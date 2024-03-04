@@ -1,6 +1,8 @@
-byte BUS[] = {2,3,4,5};
+byte BUSHigh[] = {2,3,4,5};
+byte BUSLow[] = {6,7,8,9};
 byte LCD[] = {11,12,A5,A4,A3,A2,A1};
-byte BarValue[4];
+byte BarValueHigh[4];
+byte BarValueLow[4];
 
 byte groundLed1 =A0;
 byte groundLed2 =13;
@@ -43,7 +45,8 @@ void setup() {
   pinMode (groundLed1,OUTPUT);
   pinMode (groundLed2,OUTPUT);
   for (int n=0;n<4;n++){
-    pinMode(BUS[n], INPUT);
+    pinMode(BUSHigh[n], INPUT);
+    pinMode(BUSLow[n], INPUT);
   };
    for (int n=0;n<7;n++){
     pinMode(LCD[n], OUTPUT);
@@ -52,14 +55,10 @@ void setup() {
   Serial.begin(115200);
 }
 
-void loop() {
-  // reade the bus
-  testAllNumberDual7Segment();
-  for (int n=0;n<4;n++){
-    BarValue[n] = digitalRead(BUS[n]) ? 1:0;
-  };
-  digitalWrite(groundLed1,LOW);
-  digitalWrite(groundLed2,HIGH);
+
+void decodeNibble(byte lowLed, byte highLed,byte BarValue[4]){
+  digitalWrite(lowLed,LOW);
+  digitalWrite(highLed,HIGH);
   light7segment(BarValue,d_0,b_0);
   light7segment(BarValue,d_1,b_1);
   light7segment(BarValue,d_2,b_2);
@@ -76,10 +75,39 @@ void loop() {
   light7segment(BarValue,d_d,b_d);
   light7segment(BarValue,d_e,b_e);
   light7segment(BarValue,d_f,b_f);
-  delay(5000);
-  digitalWrite(groundLed1,HIGH);
-  digitalWrite(groundLed2,LOW);
-  delay(5000);
+  delay(10);
+}
+void loop() {
+  // reade the bus
+  //testAllNumberDual7Segment();
+  for (int n=0;n<4;n++){
+    BarValueHigh[n] = digitalRead(BUSHigh[n]) ? 1:0;
+    BarValueLow[n] = digitalRead(BUSLow[n]) ? 1:0;
+  };
+  decodeNibble(groundLed1,groundLed2,BarValueHigh);
+  decodeNibble(groundLed2,groundLed1,BarValueLow);
+  // digitalWrite(groundLed1,LOW);
+  // digitalWrite(groundLed2,HIGH);
+  // light7segment(BarValue,d_0,b_0);
+  // light7segment(BarValue,d_1,b_1);
+  // light7segment(BarValue,d_2,b_2);
+  // light7segment(BarValue,d_3,b_3);
+  // light7segment(BarValue,d_4,b_4);
+  // light7segment(BarValue,d_5,b_5);
+  // light7segment(BarValue,d_6,b_6);
+  // light7segment(BarValue,d_7,b_7);
+  // light7segment(BarValue,d_8,b_8);
+  // light7segment(BarValue,d_9,b_9);
+  // light7segment(BarValue,d_a,b_a);
+  // light7segment(BarValue,d_b,b_b);
+  // light7segment(BarValue,d_c,b_c);
+  // light7segment(BarValue,d_d,b_d);
+  // light7segment(BarValue,d_e,b_e);
+  // light7segment(BarValue,d_f,b_f);
+  // delay(5000);
+  // digitalWrite(groundLed1,HIGH);
+  // digitalWrite(groundLed2,LOW);
+  // delay(5000);
 }
 
 void testNumber(char d_x[7]){
@@ -94,13 +122,13 @@ void testNumberDual7Segment(char d_x[7]){
   for (int n=0;n<7;n++){
     digitalWrite(LCD[n],d_x[n]);
   };
-  delay(2500);
+  delay(1000);
   digitalWrite(groundLed1,HIGH);
   digitalWrite(groundLed2,LOW);
   for (int n=0;n<7;n++){
     digitalWrite(LCD[n],d_x[n]);
   };
-  delay(2500);
+  delay(1000);
 }
 
 void testAllNumberDual7Segment(){
