@@ -1,5 +1,11 @@
-const char ADDR[] = {22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52}; //char is one byte from -127 to 127
-const char DATA[] = {39,41,43,45,47,49,51,53};
+
+// with ARDUINO CONNECTOR
+const char ADDR[] = {23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53}; //char is one byte from -127 to 127
+const char DATA[] = {36,34,32,30,28,26,24,22};
+
+// with regular cables
+// const char ADDR[] = {22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52}; //char is one byte from -127 to 127
+// const char DATA[] = {39,41,43,45,47,49,51,53};
 
 
 #define CLOCK 2
