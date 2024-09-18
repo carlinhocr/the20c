@@ -26,7 +26,7 @@ void setup() {
   pinMode(READ_WRITE, INPUT);
 //  pinMode(CS1, INPUT);
 //  pinMode(CS2, INPUT);
-  pinMode(CSRAM, INPUT);
+// pinMode(CSRAM, INPUT);
   // each time that on pin 2 (clock) i receive a HIGH on the rising edge run the onClock function
   attachInterrupt(digitalPinToInterrupt(CLOCK), onClock, RISING); 
   Serial.begin(115200);
@@ -35,11 +35,11 @@ void setup() {
 void onClock (){
 //  int CS1_VALUE = digitalRead(CS1) ? 1:0;
 //  int CS2_VALUE = digitalRead(CS2) ? 1:0;
-  int CSRAM_VALUE = digitalRead(CSRAM) ? 1:0;
+//  int CSRAM_VALUE = digitalRead(CSRAM) ? 1:0;
 //  Serial.print(CS1_VALUE);
 //  Serial.print(CS2_VALUE);
   Serial.print("    ");
-  Serial.print(CSRAM_VALUE);
+//  Serial.print(CSRAM_VALUE);
   Serial.print(" ");
   char output[15];
   unsigned int address = 0;
