@@ -61,6 +61,7 @@ RESET:
             ;and Scroll Display Off (0)
   jsr lcd_send_instruction
   ; END Entry Mode Set instruction
+
 write_custom_chart:
   ;BEGIN Add custom char instruction
 position_custom_char =$00
@@ -71,27 +72,27 @@ position_custom_char =$00
   ;BEGIN send data for custom character 5x8 char
   ;a little plane 0, 0x4, 0x4, 0xe, 0x1f, 0x4, 0xe, 0
   lda #$00
-  jsr save_custom_char
+  jsr lcd_send_data
   lda #$04
-  jsr save_custom_char
+  jsr lcd_send_data
   lda #$04
-  jsr save_custom_char
+  jsr lcd_send_data
   lda #$0e
-  jsr save_custom_char
+  jsr lcd_send_data
   lda #$1f
-  jsr save_custom_char
+  jsr lcd_send_data
   lda #$04
-  jsr save_custom_char
+  jsr lcd_send_data
   lda #$0e
-  jsr save_custom_char
+  jsr lcd_send_data
   lda #$0
-  jsr save_custom_char
+  jsr lcd_send_data
   ;END send data for custom character 5x8 char
   ;BEGIN display custom character
   ;Custom characters are assigned fixed display codes 
   ;from 0 to 7 for pattern stored in location pointed by CGRAM address 0x40, 0x48, 0x50.
   lda #$00
-  jsr print_char 
+  jsr lcd_send_data ;this prints the char and increments DDRAM 
 
 
 loop:
@@ -162,7 +163,7 @@ print_char:
   pla ;pull the accumulator value to the stack so we can have it back a the end of the subroutine
   rts
 
-save_custom_char:
+lcd_send_data:
   pha ;push the accumulator value to the stack so we can have it back a the end of the subroutine
   jsr lcd_wait
   sta PORTB
