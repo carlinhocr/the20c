@@ -38,35 +38,12 @@ RESET:
   lda #%11100000  ;set the last 3 pins as output
   sta DDRA ;store the accumulator in the data direction register for Port A
   ;END Initialize LCD Display
-  
-  ; BEGIN clear display instruction  on port B
-  lda #%00000001 ;the instruction itself is 00000001
-  jsr lcd_send_instruction
-  ; END clear display instruction on port B  
 
-  ; BEGIN send the instruction function set on port B
-  lda #%00111000 ;the instruction itself is 001, data lenght 8bits(1), Number Display lines 2 (1)
-            ;and Character Font 5x8 (0), last two bits are unused
-  jsr lcd_send_instruction
-  ; END send the instruction function set on port B
-
-  ;BEGIN Turn on Display instruction
-  lda #%00001110 ;the instruction itself is 0001, Display On(1), Cursor On (1)
-            ;and Cursor Blinking Off (0)
-  jsr lcd_send_instruction 
-  ; END Turn on Display instruction
- 
-   ;BEGIN Entry Mode Set instruction
-  lda #%00000110 ;the instruction itself is 00001, Put next character to the right (1)
-            ;and Scroll Display Off (0)
-  jsr lcd_send_instruction
-  ; END Entry Mode Set instruction
-
-write_custom_chart:
   ;BEGIN Add custom char instruction
-position_custom_char =$00
-  lda #$40+position_custom_char ;the instruction itself is 0001, write a custom character cgram
+  ;8026 lda
+  lda #$40;+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
   ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
   jsr lcd_send_instruction
   ; END Entry Mode Set instruction
   ;BEGIN send data for custom character 5x8 char
@@ -88,11 +65,39 @@ position_custom_char =$00
   lda #$0
   jsr lcd_send_data
   ;END send data for custom character 5x8 char
+
+
+  ; BEGIN clear display instruction  on port B
+  lda #%00000001 ;the instruction itself is 00000001
+  jsr lcd_send_instruction
+  ; END clear display instruction on port B  
+
+  ; BEGIN send the instruction function set on port B
+  lda #%00111000 ;the instruction itself is 001, data lenght 8bits(1), Number Display lines 2 (1)
+            ;and Character Font 5x8 (0), last two bits are unused
+  jsr lcd_send_instruction
+  ; END send the instruction function set on port B
+
+  ;BEGIN Turn on Display instruction
+  lda #%00001110 ;the instruction itself is 0001, Display On(1), Cursor On (1)
+            ;and Cursor Blinking Off (0)
+  jsr lcd_send_instruction 
+  ; END Turn on Display instruction
+
+   ;BEGIN Entry Mode Set instruction
+  lda #%00000110 ;the instruction itself is 00001, Put next character to the right (1)
+            ;and Scroll Display Off (0)
+  jsr lcd_send_instruction
+  ; END Entry Mode Set instruction
+  lda #"A" ;8022
+  jsr print_char;after 80a1 write the A to port 6000 41 in hexa 
   ;BEGIN display custom character
-  ;Custom characters are assigned fixed display codes 
-  ;from 0 to 7 for pattern stored in location pointed by CGRAM address 0x40, 0x48, 0x50.
   lda #$00
-  jsr lcd_send_data ;this prints the char and increments DDRAM 
+  jsr print_char ;this prints the char and increments DDRAM 
+  ;END display custom character
+
+
+
 
 
 loop:
