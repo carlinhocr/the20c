@@ -95,28 +95,70 @@ data_high= $d0
   lda #(data_low+$19)
   sta charDataVectorLow
   jsr print_message
-; ;Draw shoot 1
-;   lda #$A8 
-;   jsr lcd_send_instruction 
-;   lda #%00101110
-;   jsr print_char ;this prints the char and increments DDRAM 
-;   lda #$A8 
-;   jsr lcd_send_instruction 
-;   lda #%10100101
-;   jsr print_char ;this prints the char and increments DDRAM 
-; ;Draw Explosion
-;   lda #$CE 
-;   jsr lcd_send_instruction 
-;   lda #%10100001
-;   jsr print_char ;this prints the char and increments DDRAM 
-;   lda #$CE 
-;   jsr lcd_send_instruction 
-;   lda #%11011011
-;   jsr print_char ;this prints the char and increments DDRAM 
-;   lda #$CE 
-;   jsr lcd_send_instruction 
-;   lda #%00100000
-;   jsr print_char ;this prints the char and increments DDRAM 
+;Draw shoot 1
+  lda #$A2 
+  jsr lcd_send_instruction 
+  lda #%00101110
+  jsr print_char ;this prints the char and increments DDRAM 
+  lda #$A2 
+  jsr lcd_send_instruction 
+  lda #%10100101
+  jsr print_char ;this prints the char and increments DDRAM 
+  lda #$A2 
+  jsr lcd_send_instruction 
+  lda #%00100000
+  jsr print_char ;this prints the char and increments DDRAM 
+;Draw Explosion 1
+  lda #$CE 
+  jsr lcd_send_instruction 
+  lda #%10100001
+  jsr print_char ;this prints the char and increments DDRAM 
+  lda #$CE 
+  jsr lcd_send_instruction 
+  lda #%11011011
+  jsr print_char ;this prints the char and increments DDRAM 
+  lda #$CE 
+  jsr lcd_send_instruction 
+  lda #%00100000
+  jsr print_char ;this prints the char and increments DDRAM 
+;Draw shoot 2
+  lda #$A2 
+  jsr lcd_send_instruction 
+  lda #%00101110
+  jsr print_char ;this prints the char and increments DDRAM 
+  lda #$A2 
+  jsr lcd_send_instruction 
+  lda #%10100101
+  jsr print_char ;this prints the char and increments DDRAM 
+  lda #$A2 
+  jsr lcd_send_instruction 
+  lda #%00100000
+  jsr print_char ;this prints the char and increments DDRAM 
+  lda #$CE 
+  jsr lcd_send_instruction 
+  lda #%00101110
+  jsr print_char ;this prints the char and increments DDRAM 
+  lda #$CE 
+  jsr lcd_send_instruction 
+  lda #%10100101
+  jsr print_char ;this prints the char and increments DDRAM 
+  lda #$CE 
+  jsr lcd_send_instruction 
+  lda #%00100000
+  jsr print_char ;this prints the char and increments DDRAM 
+;Draw Explosion 2
+  lda #$8E 
+  jsr lcd_send_instruction 
+  lda #%10100001
+  jsr print_char ;this prints the char and increments DDRAM 
+  lda #$8E 
+  jsr lcd_send_instruction 
+  lda #%11011011
+  jsr print_char ;this prints the char and increments DDRAM 
+  lda #$8E 
+  jsr lcd_send_instruction 
+  lda #%00100000
+  jsr print_char ;this prints the char and increments DDRAM 
 
   
 enter_into_loop:
