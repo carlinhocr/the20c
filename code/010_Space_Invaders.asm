@@ -38,34 +38,7 @@ RESET:
   lda #%11100000  ;set the last 3 pins as output
   sta DDRA ;store the accumulator in the data direction register for Port A
   ;END Initialize LCD Display
-
-  ;BEGIN Add custom char instruction
-  ;8026 lda
-  lda #$40;+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
-  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
-  ;8028 jumps to send intrsuction
-  jsr lcd_send_instruction
-  ; END Entry Mode Set instruction
-  ;BEGIN send data for custom character 5x8 char
-  ;a little plane 0, 0x4, 0x4, 0xe, 0x1f, 0x4, 0xe, 0
-  lda #$00
-  jsr lcd_send_data
-  lda #$04
-  jsr lcd_send_data
-  lda #$04
-  jsr lcd_send_data
-  lda #$0e
-  jsr lcd_send_data
-  lda #$1f
-  jsr lcd_send_data
-  lda #$04
-  jsr lcd_send_data
-  lda #$0e
-  jsr lcd_send_data
-  lda #$0
-  jsr lcd_send_data
-  ;END send data for custom character 5x8 char
-
+  jsr add_custom_chars
 
   ; BEGIN clear display instruction  on port B
   lda #%00000001 ;the instruction itself is 00000001
@@ -79,7 +52,7 @@ RESET:
   ; END send the instruction function set on port B
 
   ;BEGIN Turn on Display instruction
-  lda #%00001110 ;the instruction itself is 0001, Display On(1), Cursor On (1)
+  lda #%00001100 ;the instruction itself is 0001, Display On(1), Cursor Off (0)
             ;and Cursor Blinking Off (0)
   jsr lcd_send_instruction 
   ; END Turn on Display instruction
@@ -91,31 +64,62 @@ RESET:
   ; END Entry Mode Set instruction
   
 
-write_Screens 
-  lda #$00
+write_Screens
+data_low= $00
+data_high= $d0
+;Draw title
+  lda #data_low
   sta charDataVectorLow
-  lda #$d0
+  lda #data_high
   sta charDataVectorHigh
   jsr print_message
-  lda #($00 + $06)
+  lda #(data_low+$06)
   sta charDataVectorLow
-  lda #$d0
-  sta charDataVectorHigh
   lda #$C0 ; position second line
   jsr lcd_send_instruction
   jsr print_message
+;Draw Ship
   lda #$E2
   jsr lcd_send_instruction 
-  lda #$00
+  lda #$00 ;custom character for ship
   jsr print_char ;this prints the char and increments DDRAM 
-  ;END display custom character
-  ;jsr DELAY_SEC
-  ;position ships
+;Draw invader line 1
   lda #$8B 
   jsr lcd_send_instruction 
-  lda #($00 + $10)
+  lda #(data_low+16)
   sta charDataVectorLow
   jsr print_message
+;Draw invader line 2
+  lda #$CB 
+  jsr lcd_send_instruction 
+  lda #(data_low+$19)
+  sta charDataVectorLow
+  jsr print_message
+; ;Draw shoot 1
+;   lda #$A8 
+;   jsr lcd_send_instruction 
+;   lda #%00101110
+;   jsr print_char ;this prints the char and increments DDRAM 
+;   lda #$A8 
+;   jsr lcd_send_instruction 
+;   lda #%10100101
+;   jsr print_char ;this prints the char and increments DDRAM 
+; ;Draw Explosion
+;   lda #$CE 
+;   jsr lcd_send_instruction 
+;   lda #%10100001
+;   jsr print_char ;this prints the char and increments DDRAM 
+;   lda #$CE 
+;   jsr lcd_send_instruction 
+;   lda #%11011011
+;   jsr print_char ;this prints the char and increments DDRAM 
+;   lda #$CE 
+;   jsr lcd_send_instruction 
+;   lda #%00100000
+;   jsr print_char ;this prints the char and increments DDRAM 
+
+  
+enter_into_loop:
   jmp loop
 
 print_message:  
@@ -244,12 +248,65 @@ INNER_LOOP:
 START:
     JSR DELAY_SEC    ; Call the delay subroutine
 
+
+add_custom_chars:
+  ;BEGIN Add custom char instruction
+  ;8026 lda
+char_1: 
+  lda #$40;+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
+  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
+  jsr lcd_send_instruction
+  ;BEGIN send data for custom character 5x8 char
+  ldx #$FF
+char_1_loop:
+  inx  
+  lda char_1_data,x
+  jsr lcd_send_data
+  cpx #07
+  bne char_1_loop
+  ;END send data for custom character 5x8 char
+char_2: 
+  lda #($40+$08) ;the instruction itself is 0001, write a custom character cgram
+  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
+  jsr lcd_send_instruction
+  ;BEGIN send data for custom character 5x8 char
+  ldx #$FF
+char_2_loop:
+  inx  
+  lda char_2_data,x
+  jsr lcd_send_data
+  cpx #07
+  bne char_2_loop
+add_custom_chars_end:  
+  rts
+  ;END send data for custom character 5x8 char
+
  .org $d000
+title_1:
   .asciiz "SPACE" ;adds a 0 after the last byte
+title_2:
   .asciiz "INVADERS" ;adds a 0 after the last byte
-  .byte $ef,$ef,$ef,$ef,$ef,$ef,$00
+;  .byte $ef,$ef,$ef,$ef,$ef,$ef,$ef,$ef,$00
+invader_ship_1:
+  .byte $01,$01,$01,$01,$01,$01,$01,$01,$00
+invader_ship_2:
+  .byte $fc,$fc,$fc,$fc,$fc,$fc,$fc,$fc,$00
+char_1_data:  
+  .byte $00,$04,$04,$0e,$1f,$04,$0e,$00
+char_2_data:  
+  .byte $00,$04,$0E,$15,$1B,$0E,$00,$00
+
 
 ;complete the file
   .org $fffc ;go to memory address $fffc of the reset vector
   .word RESET ;store in $FFFC & $FFFD the memory address of the RESET: label  00 80 ($8000 in little endian)
   .word $0000 ;finish completing the values of the eeprom $fffe $ffff with values 00 00
+
+; Positions of LCD characters
+; 	01	02	03	04	05	06	07	08	09	10	11	12	13	14	15	16	17	18	19	20
+; 1	80	81	82	83	84	85	86	87	88	89	8A	8B	8C	8D	8F	8E	90	91	92	93
+; 2	C0	C1	C2	C3	C4	C5	C6	C7	C8	C9	CA	CB	CC	CD	CE	CF	D0	D1	D2	D3
+; 3	94	95	96	97	98	99	A0	A1	A2	A3	A4	A5	A6	A7	A8	A9	AA	AB	AC	AD
+; 4	D4	D5	D6	D7	D8	D9	DA	DB	DC	DD	DE	DF	E0	E1	E2	E3	E4	E5	E6	E7
