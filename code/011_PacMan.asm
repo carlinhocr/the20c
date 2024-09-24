@@ -14,6 +14,10 @@ DDRA = $6003
 startRAMData =$2000
 charDataVectorLow = $30
 charDataVectorHigh = $31
+delay_COUNT_A = $32        
+delay_COUNT_B = $33
+charLoadLow=$28
+charLoadHigh=$29
 
 ;define LCD signals
 E = %10000000 ;Enable Signal
@@ -68,42 +72,168 @@ write_Screens
 data_low= $00
 data_high= $d0
 ;Draw title
-  lda #data_low
+  lda #<title_1
   sta charDataVectorLow
-  lda #data_high
+  lda #>title_1
   sta charDataVectorHigh
   jsr print_message
+  jsr DELAY_SEC
+  jsr DELAY_SEC
 ;Draw pacman line 1
   lda #$9F 
-  jsr lcd_send_instruction 
-  lda #(data_low+$07)
+  jsr lcd_send_instruction
+  lda #<screen_1_Line1
   sta charDataVectorLow
+  lda #>screen_1_Line1
+  sta charDataVectorHigh
   jsr print_message
+  jsr DELAY_HALF_SEC
 ;Draw pacman line 2
   lda #$9F 
   jsr lcd_send_instruction 
-  lda #(data_low+$0E)
+  lda #<screen_1_Line2
   sta charDataVectorLow
+  lda #>screen_1_Line2
+  sta charDataVectorHigh
   jsr print_message
+  jsr DELAY_HALF_SEC
 ;Draw pacman line 3
   lda #$9F 
   jsr lcd_send_instruction 
-  lda #(data_low+$11)
+  lda #<screen_1_Line3
   sta charDataVectorLow
+  lda #>screen_1_Line3
+  sta charDataVectorHigh
   jsr print_message
+  jsr DELAY_HALF_SEC
 ;Draw pacman line 4
   lda #$9F 
   jsr lcd_send_instruction 
-  lda #(data_low+$14)
+  lda #<screen_1_Line4
   sta charDataVectorLow
+  lda #>screen_1_Line4
+  sta charDataVectorHigh
   jsr print_message
+  jsr DELAY_HALF_SEC
 ;Draw pacman line 5
   lda #$9F 
   jsr lcd_send_instruction 
-  lda #(data_low+$18)
+  lda #<screen_1_Line5
   sta charDataVectorLow
+  lda #>screen_1_Line5
+  sta charDataVectorHigh
   jsr print_message
-  
+  jsr DELAY_HALF_SEC
+;Draw pacman line 5
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_1_Line6
+  sta charDataVectorLow
+  lda #>screen_1_Line6
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw pacman line 5
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_1_Line7
+  sta charDataVectorLow
+  lda #>screen_1_Line7
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw pacman line 5
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_1_Line8
+  sta charDataVectorLow
+  lda #>screen_1_Line8
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw pacman line 5
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_1_Line9
+  sta charDataVectorLow
+  lda #>screen_1_Line9
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw pacman line 5
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_1_Line10
+  sta charDataVectorLow
+  lda #>screen_1_Line10
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw pacman line 5
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_1_Line11
+  sta charDataVectorLow
+  lda #>screen_1_Line11
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw pacman line 5
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_1_Line12
+  sta charDataVectorLow
+  lda #>screen_1_Line12
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw pacman line 5
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_1_Line13
+  sta charDataVectorLow
+  lda #>screen_1_Line13
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw pacman line 5
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_1_Line14
+  sta charDataVectorLow
+  lda #>screen_1_Line14
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw pacman line 5
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_1_Line15
+  sta charDataVectorLow
+  lda #>screen_1_Line15
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw pacman line 5
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_1_Line16
+  sta charDataVectorLow
+  lda #>screen_1_Line16
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw pacman line 5
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_1_Line17
+  sta charDataVectorLow
+  lda #>screen_1_Line17
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+
+
 enter_into_loop:
   jmp loop
 
@@ -210,13 +340,24 @@ lcd_send_data:
 
 
 ; Set up the delay
-COUNT_A = $20        ; Outer loop counter
-COUNT_B = $FF        ; Inner loop counter
-
 DELAY_SEC:
-    LDX #COUNT_A     ; Load outer loop count
+  lda #$FF
+  sta delay_COUNT_A
+  lda #$FF
+  sta delay_COUNT_B
+  jmp DELAY_MAIN
+
+DELAY_HALF_SEC:
+  lda #$70
+  sta delay_COUNT_A
+  lda #$FF
+  sta delay_COUNT_B
+  jmp DELAY_MAIN
+
+DELAY_MAIN:
+    LDX delay_COUNT_A     ; Load outer loop count
 OUTER_LOOP:
-    LDY #COUNT_B     ; Load inner loop count
+    LDY delay_COUNT_B     ; Load inner loop count
 INNER_LOOP:
     NOP               ; No operation (takes 2 cycles)
     NOP               ; No operation (takes 2 cycles)
@@ -229,6 +370,8 @@ INNER_LOOP:
     BNE OUTER_LOOP    ; Branch if not zero
     RTS               ; Return from subroutine
 
+
+
 ; Main program
 START:
     JSR DELAY_SEC    ; Call the delay subroutine
@@ -237,69 +380,112 @@ START:
 add_custom_chars:
   ;BEGIN Add custom char instruction
   ;8026 lda
+
 char_1: 
   lda #($40+$08);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
   ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
   ;8028 jumps to send intrsuction
   jsr lcd_send_instruction
-  ;BEGIN send data for custom character 5x8 char
-  ldx #$FF
-char_1_loop:
-  inx  
-  lda fantasma,x
-  jsr lcd_send_data
-  cpx #07
-  bne char_1_loop
-  ;END send data for custom character 5x8 char
+  lda #<fantasma
+  sta charLoadLow
+  lda #>fantasma
+  sta charLoadHigh
+  jsr char_load
+
 char_2: 
-  lda #($40+$10) ;the instruction itself is 0001, write a custom character cgram
+  lda #($40+$10);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
   ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
   ;8028 jumps to send intrsuction
   jsr lcd_send_instruction
-  ;BEGIN send data for custom character 5x8 char
-  ldx #$FF
-char_2_loop:
-  inx  
-  lda pacman_boca_abierta,x
-  jsr lcd_send_data
-  cpx #07
-  bne char_2_loop
+  lda #<pacman_boca_abierta
+  sta charLoadLow
+  lda #>pacman_boca_abierta
+  sta charLoadHigh
+  jsr char_load
+
 char_3: 
-  lda #($40+$18) ;the instruction itself is 0001, write a custom character cgram
+  lda #($40+$18);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
   ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
   ;8028 jumps to send intrsuction
   jsr lcd_send_instruction
-  ;BEGIN send data for custom character 5x8 char
-  ldx #$FF
-char_3_loop:
-  inx  
-  lda pacman_boca_cerrada,x
-  jsr lcd_send_data
-  cpx #07
-  bne char_3_loop
+  lda #<pacman_boca_cerrada
+  sta charLoadLow
+  lda #>pacman_boca_cerrada
+  sta charLoadHigh
+  jsr char_load
+
+char_4: 
+  lda #($40+$20);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
+  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
+  jsr lcd_send_instruction
+  lda #<fantasma_comido
+  sta charLoadLow
+  lda #>fantasma_comido
+  sta charLoadHigh
+  jsr char_load
+
 add_custom_chars_end:  
+  rts
+
+
+char_load:  
+  ldy #$FF
+char_load_loop:
+  iny  
+  lda (charLoadLow),y
+  jsr lcd_send_data
+  cpy #07
+  bne char_load_loop
   rts
   ;END send data for custom character 5x8 char
 
  .org $d000
 title_1:
   .asciiz "PACMAN" ;adds a 0 after the last byte
-Screen_1_Line1:
-  .byte $02,$A1,$A1,$A1,$A1,$01,$00;pacman boca abierta,punto, punto,fantasma,
-Screen_1_Line2:
+screen_1_Line1:
+  .byte $02,$A1,$A1,$A1,$A1,%11011011,$A1,$01,$00;pacman boca abierta,punto, punto,fantasma,
+screen_1_Line2:
   .byte $20,$03,$00;pacman boca abierta,punto, punto,fantasma,
-Screen_1_Line3:
+screen_1_Line3:
   .byte $20,$02,$00;pacman boca abierta,punto, punto,fantasma
-Screen_1_Line4:
+screen_1_Line4:
   .byte $20,$20,$03,$00;pacman boca abierta,punto, punto,fantasma
-Screen_1_Line5:
+screen_1_Line5:
   .byte $20,$20,$02,$00;pacman boca abierta,punto, punto,fantasma
+screen_1_Line6:
+  .byte $20,$20,$20,$03,$00
+screen_1_Line7:
+  .byte $20,$20,$20,$02,$00  
+screen_1_Line8:
+  .byte $20,$20,$20,$20,$03,$00 
+screen_1_Line9:
+  .byte $20,$20,$20,$20,$02,$00 
+screen_1_Line10:
+  .byte $20,$20,$20,$20,$20,$03,$00 
+screen_1_Line11:
+  .byte $20,$20,$20,$20,$20,$02,$A1,$04,$00
+screen_1_Line12:
+  .byte $20,$20,$20,$20,$20,$03,$A1,$04,$00 ;open and close extra for effect
+screen_1_Line13:
+  .byte $20,$20,$20,$20,$20,$02,$A1,$04,$00 ;open and close extra for effect
+screen_1_Line14:
+  .byte $20,$20,$20,$20,$20,$20,$03,$04,$00
+screen_1_Line15:
+  .byte $20,$20,$20,$20,$20,$20,$02,$04,$00
+screen_1_Line16:
+  .byte $20,$20,$20,$20,$20,$20,$20,$03,$00
+screen_1_Line17:
+  .byte $20,$20,$20,$20,$20,$20,$20,$02,$00
+
 fantasma:
   .byte $00,$0E,$15,$1f,$1f,$1f,$15,$00
 pacman_boca_abierta:
   .byte $00,$0e,$1f,$1e,$1c,$1e,$1f,$0e
 pacman_boca_cerrada:  
   .byte $00,$0e,$1f,$1f,$1f,$1f,$1f,$0e
+fantasma_comido:
+  .byte $00,$0E,$15,$1F,$11,$1B,$15,$00
 
 
 
