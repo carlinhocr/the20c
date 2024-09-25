@@ -4,7 +4,7 @@
 ;DDRB = $6003
 ;DDRA = $6002
 
-;VIA Ports and Constants
+;VIA Ports and Constan ts
 PORTB = $6000
 PORTA = $6001
 DDRB = $6002
