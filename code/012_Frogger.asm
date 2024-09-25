@@ -84,8 +84,8 @@ data_high= $d0
   lda #>title_1
   sta charDataVectorHigh
   jsr print_message
-  ;jsr DELAY_SEC
-  ;jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
 ;Draw Screen1 line 1
   lda #$8B 
   jsr lcd_send_instruction
@@ -102,7 +102,6 @@ data_high= $d0
   lda #>screen_1_Line2
   sta charDataVectorHigh
   jsr print_message
-  jsr DELAY_HALF_SEC
 ;Draw Screen1 line 3
   lda #$9F 
   jsr lcd_send_instruction 
@@ -145,7 +144,6 @@ data_high= $d0
   lda #>screen_2_Line2
   sta charDataVectorHigh
   jsr print_message
-  jsr DELAY_HALF_SEC
 ;Draw Screen2 line 3
   lda #$9F 
   jsr lcd_send_instruction 
@@ -172,7 +170,48 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
   jsr DELAY_HALF_SEC
-
+;Draw Screen3 line 1
+  lda #$8B 
+  jsr lcd_send_instruction
+  lda #<screen_3_Line1
+  sta charDataVectorLow
+  lda #>screen_3_Line1
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen3 line 2
+  lda #$CB 
+  jsr lcd_send_instruction 
+  lda #<screen_3_Line2
+  sta charDataVectorLow
+  lda #>screen_3_Line2
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen3 line 3
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_3_Line3
+  sta charDataVectorLow
+  lda #>screen_3_Line3
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen3 line 4
+  lda #$DF 
+  jsr lcd_send_instruction 
+  lda #<screen_3_Line4
+  sta charDataVectorLow
+  lda #>screen_3_Line4
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw Screen3 line 2 bis
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_3_Line2_bis
+  sta charDataVectorLow
+  lda #>screen_3_Line2_bis
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
 enter_into_loop:
   jmp loop
 
@@ -413,6 +452,16 @@ screen_2_Line4:
   .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_2_Line3_bis:
   .byte cespacio,cautito,cespacio,cfrogger_saltando,cautito2,cespacio,cespacio,cespacio,$00
+screen_3_Line1:
+  .byte ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,$00
+screen_3_Line2:
+  .byte cespacio,cautito,cespacio,cfrogger,cautito,cespacio,cespacio,cautito2$00
+screen_3_Line3:
+  .byte cautito,cespacio,cespacio,cautito2,cespacio,cespacio,cespacio,cespacio,$00
+screen_3_Line4:
+  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+screen_3_Line2_bis:
+  .byte cespacio,cautito,cespacio,cfrogger_saltando,cautito,cespacio,cespacio,cautito2,$00
 
 
 casita:
