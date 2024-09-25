@@ -412,6 +412,17 @@ enter_into_loop:
   jmp loop
 
 
+; screen_1_Line1:
+;   .byte pos_line1,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio
+; screen_1_Line2:
+;   .byte pos_line2,cautito2,cespacio,cespacio,cautito,cespacio,cespacio,cautito,cespacio
+; screen_1_Line3:
+;   .byte pos_line3,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio
+; screen_1_Line4:
+;   .byte pos_line4,cespacio,cespacio,cespacio,cfrogger,cespacio,cespacio,cespacio,cespacio,$00
+; screen_1_Line4_bis:
+;   .byte pos_line4,cespacio,cespacio,cespacio,cfrogger_saltando,cespacio,cespacio,cespacio,cespacio,$00
+
 print_screen:  
   ;BEGIN Write all the letters 
   ldy #$00 ;first byte is the position of the line
@@ -419,7 +430,7 @@ print_screen_load_position:
   lda (charDataVectorLow),y
   beq print_screen_end ;jump to loop if I load a 0 on lda a zero means the end  of a n .asciiz string
   jsr lcd_send_instruction 
-  ldx #$FF
+  ldx #$00
 print_screen_eeprom:  
   iny
   inx
