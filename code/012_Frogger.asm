@@ -26,6 +26,12 @@ cfrogger_saltando=$03
 cautito=$04
 cautito2=$05
 cfrogger_win=$06
+cfrogger_izq=$07
+
+pos_line1=$8B
+pos_line2=$CB
+pos_line3=$9F
+pos_line4=$DF
 
 ;define LCD signals
 E = %10000000 ;Enable Signal
@@ -76,9 +82,7 @@ RESET:
   ; END Entry Mode Set instruction
   
 
-write_Screens
-data_low= $00
-data_high= $d0
+write_Screens:
 ;Draw title
   lda #<title_1
   sta charDataVectorLow
@@ -87,8 +91,9 @@ data_high= $d0
   jsr print_message
   jsr DELAY_SEC
   jsr DELAY_SEC
+play_game:
 ;Draw Screen1 line 1
-  lda #$8B 
+  lda #pos_line1 
   jsr lcd_send_instruction
   lda #<screen_1_Line1
   sta charDataVectorLow
@@ -96,7 +101,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen1 line 2
-  lda #$CB 
+  lda #pos_line2 
   jsr lcd_send_instruction 
   lda #<screen_1_Line2
   sta charDataVectorLow
@@ -104,7 +109,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen1 line 3
-  lda #$9F 
+  lda #pos_line3
   jsr lcd_send_instruction 
   lda #<screen_1_Line3
   sta charDataVectorLow
@@ -112,7 +117,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen1 line 4
-  lda #$DF 
+  lda #pos_line4 
   jsr lcd_send_instruction 
   lda #<screen_1_Line4
   sta charDataVectorLow
@@ -121,7 +126,7 @@ data_high= $d0
   jsr print_message
   jsr DELAY_HALF_SEC
 ;Draw Screen1 line 4 bis
-  lda #$DF 
+  lda #pos_line4
   jsr lcd_send_instruction 
   lda #<screen_1_Line4_bis
   sta charDataVectorLow
@@ -130,7 +135,7 @@ data_high= $d0
   jsr print_message
   jsr DELAY_HALF_SEC
 ;Draw Screen2 line 1
-  lda #$8B 
+  lda #pos_line1
   jsr lcd_send_instruction
   lda #<screen_2_Line1
   sta charDataVectorLow
@@ -138,7 +143,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen2 line 2
-  lda #$CB 
+  lda #pos_line2 
   jsr lcd_send_instruction 
   lda #<screen_2_Line2
   sta charDataVectorLow
@@ -146,7 +151,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen2 line 3
-  lda #$9F 
+  lda #pos_line3
   jsr lcd_send_instruction 
   lda #<screen_2_Line3
   sta charDataVectorLow
@@ -154,7 +159,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen2 line 4
-  lda #$DF 
+  lda #pos_line4
   jsr lcd_send_instruction 
   lda #<screen_2_Line4
   sta charDataVectorLow
@@ -163,7 +168,7 @@ data_high= $d0
   jsr print_message
   jsr DELAY_HALF_SEC
 ;Draw Screen2 line 3 bis
-  lda #$9F 
+  lda #pos_line3 
   jsr lcd_send_instruction 
   lda #<screen_2_Line3_bis
   sta charDataVectorLow
@@ -171,8 +176,10 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
   jsr DELAY_HALF_SEC
+
+
 ;Draw Screen3 line 1
-  lda #$8B 
+  lda #pos_line1 
   jsr lcd_send_instruction
   lda #<screen_3_Line1
   sta charDataVectorLow
@@ -180,7 +187,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen3 line 2
-  lda #$CB 
+  lda #pos_line2 
   jsr lcd_send_instruction 
   lda #<screen_3_Line2
   sta charDataVectorLow
@@ -188,7 +195,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen3 line 3
-  lda #$9F 
+  lda #pos_line3
   jsr lcd_send_instruction 
   lda #<screen_3_Line3
   sta charDataVectorLow
@@ -196,7 +203,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen3 line 4
-  lda #$DF 
+  lda #pos_line4
   jsr lcd_send_instruction 
   lda #<screen_3_Line4
   sta charDataVectorLow
@@ -205,7 +212,7 @@ data_high= $d0
   jsr print_message
   jsr DELAY_HALF_SEC
 ;Draw Screen3 line 2 bis
-  lda #$CB 
+  lda #pos_line2 
   jsr lcd_send_instruction 
   lda #<screen_3_Line2_bis
   sta charDataVectorLow
@@ -213,8 +220,10 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
   jsr DELAY_HALF_SEC
+
+
 ;Draw Screen4 line 1
-  lda #$8B 
+  lda #pos_line1
   jsr lcd_send_instruction
   lda #<screen_4_Line1
   sta charDataVectorLow
@@ -222,7 +231,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen4 line 2
-  lda #$CB 
+  lda #pos_line2
   jsr lcd_send_instruction 
   lda #<screen_4_Line2
   sta charDataVectorLow
@@ -230,7 +239,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen4 line 3
-  lda #$9F 
+  lda #pos_line3 
   jsr lcd_send_instruction 
   lda #<screen_4_Line3
   sta charDataVectorLow
@@ -238,7 +247,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen4 line 4
-  lda #$DF 
+  lda #pos_line4 
   jsr lcd_send_instruction 
   lda #<screen_4_Line4
   sta charDataVectorLow
@@ -247,7 +256,7 @@ data_high= $d0
   jsr print_message
   jsr DELAY_HALF_SEC
 ;Draw Screen4 line 1
-  lda #$8B 
+  lda #pos_line1 
   jsr lcd_send_instruction
   lda #<screen_4_Line1_bis
   sta charDataVectorLow
@@ -256,6 +265,312 @@ data_high= $d0
   jsr print_message
   jsr DELAY_HALF_SEC
 
+
+;Draw Screen5 line 1
+  lda #pos_line1 
+  jsr lcd_send_instruction
+  lda #<screen_5_Line1
+  sta charDataVectorLow
+  lda #>screen_5_Line1
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen5 line 2
+  lda #pos_line2 
+  jsr lcd_send_instruction 
+  lda #<screen_5_Line2
+  sta charDataVectorLow
+  lda #>screen_5_Line2
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen5 line 3
+  lda #pos_line3
+  jsr lcd_send_instruction 
+  lda #<screen_5_Line3
+  sta charDataVectorLow
+  lda #>screen_5_Line3
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen5 line 4
+  lda #pos_line4 
+  jsr lcd_send_instruction 
+  lda #<screen_5_Line4
+  sta charDataVectorLow
+  lda #>screen_5_Line4
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw Screen5 line 4 bis
+  lda #pos_line4
+  jsr lcd_send_instruction 
+  lda #<screen_5_Line4_bis
+  sta charDataVectorLow
+  lda #>screen_5_Line4_bis
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+
+;Draw Screen6 line 1
+  lda #pos_line1
+  jsr lcd_send_instruction
+  lda #<screen_6_Line1
+  sta charDataVectorLow
+  lda #>screen_6_Line1
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen6 line 2
+  lda #pos_line2 
+  jsr lcd_send_instruction 
+  lda #<screen_6_Line2
+  sta charDataVectorLow
+  lda #>screen_6_Line2
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen6 line 3
+  lda #pos_line3
+  jsr lcd_send_instruction 
+  lda #<screen_6_Line3
+  sta charDataVectorLow
+  lda #>screen_6_Line3
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen6 line 4
+  lda #pos_line4
+  jsr lcd_send_instruction 
+  lda #<screen_6_Line4
+  sta charDataVectorLow
+  lda #>screen_6_Line4
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw Screen6 line 3 bis
+  lda #pos_line3 
+  jsr lcd_send_instruction 
+  lda #<screen_6_Line3_bis
+  sta charDataVectorLow
+  lda #>screen_6_Line3_bis
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+
+;Draw Screen7 line 1
+  lda #pos_line1
+  jsr lcd_send_instruction
+  lda #<screen_7_Line1
+  sta charDataVectorLow
+  lda #>screen_7_Line1
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen7 line 2
+  lda #pos_line2 
+  jsr lcd_send_instruction 
+  lda #<screen_7_Line2
+  sta charDataVectorLow
+  lda #>screen_7_Line2
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen7 line 3
+  lda #pos_line3
+  jsr lcd_send_instruction 
+  lda #<screen_7_Line3
+  sta charDataVectorLow
+  lda #>screen_7_Line3
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen7 line 4
+  lda #pos_line4
+  jsr lcd_send_instruction 
+  lda #<screen_7_Line4
+  sta charDataVectorLow
+  lda #>screen_7_Line4
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw Screen7 line 3 bis
+  lda #pos_line3 
+  jsr lcd_send_instruction 
+  lda #<screen_7_Line3_bis
+  sta charDataVectorLow
+  lda #>screen_7_Line3_bis
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+
+;Draw Screen8 line 1
+  lda #pos_line1
+  jsr lcd_send_instruction
+  lda #<screen_8_Line1
+  sta charDataVectorLow
+  lda #>screen_8_Line1
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen8 line 2
+  lda #pos_line2 
+  jsr lcd_send_instruction 
+  lda #<screen_8_Line2
+  sta charDataVectorLow
+  lda #>screen_8_Line2
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen8 line 3
+  lda #pos_line3
+  jsr lcd_send_instruction 
+  lda #<screen_8_Line3
+  sta charDataVectorLow
+  lda #>screen_8_Line3
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen8 line 4
+  lda #pos_line4
+  jsr lcd_send_instruction 
+  lda #<screen_8_Line4
+  sta charDataVectorLow
+  lda #>screen_8_Line4
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw Screen8 line 3 bis
+  lda #pos_line3 
+  jsr lcd_send_instruction 
+  lda #<screen_8_Line3_bis
+  sta charDataVectorLow
+  lda #>screen_8_Line3_bis
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+
+;Draw Screen9 line 1
+  lda #pos_line1
+  jsr lcd_send_instruction
+  lda #<screen_9_Line1
+  sta charDataVectorLow
+  lda #>screen_9_Line1
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen9 line 2
+  lda #pos_line2 
+  jsr lcd_send_instruction 
+  lda #<screen_9_Line2
+  sta charDataVectorLow
+  lda #>screen_9_Line2
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen9 line 3
+  lda #pos_line3
+  jsr lcd_send_instruction 
+  lda #<screen_9_Line3
+  sta charDataVectorLow
+  lda #>screen_9_Line3
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen9 line 4
+  lda #pos_line4
+  jsr lcd_send_instruction 
+  lda #<screen_9_Line4
+  sta charDataVectorLow
+  lda #>screen_9_Line4
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw Screen9 line 3 bis
+  lda #pos_line3 
+  jsr lcd_send_instruction 
+  lda #<screen_9_Line3_bis
+  sta charDataVectorLow
+  lda #>screen_9_Line3_bis
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+
+;Draw Screen10 line 1
+  lda #pos_line1 
+  jsr lcd_send_instruction
+  lda #<screen_10_Line1
+  sta charDataVectorLow
+  lda #>screen_10_Line1
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen10 line 2
+  lda #pos_line2 
+  jsr lcd_send_instruction 
+  lda #<screen_10_Line2
+  sta charDataVectorLow
+  lda #>screen_10_Line2
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen10 line 3
+  lda #pos_line3
+  jsr lcd_send_instruction 
+  lda #<screen_10_Line3
+  sta charDataVectorLow
+  lda #>screen_10_Line3
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen10 line 4
+  lda #pos_line4
+  jsr lcd_send_instruction 
+  lda #<screen_10_Line4
+  sta charDataVectorLow
+  lda #>screen_10_Line4
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw Screen10 line 2 bis
+  lda #pos_line2 
+  jsr lcd_send_instruction 
+  lda #<screen_10_Line2_bis
+  sta charDataVectorLow
+  lda #>screen_10_Line2_bis
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+
+;Draw Screen11 line 1
+  lda #pos_line1
+  jsr lcd_send_instruction
+  lda #<screen_11_Line1
+  sta charDataVectorLow
+  lda #>screen_11_Line1
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen11 line 2
+  lda #pos_line2
+  jsr lcd_send_instruction 
+  lda #<screen_11_Line2
+  sta charDataVectorLow
+  lda #>screen_11_Line2
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen11 line 3
+  lda #pos_line3 
+  jsr lcd_send_instruction 
+  lda #<screen_11_Line3
+  sta charDataVectorLow
+  lda #>screen_11_Line3
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen11 line 4
+  lda #pos_line4 
+  jsr lcd_send_instruction 
+  lda #<screen_11_Line4
+  sta charDataVectorLow
+  lda #>screen_11_Line4
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw Screen11 line 1
+  lda #pos_line1 
+  jsr lcd_send_instruction
+  lda #<screen_11_Line1_bis
+  sta charDataVectorLow
+  lda #>screen_11_Line1_bis
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+
+keep_playing:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jmp play_game
 
 enter_into_loop:
   jmp loop
@@ -470,6 +785,17 @@ char_6:
   sta charLoadHigh
   jsr char_load
 
+char_7: 
+  lda #($40+$38);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
+  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
+  jsr lcd_send_instruction
+  lda #<frogger_izq
+  sta charLoadLow
+  lda #>frogger_izq
+  sta charLoadHigh
+  jsr char_load
+
 add_custom_chars_end:  
   rts
 
@@ -486,8 +812,10 @@ char_load_loop:
   ;END send data for custom character 5x8 char
 
  .org $d000
+startDATA: 
 title_1:
   .asciiz "FROGGER" ;adds a 0 after the last byte
+
 screen_1_Line1:
   .byte ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,$00
 screen_1_Line2:
@@ -498,6 +826,7 @@ screen_1_Line4:
   .byte cespacio,cespacio,cespacio,cfrogger,cespacio,cespacio,cespacio,cespacio,$00
 screen_1_Line4_bis:
   .byte cespacio,cespacio,cespacio,cfrogger_saltando,cespacio,cespacio,cespacio,cespacio,$00
+
 screen_2_Line1:
   .byte ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,$00
 screen_2_Line2:
@@ -508,6 +837,7 @@ screen_2_Line4:
   .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_2_Line3_bis:
   .byte cespacio,cautito,cespacio,cfrogger_saltando,cautito2,cespacio,cespacio,cespacio,$00
+
 screen_3_Line1:
   .byte ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,$00
 screen_3_Line2:
@@ -518,6 +848,7 @@ screen_3_Line4:
   .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_3_Line2_bis:
   .byte cespacio,cautito,cespacio,cfrogger_saltando,cautito,cespacio,cespacio,cautito2,$00
+
 screen_4_Line1:
   .byte ccasita,cespacio,ccasita,cfrogger,ccasita,cespacio,ccasita,cespacio,$00
 screen_4_Line2:
@@ -529,7 +860,86 @@ screen_4_Line4:
 screen_4_Line1_bis:
   .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
 
+screen_5_Line1:
+  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+screen_5_Line2:
+  .byte cautito,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,$00
+screen_5_Line3:
+  .byte cespacio,cespacio,cautito2,cespacio,cespacio,cespacio,cespacio,cautito,$00
+screen_5_Line4:
+  .byte cespacio,cespacio,cespacio,cfrogger,cespacio,cespacio,cespacio,cespacio,$00
+screen_5_Line4_bis:
+  .byte cespacio,cespacio,cespacio,cfrogger_saltando,cespacio,cespacio,cespacio,cespacio,$00
 
+
+screen_6_Line1:
+  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+screen_6_Line2:
+  .byte cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,$00
+screen_6_Line3:
+  .byte cespacio,cautito2,cespacio,cfrogger,cespacio,cespacio,cautito,cespacio,$00
+screen_6_Line4:
+  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+screen_6_Line3_bis:
+  .byte cespacio,cautito2,cespacio,cfrogger_izq,cespacio,cespacio,cautito,cespacio,$00
+
+screen_7_Line1:
+  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+screen_7_Line2:
+  .byte cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,$00
+screen_7_Line3:
+  .byte cespacio,cautito2,cfrogger,cespacio,cespacio,cespacio,cautito,cespacio,$00
+screen_7_Line4:
+  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+screen_7_Line3_bis:
+  .byte cespacio,cautito2,cfrogger_izq,cespacio,cespacio,cespacio,cautito,cespacio,$00
+
+screen_8_Line1:
+  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+screen_8_Line2:
+  .byte cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,cautito,$00
+screen_8_Line3:
+  .byte cautito2,cespacio,cfrogger,cespacio,cespacio,cautito,cespacio,cespacio,$00
+screen_8_Line4:
+  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+screen_8_Line3_bis:
+  .byte cautito2,cespacio,cfrogger_izq,cespacio,cespacio,cautito,cespacio,cespacio,$00
+
+screen_9_Line1:
+  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+screen_9_Line2:
+  .byte cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,cautito,$00
+screen_9_Line3:
+  .byte cautito2,cfrogger,cespacio,cespacio,cespacio,cautito,cespacio,cespacio,$00
+screen_9_Line4:
+  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+screen_9_Line3_bis:
+  .byte cautito2,cfrogger_saltando,cespacio,cespacio,cespacio,cautito,cespacio,cespacio,$00
+
+screen_10_Line1:
+  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+screen_10_Line2:
+  .byte cautito,cfrogger,cespacio,cautito2,cespacio,cespacio,cautito,cespacio,$00
+screen_10_Line3:
+  .byte cespacio,cespacio,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,$00
+screen_10_Line4:
+  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+screen_10_Line2_bis:
+  .byte cautito,cfrogger_saltando,cespacio,cautito2,cespacio,cespacio,cautito,cespacio,$00
+
+screen_11_Line1:
+  .byte ccasita,cfrogger,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+screen_11_Line2:
+  .byte cautito,cespacio,cespacio,cautito2,cespacio,cespacio,cautito,cespacio,$00
+screen_11_Line3:
+  .byte cespacio,cespacio,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,$00
+screen_11_Line4:
+  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+screen_11_Line1_bis:
+  .byte ccasita,cfrogger_win,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+
+
+;usar el primer byte como la posición de la linea
 casita:
   .byte $11,$11,$11,$11,$1f,$00,$00,$00
 frogger:
@@ -542,6 +952,8 @@ autito2:
   .byte $00,$00,$09,$06,$09,$00,$00,$00
 frogger_win:
   .byte $1b,$1b,$04,$0e,$11,$1b,$11,$11  
+frogger_izq:
+  .byte $00,$11,$13,$0e,$0e,$13,$11,$00  
 
 
 
