@@ -25,6 +25,7 @@ cfrogger=$02
 cfrogger_saltando=$03
 cautito=$04
 cautito2=$05
+cfrogger_win=$06
 
 ;define LCD signals
 E = %10000000 ;Enable Signal
@@ -204,7 +205,7 @@ data_high= $d0
   jsr print_message
   jsr DELAY_HALF_SEC
 ;Draw Screen3 line 2 bis
-  lda #$9F 
+  lda #$CB 
   jsr lcd_send_instruction 
   lda #<screen_3_Line2_bis
   sta charDataVectorLow
@@ -212,6 +213,50 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
   jsr DELAY_HALF_SEC
+;Draw Screen4 line 1
+  lda #$8B 
+  jsr lcd_send_instruction
+  lda #<screen_4_Line1
+  sta charDataVectorLow
+  lda #>screen_4_Line1
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen4 line 2
+  lda #$CB 
+  jsr lcd_send_instruction 
+  lda #<screen_4_Line2
+  sta charDataVectorLow
+  lda #>screen_4_Line2
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen4 line 3
+  lda #$9F 
+  jsr lcd_send_instruction 
+  lda #<screen_4_Line3
+  sta charDataVectorLow
+  lda #>screen_4_Line3
+  sta charDataVectorHigh
+  jsr print_message
+;Draw Screen4 line 4
+  lda #$DF 
+  jsr lcd_send_instruction 
+  lda #<screen_4_Line4
+  sta charDataVectorLow
+  lda #>screen_4_Line4
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+;Draw Screen4 line 1
+  lda #$8B 
+  jsr lcd_send_instruction
+  lda #<screen_4_Line1_bis
+  sta charDataVectorLow
+  lda #>screen_4_Line1_bis
+  sta charDataVectorHigh
+  jsr print_message
+  jsr DELAY_HALF_SEC
+
+
 enter_into_loop:
   jmp loop
 
@@ -414,6 +459,17 @@ char_5:
   sta charLoadHigh
   jsr char_load
 
+char_6: 
+  lda #($40+$30);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
+  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
+  jsr lcd_send_instruction
+  lda #<frogger_win
+  sta charLoadLow
+  lda #>frogger_win
+  sta charLoadHigh
+  jsr char_load
+
 add_custom_chars_end:  
   rts
 
@@ -462,6 +518,16 @@ screen_3_Line4:
   .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_3_Line2_bis:
   .byte cespacio,cautito,cespacio,cfrogger_saltando,cautito,cespacio,cespacio,cautito2,$00
+screen_4_Line1:
+  .byte ccasita,cespacio,ccasita,cfrogger,ccasita,cespacio,ccasita,cespacio,$00
+screen_4_Line2:
+  .byte cautito,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,$00
+screen_4_Line3:
+  .byte cespacio,cespacio,cautito2,cespacio,cespacio,cespacio,cespacio,cautito,$00
+screen_4_Line4:
+  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+screen_4_Line1_bis:
+  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
 
 
 casita:
@@ -474,6 +540,8 @@ autito:
   .byte $00,$00,$1b,$0e,$0e,$1B,$00,$00
 autito2:
   .byte $00,$00,$09,$06,$09,$00,$00,$00
+frogger_win:
+  .byte $1b,$1b,$04,$0e,$11,$1b,$11,$11  
 
 
 
