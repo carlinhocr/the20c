@@ -572,7 +572,7 @@ screen_3_Line3:
 screen_3_Line4:
   .byte pos_line4,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_3_Line2_bis:
-  .byte pos_line3,cespacio,cautito,cespacio,cfrogger_saltando,cautito,cespacio,cespacio,cautito2,$00
+  .byte pos_line2,cespacio,cautito,cespacio,cfrogger_saltando,cautito,cespacio,cespacio,cautito2,$00
 
 screen_4_Line1:
   .byte pos_line1,ccasita,cespacio,ccasita,cfrogger,ccasita,cespacio,ccasita,cespacio
