@@ -414,7 +414,7 @@ enter_into_loop:
 
 print_screen:  
   ;BEGIN Write all the letters 
-  ldy #$FF ;first byte is the position of the line
+  ldy #$00 ;first byte is the position of the line
 print_screen_load_position:
   lda (charDataVectorLow),y
   beq print_screen_end ;jump to loop if I load a 0 on lda a zero means the end  of a n .asciiz string
