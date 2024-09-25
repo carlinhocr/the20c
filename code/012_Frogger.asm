@@ -455,7 +455,7 @@ screen_2_Line3_bis:
 screen_3_Line1:
   .byte ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,$00
 screen_3_Line2:
-  .byte cespacio,cautito,cespacio,cfrogger,cautito,cespacio,cespacio,cautito2$00
+  .byte cespacio,cautito,cespacio,cfrogger,cautito,cespacio,cespacio,cautito2,$00
 screen_3_Line3:
   .byte cautito,cespacio,cespacio,cautito2,cespacio,cespacio,cespacio,cespacio,$00
 screen_3_Line4:
