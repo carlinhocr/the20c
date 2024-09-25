@@ -687,11 +687,11 @@ title_1:
   .asciiz "FROGGER" ;adds a 0 after the last byte
 
 screen_1_Line1:
-  .byte pos_line1,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio
+  .byte pos_line1,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,$00
 screen_1_Line2:
-  .byte pos_line2,cautito2,cespacio,cespacio,cautito,cespacio,cespacio,cautito,cespacio
+  .byte pos_line2,cautito2,cespacio,cespacio,cautito,cespacio,cespacio,cautito,cespacio,$00
 screen_1_Line3:
-  .byte pos_line3,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio
+  .byte pos_line3,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,$00
 screen_1_Line4:
   .byte pos_line4,cespacio,cespacio,cespacio,cfrogger,cespacio,cespacio,cespacio,cespacio,$00
 screen_1_Line4_bis:
