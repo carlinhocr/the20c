@@ -19,6 +19,13 @@ delay_COUNT_B = $33
 charLoadLow=$28
 charLoadHigh=$29
 
+cespacio=$20
+ccasita=$01
+cfrogger=$02
+cfrogger_saltando=$03
+cautito=$04
+cautito2=$05
+
 ;define LCD signals
 E = %10000000 ;Enable Signal
 RW = %01000000 ; Read/Write Signal
@@ -334,20 +341,14 @@ char_load_loop:
  .org $d000
 title_1:
   .asciiz "FROGGER" ;adds a 0 after the last byte
-cespacio=$20
-ccasita=$01
-cfrogger=$02
-cfrogger_saltando=$03
-cautito=$04
-cautito2=$05
 screen_1_Line1:
-  .byte ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,$00;
+  .byte $01,cespacio,$01,cespacio,$01,cespacio,$01,cespacio,$00
 screen_1_Line2:
   .byte cautito2,cespacio,cespacio,cautito,cespacio,cespacio,cautito,cespacio,$00
 screen_1_Line3:
   .byte cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,$00
 screen_1_Line4:
-  .byte cespacio,cespacio,cespacio,cfrogger,cespacio,cespacio,cespacio,cespacio,$00;
+  .byte cespacio,cespacio,cespacio,cfrogger,cespacio,cespacio,cespacio,cespacio,$00
 
 
 casita:
