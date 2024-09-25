@@ -77,10 +77,10 @@ data_high= $d0
   lda #>title_1
   sta charDataVectorHigh
   jsr print_message
-  jsr DELAY_SEC
-  jsr DELAY_SEC
+  ;jsr DELAY_SEC
+  ;jsr DELAY_SEC
 ;Draw Screen1 line 1
-  lda #$9F 
+  lda #$8B 
   jsr lcd_send_instruction
   lda #<screen_1_Line1
   sta charDataVectorLow
@@ -88,7 +88,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen1 line 2
-  lda #$9F 
+  lda #$CB 
   jsr lcd_send_instruction 
   lda #<screen_1_Line2
   sta charDataVectorLow
@@ -105,7 +105,7 @@ data_high= $d0
   sta charDataVectorHigh
   jsr print_message
 ;Draw Screen1 line 4
-  lda #$9F 
+  lda #$DF 
   jsr lcd_send_instruction 
   lda #<screen_1_Line4
   sta charDataVectorLow
