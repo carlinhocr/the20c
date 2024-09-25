@@ -125,393 +125,300 @@ play_game:
   jsr print_line
   jsr DELAY_HALF_SEC
 ;Draw Screen2 line 1
-  lda #pos_line1
-  jsr lcd_send_instruction
   lda #<screen_2_Line1
   sta charDataVectorLow
   lda #>screen_2_Line1
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen2 line 2
-  lda #pos_line2 
-  jsr lcd_send_instruction 
   lda #<screen_2_Line2
   sta charDataVectorLow
   lda #>screen_2_Line2
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen2 line 3
-  lda #pos_line3
-  jsr lcd_send_instruction 
   lda #<screen_2_Line3
   sta charDataVectorLow
   lda #>screen_2_Line3
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen2 line 4
-  lda #pos_line4
-  jsr lcd_send_instruction 
   lda #<screen_2_Line4
   sta charDataVectorLow
   lda #>screen_2_Line4
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 ;Draw Screen2 line 3 bis
-  lda #pos_line3 
-  jsr lcd_send_instruction 
   lda #<screen_2_Line3_bis
   sta charDataVectorLow
   lda #>screen_2_Line3_bis
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 
-
 ;Draw Screen3 line 1
-  lda #pos_line1 
-  jsr lcd_send_instruction
   lda #<screen_3_Line1
   sta charDataVectorLow
   lda #>screen_3_Line1
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen3 line 2
-  lda #pos_line2 
-  jsr lcd_send_instruction 
   lda #<screen_3_Line2
   sta charDataVectorLow
   lda #>screen_3_Line2
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen3 line 3
-  lda #pos_line3
-  jsr lcd_send_instruction 
   lda #<screen_3_Line3
   sta charDataVectorLow
   lda #>screen_3_Line3
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen3 line 4
-  lda #pos_line4
-  jsr lcd_send_instruction 
   lda #<screen_3_Line4
   sta charDataVectorLow
   lda #>screen_3_Line4
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 ;Draw Screen3 line 2 bis
-  lda #pos_line2 
-  jsr lcd_send_instruction 
   lda #<screen_3_Line2_bis
   sta charDataVectorLow
   lda #>screen_3_Line2_bis
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 
-
 ;Draw Screen4 line 1
-  lda #pos_line1
-  jsr lcd_send_instruction
   lda #<screen_4_Line1
   sta charDataVectorLow
   lda #>screen_4_Line1
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen4 line 2
-  lda #pos_line2
-  jsr lcd_send_instruction 
   lda #<screen_4_Line2
   sta charDataVectorLow
   lda #>screen_4_Line2
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen4 line 3
-  lda #pos_line3 
-  jsr lcd_send_instruction 
   lda #<screen_4_Line3
   sta charDataVectorLow
   lda #>screen_4_Line3
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen4 line 4
-  lda #pos_line4 
-  jsr lcd_send_instruction 
   lda #<screen_4_Line4
   sta charDataVectorLow
   lda #>screen_4_Line4
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 ;Draw Screen4 line 1
-  lda #pos_line1 
-  jsr lcd_send_instruction
   lda #<screen_4_Line1_bis
   sta charDataVectorLow
   lda #>screen_4_Line1_bis
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 
-
 ;Draw Screen5 line 1
-  lda #pos_line1 
-  jsr lcd_send_instruction
   lda #<screen_5_Line1
   sta charDataVectorLow
   lda #>screen_5_Line1
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen5 line 2
-  lda #pos_line2 
-  jsr lcd_send_instruction 
   lda #<screen_5_Line2
   sta charDataVectorLow
   lda #>screen_5_Line2
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen5 line 3
-  lda #pos_line3
-  jsr lcd_send_instruction 
   lda #<screen_5_Line3
   sta charDataVectorLow
   lda #>screen_5_Line3
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen5 line 4
-  lda #pos_line4 
-  jsr lcd_send_instruction 
   lda #<screen_5_Line4
   sta charDataVectorLow
   lda #>screen_5_Line4
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 ;Draw Screen5 line 4 bis
-  lda #pos_line4
-  jsr lcd_send_instruction 
   lda #<screen_5_Line4_bis
   sta charDataVectorLow
   lda #>screen_5_Line4_bis
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 
 ;Draw Screen6 line 1
-  lda #pos_line1
-  jsr lcd_send_instruction
   lda #<screen_6_Line1
   sta charDataVectorLow
   lda #>screen_6_Line1
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen6 line 2
-  lda #pos_line2 
-  jsr lcd_send_instruction 
   lda #<screen_6_Line2
   sta charDataVectorLow
   lda #>screen_6_Line2
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen6 line 3
-  lda #pos_line3
-  jsr lcd_send_instruction 
   lda #<screen_6_Line3
   sta charDataVectorLow
   lda #>screen_6_Line3
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen6 line 4
-  lda #pos_line4
-  jsr lcd_send_instruction 
   lda #<screen_6_Line4
   sta charDataVectorLow
   lda #>screen_6_Line4
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
-;Draw Screen6 line 3 bis
-  lda #pos_line3 
-  jsr lcd_send_instruction 
+;Draw Screen6 line 3 bis 
   lda #<screen_6_Line3_bis
   sta charDataVectorLow
   lda #>screen_6_Line3_bis
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 
 ;Draw Screen7 line 1
-  lda #pos_line1
-  jsr lcd_send_instruction
   lda #<screen_7_Line1
   sta charDataVectorLow
   lda #>screen_7_Line1
   sta charDataVectorHigh
-  jsr print_message
-;Draw Screen7 line 2
-  lda #pos_line2 
-  jsr lcd_send_instruction 
+  jsr print_line
+;Draw Screen7 line 2 
   lda #<screen_7_Line2
   sta charDataVectorLow
   lda #>screen_7_Line2
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen7 line 3
-  lda #pos_line3
-  jsr lcd_send_instruction 
   lda #<screen_7_Line3
   sta charDataVectorLow
   lda #>screen_7_Line3
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen7 line 4
-  lda #pos_line4
-  jsr lcd_send_instruction 
   lda #<screen_7_Line4
   sta charDataVectorLow
   lda #>screen_7_Line4
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 ;Draw Screen7 line 3 bis
-  lda #pos_line3 
-  jsr lcd_send_instruction 
   lda #<screen_7_Line3_bis
   sta charDataVectorLow
   lda #>screen_7_Line3_bis
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 
 ;Draw Screen8 line 1
-  lda #pos_line1
-  jsr lcd_send_instruction
   lda #<screen_8_Line1
   sta charDataVectorLow
   lda #>screen_8_Line1
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen8 line 2
-  lda #pos_line2 
-  jsr lcd_send_instruction 
   lda #<screen_8_Line2
   sta charDataVectorLow
   lda #>screen_8_Line2
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen8 line 3
-  lda #pos_line3
-  jsr lcd_send_instruction 
   lda #<screen_8_Line3
   sta charDataVectorLow
   lda #>screen_8_Line3
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen8 line 4
-  lda #pos_line4
-  jsr lcd_send_instruction 
   lda #<screen_8_Line4
   sta charDataVectorLow
   lda #>screen_8_Line4
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 ;Draw Screen8 line 3 bis
-  lda #pos_line3 
-  jsr lcd_send_instruction 
   lda #<screen_8_Line3_bis
   sta charDataVectorLow
   lda #>screen_8_Line3_bis
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 
 ;Draw Screen9 line 1
-  lda #pos_line1
-  jsr lcd_send_instruction
   lda #<screen_9_Line1
   sta charDataVectorLow
   lda #>screen_9_Line1
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen9 line 2
-  lda #pos_line2 
-  jsr lcd_send_instruction 
   lda #<screen_9_Line2
   sta charDataVectorLow
   lda #>screen_9_Line2
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen9 line 3
-  lda #pos_line3
-  jsr lcd_send_instruction 
   lda #<screen_9_Line3
   sta charDataVectorLow
   lda #>screen_9_Line3
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen9 line 4
-  lda #pos_line4
-  jsr lcd_send_instruction 
   lda #<screen_9_Line4
   sta charDataVectorLow
   lda #>screen_9_Line4
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 ;Draw Screen9 line 3 bis
-  lda #pos_line2 
-  jsr lcd_send_instruction 
   lda #<screen_9_Line2_bis
   sta charDataVectorLow
   lda #>screen_9_Line2_bis
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 
 ;Draw Screen10 line 1
-  lda #pos_line1 
-  jsr lcd_send_instruction
   lda #<screen_10_Line1
   sta charDataVectorLow
   lda #>screen_10_Line1
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen10 line 2
-  lda #pos_line2 
-  jsr lcd_send_instruction 
   lda #<screen_10_Line2
   sta charDataVectorLow
   lda #>screen_10_Line2
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen10 line 3
-  lda #pos_line3
-  jsr lcd_send_instruction 
   lda #<screen_10_Line3
   sta charDataVectorLow
   lda #>screen_10_Line3
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
 ;Draw Screen10 line 4
-  lda #pos_line4
-  jsr lcd_send_instruction 
   lda #<screen_10_Line4
   sta charDataVectorLow
   lda #>screen_10_Line4
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC
 ;Draw Screen10 line 2 bis
-  lda #pos_line1 
-  jsr lcd_send_instruction 
   lda #<screen_10_Line1_bis
   sta charDataVectorLow
   lda #>screen_10_Line1_bis
   sta charDataVectorHigh
-  jsr print_message
+  jsr print_line
   jsr DELAY_HALF_SEC 
 
 keep_playing:
@@ -780,116 +687,116 @@ title_1:
   .asciiz "FROGGER" ;adds a 0 after the last byte
 
 screen_1_Line1:
-  .byte pos_line1,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,$00
+  .byte pos_line1,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio
 screen_1_Line2:
-  .byte pos_line2,cautito2,cespacio,cespacio,cautito,cespacio,cespacio,cautito,cespacio,$00
+  .byte pos_line2,cautito2,cespacio,cespacio,cautito,cespacio,cespacio,cautito,cespacio
 screen_1_Line3:
-  .byte pos_line3,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,$00
+  .byte pos_line3,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio
 screen_1_Line4:
   .byte pos_line4,cespacio,cespacio,cespacio,cfrogger,cespacio,cespacio,cespacio,cespacio,$00
 screen_1_Line4_bis:
   .byte pos_line4,cespacio,cespacio,cespacio,cfrogger_saltando,cespacio,cespacio,cespacio,cespacio,$00
 
 screen_2_Line1:
-  .byte ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,$00
+  .byte pos_line1,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,$00
 screen_2_Line2:
-  .byte cespacio,cespacio,cautito,cespacio,cespacio,cautito,cespacio,cespacio,$00
+  .byte pos_line2,cespacio,cespacio,cautito,cespacio,cespacio,cautito,cespacio,cespacio,$00
 screen_2_Line3:
-  .byte cespacio,cautito,cespacio,cfrogger,cautito2,cespacio,cespacio,cespacio,$00
+  .byte pos_line3,cespacio,cautito,cespacio,cfrogger,cautito2,cespacio,cespacio,cespacio,$00
 screen_2_Line4:
-  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+  .byte pos_line4,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_2_Line3_bis:
-  .byte cespacio,cautito,cespacio,cfrogger_saltando,cautito2,cespacio,cespacio,cespacio,$00
+  .byte pos_line3,cespacio,cautito,cespacio,cfrogger_saltando,cautito2,cespacio,cespacio,cespacio,$00
 
 screen_3_Line1:
-  .byte ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,$00
+  .byte pos_line1,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,ccasita,cespacio,$00
 screen_3_Line2:
-  .byte cespacio,cautito,cespacio,cfrogger,cautito,cespacio,cespacio,cautito2,$00
+  .byte pos_line2,cespacio,cautito,cespacio,cfrogger,cautito,cespacio,cespacio,cautito2,$00
 screen_3_Line3:
-  .byte cautito,cespacio,cespacio,cautito2,cespacio,cespacio,cespacio,cespacio,$00
+  .byte pos_line3,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,cespacio,cespacio,$00
 screen_3_Line4:
-  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+  .byte pos_line4,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_3_Line2_bis:
-  .byte cespacio,cautito,cespacio,cfrogger_saltando,cautito,cespacio,cespacio,cautito2,$00
+  .byte pos_line3,cespacio,cautito,cespacio,cfrogger_saltando,cautito,cespacio,cespacio,cautito2,$00
 
 screen_4_Line1:
-  .byte ccasita,cespacio,ccasita,cfrogger,ccasita,cespacio,ccasita,cespacio,$00
+  .byte pos_line1,ccasita,cespacio,ccasita,cfrogger,ccasita,cespacio,ccasita,cespacio,$00
 screen_4_Line2:
-  .byte cautito,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,$00
+  .byte pos_line2,cautito,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,$00
 screen_4_Line3:
-  .byte cespacio,cespacio,cautito2,cespacio,cespacio,cespacio,cespacio,cautito,$00
+  .byte pos_line3,cespacio,cespacio,cautito2,cespacio,cespacio,cespacio,cespacio,cautito,$00
 screen_4_Line4:
-  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+  .byte pos_line4,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_4_Line1_bis:
-  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+  .byte pos_line1,ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
 
 screen_5_Line1:
-  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+  .byte pos_line1,ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
 screen_5_Line2:
-  .byte cautito,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,$00
+  .byte pos_line2,cautito,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,$00
 screen_5_Line3:
-  .byte cespacio,cespacio,cautito2,cespacio,cespacio,cespacio,cespacio,cautito,$00
+  .byte pos_line3,cespacio,cespacio,cautito2,cespacio,cespacio,cespacio,cespacio,cautito,$00
 screen_5_Line4:
-  .byte cespacio,cespacio,cespacio,cfrogger,cespacio,cespacio,cespacio,cespacio,$00
+  .byte pos_line4,cespacio,cespacio,cespacio,cfrogger,cespacio,cespacio,cespacio,cespacio,$00
 screen_5_Line4_bis:
-  .byte cespacio,cespacio,cespacio,cfrogger_saltando,cespacio,cespacio,cespacio,cespacio,$00
+  .byte pos_line4,cespacio,cespacio,cespacio,cfrogger_saltando,cespacio,cespacio,cespacio,cespacio,$00
 
 
 screen_6_Line1:
-  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+  .byte pos_line1,ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
 screen_6_Line2:
-  .byte cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,$00
+  .byte pos_line2,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,$00
 screen_6_Line3:
-  .byte cespacio,cautito2,cespacio,cfrogger,cespacio,cespacio,cautito,cespacio,$00
+  .byte pos_line3,cespacio,cautito2,cespacio,cfrogger,cespacio,cespacio,cautito,cespacio,$00
 screen_6_Line4:
-  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+  .byte pos_line4,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_6_Line3_bis:
-  .byte cespacio,cautito2,cespacio,cfrogger_izq,cespacio,cespacio,cautito,cespacio,$00
+  .byte pos_line3,cespacio,cautito2,cespacio,cfrogger_izq,cespacio,cespacio,cautito,cespacio,$00
 
 screen_7_Line1:
-  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+  .byte pos_line1,ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
 screen_7_Line2:
-  .byte cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,$00
+  .byte pos_line2,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,$00
 screen_7_Line3:
-  .byte cespacio,cautito2,cfrogger,cespacio,cespacio,cespacio,cautito,cespacio,$00
+  .byte pos_line3,cespacio,cautito2,cfrogger,cespacio,cespacio,cespacio,cautito,cespacio,$00
 screen_7_Line4:
-  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+  .byte pos_line4,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_7_Line3_bis:
-  .byte cespacio,cautito2,cfrogger_izq,cespacio,cespacio,cespacio,cautito,cespacio,$00
+  .byte pos_line3,cespacio,cautito2,cfrogger_izq,cespacio,cespacio,cespacio,cautito,cespacio,$00
 
 screen_8_Line1:
-  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+  .byte pos_line1,ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
 screen_8_Line2:
-  .byte cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,cautito,$00
+  .byte pos_line2,cespacio,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,cautito,$00
 screen_8_Line3:
-  .byte cautito2,cfrogger,cespacio,cespacio,cespacio,cautito,cespacio,cespacio,$00
+  .byte pos_line3,cautito2,cfrogger,cespacio,cespacio,cespacio,cautito,cespacio,cespacio,$00
 screen_8_Line4:
-  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+  .byte pos_line4,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_8_Line3_bis:
-  .byte cautito2,cfrogger_saltando,cespacio,cespacio,cespacio,cautito,cespacio,cespacio,$00
+  .byte pos_line3,cautito2,cfrogger_saltando,cespacio,cespacio,cespacio,cautito,cespacio,cespacio,$00
 
 
 screen_9_Line1:
-  .byte ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+  .byte pos_line1,ccasita,cespacio,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
 screen_9_Line2:
-  .byte cautito,cfrogger,cespacio,cautito2,cespacio,cespacio,cautito,cespacio,$00
+  .byte pos_line2,cautito,cfrogger,cespacio,cautito2,cespacio,cespacio,cautito,cespacio,$00
 screen_9_Line3:
-  .byte cespacio,cespacio,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,$00
+  .byte pos_line3,cespacio,cespacio,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,$00
 screen_9_Line4:
-  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+  .byte pos_line4,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_9_Line2_bis:
-  .byte cautito,cfrogger_saltando,cespacio,cautito2,cespacio,cespacio,cautito,cespacio,$00
+  .byte pos_line2,cautito,cfrogger_saltando,cespacio,cautito2,cespacio,cespacio,cautito,cespacio,$00
 
 screen_10_Line1:
-  .byte ccasita,cfrogger,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+  .byte pos_line1,ccasita,cfrogger,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
 screen_10_Line2:
-  .byte cautito,cespacio,cespacio,cautito2,cespacio,cespacio,cautito,cespacio,$00
+  .byte pos_line2,cautito,cespacio,cespacio,cautito2,cespacio,cespacio,cautito,cespacio,$00
 screen_10_Line3:
-  .byte cespacio,cespacio,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,$00
+  .byte pos_line3,cespacio,cespacio,cespacio,cespacio,cautito,cespacio,cespacio,cautito2,$00
 screen_10_Line4:
-  .byte cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
+  .byte pos_line4,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,cespacio,$00
 screen_10_Line1_bis:
-  .byte ccasita,cfrogger_win,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
+  .byte pos_line1,ccasita,cfrogger_win,ccasita,cfrogger_win,ccasita,cespacio,ccasita,cespacio,$00
 
 
 ;usar el primer byte como la posición de la linea
