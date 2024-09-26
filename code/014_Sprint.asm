@@ -74,10 +74,113 @@ write_Screens:
   jsr DELAY_SEC
   jsr DELAY_SEC
 play_game:
-;Draw Screen1 line 1 to line 4
+;Draw Screen1
   lda #<sprint_screen_1
   sta charDataVectorLow
   lda #>sprint_screen_1
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+;Draw Screen2
+  lda #<sprint_screen_2
+  sta charDataVectorLow
+  lda #>sprint_screen_2
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+
+;Draw Screen3
+  lda #<sprint_screen_3
+  sta charDataVectorLow
+  lda #>sprint_screen_3
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+
+;Draw Screen4
+  lda #<sprint_screen_4
+  sta charDataVectorLow
+  lda #>sprint_screen_4
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+
+;Draw Screen 5
+  lda #<sprint_screen_5
+  sta charDataVectorLow
+  lda #>sprint_screen_5
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+
+;Draw Screen 6
+  lda #<sprint_screen_6
+  sta charDataVectorLow
+  lda #>sprint_screen_6
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+
+;Draw Screen 7
+  lda #<sprint_screen_7
+  sta charDataVectorLow
+  lda #>sprint_screen_7
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+
+;Draw Screen 8
+  lda #<sprint_screen_8
+  sta charDataVectorLow
+  lda #>sprint_screen_8
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+
+;Draw Screen 9
+  lda #<sprint_screen_9
+  sta charDataVectorLow
+  lda #>sprint_screen_9
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+
+;Draw Screen10
+  lda #<sprint_screen_10
+  sta charDataVectorLow
+  lda #>sprint_screen_10
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+
+;Draw Screen11
+  lda #<sprint_screen_11
+  sta charDataVectorLow
+  lda #>sprint_screen_11
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+
+;Draw Screen12
+  lda #<sprint_screen_12
+  sta charDataVectorLow
+  lda #>sprint_screen_12
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+
+;Draw Screen13
+  lda #<sprint_screen_13
+  sta charDataVectorLow
+  lda #>sprint_screen_13
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+
+;Draw Screen14
+  lda #<sprint_screen_13
+  sta charDataVectorLow
+  lda #>sprint_screen_13
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
@@ -395,11 +498,95 @@ startDATA:
 title_1:
   .asciiz "SPRINT" ;adds a 0 after the last byte
 
-sprint_screen_1:
+sprint_screen_demo:
   .byte pos_line1,cpared_l,craya1,cauto1,craya1,craya1,craya1,craya1,cpared_r
   .byte pos_line2,cpared_l,cespacio,craya2,cauto2,craya2,craya2,cespacio,cpared_r
   .byte pos_line3,cpared_l,cespacio,craya1,craya1,cauto1,craya1,cauto_vert,cpared_r
   .byte pos_line4,cpared_l,craya2,craya2,craya2,cauto2,craya2,craya2,cpared_r,end_char
+
+sprint_screen_1:
+  .byte pos_line1,cpared_l,craya1,craya1,craya1,craya1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,craya2,craya2,craya2,craya2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cespacio,craya1,craya1,cauto1,craya1,cespacio,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,craya2,cauto2,craya2,craya2,cpared_r,end_char
+
+sprint_screen_2:
+  .byte pos_line1,cpared_l,craya1,craya1,craya1,craya1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,craya2,craya2,craya2,craya2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cespacio,craya1,craya1,craya1,cauto1,cespacio,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,craya2,cauto2,craya2,craya2,cpared_r,end_char
+
+sprint_screen_3:
+  .byte pos_line1,cpared_l,craya1,craya1,craya1,craya1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,craya2,craya2,craya2,craya2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cespacio,craya1,craya1,craya1,craya1,cauto_vert,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,craya2,craya2,cauto2,craya2,cpared_r,end_char
+
+sprint_screen_4:
+  .byte pos_line1,cpared_l,craya1,craya1,craya1,craya1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,craya2,craya2,craya2,craya2,cauto_vert,cpared_r
+  .byte pos_line3,cpared_l,cespacio,craya1,craya1,craya1,craya1,cespacio,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,craya2,craya2,craya2,cauto2,cpared_r,end_char
+
+sprint_screen_5:
+  .byte pos_line1,cpared_l,craya1,craya1,craya1,craya1,craya1,cauto1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,craya2,craya2,craya2,craya2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cespacio,craya1,craya1,craya1,craya1,cauto_vert,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,craya2,craya2,craya2,craya2,cpared_r,end_char
+
+sprint_screen_6:
+  .byte pos_line1,cpared_l,craya1,craya1,craya1,craya1,cauto1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,craya2,craya2,craya2,craya2,cauto_vert,cpared_r
+  .byte pos_line3,cpared_l,cespacio,craya1,craya1,craya1,craya1,cespacio,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,craya2,craya2,craya2,craya2,cpared_r,end_char
+
+sprint_screen_7:
+  .byte pos_line1,cpared_l,craya1,craya1,craya1,cauto1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,craya2,craya2,craya2,cauto2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cespacio,craya1,craya1,craya1,craya1,cespacio,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,craya2,craya2,craya2,craya2,cpared_r,end_char
+
+sprint_screen_8:
+  .byte pos_line1,cpared_l,craya1,craya1,cauto1,craya1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,craya2,craya2,cauto2,craya2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cespacio,craya1,craya1,craya1,craya1,cespacio,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,craya2,craya2,craya2,craya2,cpared_r,end_char
+
+sprint_screen_9:
+  .byte pos_line1,cpared_l,craya1,cauto1,craya1,craya1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,cauto2,craya2,craya2,craya2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cespacio,craya1,craya1,craya1,craya1,cespacio,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,craya2,craya2,craya2,craya2,cpared_r,end_char
+
+sprint_screen_10:
+  .byte pos_line1,cpared_l,cauto1,craya1,craya1,craya1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cauto_vert,craya2,craya2,craya2,craya2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cespacio,craya1,craya1,craya1,craya1,cespacio,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,craya2,craya2,craya2,craya2,cpared_r,end_char
+
+sprint_screen_11:
+  .byte pos_line1,cpared_l,craya1,craya1,craya1,craya1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cauto_vert,craya2,craya2,craya2,craya2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cauto_vert,craya1,craya1,craya1,craya1,cespacio,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,craya2,craya2,craya2,craya2,cpared_r,end_char
+
+sprint_screen_12:
+  .byte pos_line1,cpared_l,craya1,craya1,craya1,craya1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,craya2,craya2,craya2,craya2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cauto_vert,craya1,craya1,craya1,craya1,cespacio,cpared_r
+  .byte pos_line4,cpared_l,cauto2,craya2,craya2,craya2,craya2,craya2,cpared_r,end_char
+
+sprint_screen_13:
+  .byte pos_line1,cpared_l,craya1,craya1,craya1,craya1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,craya2,craya2,craya2,craya2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cespacio,cauto1,craya1,craya1,craya1,cespacio,cpared_r
+  .byte pos_line4,cpared_l,craya2,cauto2,craya2,craya2,craya2,craya2,cpared_r,end_char
+
+sprint_screen_14:
+  .byte pos_line1,cpared_l,craya1,craya1,craya1,craya1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,craya2,craya2,craya2,craya2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cespacio,craya1,cauto1,craya1,craya1,cespacio,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,cauto2,craya2,craya2,craya2,cpared_r,end_char
 
 ;usar el primer byte como la posición de la linea
 auto1:
