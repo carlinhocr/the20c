@@ -178,16 +178,14 @@ play_game:
   jsr DELAY_HALF_SEC
 
 ;Draw Screen14
-  lda #<sprint_screen_13
+  lda #<sprint_screen_14
   sta charDataVectorLow
-  lda #>sprint_screen_13
+  lda #>sprint_screen_14
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
 
 keep_playing:
-  jsr DELAY_SEC
-  jsr DELAY_SEC
   jmp play_game
 
 enter_into_loop:
