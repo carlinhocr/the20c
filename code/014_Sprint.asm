@@ -24,6 +24,9 @@ cauto1=$01
 cauto2=$02
 craya1=$03
 craya2=$04
+cpared_l=$05
+cpared_r=$06
+cauto_vert=$07
 cpared=%01111100
 
 end_char=$ff
@@ -339,38 +342,38 @@ char_4:
   sta charLoadHigh
   jsr char_load
 
-; char_5: 
-;   lda #($40+$28);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
-;   ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
-;   ;8028 jumps to send intrsuction
-;   jsr lcd_send_instruction
-;   lda #<autito2
-;   sta charLoadLow
-;   lda #>autito2
-;   sta charLoadHigh
-;   jsr char_load
+char_5: 
+  lda #($40+$28);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
+  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
+  jsr lcd_send_instruction
+  lda #<pared_l
+  sta charLoadLow
+  lda #>pared_l
+  sta charLoadHigh
+  jsr char_load
 
-; char_6: 
-;   lda #($40+$30);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
-;   ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
-;   ;8028 jumps to send intrsuction
-;   jsr lcd_send_instruction
-;   lda #<frogger_win
-;   sta charLoadLow
-;   lda #>frogger_win
-;   sta charLoadHigh
-;   jsr char_load
+char_6: 
+  lda #($40+$30);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
+  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
+  jsr lcd_send_instruction
+  lda #<pared_r
+  sta charLoadLow
+  lda #>pared_r
+  sta charLoadHigh
+  jsr char_load
 
-; char_7: 
-;   lda #($40+$38);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
-;   ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
-;   ;8028 jumps to send intrsuction
-;   jsr lcd_send_instruction
-;   lda #<frogger_izq
-;   sta charLoadLow
-;   lda #>frogger_izq
-;   sta charLoadHigh
-;   jsr char_load
+char_7: 
+  lda #($40+$38);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
+  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
+  jsr lcd_send_instruction
+  lda #<auto_vert
+  sta charLoadLow
+  lda #>auto_vert
+  sta charLoadHigh
+  jsr char_load
 
 add_custom_chars_end:  
   rts
@@ -393,10 +396,10 @@ title_1:
   .asciiz "SPRINT" ;adds a 0 after the last byte
 
 sprint_screen_1:
-  .byte pos_line1,cpared,craya1,cauto1,craya1,craya1,craya1,craya1,cpared
-  .byte pos_line2,cpared,cespacio,craya2,cauto2,craya2,craya2,cespacio,cpared
-  .byte pos_line3,cpared,cespacio,craya1,craya1,cauto1,craya1,cespacio,cpared
-  .byte pos_line4,cpared,craya2,craya2,craya1,cauto2,craya1,craya2,cpared,end_char
+  .byte pos_line1,cpared_l,craya1,cauto1,craya1,craya1,craya1,craya1,cpared_r
+  .byte pos_line2,cpared_l,cespacio,craya2,cauto2,craya2,craya2,cespacio,cpared_r
+  .byte pos_line3,cpared_l,cespacio,craya1,craya1,cauto1,craya1,cauto_vert,cpared_r
+  .byte pos_line4,cpared_l,craya2,craya2,craya2,cauto2,craya2,craya2,cpared_r,end_char
 
 ;usar el primer byte como la posición de la linea
 auto1:
@@ -407,6 +410,13 @@ raya1:
   .byte $00,$1F,$00,$00,$00,$00,$00,$00
 raya2:
   .byte $00,$00,$00,$00,$00,$00,$1f,$00 
+pared_l:
+  .byte $00,$01,$01,$01,$01,$01,$01,$00 
+pared_r:
+  .byte $00,$10,$10,$10,$10,$10,$10,$00 
+auto_vert:
+  .byte $00,$0A,$04,$04,$04,$0A,$00,$00 
+
 
 
 ;complete the file
