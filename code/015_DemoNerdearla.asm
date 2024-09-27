@@ -229,15 +229,15 @@ print_ascii_screen:
   ldx #$ff ; start as ff so when i add 1 it goes to zero
 print_ascii_screen_line:  
   inx
-  cpx $00
+  cpx #$00
   jsr set_position_lcd_line0
-  cpx $01
+  cpx #$01
   jsr set_position_lcd_line1
-  cpx $02
+  cpx #$02
   jsr set_position_lcd_line2
-  cpx $03
+  cpx #$03
   jsr set_position_lcd_line3
-  cpx $04
+  cpx #$04
   jmp print_ascii_screen_end
   ldy #$00
 print_ascii_screen_eeprom:  
