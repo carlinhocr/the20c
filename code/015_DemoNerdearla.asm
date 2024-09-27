@@ -77,7 +77,7 @@ write_Screens:
   sta charDataVectorLow
   lda #>screen1_demo
   sta charDataVectorHigh
-  jsr print_screen
+  jsr print_ascii_screen
   jsr DELAY_SEC
   jsr DELAY_SEC
   jsr DELAY_SEC
