@@ -77,7 +77,7 @@ write_Screens:
   sta charDataVectorLow
   lda #>screen1_demo
   sta charDataVectorHigh
-  jsr print_ascii_screen
+  jsr print_screen
   jsr DELAY_SEC
   jsr DELAY_SEC
   jsr DELAY_SEC
@@ -525,11 +525,15 @@ char_load_loop:
 startDATA: 
 
 screen1_demo:
-  .asciiz "                    "
-  .asciiz "      Hoooola       "
-  .asciiz "   NEEEEEERDDDDS    "
-  .asciiz "                    "
-
+  .byte pos_lcd_initial_line1
+  .byte "                    "
+  .byte pos_lcd_initial_line2
+  .byte "      Hoooola       "
+  .byte pos_lcd_initial_line3
+  .byte "   NEEEEEERDDDDS    "
+  .byte pos_lcd_initial_line4
+  .byte "                    "
+  .byte end_char
 
 title_1:
   .asciiz "SPRINT" ;adds a 0 after the last byte
