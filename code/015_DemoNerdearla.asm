@@ -210,19 +210,23 @@ enter_into_loop:
 set_position_lcd_line0:
   lda #pos_lcd_initial_line0
   jsr lcd_send_instruction 
-  jmp ret_lcd_line0
+  jmp print_ascii_screen_eeprom
 set_position_lcd_line1:
   lda #pos_lcd_initial_line1
   jsr lcd_send_instruction 
-  jmp ret_lcd_line1
+  jmp print_ascii_screen_eeprom
 set_position_lcd_line2:
   lda #pos_lcd_initial_line2
   jsr lcd_send_instruction 
-  jmp ret_lcd_line2
+  jmp print_ascii_screen_eeprom
 set_position_lcd_line3:
   lda #pos_lcd_initial_line3
   jsr lcd_send_instruction 
-  jmp ret_lcd_line3
+  jmp print_ascii_screen_eeprom
+reset_screen_position:
+  lda #pos_lcd_initial_line0
+  jsr lcd_send_instruction 
+  jmp print_ascii_screen_end
 
 print_ascii_screen:  
   ;BEGIN print_ascii_screen
@@ -232,19 +236,14 @@ print_ascii_screen_line:
   inx
   cpx #$00
   beq set_position_lcd_line0
-ret_lcd_line0:
   cpx #$01
   beq set_position_lcd_line1
-ret_lcd_line1:
   cpx #$02
   beq set_position_lcd_line2
-ret_lcd_line2:
   cpx #$03
-ret_lcd_line3:
+  beq set_position_lcd_line3
   cpx #$04
   beq reset_screen_position ; to reset the screen to initial position
-  cpx #$04
-  beq print_ascii_screen_end
 print_ascii_screen_eeprom:
   iny ;so it would go out of a last byte equal 0 loop
   lda (charDataVectorLow),y ;load letter from eeprom position indirect in the memory position charDataVector and indexed by Y
