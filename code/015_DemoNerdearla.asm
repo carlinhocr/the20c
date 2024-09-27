@@ -70,65 +70,74 @@ RESET:
   ;END Initialize LCD Display
   jsr add_custom_chars
   jsr initilize_display
+start_demo:  
+  jsr demo_first_part
+  jsr sprint_start ;print title an do a lap
+  jsr sprint_playing ;each one is a new lap
+  jsr sprint_playing ;each one is a new lap
+  jmp start_demo
 
-write_Screens:
-;Draw Screen 1 Demo
+demo_first_part:
+  ;Draw Screen 1 Demo
   lda #<screen1_demo
   sta charDataVectorLow
   lda #>screen1_demo
   sta charDataVectorHigh
   jsr print_ascii_screen
   jsr delay_3_sec
-;Draw Screen 2 Demo
+  ;Draw Screen 2 Demo
   lda #<screen2_demo
   sta charDataVectorLow
   lda #>screen2_demo
   sta charDataVectorHigh
   jsr print_ascii_screen
   jsr delay_3_sec
-;Draw Screen 3 Demo
+  ;Draw Screen 3 Demo
   lda #<screen3_demo
   sta charDataVectorLow
   lda #>screen3_demo
   sta charDataVectorHigh
   jsr print_ascii_screen
   jsr delay_3_sec
-;Draw Screen 4 Demo
+  ;Draw Screen 4 Demo
   lda #<screen4_demo
   sta charDataVectorLow
   lda #>screen4_demo
   sta charDataVectorHigh
   jsr print_ascii_screen
   jsr delay_3_sec
-;Draw Screen 5 Demo
+  ;Draw Screen 5 Demo
   lda #<screen5_demo
   sta charDataVectorLow
   lda #>screen5_demo
   sta charDataVectorHigh
   jsr print_ascii_screen
   jsr delay_3_sec
-;Draw Screen 6 Demo
+  ;Draw Screen 6 Demo
   lda #<screen6_demo
   sta charDataVectorLow
   lda #>screen6_demo
   sta charDataVectorHigh
   jsr print_ascii_screen
   jsr delay_3_sec
-;Draw Screen 7 Demo
+  ;Draw Screen 7 Demo
   lda #<screen7_demo
   sta charDataVectorLow
   lda #>screen7_demo
   sta charDataVectorHigh
   jsr print_ascii_screen
   jsr delay_3_sec
-;Draw Screen 8 Demo
+  ;Draw Screen 8 Demo
   lda #<screen8_demo
   sta charDataVectorLow
   lda #>screen8_demo
   sta charDataVectorHigh
   jsr print_ascii_screen
   jsr delay_3_sec
-;Draw title Sprint
+  rts
+
+sprint_start:
+  ;Draw title Sprint
   jsr clear_display
   lda #<title_sprint
   sta charDataVectorLow
@@ -137,120 +146,106 @@ write_Screens:
   jsr print_message
   jsr DELAY_SEC
   jsr DELAY_SEC
-play_game:
-;Draw Screen1
+sprint_playing:
+  ;Draw Screen1
   lda #<sprint_screen_1
   sta charDataVectorLow
   lda #>sprint_screen_1
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-;Draw Screen2
+  ;Draw Screen2
   lda #<sprint_screen_2
   sta charDataVectorLow
   lda #>sprint_screen_2
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-;Draw Screen3
+  ;Draw Screen3
   lda #<sprint_screen_3
   sta charDataVectorLow
   lda #>sprint_screen_3
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-;Draw Screen4
+  ;Draw Screen4
   lda #<sprint_screen_4
   sta charDataVectorLow
   lda #>sprint_screen_4
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-;Draw Screen 5
+  ;Draw Screen 5
   lda #<sprint_screen_5
   sta charDataVectorLow
   lda #>sprint_screen_5
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-;Draw Screen 6
+  ;Draw Screen 6
   lda #<sprint_screen_6
   sta charDataVectorLow
   lda #>sprint_screen_6
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-;Draw Screen 7
+  ;Draw Screen 7
   lda #<sprint_screen_7
   sta charDataVectorLow
   lda #>sprint_screen_7
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-;Draw Screen 8
+  ;Draw Screen 8
   lda #<sprint_screen_8
   sta charDataVectorLow
   lda #>sprint_screen_8
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-;Draw Screen 9
+  ;Draw Screen 9
   lda #<sprint_screen_9
   sta charDataVectorLow
   lda #>sprint_screen_9
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-;Draw Screen10
+  ;Draw Screen10
   lda #<sprint_screen_10
   sta charDataVectorLow
   lda #>sprint_screen_10
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-;Draw Screen11
+  ;Draw Screen11
   lda #<sprint_screen_11
   sta charDataVectorLow
   lda #>sprint_screen_11
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-;Draw Screen12
+  ;Draw Screen12
   lda #<sprint_screen_12
   sta charDataVectorLow
   lda #>sprint_screen_12
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-;Draw Screen13
+  ;Draw Screen13
   lda #<sprint_screen_13
   sta charDataVectorLow
   lda #>sprint_screen_13
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-;Draw Screen14
+  ;Draw Screen14
   lda #<sprint_screen_14
   sta charDataVectorLow
   lda #>sprint_screen_14
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-keep_playing:
-  jmp play_game
+  rts
 
 enter_into_loop:
   jmp loop
@@ -641,8 +636,8 @@ char_load_loop:
 startDATA: 
 
 screen1_demo:
-  .asciiz "                    "
   .asciiz "      Hoooola       "
+  .asciiz "                    "
   .asciiz "   NEEEEEERDDDDS    "
   .asciiz "                    "
 
@@ -660,9 +655,9 @@ screen3_demo:
 
 screen4_demo:
   .asciiz "   Soy una compu    "
-  .asciiz "  MO                "
-  .asciiz "       DU           "
-  .asciiz "             LAR    "
+  .asciiz "      MO            "
+  .asciiz "        DU          "
+  .asciiz "          LAR       "
 
 screen5_demo:
   .asciiz "   Y tengo solo     "
