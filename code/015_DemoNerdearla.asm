@@ -227,6 +227,7 @@ set_position_lcd_line3:
 print_ascii_screen:  
   ;BEGIN print_ascii_screen
   ldx #$ff ; start as ff so when i add 1 it goes to zero
+  ldy #$00 ; jsut at the begginning so it would got all the 80 characters of the screen
 print_ascii_screen_line:  
   inx
   cpx #$00
@@ -239,7 +240,6 @@ print_ascii_screen_line:
   jsr set_position_lcd_line3
   cpx #$04
   jmp print_ascii_screen_end
-  ldy #$00
 print_ascii_screen_eeprom:  
   lda (charDataVectorLow),y ;load letter from eeprom position indirect in the memory position charDataVector and indexed by Y
   beq print_ascii_screen_line ; jump to loop if I load a 0 on lda a zero means the end  of a n .asciiz string
