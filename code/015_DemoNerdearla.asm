@@ -78,13 +78,61 @@ write_Screens:
   lda #>screen1_demo
   sta charDataVectorHigh
   jsr print_ascii_screen
-  jsr DELAY_SEC
-  jsr DELAY_SEC
-  jsr DELAY_SEC
-;Draw title
-  lda #<title_1
+  jsr delay_3_sec
+;Draw Screen 2 Demo
+  lda #<screen2_demo
   sta charDataVectorLow
-  lda #>title_1
+  lda #>screen2_demo
+  sta charDataVectorHigh
+  jsr print_ascii_screen
+  jsr delay_3_sec
+;Draw Screen 3 Demo
+  lda #<screen3_demo
+  sta charDataVectorLow
+  lda #>screen3_demo
+  sta charDataVectorHigh
+  jsr print_ascii_screen
+  jsr delay_3_sec
+;Draw Screen 4 Demo
+  lda #<screen4_demo
+  sta charDataVectorLow
+  lda #>screen4_demo
+  sta charDataVectorHigh
+  jsr print_ascii_screen
+  jsr delay_3_sec
+;Draw Screen 5 Demo
+  lda #<screen5_demo
+  sta charDataVectorLow
+  lda #>screen5_demo
+  sta charDataVectorHigh
+  jsr print_ascii_screen
+  jsr delay_3_sec
+;Draw Screen 6 Demo
+  lda #<screen6_demo
+  sta charDataVectorLow
+  lda #>screen6_demo
+  sta charDataVectorHigh
+  jsr print_ascii_screen
+  jsr delay_3_sec
+;Draw Screen 7 Demo
+  lda #<screen7_demo
+  sta charDataVectorLow
+  lda #>screen7_demo
+  sta charDataVectorHigh
+  jsr print_ascii_screen
+  jsr delay_3_sec
+;Draw Screen 8 Demo
+  lda #<screen8_demo
+  sta charDataVectorLow
+  lda #>screen8_demo
+  sta charDataVectorHigh
+  jsr print_ascii_screen
+  jsr delay_3_sec
+;Draw title Sprint
+  jsr clear_display
+  lda #<title_sprint
+  sta charDataVectorLow
+  lda #>title_sprint
   sta charDataVectorHigh
   jsr print_message
   jsr DELAY_SEC
@@ -257,7 +305,6 @@ print_ascii_screen_end:
 
 print_screen:  
   ;BEGIN Write all the letters 
-  jsr clear_display
   ldy #$00 ;first byte is the position of the line
 print_screen_load_position:
   lda (charDataVectorLow),y
@@ -428,6 +475,35 @@ lcd_send_data:
 
 
 ; Set up the delay
+
+delay_2_sec:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  rts
+
+delay_3_sec:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  rts
+
+delay_4_sec:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  rts 
+
+delay_5_sec:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  rts
+
+
 DELAY_SEC:
   lda #$FF
   sta delay_COUNT_A
@@ -565,12 +641,76 @@ char_load_loop:
 startDATA: 
 
 screen1_demo:
-  .asciiz "A                   "
+  .asciiz "                    "
   .asciiz "      Hoooola       "
   .asciiz "   NEEEEEERDDDDS    "
-  .asciiz "Z                   "
+  .asciiz "                    "
 
-title_1:
+screen2_demo:
+  .asciiz "Hola                "
+  .asciiz "                    "
+  .asciiz "                    "
+  .asciiz "                    "
+
+screen3_demo:
+  .asciiz "                    "
+  .asciiz "     Soy la 20c     "
+  .asciiz "                    "
+  .asciiz "                    "
+
+screen4_demo:
+  .asciiz "   Soy una compu    "
+  .asciiz "  MO                "
+  .asciiz "       DU           "
+  .asciiz "             LAR    "
+
+screen5_demo:
+  .asciiz "   Y tengo solo     "
+  .asciiz "                    "
+  .asciiz "      8 BITS        "
+  .asciiz "                    "
+
+screen6_demo:
+  .asciiz "Me hicieron         "
+  .asciiz "para explicar       "
+  .asciiz "Como funcionan      "
+  .asciiz "las COMPUTADORAS    "
+
+screen7_demo:
+  .asciiz "                    "
+  .asciiz "  Soy  OpenSource   "
+  .asciiz "    Hard y Soft     "
+  .asciiz "                    "
+
+screen8_demo:
+  .asciiz "     Jugamos        "
+  .asciiz "    un Juego        "
+  .asciiz "   de Carreras?     "
+  .asciiz "                    "
+
+screen9_demo:
+  .asciiz "                    "
+  .asciiz "                    "
+  .asciiz "                    "
+  .asciiz "                    "
+
+screen10_demo:
+  .asciiz "                    "
+  .asciiz "                    "
+  .asciiz "                    "
+  .asciiz "                    "
+
+
+;-------------------------------------
+screenXX_demo:
+  .asciiz "                    "
+  .asciiz "                    "
+  .asciiz "                    "
+  .asciiz "                    "
+  
+
+
+title_sprint:
   .asciiz "SPRINT" ;adds a 0 after the last byte
 
 sprint_screen_demo:
