@@ -230,6 +230,7 @@ reset_screen_position:
 
 print_ascii_screen:  
   ;BEGIN print_ascii_screen
+  jsr clear_display
   ldx #$ff ; start as ff so when i add 1 it goes to zero
   ldy #$ff ; jsut at the begginning so it would got all the 80 characters of the screen
 print_ascii_screen_line:  
@@ -256,6 +257,7 @@ print_ascii_screen_end:
 
 print_screen:  
   ;BEGIN Write all the letters 
+  jsr clear_display
   ldy #$00 ;first byte is the position of the line
 print_screen_load_position:
   lda (charDataVectorLow),y
@@ -308,6 +310,12 @@ print_message_end:
 
 loop:
   jmp loop
+
+clear_display:
+; BEGIN clear display instruction  on port B
+  lda #%00000001 ;the instruction itself is 00000001
+  jsr lcd_send_instruction
+  ; END clear display instruction on port B 
 
 initilize_display:
 ; BEGIN clear display instruction  on port B
