@@ -38,13 +38,13 @@ pos_line4=$DF
 
 record_lenght=$09
 
-lenght_screen_lines=$04
+lenght_screen_lines=$04; 0 to 3
 lenght_ascii_line_characters=$20
 lenght_screen_characters=$50 ;80 in decimal
-pos_lcd_initial_line1=$80
-pos_lcd_initial_line2=$C0
-pos_lcd_initial_line3=$94
-pos_lcd_initial_line4=$D4
+pos_lcd_initial_line0=$80
+pos_lcd_initial_line1=$C0
+pos_lcd_initial_line2=$94
+pos_lcd_initial_line3=$D4
 
 ;define LCD signals
 E = %10000000 ;Enable Signal
@@ -207,14 +207,42 @@ keep_playing:
 enter_into_loop:
   jmp loop
 
+set_position_lcd_line0:
+  lda #pos_lcd_initial_line0
+  jsr lcd_send_instruction 
+  rts
+set_position_lcd_line1:
+  lda #pos_lcd_initial_line1
+  jsr lcd_send_instruction 
+  rts
+set_position_lcd_line2:
+  lda #pos_lcd_initial_line2
+  jsr lcd_send_instruction 
+  rts
+set_position_lcd_line3:
+  lda #pos_lcd_initial_line3
+  jsr lcd_send_instruction 
+  rts
 
 print_ascii_screen:  
   ;BEGIN print_ascii_screen
+  ldx #$ff ; start as ff so when i add 1 it goes to zero
+print_ascii_screen_line:  
+  inx
+  cpx $00
+  jsr set_position_lcd_line0
+  cpx $01
+  jsr set_position_lcd_line1
+  cpx $02
+  jsr set_position_lcd_line2
+  cpx $03
+  jsr set_position_lcd_line3
+  cpx $04
+  jmp print_ascii_screen_end
   ldy #$00
 print_ascii_screen_eeprom:  
   lda (charDataVectorLow),y ;load letter from eeprom position indirect in the memory position charDataVector and indexed by Y
-  cpy #lenght_screen_characters
-  beq print_ascii_screen_end ; jump to loop if I load a 0 on lda a zero means the end  of a n .asciiz string
+  beq print_ascii_screen_line ; jump to loop if I load a 0 on lda a zero means the end  of a n .asciiz string
   jsr print_char 
   iny
   jmp print_ascii_screen_eeprom
@@ -525,15 +553,10 @@ char_load_loop:
 startDATA: 
 
 screen1_demo:
-  .byte pos_lcd_initial_line1
-  .byte "                    "
-  .byte pos_lcd_initial_line2
-  .byte "      Hoooola       "
-  .byte pos_lcd_initial_line3
-  .byte "   NEEEEEERDDDDS    "
-  .byte pos_lcd_initial_line4
-  .byte "                    "
-  .byte end_char
+  .asciiz "                    "
+  .asciiz "      Hoooola       "
+  .asciiz "   NEEEEEERDDDDS    "
+  .asciiz "                    "
 
 title_1:
   .asciiz "SPRINT" ;adds a 0 after the last byte
