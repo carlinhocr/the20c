@@ -554,10 +554,10 @@ char_load_loop:
 startDATA: 
 
 screen1_demo:
-  .asciiz "                    "
+  .asciiz "A                   "
   .asciiz "      Hoooola       "
   .asciiz "   NEEEEEERDDDDS    "
-  .asciiz "                    "
+  .asciiz "Z                   "
 
 title_1:
   .asciiz "SPRINT" ;adds a 0 after the last byte
