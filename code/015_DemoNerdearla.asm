@@ -70,11 +70,13 @@ RESET:
   ;END Initialize LCD Display
   jsr add_custom_chars
   jsr initilize_display
+
 start_demo:  
   jsr demo_first_part
   jsr sprint_start ;print title an do a lap
   jsr sprint_playing ;each one is a new lap
   jsr sprint_playing ;each one is a new lap
+  jsr demo_final_part
   jmp start_demo
 
 demo_first_part:
@@ -246,6 +248,24 @@ sprint_playing:
   jsr print_screen
   jsr DELAY_HALF_SEC
   rts
+
+
+demo_final_part:
+  ;Draw Screen 1 Final Demo
+  lda #<screen1_final_demo
+  sta charDataVectorLow
+  lda #>screen1_final_demo
+  sta charDataVectorHigh
+  jsr print_ascii_screen
+  jsr delay_3_sec
+  ;Draw Screen 2 Final Demo
+  lda #<screen2_final_demo
+  sta charDataVectorLow
+  lda #>screen2_final_demo
+  sta charDataVectorHigh
+  jsr print_ascii_screen
+  jsr delay_3_sec
+  rts 
 
 enter_into_loop:
   jmp loop
@@ -654,15 +674,15 @@ screen3_demo:
   .asciiz "                    "
 
 screen4_demo:
-  .asciiz "   Soy una compu    "
-  .asciiz "      MO            "
-  .asciiz "        DU          "
-  .asciiz "          LAR       "
+  .asciiz "    Soy una compu   "
+  .asciiz "       MO           "
+  .asciiz "         DU         "
+  .asciiz "           LAR      "
 
 screen5_demo:
-  .asciiz "   Y tengo solo     "
+  .asciiz "    Y tengo solo    "
   .asciiz "                    "
-  .asciiz "      8 BITS        "
+  .asciiz "       8 BITS       "
   .asciiz "                    "
 
 screen6_demo:
@@ -672,27 +692,27 @@ screen6_demo:
   .asciiz "las COMPUTADORAS    "
 
 screen7_demo:
-  .asciiz "                    "
   .asciiz "  Soy  OpenSource   "
+  .asciiz "                    "
   .asciiz "    Hard y Soft     "
   .asciiz "                    "
 
 screen8_demo:
-  .asciiz "     Jugamos        "
-  .asciiz "    un Juego        "
-  .asciiz "   de Carreras?     "
+  .asciiz "      Jugamos       "
+  .asciiz "     un Juego       "
+  .asciiz "    de Carreras?    "
   .asciiz "                    "
 
-screen9_demo:
-  .asciiz "                    "
-  .asciiz "                    "
-  .asciiz "                    "
+screen1_final_demo:
+  .asciiz "     Queres         "
+  .asciiz "     Saber          "
+  .asciiz "     Mas?           "
   .asciiz "                    "
 
-screen10_demo:
+screen2_final_demo:
+  .asciiz "     Vayan a        "
   .asciiz "                    "
-  .asciiz "                    "
-  .asciiz "                    "
+  .asciiz "OSOLABS.TECH/THE20C "
   .asciiz "                    "
 
 
