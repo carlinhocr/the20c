@@ -991,13 +991,13 @@ title_pacman:
 pacman_screen_1:
   .byte pos_line1_pacman,cpared_v,cpacman_boca_abierta,cpared_v,cfantasma,cfantasma,cfantasma,cpared_v,cpunto,cpared_v
   .byte pos_line2_pacman,cpared_v,cpunto,cesquina_ld,cpared_h,cpared_h,cpared_h,cesquina_rd,cpunto,cpared_v
-  .byte pos_line3_pacman,cpared_v,cpill,cpunto,cpunto,cpunto,cpunto,cpunto,cfantasma,cpared_v
+  .byte pos_line3_pacman,cpared_v,cpill,cpunto,cpunto,cpunto,cpunto,cfantasma,cpunto,cpared_v
   .byte pos_line4_pacman,cesquina_ld,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cesquina_rd,end_char
 
 pacman_screen_2:
   .byte pos_line1_pacman,cpared_v,cpacman_boca_abierta,cpared_v,cfantasma,cfantasma,cfantasma,cpared_v,cpunto,cpared_v
   .byte pos_line2_pacman,cpared_v,cpunto,cesquina_ld,cpared_h,cpared_h,cpared_h,cesquina_rd,cpunto,cpared_v
-  .byte pos_line3_pacman,cpared_v,cpill,cpunto,cpunto,cpunto,cpunto,cpunto,cfantasma,cpared_v
+  .byte pos_line3_pacman,cpared_v,cpill,cpunto,cpunto,cpunto,cpunto,cfantasma,cpunto,cpared_v
   .byte pos_line4_pacman,cesquina_ld,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cesquina_rd,end_char
 
 pacman_screen_3:
