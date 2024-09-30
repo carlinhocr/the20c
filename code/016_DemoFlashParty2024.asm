@@ -1009,31 +1009,31 @@ pacman_screen_3:
 pacman_screen_4:
   .byte pos_line1_pacman,cpared_v,cespacio,cpared_v,cfantasma,cfantasma,cfantasma,cpared_v,cpunto,cpared_v
   .byte pos_line2_pacman,cpared_v,cpacman_boca_abierta,cesquina_ld,cpared_h,cpared_h,cpared_h,cesquina_rd,cpunto,cpared_v
-  .byte pos_line3_pacman,cpared_v,cpill,cpunto,cpunto,cpunto,cfantasma,cpunto,cpunto,cpared_v
+  .byte pos_line3_pacman,cpared_v,cpill,cpunto,cpunto,cfantasma,cpunto,cpunto,cpunto,cpared_v
   .byte pos_line4_pacman,cesquina_ld,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cesquina_rd,end_char
 
 pacman_screen_5:
   .byte pos_line1_pacman,cpared_v,cespacio,cpared_v,cfantasma_comido,cfantasma_comido,cfantasma_comido,cpared_v,cpunto,cpared_v
   .byte pos_line2_pacman,cpared_v,cespacio,cesquina_ld,cpared_h,cpared_h,cpared_h,cesquina_rd,cpunto,cpared_v
-  .byte pos_line3_pacman,cpared_v,cpacman_boca_cerrada,cpunto,cpunto,cpunto,cfantasma_comido,cpunto,cpunto,cpared_v
+  .byte pos_line3_pacman,cpared_v,cpacman_boca_cerrada,cpunto,cpunto,cfantasma_comido,cpunto,cpunto,cpunto,cpared_v
   .byte pos_line4_pacman,cesquina_ld,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cesquina_rd,end_char
 
 pacman_screen_6:
   .byte pos_line1_pacman,cpared_v,cespacio,cpared_v,cfantasma_comido,cfantasma_comido,cfantasma_comido,cpared_v,cpunto,cpared_v
   .byte pos_line2_pacman,cpared_v,cespacio,cesquina_ld,cpared_h,cpared_h,cpared_h,cesquina_rd,cpunto,cpared_v
-  .byte pos_line3_pacman,cpared_v,cpacman_boca_abierta,cpunto,cpunto,cpunto,cfantasma_comido,cpunto,cpunto,cpared_v
+  .byte pos_line3_pacman,cpared_v,cpacman_boca_abierta,cpunto,cpunto,cfantasma_comido,cpunto,cpunto,cpunto,cpared_v
   .byte pos_line4_pacman,cesquina_ld,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cesquina_rd,end_char
 
 pacman_screen_7:
   .byte pos_line1_pacman,cpared_v,cespacio,cpared_v,cfantasma_comido,cfantasma_comido,cfantasma_comido,cpared_v,cpunto,cpared_v
   .byte pos_line2_pacman,cpared_v,cespacio,cesquina_ld,cpared_h,cpared_h,cpared_h,cesquina_rd,cpunto,cpared_v
-  .byte pos_line3_pacman,cpared_v,cpacman_boca_cerrada,cpunto,cpunto,cpunto,cfantasma_comido,cpunto,cpunto,cpared_v
+  .byte pos_line3_pacman,cpared_v,cpacman_boca_cerrada,cpunto,cpunto,cfantasma_comido,cpunto,cpunto,cpunto,cpared_v
   .byte pos_line4_pacman,cesquina_ld,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cesquina_rd,end_char
 
 pacman_screen_8:
   .byte pos_line1_pacman,cpared_v,cespacio,cpared_v,cfantasma_comido,cfantasma_comido,cfantasma_comido,cpared_v,cpunto,cpared_v
   .byte pos_line2_pacman,cpared_v,cespacio,cesquina_ld,cpared_h,cpared_h,cpared_h,cesquina_rd,cpunto,cpared_v
-  .byte pos_line3_pacman,cpared_v,cpacman_boca_abierta,cpunto,cpunto,cpunto,cfantasma_comido,cpunto,cpunto,cpared_v
+  .byte pos_line3_pacman,cpared_v,cpacman_boca_abierta,cpunto,cpunto,cfantasma_comido,cpunto,cpunto,cpunto,cpared_v
   .byte pos_line4_pacman,cesquina_ld,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cesquina_rd,end_char  
 
 pacman_screen_9:
