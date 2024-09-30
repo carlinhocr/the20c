@@ -29,14 +29,14 @@ cpared_r=$06
 cauto_vert=$07
 cpared=%01111100
 
-
+cesquina_rd=$00
 cfantasma=$01
 cpacman_boca_abierta=$02
 cpacman_boca_cerrada=$03
 cfantasma_comido=$04
 cpared_h=$05
 cpared_v=$06
-cpacman_maze_1=$07
+cesquina_ld=$07
 cpunto=$a5
 
 end_char=$ff
@@ -604,16 +604,16 @@ add_custom_chars_pacman:
   ;BEGIN Add custom char instruction
   ;8026 lda
 
-; char_0_pacman: 
-;   lda #($40+$00);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
-;   ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
-;   ;8028 jumps to send intrsuction
-;   jsr lcd_send_instruction
-;   lda #<pared_dot_r
-;   sta charLoadLow
-;   lda #>pared_dot_r
-;   sta charLoadHigh
-;   jsr char_load
+char_0_pacman: 
+  lda #($40+$00);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
+  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
+  jsr lcd_send_instruction
+  lda #<esquina_rd
+  sta charLoadLow
+  lda #>esquina_rd
+  sta charLoadHigh
+  jsr char_load
 
 char_1_pacman: 
   lda #($40+$08);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
@@ -686,9 +686,9 @@ char_7_pacman:
   ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
   ;8028 jumps to send intrsuction
   jsr lcd_send_instruction
-  lda #<pacman_maze_1
+  lda #<esquina_ld
   sta charLoadLow
-  lda #>pacman_maze_1
+  lda #>esquina_ld
   sta charLoadHigh
   jsr char_load
 
@@ -870,7 +870,7 @@ pacman_screen_1:
   .byte pos_line1_pacman,cpared_v,cpunto,cpared_v,cfantasma,cfantasma,cfantasma,cpared_v,cpunto,cpared_v
   .byte pos_line2_pacman,cpared_v,cpunto,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpunto,cpared_v
   .byte pos_line3_pacman,cpared_v,cpacman_boca_abierta,cpunto,cpunto,cpunto,cpunto,cfantasma,cpunto,cpared_v
-  .byte pos_line4_pacman,$a4,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,$a3,end_char
+  .byte pos_line4_pacman,cesquina_ld,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cesquina_rd,end_char
 
 
 title_sprint:
@@ -983,6 +983,8 @@ auto_vert:
   .byte $00,$0A,$04,$04,$04,$0A,$00,$00 
 
 
+esquina_rd
+  .byte $04,$04,$04,$1c,$00,$00,$00,$0 
 fantasma:
   .byte $00,$0E,$15,$1f,$1f,$1f,$15,$00
 pacman_boca_abierta:
@@ -991,8 +993,8 @@ pacman_boca_cerrada:
   .byte $00,$0e,$1f,$1f,$1f,$1f,$1f,$0e
 fantasma_comido:
   .byte $00,$0E,$15,$1F,$11,$1B,$15,$00
-pacman_maze_1
-  .byte $1F,$00,$00,$00,$04,$00,$00,$1f   
+esquina_ld
+  .byte $04,$04,$04,$07,$00,$00,$00,$0   
 pared_v:
   .byte $04,$04,$04,$04,$04,$04,$04,$04 
 pared_h:
