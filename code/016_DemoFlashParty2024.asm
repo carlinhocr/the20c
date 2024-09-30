@@ -671,9 +671,9 @@ char_6_pacman:
   ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
   ;8028 jumps to send intrsuction
   jsr lcd_send_instruction
-  lda #<pared_dot_r
+  lda #<pared_dot_l
   sta charLoadLow
-  lda #>pared_dot_r
+  lda #>pared_dot_l
   sta charLoadHigh
   jsr char_load
 
