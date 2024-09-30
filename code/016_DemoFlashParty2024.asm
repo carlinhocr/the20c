@@ -51,7 +51,7 @@ pos_line2_pacman=$CB
 pos_line3_pacman=$9F
 pos_line4_pacman=$DF
 
-record_lenght=$09
+record_lenght=$150
 
 lenght_screen_lines=$04; 0 to 3
 lenght_ascii_line_characters=$20
@@ -375,7 +375,7 @@ print_screen_load_position:
 print_screen_eeprom:  
   iny
   inx
-  cpx record_lenght ; recor lenght is a memory position now
+  cpx record_lenght ; record lenght is a memory position now
   beq print_screen_load_position
   lda (charDataVectorLow),y ;load letter from eeprom position indirect in the memory position charDataVector and indexed by Y
   jsr print_char 
@@ -392,7 +392,7 @@ print_line:
   iny 
 print_line_eeprom:  
   lda (charDataVectorLow),y ;load letter from eeprom position indirect in the memory position charDataVector and indexed by Y
-  cpx #record_lenght
+  cpx record_lenght
   beq print_line_end ; jump to loop if I load a 0 on lda a zero means the end  of a n .asciiz string
   jsr print_char 
   iny
