@@ -51,7 +51,7 @@ pos_line2_pacman=$CB
 pos_line3_pacman=$9F
 pos_line4_pacman=$DF
 
-record_lenght=$150
+record_lenght=$CC
 
 lenght_screen_lines=$04; 0 to 3
 lenght_ascii_line_characters=$20
@@ -157,8 +157,6 @@ demo_first_part:
 pacman_start:
   jsr add_custom_chars_pacman
   jsr initilize_display
-  lda #$0A
-  sta record_lenght ; make the record lenght of 10 elements (one for position, 9 for graphics)
   ;Draw title Pacman
   jsr clear_display
   lda #<title_pacman
@@ -169,6 +167,8 @@ pacman_start:
   jsr DELAY_HALF_SEC
 pacman_playing:
   ;Draw Screen1
+  lda #$0A
+  sta record_lenght ; make the record lenght of 10 elements (one for position, 9 for graphics)
   lda #<pacman_screen_1
   sta charDataVectorLow
   lda #>pacman_screen_1
