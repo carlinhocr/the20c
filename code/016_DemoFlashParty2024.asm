@@ -868,7 +868,7 @@ title_pacman:
 
 pacman_screen_1:
   .byte pos_line1_pacman,cpared_v,cpunto,cpared_v,cfantasma,cfantasma,cfantasma,cpared_v,cpunto,cpared_v
-  .byte pos_line2_pacman,cpared_v,cpunto,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpunto,cpared_v
+  .byte pos_line2_pacman,cpared_v,cpunto,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpunto,cpared_v
   .byte pos_line3_pacman,cpared_v,cpacman_boca_abierta,cpunto,cpunto,cpunto,cpunto,cfantasma,cpunto,cpared_v
   .byte pos_line4_pacman,$a4,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,$a3,end_char
 
