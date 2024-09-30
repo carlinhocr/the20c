@@ -863,10 +863,10 @@ title_pacman:
   .asciiz "PACMAN" ;adds a 0 after the last byte
 
 pacman_screen_1:
-  .byte pos_line1_pacman,cpared_v,cpunto,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_v
-  .byte pos_line2_pacman,cpared_v,cpunto,cpared_v,cfantasma,cfantasma,cfantasma,cpared_v,cpunto,cpared_v
-  .byte pos_line3_pacman,cpared_v,cpacman_boca_abierta,cpunto,cpunto,cpunto,cfantasma,cpunto,cpunto,cpared_v
-  .byte pos_line4_pacman,cpared_v,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_v,end_char
+  .byte pos_line1_pacman,cpared_v,cpunto,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_v
+  .byte pos_line2_pacman,cpared_v,cpunto,cpared_v,cfantasma,cfantasma,cfantasma,cpared_v,cpared_v
+  .byte pos_line3_pacman,cpared_v,cpacman_boca_abierta,cpunto,cpunto,cpunto,cfantasma,cpunto,cpared_v
+  .byte pos_line4_pacman,cpared_v,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_v,end_char
 
 
 title_sprint:
@@ -989,8 +989,6 @@ fantasma_comido:
   .byte $00,$0E,$15,$1F,$11,$1B,$15,$00
 pacman_maze_1
   .byte $1F,$00,$00,$00,$04,$00,$00,$1f   
-pacman_maze_2
-  .byte $00,$00,$00,$00,$04,$00,$00,$1f 
 pared_v:
   .byte $04,$04,$04,$04,$04,$04,$04,$04 
 pared_h:
