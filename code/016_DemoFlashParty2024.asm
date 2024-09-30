@@ -157,6 +157,8 @@ demo_first_part:
 pacman_start:
   jsr add_custom_chars_pacman
   jsr initilize_display
+  lda #$0A
+  sta record_lenght ; make the record lenght of 10 elements (one for position, 9 for graphics)
   ;Draw title Pacman
   jsr clear_display
   lda #<title_pacman
@@ -179,6 +181,8 @@ pacman_playing:
 sprint_start:
   jsr add_custom_chars_sprint
   jsr initilize_display
+  lda #$09
+  sta record_lenght ; make the record lenght of 9 elements (one for position, 8 for graphics)
   ;Draw title Sprint
   jsr clear_display
   lda #<title_sprint
@@ -371,7 +375,7 @@ print_screen_load_position:
 print_screen_eeprom:  
   iny
   inx
-  cpx #record_lenght
+  cpx record_lenght ; recor lenght is a memory position now
   beq print_screen_load_position
   lda (charDataVectorLow),y ;load letter from eeprom position indirect in the memory position charDataVector and indexed by Y
   jsr print_char 
@@ -863,10 +867,10 @@ title_pacman:
   .asciiz "PACMAN" ;adds a 0 after the last byte
 
 pacman_screen_1:
-  .byte pos_line1_pacman,cpared_v,cpunto,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_v
-  .byte pos_line2_pacman,cpared_v,cpunto,cpared_v,cfantasma,cfantasma,cfantasma,cpared_v,cpared_v
-  .byte pos_line3_pacman,cpared_v,cpacman_boca_abierta,cpunto,cpunto,cpunto,cfantasma,cpunto,cpared_v
-  .byte pos_line4_pacman,cpared_v,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_v,end_char
+  .byte pos_line1_pacman,cpared_v,cpunto,cpared_v,cfantasma,cfantasma,cfantasma,cpared_v,cpunto,cpared_v
+  .byte pos_line2_pacman,cpared_v,cpunto,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpunto,cpared_v
+  .byte pos_line3_pacman,cpared_v,cpacman_boca_abierta,cpunto,cpunto,cpunto,cpunto,cfantasma,cpunto,cpared_v
+  .byte pos_line4_pacman,$a4,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,cpared_h,$a3,end_char
 
 
 title_sprint:
