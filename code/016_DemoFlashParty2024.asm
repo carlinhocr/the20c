@@ -29,12 +29,15 @@ cpared_r=$06
 cauto_vert=$07
 cpared=%01111100
 
+cpared_dot_r=$00
 cfantasma=$01
 cpacman_boca_abierta=$02
 cpacman_boca_cerrada=$03
 cfantasma_comido=$04
+cpacman_maze_2=$05
+cpared_dot_l=$06
 cpacman_maze_1=$07
-cpunto=$a6
+cpunto=$a5
 
 end_char=$ff
 
@@ -83,7 +86,7 @@ RESET:
   jsr initilize_display
 
 start_demo:  
-  jsr demo_first_part
+  ;jsr demo_first_part
   jsr pacman_start;
   jsr pacman_playing;
   jsr sprint_start ;print title an do a lap
@@ -161,8 +164,7 @@ pacman_start:
   lda #>title_pacman
   sta charDataVectorHigh
   jsr print_message
-  jsr DELAY_SEC
-  jsr DELAY_SEC
+  jsr DELAY_HALF_SEC
 pacman_playing:
   ;Draw Screen1
   lda #<pacman_screen_1
@@ -598,6 +600,17 @@ add_custom_chars_pacman:
   ;BEGIN Add custom char instruction
   ;8026 lda
 
+char_0_pacman: 
+  lda #($40+$00);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
+  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
+  jsr lcd_send_instruction
+  lda #<pared_dot_r
+  sta charLoadLow
+  lda #>pared_dot_r
+  sta charLoadHigh
+  jsr char_load
+
 char_1_pacman: 
   lda #($40+$08);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
   ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
@@ -639,6 +652,28 @@ char_4_pacman:
   lda #<fantasma_comido
   sta charLoadLow
   lda #>fantasma_comido
+  sta charLoadHigh
+  jsr char_load
+
+char_5_pacman: 
+  lda #($40+$28);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
+  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
+  jsr lcd_send_instruction
+  lda #<pacman_maze_2
+  sta charLoadLow
+  lda #>pacman_maze_2
+  sta charLoadHigh
+  jsr char_load
+
+char_6_pacman: 
+  lda #($40+$30);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
+  ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
+  ;8028 jumps to send intrsuction
+  jsr lcd_send_instruction
+  lda #<pared_dot_r
+  sta charLoadLow
+  lda #>pared_dot_r
   sta charLoadHigh
   jsr char_load
 
@@ -828,10 +863,10 @@ title_pacman:
   .asciiz "PACMAN" ;adds a 0 after the last byte
 
 pacman_screen_1:
-  .byte pos_line1_pacman,cpared_l,craya1,cauto1,craya1,craya1,craya1,craya1,cpared_r
-  .byte pos_line2_pacman,cpared_l,cespacio,craya2,cauto2,craya2,craya2,cespacio,cpared_r
-  .byte pos_line3_pacman,cpacman_boca_abierta,cpunto,cpunto,cpunto,cfantasma,cpunto,cpunto,cpunto
-  .byte pos_line4_pacman,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,end_char
+  .byte pos_line1_pacman,cpared_dot_l,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpared_dot_r
+  .byte pos_line2_pacman,cpared_dot_l,cpunto,cpared_dot_r,cfantasma,cfantasma,cfantasma,cpared_dot_l,cpared_dot_r
+  .byte pos_line3_pacman,cpared_dot_l,cpacman_boca_abierta,cpunto,cpunto,cpunto,cfantasma,cpunto,cpared_dot_r
+  .byte pos_line4_pacman,cpacman_maze_2,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpacman_maze_1,cpacman_maze_2,end_char
 
 
 title_sprint:
@@ -954,6 +989,12 @@ fantasma_comido:
   .byte $00,$0E,$15,$1F,$11,$1B,$15,$00
 pacman_maze_1
   .byte $1F,$00,$00,$00,$04,$00,$00,$1f   
+pacman_maze_2
+  .byte $00,$00,$00,$00,$04,$00,$00,$1f 
+pared_dot_l:
+  .byte $10,$10,$10,$10,$14,$10,$10,$10 
+pared_dot_r:
+  .byte $01,$01,$01,$01,$05,$01,$01,$01 
 
 ;complete the file
   .org $fffc ;go to memory address $fffc of the reset vector
