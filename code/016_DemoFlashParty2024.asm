@@ -166,6 +166,7 @@ pacman_start:
   sta charDataVectorHigh
   jsr print_message
   jsr DELAY_HALF_SEC
+  rts
 pacman_playing:
   ;Draw Screen1
   lda #$0A
@@ -267,11 +268,36 @@ pacman_playing:
   sta charDataVectorHigh
   jsr print_screen
   jsr DELAY_HALF_SEC
-
-
-
-pacman_end:  
+ ;Draw Screen15
+  lda #<pacman_screen_15
+  sta charDataVectorLow
+  lda #>pacman_screen_15
+  sta charDataVectorHigh
+  jsr print_screen
   jsr DELAY_HALF_SEC
+ ;Draw Screen16
+  lda #<pacman_screen_16
+  sta charDataVectorLow
+  lda #>pacman_screen_16
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+ ;Draw Screen17
+  lda #<pacman_screen_17
+  sta charDataVectorLow
+  lda #>pacman_screen_17
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+ ;Draw Screen18
+  lda #<pacman_screen_18
+  sta charDataVectorLow
+  lda #>pacman_screen_18
+  sta charDataVectorHigh
+  jsr print_screen
+  jsr DELAY_HALF_SEC
+pacman_end:  
+  jsr delay_5_sec
   rts
 
 sprint_start:
