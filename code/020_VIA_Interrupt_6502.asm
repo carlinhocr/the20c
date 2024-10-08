@@ -325,9 +325,11 @@ lcd_send_data:
   jsr lcd_wait
   sta PORTB
 
+delay_1_sec:
+  jsr DELAY_SEC
+  rts
 
 delay_2_sec:
-  jsr DELAY_SEC
   jsr DELAY_SEC
   jsr DELAY_SEC
   rts
@@ -407,22 +409,16 @@ irq:
   pha ; store the X register in the stack
   tya ; transfer Y to Accumulator
   pha ; store the Y register in the stack
-  jsr clear_display
-  lda #<button_press
-  sta charDataVectorLow
-  lda #>button_press
-  sta charDataVectorHigh
-  jsr print_message
-;   inc counter
-;   bne exit_irq ;if the counter is zero it means it has rolled over so I will
-;                ;increment the next byte
-;   inc counter + 1
-exit_irq:  
-  jsr delay_5_sec
-
   ;bit command read the memory and compares just used to read the register
   bit PORTA ; clear the interrupt flag
-
+  jsr clear_display
+  lda #<button_press_irq
+  sta charDataVectorLow
+  lda #>button_press_irq
+  sta charDataVectorHigh
+  jsr print_message
+  jsr delay_1_sec
+exit_irq:  
   ;reserve order of stacking to restore values
   pla ; retrieve the Y register from the stack
   tay ; transfer accumulator to Y register
@@ -434,9 +430,11 @@ exit_irq:
 initial_message:
   .ascii "hola"
 
-button_press:
-  .ascii "button pressed"
+button_press_irq:
+  .ascii "button pressed irq"
 
+button_press_nmi:
+  .ascii "button pressed nmi"
 
 ;complete the file
   .org $fffa
