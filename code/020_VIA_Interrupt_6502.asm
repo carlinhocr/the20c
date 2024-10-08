@@ -93,7 +93,7 @@ start:
   lda #>initial_message
   sta charDataVectorHigh
   jsr print_message
-  jmp initial_message
+  jmp start
 
   
 print_message:  
