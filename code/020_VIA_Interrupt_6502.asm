@@ -14,6 +14,11 @@ IFR = $600d
 IER = $600e
 
 
+charDataVectorLow = $30
+charDataVectorHigh = $31
+delay_COUNT_A = $32        
+delay_COUNT_B = $33
+
 value =$0200 ;2 bytes, Low 16 bit half
 mod10 =$0202 ;2 bytes, high 16 bit half and as it has the remainder of dividing by 10
              ;it is the mod 10 of the division (the remainder)
@@ -81,118 +86,174 @@ RESET:
   jsr lcd_send_instruction
   ; END Entry Mode Set instruction
 
-  ;initializa the 16 bit counter to zero
-  lda #0
-  sta counter
-  sta counter + 1
+start:
+  jsr clear_display
+  lda #<initial_message
+  sta charDataVectorLow
+  lda #>initial_message
+  sta charDataVectorHigh
+  jsr print_message
+  jmp initial_message
 
-loop:
-  lda #%00000010 ;send the cursor Home
-  jsr lcd_send_instruction
-
-  lda #0 ;this signals the empty string
-  sta message ;initialize the string we will use for the results
-
-  ;BEGIN Initialization of the 4 bytes
-  ; initializae value to be the counter to ccount interrupts 
-  sei ;disable interrupts so as to update properly the counter
-  lda counter
-  sta value 
-  lda counter + 1
-  sta value + 1
-  cli ; reenable interrupts after updating
-
-divide:
-  ;initialize the remainder to be 0
-  lda #0
-  sta mod10
-  sta mod10 + 1
-  clc ; we will clear the carry bit
-  ;END Initialization of the 4 bytes
-
-
-  ldx #16
-divloop:
-  ;rotate the quotient and the remainder
-  rol value
-  rol value + 1
-  rol mod10
-  rol mod10 + 1
   
-  ;substract 1010, we will do it 8 bits at a time
-  sec ; set the carry bit
-  lda mod10
-  sbc #10 ;substract with carry from 10
-  tay ; save the low part of the 16 bits of the remainder to register y
-  lda mod10 + 1
-  sbc #0 ;substract with carry zero as the 8 high bits are all zeroes from 10 division
-  ; the answer is on the combination of the a register and the y register
-  ; a,y = dividend - divisor
-  ; if the carry is clear for a then the dividend was less that the divisor and we will
-  ; discard the result and do a shift left
-  bcc ignore_result ; we will branch if the carry bit is clear (the carry of the last operation)
-  ; if we do not ignore the result we want to store the intermediate result a,y
-  ; in mod10+1 for a register and mod10 for the y register
-  sty mod10
-  sta mod10 + 1
-
-  ; and then we will keep with the division if we did less than 16 left shifts
-
-
-ignore_result:
-  dex ; decrement the X time that we shifted left
-      ; dex affects the Z flag if the content of the x register is zero
-  bne divloop ;if what is on the X register
-  ;we will rotate the carry bit inside value to have the result of the division
-  rol value
-  rol value + 1
-  
-  ;now we have to store the remainder
-  lda mod10
-  clc
-  adc #"0" ;by adding zero to the a register we will have the ascii number of its value
-  jsr push_char ;and now we store our character in the string
-  ; we will be done dividen whne the result of the division is a zero
-  ; we will check value and value + 1 and if any bit is one we are not done
-  lda value
-  ora value + 1 ; combine all ones from the 16 bits of value
-  bne divide ; if a is not zero keep dividing
-
 print_message:  
   ;BEGIN Write all the letters
-  ldx #0 ;start on FF so when i add one it will be 0
+  ldy #$00 ;start on FF so when i add one it will be 0
 
 print_message_eeprom:  
-  lda message,x ;load letter from eeprom position message + the value of register X
-  beq loop ; jump to loop if I load a 0 on lda a zero means the end  of a n .asciiz string
+  lda (charDataVectorLow),y ;load letter from eeprom position indirect in the memory position charDataVector and indexed by Y
+  beq print_message_end ; jump to loop if I load a 0 on lda a zero means the end  of a n .asciiz string
   jsr print_char 
-  inx
+  iny
   jmp print_message_eeprom
-  ;END Write all the letters  
+print_message_end:
+  rts 
+  ;END Write all the letters
 
-number: .word 1729 ;the number we will convert
+;   ;initializa the 16 bit counter to zero
+;   lda #0
+;   sta counter
+;   sta counter + 1
+; 
+; 
+;
+; loop:
+;   lda #%00000010 ;send the cursor Home
+;   jsr lcd_send_instruction
+
+;   lda #0 ;this signals the empty string
+;   sta message ;initialize the string we will use for the results
+
+;   ;BEGIN Initialization of the 4 bytes
+;   ; initializae value to be the counter to ccount interrupts 
+;   sei ;disable interrupts so as to update properly the counter
+;   lda counter
+;   sta value 
+;   lda counter + 1
+;   sta value + 1
+;   cli ; reenable interrupts after updating
+
+; divide:
+;   ;initialize the remainder to be 0
+;   lda #0
+;   sta mod10
+;   sta mod10 + 1
+;   clc ; we will clear the carry bit
+;   ;END Initialization of the 4 bytes
+
+
+;   ldx #16
+; divloop:
+;   ;rotate the quotient and the remainder
+;   rol value
+;   rol value + 1
+;   rol mod10
+;   rol mod10 + 1
+  
+;   ;substract 1010, we will do it 8 bits at a time
+;   sec ; set the carry bit
+;   lda mod10
+;   sbc #10 ;substract with carry from 10
+;   tay ; save the low part of the 16 bits of the remainder to register y
+;   lda mod10 + 1
+;   sbc #0 ;substract with carry zero as the 8 high bits are all zeroes from 10 division
+;   ; the answer is on the combination of the a register and the y register
+;   ; a,y = dividend - divisor
+;   ; if the carry is clear for a then the dividend was less that the divisor and we will
+;   ; discard the result and do a shift left
+;   bcc ignore_result ; we will branch if the carry bit is clear (the carry of the last operation)
+;   ; if we do not ignore the result we want to store the intermediate result a,y
+;   ; in mod10+1 for a register and mod10 for the y register
+;   sty mod10
+;   sta mod10 + 1
+
+;   ; and then we will keep with the division if we did less than 16 left shifts
+
+
+; ignore_result:
+;   dex ; decrement the X time that we shifted left
+;       ; dex affects the Z flag if the content of the x register is zero
+;   bne divloop ;if what is on the X register
+;   ;we will rotate the carry bit inside value to have the result of the division
+;   rol value
+;   rol value + 1
+  
+;   ;now we have to store the remainder
+;   lda mod10
+;   clc
+;   adc #"0" ;by adding zero to the a register we will have the ascii number of its value
+;   jsr push_char ;and now we store our character in the string
+;   ; we will be done dividen whne the result of the division is a zero
+;   ; we will check value and value + 1 and if any bit is one we are not done
+;   lda value
+;   ora value + 1 ; combine all ones from the 16 bits of value
+;   bne divide ; if a is not zero keep dividing
+
+; print_message:  
+;   ;BEGIN Write all the letters
+;   ldx #0 ;start on FF so when i add one it will be 0
+
+; print_message_eeprom:  
+;   lda message,x ;load letter from eeprom position message + the value of register X
+;   beq loop ; jump to loop if I load a 0 on lda a zero means the end  of a n .asciiz string
+;   jsr print_char 
+;   inx
+;   jmp print_message_eeprom
+;   ;END Write all the letters  
+
+; number: .word 1729 ;the number we will convert
 
 ;add the content of the a register to a null terminated string message
-push_char:
-  pha ;push new character into the stack first 
-  ldy #0
+; push_char:
+;   pha ;push new character into the stack first 
+;   ldy #0
 
-char_loop:
-  lda message,y ;get char on string and put into x
-  tax
-  pla
-  sta message,y ; we replaced the old first character with the new one
-  iny ; lets go to the next character
-  txa
-  pha ; we have the character that used to be on the beginning of the message on the stack
-  ;if a is zero we are at the end of the string
-  bne char_loop
+; char_loop:
+;   lda message,y ;get char on string and put into x
+;   tax
+;   pla
+;   sta message,y ; we replaced the old first character with the new one
+;   iny ; lets go to the next character
+;   txa
+;   pha ; we have the character that used to be on the beginning of the message on the stack
+;   ;if a is zero we are at the end of the string
+;   bne char_loop
 
-  pla
-  sta message,y ; store the null terminator again
+;   pla
+;   sta message,y ; store the null terminator again
+;   rts
+
+clear_display:
+; BEGIN clear display instruction  on port B
+  lda #%00000001 ;the instruction itself is 00000001
+  jsr lcd_send_instruction
+  ; END clear display instruction on port B 
+
+
+initilize_display:
+; BEGIN clear display instruction  on port B
+  lda #%00000001 ;the instruction itself is 00000001
+  jsr lcd_send_instruction
+  ; END clear display instruction on port B  
+
+  ; BEGIN send the instruction function set on port B
+  lda #%00111000 ;the instruction itself is 001, data lenght 8bits(1), Number Display lines 2 (1)
+            ;and Character Font 5x8 (0), last two bits are unused
+  jsr lcd_send_instruction 
+  ; END send the instruction function set on port B
+
+  ;BEGIN Turn on Display instruction
+  lda #%00001100 ;the instruction itself is 0001, Display On(1), Cursor Off (0)
+            ;and Cursor Blinking Off (0)
+  jsr lcd_send_instruction 
+  ; END Turn on Display instruction
+
+   ;BEGIN Entry Mode Set instruction
+  lda #%00000110 ;the instruction itself is 00001, Put next character to the right (1)
+            ;and Scroll Display Off (0)
+  jsr lcd_send_instruction
+  ; END Entry Mode Set instruction
   rts
-
-
 
 lcd_wait:
   pha ; push to preserve the contents of the acummulator register
@@ -259,6 +320,78 @@ print_char:
   pla ;pull the accumulator value to the stack so we can have it back a the end of the subroutine
   rts
 
+lcd_send_data:
+  pha ;push the accumulator value to the stack so we can have it back a the end of the subroutine
+  jsr lcd_wait
+  sta PORTB
+
+
+delay_2_sec:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  rts
+
+delay_3_sec:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  rts
+
+delay_4_sec:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  rts 
+
+delay_5_sec:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  rts
+
+DELAY_onetenth_SEC:
+  lda #$10
+  sta delay_COUNT_A
+  lda #$FF
+  sta delay_COUNT_B
+  jmp DELAY_MAIN
+
+DELAY_SEC:
+  lda #$FF
+  sta delay_COUNT_A
+  lda #$FF
+  sta delay_COUNT_B
+  jmp DELAY_MAIN
+
+DELAY_HALF_SEC:
+  lda #$50
+  sta delay_COUNT_A
+  lda #$FF
+  sta delay_COUNT_B
+  jmp DELAY_MAIN
+
+DELAY_MAIN:
+    LDX delay_COUNT_A     ; Load outer loop count
+OUTER_LOOP:
+    LDY delay_COUNT_B     ; Load inner loop count
+INNER_LOOP:
+    NOP               ; No operation (takes 2 cycles)
+    NOP               ; No operation (takes 2 cycles)
+    NOP               ; No operation (takes 2 cycles)
+    NOP               ; No operation (takes 2 cycles)
+    NOP               ; No operation (takes 2 cycles)
+    DEY               ; Decrement inner loop counter
+    BNE INNER_LOOP    ; Branch if not zero
+    DEX               ; Decrement outer loop counter
+    BNE OUTER_LOOP    ; Branch if not zero
+    RTS               ; Return from subroutine
+
+
+
 nmi:
   inc counter
   bne exit_nmi ;if the counter is zero it means it has rolled over so I will
@@ -274,20 +407,18 @@ irq:
   pha ; store the X register in the stack
   tya ; transfer Y to Accumulator
   pha ; store the Y register in the stack
-
-  inc counter
-  bne exit_irq ;if the counter is zero it means it has rolled over so I will
-               ;increment the next byte
-  inc counter + 1
+  jsr clear_display
+  lda #<button_press
+  sta charDataVectorLow
+  lda #>button_press
+  sta charDataVectorHigh
+  jsr print_message
+;   inc counter
+;   bne exit_irq ;if the counter is zero it means it has rolled over so I will
+;                ;increment the next byte
+;   inc counter + 1
 exit_irq:  
-  ;add a delay to help with button bouncing 
-  ldy #$ff
-  ldx #$ff
-delay:
-  dex
-  bne delay ;if X is not zero go to delay
-  dey 
-  bne delay ;if Y is not zero go to delay
+  jsr delay_5_sec
 
   ;bit command read the memory and compares just used to read the register
   bit PORTA ; clear the interrupt flag
@@ -299,6 +430,12 @@ delay:
   tax ; transfer accumulator to X register
   pla ; restore the accumulator value
   rti 
+
+initial_message:
+  .ascii "hola"
+
+button_press:
+  .ascii "button pressed"
 
 
 ;complete the file
