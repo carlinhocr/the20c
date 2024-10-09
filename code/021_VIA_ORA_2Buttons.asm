@@ -330,6 +330,7 @@ exit_nmi:
   rti 
 
 irq:
+  sei ; disable interrupts
   ;preserve Accumulator, X and Y so we can use them here
   pha ; store accumulator in the stack
   txa ; transfer X to Accumulator
@@ -346,6 +347,7 @@ exit_irq:
   pla ; retrieve the X register from the stack
   tax ; transfer accumulator to X register
   pla ; restore the accumulator value
+  cli ;re enable interrupts
   rti 
 
 initial_message:
