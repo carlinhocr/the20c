@@ -12,7 +12,7 @@ DDRA = $6003
 PCR = $600c
 IFR = $600d
 IER = $600e
-PORTSTATUS=$00A0
+PORTSTATUS=$A0
 
 
 charDataVectorLow = $30
@@ -78,34 +78,30 @@ start:
 
 test_buttons:
   lda PORTA
-  sei 
   sta PORTSTATUS
   ;move PA4 to PA7 and PA3 to PA6
   rol PORTSTATUS
   rol PORTSTATUS
   rol PORTSTATUS
+  rol PORTSTATUS ; now we have PA4 on the carry and PA3 on the negative flag
   lda PORTSTATUS
-  bmi test_buttons_negative_b1 
-  ;if it is not negative it is zero and the button is pressed
-  ;as the button is normally +5v or 1 with a 1k pullup
-  jsr clear_display
-  lda #<button_press_pa4
-  sta charDataVectorLow
-  lda #>button_press_pa4
-  sta charDataVectorHigh
-  rts
-test_buttons_negative_b1:
-  ;then PA4 was a zero and because an interrupt happened then it must have been PA3
-  ;but lets checknyway
-  rol PORTSTATUS ;move PA6 to PA7
-  lda PORTSTATUS
-  bmi test_buttons_else_case
-  ;then PA3 was a zero 
+  bcc test_buttons_pa4
+  bmi test_buttons_else_case; if one the pa3 was not pressed
+  ;here button pa3 was pressed
   jsr clear_display
   lda #<button_press_pa3
   sta charDataVectorLow
   lda #>button_press_pa3
   sta charDataVectorHigh
+  jsr print_message
+  rts
+test_buttons_pa4:  
+  jsr clear_display
+  lda #<button_press_pa4
+  sta charDataVectorLow
+  lda #>button_press_pa4
+  sta charDataVectorHigh
+  jsr print_message
   rts
 test_buttons_else_case:
   ;There was an interrupt but no button was pressed
@@ -114,6 +110,7 @@ test_buttons_else_case:
   sta charDataVectorLow
   lda #>button_press_irq
   sta charDataVectorHigh
+  jsr print_message
   rts
 
   
@@ -339,7 +336,6 @@ irq:
   ;bit command read the memory and compares just used to read the register
   ;bit PORTA ; clear the interrupt flag I am doing it with an LDA on test_buttons
   jsr test_buttons ;test_buttons loads the message
-  jsr print_message
   jsr delay_1_sec
 exit_irq:  
   ;reserve order of stacking to restore values
