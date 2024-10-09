@@ -83,17 +83,18 @@ test_buttons:
   rol
   bmi test_buttons_negative
   jsr clear_display
-  lda #<button_press_pa6
+  lda #<button_press_pa3
   sta charDataVectorLow
-  lda #>button_press_pa6
+  lda #>button_press_pa3
   sta charDataVectorHigh
   jsr print_message
   jsr delay_1_sec
+  rts
 test_buttons_negative:
   jsr clear_display
-  lda #<button_press_pa7
+  lda #<button_press_pa4
   sta charDataVectorLow
-  lda #>button_press_pa7
+  lda #>button_press_pa4
   sta charDataVectorHigh
   jsr print_message
   jsr delay_1_sec
@@ -332,10 +333,10 @@ exit_irq:
 initial_message:
   .ascii "Main Screen"
 
-button_press_pa7:
+button_press_pa4:
   .ascii "Left Button"
 
-button_press_pa6:
+button_press_pa3:
   .ascii "Right Button"
 
 button_press_nmi:
