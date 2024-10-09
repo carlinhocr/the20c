@@ -336,7 +336,6 @@ irq:
   ;bit command read the memory and compares just used to read the register
   ;bit PORTA ; clear the interrupt flag I am doing it with an LDA on test_buttons
   jsr test_buttons ;test_buttons loads the message
-  jsr delay_1_sec
 exit_irq:  
   ;reserve order of stacking to restore values
   pla ; retrieve the Y register from the stack
