@@ -78,6 +78,7 @@ start:
 
 test_buttons:
   lda PORTA
+  sei 
   sta PORTSTATUS
   ;move PA4 to PA7 and PA3 to PA6
   rol PORTSTATUS
