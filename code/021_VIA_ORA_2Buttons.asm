@@ -81,16 +81,9 @@ test_buttons:
   rol 
   rol
   rol
-  bmi test_buttons_negative
-  jsr clear_display
-  lda #<button_press_pa3
-  sta charDataVectorLow
-  lda #>button_press_pa3
-  sta charDataVectorHigh
-  jsr print_message
-  jsr delay_1_sec
-  rts
-test_buttons_negative:
+  bmi test_buttons_negative_b1 
+  ;if it is not negative it is zero and the button is pressed
+  ;as the button is normally +5v or 1 with a 1k pullup
   jsr clear_display
   lda #<button_press_pa4
   sta charDataVectorLow
@@ -99,6 +92,31 @@ test_buttons_negative:
   jsr print_message
   jsr delay_1_sec
   rts
+test_buttons_negative_b1:
+  ;then PA4 was a zero and because an interrupt happened then it must have been PA3
+  ;but lets checknyway
+  rol ;move PA6 to PA7
+  bmi test_buttons_else_case
+  ;then PA3 was a zero 
+  jsr clear_display
+  lda #<button_press_pa3
+  sta charDataVectorLow
+  lda #>button_press_pa3
+  sta charDataVectorHigh
+  jsr print_message
+  jsr delay_1_sec
+  rts
+test_buttons_else_case:
+  ;There was an interrupt but no button was pressed
+  jsr clear_display
+  lda #<button_press_irq
+  sta charDataVectorLow
+  lda #>button_press_irq
+  sta charDataVectorHigh
+  jsr print_message
+  jsr delay_1_sec
+  rts
+
   
   
 print_message:  
@@ -341,6 +359,9 @@ button_press_pa3:
 
 button_press_nmi:
   .ascii "NMI Interrupt"
+
+button_press_irq:
+  .ascii "IRQ Interrupt"
 
 ;complete the file
   .org $fffa
