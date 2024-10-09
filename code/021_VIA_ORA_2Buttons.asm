@@ -72,7 +72,7 @@ start:
   lda #>initial_message
   sta charDataVectorHigh
   jsr print_message
-  jsr delay_5_sec
+  jsr delay_2_sec
   jmp start
 
 test_buttons:
