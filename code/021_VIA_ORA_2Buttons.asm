@@ -93,8 +93,6 @@ test_buttons:
   sta charDataVectorLow
   lda #>button_press_pa4
   sta charDataVectorHigh
-  jsr print_message
-  jsr delay_1_sec
   rts
 test_buttons_negative_b1:
   ;then PA4 was a zero and because an interrupt happened then it must have been PA3
@@ -108,8 +106,6 @@ test_buttons_negative_b1:
   sta charDataVectorLow
   lda #>button_press_pa3
   sta charDataVectorHigh
-  jsr print_message
-  jsr delay_1_sec
   rts
 test_buttons_else_case:
   ;There was an interrupt but no button was pressed
@@ -118,8 +114,6 @@ test_buttons_else_case:
   sta charDataVectorLow
   lda #>button_press_irq
   sta charDataVectorHigh
-  jsr print_message
-  jsr delay_1_sec
   rts
 
   
@@ -344,7 +338,9 @@ irq:
   pha ; store the Y register in the stack
   ;bit command read the memory and compares just used to read the register
   ;bit PORTA ; clear the interrupt flag I am doing it with an LDA on test_buttons
-  jsr test_buttons
+  jsr test_buttons ;test_buttons loads the message
+  jsr print_message
+  jsr delay_1_sec
 exit_irq:  
   ;reserve order of stacking to restore values
   pla ; retrieve the Y register from the stack
