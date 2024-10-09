@@ -59,7 +59,7 @@ RESET:
   lda #%11111111  ;load all ones equivalent to $FF
   sta DDRB ;store the accumulator in the data direction register for Port B
 
-  lda #%11100000  ;set the last 3 pins as output
+  lda #%11100000  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
   sta DDRA ;store the accumulator in the data direction register for Port A
   ;END Configure Ports A & B
 
@@ -77,6 +77,10 @@ start:
 
 test_buttons:
   lda PORTA
+  ;move PA4 to PA7 and PA3 to PA6
+  rol 
+  rol
+  rol
   bmi test_buttons_negative
   jsr clear_display
   lda #<button_press_pa6
