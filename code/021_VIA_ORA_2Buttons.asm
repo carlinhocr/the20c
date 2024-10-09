@@ -12,6 +12,7 @@ DDRA = $6003
 PCR = $600c
 IFR = $600d
 IER = $600e
+PORTSTATUS=$00A0
 
 
 charDataVectorLow = $30
@@ -77,10 +78,12 @@ start:
 
 test_buttons:
   lda PORTA
+  sta PORTSTATUS
   ;move PA4 to PA7 and PA3 to PA6
-  rol 
-  rol
-  rol
+  rol PORTSTATUS
+  rol PORTSTATUS
+  rol PORTSTATUS
+  lda PORTSTATUS
   bmi test_buttons_negative_b1 
   ;if it is not negative it is zero and the button is pressed
   ;as the button is normally +5v or 1 with a 1k pullup
@@ -95,7 +98,8 @@ test_buttons:
 test_buttons_negative_b1:
   ;then PA4 was a zero and because an interrupt happened then it must have been PA3
   ;but lets checknyway
-  rol ;move PA6 to PA7
+  rol PORTSTATUS ;move PA6 to PA7
+  lda PORTSTATUS
   bmi test_buttons_else_case
   ;then PA3 was a zero 
   jsr clear_display
