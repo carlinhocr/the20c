@@ -14,6 +14,8 @@ IFR = $600d
 IER = $600e
 PORTSTATUS=$A0
 
+
+
 cursor_position=$a1
 center_cursor=$A4
 right_cursor_limit=$d3
@@ -100,9 +102,14 @@ erase_cursor:
   rts
 
 move_cursor_right:
+  ldx #$FF
   lda cursor_position
-  cmp #right_cursor_limit
+check_right_limit:  
+  inx 
+  cmp right_cursor_limits,x
   beq not_move_right
+  cpx #$03
+  bne check_right_limit
   jsr erase_cursor
   inc cursor_position
   jsr draw_cursor
@@ -111,9 +118,14 @@ not_move_right:
   
 
 move_cursor_left:
+  ldx #$FF
   lda cursor_position
-  cmp #left_cursor_limit
+check_left_limit:  
+  inx 
+  cmp left_cursor_limits,x
   beq not_move_left
+  cpx #$03
+  bne check_left_limit
   jsr erase_cursor
   dec cursor_position
   jsr draw_cursor
@@ -389,6 +401,26 @@ button_press_nmi:
 button_press_irq:
   .ascii "IRQ Interrupt"
 
+
+; Positions of LCD characters
+; 	01	02	03	04	05	06	07	08	09	10	11	12	13	14	15	16	17	18	19	20
+; 1	80	81	82	83	84	85	86	87	88	89	8A	8B	8C	8D	8F	8E	90	91	92	93
+; 2	C0	C1	C2	C3	C4	C5	C6	C7	C8	C9	CA	CB	CC	CD	CE	CF	D0	D1	D2	D3
+; 3	94	95	96	97	98	99	A0	A1	A2	A3	A4	A5	A6	A7	A8	A9	AA	AB	AC	AD
+; 4	D4	D5	D6	D7	D8	D9	DA	DB	DC	DD	DE	DF	E0	E1	E2	E3	E4	E5	E6	E7
+
+left_cursor_limits:
+  .byte  $80,$c0,$94,$d4
+
+right_cursor_limits:
+  .byte  $93,$d3,$ad,$e7
+
+up_cursor_limits:
+  .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8F,$8E,$90,$91,$92,$93
+
+down_cursor_limits:
+  .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$DD,$DE,$DF,$E0,$E1,$E2,$E3,$E4,$E5,$E6,$E7
+
 ;complete the file
   .org $fffa
   .word nmi ;a word is 16 bits or two bytes in this case $fffa and $fffb
@@ -398,9 +430,4 @@ button_press_irq:
   .word irq ;a word is 16 bits or two bytes in this case $fffe and $ffff
 
 
-; Positions of LCD characters
-; 	01	02	03	04	05	06	07	08	09	10	11	12	13	14	15	16	17	18	19	20
-; 1	80	81	82	83	84	85	86	87	88	89	8A	8B	8C	8D	8F	8E	90	91	92	93
-; 2	C0	C1	C2	C3	C4	C5	C6	C7	C8	C9	CA	CB	CC	CD	CE	CF	D0	D1	D2	D3
-; 3	94	95	96	97	98	99	A0	A1	A2	A3	A4	A5	A6	A7	A8	A9	AA	AB	AC	AD
-; 4	D4	D5	D6	D7	D8	D9	DA	DB	DC	DD	DE	DF	E0	E1	E2	E3	E4	E5	E6	E7
+
