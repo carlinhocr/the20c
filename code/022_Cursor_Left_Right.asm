@@ -15,10 +15,10 @@ IER = $600e
 PORTSTATUS=$A0
 
 cursor_position=$a1
-center_cursor=$c9
+center_cursor=$A4
 right_cursor_limit=$d3
 left_cursor_limit=$c0
-cursor_char=$f5
+cursor_char=$fc
 blank_char=$20
 
 
@@ -76,7 +76,7 @@ RESET:
 
 start:
   jsr clear_display
-  lda center_cursor
+  lda #center_cursor
   sta cursor_position
   lda #center_cursor
   jsr lcd_send_instruction 
