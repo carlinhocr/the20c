@@ -15,18 +15,31 @@ IER = $600e
 PORTSTATUS=$A0
 
 
-
-cursor_position=$a1
-center_cursor=$A4
-right_cursor_limit=$d3
-left_cursor_limit=$c0
-cursor_char=$fc
-blank_char=$20
-
-
+;Vectors
 
 charDataVectorLow = $30
 charDataVectorHigh = $31
+
+rightCursorVectorLow=$d0
+rightCursorVectorHigh=$d1
+leftCursorVectorLow=$d2
+leftCursorVectorHigh=$d3
+upCursorVectorLow=$d4
+upCursorVectorHigh=$d5
+downCursorVectorLow=$d6
+downCursorVectorHigh=$d7
+
+;variables
+cursor_position=$a1
+
+;constants
+cursor_char=$fc
+blank_char=$20
+center_cursor=$A4
+
+
+
+
 delay_COUNT_A = $32        
 delay_COUNT_B = $33
 
@@ -78,6 +91,7 @@ RESET:
 
 start:
   jsr clear_display
+  jsr initiliaze_vectors
   lda #center_cursor
   sta cursor_position
   lda #center_cursor
@@ -86,6 +100,17 @@ start:
   jsr print_char
 loop:
   jmp loop
+
+initiliaze_vectors:
+  lda #<left_cursor_endings
+  sta leftCursorVectorLow
+  lda #>left_cursor_endings
+  sta leftCursorVectorHigh
+  lda #<right_cursor_endings
+  sta rightCursorVectorLow
+  lda #>right_cursor_endings
+  sta rightCursorVectorHigh
+  rts
 
 draw_cursor:
   lda cursor_position
@@ -102,13 +127,14 @@ erase_cursor:
   rts
 
 move_cursor_right:
-  ldx #$FF
+  ldy #$FF
   lda cursor_position
 check_right_limit:  
-  inx 
-  cmp right_cursor_limits,x
+  iny 
+  lda (rightCursorVectorLow),y ;first fo to address in right_cursor_endingss, then increase it
+  cmp cursor_position 
   beq not_move_right
-  cpx #$03
+  cpy #$03
   bne check_right_limit
   jsr erase_cursor
   inc cursor_position
@@ -118,13 +144,14 @@ not_move_right:
   
 
 move_cursor_left:
-  ldx #$FF
+  ldy #$FF
   lda cursor_position
 check_left_limit:  
-  inx 
-  cmp left_cursor_limits,x
+  iny 
+  lda (leftCursorVectorLow),y ;first fo to address in left_cursor_endings, then increase it
+  cmp cursor_position  
   beq not_move_left
-  cpx #$03
+  cpy #$03
   bne check_left_limit
   jsr erase_cursor
   dec cursor_position
@@ -409,16 +436,16 @@ button_press_irq:
 ; 3	94	95	96	97	98	99	A0	A1	A2	A3	A4	A5	A6	A7	A8	A9	AA	AB	AC	AD
 ; 4	D4	D5	D6	D7	D8	D9	DA	DB	DC	DD	DE	DF	E0	E1	E2	E3	E4	E5	E6	E7
 
-left_cursor_limits:
+left_cursor_endings:
   .byte  $80,$c0,$94,$d4
 
-right_cursor_limits:
+right_cursor_endings:
   .byte  $93,$d3,$ad,$e7
 
-up_cursor_limits:
+up_cursor_endings:
   .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8F,$8E,$90,$91,$92,$93
 
-down_cursor_limits:
+down_cursor_endings:
   .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$DD,$DE,$DF,$E0,$E1,$E2,$E3,$E4,$E5,$E6,$E7
 
 ;complete the file
