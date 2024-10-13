@@ -11,6 +11,8 @@
   .org $8000
 
 RESET:
+;accumulator addressing
+  asl ;rotate left the bits of the accumulator
 ;implicit addresing
   inx ;increment X
 ;inmediate addresing
