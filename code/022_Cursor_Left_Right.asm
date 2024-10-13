@@ -35,7 +35,7 @@ cursor_position=$a1
 ;constants
 cursor_char=$fc
 blank_char=$20
-center_cursor=$A4
+center_cursor=$94
 
 
 
