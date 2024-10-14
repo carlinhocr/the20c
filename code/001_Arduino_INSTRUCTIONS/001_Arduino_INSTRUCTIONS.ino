@@ -58,19 +58,32 @@ char SYNC_VALUE = digitalRead(SYNC) ? 'S':'n';
     Serial.print(bit);
     data = (data << 1) + bit;
   }
-  char instruction[4]='NON\0';
-  //sync_string(SYNC_VALUE,instruction);
-  sprintf(output, " %04x  %04c %01c %02x %05c",address,digitalRead(READ_WRITE)?'r':'W',SYNC_VALUE,data,instruction);
-  Serial.println(output);
+  char *instruction=sync_string(SYNC_VALUE,data);
+  sprintf(output, " %04x  %04c %01c %02x %01c",address,digitalRead(READ_WRITE)?'r':'W',SYNC_VALUE,data,' ');
+  Serial.print(output);
+  Serial.println(instruction);
 
 }
 
-void sync_string(char SYNC_VALUE,char * instruction) {
+char *sync_string(char SYNC_VALUE,unsigned int data) {
   if (SYNC_VALUE == 'S'){
-    instruction =  "OPA" ;
+    switch (data){
+      case 0x0a:
+      return "ASL A";
+      case 0xe8:
+      return "INX";
+      case 0xa9:
+      return "LDA #";
+      case 0xa5:
+      return "LDA zpg";
+      case 0xad:
+      return "LDA abs";
+      default:
+      return "UNKNOWN";
+    };
     }
   else{
-    instruction =  "NON" ;
+    return  "   " ;
   }
 } 
 
