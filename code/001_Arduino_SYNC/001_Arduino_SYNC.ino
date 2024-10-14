@@ -40,7 +40,7 @@ void onClock (){
 //  int CSRAM_VALUE = digitalRead(CSRAM) ? 1:0;
 //  Serial.print(CS1_VALUE);
 //  Serial.print(CS2_VALUE);
-int SYNC_VALUE = digitalRead(CS1) ? 1:0;
+char SYNC_VALUE = digitalRead(SYNC) ? 'S':'n';
   Serial.print("    ");
 //  Serial.print(CSRAM_VALUE);
   Serial.print(" ");
@@ -58,7 +58,7 @@ int SYNC_VALUE = digitalRead(CS1) ? 1:0;
     Serial.print(bit);
     data = (data << 1) + bit;
   }
-  sprintf(output, " %04x  %04c %02x",address,digitalRead(READ_WRITE)?'r':'W',digitalRead(SYNC)?'S':' 'data);
+  sprintf(output, " %04x  %04c %01c %02x",address,digitalRead(READ_WRITE)?'r':'W',SYNC_VALUE,data);
   Serial.println(output);
 
 }
