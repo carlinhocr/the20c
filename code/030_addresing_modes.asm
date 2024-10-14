@@ -58,6 +58,9 @@ RESET:
   sta $21 ;store address high
   lda ($20),y ;got to $20 for ADL and $21 for address high and then add Y to the address
               ;the address will be $03FF + y = $0406
+;loop to finish program
+loop:
+  jmp loop
   
 
 
