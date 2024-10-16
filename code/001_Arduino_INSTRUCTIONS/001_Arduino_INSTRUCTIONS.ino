@@ -68,16 +68,36 @@ char SYNC_VALUE = digitalRead(SYNC) ? 'S':'n';
 char *sync_string(char SYNC_VALUE,unsigned int data) {
   if (SYNC_VALUE == 'S'){
     switch (data){
+      case 0x00:
+      return "BRK";
       case 0x0a:
       return "ASL A";
+      case 0x4c:
+      return "JMP abs";
+      case 0x85:
+      return "STA zpg";
       case 0xe8:
       return "INX";
-      case 0xa9:
-      return "LDA #";
-      case 0xa5:
-      return "LDA zpg";
       case 0xad:
       return "LDA abs";
+      case 0xa0:
+      return "LDY #";
+      case 0xa1:
+      return "LDA X,ind";
+      case 0xa2:
+      return "LDX #";
+      case 0xa5:
+      return "LDA zpg";
+      case 0xa9:
+      return "LDA #";
+      case 0xb1:
+      return "LDA ind,Y";
+      case 0xb5:
+      return "LDA zpg,X";
+      case 0xb9:
+      return "LDA abs,Y";
+      case 0xbd:
+      return "LDA abs,X";
       default:
       return "UNKNOWN";
     };
