@@ -181,14 +181,16 @@ not_move_left:
 
 move_cursor_up:
   lda line_cursor
+  cmp #$0
+  beq not_move_up
   cmp #$1
   beq move_up_from_row_1
   cmp #$2
   beq move_up_from_row_2
   cmp #$3
   beq move_up_from_row_3
-  ;if not row 1,  2 or 3 then it is row0
-  beq not_move_up
+  ;if not row 0,1,  2 or 3 then return wrong case
+  rts
 move_up_from_row_1:
   jsr erase_cursor
   lda cursor_position
@@ -225,8 +227,10 @@ move_cursor_down:
   beq move_down_from_row_1
   cmp #$2
   beq move_down_from_row_2
-  ;if not row 0,1 or 2 then it is row0
+  cmp #$3
   beq not_move_down
+  ;if not row 0,1,  2 or 3 then return wrong case
+  rts
 move_down_from_row_0:
   jsr erase_cursor
   clc
