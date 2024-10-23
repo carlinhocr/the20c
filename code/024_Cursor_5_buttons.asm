@@ -40,14 +40,11 @@ cursor_char=$fc
 blank_char=$20
 ;center_cursor=$9d
 center_cursor=$dd
-;moving up
-sbc_row_from_1_to_0=$40
-adc_row_from_2_to_1=$2e
-adc_row_from_3_to_2=$40
-;moving down
-adc_row_from_0_to_1=$40
-sbc_row_from_1_to_2=$2e
-sbc_row_from_2_to_3=$40
+
+diff_1_0=$40
+diff_2_1=$2c
+diff_3_2=$40
+
 
 
 
@@ -103,10 +100,10 @@ RESET:
 
 ; Positions of LCD characters
 ; 	01	02	03	04	05	06	07	08	09	10	11	12	13	14	15	16	17	18	19	20
-; 1	80	81	82	83	84	85	86	87	88	89	8A	8B	8C	8D	8F	8E	90	91	92	93
-; 2	C0	C1	C2	C3	C4	C5	C6	C7	C8	C9	CA	CB	CC	CD	CE	CF	D0	D1	D2	D3
-; 3	94	95	96	97	98	99	9a	9b	9c	9d	9e	9f	a0	a1	a2	a3	a4	a5	a6	a7
-; 4	D4	D5	D6	D7	D8	D9	DA	DB	DC	DD	DE	DF	E0	E1	E2	E3	E4	E5	E6	E7
+; 0	80	81	82	83	84	85	86	87	88	89	8A	8B	8C	8D	8F	8E	90	91	92	93
+; 1	C0	C1	C2	C3	C4	C5	C6	C7	C8	C9	CA	CB	CC	CD	CE	CF	D0	D1	D2	D3
+; 2	94	95	96	97	98	99	9a	9b	9c	9d	9e	9f	a0	a1	a2	a3	a4	a5	a6	a7
+; 3	D4	D5	D6	D7	D8	D9	DA	DB	DC	DD	DE	DF	E0	E1	E2	E3	E4	E5	E6	E7
 
 
 start:
@@ -195,7 +192,7 @@ move_cursor_up:
 move_up_from_row_1:
   jsr erase_cursor
   lda cursor_position
-  sbc #sbc_row_from_1_to_0
+  sbc #diff_1_0
   sta cursor_position
   jsr draw_cursor
   dec line_cursor
@@ -204,7 +201,7 @@ move_up_from_row_2:
   jsr erase_cursor
   lda cursor_position
   clc
-  adc #adc_row_from_2_to_1
+  adc #diff_2_1
   sta cursor_position
   jsr draw_cursor
   dec line_cursor
@@ -213,7 +210,7 @@ move_up_from_row_3:
   jsr erase_cursor
   lda cursor_position
   clc
-  adc #adc_row_from_3_to_2
+  sbc #diff_3_2
   sta cursor_position
   jsr draw_cursor
   dec line_cursor
@@ -235,7 +232,7 @@ move_down_from_row_0:
   jsr erase_cursor
   lda cursor_position
   clc
-  adc #adc_row_from_0_to_1
+  adc #diff_1_0
   sta cursor_position
   jsr draw_cursor
   dec line_cursor
@@ -243,7 +240,7 @@ move_down_from_row_0:
 move_down_from_row_1:
   jsr erase_cursor
   lda cursor_position
-  sbc #sbc_row_from_1_to_2
+  sbc #diff_2_1
   sta cursor_position
   jsr draw_cursor
   dec line_cursor
@@ -251,7 +248,7 @@ move_down_from_row_1:
 move_down_from_row_2:
   jsr erase_cursor
   lda cursor_position
-  sbc #sbc_row_from_2_to_3
+  adc #diff_3_2
   sta cursor_position
   jsr draw_cursor
   dec line_cursor
@@ -587,10 +584,10 @@ button_press_irq:
 
 ; Positions of LCD characters
 ; 	01	02	03	04	05	06	07	08	09	10	11	12	13	14	15	16	17	18	19	20
-; 1	80	81	82	83	84	85	86	87	88	89	8A	8B	8C	8D	8F	8E	90	91	92	93
-; 2	C0	C1	C2	C3	C4	C5	C6	C7	C8	C9	CA	CB	CC	CD	CE	CF	D0	D1	D2	D3
-; 3	94	95	96	97	98	99	9a	9b	9c	9d	9e	9f	a0	a1	a2	a3	a4	a5	a6	a7
-; 4	D4	D5	D6	D7	D8	D9	DA	DB	DC	DD	DE	DF	E0	E1	E2	E3	E4	E5	E6	E7
+; 0	80	81	82	83	84	85	86	87	88	89	8A	8B	8C	8D	8F	8E	90	91	92	93
+; 1	C0	C1	C2	C3	C4	C5	C6	C7	C8	C9	CA	CB	CC	CD	CE	CF	D0	D1	D2	D3
+; 2	94	95	96	97	98	99	9a	9b	9c	9d	9e	9f	a0	a1	a2	a3	a4	a5	a6	a7
+; 3	D4	D5	D6	D7	D8	D9	DA	DB	DC	DD	DE	DF	E0	E1	E2	E3	E4	E5	E6	E7
 
 left_cursor_endings:
   .byte  $80,$c0,$94,$d4
