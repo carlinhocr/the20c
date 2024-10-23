@@ -30,6 +30,7 @@ downCursorVectorLow=$d6
 downCursorVectorHigh=$d7
 fireCursorVectorLow=$d8
 fireCursorVectorHigh=$d9
+line_cursor=$da
 
 ;variables
 cursor_position=$a1
@@ -38,6 +39,14 @@ cursor_position=$a1
 cursor_char=$fc
 blank_char=$20
 center_cursor=$9d
+;moving up
+sbc_row_from_1_to_0=$40
+adc_row_from_2_to_1=$2c
+adc_row_from_3_to_2=$40
+;moving down
+adc_row_from_0_to_1=$40
+sbc_row_from_1_to_2=$2c
+sbc_row_from_2_to_3=$40
 
 
 
@@ -94,6 +103,8 @@ RESET:
 start:
   jsr clear_display
   jsr initiliaze_vectors
+  lda #$2
+  sta line_cursor
   lda #center_cursor
   sta cursor_position
   lda #center_cursor
@@ -163,36 +174,78 @@ not_move_left:
   rts
 
 move_cursor_up:
-  ldy #$FF
-  lda cursor_position
-check_up_limit:  
-  iny 
-  lda (upCursorVectorLow),y ;first fo to address in left_cursor_endings, then increase it
-  cmp cursor_position  
+  lda line_cursor
+  cmp #$1
+  beq move_up_from_row_1
+  cmp #$2
+  beq move_up_from_row_2
+  cmp #$3
+  beq move_up_from_row_2
+  ;if not row 1,  2 or 3 then it is row0
   beq not_move_up
-  cpy #$15 ; 20 position for the top boundary
-  bne check_up_limit
+move_up_from_row_1:
+  lda cursor_position
+  sbc sbc_row_from_1_to_0
+  sta cursor_position
+  dec line_cursor
   jsr erase_cursor
-  dec cursor_position
   jsr draw_cursor
+  rts
+move_up_from_row_2:
+  lda cursor_position
+  adc adc_row_from_2_to_1
+  sta cursor_position
+  dec line_cursor
+  jsr erase_cursor
+  jsr draw_cursor
+  rts
+move_up_from_row_3:
+  lda cursor_position
+  adc adc_row_from_3_to_2
+  sta cursor_position
+  dec line_cursor
+  jsr erase_cursor
+  jsr draw_cursor
+  rts
 not_move_up:
   rts  
 
 move_cursor_down:
-  ldy #$FF
-  lda cursor_position
-check_down_limit:  
-  iny 
-  lda (downCursorVectorLow),y ;first fo to address in left_cursor_endings, then increase it
-  cmp cursor_position  
+  lda line_cursor
+  cmp #$0
+  beq move_down_from_row_0
+  cmp #$1
+  beq move_up_from_row_1
+  cmp #$2
+  beq move_up_from_row_2
+  ;if not row 0,1 or 2 then it is row0
   beq not_move_down
-  cpy #$15 ; 20 position for the top boundary
-  bne check_up_limit
+move_down_from_row_0:
+  lda cursor_position
+  adc adc_row_from_0_to_1
+  sta cursor_position
+  dec line_cursor
   jsr erase_cursor
-  dec cursor_position
   jsr draw_cursor
+  rts
+move_down_from_row_1:
+  lda cursor_position
+  sbc sbc_row_from_1_to_2
+  sta cursor_position
+  dec line_cursor
+  jsr erase_cursor
+  jsr draw_cursor
+  rts
+move_down_from_row_2:
+  lda cursor_position
+  sbc sbc_row_from_2_to_3
+  sta cursor_position
+  dec line_cursor
+  jsr erase_cursor
+  jsr draw_cursor
+  rts
 not_move_down:
-  rts  
+  rts 
 
 
 test_buttons:
