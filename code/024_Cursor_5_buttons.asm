@@ -184,20 +184,20 @@ move_cursor_up:
   ;if not row 1,  2 or 3 then it is row0
   beq not_move_up
 move_up_from_row_1:
+  jsr erase_cursor
   lda cursor_position
   sbc sbc_row_from_1_to_0
   sta cursor_position
   dec line_cursor
-  jsr erase_cursor
   jsr draw_cursor
   rts
 move_up_from_row_2:
+  jsr erase_cursor
   lda cursor_position
   adc adc_row_from_2_to_1
   sta cursor_position
-  dec line_cursor
-  jsr erase_cursor
   jsr draw_cursor
+  dec line_cursor
   rts
 move_up_from_row_3:
   lda cursor_position
