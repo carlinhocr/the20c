@@ -91,13 +91,14 @@ RESET:
 
 start:
   jsr clear_display
-  jsr initiliaze_vectors
-  lda #center_cursor
-  sta cursor_position
-  lda #center_cursor
-  jsr lcd_send_instruction 
-  lda #cursor_char
-  jsr print_char
+  lda #<initial_message
+  sta charDataVectorLow
+  lda #>initial_message
+  sta charDataVectorHigh
+  jsr print_message
+  jsr delay_2_sec
+  jmp start 
+
 loop:
   jmp loop
 
@@ -180,8 +181,8 @@ pressed_buttons_pa4:
 test_buttons_keep_testing:
   rol PORTSTATUS
   rol PORTSTATUS ; now we have PA2 on the carry and PA1 on the negative flag 
-  bcc pressed_buttons_pa2 ;no carry  means that Pa4 was zero then it was pressed
-  bmi test_buttons_keep_testing_again; if one the pa3 was not pressed
+  bcc pressed_buttons_pa2 ;no carry  means that Pa2 was zero then it was pressed
+  bmi test_buttons_keep_testing_again; if one the pa1 was not pressed
 pressed_buttons_pa1:
   ;here button pa1 was pressed
   jsr pa1_button_action 
