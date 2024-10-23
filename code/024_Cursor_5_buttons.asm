@@ -41,11 +41,11 @@ blank_char=$20
 center_cursor=$9d
 ;moving up
 sbc_row_from_1_to_0=$40
-adc_row_from_2_to_1=$2c
+adc_row_from_2_to_1=$2b
 adc_row_from_3_to_2=$40
 ;moving down
 adc_row_from_0_to_1=$40
-sbc_row_from_1_to_2=$2c
+sbc_row_from_1_to_2=$2b
 sbc_row_from_2_to_3=$40
 
 
