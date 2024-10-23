@@ -232,31 +232,30 @@ move_cursor_down:
   ;if not row 0,1,  2 or 3 then return wrong case
   rts
 move_down_from_row_0:
+  inc line_cursor
   jsr erase_cursor
   clc
   lda cursor_position
   adc #diff_1_0
   sta cursor_position
   jsr draw_cursor
-  inc line_cursor
   rts
 move_down_from_row_1:
+  inc line_cursor
   jsr erase_cursor
-  sec
   lda cursor_position
   sbc #diff_2_1
   sta cursor_position
   jsr draw_cursor
-  inc line_cursor
   rts
 move_down_from_row_2:
+  inc line_cursor
   jsr erase_cursor
   clc
   lda cursor_position
   adc #diff_3_2
   sta cursor_position
   jsr draw_cursor
-  inc line_cursor
   rts
 not_move_down:
   rts 
