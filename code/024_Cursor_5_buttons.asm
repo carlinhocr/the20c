@@ -191,7 +191,6 @@ move_cursor_up:
   beq not_move_up
 move_up_from_row_1:
   jsr erase_cursor
-  sec
   lda cursor_position
   sbc #diff_1_0
   sta cursor_position
@@ -209,7 +208,6 @@ move_up_from_row_2:
   rts
 move_up_from_row_3:
   jsr erase_cursor
-  sec
   lda cursor_position
   sbc #diff_3_2
   sta cursor_position
