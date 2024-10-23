@@ -180,7 +180,7 @@ move_cursor_up:
   cmp #$2
   beq move_up_from_row_2
   cmp #$3
-  beq move_up_from_row_2
+  beq move_up_from_row_3
   ;if not row 1,  2 or 3 then it is row0
   beq not_move_up
 move_up_from_row_1:
@@ -215,9 +215,9 @@ move_cursor_down:
   cmp #$0
   beq move_down_from_row_0
   cmp #$1
-  beq move_up_from_row_1
+  beq move_down_from_row_1
   cmp #$2
-  beq move_up_from_row_2
+  beq move_down_from_row_2
   ;if not row 0,1 or 2 then it is row0
   beq not_move_down
 move_down_from_row_0:
