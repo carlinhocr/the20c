@@ -112,7 +112,7 @@ RESET:
 start:
   jsr clear_display
   jsr initiliaze_vectors
-  lda #$2
+  lda #$3
   sta line_cursor
   lda #center_cursor
   sta cursor_position
