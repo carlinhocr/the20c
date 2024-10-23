@@ -191,8 +191,8 @@ move_cursor_up:
   beq not_move_up
 move_up_from_row_1:
   jsr erase_cursor
+  sec
   lda cursor_position
-  clc
   sbc #diff_1_0
   sta cursor_position
   jsr draw_cursor
@@ -200,8 +200,8 @@ move_up_from_row_1:
   rts
 move_up_from_row_2:
   jsr erase_cursor
-  lda cursor_position
   clc
+  lda cursor_position
   adc #diff_2_1
   sta cursor_position
   jsr draw_cursor
@@ -209,8 +209,8 @@ move_up_from_row_2:
   rts
 move_up_from_row_3:
   jsr erase_cursor
+  sec
   lda cursor_position
-  clc
   sbc #diff_3_2
   sta cursor_position
   jsr draw_cursor
@@ -231,8 +231,8 @@ move_cursor_down:
   beq not_move_down
 move_down_from_row_0:
   jsr erase_cursor
-  lda cursor_position
   clc
+  lda cursor_position
   adc #diff_1_0
   sta cursor_position
   jsr draw_cursor
@@ -240,8 +240,8 @@ move_down_from_row_0:
   rts
 move_down_from_row_1:
   jsr erase_cursor
+  sec
   lda cursor_position
-  clc
   sbc #diff_2_1
   sta cursor_position
   jsr draw_cursor
@@ -249,8 +249,8 @@ move_down_from_row_1:
   rts
 move_down_from_row_2:
   jsr erase_cursor
-  lda cursor_position
   clc
+  lda cursor_position
   adc #diff_3_2
   sta cursor_position
   jsr draw_cursor
