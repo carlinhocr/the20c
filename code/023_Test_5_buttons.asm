@@ -191,6 +191,7 @@ pressed_buttons_pa2:
   jsr pa2_button_action
   rts
 test_buttons_keep_testing_again:
+  rol PORTSTATUS
   rol PORTSTATUS ; now we have PA0 on the carry 
   bcc pressed_buttons_pa0
   ;no button was pressed but we had an interrupt
