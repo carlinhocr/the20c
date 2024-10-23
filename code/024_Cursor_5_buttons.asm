@@ -197,7 +197,7 @@ move_up_from_row_1:
   sbc #diff_1_0
   sta cursor_position
   jsr draw_cursor
-  dec line_cursor
+  inc line_cursor
   rts
 move_up_from_row_2:
   jsr erase_cursor
@@ -206,7 +206,7 @@ move_up_from_row_2:
   adc #diff_2_1
   sta cursor_position
   jsr draw_cursor
-  dec line_cursor
+  inc line_cursor
   rts
 move_up_from_row_3:
   jsr erase_cursor
@@ -214,7 +214,7 @@ move_up_from_row_3:
   sbc #diff_3_2
   sta cursor_position
   jsr draw_cursor
-  dec line_cursor
+  inc line_cursor
   rts
 not_move_up:
   rts  
