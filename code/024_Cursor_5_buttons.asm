@@ -186,26 +186,26 @@ move_cursor_up:
 move_up_from_row_1:
   jsr erase_cursor
   lda cursor_position
-  sbc sbc_row_from_1_to_0
+  sbc #sbc_row_from_1_to_0
   sta cursor_position
-  dec line_cursor
   jsr draw_cursor
+  dec line_cursor
   rts
 move_up_from_row_2:
   jsr erase_cursor
   lda cursor_position
-  adc adc_row_from_2_to_1
+  adc #adc_row_from_2_to_1
   sta cursor_position
   jsr draw_cursor
   dec line_cursor
   rts
 move_up_from_row_3:
-  lda cursor_position
-  adc adc_row_from_3_to_2
-  sta cursor_position
-  dec line_cursor
   jsr erase_cursor
+  lda cursor_position
+  adc #adc_row_from_3_to_2
+  sta cursor_position
   jsr draw_cursor
+  dec line_cursor
   rts
 not_move_up:
   rts  
@@ -221,28 +221,28 @@ move_cursor_down:
   ;if not row 0,1 or 2 then it is row0
   beq not_move_down
 move_down_from_row_0:
-  lda cursor_position
-  adc adc_row_from_0_to_1
-  sta cursor_position
-  dec line_cursor
   jsr erase_cursor
+  lda cursor_position
+  adc #adc_row_from_0_to_1
+  sta cursor_position
   jsr draw_cursor
+  dec line_cursor
   rts
 move_down_from_row_1:
-  lda cursor_position
-  sbc sbc_row_from_1_to_2
-  sta cursor_position
-  dec line_cursor
   jsr erase_cursor
+  lda cursor_position
+  sbc #sbc_row_from_1_to_2
+  sta cursor_position
   jsr draw_cursor
+  dec line_cursor
   rts
 move_down_from_row_2:
-  lda cursor_position
-  sbc sbc_row_from_2_to_3
-  sta cursor_position
-  dec line_cursor
   jsr erase_cursor
+  lda cursor_position
+  sbc #sbc_row_from_2_to_3
+  sta cursor_position
   jsr draw_cursor
+  dec line_cursor
   rts
 not_move_down:
   rts 
