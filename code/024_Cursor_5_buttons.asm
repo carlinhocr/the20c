@@ -38,7 +38,8 @@ cursor_position=$a1
 ;constants
 cursor_char=$fc
 blank_char=$20
-center_cursor=$9d
+;center_cursor=$9d
+center_cursor=$dd
 ;moving up
 sbc_row_from_1_to_0=$40
 adc_row_from_2_to_1=$2e
@@ -99,6 +100,14 @@ RESET:
   ;END Configure Ports A & B
 
   jsr initilize_display
+
+; Positions of LCD characters
+; 	01	02	03	04	05	06	07	08	09	10	11	12	13	14	15	16	17	18	19	20
+; 1	80	81	82	83	84	85	86	87	88	89	8A	8B	8C	8D	8F	8E	90	91	92	93
+; 2	C0	C1	C2	C3	C4	C5	C6	C7	C8	C9	CA	CB	CC	CD	CE	CF	D0	D1	D2	D3
+; 3	94	95	96	97	98	99	9a	9b	9c	9d	9e	9f	a0	a1	a2	a3	a4	a5	a6	a7
+; 4	D4	D5	D6	D7	D8	D9	DA	DB	DC	DD	DE	DF	E0	E1	E2	E3	E4	E5	E6	E7
+
 
 start:
   jsr clear_display
