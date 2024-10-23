@@ -39,7 +39,7 @@ cursor_position=$a1
 cursor_char=$fc
 blank_char=$20
 ;center_cursor=$9d
-center_cursor=$dd
+center_cursor=$c9
 
 diff_1_0=$40
 diff_2_1=$2c
