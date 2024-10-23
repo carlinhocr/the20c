@@ -192,6 +192,7 @@ move_cursor_up:
 move_up_from_row_1:
   jsr erase_cursor
   lda cursor_position
+  clc
   sbc #diff_1_0
   sta cursor_position
   jsr draw_cursor
@@ -240,6 +241,7 @@ move_down_from_row_0:
 move_down_from_row_1:
   jsr erase_cursor
   lda cursor_position
+  clc
   sbc #diff_2_1
   sta cursor_position
   jsr draw_cursor
@@ -248,6 +250,7 @@ move_down_from_row_1:
 move_down_from_row_2:
   jsr erase_cursor
   lda cursor_position
+  clc
   adc #diff_3_2
   sta cursor_position
   jsr draw_cursor
