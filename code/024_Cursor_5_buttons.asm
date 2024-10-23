@@ -41,11 +41,11 @@ blank_char=$20
 center_cursor=$9d
 ;moving up
 sbc_row_from_1_to_0=$40
-adc_row_from_2_to_1=$2b
+adc_row_from_2_to_1=$2e
 adc_row_from_3_to_2=$40
 ;moving down
 adc_row_from_0_to_1=$40
-sbc_row_from_1_to_2=$2b
+sbc_row_from_1_to_2=$2e
 sbc_row_from_2_to_3=$40
 
 
@@ -194,6 +194,7 @@ move_up_from_row_1:
 move_up_from_row_2:
   jsr erase_cursor
   lda cursor_position
+  clc
   adc #adc_row_from_2_to_1
   sta cursor_position
   jsr draw_cursor
@@ -202,6 +203,7 @@ move_up_from_row_2:
 move_up_from_row_3:
   jsr erase_cursor
   lda cursor_position
+  clc
   adc #adc_row_from_3_to_2
   sta cursor_position
   jsr draw_cursor
@@ -223,6 +225,7 @@ move_cursor_down:
 move_down_from_row_0:
   jsr erase_cursor
   lda cursor_position
+  clc
   adc #adc_row_from_0_to_1
   sta cursor_position
   jsr draw_cursor
