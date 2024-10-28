@@ -14,6 +14,13 @@ IFR = $600d
 IER = $600e
 PORTSTATUS=$A0
 
+startRAMData =$2000
+charDataVectorLow = $30
+charDataVectorHigh = $31
+delay_COUNT_A = $32        
+delay_COUNT_B = $33
+charLoadLow=$28
+charLoadHigh=$29
 
 ;Vectors
 
@@ -152,9 +159,11 @@ gameFlow:
 load_screen_memory:
   ldx #$FF
 load_screen_memory_copy:
+;CHECK IF SCREEN MEMORy LOW DOES NOT NEED TO ADD 1 TO HIGH BYTE
   inc X
   lda invaders_screen_0,X
-  sta screenMemory,X ; always copy the character also when it is the end_char
+  sta screenMemoryLow,X ; always copy the character also when it is the end_char
+  bne load_screen_memory_going
   cmp #end_char
   bne load_screen_memory_copy
   rti
