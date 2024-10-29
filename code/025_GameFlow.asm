@@ -144,6 +144,8 @@ gameInitilize:
   jsr add_custom_chars_invaders
   jsr initilize_display
   jsr clear_display
+  jsr test_custom_chars
+  jsr DELAY_SEC
   lda #inv_line_lenght
   sta record_lenght
   ;jsr load_screen_memory
@@ -151,6 +153,18 @@ gameInitilize:
   
 loop:
   jmp loop
+
+test_custom_chars:
+  ldx #$ff
+  lda #$44
+  jsr print_char
+test_custom_chars_loop 
+  inx
+  txa
+  jsr print_char
+  cpx #$07
+  bne test_custom_chars_loop
+  rts
 
 gameFlow:
   jsr draw_screen  
