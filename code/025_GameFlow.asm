@@ -245,7 +245,7 @@ move_aliens_right_cont:
   bne move_aliens_right_cont
   rts
 
-move_alien_right_now 
+move_alien_right_now: 
   iny ; save alien in a position to the right
   sta (screenMemoryLow2),y
   dey ;move back to original position 
