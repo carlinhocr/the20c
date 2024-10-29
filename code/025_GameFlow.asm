@@ -170,6 +170,8 @@ draw_screen
   sta charDataVectorLow
   lda #>invaders_screen_0
   sta charDataVectorHigh
+  lda #$0A 
+  sta record_lenght
   ;lda #screenMemoryLow
   ;sta charDataVectorLow
   ;lda #screenMemoryHigh
@@ -197,10 +199,6 @@ print_screen_eeprom:
 print_screen_end:
   rts 
 
-
-
-  
-  
 
 initiliaze_vectors:
   lda #<left_cursor_endings
@@ -595,17 +593,6 @@ INNER_LOOP:
     RTS               ; Return from subroutine
 
 
-char_load:  
-    ldy #$FF
-char_load_loop:
-    iny  
-    lda (charLoadLow),y
-    jsr lcd_send_data
-    cpy #07
-    bne char_load_loop
-    rts
-    ;END send data for custom character 5x8 char
-
 add_custom_chars_invaders:
     ;BEGIN Add custom char instruction
     ;8026 lda
@@ -635,6 +622,16 @@ char_1_invaders:
 add_custom_chars_end_invaders:  
     rts
   
+char_load:  
+    ldy #$FF
+char_load_loop:
+    iny  
+    lda (charLoadLow),y
+    jsr lcd_send_data
+    cpy #07
+    bne char_load_loop
+    rts
+    ;END send data for custom character 5x8 char
 
 nmi:
   ;preserve Accumulator, X and Y so we can use them here
@@ -740,7 +737,8 @@ invaders_screen_0:
   .byte pos_line1_invaders,cinv1,cinv1,cinv1,cinv1,cinv1,cinv1,cinv1,cinv1,cblank
   .byte pos_line2_invaders,cinv2,cinv2,cinv2,cinv2,cinv2,cinv2,cinv2,cinv2,cblank
   .byte pos_line3_invaders,cblank,cblank,cblank,cblank,cblank,cblank,cblank,cblank,cblank
-  .byte pos_line4_invaders,cblank,cblank,cblank,cship,cblank,cblank,cblank,cblank,cblank,end_char
+  .byte pos_line4_invaders,cblank,cblank,cblank,cship,cblank,cblank,cblank,cblank,cblank
+  .byte end_char
 
 invader_ship_1:
   .byte $00,$04,$04,$0e,$1f,$04,$0e,$00
