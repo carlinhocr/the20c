@@ -223,8 +223,8 @@ copy_screen2_screen:
   ldy #$FF
 copy_screen2_screen_loop:
   iny
-  lda (screenMemoryLow),y
-  sta (screenMemoryLow2),y
+  lda (screenMemoryLow2),y
+  sta (screenMemoryLow),y
   cmp #end_char
   bne copy_screen2_screen_loop
   rts
@@ -234,13 +234,14 @@ move_aliens_right:
 move_aliens_cont:  
   iny
   lda (screenMemoryLow),y
+  sta (screenMemoryLow2),y
   cmp cinv1
   beq move_alien_now 
   cmp cinv2
   beq move_alien_now
-  sta (screenMemoryLow2),y
   cmp #end_char
   bne move_aliens_cont
+
   rts
 move_alien_now 
   iny ; save alien in a position to the right
