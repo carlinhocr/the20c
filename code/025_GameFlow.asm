@@ -28,6 +28,8 @@ delay_COUNT_A = $32
 delay_COUNT_B = $33
 screenMemoryLow=$34 ;80 bytes
 screenMemoryHigh=$35 
+screenMemoryLow2=$36 ;80 bytes
+screenMemoryHigh2=$37 
 
 
 rightCursorVectorLow=$d0
@@ -191,23 +193,28 @@ load_screen_memory:
   sta screenMemoryLow
   lda #$04
   sta screenMemoryHigh
+  lda #$00
+  sta screenMemoryLow2
+  lda #$05
+  sta screenMemoryHigh2
   ldy #$FF
 load_screen_memory_copy:
 ;CHECK IF SCREEN MEMORy LOW DOES NOT NEED TO ADD 1 TO HIGH BYTE
   iny
   lda invaders_screen_0,y
   sta (screenMemoryLow),y ; always copy the character also when it is the end_char
+  sta (screenMemoryLow2),y ; always copy the character also when it is the end_char
   cmp #end_char
   bne load_screen_memory_copy
   rts
 
 draw_screen
-  lda #<invaders_screen_0
+  lda screenMemoryLow
   sta charDataVectorLow
-  lda #>invaders_screen_0
+  lda screenMemoryHigh
   sta charDataVectorHigh
-  lda #$0A 
-  sta record_lenght
+  ;lda #$0A 
+  ;sta record_lenght
   ;lda #screenMemoryLow
   ;sta charDataVectorLow
   ;lda #screenMemoryHigh
