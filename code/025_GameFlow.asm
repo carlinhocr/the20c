@@ -50,7 +50,7 @@ line_cursor=$da
 cursor_position=$a1
 
 record_lenght=$CC ;it is a memory position
-
+record_lenght_plus1=$CD
 ;constants
 cursor_char=$fc
 blank_char=$20
@@ -167,6 +167,8 @@ gameInitilize:
   ;jsr test_custom_chars
   lda #inv_line_lenght
   sta record_lenght
+  sta record_lenght_plus1
+  inc record_lenght_plus1
   jsr load_screen_memory
   jsr draw_screen
   jsr delay_1_sec
@@ -233,10 +235,9 @@ copy_screen2_screen_loop:
 move_aliens_right:
   ldy #$FF
   ldx #$FF
-move_aliens_right_cont:
-  cpx #record_lenght
-  bne move_aliens_right_cont2
-  ldx #$FF  
+move_aliens_right_cont: 
+  cpx #record_lenght_plus1
+  beq reset_x  
 move_aliens_right_cont2 
   iny
   inx
@@ -250,6 +251,10 @@ move_aliens_right_cont2
   cmp #end_char
   bne move_aliens_right_cont
   rts
+
+reset_x:
+  ldx #$FF
+  jmp move_aliens_right_cont2
 
 move_aliens_right_now:
   cpx #$01 ;first screen position that it is not the position to start the line
