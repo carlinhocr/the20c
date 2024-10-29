@@ -148,14 +148,20 @@ gameInitilize:
   jsr add_custom_chars_invaders
   jsr initilize_display
   jsr clear_display
-  lda #$0
+  lda #cinv2
   jsr print_char  
   jsr DELAY_SEC
-  jsr test_custom_chars
-  lda #inv_line_lenght
-  sta record_lenght
+  lda #cinv1
+  jsr print_char  
+  jsr DELAY_SEC
+  lda #cship
+  jsr print_char  
+  jsr DELAY_SEC
+  ;jsr test_custom_chars
+  ;lda #inv_line_lenght
+  ;sta record_lenght
   ;jsr load_screen_memory
-  jsr draw_screen
+  ;jsr draw_screen
   
 loop:
   jmp loop
