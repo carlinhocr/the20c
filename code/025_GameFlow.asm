@@ -54,7 +54,7 @@ blank_char=$20
 end_char=$ff
 ;cship=$00
 ;cinv1=$01
-cship=$DE
+cship=$cE
 cinv1=$f2
 cinv2=$fc
 cblank=$20
@@ -161,10 +161,10 @@ gameInitilize:
   jsr print_char  
   jsr DELAY_SEC
   ;jsr test_custom_chars
-  ;lda #inv_line_lenght
-  ;sta record_lenght
-  ;jsr load_screen_memory
-  ;jsr draw_screen
+  lda #inv_line_lenght
+  sta record_lenght
+  jsr load_screen_memory
+  jsr draw_screen
   
 loop:
   jmp loop
