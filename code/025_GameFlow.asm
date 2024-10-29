@@ -145,7 +145,7 @@ gameInitilize:
   jsr add_custom_chars_invaders
   lda #inv_line_lenght
   sta record_lenght
-  jsr load_screen_memory
+  ;jsr load_screen_memory
   jsr draw_screen
   
 loop:
@@ -165,8 +165,7 @@ load_screen_memory_copy:
   bne load_screen_memory_copy
   rti
 
-draw_screen:
-
+draw_screen
   lda #<invaders_screen_0
   sta charDataVectorLow
   lda #>invaders_screen_0
