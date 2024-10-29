@@ -169,6 +169,7 @@ gameInitilize:
   sta record_lenght
   jsr load_screen_memory
   jsr draw_screen
+  jsr delay_1_sec
   jsr move_aliens_right
   jsr copy_screen2_screen
   jsr draw_screen
@@ -231,22 +232,22 @@ copy_screen2_screen_loop:
 
 move_aliens_right:
   ldy #$FF
-move_aliens_cont:  
+move_aliens_right_cont:  
   iny
   lda (screenMemoryLow),y
   cmp #cinv1
-  beq move_alien_now 
+  beq move_alien_right_now 
   cmp #cinv2
-  beq move_alien_now
+  beq move_alien_right_now
   cmp #end_char
-  bne move_aliens_cont
+  bne move_aliens_right_cont
   rts
-  
-move_alien_now 
+
+move_alien_right_now 
   iny ; save alien in a position to the right
   sta (screenMemoryLow2),y
   dey ;move back to original position 
-  jmp move_aliens_cont
+  jmp move_aliens_right_cont
 
 
 
@@ -807,8 +808,8 @@ down_cursor_endings:
 
 
 invaders_screen_0:
-  .byte pos_line1_invaders,cinv1,cinv1,cinv1,cinv1,cinv1,cinv1,cinv1,cinv1,cblank
-  .byte pos_line2_invaders,cinv2,cinv2,cinv2,cinv2,cinv2,cinv2,cinv2,cinv2,cblank
+  .byte pos_line1_invaders,cinv1,cinv1,cblank,cinv1,cinv1,cinv1,cinv1,cinv1,cblank
+  .byte pos_line2_invaders,cinv2,cblank,cinv2,cinv2,cinv2,cinv2,cinv2,cinv2,cblank
   .byte pos_line3_invaders,cblank,cblank,cblank,cblank,cblank,cblank,cblank,cblank,cblank
   .byte pos_line4_invaders,cblank,cblank,cblank,cship,cblank,cblank,cblank,cblank,cblank
   .byte end_char
