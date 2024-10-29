@@ -236,7 +236,7 @@ move_aliens_right:
   ldy #$FF
   ldx #$FF
 move_aliens_right_cont: 
-  cpx #record_lenght_plus1
+  cpx record_lenght_plus1
   beq reset_x  
 move_aliens_right_cont2 
   iny
