@@ -26,6 +26,9 @@ charDataVectorLow = $30
 charDataVectorHigh = $31
 delay_COUNT_A = $32        
 delay_COUNT_B = $33
+screenMemoryLow=$34 ;80 bytes
+screenMemoryHigh=$35 
+
 
 rightCursorVectorLow=$d0
 rightCursorVectorHigh=$d1
@@ -43,8 +46,7 @@ line_cursor=$da
 
 ;variables
 cursor_position=$a1
-screenMemoryLow=$00 ;80 bytes
-screenMemoryHigh=$04 
+
 record_lenght=$CC ;it is a memory position
 
 ;constants
@@ -185,6 +187,10 @@ gameFlow:
   jsr draw_screen  
 
 load_screen_memory:
+  lda #$00
+  sta screenMemoryLow
+  lda #$04
+  sta screenMemoryHigh
   ldy #$FF
 load_screen_memory_copy:
 ;CHECK IF SCREEN MEMORy LOW DOES NOT NEED TO ADD 1 TO HIGH BYTE
