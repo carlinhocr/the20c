@@ -166,10 +166,15 @@ load_screen_memory_copy:
   rti
 
 draw_screen:
-  lda #screenMemoryLow
+
+  lda #<invaders_screen_0
   sta charDataVectorLow
-  lda #screenMemoryHigh
-  sta charDataVectorLow
+  lda #>invaders_screen_0
+  sta charDataVectorHigh
+  ;lda #screenMemoryLow
+  ;sta charDataVectorLow
+  ;lda #screenMemoryHigh
+  ;sta charDataVectorLow
   jsr print_screen
   rti
 
