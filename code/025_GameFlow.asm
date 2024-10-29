@@ -216,12 +216,6 @@ draw_screen
   sta charDataVectorLow
   lda screenMemoryHigh
   sta charDataVectorHigh
-  ;lda #$0A 
-  ;sta record_lenght
-  ;lda #screenMemoryLow
-  ;sta charDataVectorLow
-  ;lda #screenMemoryHigh
-  ;sta charDataVectorLow
   jsr print_screen
   rts
 
@@ -244,9 +238,9 @@ move_aliens_cont:
   beq move_alien_now 
   cmp cinv2
   beq move_alien_now
+  sta (screenMemoryLow2),y
   cmp #end_char
   bne move_aliens_cont
-  sta (screenMemoryLow2),y
   rts
 move_alien_now 
   iny ; save alien in a position to the right
