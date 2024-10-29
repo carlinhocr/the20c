@@ -236,11 +236,12 @@ move_aliens_right:
   ldy #$FF
   ldx #$FF
 move_aliens_right_cont: 
-  cpx record_lenght
-  beq reset_x  
-move_aliens_right_cont2 
   iny
   inx
+  cpx record_lenght_plus1
+  bne move_aliens_right_cont2
+  ldx #$00
+move_aliens_right_cont2:  
   lda (screenMemoryLow),y
   cmp #cinv1
   beq move_aliens_right_now 
@@ -251,10 +252,6 @@ move_aliens_right_cont2
   cmp #end_char
   bne move_aliens_right_cont
   rts
-
-reset_x:
-  ldx #$FF
-  jmp move_aliens_right_cont2
 
 move_aliens_right_now:
   cpx #$01 ;first screen position that it is not the position to start the line
