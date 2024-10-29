@@ -24,6 +24,8 @@ charLoadLow=$28
 charLoadHigh=$29
 charDataVectorLow = $30
 charDataVectorHigh = $31
+delay_COUNT_A = $32        
+delay_COUNT_B = $33
 
 rightCursorVectorLow=$d0
 rightCursorVectorHigh=$d1
@@ -50,8 +52,10 @@ cursor_char=$fc
 blank_char=$20
 
 end_char=$ff
-cship=$00
-cinv1=$01
+;cship=$00
+;cinv1=$01
+cship=$DE
+cinv1=$f2
 cinv2=$fc
 cblank=$20
 pos_line1_invaders=$8B
@@ -70,8 +74,7 @@ diff_3_2=$40
 
 
 
-delay_COUNT_A = $32        
-delay_COUNT_B = $33
+
 
 value =$0200 ;2 bytes, Low 16 bit half
 mod10 =$0202 ;2 bytes, high 16 bit half and as it has the remainder of dividing by 10
