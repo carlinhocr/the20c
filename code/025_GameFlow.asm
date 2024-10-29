@@ -145,9 +145,9 @@ gameInitilize:
   lda #$43
   jsr print_char  
   jsr DELAY_SEC
-  jsr add_custom_chars_invaders
-  jsr initilize_display
-  jsr clear_display
+  ;jsr add_custom_chars_invaders
+  ;jsr initilize_display
+  ;jsr clear_display
   lda #cinv2
   jsr print_char  
   jsr DELAY_SEC
@@ -618,6 +618,7 @@ INNER_LOOP:
     DEX               ; Decrement outer loop counter
     BNE OUTER_LOOP    ; Branch if not zero
     RTS               ; Return from subroutine
+
 
 
 add_custom_chars_invaders:
