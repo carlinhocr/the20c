@@ -232,8 +232,14 @@ copy_screen2_screen_loop:
 
 move_aliens_right:
   ldy #$FF
-move_aliens_right_cont:  
+  ldx #$FF
+move_aliens_right_cont:
+  cpx #record_lenght
+  bne move_aliens_right_cont2
+  ldx #$FF  
+move_aliens_right_cont2 
   iny
+  inx
   lda (screenMemoryLow),y
   cmp #cinv1
   beq move_aliens_right_now 
@@ -245,7 +251,13 @@ move_aliens_right_cont:
   bne move_aliens_right_cont
   rts
 
-move_aliens_right_now: 
+move_aliens_right_now:
+  cpx #$01 ;first screen position that it is not the position to start the line
+  bne move_aliens_right_now_only 
+  ;insert a space where the alien was
+  lda #blank_char
+  sta (screenMemoryLow2),y
+move_aliens_right_now_only:   
   iny ; save alien in a position to the right
   sta (screenMemoryLow2),y
   dey ;move back to original position 
