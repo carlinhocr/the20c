@@ -235,9 +235,9 @@ move_aliens_cont:
   iny
   lda (screenMemoryLow),y
   sta (screenMemoryLow2),y
-  cmp cinv1
+  cmp #cinv1
   beq move_alien_now 
-  cmp cinv2
+  cmp #cinv2
   beq move_alien_now
   cmp #end_char
   bne move_aliens_cont
