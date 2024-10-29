@@ -236,16 +236,16 @@ move_aliens_right_cont:
   iny
   lda (screenMemoryLow),y
   cmp #cinv1
-  beq move_alien_right_now 
+  beq move_aliens_right_now 
   cmp #cinv2
-  beq move_alien_right_now
-  cmp #blank_char
-  beq move_alien_right_now
+  beq move_aliens_right_now
+  ;cmp #cblank
+  ;beq move_aliens_right_now
   cmp #end_char
   bne move_aliens_right_cont
   rts
 
-move_alien_right_now: 
+move_aliens_right_now: 
   iny ; save alien in a position to the right
   sta (screenMemoryLow2),y
   dey ;move back to original position 
