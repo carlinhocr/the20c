@@ -169,6 +169,9 @@ gameInitilize:
   sta record_lenght
   jsr load_screen_memory
   jsr draw_screen
+  jsr move_aliens_right
+  jsr copy_screen2_screen
+  jsr draw_screen
   
 loop:
   jmp loop
@@ -221,6 +224,38 @@ draw_screen
   ;sta charDataVectorLow
   jsr print_screen
   rts
+
+copy_screen2_screen:
+  ldy #$FF
+copy_screen2_screen_loop:
+  iny
+  lda (screenMemoryLow),y
+  sta (screenMemoryLow2),y
+  cmp #end_char
+  bne copy_screen2_screen_loop
+  rts
+
+move_aliens_right:
+  ldy #$FF
+move_aliens_cont:  
+  iny
+  lda (screenMemoryLow),y
+  cmp cinv1
+  beq move_alien_now 
+  cmp cinv2
+  beq move_alien_now
+  cmp #end_char
+  bne move_aliens_cont
+  sta (screenMemoryLow2),y
+  rts
+move_alien_now 
+  iny ; save alien in a position to the right
+  sta (screenMemoryLow2),y
+  dey ;move back to original position 
+  jmp move_aliens_cont
+
+
+
 
 print_screen:  
   ;BEGIN Write all the letters 
