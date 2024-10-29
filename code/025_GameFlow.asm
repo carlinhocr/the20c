@@ -199,7 +199,7 @@ load_screen_memory_copy:
   sta (screenMemoryLow),y ; always copy the character also when it is the end_char
   cmp #end_char
   bne load_screen_memory_copy
-  rti
+  rts
 
 draw_screen
   lda #<invaders_screen_0
@@ -213,7 +213,7 @@ draw_screen
   ;lda #screenMemoryHigh
   ;sta charDataVectorLow
   jsr print_screen
-  rti
+  rts
 
 print_screen:  
   ;BEGIN Write all the letters 
