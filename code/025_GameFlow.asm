@@ -141,8 +141,9 @@ RESET:
 
 
 gameInitilize:
-  jsr clear_display
   jsr add_custom_chars_invaders
+  jsr initilize_display
+  jsr clear_display
   lda #inv_line_lenght
   sta record_lenght
   ;jsr load_screen_memory
