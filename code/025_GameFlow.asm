@@ -18,6 +18,7 @@ startRAMData =$2000
 
 
 
+
 ;Vectors
 
 charLoadLow=$28
@@ -31,6 +32,12 @@ screenMemoryHigh=$35
 screenMemoryLow2=$36 ;80 bytes
 screenMemoryHigh2=$37 
 
+lcdCharPositionsLowZeroPage =$38 
+lcdCharPositionsHighZeroPage =$39
+lcdROMPositionsLowZeroPage =$3a 
+lcdROMPositionsHighZeroPage =$3b
+initialScreenZeroPageLow=$3c
+initialScreenZeroPageHigh=$3e
 
 rightCursorVectorLow=$d0
 rightCursorVectorHigh=$d1
@@ -46,6 +53,14 @@ line_cursor=$da
 
 
 
+;Memory Mappings
+
+screenBufferLow =$00 ;goes to $50 which is 80 decimal
+screenBufferHigh =$30
+
+lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
+lcdCharPositionsHigh =$31
+
 ;variables
 cursor_position=$a1
 
@@ -54,6 +69,7 @@ record_lenght_plus1=$CD
 ;constants
 cursor_char=$fc
 blank_char=$20
+fill=$43 ;letter C
 
 end_char=$ff
 ;cship=$00
@@ -134,6 +150,14 @@ RESET:
 ; 3	D4	D5	D6	D7	D8	D9	DA	DB	DC	DD	DE	DF	E0	E1	E2	E3	E4	E5	E6	E7
 
 
+; PLAN
+; create a matrix of cursor positions in memory 4x20
+;
+; create a videoRAM MAP 4x20 from ROM
+;
+; create a function that reads the video ram and position by position puts it in the
+; correct lcd position drawing the screen
+
 ; start:
 ;   jsr clear_display
 ;   jsr initiliaze_vectors
@@ -145,6 +169,64 @@ RESET:
 ;   jsr lcd_send_instruction 
 ;   lda #cursor_char
 ;   jsr print_char
+
+; create a matrix of cursor positions in memory 4x20
+loadCursorPositions:
+  ;load vectors
+  lda #lcdCharPositionsLow
+  sta lcdCharPositionsLowZeroPage ; to use indirect addressing with y
+  lda #lcdCharPositionsHigh
+  sta lcdCharPositionsHighZeroPage
+  lda #<lcd_positions
+  sta lcdROMPositionsLowZeroPage
+  lda #>lcd_positions
+  sta lcdROMPositionsHighZeroPage
+  ldy #$ff
+loadCursorPositionsLoop:
+  iny
+  cpy #$51 ;81 decimal
+  beq loadCursorPositionsEnd
+  ; copy from ROM to RAM the LCD positions
+  lda (lcdROMPositionsLowZeroPage),Y
+  sta (lcdCharPositionsLowZeroPage),Y
+loadCursorPositionsEnd:
+  rts
+
+loadScreen:
+  ;load vectors
+  lda #screenBufferLow
+  sta screenMemoryLow ; to use indirect addressing with y
+  lda #screenBufferHigh
+  sta screenMemoryHigh
+  lda #<initialScreen
+  sta initialScreenZeroPageLow
+  lda #>initialScreen
+  sta initialScreenZeroPageHigh
+  ldy #$ff
+loadScreenLoop:
+  iny
+  cpy #$51 ;81 decimal
+  beq loadCursorPositionsEnd
+  ; copy from ROM to RAM the LCD positions
+  lda (initialScreenZeroPageLow),Y
+  sta (screenMemoryLow),Y
+loadScreenEnd:
+  rts
+
+drawScreen:
+  ldy #$ff
+drawScreenLoop:
+  iny
+  cpy #$51 ;81 decimal
+  beq drawScreenEnd
+  ;position cursor
+  lda (lcdCharPositionsLowZeroPage),Y ;load cursor position
+  jsr lcd_send_instruction ; position cursor
+  ;write screen character
+  lda (screenMemoryLow),Y ;load character
+  jsr print_char 
+drawScreenEnd:
+  rts
 
 
 gameInitilize:
@@ -165,16 +247,19 @@ gameInitilize:
   jsr print_char  
   jsr DELAY_SEC
   ;jsr test_custom_chars
-  lda #inv_line_lenght
-  sta record_lenght
-  sta record_lenght_plus1
-  inc record_lenght_plus1
-  jsr load_screen_memory
-  jsr draw_screen
-  jsr delay_1_sec
-  jsr move_aliens_right
-  jsr copy_screen2_screen
-  jsr draw_screen
+  jsr loadCursorPositions
+  jsr loadScreen
+  jsr drawScreen
+  ; lda #inv_line_lenght
+  ; sta record_lenght
+  ; sta record_lenght_plus1
+  ; inc record_lenght_plus1
+  ; jsr load_screen_memory
+  ; jsr draw_screen
+  ; jsr delay_1_sec
+  ; jsr move_aliens_right
+  ; jsr copy_screen2_screen
+  ; jsr draw_screen
   
 loop:
   jmp loop
@@ -811,7 +896,7 @@ button_press_nmi:
 button_press_irq:
   .ascii "IRQ Interrupt"
 
-
+lcd_positions:
 lcd_positions_line0:
   .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8E,$8F,$90,$91,$92,$93
 lcd_positions_line1:
@@ -827,6 +912,15 @@ lcd_positions_line3:
 ; 1	C0	C1	C2	C3	C4	C5	C6	C7	C8	C9	CA	CB	CC	CD	CE	CF	D0	D1	D2	D3
 ; 2	94	95	96	97	98	99	9a	9b	9c	9d	9e	9f	a0	a1	a2	a3	a4	a5	a6	a7
 ; 3	D4	D5	D6	D7	D8	D9	DA	DB	DC	DD	DE	DF	E0	E1	E2	E3	E4	E5	E6	E7
+initialScreen:
+  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
+  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
+  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
+  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
+  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
+  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
+  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
+  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill            
 
 left_cursor_endings:
   .byte  $80,$c0,$94,$d4
