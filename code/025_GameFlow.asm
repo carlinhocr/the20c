@@ -155,12 +155,12 @@ gameFlow:
   jsr draw_screen  
 
 load_screen_memory:
-  ldx #$FF
+  ldy #$FF
 load_screen_memory_copy:
 ;CHECK IF SCREEN MEMORy LOW DOES NOT NEED TO ADD 1 TO HIGH BYTE
-  inx
-  lda invaders_screen_0,X
-  sta screenMemoryLow,X ; always copy the character also when it is the end_char
+  iny
+  lda invaders_screen_0,y
+  sta (screenMemoryLow),y ; always copy the character also when it is the end_char
   cmp #end_char
   bne load_screen_memory_copy
   rti
