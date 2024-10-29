@@ -143,8 +143,8 @@ RESET:
 gameInitilize:
   jsr clear_display
   lda #$43
+  jsr print_char  
   jsr DELAY_SEC
-  jsr print_char
   jsr add_custom_chars_invaders
   jsr initilize_display
   jsr clear_display
