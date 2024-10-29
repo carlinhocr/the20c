@@ -43,7 +43,7 @@ line_cursor=$da
 cursor_position=$a1
 screenMemoryLow=$00 ;80 bytes
 screenMemoryHigh=$04 
-record_lenght=$fc ;it is a memory position
+record_lenght=$CC ;it is a memory position
 
 ;constants
 cursor_char=$fc
@@ -141,11 +141,14 @@ RESET:
 
 
 gameInitilize:
+  jsr clear_display
+  lda #$43
+  jsr DELAY_SEC
+  jsr print_char
   jsr add_custom_chars_invaders
   jsr initilize_display
   jsr clear_display
   jsr test_custom_chars
-  jsr DELAY_SEC
   lda #inv_line_lenght
   sta record_lenght
   ;jsr load_screen_memory
@@ -156,7 +159,7 @@ loop:
 
 test_custom_chars:
   ldx #$ff
-  lda #$44
+  lda #$43
   jsr print_char
 test_custom_chars_loop 
   inx
