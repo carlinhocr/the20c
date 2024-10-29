@@ -15,15 +15,13 @@ IER = $600e
 PORTSTATUS=$A0
 
 startRAMData =$2000
-charDataVectorLow = $30
-charDataVectorHigh = $31
-delay_COUNT_A = $32        
-delay_COUNT_B = $33
-charLoadLow=$28
-charLoadHigh=$29
+
+
 
 ;Vectors
 
+charLoadLow=$28
+charLoadHigh=$29
 charDataVectorLow = $30
 charDataVectorHigh = $31
 
@@ -160,10 +158,9 @@ load_screen_memory:
   ldx #$FF
 load_screen_memory_copy:
 ;CHECK IF SCREEN MEMORy LOW DOES NOT NEED TO ADD 1 TO HIGH BYTE
-  inc X
+  inx
   lda invaders_screen_0,X
   sta screenMemoryLow,X ; always copy the character also when it is the end_char
-  bne load_screen_memory_going
   cmp #end_char
   bne load_screen_memory_copy
   rti
@@ -593,6 +590,17 @@ INNER_LOOP:
     BNE OUTER_LOOP    ; Branch if not zero
     RTS               ; Return from subroutine
 
+
+char_load:  
+    ldy #$FF
+char_load_loop:
+    iny  
+    lda (charLoadLow),y
+    jsr lcd_send_data
+    cpy #07
+    bne char_load_loop
+    rts
+    ;END send data for custom character 5x8 char
 
 add_custom_chars_invaders:
     ;BEGIN Add custom char instruction
