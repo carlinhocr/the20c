@@ -37,7 +37,7 @@ lcdCharPositionsHighZeroPage =$39
 lcdROMPositionsLowZeroPage =$3a 
 lcdROMPositionsHighZeroPage =$3b
 initialScreenZeroPageLow=$3c
-initialScreenZeroPageHigh=$3e
+initialScreenZeroPageHigh=$3d
 
 rightCursorVectorLow=$d0
 rightCursorVectorHigh=$d1
@@ -168,17 +168,17 @@ RESET:
 ;   jsr print_char
 
 gameInitilize:
-  ; jsr initilize_display
-  ; jsr clear_display
-  ; lda #$43
+  jsr initilize_display
+  jsr clear_display
+  ;  lda #$43
   ; jsr print_char  
   ; jsr DELAY_SEC
   ; ;jsr add_custom_chars_invaders
   ; ;jsr initilize_display
   ; ;jsr clear_display
-  ; lda #cinv2
-  ; jsr print_char  
-  ; jsr DELAY_SEC
+  lda #cinv2
+  jsr print_char  
+  jsr DELAY_SEC
   ; lda #cinv1
   ; jsr print_char  
   ; jsr DELAY_SEC
@@ -217,7 +217,7 @@ loadCursorPositions:
   ldy #$ff
 loadCursorPositionsLoop:
   iny
-  cpy #$51 ;81 decimal
+  cpy #$50 ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
   beq loadCursorPositionsEnd
   ; copy from ROM to RAM the LCD positions
   lda (lcdROMPositionsLowZeroPage),Y
@@ -239,7 +239,7 @@ loadScreen:
   ldy #$ff
 loadScreenLoop:
   iny
-  cpy #$51 ;81 decimal
+  cpy #$50 ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
   beq loadCursorPositionsEnd
   ; copy from ROM to RAM the LCD positions
   lda (initialScreenZeroPageLow),Y
@@ -252,7 +252,7 @@ drawScreen:
   ldy #$ff
 drawScreenLoop:
   iny
-  cpy #$51 ;81 decimal
+  cpy #$50 ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
   beq drawScreenEnd
   ;position cursor
   lda (lcdCharPositionsLowZeroPage),Y ;load cursor position
