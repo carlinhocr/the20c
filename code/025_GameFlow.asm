@@ -139,9 +139,6 @@ RESET:
   lda #%11100000  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
   sta DDRA ;store the accumulator in the data direction register for Port A
   ;END Configure Ports A & B
-
-  jsr initilize_display
-
 ; Positions of LCD characters
 ; 	01	02	03	04	05	06	07	08	09	10	11	12	13	14	15	16	17	18	19	20
 ; 0	80	81	82	83	84	85	86	87	88	89	8A	8B	8C	8D	8F	8E	90	91	92	93
@@ -171,22 +168,23 @@ RESET:
 ;   jsr print_char
 
 gameInitilize:
-  jsr clear_display
-  lda #$43
-  jsr print_char  
-  jsr DELAY_SEC
-  ;jsr add_custom_chars_invaders
-  ;jsr initilize_display
-  ;jsr clear_display
-  lda #cinv2
-  jsr print_char  
-  jsr DELAY_SEC
-  lda #cinv1
-  jsr print_char  
-  jsr DELAY_SEC
-  lda #cship
-  jsr print_char  
-  jsr DELAY_SEC
+  ; jsr initilize_display
+  ; jsr clear_display
+  ; lda #$43
+  ; jsr print_char  
+  ; jsr DELAY_SEC
+  ; ;jsr add_custom_chars_invaders
+  ; ;jsr initilize_display
+  ; ;jsr clear_display
+  ; lda #cinv2
+  ; jsr print_char  
+  ; jsr DELAY_SEC
+  ; lda #cinv1
+  ; jsr print_char  
+  ; jsr DELAY_SEC
+  ; lda #cship
+  ; jsr print_char  
+  ; jsr DELAY_SEC
   ;jsr test_custom_chars
   jsr loadCursorPositions
   jsr loadScreen
