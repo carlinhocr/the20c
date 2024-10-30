@@ -68,6 +68,7 @@ record_lenght_plus1=$CD
 cursor_char=$fc
 blank_char=$20
 fill=$43 ;letter C
+totalScreenLenght=$50
 
 end_char=$ff
 ;cship=$00
@@ -215,7 +216,7 @@ loadCursorPositions:
   ldy #$ff
 loadCursorPositionsLoop:
   iny
-  cpy #$50 ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
+  cpy #totalScreenLenght ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
   beq loadCursorPositionsEnd
   ; copy from ROM to RAM the LCD positions
   lda (lcdROMPositionsLowZeroPage),Y
@@ -237,7 +238,7 @@ loadScreen:
   ldy #$ff
 loadScreenLoop:
   iny
-  cpy #$50 ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
+  cpy #totalScreenLenght ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
   beq loadCursorPositionsEnd
   ; copy from ROM to RAM the LCD positions
   lda (initialScreenZeroPageLow),Y
@@ -250,7 +251,7 @@ drawScreen:
   ldy #$ff
 drawScreenLoop:
   iny
-  cpy #$50 ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
+  cpy #totalScreenLenght ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
   beq drawScreenEnd
   ;position cursor
   lda (lcdCharPositionsLowZeroPage),Y ;load cursor position
