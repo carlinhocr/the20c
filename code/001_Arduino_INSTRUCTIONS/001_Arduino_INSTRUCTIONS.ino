@@ -84,6 +84,8 @@ char *sync_string(char SYNC_VALUE,unsigned int data) {
       return "STA zpg";
       case 0x8d:
       return "STA abs";
+      case 0x91:
+      return "STA ind,Y";
       case 0x9a:
       return "TXS impl";
       case 0xe8:
@@ -108,6 +110,16 @@ char *sync_string(char SYNC_VALUE,unsigned int data) {
       return "LDA abs,Y";
       case 0xbd:
       return "LDA abs,X";
+      case 0xc0:
+      return "CPY #";
+      case 0xc8:
+      return "INY impl";
+      case 0xc9:
+      return "CMP #";
+      case 0xd0:
+      return "BNE rel";
+      case 0xf0:
+      return "BEQ rel";
       default:
       return "UNKNOWN";
     };
