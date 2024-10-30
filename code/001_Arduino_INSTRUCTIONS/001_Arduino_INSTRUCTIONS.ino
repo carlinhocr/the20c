@@ -78,6 +78,8 @@ char *sync_string(char SYNC_VALUE,unsigned int data) {
       return "JMP abs";
       case 0x58:
       return "CLI impl";
+      case 0x60:
+      return "SEI impl";
       case 0x78:
       return "SEI impl";
       case 0x85:
