@@ -71,10 +71,10 @@ fill=$43 ;letter C
 totalScreenLenght=$50
 
 end_char=$ff
-;cship=$00
-;cinv1=$01
-cship=$cE
-cinv1=$f2
+cship=$00
+cinv1=$01
+; cship=$cE
+; cinv1=$f2
 cinv2=$fc
 cblank=$20
 pos_line1_invaders=$8B
@@ -178,12 +178,12 @@ gameInitilize:
   lda #cinv2
   jsr print_char  
   jsr DELAY_SEC
-  ; lda #cinv1
-  ; jsr print_char  
-  ; jsr DELAY_SEC
-  ; lda #cship
-  ; jsr print_char  
-  ; jsr DELAY_SEC
+  lda #cinv1
+  jsr print_char  
+  jsr DELAY_SEC
+  lda #cship
+  jsr print_char  
+  jsr DELAY_SEC
   ;jsr test_custom_chars
   jsr loadCursorPositions
   jsr loadScreen
@@ -621,9 +621,24 @@ print_char:
   rts
 
 lcd_send_data:
+  ;print_char is equal to send data
   pha ;push the accumulator value to the stack so we can have it back a the end of the subroutine
   jsr lcd_wait
   sta PORTB
+
+  ;RS is one so we are sending data
+  ;RW is zero so we are writing
+  lda #RS  ;Set RS, and clear RW and E bit on Port A  
+  sta PORTA ;     
+
+  ;togle the enable bit in order to send the instruction
+  lda #(RS | E );RS and enable bit are 1 , we OR them and send the data
+  sta PORTA ; 
+
+  lda #RS  ;Set RS, and clear RW and E bit on Port A  
+  sta PORTA ; 
+  pla ;pull the accumulator value to the stack so we can have it back a the end of the subroutine
+  rts
 
 delay_1_sec:
   jsr DELAY_SEC
