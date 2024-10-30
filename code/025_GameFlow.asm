@@ -17,8 +17,6 @@ PORTSTATUS=$A0
 startRAMData =$2000
 
 
-
-
 ;Vectors
 
 charLoadLow=$28
@@ -278,100 +276,6 @@ test_custom_chars_loop
   cpx #$07
   bne test_custom_chars_loop
   rts
-
-gameFlow:
-  jsr draw_screen  
-
-load_screen_memory:
-  lda #$00
-  sta screenMemoryLow
-  lda #$04
-  sta screenMemoryHigh
-  lda #$00
-  sta screenMemoryLow2
-  lda #$05
-  sta screenMemoryHigh2
-  ldy #$FF
-load_screen_memory_copy:
-;CHECK IF SCREEN MEMORy LOW DOES NOT NEED TO ADD 1 TO HIGH BYTE
-  iny
-  lda invaders_screen_0,y
-  sta (screenMemoryLow),y ; always copy the character also when it is the end_char
-  sta (screenMemoryLow2),y ; always copy the character also when it is the end_char
-  cmp #end_char
-  bne load_screen_memory_copy
-  rts
-
-draw_screen
-  lda screenMemoryLow
-  sta charDataVectorLow
-  lda screenMemoryHigh
-  sta charDataVectorHigh
-  jsr print_screen
-  rts
-
-copy_screen2_screen:
-  ldy #$FF
-copy_screen2_screen_loop:
-  iny
-  lda (screenMemoryLow2),y
-  sta (screenMemoryLow),y
-  cmp #end_char
-  bne copy_screen2_screen_loop
-  rts
-
-move_aliens_right:
-  ldy #$FF
-  ldx #$FF
-move_aliens_right_cont: 
-  iny
-  inx
-  cpx record_lenght_plus1
-  bne move_aliens_right_cont2
-  ldx #$00
-move_aliens_right_cont2:  
-  lda (screenMemoryLow),y
-  cmp #cinv1
-  beq move_aliens_right_now 
-  cmp #cinv2
-  beq move_aliens_right_now
-  ;cmp #cblank
-  ;beq move_aliens_right_now
-  cmp #end_char
-  bne move_aliens_right_cont
-  rts
-
-move_aliens_right_now:
-  cpx #$01 ;first screen position that it is not the position to start the line
-  bne move_aliens_right_now_only 
-  ;insert a space where the alien was
-  lda #blank_char
-  sta (screenMemoryLow2),y
-move_aliens_right_now_only:   
-  iny ; save alien in a position to the right
-  sta (screenMemoryLow2),y
-  dey ;move back to original position 
-  jmp move_aliens_right_cont
-
-; move_aliens_right:
-;   ldy #$FF
-; move_aliens_right_cont:  
-;   iny
-;   lda (screenMemoryLow),y
-;   cmp #cinv1
-;   beq move_alien_right_now 
-;   cmp #cinv2
-;   beq move_alien_right_now
-;   cmp #end_char
-;   bne move_aliens_right_cont
-;   rts
-
-; move_alien_right_now 
-;   iny ; save alien in a position to the right
-;   sta (screenMemoryLow2),y
-;   dey ;move back to original position 
-;   jmp move_aliens_right_cont
-
 
 
 print_screen:  
