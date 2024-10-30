@@ -224,6 +224,7 @@ loadCursorPositionsLoop:
   ; copy from ROM to RAM the LCD positions
   lda (lcdROMPositionsLowZeroPage),Y
   sta (lcdCharPositionsLowZeroPage),Y
+  jmp loadCursorPositionsLoop
 loadCursorPositionsEnd:
   rts
 
@@ -245,6 +246,7 @@ loadScreenLoop:
   ; copy from ROM to RAM the LCD positions
   lda (initialScreenZeroPageLow),Y
   sta (screenMemoryLow),Y
+  jmp loadScreenLoop
 loadScreenEnd:
   rts
 
@@ -260,6 +262,7 @@ drawScreenLoop:
   ;write screen character
   lda (screenMemoryLow),Y ;load character
   jsr print_char 
+  jmp drawScreenLoop
 drawScreenEnd:
   rts
 
