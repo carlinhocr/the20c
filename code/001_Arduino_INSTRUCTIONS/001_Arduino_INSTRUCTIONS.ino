@@ -76,6 +76,10 @@ char *sync_string(char SYNC_VALUE,unsigned int data) {
       return "JSR abs";
       case 0x4c:
       return "JMP abs";
+      case 0x58:
+      return "CLI impl";
+      case 0x78:
+      return "SEI impl";
       case 0x85:
       return "STA zpg";
       case 0x8d:
