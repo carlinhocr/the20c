@@ -170,6 +170,41 @@ RESET:
 ;   lda #cursor_char
 ;   jsr print_char
 
+gameInitilize:
+  jsr clear_display
+  lda #$43
+  jsr print_char  
+  jsr DELAY_SEC
+  ;jsr add_custom_chars_invaders
+  ;jsr initilize_display
+  ;jsr clear_display
+  lda #cinv2
+  jsr print_char  
+  jsr DELAY_SEC
+  lda #cinv1
+  jsr print_char  
+  jsr DELAY_SEC
+  lda #cship
+  jsr print_char  
+  jsr DELAY_SEC
+  ;jsr test_custom_chars
+  jsr loadCursorPositions
+  jsr loadScreen
+  jsr drawScreen
+  ; lda #inv_line_lenght
+  ; sta record_lenght
+  ; sta record_lenght_plus1
+  ; inc record_lenght_plus1
+  ; jsr load_screen_memory
+  ; jsr draw_screen
+  ; jsr delay_1_sec
+  ; jsr move_aliens_right
+  ; jsr copy_screen2_screen
+  ; jsr draw_screen
+  
+loop:
+  jmp loop
+
 ; create a matrix of cursor positions in memory 4x20
 loadCursorPositions:
   ;load vectors
@@ -229,40 +264,7 @@ drawScreenEnd:
   rts
 
 
-gameInitilize:
-  jsr clear_display
-  lda #$43
-  jsr print_char  
-  jsr DELAY_SEC
-  ;jsr add_custom_chars_invaders
-  ;jsr initilize_display
-  ;jsr clear_display
-  lda #cinv2
-  jsr print_char  
-  jsr DELAY_SEC
-  lda #cinv1
-  jsr print_char  
-  jsr DELAY_SEC
-  lda #cship
-  jsr print_char  
-  jsr DELAY_SEC
-  ;jsr test_custom_chars
-  jsr loadCursorPositions
-  jsr loadScreen
-  jsr drawScreen
-  ; lda #inv_line_lenght
-  ; sta record_lenght
-  ; sta record_lenght_plus1
-  ; inc record_lenght_plus1
-  ; jsr load_screen_memory
-  ; jsr draw_screen
-  ; jsr delay_1_sec
-  ; jsr move_aliens_right
-  ; jsr copy_screen2_screen
-  ; jsr draw_screen
-  
-loop:
-  jmp loop
+
 
 test_custom_chars:
   ldx #$ff
