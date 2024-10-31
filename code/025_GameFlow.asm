@@ -215,7 +215,6 @@ gameInitilize:
   lda #cship
   jsr print_char  
   jsr DELAY_SEC
-  ;jsr test_custom_chars
   jsr loadCursorPositions
   jsr loadScreen
   jsr drawScreen
@@ -247,7 +246,7 @@ loopLeft:
   jsr drawScreen
   jsr DELAY_SEC 
   lda xVariable 
-  cmp #$01 ; do... until
+  cmp #$02 ; do... until
   bne loopLeft
   jmp loopBackAndForth
 
