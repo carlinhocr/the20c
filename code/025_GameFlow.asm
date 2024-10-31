@@ -348,6 +348,7 @@ moveRightLoop:
   lda #1
   clc
   adc (aliensArrayZPL),y
+  sta (aliensArrayZPL),y
   jmp moveRightLoop
 moveRightEnd:
   rts
@@ -359,6 +360,7 @@ moveLeftLoop:
   lda #1
   clc
   sbc (aliensArrayZPL),y
+  sta (aliensArrayZPL),y
   jmp moveLeftLoop
 moveLeftEnd:
   rts
