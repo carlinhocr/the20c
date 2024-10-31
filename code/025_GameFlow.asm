@@ -225,19 +225,25 @@ gameInitilize:
   jsr loadScreen
   jsr drawScreen
   jsr DELAY_SEC  
+  jsr clearScreenBuffer
+  jsr drawScreen
   jsr loadAliens
   jsr writeAliens
   jsr drawScreen
   jsr DELAY_SEC  
+  jsr clearScreenBuffer  
   jsr moveRight
   jsr drawScreen
   jsr DELAY_SEC 
+  jsr clearScreenBuffer  
   jsr moveRight
   jsr drawScreen
   jsr DELAY_SEC 
+  jsr clearScreenBuffer
   jsr moveLeft
   jsr drawScreen
   jsr DELAY_SEC 
+  jsr clearScreenBuffer
   jsr moveLeft
   jsr drawScreen
   jsr DELAY_SEC 
@@ -341,6 +347,18 @@ writeAliensLoop:
 writeAliensEnd: 
   rts
 
+clearScreenBuffer: 
+  ldy #$FF 
+clearScreenBufferLoop:
+  iny      
+  cpy #$50
+  beq clearScreenBufferEnd
+  lda #cblank ;load ship form
+  sta (screenMemoryLow),y ;at the alien position en Y draw the alien ship on the accumulator
+  jmp clearScreenBufferLoop 
+clearScreenBufferEnd: 
+  rts  
+
 moveRightLoop:
   iny
   cpy alienTotal
@@ -411,7 +429,6 @@ loadScreenEnd:
   rts
 
 drawScreen:
-  jsr clear_display
   ldy #$ff
 drawScreenLoop:
   iny
