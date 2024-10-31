@@ -267,15 +267,19 @@ loadAliens:
 moveRight:
   jsr prepAliensCinv1
   jsr moveRightLoop
+  jsr writeAliensLoop
   jsr prepAliensCinv2
   jsr moveRightLoop
+  jsr writeAliensLoop
   rts
 
 moveLeft:
   jsr prepAliensCinv1
   jsr moveLeftLoop
+  jsr writeAliensLoop
   jsr prepAliensCinv2
   jsr moveLeftLoop
+  jsr writeAliensLoop
   rts
 
 writeAliens:
