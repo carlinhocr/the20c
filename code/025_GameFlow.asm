@@ -36,6 +36,8 @@ lcdROMPositionsLowZeroPage =$3a
 lcdROMPositionsHighZeroPage =$3b
 initialScreenZeroPageLow=$3c
 initialScreenZeroPageHigh=$3d
+aliensArrayZPL=$3E
+aliensArrayZPH=$3F
 
 rightCursorVectorLow=$d0
 rightCursorVectorHigh=$d1
@@ -59,6 +61,9 @@ screenBufferHigh =$30
 lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
 lcdCharPositionsHigh =$31
 
+aliensArrayMemoryPositionL=$00
+aliensArrayMemoryPositionH=$32
+
 ;variables
 cursor_position=$a1
 
@@ -77,6 +82,9 @@ cinv1=$01
 ; cinv1=$f2
 cinv2=$fc
 cblank=$20
+posScreenAlienInitial=$09
+alienTotal=$05
+
 pos_line1_invaders=$8B
 pos_line2_invaders=$CB
 pos_line3_invaders=$9F
@@ -165,7 +173,7 @@ RESET:
 ;
 ; an array of aliens with the realtive position of each
 ;
-;a function that reads that array and writes to the screen 
+; a function that reads that array and writes to the screen 
 ;
 ;
 
@@ -218,6 +226,25 @@ gameInitilize:
   
 loop:
   jmp loop
+
+
+loadAliens:
+  lda #aliensArrayMemoryPositionL
+  sta aliensArrayZPL
+  lda #aliensArrayMemoryPositionH
+  sta aliensArrayZPH
+  ldy #$FF
+loadAliensLoop:  
+  iny
+  cpy #alienTotal
+  beq loadAliensEnd
+  lda posScreenAlienInitial
+  tya ;transfer y to the accumulator
+  clc ; clear carry before adding
+  adc #posScreenAlienInitial ; add the initial position to the Y in the accumulator
+  sta (aliensArrayZPL),y ;save the alien in the position    
+loadAliensEnd:
+  rts
 
 ; create a matrix of cursor positions in memory 4x20
 loadCursorPositions:
