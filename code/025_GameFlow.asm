@@ -363,7 +363,7 @@ moveRightLoop:
   iny
   cpy alienTotal
   beq moveRightEnd
-  lda #1
+  lda #$01
   clc
   adc (aliensArrayZPL),y
   sta (aliensArrayZPL),y
@@ -375,9 +375,8 @@ moveLeftLoop:
   iny
   cpy alienTotal
   beq moveLeftEnd
-  lda #1
-  sec
-  sbc (aliensArrayZPL),y
+  lda (aliensArrayZPL),y
+  sbc #$01
   sta (aliensArrayZPL),y
   jmp moveLeftLoop
 moveLeftEnd:
