@@ -246,7 +246,6 @@ loadAliensLoop:
   iny
   cpy #alienTotal
   beq loadAliensEnd
-  lda posScreenAlienInitial
   tya ;transfer y to the accumulator
   clc ; clear carry before adding
   adc #posScreenAlienInitial ; add the initial position to the Y in the accumulator
@@ -266,6 +265,7 @@ writeAliensLoop:
   tay ;transfer position in screen of alien to register Y
   lda #cinv1 ;load ship form
   sta (screenMemoryLow),y ;at the alien position en Y draw the alien ship on the accumulator
+  ldy temporaryY
   jmp writeAliensLoop 
 writeAliensEnd: 
   rts
