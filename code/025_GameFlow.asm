@@ -205,12 +205,6 @@ gameInitilize:
   jsr add_custom_chars_invaders
   jsr initilize_display
   jsr clear_display
-  ; lda #$43
-  ; jsr print_char  
-  ; jsr DELAY_SEC
-  ; ;jsr add_custom_chars_invaders
-  ; ;jsr initilize_display
-  ; ;jsr clear_display
   lda #cinv2
   jsr print_char  
   jsr DELAY_SEC
@@ -230,34 +224,28 @@ gameInitilize:
   jsr loadAliens
   jsr writeAliens
   jsr drawScreen
-  jsr DELAY_SEC  
+  jsr DELAY_SEC
+loopBackAndForth   
+  ldx #$FF
+loopRight:  
+  inx
   jsr clearScreenBuffer  
   jsr moveRight
   jsr drawScreen
   jsr DELAY_SEC 
+  cpx #$02 ; do... until
+  bne loopRight 
+  ldx #$FF
+loopLeft:  
+  inx
   jsr clearScreenBuffer  
-  jsr moveRight
-  jsr drawScreen
-  jsr DELAY_SEC 
-  jsr clearScreenBuffer
   jsr moveLeft
   jsr drawScreen
   jsr DELAY_SEC 
-  jsr clearScreenBuffer
-  jsr moveLeft
-  jsr drawScreen
-  jsr DELAY_SEC 
+  cpx #$02 ; do... until
+  bne loopLeft
+  jmp loopBackAndForth
 
-  ; lda #inv_line_lenght
-  ; sta record_lenght
-  ; sta record_lenght_plus1
-  ; inc record_lenght_plus1
-  ; jsr load_screen_memory
-  ; jsr draw_screen
-  ; jsr delay_1_sec
-  ; jsr move_aliens_right
-  ; jsr copy_screen2_screen
-  ; jsr draw_screen
   
 loop:
   jmp loop
