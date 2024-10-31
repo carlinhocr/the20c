@@ -224,10 +224,24 @@ gameInitilize:
   jsr loadCursorPositions
   jsr loadScreen
   jsr drawScreen
-  jsr DELAY_SEC
+  jsr DELAY_SEC  
   jsr loadAliens
   jsr writeAliens
   jsr drawScreen
+  jsr DELAY_SEC  
+  jsr moveRight
+  jsr drawScreen
+  jsr DELAY_SEC 
+  jsr moveRight
+  jsr drawScreen
+  jsr DELAY_SEC 
+  jsr moveLeft
+  jsr drawScreen
+  jsr DELAY_SEC 
+  jsr moveLeft
+  jsr drawScreen
+  jsr DELAY_SEC 
+
   ; lda #inv_line_lenght
   ; sta record_lenght
   ; sta record_lenght_plus1
@@ -248,6 +262,20 @@ loadAliens:
   jsr loadAliensLoop
   jsr prepAliensCinv2
   jsr loadAliensLoop
+  rts
+
+moveRight:
+  jsr prepAliensCinv1
+  jsr moveRightLoop
+  jsr prepAliensCinv2
+  jsr moveRightLoop
+  rts
+
+moveLeft:
+  jsr prepAliensCinv1
+  jsr moveLeftLoop
+  jsr prepAliensCinv2
+  jsr moveLeftLoop
   rts
 
 writeAliens:
@@ -379,6 +407,7 @@ loadScreenEnd:
   rts
 
 drawScreen:
+  jsr clear_display
   ldy #$ff
 drawScreenLoop:
   iny
