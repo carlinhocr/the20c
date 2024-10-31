@@ -40,6 +40,9 @@ aliensArrayZPL=$3E
 aliensArrayZPH=$3F
 
 temporaryY=$40
+posScreenAlienInitial=$41 ;variable
+alienTotal=$42
+calien=$43
 
 rightCursorVectorLow=$d0
 rightCursorVectorHigh=$d1
@@ -63,8 +66,11 @@ screenBufferHigh =$30
 lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
 lcdCharPositionsHigh =$31
 
-aliensArrayMemoryPositionL=$00
-aliensArrayMemoryPositionH=$32
+aliensArrayMemoryPositionCinv2L=$00
+aliensArrayMemoryPositionCinv2H=$32
+
+aliensArrayMemoryPositionCinv1L=$50
+aliensArrayMemoryPositionCinv1H=$32
 
 ;variables
 cursor_position=$a1
@@ -82,12 +88,13 @@ totalScreenLenght=$50
 end_char=$ff
 cship=$00
 cinv1=$01
-; cship=$cE
-; cinv1=$f2
 cinv2=$fc
+
 cblank=$20
-posScreenAlienInitial=$09
-alienTotal=$05
+posScreenAlienInitialCinv1=$09
+alienTotalCinv1=$05
+posScreenAlienInitialCinv2=$1C
+alienTotalCinv2=$07
 
 pos_line1_invaders=$8B
 pos_line2_invaders=$CB
@@ -237,33 +244,88 @@ loop:
 
 
 loadAliens:
-  lda #aliensArrayMemoryPositionL
+  jsr loadAliensCinv1
+  jsr loadAliensCinv2
+  rts
+
+loadAliensCinv1:
+  lda #aliensArrayMemoryPositionCinv1L
   sta aliensArrayZPL
-  lda #aliensArrayMemoryPositionH
+  lda #aliensArrayMemoryPositionCinv1H
   sta aliensArrayZPH
   ldy #$FF
+  lda #posScreenAlienInitialCinv1
+  sta posScreenAlienInitial
+  lda #alienTotalCinv1
+  sta alienTotal
+  jsr loadAliensLoop
+  rts  
+
+loadAliensCinv2:
+  lda #aliensArrayMemoryPositionCinv2L
+  sta aliensArrayZPL
+  lda #aliensArrayMemoryPositionCinv2H
+  sta aliensArrayZPH
+  ldy #$FF
+  lda #posScreenAlienInitialCinv2
+  sta posScreenAlienInitial
+  lda #alienTotalCinv2
+  sta alienTotal
+  jsr loadAliensLoop
+  rts 
+
 loadAliensLoop:  
   iny
-  cpy #alienTotal
+  cpy alienTotal
   beq loadAliensEnd
   tya ;transfer y to the accumulator
   clc ; clear carry before adding
-  adc #posScreenAlienInitial ; add the initial position to the Y in the accumulator
+  adc posScreenAlienInitial ; add the initial position to the Y in the accumulator
   sta (aliensArrayZPL),y ;save the alien in the position   
   jmp loadAliensLoop 
 loadAliensEnd:
   rts
 
+writeAliensCinv1:
+  lda #aliensArrayMemoryPositionCinv1L
+  sta aliensArrayZPL
+  lda #aliensArrayMemoryPositionCinv1H
+  sta aliensArrayZPH
+  ldy #$FF
+  lda #posScreenAlienInitialCinv1
+  sta posScreenAlienInitial
+  lda #alienTotalCinv1
+  sta alienTotal
+  lda #cinv1
+  sta calien
+  jsr writeAliensLoop
+  rts 
+  
+writeAliensCinv2:
+  lda #aliensArrayMemoryPositionCinv1L
+  sta aliensArrayZPL
+  lda #aliensArrayMemoryPositionCinv1H
+  sta aliensArrayZPH
+  ldy #$FF
+  lda #posScreenAlienInitialCinv1
+  sta posScreenAlienInitial
+  lda #alienTotalCinv1
+  sta alienTotal
+  lda #cinv1
+  sta calien
+  jsr writeAliensLoop
+  rts   
+
 writeAliens:
   ldy #$FF
 writeAliensLoop:
   iny      
-  cpy #alienTotal
+  cpy alienTotal
   beq writeAliensEnd
   lda (aliensArrayZPL),y ;alien position loaded
   sty temporaryY; save current y position 
   tay ;transfer position in screen of alien to register Y
-  lda #cinv1 ;load ship form
+  lda calien ;load ship form
   sta (screenMemoryLow),y ;at the alien position en Y draw the alien ship on the accumulator
   ldy temporaryY
   jmp writeAliensLoop 
