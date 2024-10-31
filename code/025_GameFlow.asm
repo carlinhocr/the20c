@@ -217,6 +217,9 @@ gameInitilize:
   jsr loadCursorPositions
   jsr loadScreen
   jsr drawScreen
+  jsr loadAliens
+  jsr writeAliens
+  jsr drawScreen
   ; lda #inv_line_lenght
   ; sta record_lenght
   ; sta record_lenght_plus1
