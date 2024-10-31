@@ -70,8 +70,22 @@ char *sync_string(char SYNC_VALUE,unsigned int data) {
     switch (data){
       case 0x00:
       return "BRK";
+      case 0x01:
+      return "ORA X,ind";
+      case 0x05:
+      return "ORA zpg";
+      case 0x06:
+      return "ASL zpg";
+      case 0x08:
+      return "PHP impl";
+      case 0x09:
+      return "ORA #";
       case 0x0a:
       return "ASL A";
+      case 0x0d:
+      return "ORA abs";
+      case 0x0e:
+      return "ASL abs";
       case 0x20:
       return "JSR abs";
       case 0x4c:
