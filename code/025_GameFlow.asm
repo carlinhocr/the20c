@@ -217,6 +217,7 @@ gameInitilize:
   jsr loadCursorPositions
   jsr loadScreen
   jsr drawScreen
+  jsr DELAY_SEC
   jsr loadAliens
   jsr writeAliens
   jsr drawScreen
