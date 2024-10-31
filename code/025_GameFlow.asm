@@ -248,6 +248,11 @@ loadAliens:
   jsr loadAliensCinv2
   rts
 
+writeAliens:
+  jsr writeAliensCinv1
+  jsr writeAliensCinv2
+  rts
+
 loadAliensCinv1:
   lda #aliensArrayMemoryPositionCinv1L
   sta aliensArrayZPL
@@ -316,8 +321,6 @@ writeAliensCinv2:
   jsr writeAliensLoop
   rts   
 
-writeAliens:
-  ldy #$FF
 writeAliensLoop:
   iny      
   cpy alienTotal
