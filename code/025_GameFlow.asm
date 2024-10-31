@@ -39,6 +39,8 @@ initialScreenZeroPageHigh=$3d
 aliensArrayZPL=$3E
 aliensArrayZPH=$3F
 
+temporaryY=$40
+
 rightCursorVectorLow=$d0
 rightCursorVectorHigh=$d1
 leftCursorVectorLow=$d2
@@ -69,6 +71,8 @@ cursor_position=$a1
 
 record_lenght=$CC ;it is a memory position
 record_lenght_plus1=$CD
+
+
 ;constants
 cursor_char=$fc
 blank_char=$20
@@ -242,8 +246,24 @@ loadAliensLoop:
   tya ;transfer y to the accumulator
   clc ; clear carry before adding
   adc #posScreenAlienInitial ; add the initial position to the Y in the accumulator
-  sta (aliensArrayZPL),y ;save the alien in the position    
+  sta (aliensArrayZPL),y ;save the alien in the position   
+  jmp loadAliensLoop 
 loadAliensEnd:
+  rts
+
+writeAliens:
+  ldy #$FF
+writeAliensLoop:
+  iny      
+  cpy #alienTotal
+  beq writeAliensEnd
+  lda (aliensArrayZPL),y ;alien position loaded
+  sty temporaryY; save current y position 
+  tay ;transfer position in screen of alien to register Y
+  lda #cinv1 ;load ship form
+  sta (screenMemoryLow),y ;at the alien position en Y draw the alien ship on the accumulator
+  jmp writeAliensLoop 
+writeAliensEnd: 
   rts
 
 ; create a matrix of cursor positions in memory 4x20
