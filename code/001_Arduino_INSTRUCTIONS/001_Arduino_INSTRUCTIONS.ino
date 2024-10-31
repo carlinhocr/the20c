@@ -88,10 +88,42 @@ char *sync_string(char SYNC_VALUE,unsigned int data) {
       return "ASL abs";
       case 0x20:
       return "JSR abs";
+      case 0x40:
+      return "RTI impl";  
+      case 0x41:
+      return "EOR X,ind"; 
+      case 0x45:
+      return "EOR zpg";   
+      case 0x46:
+      return "LSR zpg";
+      case 0x48:
+      return "PHA impl";
+      case 0x49:
+      return "EOR #"; 
+      case 0x4a:
+      return "LSR A"; 
       case 0x4c:
       return "JMP abs";
+      case 0x4d:
+      return "EOR abs"; 
+      case 0x4e:
+      return "LSR abs";
+      case 0x50:
+      return "BVC rel";
+      case 0x51:
+      return "EOR ind,Y";
+      case 0x55:
+      return "EOR zpg,X";
+      case 0x56:
+      return "LSR zpg,X";
       case 0x58:
       return "CLI impl";
+      case 0x59:
+      return "EOR zpg,Y";
+      case 0x5d:
+      return "EOR abs,X"; 
+      case 0x5e:
+      return "LSR abs,X";
       case 0x60:
       return "SEI impl";
       case 0x78:
