@@ -247,7 +247,7 @@ loopLeft:
   jsr drawScreen
   jsr DELAY_SEC 
   lda xVariable 
-  cmp #$02 ; do... until
+  cmp #$01 ; do... until
   bne loopLeft
   jmp loopBackAndForth
 
