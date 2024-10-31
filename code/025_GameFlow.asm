@@ -45,6 +45,11 @@ alienTotal=$42
 calien=$43
 xVariable=$44
 
+cursor_position=$a1
+
+record_lenght=$CC ;it is a memory position
+record_lenght_plus1=$CD
+
 rightCursorVectorLow=$d0
 rightCursorVectorHigh=$d1
 leftCursorVectorLow=$d2
@@ -74,10 +79,7 @@ aliensArrayMemoryPositionCinv1L=$50
 aliensArrayMemoryPositionCinv1H=$32
 
 ;variables
-cursor_position=$a1
 
-record_lenght=$CC ;it is a memory position
-record_lenght_plus1=$CD
 
 
 ;constants
