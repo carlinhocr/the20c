@@ -138,8 +138,6 @@ char *sync_string(char SYNC_VALUE,unsigned int data) {
       return "TXS impl";
       case 0xe8:
       return "INX";
-      case 0xad:
-      return "LDA abs";
       case 0xa0:
       return "LDY #";
       case 0xa1:
@@ -148,8 +146,12 @@ char *sync_string(char SYNC_VALUE,unsigned int data) {
       return "LDX #";
       case 0xa5:
       return "LDA zpg";
+      case 0xa8:
+      return "TAY impl";
       case 0xa9:
       return "LDA #";
+      case 0xad:
+      return "LDA abs";
       case 0xb1:
       return "LDA ind,Y";
       case 0xb5:
@@ -164,9 +166,17 @@ char *sync_string(char SYNC_VALUE,unsigned int data) {
       return "INY impl";
       case 0xc9:
       return "CMP #";
+      case 0xca:
+      return "DEX impl";
       case 0xd0:
       return "BNE rel";
+      case 0xe0:
+      return "CPX #";
+      case 0xea:
+      return "NOP";
       case 0xf0:
+      return "BEQ rel";
+      case 0xfa:
       return "BEQ rel";
       default:
       return "UNKNOWN";
