@@ -244,16 +244,20 @@ loop:
 
 
 loadAliens:
-  jsr loadAliensCinv1
-  jsr loadAliensCinv2
+  jsr prepAliensCinv1
+  jsr loadAliensLoop
+  jsr prepAliensCinv2
+  jsr loadAliensLoop
   rts
 
 writeAliens:
-  jsr writeAliensCinv1
-  jsr writeAliensCinv2
+  jsr prepAliensCinv1
+  jsr writeAliensLoop
+  jsr prepAliensCinv2
+  jsr writeAliensLoop
   rts
 
-loadAliensCinv1:
+prepAliensCinv1:
   lda #aliensArrayMemoryPositionCinv1L
   sta aliensArrayZPL
   lda #aliensArrayMemoryPositionCinv1H
@@ -263,10 +267,11 @@ loadAliensCinv1:
   sta posScreenAlienInitial
   lda #alienTotalCinv1
   sta alienTotal
-  jsr loadAliensLoop
+  lda #cinv1
+  sta calien
   rts  
 
-loadAliensCinv2:
+prepAliensCinv2:
   lda #aliensArrayMemoryPositionCinv2L
   sta aliensArrayZPL
   lda #aliensArrayMemoryPositionCinv2H
@@ -276,8 +281,9 @@ loadAliensCinv2:
   sta posScreenAlienInitial
   lda #alienTotalCinv2
   sta alienTotal
-  jsr loadAliensLoop
-  rts 
+  lda #cinv2
+  sta calien
+  rts  
 
 loadAliensLoop:  
   iny
@@ -290,37 +296,7 @@ loadAliensLoop:
   jmp loadAliensLoop 
 loadAliensEnd:
   rts
-
-writeAliensCinv1:
-  lda #aliensArrayMemoryPositionCinv1L
-  sta aliensArrayZPL
-  lda #aliensArrayMemoryPositionCinv1H
-  sta aliensArrayZPH
-  ldy #$FF
-  lda #posScreenAlienInitialCinv1
-  sta posScreenAlienInitial
-  lda #alienTotalCinv1
-  sta alienTotal
-  lda #cinv1
-  sta calien
-  jsr writeAliensLoop
-  rts 
   
-writeAliensCinv2:
-  lda #aliensArrayMemoryPositionCinv2L
-  sta aliensArrayZPL
-  lda #aliensArrayMemoryPositionCinv2H
-  sta aliensArrayZPH
-  ldy #$FF
-  lda #posScreenAlienInitialCinv2
-  sta posScreenAlienInitial
-  lda #alienTotalCinv2
-  sta alienTotal
-  lda #cinv2
-  sta calien
-  jsr writeAliensLoop
-  rts   
-
 writeAliensLoop:
   iny      
   cpy alienTotal
