@@ -307,16 +307,16 @@ writeAliensCinv1:
   rts 
   
 writeAliensCinv2:
-  lda #aliensArrayMemoryPositionCinv1L
+  lda #aliensArrayMemoryPositionCinv2L
   sta aliensArrayZPL
-  lda #aliensArrayMemoryPositionCinv1H
+  lda #aliensArrayMemoryPositionCinv2H
   sta aliensArrayZPH
   ldy #$FF
-  lda #posScreenAlienInitialCinv1
+  lda #posScreenAlienInitialCinv2
   sta posScreenAlienInitial
-  lda #alienTotalCinv1
+  lda #alienTotalCinv2
   sta alienTotal
-  lda #cinv1
+  lda #cinv2
   sta calien
   jsr writeAliensLoop
   rts   
