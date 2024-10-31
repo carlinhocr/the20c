@@ -311,6 +311,28 @@ writeAliensLoop:
 writeAliensEnd: 
   rts
 
+moveRightLoop:
+  iny
+  cpy alienTotal
+  beq moveRightEnd
+  lda #1
+  clc
+  adc (aliensArrayZPL),y
+  jmp moveRightLoop
+moveRightEnd:
+  rts
+
+moveLeftLoop:
+  iny
+  cpy alienTotal
+  beq moveLeftEnd
+  lda #1
+  clc
+  sbc (aliensArrayZPL),y
+  jmp moveLeftLoop
+moveLeftEnd:
+  rts
+
 ; create a matrix of cursor positions in memory 4x20
 loadCursorPositions:
   ;load vectors
