@@ -321,7 +321,7 @@ loadAliensLoop:
 loadAliensEnd:
   rts
 
-WriteAliensPrep:  
+writeAliensPrep:  
   ldy #$FF    
 writeAliensLoop:
   iny      
