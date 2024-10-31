@@ -241,7 +241,7 @@ loopRight:
   lda #$ff
   sta xVariable
 loopLeft:  
-  inx
+  inc xVariable
   jsr clearScreenBuffer  
   jsr moveLeft
   jsr drawScreen
