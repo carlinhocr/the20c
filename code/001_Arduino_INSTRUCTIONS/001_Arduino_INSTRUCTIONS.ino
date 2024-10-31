@@ -204,6 +204,8 @@ char *sync_string(char SYNC_VALUE,unsigned int data) {
       return "NOP";
       case 0xf0:
       return "BEQ rel";
+      case 0xf8:
+      return "SED impl";
       case 0xfa:
       return "BEQ rel";
       default:
