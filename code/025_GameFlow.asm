@@ -374,7 +374,7 @@ moveLeftLoop:
   iny
   cpy alienTotal
   beq moveLeftEnd
-  clc
+  sec
   lda (aliensArrayZPL),y
   sbc #$01
   sta (aliensArrayZPL),y
