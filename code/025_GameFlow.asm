@@ -167,9 +167,10 @@ RESET:
 ;   jsr print_char
 
 gameInitilize:
+  jsr add_custom_chars_invaders
   jsr initilize_display
   jsr clear_display
-  ;  lda #$43
+  ; lda #$43
   ; jsr print_char  
   ; jsr DELAY_SEC
   ; ;jsr add_custom_chars_invaders
