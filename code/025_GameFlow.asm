@@ -265,32 +265,32 @@ loop:
 
 loadAliens:
   jsr prepAliensCinv1
-  jsr loadAliensLoop
+  jsr loadAliensPrep
   jsr prepAliensCinv2
-  jsr loadAliensLoop
+  jsr loadAliensPrep
   rts
 
 moveRight:
   jsr prepAliensCinv1
-  jsr moveRightLoop
+  jsr moveRightPrep
   jsr prepAliensCinv2
-  jsr moveRightLoop
+  jsr moveRightPrep
   jsr writeAliens
   rts
 
 moveLeft:
   jsr prepAliensCinv1
-  jsr moveLeftLoop
+  jsr moveLeftPrep
   jsr prepAliensCinv2
-  jsr moveLeftLoop
+  jsr moveLeftPrep
   jsr writeAliens
   rts
 
 writeAliens:
   jsr prepAliensCinv1
-  jsr writeAliensLoop
+  jsr writeAliensPrep
   jsr prepAliensCinv2
-  jsr writeAliensLoop
+  jsr writeAliensPrep
   rts
 
 prepAliensCinv1:
@@ -298,7 +298,6 @@ prepAliensCinv1:
   sta aliensArrayZPL
   lda #aliensArrayMemoryPositionCinv1H
   sta aliensArrayZPH
-  ldy #$FF
   lda #posScreenAlienInitialCinv1
   sta posScreenAlienInitial
   lda #alienTotalCinv1
@@ -312,7 +311,6 @@ prepAliensCinv2:
   sta aliensArrayZPL
   lda #aliensArrayMemoryPositionCinv2H
   sta aliensArrayZPH
-  ldy #$FF
   lda #posScreenAlienInitialCinv2
   sta posScreenAlienInitial
   lda #alienTotalCinv2
@@ -321,6 +319,8 @@ prepAliensCinv2:
   sta calien
   rts  
 
+loadAliensPrep:  
+  ldy #$FF  
 loadAliensLoop:  
   iny
   cpy alienTotal
@@ -332,7 +332,9 @@ loadAliensLoop:
   jmp loadAliensLoop 
 loadAliensEnd:
   rts
-  
+
+WriteAliensPrep:  
+  ldy #$FF    
 writeAliensLoop:
   iny      
   cpy alienTotal
@@ -358,7 +360,8 @@ clearScreenBufferLoop:
   jmp clearScreenBufferLoop 
 clearScreenBufferEnd: 
   rts  
-
+moveRightPrep:
+  ldy #$FF
 moveRightLoop:
   iny
   cpy alienTotal
@@ -371,6 +374,8 @@ moveRightLoop:
 moveRightEnd:
   rts
 
+moveLeftPrep:
+  ldy #$FF  
 moveLeftLoop:
   iny
   cpy alienTotal
