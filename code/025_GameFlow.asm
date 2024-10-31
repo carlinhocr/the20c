@@ -43,6 +43,7 @@ temporaryY=$40
 posScreenAlienInitial=$41 ;variable
 alienTotal=$42
 calien=$43
+xVariable=$44
 
 rightCursorVectorLow=$d0
 rightCursorVectorHigh=$d1
@@ -226,23 +227,27 @@ gameInitilize:
   jsr drawScreen
   jsr DELAY_SEC
 loopBackAndForth   
-  ldx #$FF
+  lda #$ff
+  sta xVariable
 loopRight:  
-  inx
+  inc xVariable
   jsr clearScreenBuffer  
   jsr moveRight
   jsr drawScreen
-  jsr DELAY_SEC 
-  cpx #$02 ; do... until
+  jsr DELAY_SEC
+  lda xVariable 
+  cmp #$02 ; do... until
   bne loopRight 
-  ldx #$FF
+  lda #$ff
+  sta xVariable
 loopLeft:  
   inx
   jsr clearScreenBuffer  
   jsr moveLeft
   jsr drawScreen
   jsr DELAY_SEC 
-  cpx #$02 ; do... until
+  lda xVariable 
+  cmp #$02 ; do... until
   bne loopLeft
   jmp loopBackAndForth
 
