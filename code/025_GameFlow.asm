@@ -50,6 +50,7 @@ firePosition=$46
 
 
 cursor_position=$a1
+cursor_position_relative=$a2
 
 record_lenght=$CC ;it is a memory position
 record_lenght_plus1=$CD
@@ -239,7 +240,7 @@ gameInitilize:
   jsr drawScreen
   jsr DELAY_SEC
   ;initialize first fire position
-  lda #$35
+  lda #$50 ;out of the screen so it does not appear initilially
   sta firePosition
   rts
 
@@ -260,16 +261,6 @@ gameFlow:
   jsr DELAY_SEC
   jmp gameFlow
 
-writeFire:
-  ldy firePosition
-  lda #cfire
-  sta (screenMemoryLow),y
-  rts
-
-calculateFirePosition:
-  lda #$37
-  sta firePosition
-  rts
 
 moveAliens:   
   lda xDirection
@@ -527,11 +518,54 @@ print_screen_eeprom:
   jmp print_screen_eeprom
 print_screen_end:
   rts 
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------------FIRE-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------  
+
+writeFire:
+  ldy firePosition
+  lda #cfire
+  sta (screenMemoryLow),y
+  rts
+
+calculateFirePosition:
+  lda cursor_position_relative
+  sta firePosition
+  rts  
+
+firstFire:
+  jsr mapPositionShip
+  jsr calculateFirePosition
+  
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------------FIRE-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+  
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------SPACE SHIP-----------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+
+mapPositionShip:
+  lda cursor_position
+  ldy #$FF
+mapPositionLoop:
+  iny
+  cpy #totalScreenLenght ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
+  beq mapPositionLoopEnd
+;position cursor
+  lda (lcdCharPositionsLowZeroPage),Y ;load cursor position
+  cmp cursor_position
+  bne mapPositionLoop
+  sta cursor_position_relative
+mapPositionLoopEnd:
+  rts
 
 start_ship:
   jsr initiliaze_vectors
@@ -734,7 +768,7 @@ pressed_buttons_pa0:
 ;   rts
 
 pa4_button_action:
-  jsr calculateFirePosition
+  jsr firstFire
   rts
 
 pa3_button_action:
