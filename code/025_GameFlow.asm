@@ -47,6 +47,7 @@ xVariable=$44
 xDirection=$45 ; 0 right 1 left
 
 firePosition=$46
+fireInPlay=$47 ;0 no fire 1 fire
 
 
 cursor_position=$a1
@@ -537,6 +538,12 @@ writeFire:
   sta (screenMemoryLow),y
   rts 
 
+updateFire:
+  lda fireInPlay  
+  bne updateFireEnd
+updateFireEnd:
+  rts  
+
 firstFire:
   jsr mapPositionShip
   ;subtract 20 decimal $14 hexa from the ship position to draw the fire
@@ -544,6 +551,8 @@ firstFire:
   sec
   sbc #$14 ;#jump
   sta firePosition
+  lda #$01
+  sta fireInPlay
   rts
   
 ;END--------------------------------------------------------------------------------
