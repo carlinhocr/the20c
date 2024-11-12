@@ -240,7 +240,7 @@ gameInitilize:
   jsr drawScreen
   jsr DELAY_SEC
   ;initialize first fire position
-  lda #$35 ;out of the screen so it does not appear initilially
+  lda #$51 ;out of the screen so it does not appear initilially
   sta firePosition
   rts
 
@@ -261,6 +261,11 @@ gameFlow:
   jsr DELAY_SEC
   jmp gameFlow
 
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------ALIENS---------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
 moveAliens:   
   lda xDirection
@@ -289,12 +294,6 @@ moveAliensRight:
   jmp moveAliensEnd
 moveAliensEnd:
   rts
-
-  
-loop:
-  jmp loop
-
-start_screen:
   
 
 loadAliens:
@@ -422,6 +421,18 @@ moveLeftLoop:
 moveLeftEnd:
   rts
 
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------ALIENS---------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SCREEN MANAGEMENT----------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
 ; create a matrix of cursor positions in memory 4x20
 loadCursorPositions:
   ;load vectors
@@ -485,21 +496,6 @@ drawScreenEnd:
   rts
 
 
-
-
-test_custom_chars:
-  ldx #$ff
-  lda #$43
-  jsr print_char
-test_custom_chars_loop 
-  inx
-  txa
-  jsr print_char
-  cpx #$07
-  bne test_custom_chars_loop
-  rts
-
-
 print_screen:  
   ;BEGIN Write all the letters 
   ldy #$00 ;first byte is the position of the line
@@ -518,7 +514,16 @@ print_screen_eeprom:
   jsr print_char 
   jmp print_screen_eeprom
 print_screen_end:
-  rts 
+  rts   
+
+;END--------------------------------------------------------------------------------  
+;-----------------------------------------------------------------------------------
+;--------------------------------SCREEN MANAGEMENT----------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+
+
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -534,10 +539,10 @@ writeFire:
 
 firstFire:
   jsr mapPositionShip
-  ;subtract 20 from the ship position to draw the fire
+  ;subtract 20 decimal $14 hexa from the ship position to draw the fire
   lda cursor_position_relative
   sec
-  sbc #$20
+  sbc #$14 ;#jump
   sta firePosition
   rts
   
@@ -1008,6 +1013,18 @@ INNER_LOOP:
     RTS               ; Return from subroutine
 
 
+
+test_custom_chars:
+    ldx #$ff
+    lda #$43
+    jsr print_char
+test_custom_chars_loop: 
+    inx
+    txa
+    jsr print_char
+    cpx #$07
+    bne test_custom_chars_loop
+    rts    
 
 add_custom_chars_invaders:
     ;BEGIN Add custom char instruction
