@@ -46,6 +46,7 @@ calien=$43
 xVariable=$44
 xDirection=$45 ; 0 right 1 left
 
+
 cursor_position=$a1
 
 record_lenght=$CC ;it is a memory position
@@ -93,6 +94,8 @@ end_char=$ff
 cship=$00
 cinv1=$01
 cinv2=$fc
+
+xLimit=$04 ; how much the shift moves left and right
 
 cblank=$20
 posScreenAlienInitialCinv1=$09
@@ -257,7 +260,7 @@ moveAliensLeft:
   jsr clearScreenBuffer  
   jsr moveLeft
   lda xVariable 
-  cmp #$02 ; do... until
+  cmp #xLimit ; do... until
   bne moveAliensEnd 
   lda #$ff
   sta xVariable  
@@ -269,7 +272,7 @@ moveAliensRight:
   jsr clearScreenBuffer  
   jsr moveRight
   lda xVariable 
-  cmp #$02 ; do... until
+  cmp #xLimit; do... until
   bne moveAliensEnd 
   lda #$ff
   sta xVariable  
