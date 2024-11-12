@@ -83,7 +83,7 @@ aliensArrayMemoryPositionCinv1H=$32
 
 
 ;constants
-cursor_char=$fc
+cursor_char=$00 ;this selects a ship
 blank_char=$20
 fill=$43 ;letter C
 totalScreenLenght=$50
@@ -478,7 +478,11 @@ print_screen_eeprom:
   jmp print_screen_eeprom
 print_screen_end:
   rts 
-
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SPACE SHIP-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
 initiliaze_vectors:
   lda #<left_cursor_endings
@@ -1026,14 +1030,17 @@ initialScreen:
   .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill            
 
 left_cursor_endings:
-  .byte  $80,$c0,$94,$d4
+ ; .byte  $80,$c0,$94,$d4
+  .byte  $87,$c7,$9b,$db  
 
 right_cursor_endings:
   .byte  $93,$d3,$a7,$e7
 
-up_cursor_endings:
-  .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8F,$8E,$90,$91,$92,$93
-
+; up_cursor_endings:
+;   .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8F,$8E,$90,$91,$92,$93
+up_cursor_endings: ;so it is all in one line
+  .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$DD,$DE,$DF,$E0,$E1,$E2,$E3,$E4,$E5,$E6,$E7
+  
 down_cursor_endings:
   .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$DD,$DE,$DF,$E0,$E1,$E2,$E3,$E4,$E5,$E6,$E7
 
