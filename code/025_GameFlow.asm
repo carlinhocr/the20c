@@ -46,6 +46,8 @@ calien=$43
 xVariable=$44
 xDirection=$45 ; 0 right 1 left
 
+firePosition=$46
+
 
 cursor_position=$a1
 
@@ -94,6 +96,7 @@ end_char=$ff
 cship=$00
 cinv1=$01
 cinv2=$fc
+cfire=$7c
 
 xLimit=$04 ; how much the shift moves left and right
 
@@ -373,6 +376,14 @@ writeAliensLoop:
   ldy temporaryY
   jmp writeAliensLoop 
 writeAliensEnd: 
+  rts
+
+writeFire:
+  lda #$35
+  sta firePosition
+  ldy firePosition
+  lda #cfire
+  sta (screenMemoryLow),y
   rts
 
 clearScreenBuffer: 
@@ -707,13 +718,17 @@ pressed_buttons_pa0:
   jsr pa0_button_action
   rts
 
+; pa4_button_action:
+;   jsr clear_display
+;   lda #<button_press_pa4
+;   sta charDataVectorLow
+;   lda #>button_press_pa4
+;   sta charDataVectorHigh
+;   jsr print_message
+;   rts
+
 pa4_button_action:
-  jsr clear_display
-  lda #<button_press_pa4
-  sta charDataVectorLow
-  lda #>button_press_pa4
-  sta charDataVectorHigh
-  jsr print_message
+  jsr writeFire
   rts
 
 pa3_button_action:
