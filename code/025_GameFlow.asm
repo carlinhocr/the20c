@@ -250,6 +250,7 @@ gameInitAliens:
   rts
 
 gameFlow:  
+  jsr clearScreenBuffer  
   jsr moveAliens
   jsr drawScreen
   jsr DELAY_SEC
@@ -260,7 +261,6 @@ moveAliens:
   beq moveAliensRight
 moveAliensLeft:
   inc xVariable
-  jsr clearScreenBuffer  
   jsr moveLeft
   lda xVariable 
   cmp #xLimit ; do... until
@@ -272,7 +272,6 @@ moveAliensLeft:
   jmp moveAliensEnd
 moveAliensRight:
   inc xVariable
-  jsr clearScreenBuffer  
   jsr moveRight
   lda xVariable 
   cmp #xLimit; do... until
