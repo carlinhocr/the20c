@@ -105,7 +105,7 @@ pos_line3_invaders=$9F
 pos_line4_invaders=$DF
 inv_line_lenght=$0A ; make the record lenght of 10 elements (one for position, 9 for graphics)
 ;center_cursor=$9d
-center_cursor=$c9
+center_cursor=$e1
 
 diff_1_0=$40
 diff_2_1=$2c
@@ -227,6 +227,7 @@ gameInitilize:
   jsr writeAliens
   jsr drawScreen
   jsr DELAY_SEC
+  jsr start_ship
 loopBackAndForth   
   lda #$ff
   sta xVariable
@@ -484,6 +485,17 @@ print_screen_end:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+start_ship:
+  jsr initiliaze_vectors
+  lda #$4
+  sta line_cursor
+  lda #center_cursor
+  sta cursor_position
+  lda #center_cursor
+  jsr lcd_send_instruction 
+  lda #cursor_char
+  jsr print_char
+
 initiliaze_vectors:
   lda #<left_cursor_endings
   sta leftCursorVectorLow
@@ -689,6 +701,11 @@ pa0_button_action:
   jsr move_cursor_right
   rts
 
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SPACE SHIP-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
   
 
   
