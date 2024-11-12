@@ -44,6 +44,7 @@ posScreenAlienInitial=$41 ;variable
 alienTotal=$42
 calien=$43
 xVariable=$44
+xDirection=$45 ; 0 right 1 left
 
 cursor_position=$a1
 
@@ -204,6 +205,10 @@ RESET:
 ;   lda #cursor_char
 ;   jsr print_char
 
+game:
+  jsr gameInitilize
+  jsr gameFlow
+
 gameInitilize:
   jsr add_custom_chars_invaders
   jsr initilize_display
@@ -221,42 +226,65 @@ gameInitilize:
   jsr loadScreen
   jsr drawScreen
   jsr DELAY_SEC  
+  jsr start_ship
   jsr clearScreenBuffer
   jsr drawScreen
+  jsr gameInitAliens
+  jsr drawScreen
+  jsr DELAY_SEC
+  rts
+
+gameInitAliens:
   jsr loadAliens
   jsr writeAliens
-  jsr drawScreen
-  jsr DELAY_SEC
-  jsr start_ship
-loopBackAndForth   
   lda #$ff
   sta xVariable
-loopRight:  
-  inc xVariable
-  jsr clearScreenBuffer  
-  jsr moveRight
+  lda #$00 
+  sta xDirection
+  rts
+
+gameFlow:  
+  jsr moveAliens
   jsr drawScreen
   jsr DELAY_SEC
-  lda xVariable 
-  cmp #$02 ; do... until
-  bne loopRight 
-  lda #$ff
-  sta xVariable
-loopLeft:  
+  jmp gameFlow
+
+moveAliens:   
+  lda xDirection
+  beq moveAliensRight
+moveAliensLeft:
   inc xVariable
   jsr clearScreenBuffer  
   jsr moveLeft
-  jsr drawScreen
-  jsr DELAY_SEC 
   lda xVariable 
   cmp #$02 ; do... until
-  bne loopLeft
-  jmp loopBackAndForth
+  bne moveAliensEnd 
+  lda #$ff
+  sta xVariable  
+  lda #$0
+  sta xDirection ; go right
+  jmp moveAliensEnd
+moveAliensRight:
+  inc xVariable
+  jsr clearScreenBuffer  
+  jsr moveRight
+  lda xVariable 
+  cmp #$02 ; do... until
+  bne moveAliensEnd 
+  lda #$ff
+  sta xVariable  
+  lda #$1
+  sta xDirection ; go left
+  jmp moveAliensEnd
+moveAliensEnd:
+  rts
 
   
 loop:
   jmp loop
 
+start_screen:
+  
 
 loadAliens:
   jsr prepAliensCinv1
