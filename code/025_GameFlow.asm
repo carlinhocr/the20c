@@ -238,6 +238,9 @@ gameInitilize:
   jsr gameInitAliens
   jsr drawScreen
   jsr DELAY_SEC
+  ;initialize first fire position
+  lda #$35
+  sta firePosition
   rts
 
 gameInitAliens:
@@ -252,9 +255,21 @@ gameInitAliens:
 gameFlow:  
   jsr clearScreenBuffer  
   jsr moveAliens
+  jsr writeFire
   jsr drawScreen
   jsr DELAY_SEC
   jmp gameFlow
+
+writeFire:
+  ldy firePosition
+  lda #cfire
+  sta (screenMemoryLow),y
+  rts
+
+calculateFirePosition:
+  lda #$37
+  sta firePosition
+  rts
 
 moveAliens:   
   lda xDirection
@@ -375,14 +390,6 @@ writeAliensLoop:
   ldy temporaryY
   jmp writeAliensLoop 
 writeAliensEnd: 
-  rts
-
-writeFire:
-  lda #$35
-  sta firePosition
-  ldy firePosition
-  lda #cfire
-  sta (screenMemoryLow),y
   rts
 
 clearScreenBuffer: 
@@ -727,7 +734,7 @@ pressed_buttons_pa0:
 ;   rts
 
 pa4_button_action:
-  jsr writeFire
+  jsr calculateFirePosition
   rts
 
 pa3_button_action:
