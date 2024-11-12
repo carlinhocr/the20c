@@ -1079,7 +1079,7 @@ initialScreen:
 
 left_cursor_endings:
  ; .byte  $80,$c0,$94,$d4
-  .byte  $87,$c7,$9b,$db  
+  .byte  $88,$c8,$9c,$dc  
 
 right_cursor_endings:
   .byte  $93,$d3,$a7,$e7
