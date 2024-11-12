@@ -86,8 +86,8 @@ aliensArrayMemoryPositionCinv1H=$32
 cursor_char=$00 ;this selects a ship
 blank_char=$20
 fill=$43 ;letter C
-totalScreenLenght=$50
-
+;totalScreenLenght=$50
+totalScreenLenght=$3c ;make it only 3 lines long 3c = 60 decimal
 end_char=$ff
 cship=$00
 cinv1=$01
