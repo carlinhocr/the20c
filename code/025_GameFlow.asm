@@ -529,16 +529,16 @@ writeFire:
   ldy firePosition
   lda #cfire
   sta (screenMemoryLow),y
-  rts
-
-calculateFirePosition:
-  lda cursor_position_relative
-  sta firePosition
-  rts  
+  rts 
 
 firstFire:
   jsr mapPositionShip
-  jsr calculateFirePosition
+  ;subtract 20 from the ship position to draw the fire
+  lda cursor_position_relative
+  sec
+  sbc #$20
+  sta firePosition
+  rts
   
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -553,7 +553,6 @@ firstFire:
 ;-----------------------------------------------------------------------------------
 
 mapPositionShip:
-  lda cursor_position
   ldy #$FF
 mapPositionLoop:
   iny
@@ -563,7 +562,8 @@ mapPositionLoop:
   lda (lcdCharPositionsLowZeroPage),Y ;load cursor position
   cmp cursor_position
   bne mapPositionLoop
-  sta cursor_position_relative
+  ;the Y position is the relative position of the ship
+  sty cursor_position_relative
 mapPositionLoopEnd:
   rts
 
