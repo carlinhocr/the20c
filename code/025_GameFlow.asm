@@ -240,7 +240,7 @@ gameInitilize:
   jsr drawScreen
   jsr DELAY_SEC
   ;initialize first fire position
-  lda #$50 ;out of the screen so it does not appear initilially
+  lda #$35 ;out of the screen so it does not appear initilially
   sta firePosition
   rts
 
@@ -436,7 +436,8 @@ loadCursorPositions:
   ldy #$ff
 loadCursorPositionsLoop:
   iny
-  cpy #totalScreenLenght ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
+  cpy #$50 
+  ;cpy #totalScreenLenght ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
   beq loadCursorPositionsEnd
   ; copy from ROM to RAM the LCD positions
   lda (lcdROMPositionsLowZeroPage),Y
@@ -810,6 +811,12 @@ print_message_end:
   rts 
   ;END Write all the letters
 
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------LCD COMMANDS---------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------  
+
 clear_display:
 ; BEGIN clear display instruction  on port B
   lda #%00000001 ;the instruction itself is 00000001
@@ -926,6 +933,12 @@ lcd_send_data:
   sta PORTA ; 
   pla ;pull the accumulator value to the stack so we can have it back a the end of the subroutine
   rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------LCD COMMANDS---------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
 delay_1_sec:
   jsr DELAY_SEC
