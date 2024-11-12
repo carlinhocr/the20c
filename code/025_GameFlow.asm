@@ -91,7 +91,7 @@ aliensArrayMemoryPositionCinv1H=$32
 cursor_char=$00 ;this selects a ship
 blank_char=$20
 fill=$43 ;letter C
-;totalScreenLenght=$50
+totalScreenLenght4Lines=$50
 totalScreenLenght=$3c ;make it only 3 lines long 3c = 60 decimal
 end_char=$ff
 cship=$00
@@ -436,7 +436,7 @@ loadCursorPositions:
   ldy #$ff
 loadCursorPositionsLoop:
   iny
-  cpy #$50 
+  cpy #totalScreenLenght4Lines 
   ;cpy #totalScreenLenght ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
   beq loadCursorPositionsEnd
   ; copy from ROM to RAM the LCD positions
@@ -557,7 +557,7 @@ mapPositionShip:
   ldy #$FF
 mapPositionLoop:
   iny
-  cpy #totalScreenLenght ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
+  cpy #totalScreenLenght4Lines ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
   beq mapPositionLoopEnd
 ;position cursor
   lda (lcdCharPositionsLowZeroPage),Y ;load cursor position
