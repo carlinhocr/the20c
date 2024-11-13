@@ -568,9 +568,19 @@ writeFire:
 
 updateFire:
   lda fireInPlay  
-  bne updateFireEnd
-updateFireEnd:
+  bne firstFire
+  sec
+  sbc #$14 ;#jump
+  bmi destroyFire ;less than zero fire out of screen
+  sta firePosition
   rts  
+
+destroyFire:
+  lda #$00
+  sta fireInPlay
+  lda #$51
+  sta firePosition
+  rts ;ends updateFireSubroutine
 
 firstFire:
   jsr mapPositionShip
@@ -581,7 +591,7 @@ firstFire:
   sta firePosition
   lda #$01
   sta fireInPlay
-  rts
+  rts ;ends updateFireSubroutine
   
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -815,7 +825,7 @@ pressed_buttons_pa0:
 ;   rts
 
 pa4_button_action:
-  jsr firstFire
+  jsr updateFire
   rts
 
 pa3_button_action:
