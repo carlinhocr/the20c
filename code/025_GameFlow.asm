@@ -52,6 +52,9 @@ fireInPlay=$47 ;0 no fire 1 fire
 
 cursor_position=$a1
 cursor_position_relative=$a2
+aliensRemaining=$a3
+scoreHexa=$a4
+gameStatus=$a5 ;0 not started, 1 playing, 2 over
 
 record_lenght=$CC ;it is a memory position
 record_lenght_plus1=$CD
@@ -245,30 +248,41 @@ gameInitilize:
   jsr start_ship
   jsr clearScreenBuffer
   jsr drawScreen
-  jsr gameInitAliens
+  jsr aliensInit
+  jsr scoreInit
   jsr drawScreen
   jsr DELAY_SEC
   ;initialize first fire position
   lda #$51 ;out of the screen so it does not appear initilially
   sta firePosition
+  lda #$0;load screen
+  sta gameStatus
   rts
 
-gameInitAliens:
-  jsr loadAliens
-  jsr writeAliens
-  lda #$ff
-  sta xVariable
-  lda #$00 
-  sta xDirection
-  rts
-
-gameFlow:  
+gameFlow:    
+  lda #$1
+  sta gameStatus
   jsr clearScreenBuffer  
   jsr moveAliens
   jsr writeFire
   jsr drawScreen
   jsr DELAY_SEC
   jmp gameFlow
+
+gameEnd:
+  lda #$2
+  sta gameStatus
+  jsr clear_display
+  lda #$C0 ;position cursor at the start of second line
+  jsr lcd_send_instruction
+  lda #<endGameMessage
+  sta charDataVectorLow
+  lda #>endGameMessage
+  sta charDataVectorHigh
+  jsr print_message
+gameEndLoop:
+  jmp gameEndLoop    
+  
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -281,6 +295,15 @@ gameFlow:
 ;--------------------------------ALIENS---------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+
+aliensInit:
+  jsr loadAliens
+  jsr writeAliens
+  lda #$ff
+  sta xVariable
+  lda #$00 
+  sta xDirection
+  rts
 
 moveAliens:   
   lda xDirection
@@ -600,6 +623,83 @@ firstFire:
 ;-----------------------------------------------------------------------------------
   
 
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;------------------------------------COLLISIONS-------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+    
+
+checkCollisions:
+  ;check with aliens 1 positions
+checkAliens:  
+  ldy #$FF
+  jsr prepAliensCinv1
+  jsr checkAliensLoop 
+  ldy #$FF
+  jsr prepAliensCinv2
+  jsr checkAliensLoop
+  rts
+
+checkAliensLoop:
+  iny
+  cpy alienTotal
+  beq checkAliensLoopEnd
+  lda (aliensArrayZPL),y
+  cmp firePosition   ;loadFirePosition and compare with alien position
+  bne checkAliensLoop   
+  ;if match erase alien, destroy fire, add to scores
+  ;if here we found the fire and the alien in the same screen position
+  ;update alien position to out of the screen
+  lda #$52
+  sta (aliensArrayZPL),y
+  jsr destroyFire
+  jsr updateScore  
+checkAliensLoopEnd:
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;------------------------------------COLLISIONS-------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------------SCORE----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+scoreInit:
+  clc
+  lda #alienTotalCinv1
+  adc #alienTotalCinv2
+  sta aliensRemaining
+  lda #$0
+  sta scoreHexa
+
+updateScore:
+  clc
+  lda #$1
+  adc scoreHexa
+  sec
+  lda aliensRemaining
+  sbc #$1
+  beq endScore
+  rts 
+
+endScore:
+  jsr gameEnd
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------------SCORE----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
 
 
@@ -1218,6 +1318,9 @@ button_press_nmi:
 
 button_press_irq:
   .ascii "IRQ Interrupt"
+
+endGameMessage:
+  .ascii "Game Over you WIN!!"  
 
 lcd_positions:
 lcd_positions_line0:
