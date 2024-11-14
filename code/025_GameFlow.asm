@@ -246,6 +246,7 @@ gameFlow:
   jsr clearScreenBuffer  
   jsr moveAliens
   jsr moveFire
+  jsr checkCollisions
   jsr drawScreen
   jsr DELAY_SEC
   jmp gameFlow
