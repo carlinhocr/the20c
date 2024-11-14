@@ -634,6 +634,7 @@ fireButtonPressed:
   sta firePosition
   lda #$01
   sta fireInPlay
+  jsr writeFire
 fireButtonPressedEnd:
   rts ;ends updateFireSubroutine
   
