@@ -609,11 +609,27 @@ updateFire:
   lda fireInPlay  
   beq updateFireEnd ;no fire in play do nothing (fireInPlay = 0)
   ;there is a fire in play update position
+  cmp #$01
+  beq updateFire1Row ; go to first row
+  cmp #$02
+  beq updateFire2or3Row
+  cmp #$03
+  beq updateFire2or3Row
+  ;if not 0,1,2,3 we have to destroy the fire
+  jsr destroyFire
+  jmp updateFireEnd
+updateFire1Row:
+  ;no position update let it be written in first row but increase to second row for next iteration
+  inc fireInPlay
+  rts
+updateFire2or3Row:
+  ;update fire position increase to third row for next iteration
   sec
   lda firePosition
   sbc #$14 ;#jump
-  ;bmi destroyFire ;less than zero fire out of screen
-  sta firePosition  
+  sta firePosition
+  inc fireInPlay
+  rts  
 updateFireEnd:  
   rts  
 
@@ -635,7 +651,6 @@ fireButtonPressed:
   sta firePosition
   lda #$01
   sta fireInPlay
-  jsr writeFire
 fireButtonPressedEnd:
   rts ;ends updateFireSubroutine
   
