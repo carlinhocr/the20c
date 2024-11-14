@@ -611,7 +611,7 @@ updateFire:
   ;there is a fire in play update position
   sec
   sbc #$14 ;#jump
-  bmi destroyFire ;less than zero fire out of screen
+  ;bmi destroyFire ;less than zero fire out of screen
   sta firePosition  
 updateFireEnd:  
   rts  
