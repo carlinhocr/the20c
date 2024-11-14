@@ -229,32 +229,13 @@ game:
   jsr gameFlow
 
 gameInitilize:
-  jsr add_custom_chars_invaders
-  jsr initilize_display
-  jsr clear_display
-  lda #cinv2
-  jsr print_char  
-  jsr DELAY_SEC
-  lda #cinv1
-  jsr print_char  
-  jsr DELAY_SEC
-  lda #cship
-  jsr print_char  
-  jsr DELAY_SEC
-  jsr loadCursorPositions
-  jsr loadScreen
-  jsr drawScreen
-  jsr DELAY_SEC  
-  jsr start_ship
-  jsr clearScreenBuffer
-  jsr drawScreen
+  jsr screenInit
+  jsr shipInit
   jsr aliensInit
   jsr scoreInit
   jsr drawScreen
   jsr DELAY_SEC
-  ;initialize first fire position
-  lda #$51 ;out of the screen so it does not appear initilially
-  sta firePosition
+  jsr initFire
   lda #$0;load screen
   sta gameStatus
   rts
@@ -471,6 +452,27 @@ moveLeftEnd:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+screenInit:
+  jsr add_custom_chars_invaders
+  jsr initilize_display
+  jsr clear_display
+  lda #cinv2
+  jsr print_char  
+  jsr DELAY_SEC
+  lda #cinv1
+  jsr print_char  
+  jsr DELAY_SEC
+  lda #cship
+  jsr print_char  
+  jsr DELAY_SEC
+  jsr loadCursorPositions
+  jsr loadScreen
+  jsr drawScreen
+  jsr DELAY_SEC   
+  jsr clearScreenBuffer
+  jsr drawScreen 
+  rts
+
 ; create a matrix of cursor positions in memory 4x20
 loadCursorPositions:
   ;load vectors
@@ -582,6 +584,15 @@ print_message_end:
 ;--------------------------------------FIRE-----------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------  
+
+initFire:
+  ;initialize first fire position
+  lda #$51 ;out of the screen so it does not appear initilially
+  sta firePosition
+  ;inititialize fire that it is not in play
+  lda #$0
+  sta fireInPlay
+  rts
 
 writeFire:
   ldy firePosition
@@ -734,7 +745,7 @@ mapPositionLoop:
 mapPositionLoopEnd:
   rts
 
-start_ship:
+shipInit:
   jsr initiliaze_vectors
   lda #$4
   sta line_cursor
