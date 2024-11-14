@@ -102,7 +102,7 @@ cship=$00
 cinv1=$01
 cinv2=$fc
 cfire=$7c
-cexplosion=$f4
+cexplosion=$f3
 
 xLimit=$04 ; how much the shift moves left and right
 
@@ -442,6 +442,12 @@ moveLeftLoop:
 moveLeftEnd:
   rts
 
+destroyAlien:
+  ldy firePosition
+  lda #cexplosion
+  sta (screenMemoryLow),y 
+  rts ;ends 
+
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------ALIENS---------------------------------------------
@@ -636,9 +642,6 @@ updateFireEnd:
   rts  
 
 destroyFire:
-  ldy firePosition
-  lda #cexplosion
-  sta (screenMemoryLow),y 
   lda #$00
   sta fireInPlay
   lda #$51
@@ -697,6 +700,7 @@ checkAliensLoop:
   ;update alien position to out of the screen
   lda #$52
   sta (aliensArrayZPL),y
+  jsr destroyAlien
   jsr destroyFire
   jsr updateScore  
 checkAliensLoopEnd:
