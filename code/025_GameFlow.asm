@@ -610,6 +610,7 @@ updateFire:
   beq updateFireEnd ;no fire in play do nothing (fireInPlay = 0)
   ;there is a fire in play update position
   sec
+  lda firePosition
   sbc #$14 ;#jump
   ;bmi destroyFire ;less than zero fire out of screen
   sta firePosition  
