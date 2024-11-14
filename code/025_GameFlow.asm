@@ -102,6 +102,7 @@ cship=$00
 cinv1=$01
 cinv2=$fc
 cfire=$7c
+cexplosion=$f4
 
 xLimit=$04 ; how much the shift moves left and right
 
@@ -635,6 +636,9 @@ updateFireEnd:
   rts  
 
 destroyFire:
+  ldy firePosition
+  lda #cexplosion
+  sta (screenMemoryLow),y 
   lda #$00
   sta fireInPlay
   lda #$51
