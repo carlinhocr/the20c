@@ -264,7 +264,7 @@ gameFlow:
   sta gameStatus
   jsr clearScreenBuffer  
   jsr moveAliens
-  jsr writeFire
+  jsr moveFire
   jsr drawScreen
   jsr DELAY_SEC
   jmp gameFlow
@@ -589,7 +589,7 @@ writeFire:
   sta (screenMemoryLow),y
   rts 
 
-flowFire:
+moveFire:
   jsr updateFire
   jsr writeFire
   rts  
