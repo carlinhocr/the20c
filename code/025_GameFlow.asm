@@ -601,7 +601,7 @@ writeFire:
   rts 
 
 moveFire:
-  ;jsr updateFire
+  jsr updateFire
   jsr writeFire
   rts  
 
