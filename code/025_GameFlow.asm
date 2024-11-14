@@ -589,13 +589,20 @@ writeFire:
   sta (screenMemoryLow),y
   rts 
 
+flowFire:
+  jsr updateFire
+  jsr writeFire
+  rts  
+
 updateFire:
   lda fireInPlay  
-  bne firstFire
+  beq updateFireEnd ;no fire in play do nothing (fireInPlay = 0)
+  ;there is a fire in play update position
   sec
   sbc #$14 ;#jump
   bmi destroyFire ;less than zero fire out of screen
-  sta firePosition
+  sta firePosition  
+updateFireEnd:  
   rts  
 
 destroyFire:
@@ -605,7 +612,9 @@ destroyFire:
   sta firePosition
   rts ;ends updateFireSubroutine
 
-firstFire:
+fireButtonPressed:
+  lda fireInPlay  
+  bne fireButtonPressedEnd ; there is already a fire in play it is not the first fire do nothing
   jsr mapPositionShip
   ;subtract 20 decimal $14 hexa from the ship position to draw the fire
   lda cursor_position_relative
@@ -614,6 +623,7 @@ firstFire:
   sta firePosition
   lda #$01
   sta fireInPlay
+fireButtonPressedEnd:
   rts ;ends updateFireSubroutine
   
 ;END--------------------------------------------------------------------------------
@@ -925,7 +935,7 @@ pressed_buttons_pa0:
 ;   rts
 
 pa4_button_action:
-  jsr updateFire
+  jsr fireButtonPressed
   rts
 
 pa3_button_action:
