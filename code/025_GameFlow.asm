@@ -841,10 +841,10 @@ updateScoreContinue:
   rts 
 
 endScore:
-  cli ; reenable interrupts after updating because me missed the one from updateScore
-  ;jsr gameEnd
   lda #$2
   sta gameStatus
+  cli ; reenable interrupts after updating because me missed the one from updateScore
+  ;jsr gameEnd  
   rts
 
 testScore:
