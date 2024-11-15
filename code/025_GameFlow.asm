@@ -728,28 +728,37 @@ checkAliensLoopEnd:
 
 scoreInit:
   clc
+  sei ;disable interrupts so as to update properly the counter
   lda #alienTotalCinv1
   adc #alienTotalCinv2
   sta aliensRemaining
-  lda #$0
-  sta scoreHexa
-  lda #$0
+  lda #$FF
   sta score
-  lda #$1
+  lda #$0
   sta score + 1
   lda #<scoreMessage
   sta scoreMessageVectorLow
   lda #>scoreMessage
   sta scoreMessageVectorHigh
+  cli ; reenable interrupts after updating
+  rts
 
 updateScore:
+  sei ;disable interrupts so as to update properly the counter
   clc
-  lda #$1
-  adc score
+  lda score
+  adc #$1
   sta score
+  bne updateScoreContinue
+  ;addOneMore to the next byte
+  lda score +1
+  adc #$1
+  sta score +1
+updateScoreContinue:
   sec
   lda aliensRemaining
   sbc #$1
+  cli ; reenable interrupts after updating
   beq endScore
   rts 
 
