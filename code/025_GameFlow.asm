@@ -53,8 +53,8 @@ fireInPlay=$47 ;0 no fire 1 fire
 cursor_position=$a1
 cursor_position_relative=$a2
 aliensRemaining=$a3
-scoreHexa=$a4
-gameStatus=$a5 ;0 not started, 1 playing, 2 over
+aliensRemainingExtra=$a4
+gameStatus=$a4 ;0 not started, 1 playing, 2 over
 
 record_lenght=$CC ;it is a memory position
 record_lenght_plus1=$CD
@@ -744,6 +744,8 @@ scoreInit:
   adc #alienTotalCinv2
   sta aliensRemaining
   lda #$0
+  sta aliensRemainingExtra
+  lda #$0
   sta score
   lda #$0
   sta score + 1
@@ -1077,6 +1079,20 @@ bin_2_ascii_score:
   lda score
   sta value 
   lda score + 1
+  sta value + 1
+  cli ; reenable interrupts after updating
+  jsr bin_2_ascii
+  rts
+
+bin_2_ascii_aliens:
+  lda #0 ;this signals the empty string
+  sta message ;initialize the string we will use for the results
+  ;BEGIN Initialization of the 4 bytes
+  ; initializae value to be the counter to ccount interrupts 
+  sei ;disable interrupts so as to update properly the counter
+  lda aliensRemaining
+  sta value 
+  lda aliensRemaining + 1
   sta value + 1
   cli ; reenable interrupts after updating
   jsr bin_2_ascii
@@ -1545,10 +1561,10 @@ button_press_irq:
   .ascii "IRQ Interrupt"
 
 endGameMessage:
-  .ascii "      Game Over"  
+  .ascii "     GAME  OVER"  
 
 endGameMessage2:
-  .ascii "      YOU WIN!!"   
+  .ascii "       YOU WIN"   
 
 scoreMessage:
   .ascii "SCORE"   
