@@ -731,7 +731,7 @@ scoreInit:
   sta aliensRemaining
   lda #$0
   sta scoreHexa
-  lda #$A
+  lda #$0
   sta score
   lda #$0
   sta score + 1
