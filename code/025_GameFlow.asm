@@ -740,8 +740,9 @@ checkAliensLoopEnd:
 scoreInit:
   sei ;disable interrupts so as to update properly the counter
   clc
-  lda #alienTotalCinv1
-  adc #alienTotalCinv2
+  ;lda #alienTotalCinv1
+  ;adc #alienTotalCinv2
+  lda #$C
   sta aliensRemaining
   lda #$0
   sta aliensRemainingExtra
