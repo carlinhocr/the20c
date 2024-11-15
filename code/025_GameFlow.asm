@@ -1567,7 +1567,7 @@ endGameMessage:
   .ascii "     GAME  OVER"  
 
 endGameMessage2:
-  .ascii "       YOU WIN"   
+  .ascii "       YOU  WIN"   
 
 scoreMessage:
   .ascii "SCORE"   
