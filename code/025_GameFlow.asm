@@ -685,13 +685,16 @@ fireButtonPressedEnd:
 
 checkCollisions:
   ;check with aliens 1 positions
-checkAliens:  
+checkAliens:
+  lda fireInPlay
+  beq checkAliensEnd  
   ldy #$FF
   jsr prepAliensCinv1
   jsr checkAliensLoop 
   ldy #$FF
   jsr prepAliensCinv2
   jsr checkAliensLoop
+checkAliensEnd:
   rts
 
 checkAliensLoop:
@@ -751,6 +754,7 @@ updateScore:
   sta score
   bne updateScoreContinue
   ;addOneMore to the next byte
+  clc
   lda score +1
   adc #$1
   sta score +1
