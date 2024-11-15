@@ -70,7 +70,8 @@ downCursorVectorHigh=$d7
 fireCursorVectorLow=$d8
 fireCursorVectorHigh=$d9
 line_cursor=$da
-
+scoreMessageVectorLow=$db 
+scoreMessageVectorHigh=$dc
 
 
 ;Memory Mappings
@@ -135,6 +136,7 @@ mod10 =$0202 ;2 bytes, high 16 bit half and as it has the remainder of dividing 
              ;it is the mod 10 of the division (the remainder)
 message = $0204 ; the result up to 6 bytes
 counter = $020a ; 2 bytes
+score = $020c ; 2 bytes
 
 ;define LCD signals
 E = %10000000 ;Enable Signal
@@ -729,9 +731,13 @@ scoreInit:
   lda #$0
   sta scoreHexa
   lda #$A
-  sta counter
+  sta score
   lda #$0
-  sta counter + 1
+  sta score + 1
+  lda #<scoreMessage
+  sta scoreMessageVectorLow
+  lda #>scoreMessage
+  sta scoreMessageVectorHigh
 
 updateScore:
   clc
@@ -749,8 +755,20 @@ endScore:
 
 testScore:
   jsr scoreInit
-  jsr bin_2_ascii
+  jsr bin_2_ascii_score
   jsr delay_2_sec
+  rts  
+
+writeScore:  
+  ldy #$FF    
+writeScoreLoop:
+  iny ;write the letter score in position 0     
+  beq writeScoreEnd
+  lda (scoreMessageVectorLow),y ;letter loaded
+  beq writeScoreEnd ;if #$0 end of string finish writing score message
+  sta (screenMemoryLow),y ;
+  jmp writeScoreLoop 
+writeScoreEnd: 
   rts  
 
 ;END--------------------------------------------------------------------------------
@@ -1014,18 +1032,21 @@ pa0_button_action:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-bin_2_ascii:
+bin_2_ascii_score:
   lda #0 ;this signals the empty string
   sta message ;initialize the string we will use for the results
   ;BEGIN Initialization of the 4 bytes
   ; initializae value to be the counter to ccount interrupts 
   sei ;disable interrupts so as to update properly the counter
-  lda counter
+  lda score
   sta value 
-  lda counter + 1
+  lda score + 1
   sta value + 1
   cli ; reenable interrupts after updating
+  jsr bin_2_ascii
+  rts
 
+bin_2_ascii:
 divide:
   ;initialize the remainder to be 0
   lda #0
@@ -1488,6 +1509,9 @@ button_press_irq:
 
 endGameMessage:
   .ascii "Game Over you WIN!!"  
+
+scoreMessage:
+  .ascii "SCORE"   
 
 lcd_positions:
 lcd_positions_line0:
