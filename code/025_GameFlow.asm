@@ -1636,7 +1636,7 @@ startMessage1:
   .ascii "    SPACE   DONA"  
 
 startMessage2:
-  .ascii "  PRESS FIRE TO START"   
+  .ascii "PRESS FIRE  TO START"   
 
 scoreMessage:
   .ascii "SCORE"   
