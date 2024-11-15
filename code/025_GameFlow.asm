@@ -698,7 +698,9 @@ checkAliens:
   beq checkAliensEnd  
   ldy #$FF
   jsr prepAliensCinv1
-  jsr checkAliensLoop 
+  jsr checkAliensLoop
+  lda fireInPlay
+  beq checkAliensEnd  
   ldy #$FF
   jsr prepAliensCinv2
   jsr checkAliensLoop
