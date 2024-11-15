@@ -743,7 +743,7 @@ scoreInit:
 updateScore:
   clc
   lda #$1
-  adc scoreHexa
+  adc score
   sec
   lda aliensRemaining
   sbc #$1
@@ -757,6 +757,7 @@ endScore:
 testScore:
   jsr scoreInit
   jsr bin_2_ascii_score
+  jsr print_message_ascii
   jsr delay_2_sec
   rts  
 
@@ -765,10 +766,18 @@ writeScore:
 writeScoreLoop:
   iny ;write the letter score in position 0     
   lda (scoreMessageVectorLow),y ;letter loaded
-  beq writeScoreEnd ;if #$0 end of string finish writing score message
+  beq writeScore2Line ;if #$0 end of string finish writing score message
   sta (screenMemoryLow),y ;
   jmp writeScoreLoop 
-writeScoreEnd: 
+writeScore2Line: 
+  jsr bin_2_ascii_score
+  ldy #$FF
+writeScore2Loop:
+  lda message,Y
+  beq writeScore2LineEnd
+  sta (screenMemoryLow),y
+  jmp writeScore2Loop
+writeScore2LineEnd:
   rts  
 
 ;END--------------------------------------------------------------------------------
@@ -1100,6 +1109,7 @@ ignore_result:
   lda value
   ora value + 1 ; combine all ones from the 16 bits of value
   bne divide ; if a is not zero keep dividing
+  rts
 
 print_message_ascii:  
   ;BEGIN Write all the letters
