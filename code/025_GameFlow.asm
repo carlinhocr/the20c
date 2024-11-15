@@ -277,6 +277,7 @@ gameStartScreenLoop:
   lda gameStatus
   cmp #$1
   beq gameStartScreenEnd
+  jmp gameStartScreenLoop
 gameStartScreenEnd:
   rts 
 
