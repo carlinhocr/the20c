@@ -744,6 +744,7 @@ updateScore:
   clc
   lda #$1
   adc score
+  sta score
   sec
   lda aliensRemaining
   sbc #$1
