@@ -730,8 +730,8 @@ checkAliensLoopEnd:
 ;-----------------------------------------------------------------------------------
 
 scoreInit:
-  clc
   sei ;disable interrupts so as to update properly the counter
+  clc
   lda #alienTotalCinv1
   adc #alienTotalCinv2
   sta aliensRemaining
@@ -762,11 +762,13 @@ updateScoreContinue:
   sec
   lda aliensRemaining
   sbc #$1
-  cli ; reenable interrupts after updating
+  sta aliensRemaining
   beq endScore
+  cli ; reenable interrupts after updating
   rts 
 
 endScore:
+  cli ; reenable interrupts after updating because me missed the one from updateScore
   jsr gameEnd
   rts
 
@@ -1537,7 +1539,7 @@ button_press_irq:
   .ascii "IRQ Interrupt"
 
 endGameMessage:
-  .ascii "Game Over you WIN!!"  
+  .ascii "     Game Over you WIN!!"  
 
 scoreMessage:
   .ascii "SCORE"   
