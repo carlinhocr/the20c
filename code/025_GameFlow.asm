@@ -277,6 +277,7 @@ gameStartScreenLoop:
   lda gameStatus
   cmp #$1
   beq gameStartScreenEnd
+  jsr delay_1_sec
   jmp gameStartScreenLoop
 gameStartScreenEnd:
   rts 
