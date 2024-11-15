@@ -473,6 +473,7 @@ screenInit:
   lda #cship
   jsr print_char  
   jsr DELAY_SEC
+  jsr testScore
   jsr loadCursorPositions
   jsr loadScreen
   jsr drawScreen
@@ -742,6 +743,11 @@ endScore:
   jsr gameEnd
   rts
 
+testScore:
+  jsr bin_2_ascii
+  jsr delay_2_sec
+  rts  
+
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------------SCORE----------------------------------------
@@ -996,9 +1002,116 @@ pa0_button_action:
 ;--------------------------------SPACE SHIP-----------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-  
 
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------Binary to Ascii------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
+bin_2_ascii:
+  lda #0 ;this signals the empty string
+  sta message ;initialize the string we will use for the results
+  ;BEGIN Initialization of the 4 bytes
+  ; initializae value to be the number to convert
+  lda number
+  sta value 
+  lda number + 1
+  sta value + 1
+
+divide:
+  ;initialize the remainder to be 0
+  lda #0
+  sta mod10
+  sta mod10 + 1
+  clc ; we will clear the carry bit
+  ;END Initialization of the 4 bytes
+  ldx #16
+
+divloop:
+  ;rotate the quotient and the remainder
+  rol value
+  rol value + 1
+  rol mod10
+  rol mod10 + 1
+
+  ;substract 1010, we will do it 8 bits at a time
+   sec ; set the carry bit
+  lda mod10
+  sbc #10 ;substract with carry from 10
+  tay ; save the low part of the 16 bits of the remainder to register y
+  lda mod10 + 1
+  sbc #0 ;substract with carry zero as the 8 high bits are all zeroes from 10 division
+  ; the answer is on the combination of the a register and the y register
+  ; a,y = dividend - divisor
+  ; if the carry is clear for a then the dividend was less that the divisor and we will
+  ; discard the result and do a shift left
+  bcc ignore_result ; we will branch if the carry bit is clear (the carry of the last operation)
+  ; if we do not ignore the result we want to store the intermediate result a,y
+  ; in mod10+1 for a register and mod10 for the y register
+  sty mod10
+  sta mod10 + 1
+
+  ; and then we will keep with the division if we did less than 16 left shifts
+
+ignore_result:
+  dex ; decrement the X time that we shifted left
+    ; dex affects the Z flag if the content of the x register is zero
+  bne divloop ;if what is on the X register
+  ;we will rotate the carry bit inside value to have the result of the division
+  rol value
+  rol value + 1
+
+  ;now we have to store the remainder
+  lda mod10
+  clc
+  adc #"0" ;by adding zero to the a register we will have the ascii number of its value
+  jsr push_char ;and now we store our character in the string
+  ; we will be done dividen whne the result of the division is a zero
+  ; we will check value and value + 1 and if any bit is one we are not done
+  lda value
+  ora value + 1 ; combine all ones from the 16 bits of value
+  bne divide ; if a is not zero keep dividing
+
+print_message_ascii:  
+  ;BEGIN Write all the letters
+  ldx #0 ;start on FF so when i add one it will be 0
+
+print_message_eeprom_ascii:  
+  lda message,x ;load letter from eeprom position message + the value of register X
+  beq print_message_ascii_end ; jump to end if I load a 0 on lda a zero means the end  of a n .asciiz string
+  jsr print_char 
+  inx
+  jmp print_message_eeprom_ascii
+  ;END Write all the letters  
+print_message_ascii_end:
+  rts   
+
+number: .word 1729 ;the number we will convert
+
+;add the content of the a register to a null terminated string message
+push_char:
+  pha ;push new character into the stack first 
+  ldy #0
+
+char_loop:
+  lda message,y ;get char on string and put into x
+  tax
+  pla
+  sta message,y ; we replaced the old first character with the new one
+  iny ; lets go to the next character
+  txa
+  pha ; we have the character that used to be on the beginning of the message on the stack
+  ;if a is zero we are at the end of the string
+  bne char_loop
+  pla
+  sta message,y ; store the null terminator again
+  rts
+;END-----------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------Binary to Ascii------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
