@@ -742,12 +742,9 @@ checkAliensLoopEnd:
 scoreInit:
   sei ;disable interrupts so as to update properly the counter
   clc
-  ;lda #alienTotalCinv1
-  ;adc #alienTotalCinv2
-  lda #$C
+  lda #alienTotalCinv1
+  adc #alienTotalCinv2
   sta aliensRemaining
-  lda #$0
-  sta aliensRemainingExtra
   lda #$0
   sta score
   lda #$0
@@ -1564,10 +1561,10 @@ button_press_irq:
   .ascii "IRQ Interrupt"
 
 endGameMessage:
-  .ascii "     GAME  OVER"  
+  .ascii "     GAME   OVER"  
 
 endGameMessage2:
-  .ascii "       YOU  WIN"   
+  .ascii "       YOU WIN"   
 
 scoreMessage:
   .ascii "SCORE"   
