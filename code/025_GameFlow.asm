@@ -771,8 +771,9 @@ writeScoreLoop:
   jmp writeScoreLoop 
 writeScore2Line: 
   jsr bin_2_ascii_score
-  ldy #$FF
+  ldy #$15 ; so it will start at the beginning of line two in position 16
 writeScore2Loop:
+  iny
   lda message,Y
   beq writeScore2LineEnd
   sta (screenMemoryLow),y
