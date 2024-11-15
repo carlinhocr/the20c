@@ -764,7 +764,6 @@ writeScore:
   ldy #$FF    
 writeScoreLoop:
   iny ;write the letter score in position 0     
-  beq writeScoreEnd
   lda (scoreMessageVectorLow),y ;letter loaded
   beq writeScoreEnd ;if #$0 end of string finish writing score message
   sta (screenMemoryLow),y ;
