@@ -728,6 +728,10 @@ scoreInit:
   sta aliensRemaining
   lda #$0
   sta scoreHexa
+  lda #$A
+  sta counter
+  lda #$0
+  sta counter + 1
 
 updateScore:
   clc
@@ -744,6 +748,7 @@ endScore:
   rts
 
 testScore:
+  jsr scoreInit
   jsr bin_2_ascii
   jsr delay_2_sec
   rts  
@@ -1013,11 +1018,13 @@ bin_2_ascii:
   lda #0 ;this signals the empty string
   sta message ;initialize the string we will use for the results
   ;BEGIN Initialization of the 4 bytes
-  ; initializae value to be the number to convert
-  lda number
+  ; initializae value to be the counter to ccount interrupts 
+  sei ;disable interrupts so as to update properly the counter
+  lda counter
   sta value 
-  lda number + 1
+  lda counter + 1
   sta value + 1
+  cli ; reenable interrupts after updating
 
 divide:
   ;initialize the remainder to be 0
@@ -1026,8 +1033,8 @@ divide:
   sta mod10 + 1
   clc ; we will clear the carry bit
   ;END Initialization of the 4 bytes
-  ldx #16
 
+  ldx #16
 divloop:
   ;rotate the quotient and the remainder
   rol value
