@@ -273,6 +273,11 @@ gameStartScreen:
   lda #>startMessage2
   sta charDataVectorHigh
   jsr print_message
+gameStartScreenLoop:
+  lda gameStatus
+  cmp #$1
+  beq gameStartScreenEnd
+gameStartScreenEnd:
   rts 
 
 gamePlaying:  
