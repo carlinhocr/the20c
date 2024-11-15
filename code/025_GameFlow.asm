@@ -640,7 +640,7 @@ updateFire2or3Row:
   ;update fire position increase to third row for next iteration
   sec
   lda firePosition
-  sbc #$14 ;#jump
+  sbc #$15 ;#jump
   sta firePosition
   inc fireInPlay
   rts  
@@ -735,7 +735,7 @@ scoreInit:
   lda #alienTotalCinv1
   adc #alienTotalCinv2
   sta aliensRemaining
-  lda #$FF
+  lda #$0
   sta score
   lda #$0
   sta score + 1
