@@ -137,6 +137,8 @@ mod10 =$0202 ;2 bytes, high 16 bit half and as it has the remainder of dividing 
 message = $0204 ; the result up to 6 bytes
 counter = $020a ; 2 bytes
 score = $020c ; 2 bytes
+; scoreLow=$0c 
+; scoreHigh=$02
 
 ;define LCD signals
 E = %10000000 ;Enable Signal
@@ -733,7 +735,7 @@ scoreInit:
   sta scoreHexa
   lda #$0
   sta score
-  lda #$0
+  lda #$1
   sta score + 1
   lda #<scoreMessage
   sta scoreMessageVectorLow
