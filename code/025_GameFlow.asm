@@ -268,6 +268,14 @@ gameEnd:
   lda #>endGameMessage
   sta charDataVectorHigh
   jsr print_message
+  lda #$94 ;position cursor at the start of second line
+  jsr lcd_send_instruction
+  jsr lcd_send_instruction
+  lda #<endGameMessage2
+  sta charDataVectorLow
+  lda #>endGameMessage2
+  sta charDataVectorHigh
+  jsr print_message
 gameEndLoop:
   jmp gameEndLoop    
   
@@ -759,10 +767,8 @@ updateScore:
   adc #$1
   sta score +1
 updateScoreContinue:
-  sec
+  dec aliensRemaining
   lda aliensRemaining
-  sbc #$1
-  sta aliensRemaining
   beq endScore
   cli ; reenable interrupts after updating
   rts 
@@ -1539,7 +1545,10 @@ button_press_irq:
   .ascii "IRQ Interrupt"
 
 endGameMessage:
-  .ascii "     Game Over you WIN!!"  
+  .ascii "      Game Over"  
+
+endGameMessage2:
+  .ascii "      YOU WIN!!"   
 
 scoreMessage:
   .ascii "SCORE"   
