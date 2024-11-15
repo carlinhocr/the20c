@@ -295,7 +295,7 @@ gamePlayingLoop:
   beq gamePlayingLoopEnd
   jmp gamePlayingLoop
 gamePlayingLoopEnd:
-  rts
+  rts 
 
 gameEnd:
   jsr clear_display
