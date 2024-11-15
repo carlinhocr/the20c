@@ -640,7 +640,7 @@ updateFire2or3Row:
   ;update fire position increase to third row for next iteration
   sec
   lda firePosition
-  sbc #$15 ;#jump
+  sbc #$14 ;#jump
   sta firePosition
   inc fireInPlay
   rts  
@@ -788,7 +788,7 @@ writeScoreLoop:
 writeScore2Line: 
   jsr bin_2_ascii_score
   ldx #$ff ; to iterate message
-  ldy #$15 ; so it will start at the beginning of line two in position 16
+  ldy #$16 ; so it will start at the beginning of line two in position 16
 writeScore2Loop:
   iny
   inx
