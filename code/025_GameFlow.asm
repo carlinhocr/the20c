@@ -776,7 +776,7 @@ writeScore2Line:
 writeScore2Loop:
   iny
   inx
-  lda message,Y
+  lda message,x
   beq writeScore2LineEnd
   sta (screenMemoryLow),y
   jmp writeScore2Loop
