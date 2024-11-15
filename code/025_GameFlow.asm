@@ -230,24 +230,59 @@ RESET:
 ;
 
 game:
-  jsr gameInitilize
-  jsr gameFlow
-
-gameInitilize:
   jsr screenInit
+  lda #$0
+  sta gameStatus
+
+gameLoop:  
+  lda gameStatus
+  cmp #$0
+  beq gameStartScreenJump
+  cmp #$1
+  beq gamePlayingJump
+  cmp #$2
+  beq gameEndJump 
+  jmp gameLoop
+
+gameStartScreenJump:
+  jsr gameStartScreen
+  jmp gameLoop
+
+gamePlayingJump:
+  jsr gamePlaying 
+  jmp gameLoop 
+
+gameEndJump:
+  jsr gameEnd 
+  jmp gameLoop 
+
+
+gameStartScreen:
+  jsr clear_display
+  lda #$C0 ;position cursor at the start of second line
+  jsr lcd_send_instruction
+  lda #<startMessage1
+  sta charDataVectorLow
+  lda #>startMessage1
+  sta charDataVectorHigh
+  jsr print_message
+  lda #$94 ;position cursor at the start of second line
+  jsr lcd_send_instruction
+  lda #<startMessage2
+  sta charDataVectorLow
+  lda #>startMessage2
+  sta charDataVectorHigh
+  jsr print_message
+  rts 
+
+gamePlaying:  
   jsr shipInit
   jsr aliensInit
   jsr scoreInit
   jsr drawScreen
   jsr DELAY_SEC
-  jsr initFire
-  lda #$0;load screen
-  sta gameStatus
-  rts
-
-gameFlow:    
-  lda #$1
-  sta gameStatus
+  jsr initFire  
+gamePlayingLoop:    
   jsr clearScreenBuffer  
   jsr moveAliens
   jsr moveFire
@@ -255,11 +290,14 @@ gameFlow:
   jsr writeScore
   jsr drawScreen
   jsr DELAY_SEC
-  jmp gameFlow
+  lda gameStatus
+  cmp #$2
+  beq gamePlayingLoopEnd
+  jmp gamePlayingLoop
+gamePlayingLoopEnd:
+  rts
 
 gameEnd:
-  lda #$2
-  sta gameStatus
   jsr clear_display
   lda #$C0 ;position cursor at the start of second line
   jsr lcd_send_instruction
@@ -277,7 +315,12 @@ gameEnd:
   sta charDataVectorHigh
   jsr print_message
 gameEndLoop:
+  lda gameStatus
+  cmp #$0
+  beq gameEndLoopEnd
   jmp gameEndLoop    
+gameEndLoopEnd:
+  rts
   
 
 ;END--------------------------------------------------------------------------------
@@ -663,6 +706,11 @@ destroyFire:
   rts ;ends updateFireSubroutine
 
 fireButtonPressed:
+  lda gameStatus
+  beq fireButtonPressedStartGame
+  lda gameStatus
+  cmp #$2
+  beq fireButtonPressedEndGame
   lda fireInPlay  
   bne fireButtonPressedEnd ; there is already a fire in play it is not the first fire do nothing
   jsr mapPositionShip
@@ -675,6 +723,16 @@ fireButtonPressed:
   sta fireInPlay
 fireButtonPressedEnd:
   rts ;ends updateFireSubroutine
+
+fireButtonPressedStartGame:
+  lda #$1 ; load 1 to start playing
+  sta gameStatus
+  rts  
+
+fireButtonPressedEndGame:
+  lda #$0 ; load 0 to go to start screen
+  sta gameStatus
+  rts    
   
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -777,7 +835,9 @@ updateScoreContinue:
 
 endScore:
   cli ; reenable interrupts after updating because me missed the one from updateScore
-  jsr gameEnd
+  ;jsr gameEnd
+  lda #$2
+  sta gameStatus
   rts
 
 testScore:
@@ -1565,6 +1625,12 @@ endGameMessage:
 
 endGameMessage2:
   .ascii "       YOU WIN"   
+
+startMessage1:
+  .ascii "    SPACE   DONA"  
+
+startMessage2:
+  .ascii "  PRESS FIRE TO START"   
 
 scoreMessage:
   .ascii "SCORE"   
