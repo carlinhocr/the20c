@@ -250,6 +250,7 @@ gameFlow:
   jsr moveAliens
   jsr moveFire
   jsr checkCollisions
+  jsr writeScore
   jsr drawScreen
   jsr DELAY_SEC
   jmp gameFlow
