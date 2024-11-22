@@ -11,5 +11,10 @@ for indexRom in range(255):
     indexDigit = indexRom % 16
     rom[indexRom]=digits[indexDigit]
 
+for indexRom256 in range(256,511):
+    for digitPosition in range(15):
+        indexROM256Digits=indexRom256+digitPosition
+        rom[indexROM256Digits]=digits[digitPosition]
+
 with open("032_2x7SD_ROM.bin","wb") as out_file:
     out_file.write(rom)
