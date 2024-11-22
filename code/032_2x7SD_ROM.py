@@ -7,7 +7,7 @@ digits= bytes([0b01110111,0b00010100,0b10110011,0b10110110,
 
 # address that are of the form 0 XXXX0000 will show on the second display
 # address that are of the form 1 0000XXXX will show on the first display
-for indexRom in range(255):
+for indexRom in range(256):
     indexDigit = indexRom % 16
     rom[indexRom]=digits[indexDigit]
 
@@ -16,10 +16,11 @@ for indexRom in range(255):
 #         indexROM256Digits=indexRom256+digitPosition
 #         rom[indexROM256Digits]=digits[digitPosition]
 
-for indexRomHighByte in range(256,511): # it is 256 as i have the ninth byte in one
-    indexDigit= (indexRomHighByte - 256) % 16
-    for indexRomLowByte in range(15):
-        indexRom=indexRomHighByte + indexRomLowByte
-        rom[indexRom]=digits[indexDigit]
+for indexRomHighByte in range(256,511,16): # it is 256 as i have the ninth byte in one
+    indexDigit= (indexRomHighByte - 256) // 16
+    for indexRomLowByte in range(16):
+        indexRomHigLowByte = indexRomHighByte + indexRomLowByte
+        print(indexRomHigLowByte,indexDigit)
+        rom[indexRomHigLowByte]=digits[indexDigit]
 with open("032_2x7SD_ROM.bin","wb") as out_file:
     out_file.write(rom)
