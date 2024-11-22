@@ -11,5 +11,5 @@ for indexRom in range(255):
     indexDigit = indexRom % 16
     rom[indexRom]=indexDigit
 
-with open("031_7SegmentDisplayROM.bin","wb") as out_file:
+with open("032_2x7SD_ROM.bin","wb") as out_file:
     out_file.write(rom)
