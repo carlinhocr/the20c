@@ -43,7 +43,7 @@ void onClock (){
 //  Serial.print(CS1_VALUE);
 //  Serial.print(CS2_VALUE);
 char SYNC_VALUE = digitalRead(SYNC) ? 'S':'n';
-char RESET_VALUE = digitalRead(RESET) ? 'R':'n';
+char RESET_VALUE = digitalRead(RESET) ? 'n':'R';
   Serial.print("    ");
 //  Serial.print(CSRAM_VALUE);
   Serial.print(" ");
