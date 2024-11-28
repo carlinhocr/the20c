@@ -11,6 +11,7 @@ const char DATA[] = {36,34,32,30,28,26,24,22};
 #define CLOCK 2
 #define READ_WRITE 3
 #define SYNC 4
+#define RESET 5
 //#define CS1 4 cia only
 //#define CS2 5 cia only
 #define CSRAM 6
@@ -26,6 +27,7 @@ void setup() {
   pinMode(CLOCK, INPUT);
   pinMode(READ_WRITE, INPUT);
   pinMode(SYNC, INPUT);
+  pinMode(RESET, INPUT);
 //  pinMode(CS1, INPUT);
 //  pinMode(CS2, INPUT);
 // pinMode(CSRAM, INPUT);
@@ -41,6 +43,7 @@ void onClock (){
 //  Serial.print(CS1_VALUE);
 //  Serial.print(CS2_VALUE);
 char SYNC_VALUE = digitalRead(SYNC) ? 'S':'n';
+char RESET_VALUE = digitalRead(RESET) ? 'R':'n';
   Serial.print("    ");
 //  Serial.print(CSRAM_VALUE);
   Serial.print(" ");
@@ -58,14 +61,17 @@ char SYNC_VALUE = digitalRead(SYNC) ? 'S':'n';
     Serial.print(bit);
     data = (data << 1) + bit;
   }
-  char *instruction=sync_string(SYNC_VALUE,data);
+  char *instruction=sync_string(SYNC_VALUE,RESET_VALUE,data);
   sprintf(output, " %04x  %04c %01c %02x %01c",address,digitalRead(READ_WRITE)?'r':'W',SYNC_VALUE,data,' ');
   Serial.print(output);
   Serial.println(instruction);
 
 }
 
-char *sync_string(char SYNC_VALUE,unsigned int data) {
+char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
+  if (RESET_VALUE == 'R'){
+    return "RESET";
+  };
   if (SYNC_VALUE == 'S'){
     switch (data){
       case 0x00:
