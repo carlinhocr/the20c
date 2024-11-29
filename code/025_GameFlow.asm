@@ -1114,7 +1114,7 @@ pa3_button_action:
   rts
 
 pa2_button_action:
-  jsr move_cursor_left
+  jsr move_cursor_right
   rts
 
 pa1_button_action:
@@ -1122,7 +1122,7 @@ pa1_button_action:
   rts
 
 pa0_button_action:
-  jsr move_cursor_right
+  jsr move_cursor_left
   rts
 
 ;END--------------------------------------------------------------------------------
