@@ -18,4 +18,9 @@ for pin in address_pin:
     address = address + str(pin.value())
 print (address)
 print (hex(int(address,2)))
+print ("{0:0>4X}".format(int(address, 2))) #use for address fields
+print ("{0:0>2X}".format(int(address, 2))) #use for data fields
+
+address_hexa="{0:0>4X}".format(int(address, 2))
+print(address+" "+address_hexa)
     
