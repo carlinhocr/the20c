@@ -7,7 +7,7 @@ import mcp23017
 sdaPIN=machine.Pin(20)
 sdlPIN=machine.Pin(21)
 #configure i2c settings
-i2c=machine.I2C(0,sda=sdaPIN, scl=sclPIN, freq=400000)
+i2c=machine.I2C(0,sda=sdaPIN, scl=sdlPIN, freq=400000)
 #create an object for using the chip
 mcp = mcp23017.MCP23017(i2c,0x20)
 
@@ -16,6 +16,8 @@ address_number = [3,2,1,0]
 address_pin = []
 clock = 28
 
+# 0-7 Port A
+# 8-15 Port B
 for mcp_pin_number in range(0,15):
     mcp[mcp_pin_number].input()
 
@@ -31,7 +33,7 @@ for pin in address_pin:
     address = address + str(pin.value())
 mcp_data = ""
 print("mcp")
-for mcp_pin_number in range(8,15):
+for mcp_pin_number in range(0,7):
     print(mcp[mcp_pin_number].value())
     mcp_data = mcp_data + int(mcp[mcp_pin_number].value())
     
