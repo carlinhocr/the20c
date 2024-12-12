@@ -10,7 +10,7 @@ sdlPIN=machine.Pin(21)
 i2c=machine.I2C(0,sda=sdaPIN, scl=sdlPIN, freq=400000)
 #create an object for using the chip
 mcp = mcp23017.MCP23017(i2c,0x20)
-
+utime.sleep_ms(1)
 
 address_number = [3,2,1,0]
 address_pin = []
@@ -18,8 +18,9 @@ clock = 28
 
 # 0-7 Port A
 # 8-15 Port B
-for mcp_pin_number in range(0,15):
-    mcp[mcp_pin_number].input()
+for mcp_pin_number in range(1,15):
+    #mcp[mcp_pin_number].input()
+    mcp[1].input(pull=1)
 
 for pin_number in address_number:
     print(pin_number)
@@ -33,7 +34,8 @@ for pin in address_pin:
     address = address + str(pin.value())
 mcp_data = ""
 print("mcp")
-for mcp_pin_number in range(0,7):
+for mcp_pin_number in range(1,7):
+    print(mcp_pin_number)
     print(mcp[mcp_pin_number].value())
     mcp_data = mcp_data + int(mcp[mcp_pin_number].value())
     
