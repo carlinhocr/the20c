@@ -17,4 +17,5 @@ for pin in address_pin:
     print(pin.value())
     address = address + str(pin.value())
 print (address)
+print (hex(int(address,2)))
     
