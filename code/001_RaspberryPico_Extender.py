@@ -18,7 +18,8 @@ clock = 28
 
 # 0-7 Port A
 # 8-15 Port B
-for mcp_pin_number in range(1,15):
+for mcp_pin_number in range(0,15):
+    print(mcp_pin_number)
     #mcp[mcp_pin_number].input()
     mcp[1].input(pull=1)
 
@@ -34,11 +35,12 @@ for pin in address_pin:
     address = address + str(pin.value())
 mcp_data = ""
 print("mcp")
-for mcp_pin_number in range(1,7):
+for mcp_pin_number in range(0,7):
     print(mcp_pin_number)
     print(mcp[mcp_pin_number].value())
-    mcp_data = mcp_data + int(mcp[mcp_pin_number].value())
-    
+    mcp_data = mcp_data + str(mcp[mcp_pin_number].value())
+
+print ("address")
 print (address)
 print (hex(int(address,2)))
 print ("{0:0>4X}".format(int(address, 2))) #use for address fields
@@ -46,3 +48,12 @@ print ("{0:0>2X}".format(int(address, 2))) #use for data fields
 
 address_hexa="{0:0>4X}".format(int(address, 2))
 print(address+" "+address_hexa)
+
+print ("MCP")
+print (mcp_data)
+print (hex(int(mcp_data,2)))
+print ("{0:0>4X}".format(int(mcp_data, 2))) #use for address fields
+print ("{0:0>2X}".format(int(mcp_data, 2))) #use for data fields
+
+mcp_data_hexa="{0:0>4X}".format(int(mcp_data, 2))
+print(mcp_data+" "+mcp_data_hexa)
