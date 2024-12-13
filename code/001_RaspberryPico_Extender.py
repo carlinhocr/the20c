@@ -6,10 +6,10 @@ import mcp23017
 #ADD mcp23017.py library to raspberry pico via thony Upload to /
 #configure i2c pins
 #ADD 1K PULL UPS to both ports or it won't work
-sdaPIN=machine.Pin(20)
-sclPIN=machine.Pin(21)
+sdaPIN=machine.Pin(26)
+sclPIN=machine.Pin(27)
 #configure i2c settings
-i2c=machine.I2C(0,sda=sdaPIN, scl=sclPIN, freq=400000)
+i2c=machine.I2C(1,sda=sdaPIN, scl=sclPIN, freq=400000)
 #create an object for using the chip
 mcp = mcp23017.MCP23017(i2c,0x20)
 utime.sleep_ms(1)
