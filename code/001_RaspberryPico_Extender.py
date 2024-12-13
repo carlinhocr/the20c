@@ -29,7 +29,6 @@ for mcp_pin_number in range(0,15):
 mcp1.porta.mode = 0xff #direction 0 output 1 Input
 mcp1.portb.mode = 0xff #direction 0 output 1 Input
 
-
 for pin_number in address_number:
     print(pin_number)
     address_pin.append(machine.Pin(pin_number, machine.Pin.IN))
