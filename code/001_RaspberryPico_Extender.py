@@ -37,7 +37,7 @@ for pin in address_pin:
     address = address + str(pin.value())
 mcp_data = ""
 print("mcp")
-for mcp_pin_number in range(0,7):
+for mcp_pin_number in range(7,-1,-1):
     print(mcp_pin_number)
     print(mcp[mcp_pin_number].value())
     mcp_data = mcp_data + str(mcp[mcp_pin_number].value())
@@ -59,3 +59,5 @@ print ("{0:0>2X}".format(int(mcp_data, 2))) #use for data fields
 
 mcp_data_hexa="{0:0>4X}".format(int(mcp_data, 2))
 print(mcp_data+" "+mcp_data_hexa)
+print(hex(mcp.porta.gpio))
+print(str("{0:0>4X}".format(mcp.porta.gpio, 2)))
