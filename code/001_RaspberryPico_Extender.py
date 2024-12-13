@@ -7,9 +7,9 @@ import mcp23017
 #configure i2c pins
 #ADD 1K PULL UPS to both ports or it won't work
 sdaPIN=machine.Pin(20)
-sdlPIN=machine.Pin(21)
+sclPIN=machine.Pin(21)
 #configure i2c settings
-i2c=machine.I2C(0,sda=sdaPIN, scl=sdlPIN, freq=400000)
+i2c=machine.I2C(0,sda=sdaPIN, scl=sclPIN, freq=400000)
 #create an object for using the chip
 mcp = mcp23017.MCP23017(i2c,0x20)
 utime.sleep_ms(1)
