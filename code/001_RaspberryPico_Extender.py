@@ -13,6 +13,9 @@ i2c=machine.I2C(1,sda=sdaPIN, scl=sclPIN, freq=400000)
 #create an object for using the chip
 mcp = mcp23017.MCP23017(i2c,0x20)
 mcp1 = mcp23017.MCP23017(i2c,0x21)
+mcp2 = mcp23017.MCP23017(i2c,0x22)
+
+
 utime.sleep_ms(1)
 
 address_number = [3,2,1,0]
@@ -28,6 +31,8 @@ for mcp_pin_number in range(0,15):
 
 mcp1.porta.mode = 0xff #direction 0 output 1 Input
 mcp1.portb.mode = 0xff #direction 0 output 1 Input
+mcp2.porta.mode = 0xff #direction 0 output 1 Input
+mcp2.portb.mode = 0xff #direction 0 output 1 Input
 
 for pin_number in address_number:
     print(pin_number)
@@ -79,3 +84,9 @@ print(str("{0:0>4X}".format(mcp1.gpio, 4)))
 mcp1_full_hexa = str("{0:0>4X}".format(mcp1.gpio, 4))
 mcp1_full_bin = str("{0:0>4b}".format(mcp1.gpio, 4))
 print (mcp1_full_bin + "   " + mcp1_full_hexa)
+
+print("MCP 2 PORT B & A")
+print(str("{0:0>4X}".format(mcp2.gpio, 4)))
+mcp2_full_hexa = str("{0:0>4X}".format(mcp2.gpio, 4))
+mcp2_full_bin = str("{0:0>4b}".format(mcp2.gpio, 4))
+print (mcp2_full_bin + "   " + mcp2_full_hexa)
