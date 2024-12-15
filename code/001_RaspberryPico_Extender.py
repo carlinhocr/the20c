@@ -34,6 +34,12 @@ mcp1.portb.mode = 0xff #direction 0 output 1 Input
 mcp2.porta.mode = 0xff #direction 0 output 1 Input
 mcp2.portb.mode = 0xff #direction 0 output 1 Input
 
+intPin16 = machine.Pin(16,machine.Pin.IN)
+
+def onClockCallback():
+    print("Clock now")
+    
+
 for pin_number in address_number:
     print(pin_number)
     address_pin.append(machine.Pin(pin_number, machine.Pin.IN))
