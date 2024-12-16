@@ -49,7 +49,7 @@ def onClockCallback(pin):
     mcp1_porta_hexa = str("{0:0>2X}".format(mcp1.porta.gpio, 2))
     if mcp1[mcp_pin_instruction].value() == 1:
         instruction_text = str(whichInstruction(mcp1.porta.gpio))
-        mcp_instruction = "Aca hay instrucción:  "+instruction_text
+        mcp_instruction = "INSTRUCTION:  "+instruction_text
     else:
         mcp_instruction = "DATA"
 
