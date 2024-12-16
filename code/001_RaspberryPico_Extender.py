@@ -19,7 +19,7 @@ utime.sleep_ms(1)
 
 # 0-7 Port A
 # 8-15 Port B
-for pin_number in range(0,15):
+for mcp_pin_number in range(0,15):
     mcp0[mcp_pin_number].input(pull=1)
     mcp1[mcp_pin_number].input(pull=1)
     mcp2[mcp_pin_number].input(pull=1)
