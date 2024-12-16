@@ -38,37 +38,174 @@ pinClock = 16
 intPin = machine.Pin(16,machine.Pin.IN,machine.Pin.PULL_DOWN)
 
 def onClockCallback(pin):
-    print("Clock now")
-    print("MCP 0 PORT B & A")
-    print(str("{0:0>4X}".format(mcp0.gpio, 4)))
-    mcp0_full_hexa = str("{0:0>4X}".format(mcp0.gpio, 4))
-    mcp0_full_bin = str("{0:0>4b}".format(mcp0.gpio, 4))
-    print (mcp0_full_bin + "   " + mcp0_full_hexa)
-    
-    print("MCP 1 PORT B & A")
-    print(str("{0:0>4X}".format(mcp1.gpio, 4)))
+
+    mcp0_full_hexa = str("{0:0>4X}".format(mcp0.gpio, 2))
+    mcp0_full_bin = str("{0:0>4b}".format(mcp0.gpio, 2))
     mcp1_full_hexa = str("{0:0>4X}".format(mcp1.gpio, 4))
     mcp1_full_bin = str("{0:0>4b}".format(mcp1.gpio, 4))
-    print (mcp1_full_bin + "   " + mcp1_full_hexa)
-
-    print("MCP 2 PORT B & A")
-    print(str("{0:0>4X}".format(mcp2.gpio, 4)))
     mcp2_full_hexa = str("{0:0>4X}".format(mcp2.gpio, 4))
     mcp2_full_bin = str("{0:0>4b}".format(mcp2.gpio, 4))
-    print (mcp2_full_bin + "   " + mcp2_full_hexa)
-    mcp1_porta_bin = str("{0:0>2b}".format(mcp1.porta, 2))
-    mcp1_porta_hexa = str("{0:0>2X}".format(mcp1.porta, 2))
+    mcp1_porta_bin = str("{0:0>2b}".format(mcp1.porta.gpio, 2))
+    mcp1_porta_hexa = str("{0:0>2X}".format(mcp1.porta.gpio, 2))
     if mcp1[mcp_pin_instruction].value() == 1:
-        mcp_instruction = "Aca hay instrucción"
+        instruction_text = str(whichInstruction(mcp1.porta.gpio))
+        mcp_instruction = "Aca hay instrucción:  "+instruction_text
     else:
         mcp_instruction = "DATA"
-    print("ADDDRESS BINARY  DATA BINARY  ADDRESS HEXA DATA HEXA  INSTRUCTION")
-    print(mcp0_full_bin + " " + mcp1_porta_bin + " " + mcp2_full_hexa  + " " + mcp1_porta_hexa + " " + mcp_instruction)
+
+    print(mcp0_full_bin + "  " + mcp1_porta_bin + "  " + mcp0_full_hexa  + "  " + mcp1_porta_hexa + "     " + mcp_instruction)
         
-intPin.irq(trigger=machine.Pin.IRQ_RISING, handler=onClockCallback)     
+def whichInstruction(code):
+      if code == 0x00:
+          return "BRK"
+      elif code == 0x01:
+          return "ORA X,ind"
+      elif code == 0x02:
+          return "INVALID"
+      elif code == 0x03:
+          return "INVALID"
+      elif code == 0x04:
+          return "INVALID"
+      elif code == 0x05:
+          return "ORA zpg"
+      elif code == 0x06:
+          return "ASL zpg"
+      elif code == 0x07:
+          return "INVALID"
+      elif code == 0x08:
+          return "PHP impl"
+      elif code == 0x09:
+          return "ORA #"
+      elif code == 0x0a:
+          return "ASL A"
+      elif code == 0x0b:
+          return "INVALID"
+      elif code == 0x0c:
+          return "INVALID"
+      elif code == 0x0d:
+          return "ORA abs"
+      elif code == 0x0e:
+          return "ASL abs"
+      elif code == 0x0f:
+          return "INVALID"
+      elif code == 0x20:
+          return "JSR abs"
+      elif code == 0x40:
+          return "RTI impl"  
+      elif code == 0x41:
+          return "EOR X,ind" 
+      elif code == 0x42:
+          return "INVALID"
+      elif code == 0x43:
+          return "INVALID"
+      elif code == 0x44:
+          return "INVALID"
+      elif code == 0x45:
+          return "EOR zpg"   
+      elif code == 0x46:
+          return "LSR zpg"
+      elif code == 0x47:
+          return "INVALID"
+      elif code == 0x48:
+          return "PHA impl"
+      elif code == 0x49:
+          return "EOR #" 
+      elif code == 0x4a:
+          return "LSR A" 
+      elif code == 0x4b:
+          return "INVALID"
+      elif code == 0x4c:
+          return "JMP abs"
+      elif code == 0x4d:
+          return "EOR abs" 
+      elif code == 0x4e:
+          return "LSR abs"
+      elif code == 0x4f:
+          return "INVALID"
+      elif code == 0x50:
+          return "BVC rel"
+      elif code == 0x51:
+          return "EOR ind,Y"
+      elif code == 0x55:
+          return "EOR zpg,X"
+      elif code == 0x56:
+          return "LSR zpg,X"
+      elif code == 0x58:
+          return "CLI impl"
+      elif code == 0x59:
+          return "EOR zpg,Y"
+      elif code == 0x5d:
+          return "EOR abs,X" 
+      elif code == 0x5e:
+          return "LSR abs,X"
+      elif code == 0x60:
+          return "SEI impl"
+      elif code == 0x78:
+          return "SEI impl"
+      elif code == 0x85:
+          return "STA zpg"
+      elif code == 0x8d:
+          return "STA abs"
+      elif code == 0x91:
+          return "STA ind,Y"
+      elif code == 0x9a:
+          return "TXS impl"
+      elif code == 0xe8:
+          return "INX"
+      elif code == 0xa0:
+          return "LDY #"
+      elif code == 0xa1:
+          return "LDA X,ind"
+      elif code == 0xa2:
+          return "LDX #"
+      elif code == 0xa5:
+          return "LDA zpg"
+      elif code == 0xa8:
+          return "TAY impl"
+      elif code == 0xa9:
+          return "LDA #"
+      elif code == 0xaa:
+          return "TAX impl"
+      elif code == 0xad:
+          return "LDA abs"
+      elif code == 0xb1:
+          return "LDA ind,Y"
+      elif code == 0xb5:
+          return "LDA zpg,X"
+      elif code == 0xb9:
+          return "LDA abs,Y"
+      elif code == 0xbd:
+          return "LDA abs,X"
+      elif code == 0xc0:
+          return "CPY #"
+      elif code == 0xc8:
+          return "INY impl"
+      elif code == 0xc9:
+          return "CMP #"
+      elif code == 0xca:
+          return "DEX impl"
+      elif code == 0xd0:
+          return "BNE rel"
+      elif code == 0xe0:
+          return "CPX #"
+      elif code == 0xea:
+          return "NOP"
+      elif code == 0xf0:
+          return "BEQ rel"
+      elif code == 0xf8:
+          return "SED impl"
+      elif code == 0xfa:
+          return "BEQ rel"
+      else:
+          return "UNKNOWN"
+   
     
+    
+intPin.irq(trigger=machine.Pin.IRQ_RISING, handler=onClockCallback)     
+print("ADDDRESS  BINARY  DATA BIN  ADDR  DATA   INSTRUCTION")    
 #read pin values
 while True:
     utime.sleep_ms(1)
     
+
 
