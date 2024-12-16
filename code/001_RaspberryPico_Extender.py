@@ -35,7 +35,7 @@ for pin_number in range(0,15):
 mcp_pin_instruction = 15 #mcp1 pin instruction for SYN  FLAG
 pinClock = 16
 
-intPin = machine.Pin(16,machine.Pin.IN)
+intPin = machine.Pin(16,machine.Pin.IN,machine.Pin.PULL_DOWN)
 
 def onClockCallback(pin):
     print("Clock now")
