@@ -22,7 +22,8 @@ utime.sleep_ms(1)
 for mcp_pin_number in range(0,15):
     mcp0[mcp_pin_number].input(pull=1)
     mcp1[mcp_pin_number].input(pull=1)
-    mcp2[mcp_pin_number].input(pull=1)
+    mcp2[mcp_pin_number].input()
+
 
 #mcp0.porta.mode = 0xff #direction 0=output 1=Input
 #mcp0.portb.mode = 0xff #direction 0=output 1=Input
@@ -35,10 +36,24 @@ for mcp_pin_number in range(0,15):
 mcp_pin_instruction = 15 #mcp1 pin instruction for SYN  FLAG
 pinClock = 16
 
+#mcp2.pin(mcp_pin_instruction,mode=1,interrupt_enable=1,default_value=0)
+
+mcp2.portb.default_value= 0x00
+mcp2.portb.interrupt_enable = 0xff
+mcp2.portb.interrupt_configuration=0xFF
+mcp2.portb.io_control=0b10100110
+mcp2.portb.gpint=0xff
+mcp2.portb.interrupt_compare_default =0x00
+
+def onClockCallbackMCP():
+    print("MCP IRQ")
 intPin = machine.Pin(16,machine.Pin.IN,machine.Pin.PULL_DOWN)
 
 def onClockCallback(pin):
-
+    flagged = mcp2.portb.interrupt_flag
+    captured = mcp2.portb.interrupt_captured
+    print(mcp2[15].value(),flagged,captured)
+    
     mcp0_full_hexa = str("{0:0>4X}".format(mcp0.gpio, 2))
     mcp0_full_bin = str("{0:0>4b}".format(mcp0.gpio, 2))
     mcp1_full_hexa = str("{0:0>4X}".format(mcp1.gpio, 4))
@@ -52,7 +67,6 @@ def onClockCallback(pin):
         mcp_instruction = "INSTRUCTION:  "+instruction_text
     else:
         mcp_instruction = "DATA"
-
     print(mcp0_full_bin + "  " + mcp1_porta_bin + "  " + mcp0_full_hexa  + "  " + mcp1_porta_hexa + "     " + mcp_instruction)
         
 def whichInstruction(code):
