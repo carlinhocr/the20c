@@ -32,7 +32,7 @@ for pin_number in range(0,15):
 #mcp1.portb.mode = 0xff #direction 0=output 1=Input
 #mcp2.porta.mode = 0xff #direction 0=output 1=Input
 #mcp2.portb.mode = 0xff #direction 0=output 1=Input
-mcp_pin_instruction = 15 #mcp1 pin instruction for SYN FLAG
+mcp_pin_instruction = 15 #mcp1 pin instruction for SYN  FLAG
 pinClock = 16
 
 intPin = machine.Pin(16,machine.Pin.IN)
