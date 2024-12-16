@@ -39,7 +39,7 @@ pinClock = 16
 #mcp2.pin(mcp_pin_instruction,mode=1,interrupt_enable=1,default_value=0)
 
 mcp2.portb.default_value= 0x00
-mcp2.portb.interrupt_enable = 0xff
+mcp2.portb.interrupt_enable = 0x80
 mcp2.portb.interrupt_configuration=0xFF
 mcp2.portb.io_control=0b10100110
 mcp2.portb.gpint=0xff
@@ -215,7 +215,7 @@ def whichInstruction(code):
    
     
     
-intPin.irq(trigger=machine.Pin.IRQ_RISING, handler=onClockCallback)     
+intPin.irq(trigger=machine.Pin.IRQ_FALLING, handler=onClockCallback)     
 print("ADDDRESS  BINARY  DATA BIN  ADDR  DATA   INSTRUCTION")    
 #read pin values
 while True:
