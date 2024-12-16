@@ -52,22 +52,23 @@ intPin = machine.Pin(16,machine.Pin.IN,machine.Pin.PULL_DOWN)
 def onClockCallback(pin):
     flagged = mcp2.portb.interrupt_flag
     captured = mcp2.portb.interrupt_captured
-    print(mcp2[15].value(),flagged,captured)
-    
-    mcp0_full_hexa = str("{0:0>4X}".format(mcp0.gpio, 2))
-    mcp0_full_bin = str("{0:0>4b}".format(mcp0.gpio, 2))
-    mcp1_full_hexa = str("{0:0>4X}".format(mcp1.gpio, 4))
-    mcp1_full_bin = str("{0:0>4b}".format(mcp1.gpio, 4))
-    mcp2_full_hexa = str("{0:0>4X}".format(mcp2.gpio, 4))
-    mcp2_full_bin = str("{0:0>4b}".format(mcp2.gpio, 4))
-    mcp1_porta_bin = str("{0:0>2b}".format(mcp1.porta.gpio, 2))
-    mcp1_porta_hexa = str("{0:0>2X}".format(mcp1.porta.gpio, 2))
-    if mcp1[mcp_pin_instruction].value() == 1:
-        instruction_text = str(whichInstruction(mcp1.porta.gpio))
-        mcp_instruction = "INSTRUCTION:  "+instruction_text
-    else:
-        mcp_instruction = "DATA"
-    print(mcp0_full_bin + "  " + mcp1_porta_bin + "  " + mcp0_full_hexa  + "  " + mcp1_porta_hexa + "     " + mcp_instruction)
+    pin_value=mcp2[15].value()
+    if pin_value == 1: #rising value of pin interrupt
+        print(pin_value,flagged,captured)
+        mcp0_full_hexa = str("{0:0>4X}".format(mcp0.gpio, 2))
+        mcp0_full_bin = str("{0:0>4b}".format(mcp0.gpio, 2))
+        mcp1_full_hexa = str("{0:0>4X}".format(mcp1.gpio, 4))
+        mcp1_full_bin = str("{0:0>4b}".format(mcp1.gpio, 4))
+        mcp2_full_hexa = str("{0:0>4X}".format(mcp2.gpio, 4))
+        mcp2_full_bin = str("{0:0>4b}".format(mcp2.gpio, 4))
+        mcp1_porta_bin = str("{0:0>2b}".format(mcp1.porta.gpio, 2))
+        mcp1_porta_hexa = str("{0:0>2X}".format(mcp1.porta.gpio, 2))
+        if mcp1[mcp_pin_instruction].value() == 1:
+            instruction_text = str(whichInstruction(mcp1.porta.gpio))
+            mcp_instruction = "INSTRUCTION:  "+instruction_text
+        else:
+            mcp_instruction = "DATA"
+        print(mcp0_full_bin + "  " + mcp1_porta_bin + "  " + mcp0_full_hexa  + "  " + mcp1_porta_hexa + "     " + mcp_instruction)
         
 def whichInstruction(code):
       if code == 0x00:
