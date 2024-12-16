@@ -32,7 +32,7 @@ for pin_number in range(0,15):
 #mcp1.portb.mode = 0xff #direction 0=output 1=Input
 #mcp2.porta.mode = 0xff #direction 0=output 1=Input
 #mcp2.portb.mode = 0xff #direction 0=output 1=Input
-
+mcp_pin_instruction = 15 #mcp1 pin instruction for SYN FLAG
 pinClock = 16
 
 intPin = machine.Pin(16,machine.Pin.IN)
@@ -58,8 +58,12 @@ def onClockCallback(pin):
     print (mcp2_full_bin + "   " + mcp2_full_hexa)
     mcp1_porta_bin = str("{0:0>2b}".format(mcp1.porta, 2))
     mcp1_porta_hexa = str("{0:0>2X}".format(mcp1.porta, 2))
-    print("ADDDRESS BINARY  DATA BINARY  ADDRESS HEXA DATA HEXA")
-    print(mcp0_full_bin + " " + mcp1_porta_bin + " " + mcp2_full_hexa  + " " + mcp1_porta_hexa)
+    if mcp1[mcp_pin_instruction].value() == 1:
+        mcp_instruction = "Aca hay instrucción"
+    else:
+        mcp_instruction = "DATA"
+    print("ADDDRESS BINARY  DATA BINARY  ADDRESS HEXA DATA HEXA  INSTRUCTION")
+    print(mcp0_full_bin + " " + mcp1_porta_bin + " " + mcp2_full_hexa  + " " + mcp1_porta_hexa + " " + mcp_instruction)
         
 intPin.irq(trigger=machine.Pin.IRQ_RISING, handler=onClockCallback)     
     
