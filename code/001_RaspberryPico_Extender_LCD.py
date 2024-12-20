@@ -68,6 +68,7 @@ def onClockCallbackMCP():
 intPin = machine.Pin(16,machine.Pin.IN,machine.Pin.PULL_DOWN)
 
 def onClockCallback(pin):
+    global screenPos
     flagged = mcp2.portb.interrupt_flag
     captured = mcp2.portb.interrupt_captured
     pin_value=mcp2[15].value()
@@ -89,14 +90,35 @@ def onClockCallback(pin):
             mcp_instruction = "DATA       "
         print(mcp0_full_bin + "  " + mcp1_porta_bin + "  " + mcp0_full_hexa  + "  " + mcp1_porta_hexa + "     " + mcp_instruction)
         lcd_data = mcp0_full_hexa + " " + mcp1_porta_hexa +" " + mcp_instruction
-        lcd.move_to(0,0)
-        lcd.putstr(lcd_data)
+        screen.append(lcd_data)
+        lcdPrintScreen(screen,screenPos)
+        screenPos+=1
 
 def lcdScrollInit():
     screen=[]
     for i in range(0,20):
         screen.append("                    ")
     return screen
+
+def lcdPrintScreen(screen,fromline):
+    if  len(screen) == 1:
+        lcd.move_to(0,0)
+        lcd.putstr(screen[fromline])
+    elif len(screen) == 2:
+        lcd.move_to(0,1)
+        lcd.putstr(screen[fromline])
+    elif len(screen) == 3:
+        lcd.move_to(0,2)
+        lcd.putstr(screen[fromline])
+    elif len(screen) == 4:
+        lcd.move_to(0,3)
+        lcd.putstr(screen[fromline])
+    else:
+        for i in range(0,4):
+            lcd.move_to(0,i)
+            print("fromline+i",fromline+i-3)
+            lcd.putstr(screen[fromline+i-3])
+
         
 def whichInstruction(code):
       if code == 0x00:
@@ -245,7 +267,9 @@ def whichInstruction(code):
     
     
 intPin.irq(trigger=machine.Pin.IRQ_FALLING, handler=onClockCallback)
-print("ADDDRESS  BINARY  DATA BIN  ADDR  DATA   INSTRUCTION")    
+print("ADDDRESS  BINARY  DATA BIN  ADDR  DATA   INSTRUCTION")
+screen=[]
+screenPos=0
 #read pin values
 while True:
     utime.sleep_ms(1)
