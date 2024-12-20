@@ -2,7 +2,7 @@ import machine
 import utime
 import urandom
 import mcp23017
-import pico_i2c_lcd
+from pico_i2c_lcd import I2cLcd
 
 #ADD mcp23017.py library to raspberry pico via thony Upload to /
 #configure i2c pins
@@ -15,6 +15,29 @@ i2c=machine.I2C(1,sda=sdaPIN, scl=sclPIN, freq=400000)
 mcp0 = mcp23017.MCP23017(i2c,0x20)
 mcp1 = mcp23017.MCP23017(i2c,0x21)
 mcp2 = mcp23017.MCP23017(i2c,0x22)
+
+I2C_ADDR = 0x27
+I2C_NUM_ROWS = 4
+I2C_NUM_COLS = 20
+
+lcd=I2cLcd(i2c,I2C_ADDR, I2C_NUM_ROWS, I2C_NUM_COLS)
+
+# HELP
+# lcd.display_on()
+# lcd.display_off()
+# lcd.backlight_off()
+# lcd.backlight_on()
+# lcd.blink_cursor_on()
+# lcd.blink_cursor_off()
+# lcd.clear()
+# lcd.move_to(1,1)
+# lcd.putchar(chr(0))
+
+lcd.putstr(" Hola!")
+lcd.move_to(0,1)
+lcd.putstr(" asi siiii")
+lcd.move_to(0,3)
+lcd.putstr("me voy a la ultima")
 
 utime.sleep_ms(1)
 
@@ -224,7 +247,6 @@ def whichInstruction(code):
     
     
 intPin.irq(trigger=machine.Pin.IRQ_FALLING, handler=onClockCallback)
-lcdTest(39)
 print("ADDDRESS  BINARY  DATA BIN  ADDR  DATA   INSTRUCTION")    
 #read pin values
 while True:
