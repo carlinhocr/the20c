@@ -33,12 +33,6 @@ lcd=I2cLcd(i2c,I2C_ADDR, I2C_NUM_ROWS, I2C_NUM_COLS)
 # lcd.move_to(1,1)
 # lcd.putchar(chr(0))
 
-lcd.putstr(" Hola!")
-lcd.move_to(0,1)
-lcd.putstr(" asi siiii")
-lcd.move_to(0,3)
-lcd.putstr("me voy a la ultima")
-
 utime.sleep_ms(1)
 
 # 0-7 Port A
@@ -57,7 +51,7 @@ for mcp_pin_number in range(0,15):
 #mcp1.portb.mode = 0xff #direction 0=output 1=Input
 #mcp2.porta.mode = 0xff #direction 0=output 1=Input
 #mcp2.portb.mode = 0xff #direction 0=output 1=Input
-mcp_pin_instruction = 15 #mcp1 pin instruction for SYN  FLAG
+mcp_pin_instruction = 14 #mcp1 pin instruction for SYN  FLAG
 pinClock = 16
 
 #mcp2.pin(mcp_pin_instruction,mode=1,interrupt_enable=1,default_value=0)
@@ -73,18 +67,13 @@ def onClockCallbackMCP():
     print("MCP IRQ")
 intPin = machine.Pin(16,machine.Pin.IN,machine.Pin.PULL_DOWN)
 
-def lcdTest(devNumber):
-    i2c.writeto(devNumber,'\x7c')
-    i2c.writeto(devNumber,'\x2d')
-    i2c.writeto(devNumber,"Testing 123")
-    
-
 def onClockCallback(pin):
     flagged = mcp2.portb.interrupt_flag
     captured = mcp2.portb.interrupt_captured
     pin_value=mcp2[15].value()
+    pin_value_SYN=mcp2[mcp_pin_instruction].value()
     if pin_value == 1: #rising value of pin interrupt
-        print(pin_value,flagged,captured)
+        print(pin_value,pin_value_SYN,flagged,captured)
         mcp0_full_hexa = str("{0:0>4X}".format(mcp0.gpio, 2))
         mcp0_full_bin = str("{0:0>4b}".format(mcp0.gpio, 2))
         mcp1_full_hexa = str("{0:0>4X}".format(mcp1.gpio, 4))
@@ -93,12 +82,21 @@ def onClockCallback(pin):
         mcp2_full_bin = str("{0:0>4b}".format(mcp2.gpio, 4))
         mcp1_porta_bin = str("{0:0>2b}".format(mcp1.porta.gpio, 2))
         mcp1_porta_hexa = str("{0:0>2X}".format(mcp1.porta.gpio, 2))
-        if mcp1[mcp_pin_instruction].value() == 1:
+        if mcp2[mcp_pin_instruction].value() == 1:
             instruction_text = str(whichInstruction(mcp1.porta.gpio))
-            mcp_instruction = "INSTRUCTION:  "+instruction_text
+            mcp_instruction = instruction_text
         else:
-            mcp_instruction = "DATA"
+            mcp_instruction = "DATA       "
         print(mcp0_full_bin + "  " + mcp1_porta_bin + "  " + mcp0_full_hexa  + "  " + mcp1_porta_hexa + "     " + mcp_instruction)
+        lcd_data = mcp0_full_hexa + " " + mcp1_porta_hexa +" " + mcp_instruction
+        lcd.move_to(0,0)
+        lcd.putstr(lcd_data)
+
+def lcdScrollInit():
+    screen=[]
+    for i in range(0,20):
+        screen.append("                    ")
+    return screen
         
 def whichInstruction(code):
       if code == 0x00:
