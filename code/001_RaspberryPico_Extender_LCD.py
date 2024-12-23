@@ -71,6 +71,8 @@ mcp2.portb.io_control=0b10100110
 mcp2.portb.gpint=0xff
 mcp2.portb.interrupt_compare_default =0x00
 
+fileLog = open("LogAddressDataBus.txt","w")
+
 def onClockCallbackMCP():
     print("MCP IRQ")
 intPin = machine.Pin(16,machine.Pin.IN,machine.Pin.PULL_DOWN)
@@ -96,7 +98,11 @@ def onClockCallback(pin):
             mcp_instruction = instruction_text
         else:
             mcp_instruction = "DATA       "
-        print(mcp0_full_bin + "  " + mcp1_porta_bin + "  " + mcp0_full_hexa  + "  " + mcp1_porta_hexa + "     " + mcp_instruction)
+        screenData = mcp0_full_bin + "  " + mcp1_porta_bin + "  " + mcp0_full_hexa  + "  " + mcp1_porta_hexa + "     " + mcp_instruction    
+        print(screenData)
+        logData = mcp0_full_bin + "," + mcp1_porta_bin + "," + mcp0_full_hexa  + "," + mcp1_porta_hexa + "," + mcp_instruction  +"\n"    
+        fileLog.write(logData)
+        fileLog.flush
         lcd_data = mcp0_full_hexa + " " + mcp1_porta_hexa +" " + mcp_instruction
         screen.append(lcd_data)
         lcdPrintScreen(screen,screenPos)
