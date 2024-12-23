@@ -7,9 +7,9 @@ from pico_i2c_lcd import I2cLcd
 #this file for the LCD uses
 #https://github.com/Amin-Sedighfar/Raspberrypi-pico/tree/main/LCD
 #import the files 
-#	lcd_api.py
-#	mcp23017.py
-#	pico_i2c_lcd.py
+#lcd_api.py
+#mcp23017.py
+#pico_i2c_lcd.py
 #to / on the pico
 
 #ADD mcp23017.py library to raspberry pico via thony Upload to /
