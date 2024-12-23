@@ -130,7 +130,6 @@ def lcdPrintScreen(screen,fromline):
     else:
         for i in range(0,4):
             lcd.move_to(0,i)
-            print("fromline+i",fromline+i-3)
             lcd.putstr(screen[fromline+i-3])
 
         
