@@ -4,6 +4,13 @@
 ;DDRB = $6003
 ;DDRA = $6002
 
+;define ports and constansts VIA1 (6000) VIA2 (7000)
+;define LCD primitives for showing one message VIA1 or VIA2
+;define LED primitives for showing lights on PORTA and PORTB VIA1 or VIA2
+;Show message on LCD on VIA1
+;show light show with LEDs on VIA2
+
+
 ;VIA Ports and Constants
 PORTB = $6000
 PORTA = $6001
