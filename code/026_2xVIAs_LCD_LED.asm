@@ -29,6 +29,7 @@ LED_IFR = $700d
 LED_IER = $700e
 
 PORTSTATUS=$A0
+PATTERN=$A1
 
 
 
@@ -293,14 +294,19 @@ welcomeMessage:
 ;it will go to the other port  
 ledLights:
   lda #%00000000 ;light pattern the first inc turns it on
+  sta PATTERN
+  sta LED_PORTB
+  sta LED_PORTA
 ledLightsPortBLoop: 
-  rol 
   jsr DELAY_SEC
+  inc PATTERN 
+  lda PATTERN
   sta LED_PORTB
   bpl ledLightsPortBLoop 
 ledLightsPortALoop: 
-  rol 
   jsr DELAY_SEC
+  inc PATTERN 
+  lda PATTERN
   sta LED_PORTA
   bpl ledLightsPortBLoop 
 
