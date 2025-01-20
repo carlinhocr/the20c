@@ -294,11 +294,11 @@ welcomeMessage:
 ledLights:
   lda #%00000000 ;light pattern the first inc turns it on
 ledLightsPortBLoop: 
-  inc 
+  rol 
   sta LED_PORTB
   bpl ledLightsPortBLoop 
 ledLightsPortALoop: 
-  inc 
+  rol 
   sta LED_PORTA
   bpl ledLightsPortBLoop 
 
