@@ -295,10 +295,12 @@ ledLights:
   lda #%00000000 ;light pattern the first inc turns it on
 ledLightsPortBLoop: 
   rol 
+  jsr DELAY_SEC
   sta LED_PORTB
   bpl ledLightsPortBLoop 
 ledLightsPortALoop: 
   rol 
+  jsr DELAY_SEC
   sta LED_PORTA
   bpl ledLightsPortBLoop 
 
