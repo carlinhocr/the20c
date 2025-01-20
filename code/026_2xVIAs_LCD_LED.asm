@@ -1,25 +1,36 @@
 ;CIA Ports and Constants
 ;PORTB = $6001
 ;PORTA = $6000
-;DDRB = $6003
+;LCD_DDRB = $6003
 ;DDRA = $6002
 
 ;define ports and constansts VIA1 (6000) VIA2 (7000)
 ;define LCD primitives for showing one message VIA1 or VIA2
-;define LED primitives for showing lights on PORTA and PORTB VIA1 or VIA2
+;define LED primitives for showing lights on LCD_PORTA and PORTB VIA1 or VIA2
 ;Show message on LCD on VIA1
 ;show light show with LEDs on VIA2
 
 
 ;VIA Ports and Constants
-PORTB = $6000
-PORTA = $6001
-DDRB = $6002
-DDRA = $6003
-PCR = $600c
-IFR = $600d
-IER = $600e
+LCD_PORTB = $6000
+LCD_PORTA = $6001
+LCD_DDRB = $6002
+LCD_DDRA = $6003
+LCD_PCR = $600c
+LCD_IFR = $600d
+LCD_IER = $600e
+
+LED_PORTB = $7000
+LED_PORTA = $7001
+LED_DDRB = $7002
+LED_DDRA = $7003
+LED_PCR = $700c
+LED_IFR = $700d
+LED_IER = $700e
+
 PORTSTATUS=$A0
+
+
 
 startRAMData =$2000
 
@@ -171,24 +182,44 @@ RESET:
       ;- - - 0 - -
 
 
-  ;BEGIN enable interrupts
+  ;BEGIN enable interrupts LCD VIA
   ;enable CA1 for interrupts
   ;bits set/clear,timer1,timer2,CB1,CB2,ShiftReg,CA1,CA2
   lda #%10000010
-  sta IER 
-  ;enable negative edge transition ca1 pcr register
+  sta LCD_IER 
+  ;enable negative edge transition ca1 LCD_PCR register
   ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
   lda #%00000000
-  sta PCR 
+  sta LCD_PCR 
   ;END enable interrupts
 
   ;BEGIN Configure Ports A & B
   ;set all port B pins as output
   lda #%11111111  ;load all ones equivalent to $FF
-  sta DDRB ;store the accumulator in the data direction register for Port B
+  sta LCD_DDRB ;store the accumulator in the data direction register for Port B
 
   lda #%11100000  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
-  sta DDRA ;store the accumulator in the data direction register for Port A
+  sta LCD_DDRA ;store the accumulator in the data direction register for Port A
+  ;END Configure Ports A & B
+
+  ;BEGIN enable interrupts LED VIA
+  ;enable CA1 for interrupts
+  ;bits set/clear,timer1,timer2,CB1,CB2,ShiftReg,CA1,CA2
+  lda #%10000010
+  sta LED_IER 
+  ;enable negative edge transition ca1 LCD_PCR register
+  ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
+  lda #%00000000
+  sta LED_PCR 
+  ;END enable interrupts
+
+  ;BEGIN Configure Ports A & B
+  ;set all port B pins as output
+  lda #%11111111  ;load all ones equivalent to $FF
+  sta LED_DDRB ;store the accumulator in the data direction register for Port B
+
+  lda #%11111111  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
+  sta LED_DDRA ;store the accumulator in the data direction register for Port A
   ;END Configure Ports A & B
 
 ;END--------------------------------------------------------------------------------
@@ -236,35 +267,12 @@ RESET:
 ;
 ;
 
-game:
+programStart:
   jsr screenInit
-  lda #$0
-  sta gameStatus
+  jsr welcomeMessage
+  jsr ledLights
 
-gameLoop:  
-  lda gameStatus
-  cmp #$0
-  beq gameStartScreenJump
-  cmp #$1
-  beq gamePlayingJump
-  cmp #$2
-  beq gameEndJump 
-  jmp gameLoop
-
-gameStartScreenJump:
-  jsr gameStartScreen
-  jmp gameLoop
-
-gamePlayingJump:
-  jsr gamePlaying 
-  jmp gameLoop 
-
-gameEndJump:
-  jsr gameEnd 
-  jmp gameLoop 
-
-
-gameStartScreen:
+welcomeMessage:
   jsr clear_display
   lda #$C0 ;position cursor at the start of second line
   jsr lcd_send_instruction
@@ -280,68 +288,23 @@ gameStartScreen:
   lda #>startMessage2
   sta charDataVectorHigh
   jsr print_message
-gameStartScreenLoop:
-  lda gameStatus
-  cmp #$1
-  beq gameStartScreenEnd
-  jsr delay_1_sec
-  jmp gameStartScreenLoop
-gameStartScreenEnd:
-  rts 
 
-gamePlaying:  
-  jsr shipInit
-  jsr aliensInit
-  jsr scoreInit
-  jsr drawScreen
-  jsr DELAY_SEC
-  jsr initFire  
-gamePlayingLoop:    
-  jsr clearScreenBuffer  
-  jsr moveAliens
-  jsr moveFire
-  jsr checkCollisions
-  jsr writeScore
-  jsr drawScreen
-  jsr DELAY_SEC
-  lda gameStatus
-  cmp #$2
-  beq gamePlayingLoopEnd
-  jmp gamePlayingLoop
-gamePlayingLoopEnd:
-  rts 
+;led lights will shift lights to the right when all the shift is done
+;it will go to the other port  
+ledLights:
+  lda #%00000000 ;light pattern the first inc turns it on
+ledLightsPortBLoop: 
+  inc 
+  sta LED_PORTB
+  bpl ledLightsPortBLoop 
+ledLightsPortALoop: 
+  inc 
+  sta LED_PORTA
+  bpl ledLightsPortBLoop 
 
-gameEnd:
-  jsr clear_display
-  lda #$C0 ;position cursor at the start of second line
-  jsr lcd_send_instruction
-  lda #<endGameMessage
-  sta charDataVectorLow
-  lda #>endGameMessage
-  sta charDataVectorHigh
-  jsr print_message
-  lda #$94 ;position cursor at the start of second line
-  jsr lcd_send_instruction
-  jsr lcd_send_instruction
-  lda #<endGameMessage2
-  sta charDataVectorLow
-  lda #>endGameMessage2
-  sta charDataVectorHigh
-  jsr print_message
-gameEndLoop:
-  lda gameStatus
-  cmp #$0
-  beq gameEndLoopEnd
-  jmp gameEndLoop    
-gameEndLoopEnd:
-  rts
-  
+programLoop:  
+  jmp programLoop
 
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------GAME-----------------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------  
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -531,19 +494,8 @@ destroyAlien:
 ;-----------------------------------------------------------------------------------
 
 screenInit:
-  jsr add_custom_chars_invaders
   jsr initilize_display
   jsr clear_display
-  lda #cinv2
-  jsr print_char  
-  jsr DELAY_SEC
-  lda #cinv1
-  jsr print_char  
-  jsr DELAY_SEC
-  lda #cship
-  jsr print_char  
-  jsr DELAY_SEC
-  jsr testScore
   jsr loadCursorPositions
   jsr loadScreen
   jsr drawScreen
@@ -1064,7 +1016,7 @@ not_move_down:
 
 
 test_buttons:
-  lda PORTA
+  lda LCD_PORTA
   sta PORTSTATUS
   ;move PA4 to PA7 and PA3 to PA6
   rol PORTSTATUS
@@ -1308,27 +1260,27 @@ initilize_display:
 
 lcd_wait:
   pha ; push to preserve the contents of the acummulator register
-  ;set PORTB to all inputs so we can read the busy flag
+  ;set LCD_PORTB to all inputs so we can read the busy flag
   lda #$00000000 ;port b ins input
-  sta DDRB 
+  sta LCD_DDRB 
 lcd_busy:
   ;set register select to 0 and RW to 1 to read the busy flag
   lda #RW ;set RW RW = %01000000 ; Read/Write Signal
-  sta PORTA
+  sta LCD_PORTA
   lda #(RW | E) ;do the enable and do not era the RW bit
-  sta PORTA
+  sta LCD_PORTA
   ;this will give us the info from the busy flags and the counter 01 BF AC AC AC AC AC AC AC
   ;on port B so we read it
-  lda PORTB
+  lda LCD_PORTB
   and #%10000000 ;and the accumulator to loose all bits but the 7 bit (from 7 to 0)
                 ; on the acummulator I will now have only the Busy Flag result
   bne lcd_busy ; branch if the zero flag is not set
   ;turn off the enable bit
   lda #RW ;set RW RW = %01000000 ; Read/Write Signal
-  sta PORTA
+  sta LCD_PORTA
   ;set all port B pins as output
   lda #%11111111  ;load all ones equivalent to $FF to make it output
-  sta DDRB ;store the accumulator in the data direction register for Port B
+  sta LCD_DDRB ;store the accumulator in the data direction register for Port B
   pla ; pull to restablish the contents of the acummulator register
   rts
 
@@ -1336,38 +1288,38 @@ lcd_busy:
 lcd_send_instruction:
   pha ;push the accumulator value to the stack so we can have it back a the end of the subroutine
   jsr lcd_wait
-  sta PORTB
+  sta LCD_PORTB
             
   lda #%0  ;Clear RS,RW and E bit on Port A  
-  sta PORTA ;     
+  sta LCD_PORTA ;     
 
   ;togle the enable bit in order to send the instruction
   ;RS is zero so we are sending instructions
   ;RW is zero so we are writing
   lda #E ;enable bit is 1 , so we turn on the chip and execute the instruction.
-  sta PORTA ; 
+  sta LCD_PORTA ; 
 
   lda #%0  ;Clear RS,RW and E bit on Port A  
-  sta PORTA ;  
+  sta LCD_PORTA ;  
   pla ;pull the accumulator value to the stack so we can have it back a the end of the subroutine
   rts ; return from the subroutine
 
 print_char:
   pha ;push the accumulator value to the stack so we can have it back a the end of the subroutine
   jsr lcd_wait
-  sta PORTB
+  sta LCD_PORTB
 
   ;RS is one so we are sending data
   ;RW is zero so we are writing
   lda #RS  ;Set RS, and clear RW and E bit on Port A  
-  sta PORTA ;     
+  sta LCD_PORTA ;     
 
   ;togle the enable bit in order to send the instruction
   lda #(RS | E );RS and enable bit are 1 , we OR them and send the data
-  sta PORTA ; 
+  sta LCD_PORTA ; 
 
   lda #RS  ;Set RS, and clear RW and E bit on Port A  
-  sta PORTA ; 
+  sta LCD_PORTA ; 
   pla ;pull the accumulator value to the stack so we can have it back a the end of the subroutine
   rts
 
@@ -1375,19 +1327,19 @@ lcd_send_data:
   ;print_char is equal to send data
   pha ;push the accumulator value to the stack so we can have it back a the end of the subroutine
   jsr lcd_wait
-  sta PORTB
+  sta LCD_PORTB
 
   ;RS is one so we are sending data
   ;RW is zero so we are writing
   lda #RS  ;Set RS, and clear RW and E bit on Port A  
-  sta PORTA ;     
+  sta LCD_PORTA ;     
 
   ;togle the enable bit in order to send the instruction
   lda #(RS | E );RS and enable bit are 1 , we OR them and send the data
-  sta PORTA ; 
+  sta LCD_PORTA ; 
 
   lda #RS  ;Set RS, and clear RW and E bit on Port A  
-  sta PORTA ; 
+  sta LCD_PORTA ; 
   pla ;pull the accumulator value to the stack so we can have it back a the end of the subroutine
   rts
 
@@ -1558,7 +1510,7 @@ nmi:
   tya ; transfer Y to Accumulator
   pha ; store the Y register in the stack
   ;bit command read the memory and compares just used to read the register
-  bit PORTA ; clear the interrupt flag
+  bit LCD_PORTA ; clear the interrupt flag
   jsr clear_display
   lda #<button_press_nmi
   sta charDataVectorLow
@@ -1584,7 +1536,7 @@ irq:
   tya ; transfer Y to Accumulator
   pha ; store the Y register in the stack
   ;bit command read the memory and compares just used to read the register
-  ;bit PORTA ; clear the interrupt flag I am doing it with an LDA on test_buttons
+  ;bit LCD_PORTA ; clear the interrupt flag I am doing it with an LDA on test_buttons
   jsr test_buttons ;test_buttons loads the message
 exit_irq:  
   ;reserve order of stacking to restore values
@@ -1641,10 +1593,10 @@ endGameMessage2:
   .ascii "       YOU WIN"   
 
 startMessage1:
-  .ascii "    SPACE   DONA"  
+  .ascii " LCD on VIA 1 $6000"  
 
 startMessage2:
-  .ascii "PRESS FIRE  TO START"   
+  .ascii " LEDs on VIA 2"   
 
 scoreMessage:
   .ascii "SCORE"   
