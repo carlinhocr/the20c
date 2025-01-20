@@ -297,18 +297,18 @@ ledLights:
   sta PATTERN
   sta LED_PORTB
   sta LED_PORTA
-ledLightsPortBLoop: 
-  jsr DELAY_SEC
-  inc PATTERN 
-  lda PATTERN
-  sta LED_PORTB
-  bpl ledLightsPortBLoop 
 ledLightsPortALoop: 
   jsr DELAY_SEC
   inc PATTERN 
   lda PATTERN
   sta LED_PORTA
-  bpl ledLightsPortBLoop 
+  bpl ledLightsPortALoop 
+ledLightsPortBLoop: 
+  jsr DELAY_SEC
+  inc PATTERN 
+  lda PATTERN
+  sta LED_PORTB
+  bpl ledLightsPortALoop 
 
 programLoop:  
   jmp programLoop
