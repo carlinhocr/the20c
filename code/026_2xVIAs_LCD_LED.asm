@@ -300,23 +300,22 @@ ledLights:
   sta LED_PORTA
   jsr DELAY_SEC
 ledLightsPortALoop: 
+  jsr DELAY_SEC
   rol PATTERN 
   lda PATTERN
   sta LED_PORTA
-  jsr DELAY_SEC
   bpl ledLightsPortALoop
-  rol PATTERN ;former 1000 0000 after rol 0000 0000
+  lda #%00000000 ;light pattern the first inc turns it on
+  sta PATTERN
   sta LED_PORTA ;turn  off port a lights
 ledLightsPortBLoop: 
+  jsr DELAY_SEC
   rol PATTERN 
   lda PATTERN
   sta LED_PORTB
-  jsr DELAY_SEC
   bpl ledLightsPortBLoop ;if the form is 0xxx xxxx keep going on port b
   ;here the form is 1000 0000 
-  rol PATTERN ;former 1000 0000 after rol 0000 0000
-  sta LED_PORTA ;turn  off port a lights
-  jmp ledLightsPortALoop
+  jmp ledLights
 
 programLoop:  
   jmp programLoop
