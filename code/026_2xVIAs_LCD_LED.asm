@@ -294,14 +294,21 @@ welcomeMessage:
 ;led lights will shift lights to the right when all the shift is done
 ;it will go to the other port  
 ledLights:
-  clc
   lda #%00000000 ;light pattern the first inc turns it on  
   ;turn off both ports
   sta LED_PORTB
   sta LED_PORTA
   jsr DELAY_SEC
-  lda #%00000001
-  sta PATTERN
+  lda #%10101010
+  sta LED_PORTB
+  sta LED_PORTA
+  jsr DELAY_SEC
+  lda #%01010101
+  sta LED_PORTB
+  sta LED_PORTA
+  jsr DELAY_SEC
+  jmp ledLights
+
 ledLightsPortALoop: 
   jsr DELAY_SEC
   lda PATTERN
