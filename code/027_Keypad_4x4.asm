@@ -10,10 +10,12 @@
 ;Show message on LCD on VIA1
 ;show light show with LEDs on VIA2
 
-;PORTA columns output #$FF
-;PORTB rows input #$00
-;write a high to each row in turn if there was a short on a column we know which row it was
-;if there was not a high the key was pressed
+;PORTA rows input #$00
+;PORTB columns output #$FF
+;write a zero to each column in turn (1110, 1101, 1011, 0111)
+;read the rows if one is in zero then it is because of a short circuit with the column
+;now we know the intersection column + row and we can establish which key was pressed
+;if no rows are zero then no key was pressed.
 
 
 ;VIA Ports and Constants
