@@ -10,6 +10,11 @@
 ;Show message on LCD on VIA1
 ;show light show with LEDs on VIA2
 
+;PORTA columns output #$FF
+;PORTB rows input #$00
+;write a high to each row in turn if there was a short on a column we know which row it was
+;if there was not a high the key was pressed
+
 
 ;VIA Ports and Constants
 LCD_PORTB = $6000
