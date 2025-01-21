@@ -293,25 +293,27 @@ welcomeMessage:
 ;led lights will shift lights to the right when all the shift is done
 ;it will go to the other port  
 ledLights:
-  lda #%00000000 ;light pattern the first inc turns it on
-  sta PATTERN
+  lda #%00000000 ;light pattern the first inc turns it on  
   ;turn off both ports
   sta LED_PORTB
   sta LED_PORTA
   jsr DELAY_SEC
+  lda #%00000001
+  sta PATTERN
 ledLightsPortALoop: 
   jsr DELAY_SEC
-  rol PATTERN 
   lda PATTERN
+  rol PATTERN ;rol after displaying
   sta LED_PORTA
   bpl ledLightsPortALoop
   lda #%00000000 ;light pattern the first inc turns it on
-  sta PATTERN
   sta LED_PORTA ;turn  off port a lights
+  lda #%00000001
+  sta PATTERN
 ledLightsPortBLoop: 
   jsr DELAY_SEC
-  rol PATTERN 
   lda PATTERN
+  rol PATTERN ;rol after displaying
   sta LED_PORTB
   bpl ledLightsPortBLoop ;if the form is 0xxx xxxx keep going on port b
   ;here the form is 1000 0000 
