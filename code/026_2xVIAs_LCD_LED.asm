@@ -219,7 +219,8 @@ RESET:
   lda #%11111111  ;load all ones equivalent to $FF
   sta LED_DDRB ;store the accumulator in the data direction register for Port B
 
-  lda #%11111111  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
+  ;set all port A pins as output
+  lda #%11111111  ;load all ones equivalent to $FF
   sta LED_DDRA ;store the accumulator in the data direction register for Port A
   ;END Configure Ports A & B
 
@@ -293,6 +294,7 @@ welcomeMessage:
 ;led lights will shift lights to the right when all the shift is done
 ;it will go to the other port  
 ledLights:
+  clc
   lda #%00000000 ;light pattern the first inc turns it on  
   ;turn off both ports
   sta LED_PORTB
@@ -311,10 +313,11 @@ ledLightsPortALoop:
   lda #%00000001
   sta PATTERN
 ledLightsPortBLoop: 
+  clc 
   jsr DELAY_SEC
   lda PATTERN
-  rol PATTERN ;rol after displaying
-  sta LED_PORTB
+  rol PATTERN
+  sta LED_PORTB  
   bpl ledLightsPortBLoop ;if the form is 0xxx xxxx keep going on port b
   ;here the form is 1000 0000 
   jmp ledLights
