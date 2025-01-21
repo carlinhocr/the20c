@@ -295,205 +295,32 @@ welcomeMessage:
 ledLights:
   lda #%00000000 ;light pattern the first inc turns it on
   sta PATTERN
+  ;turn off both ports
   sta LED_PORTB
   sta LED_PORTA
+  jsr DELAY_SEC
 ledLightsPortALoop: 
-  jsr DELAY_SEC
-  inc PATTERN 
+  rol PATTERN 
   lda PATTERN
   sta LED_PORTA
-  bpl ledLightsPortALoop 
-ledLightsPortBLoop: 
   jsr DELAY_SEC
-  inc PATTERN 
+  bpl ledLightsPortALoop
+  rol PATTERN ;former 1000 0000 after rol 0000 0000
+  sta LED_PORTA ;turn  off port a lights
+ledLightsPortBLoop: 
+  rol PATTERN 
   lda PATTERN
   sta LED_PORTB
-  bpl ledLightsPortALoop 
+  jsr DELAY_SEC
+  bpl ledLightsPortBLoop ;if the form is 0xxx xxxx keep going on port b
+  ;here the form is 1000 0000 
+  rol PATTERN ;former 1000 0000 after rol 0000 0000
+  sta LED_PORTA ;turn  off port a lights
+  jmp ledLightsPortALoop
 
 programLoop:  
   jmp programLoop
 
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------ALIENS---------------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-aliensInit:
-  jsr loadAliens
-  jsr writeAliens
-  lda #$ff
-  sta xVariable
-  lda #$00 
-  sta xDirection
-  rts
-
-moveAliens:   
-  lda xDirection
-  beq moveAliensRight
-moveAliensLeft:
-  inc xVariable
-  jsr moveLeft
-  lda xVariable 
-  cmp #xLimit ; do... until
-  bne moveAliensEnd 
-  lda #$ff
-  sta xVariable  
-  lda #$0
-  sta xDirection ; go right
-  jmp moveAliensEnd
-moveAliensRight:
-  inc xVariable
-  jsr moveRight
-  lda xVariable 
-  cmp #xLimit; do... until
-  bne moveAliensEnd 
-  lda #$ff
-  sta xVariable  
-  lda #$1
-  sta xDirection ; go left
-  jmp moveAliensEnd
-moveAliensEnd:
-  rts
-  
-
-loadAliens:
-  jsr prepAliensCinv1
-  jsr loadAliensPrep
-  jsr prepAliensCinv2
-  jsr loadAliensPrep
-  rts
-
-moveRight:
-  jsr prepAliensCinv1
-  jsr moveRightPrep
-  jsr prepAliensCinv2
-  jsr moveRightPrep
-  jsr writeAliens
-  rts
-
-moveLeft:
-  jsr prepAliensCinv1
-  jsr moveLeftPrep
-  jsr prepAliensCinv2
-  jsr moveLeftPrep
-  jsr writeAliens
-  rts
-
-writeAliens:
-  jsr prepAliensCinv1
-  jsr writeAliensPrep
-  jsr prepAliensCinv2
-  jsr writeAliensPrep
-  rts
-
-prepAliensCinv1:
-  lda #aliensArrayMemoryPositionCinv1L
-  sta aliensArrayZPL
-  lda #aliensArrayMemoryPositionCinv1H
-  sta aliensArrayZPH
-  lda #posScreenAlienInitialCinv1
-  sta posScreenAlienInitial
-  lda #alienTotalCinv1
-  sta alienTotal
-  lda #cinv1
-  sta calien
-  rts  
-
-prepAliensCinv2:
-  lda #aliensArrayMemoryPositionCinv2L
-  sta aliensArrayZPL
-  lda #aliensArrayMemoryPositionCinv2H
-  sta aliensArrayZPH
-  lda #posScreenAlienInitialCinv2
-  sta posScreenAlienInitial
-  lda #alienTotalCinv2
-  sta alienTotal
-  lda #cinv2
-  sta calien
-  rts  
-
-loadAliensPrep:  
-  ldy #$FF  
-loadAliensLoop:  
-  iny
-  cpy alienTotal
-  beq loadAliensEnd
-  tya ;transfer y to the accumulator
-  clc ; clear carry before adding
-  adc posScreenAlienInitial ; add the initial position to the Y in the accumulator
-  sta (aliensArrayZPL),y ;save the alien in the position   
-  jmp loadAliensLoop 
-loadAliensEnd:
-  rts
-
-writeAliensPrep:  
-  ldy #$FF    
-writeAliensLoop:
-  iny      
-  cpy alienTotal
-  beq writeAliensEnd
-  lda (aliensArrayZPL),y ;alien position loaded
-  sty temporaryY; save current y position 
-  tay ;transfer position in screen of alien to register Y
-  lda calien ;load ship form
-  sta (screenMemoryLow),y ;at the alien position en Y draw the alien ship on the accumulator
-  ldy temporaryY
-  jmp writeAliensLoop 
-writeAliensEnd: 
-  rts
-
-clearScreenBuffer: 
-  ldy #$FF 
-clearScreenBufferLoop:
-  iny      
-  cpy #$50
-  beq clearScreenBufferEnd
-  lda #cblank ;load ship form
-  sta (screenMemoryLow),y ;at the alien position en Y draw the alien ship on the accumulator
-  jmp clearScreenBufferLoop 
-clearScreenBufferEnd: 
-  rts  
-moveRightPrep:
-  ldy #$FF
-moveRightLoop:
-  iny
-  cpy alienTotal
-  beq moveRightEnd
-  lda #$01
-  clc
-  adc (aliensArrayZPL),y
-  sta (aliensArrayZPL),y
-  jmp moveRightLoop
-moveRightEnd:
-  rts
-
-moveLeftPrep:
-  ldy #$FF  
-moveLeftLoop:
-  iny
-  cpy alienTotal
-  beq moveLeftEnd
-  sec
-  lda (aliensArrayZPL),y
-  sbc #$01
-  sta (aliensArrayZPL),y
-  jmp moveLeftLoop
-moveLeftEnd:
-  rts
-
-destroyAlien:
-  ldy firePosition
-  lda #cexplosion
-  sta (screenMemoryLow),y 
-  rts ;ends 
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------ALIENS---------------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -609,6 +436,18 @@ print_message_end:
   rts 
   ;END Write all the letters  
 
+clearScreenBuffer: 
+  ldy #$FF 
+clearScreenBufferLoop:
+  iny      
+  cpy #$50
+  beq clearScreenBufferEnd
+  lda #cblank ;load ship form
+  sta (screenMemoryLow),y ;at the alien position en Y draw the alien ship on the accumulator
+  jmp clearScreenBufferLoop 
+clearScreenBufferEnd: 
+  rts    
+
 ;END--------------------------------------------------------------------------------  
 ;-----------------------------------------------------------------------------------
 ;--------------------------------SCREEN MANAGEMENT----------------------------------
@@ -616,487 +455,6 @@ print_message_end:
 ;-----------------------------------------------------------------------------------
 
 
-
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------------FIRE-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------  
-
-initFire:
-  ;initialize first fire position
-  lda #$51 ;out of the screen so it does not appear initilially
-  sta firePosition
-  ;inititialize fire that it is not in play
-  lda #$0
-  sta fireInPlay
-  rts
-
-writeFire:
-  ldy firePosition
-  lda #cfire
-  sta (screenMemoryLow),y
-  rts 
-
-moveFire:
-  jsr updateFire
-  jsr writeFire
-  rts  
-
-updateFire:
-  lda fireInPlay  
-  beq updateFireEnd ;no fire in play do nothing (fireInPlay = 0)
-  ;there is a fire in play update position
-  cmp #$01
-  beq updateFire1Row ; go to first row
-  cmp #$02
-  beq updateFire2or3Row
-  cmp #$03
-  beq updateFire2or3Row
-  ;if not 0,1,2,3 we have to destroy the fire
-  jsr destroyFire
-  jmp updateFireEnd
-updateFire1Row:
-  ;no position update let it be written in first row but increase to second row for next iteration
-  inc fireInPlay
-  rts
-updateFire2or3Row:
-  ;update fire position increase to third row for next iteration
-  sec
-  lda firePosition
-  sbc #$14 ;#jump
-  sta firePosition
-  inc fireInPlay
-  rts  
-updateFireEnd:  
-  rts  
-
-destroyFire:
-  lda #$00
-  sta fireInPlay
-  lda #$51
-  sta firePosition
-  rts ;ends updateFireSubroutine
-
-fireButtonPressed:
-  lda gameStatus
-  beq fireButtonPressedStartGame
-  lda gameStatus
-  cmp #$2
-  beq fireButtonPressedEndGame
-  lda fireInPlay  
-  bne fireButtonPressedEnd ; there is already a fire in play it is not the first fire do nothing
-  jsr mapPositionShip
-  ;subtract 20 decimal $14 hexa from the ship position to draw the fire
-  lda cursor_position_relative
-  sec
-  sbc #$14 ;#jump
-  sta firePosition
-  lda #$01
-  sta fireInPlay
-fireButtonPressedEnd:
-  rts ;ends updateFireSubroutine
-
-fireButtonPressedStartGame:
-  lda #$1 ; load 1 to start playing
-  sta gameStatus
-  rts  
-
-fireButtonPressedEndGame:
-  lda #$0 ; load 0 to go to start screen
-  sta gameStatus
-  rts    
-  
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------------FIRE-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-  
-
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;------------------------------------COLLISIONS-------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-    
-
-checkCollisions:
-  ;check with aliens 1 positions
-checkAliens:
-  lda fireInPlay
-  beq checkAliensEnd  
-  ldy #$FF
-  jsr prepAliensCinv1
-  jsr checkAliensLoop
-  lda fireInPlay
-  beq checkAliensEnd  
-  ldy #$FF
-  jsr prepAliensCinv2
-  jsr checkAliensLoop
-checkAliensEnd:
-  rts
-
-checkAliensLoop:
-  iny
-  cpy alienTotal
-  beq checkAliensLoopEnd
-  lda (aliensArrayZPL),y
-  cmp firePosition   ;loadFirePosition and compare with alien position
-  bne checkAliensLoop   
-  ;if match erase alien, destroy fire, add to scores
-  ;if here we found the fire and the alien in the same screen position
-  ;update alien position to out of the screen
-  lda #$52
-  sta (aliensArrayZPL),y
-  jsr destroyAlien
-  jsr destroyFire
-  jsr updateScore  
-checkAliensLoopEnd:
-  rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;------------------------------------COLLISIONS-------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------------SCORE----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-scoreInit:
-  sei ;disable interrupts so as to update properly the counter
-  clc
-  lda #alienTotalCinv1
-  adc #alienTotalCinv2
-  sta aliensRemaining
-  lda #$0
-  sta score
-  lda #$0
-  sta score + 1
-  lda #<scoreMessage
-  sta scoreMessageVectorLow
-  lda #>scoreMessage
-  sta scoreMessageVectorHigh
-  cli ; reenable interrupts after updating
-  rts
-
-updateScore:
-  sei ;disable interrupts so as to update properly the counter
-  clc
-  lda score
-  adc #$1
-  sta score
-  bne updateScoreContinue
-  ;addOneMore to the next byte
-  clc
-  lda score +1
-  adc #$1
-  sta score +1
-updateScoreContinue:
-  dec aliensRemaining
-  lda aliensRemaining
-  beq endScore
-  cli ; reenable interrupts after updating
-  rts 
-
-endScore:
-  lda #$2
-  sta gameStatus
-  cli ; reenable interrupts after updating because me missed the one from updateScore
-  ;jsr gameEnd  
-  rts
-
-testScore:
-  jsr scoreInit
-  jsr bin_2_ascii_score
-  jsr print_message_ascii
-  jsr delay_2_sec
-  rts  
-
-writeScore:  
-  ldy #$FF    
-writeScoreLoop:
-  iny ;write the letter score in position 0     
-  lda (scoreMessageVectorLow),y ;letter loaded
-  beq writeScore2Line ;if #$0 end of string finish writing score message
-  sta (screenMemoryLow),y ;
-  jmp writeScoreLoop 
-writeScore2Line: 
-  jsr bin_2_ascii_score
-  ldx #$ff ; to iterate message
-  ldy #$16 ; so it will start at the beginning of line two in position 16
-writeScore2Loop:
-  iny
-  inx
-  lda message,x
-  beq writeScore2LineEnd
-  sta (screenMemoryLow),y
-  jmp writeScore2Loop
-writeScore2LineEnd:
-  rts  
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------------SCORE----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------SPACE SHIP-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-mapPositionShip:
-  ldy #$FF
-mapPositionLoop:
-  iny
-  cpy #totalScreenLenght4Lines ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
-  beq mapPositionLoopEnd
-;position cursor
-  lda (lcdCharPositionsLowZeroPage),Y ;load cursor position
-  cmp cursor_position
-  bne mapPositionLoop
-  ;the Y position is the relative position of the ship
-  sty cursor_position_relative
-mapPositionLoopEnd:
-  rts
-
-shipInit:
-  jsr initiliaze_vectors
-  lda #$4
-  sta line_cursor
-  lda #center_cursor
-  sta cursor_position
-  lda #center_cursor
-  jsr lcd_send_instruction 
-  lda #cursor_char
-  jsr print_char
-
-initiliaze_vectors:
-  lda #<left_cursor_endings
-  sta leftCursorVectorLow
-  lda #>left_cursor_endings
-  sta leftCursorVectorHigh
-  lda #<right_cursor_endings
-  sta rightCursorVectorLow
-  lda #>right_cursor_endings
-  sta rightCursorVectorHigh
-  rts
-
-draw_cursor:
-  lda cursor_position
-  jsr lcd_send_instruction 
-  lda #cursor_char
-  jsr print_char
-  rts
-
-erase_cursor:
-  lda cursor_position
-  jsr lcd_send_instruction 
-  lda #blank_char
-  jsr print_char
-  rts
-
-move_cursor_right:
-  ldy #$FF
-  lda cursor_position
-check_right_limit:  
-  iny 
-  lda (rightCursorVectorLow),y ;first fo to address in right_cursor_endingss, then increase it
-  cmp cursor_position 
-  beq not_move_right
-  cpy #$03
-  bne check_right_limit
-  jsr erase_cursor
-  inc cursor_position
-  jsr draw_cursor
-not_move_right:
-  rts
-  
-
-move_cursor_left:
-  ldy #$FF
-  lda cursor_position
-check_left_limit:  
-  iny 
-  lda (leftCursorVectorLow),y ;first fo to address in left_cursor_endings, then increase it
-  cmp cursor_position  
-  beq not_move_left
-  cpy #$03
-  bne check_left_limit
-  jsr erase_cursor
-  dec cursor_position
-  jsr draw_cursor
-not_move_left:
-  rts
-
-move_cursor_up:
-  lda line_cursor
-  cmp #$0
-  beq not_move_up
-  cmp #$1
-  beq move_up_from_row_1
-  cmp #$2
-  beq move_up_from_row_2
-  cmp #$3
-  beq move_up_from_row_3
-  ;if not row 0,1,  2 or 3 then return wrong case
-  rts
-move_up_from_row_1:
-  jsr erase_cursor
-  lda cursor_position
-  sbc #diff_1_0
-  sta cursor_position
-  jsr draw_cursor
-  dec line_cursor
-  rts
-move_up_from_row_2:
-  jsr erase_cursor
-  clc
-  lda cursor_position
-  adc #diff_2_1
-  sta cursor_position
-  jsr draw_cursor
-  dec line_cursor
-  rts
-move_up_from_row_3:
-  jsr erase_cursor
-  lda cursor_position
-  sbc #diff_3_2
-  sta cursor_position
-  jsr draw_cursor
-  dec line_cursor
-  rts
-not_move_up:
-  rts  
-
-move_cursor_down:
-  lda line_cursor
-  cmp #$0
-  beq move_down_from_row_0
-  cmp #$1
-  beq move_down_from_row_1
-  cmp #$2
-  beq move_down_from_row_2
-  cmp #$3
-  beq not_move_down
-  ;if not row 0,1,  2 or 3 then return wrong case
-  rts
-move_down_from_row_0:
-  inc line_cursor
-  jsr erase_cursor
-  clc
-  lda cursor_position
-  adc #diff_1_0
-  sta cursor_position
-  jsr draw_cursor
-  rts
-move_down_from_row_1:
-  inc line_cursor
-  jsr erase_cursor
-  lda cursor_position
-  sbc #diff_2_1
-  sta cursor_position
-  jsr draw_cursor
-  rts
-move_down_from_row_2:
-  inc line_cursor
-  jsr erase_cursor
-  clc
-  lda cursor_position
-  adc #diff_3_2
-  sta cursor_position
-  jsr draw_cursor
-  rts
-not_move_down:
-  rts 
-
-
-test_buttons:
-  lda LCD_PORTA
-  sta PORTSTATUS
-  ;move PA4 to PA7 and PA3 to PA6
-  rol PORTSTATUS
-  rol PORTSTATUS
-  rol PORTSTATUS
-  rol PORTSTATUS ; now we have PA4 on the carry and PA3 on the negative flag 
-  lda PORTSTATUS
-  bcc pressed_buttons_pa4 ;no carry  means that Pa4 was zero then it was pressed
-  bmi test_buttons_keep_testing; if one the pa3 was not pressed
-pressed_buttons_pa3:
-  ;here button pa3 was pressed
-  jsr pa3_button_action 
-  rts
-pressed_buttons_pa4:  
-  jsr pa4_button_action
-  rts
-test_buttons_keep_testing:
-  rol PORTSTATUS
-  rol PORTSTATUS ; now we have PA2 on the carry and PA1 on the negative flag 
-  bcc pressed_buttons_pa2 ;no carry  means that Pa2 was zero then it was pressed
-  bmi test_buttons_keep_testing_again; if one the pa1 was not pressed
-pressed_buttons_pa1:
-  ;here button pa1 was pressed
-  jsr pa1_button_action 
-  rts
-pressed_buttons_pa2:  
-  jsr pa2_button_action
-  rts
-test_buttons_keep_testing_again:
-  rol PORTSTATUS
-  rol PORTSTATUS ; now we have PA0 on the carry 
-  bcc pressed_buttons_pa0
-  ;no button was pressed but we had an interrupt
-  rts
-pressed_buttons_pa0:
-  jsr pa0_button_action
-  rts
-
-; pa4_button_action:
-;   jsr clear_display
-;   lda #<button_press_pa4
-;   sta charDataVectorLow
-;   lda #>button_press_pa4
-;   sta charDataVectorHigh
-;   jsr print_message
-;   rts
-
-pa4_button_action:
-  jsr fireButtonPressed
-  rts
-
-pa3_button_action:
-  jsr move_cursor_up
-  rts
-
-pa2_button_action:
-  jsr move_cursor_right
-  rts
-
-pa1_button_action:
-  jsr move_cursor_down
-  rts
-
-pa0_button_action:
-  jsr move_cursor_left
-  rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------SPACE SHIP-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -1437,131 +795,9 @@ INNER_LOOP:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------CUSTOM CHARS---------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-test_custom_chars:
-    ldx #$ff
-    lda #$43
-    jsr print_char
-test_custom_chars_loop: 
-    inx
-    txa
-    jsr print_char
-    cpx #$07
-    bne test_custom_chars_loop
-    rts    
-
-add_custom_chars_invaders:
-    ;BEGIN Add custom char instruction
-    ;8026 lda
-  
-char_0_invaders: 
-    lda #($40+$00);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
-    ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
-    ;8028 jumps to send intrsuction
-    jsr lcd_send_instruction
-    lda #<invader_ship_1
-    sta charLoadLow
-    lda #>invader_ship_1
-    sta charLoadHigh
-    jsr char_load
-  
-char_1_invaders: 
-    lda #($40+$08);+#position_custom_char ;the instruction itself is 0001, write a custom character cgram
-    ;or set cg ram address charter positions are 00,08,10,18,20,28,30,38
-    ;8028 jumps to send intrsuction
-    jsr lcd_send_instruction
-    lda #<invader_ship_2
-    sta charLoadLow
-    lda #>invader_ship_2
-    sta charLoadHigh
-    jsr char_load
-  
-add_custom_chars_end_invaders:  
-    rts
-  
-char_load:  
-    ldy #$FF
-char_load_loop:
-    iny  
-    lda (charLoadLow),y
-    jsr lcd_send_data
-    cpy #07
-    bne char_load_loop
-    rts
-    ;END send data for custom character 5x8 char
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------CUSTOM CHARS---------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------INTERRUPT MANAGEMENT-------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
 nmi:
-  ;preserve Accumulator, X and Y so we can use them here
-  pha ; store accumulator in the stack
-  txa ; transfer X to Accumulator
-  pha ; store the X register in the stack
-  tya ; transfer Y to Accumulator
-  pha ; store the Y register in the stack
-  ;bit command read the memory and compares just used to read the register
-  bit LCD_PORTA ; clear the interrupt flag
-  jsr clear_display
-  lda #<button_press_nmi
-  sta charDataVectorLow
-  lda #>button_press_nmi
-  sta charDataVectorHigh
-  jsr print_message
-  jsr delay_1_sec
-exit_nmi:  
-  ;reserve order of stacking to restore values
-  pla ; retrieve the Y register from the stack
-  tay ; transfer accumulator to Y register
-  pla ; retrieve the X register from the stack
-  tax ; transfer accumulator to X register
-  pla ; restore the accumulator value
-  rti 
-
 irq:
-  sei ; disable interrupts
-  ;preserve Accumulator, X and Y so we can use them here
-  pha ; store accumulator in the stack
-  txa ; transfer X to Accumulator
-  pha ; store the X register in the stack
-  tya ; transfer Y to Accumulator
-  pha ; store the Y register in the stack
-  ;bit command read the memory and compares just used to read the register
-  ;bit LCD_PORTA ; clear the interrupt flag I am doing it with an LDA on test_buttons
-  jsr test_buttons ;test_buttons loads the message
-exit_irq:  
-  ;reserve order of stacking to restore values
-  pla ; retrieve the Y register from the stack
-  tay ; transfer accumulator to Y register
-  pla ; retrieve the X register from the stack
-  tax ; transfer accumulator to X register
-  pla ; restore the accumulator value
-  cli ;re enable interrupts
-  rti 
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------INTERRUPT MANAGEMENT-------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------  
-
+    rti
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -1570,44 +806,13 @@ exit_irq:
 ;-----------------------------------------------------------------------------------
 
 
-initial_message:
-  .ascii "Main Screen"
-
-button_press_pa4:
-  .ascii "Fire Button"
-
-button_press_pa3:
-  .ascii "Up Button"
-
-button_press_pa2:
-  .ascii "Left Button"
-
-button_press_pa1:
-  .ascii "Down Button"
-
-button_press_pa0:
-  .ascii "Right Button"
-
-button_press_nmi:
-  .ascii "NMI Interrupt"
-
-button_press_irq:
-  .ascii "IRQ Interrupt"
-
-endGameMessage:
-  .ascii "     GAME   OVER"  
-
-endGameMessage2:
-  .ascii "       YOU WIN"   
 
 startMessage1:
   .ascii " LCD on VIA 1 $6000"  
 
 startMessage2:
-  .ascii " LEDs on VIA 2"   
-
-scoreMessage:
-  .ascii "SCORE"   
+  .ascii " LED on VIA 2 $7000"   
+ 
 
 lcd_positions:
 lcd_positions_line0:
@@ -1650,24 +855,12 @@ up_cursor_endings: ;so it is all in one line
 down_cursor_endings:
   .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$DD,$DE,$DF,$E0,$E1,$E2,$E3,$E4,$E5,$E6,$E7
 
-
-invaders_screen_0:
-  .byte pos_line1_invaders,cinv1,cinv1,cblank,cinv1,cinv1,cinv1,cinv1,cinv1,cblank
-  .byte pos_line2_invaders,cinv2,cblank,cinv2,cinv2,cinv2,cinv2,cinv2,cinv2,cblank
-  .byte pos_line3_invaders,cblank,cblank,cblank,cblank,cblank,cblank,cblank,cblank,cblank
-  .byte pos_line4_invaders,cblank,cblank,cblank,cship,cblank,cblank,cblank,cblank,cblank
-  .byte end_char
-
-invader_ship_1:
-  .byte $00,$04,$04,$0e,$1f,$04,$0e,$00
-invader_ship_2:
-  .byte $00,$04,$0E,$15,$1B,$0E,$00,$00
-
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;---------------------------------------DATA----------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+  
 
 ;complete the file
   .org $fffa
