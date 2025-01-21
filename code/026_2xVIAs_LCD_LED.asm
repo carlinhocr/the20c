@@ -295,7 +295,7 @@ welcomeMessage:
 ;it will go to the other port  
 ledLights:
   clc
-  lda #%10101010 ;light pattern the first inc turns it on  
+  lda #%00000000 ;light pattern the first inc turns it on  
   ;turn off both ports
   sta LED_PORTB
   sta LED_PORTA
