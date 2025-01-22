@@ -366,23 +366,22 @@ writeKeyboardBuffer:
   ldx #$FF
   clc
 writeKeyboardBufferFindKeyMapPositionLoop:  
-  inx
-  lda keyPressedPosition
-  adc columnNumberDetected
-  sta keyPressedPosition
-  cpx rowNumberDetected
-  bne writeKeyboardBufferFindKeyMapPositionLoop
+;   inx
+;   lda keyPressedPosition
+;   adc columnNumberDetected
+;   sta keyPressedPosition
+;   cpx rowNumberDetected
+;   bne writeKeyboardBufferFindKeyMapPositionLoop
+;   lda #$d4 ;position cursor at the start of sthe fourth line
+;   jsr lcd_send_instruction
+;   ldy keyPressedPosition 
+;   lda (keymapLow),Y
+;   jsr print_char 
+  jsr buttonPressed
   lda #$d4 ;position cursor at the start of sthe fourth line
   jsr lcd_send_instruction
-  ldy keyPressedPosition 
-  ;lda (keymapLow),Y
-  lda #"1"
+  lda #"1" ;load letter ascii
   jsr print_char 
-  ;jsr buttonPressed
-  ;lda #$d4 ;position cursor at the start of sthe fourth line
-  ;jsr lcd_send_instruction
-  ;lda #"1" ;load letter ascii
-  ;jsr print_char 
   jsr delay_1_sec
   jsr welcomeMessage
   rts
@@ -591,20 +590,6 @@ bin_2_ascii_score:
   lda score
   sta value 
   lda score + 1
-  sta value + 1
-  cli ; reenable interrupts after updating
-  jsr bin_2_ascii
-  rts
-
-bin_2_ascii_aliens:
-  lda #0 ;this signals the empty string
-  sta message ;initialize the string we will use for the results
-  ;BEGIN Initialization of the 4 bytes
-  ; initializae value to be the counter to ccount interrupts 
-  sei ;disable interrupts so as to update properly the counter
-  lda aliensRemaining
-  sta value 
-  lda aliensRemaining + 1
   sta value + 1
   cli ; reenable interrupts after updating
   jsr bin_2_ascii
