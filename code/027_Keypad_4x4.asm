@@ -346,6 +346,7 @@ writeKeyboardBuffer:
 writeKeyboardBufferFindKeyMapPositionLoop:  
   inx
   lda keyPressedPosition
+  clc
   adc columnNumberDetected
   sta keyPressedPosition
   cpx rowNumberDetected
@@ -353,8 +354,8 @@ writeKeyboardBufferFindKeyMapPositionLoop:
 ;   jsr buttonPressed
   lda #$d4 ;position cursor at the start of sthe fourth line
   jsr lcd_send_instruction
-  ;ldy #keyPressedPosition
-  ldy #$3
+  ldy keyPressedPosition
+  ;ldy #$3
   lda (keymapMemoryLowZeroPage),Y
   ;lda #$31 ;load letter ascii
   jsr print_char 
