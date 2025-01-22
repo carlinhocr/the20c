@@ -36,7 +36,8 @@ keyboardBufferPointer = $A3
 keyboardBufferLow = $A4
 keyboardBufferHigh = $A5
 rowDetected = $A6
-columnDetected = $A7
+rowNumberDetected = $A7
+columnNumberDetected = $A8
 
 
 startRAMData =$2000
@@ -319,7 +320,7 @@ keyboardScanRows:
   ;we just return
   jmp keyboardScanRowsEnd
 row0Detected:
-  lda #$0
+  lda #$1
   sta rowDetected
 
 keyboardScanRowsEnd:
