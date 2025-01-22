@@ -296,25 +296,55 @@ programLoop:
 keyboardScan:
   ;scan column 0 at PB0
   ;write 0 to column 0 at PB0
-  lda #$11111110
+  lda #%11111110
+  lda #$0
+  sta columnNumberDetected
+  jsr keyboardScanColumn
+  ;scan column 1 at PB0
+  ;write 0 to column 1 at PB0
+  lda #%11111101
+  lda #$1
+  sta columnNumberDetected
+  jsr keyboardScanColumn
+  ;scan column 2 at PB0
+  ;write 0 to column 2 at PB0
+  lda #%11111011
+  lda #$2
+  sta columnNumberDetected
+  jsr keyboardScanColumn
+  ;scan column 3 at PB0
+  ;write 0 to column 3 at PB0
+  lda #$3
+  sta columnNumberDetected
+  lda #%11110111
+  jsr keyboardScanColumn
+  rti
+
+keyboardScanColumn:  
   sta KB_PORTB
   jsr keyboardScanRows
+  lda #$1 ;see if a row was detected
+  cmp rowDetected
+  beq writeKeyboardBuffer
+  lda #$0
+  sta rowDetected
+  rti
 
 keyboardScanRows:
   ;scan rows to detect if one is 0
   lda KB_PORTA
   ;detect which row was zero
   ;compare to 0 on row 0
-  cmp #$11111110
+  cmp #%11111110
   beq row0Detected
   ;compare to 0 on row 1
-  cmp #$11111101
+  cmp #%11111101
   beq row1Detected
   ;compare to 0 on row 2
-  cmp #$11111011
+  cmp #%11111011
   beq row2Detected
   ;compare to 0 on row 3
-  cmp #$11110111
+  cmp #%11110111
   beq row3Detected
   ;if we are here no rows intersecting with column were detected we move to another column.
   ;we just return
@@ -322,10 +352,35 @@ keyboardScanRows:
 row0Detected:
   lda #$1
   sta rowDetected
-
+  lda #$0
+  sta rowNumberDetected
+  jmp keyboardScanRowsEnd
+row1Detected:
+  lda #$1
+  sta rowDetected
+  lda #$1
+  sta rowNumberDetected
+  jmp keyboardScanRowsEnd
+row2Detected:
+  lda #$1
+  sta rowDetected
+  lda #$2
+  sta rowNumberDetected
+  jmp keyboardScanRowsEnd
+row3Detected:
+  lda #$1
+  sta rowDetected
+  lda #$3
+  sta rowNumberDetected
+  jmp keyboardScanRowsEnd
 keyboardScanRowsEnd:
   rti
 
+writeKeyboardBuffer:
+  ldx columnNumberDetected
+
+printKeyboarBuffer:
+  lda #$4
 
 
 
@@ -845,7 +900,13 @@ initialScreen:
   .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
   .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
   .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
-  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill            
+  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
+  
+keyboardMap:
+  .ascii "1","2","3","A" 
+  .ascii "4","5","6","B"
+  .ascii "7","7","9","C"
+  .ascii "*","0","#","D"
 
 left_cursor_endings:
  ; .byte  $80,$c0,$94,$d4
