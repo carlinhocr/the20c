@@ -345,12 +345,17 @@ writeKeyboardBuffer:
   ldx #$FF
 writeKeyboardBufferFindKeyMapPositionLoop:  
   inx
+  ;add the number of row if row is 0 the column is the number
+  ;if row is 1 the column + 4 is the number
+  ;ex for key "2" row 1 column 1
+  ;the number is 5 from 0,1,2,3,4,5
   lda keyPressedPosition
   clc
-  adc columnNumberDetected
+  adc columnNumberDetected 
   sta keyPressedPosition
   cpx rowNumberDetected
   bne writeKeyboardBufferFindKeyMapPositionLoop
+
 ;   jsr buttonPressed
   lda #$d4 ;position cursor at the start of sthe fourth line
   jsr lcd_send_instruction
