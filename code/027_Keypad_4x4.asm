@@ -30,17 +30,36 @@ KB_PCR = $700c
 KB_IFR = $700d
 KB_IER = $700e
 
-PORTSTATUS=$A0
-PATTERN=$A1
-keyboardBufferPointer = $A3
-keyboardBufferLow = $A4
-keyboardBufferHigh = $A5
-rowDetected = $A6
-rowNumberDetected = $A7
-columnNumberDetected = $A8
+PORTSTATUS=$b0
+PATTERN=$b1
+keyboardBufferPointer = $b3 ;points to the next free space on the keyboard buffer
+rowDetected = $b6
+rowNumberDetected = $b7
+columnNumberDetected = $b8
 
+keymapMemoryLowZeroPage=$b9
+keymapMemoryHighZeroPage=$ba
+keymapROMZeroPageLow=$bb
+keymapROMZeroPageHigh=$bc
 
 startRAMData =$2000
+
+
+;constants
+totalKeymapLenght=$0F ;16 key positions
+
+;vectors
+
+
+keyboardBufferLow = $00 
+keyboardBufferHigh = $33 ;256 positions from $3000 to $30FF
+
+
+;Memory Mappings
+keymapLow = $00
+keymapHigh =$32
+
+
 
 
 ;Vectors
@@ -107,9 +126,6 @@ screenBufferHigh =$30
 
 lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
 lcdCharPositionsHigh =$31
-
-aliensArrayMemoryPositionCinv2L=$00
-aliensArrayMemoryPositionCinv2H=$32
 
 aliensArrayMemoryPositionCinv1L=$50
 aliensArrayMemoryPositionCinv1H=$32
@@ -269,24 +285,21 @@ programStart:
 keyboardInit:
   lda #$0
   sta keyboardBufferPointer
+  jsr loadKeymap
+  lda #$94 ;position cursor at the start of third line
+  jsr lcd_send_instruction
+  rts
 
 welcomeMessage:
   jsr clear_display
-  lda #$C0 ;position cursor at the start of second line
+  lda #$80 ;position cursor at the start of sthe first line
   jsr lcd_send_instruction
   lda #<startMessage1
   sta charDataVectorLow
   lda #>startMessage1
   sta charDataVectorHigh
   jsr print_message
-  lda #$94 ;position cursor at the start of second line
-  jsr lcd_send_instruction
-  lda #<startMessage2
-  sta charDataVectorLow
-  lda #>startMessage2
-  sta charDataVectorHigh
-  jsr print_message
-
+  rts
 
 programLoop:  
   jsr keyboardScan
@@ -318,7 +331,7 @@ keyboardScan:
   sta columnNumberDetected
   lda #%11110111
   jsr keyboardScanColumn
-  rti
+  rts
 
 keyboardScanColumn:  
   sta KB_PORTB
@@ -328,7 +341,7 @@ keyboardScanColumn:
   beq writeKeyboardBuffer
   lda #$0
   sta rowDetected
-  rti
+  rts
 
 keyboardScanRows:
   ;scan rows to detect if one is 0
@@ -374,14 +387,66 @@ row3Detected:
   sta rowNumberDetected
   jmp keyboardScanRowsEnd
 keyboardScanRowsEnd:
-  rti
+  rts
 
 writeKeyboardBuffer:
-  ldx columnNumberDetected
+  jsr bin_2_ascii_Row
+  jsr bin_2_ascii_Column
+  rts
 
-printKeyboarBuffer:
+bin_2_ascii_Row:
+  lda #0 ;this signals the empty string
+  sta message ;initialize the string we will use for the results
+  ;BEGIN Initialization of the 4 bytes
+  ; initializae value to be the counter to ccount interrupts 
+  sei ;disable interrupts so as to update properly the counter
+  lda rowNumberDetected
+  sta value 
+  lda #$00
+  sta value + 1
+  cli ; reenable interrupts after updating
+  jsr bin_2_ascii
+  rts
+
+bin_2_ascii_Column:
+  lda #0 ;this signals the empty string
+  sta message ;initialize the string we will use for the results
+  ;BEGIN Initialization of the 4 bytes
+  ; initializae value to be the counter to ccount interrupts 
+  sei ;disable interrupts so as to update properly the counter
+  lda columnNumberDetected
+  sta value 
+  lda #$00
+  sta value + 1
+  cli ; reenable interrupts after updating
+  jsr bin_2_ascii
+  rts  
+
+printKeyboardBuffer:
   lda #$4
+  rts
 
+loadKeymap:
+  ;load vectors
+  lda #keymapLow
+  sta keymapMemoryLowZeroPage ; to use indirect addressing with y
+  lda #keymapHigh
+  sta keymapMemoryHighZeroPage
+  lda #<keyboardMap
+  sta keymapROMZeroPageLow
+  lda #>keyboardMap
+  sta keymapROMZeroPageHigh
+  ldy #$ff
+loadKeymapLoop:
+  iny
+  cpy #totalKeymapLenght ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
+  beq loadKeymapEnd
+  ; copy from ROM to RAM the LCD positions
+  lda (keymapROMZeroPageLow),Y
+  sta (keymapMemoryLowZeroPage),Y
+  jmp loadKeymapLoop
+loadKeymapEnd:
+  rts
 
 
 ;BEGIN------------------------------------------------------------------------------
@@ -870,10 +935,7 @@ irq:
 
 
 startMessage1:
-  .ascii " LCD on VIA 1 $6000"  
-
-startMessage2:
-  .ascii " LED on VIA 2 $7000"   
+  .ascii "     KEYPAD 4x4"    
  
 
 lcd_positions:
