@@ -301,6 +301,16 @@ welcomeMessage:
   jsr print_message
   rts
 
+buttonPressed:
+  lda #$94 ;position cursor at the start of sthe third line
+  jsr lcd_send_instruction
+  lda #<buttonPressedMessage
+  sta charDataVectorLow
+  lda #>buttonPressedMessage
+  sta charDataVectorHigh
+  jsr print_message
+  rts  
+
 programLoop:  
   jsr keyboardScan
   jsr printKeyboardBuffer
@@ -938,6 +948,9 @@ irq:
 
 startMessage1:
   .ascii "     KEYPAD 4x4"    
+
+buttonPressedMessage:
+  .ascii "   BUTTON PRESSED"
  
 
 lcd_positions:
