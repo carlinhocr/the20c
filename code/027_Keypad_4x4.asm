@@ -376,7 +376,7 @@ writeKeyboardBufferFindKeyMapPositionLoop:
   jsr lcd_send_instruction
   ldy keyPressedPosition 
   ;lda (keymapLow),Y
-  lda #$31
+  lda #"1"
   jsr print_char 
   ;jsr buttonPressed
   ;lda #$d4 ;position cursor at the start of sthe fourth line
