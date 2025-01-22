@@ -343,29 +343,50 @@ writeKeyboardBuffer:
   lda #$0
   sta keyPressedPosition
   ldx #$FF
-writeKeyboardBufferFindKeyMapPositionLoop:  
-  ;add the number of row if row is 0 the column is the number
-  ;if row is 1 the column + 4 is the number
-  ;ex for key "2" row 1 column 1
-  ;the number is 5 from 0,1,2,3,4,5
-  inx
-  cpx rowNumberDetected
-  beq writeKeyboardBufferFindKeyLastRow
-  ;it is not equal we add the row and keep looping
-  ldy #$FF
-looping: 
-  iny  
+  lda #$0
+  cmp rowNumberDetected
+  beq row0Case
+  lda #$1
+  cmp rowNumberDetected
+  beq row0Case
+  lda #$2
+  cmp rowNumberDetected
+  beq row0Case
+  lda #$3
+  cmp rowNumberDetected
+  beq row0Case
+
+row0Case: 
+  jmp addColumnNumber
+
+row1Case: 
   lda keyPressedPosition
   clc
-  adc #$03
+  adc #$04
   sta keyPressedPosition
-  jmp writeKeyboardBufferFindKeyMapPositionLoop
-writeKeyboardBufferFindKeyLastRow:
-  ;it is equal we are on the last row so we add the column number
+  jmp addColumnNumber
+
+row2Case: 
+  lda keyPressedPosition
+  clc
+  adc #$08
+  sta keyPressedPosition
+  jmp addColumnNumber
+
+row3Case: 
+  lda keyPressedPosition
+  clc
+  adc #$0C
+  sta keyPressedPosition
+  jmp addColumnNumber
+
+addColumnNumber:  
   lda keyPressedPosition
   clc
   adc columnNumberDetected
   sta keyPressedPosition
+  jmp writeKeyboardBufferMapKey
+
 writeKeyboardBufferMapKey:  
   lda #$d4 ;position cursor at the start of sthe fourth line
   jsr lcd_send_instruction
