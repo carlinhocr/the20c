@@ -358,9 +358,9 @@ writeKeyboardBufferFindKeyMapPositionLoop:
 ;   jsr buttonPressed
   lda #$d4 ;position cursor at the start of sthe fourth line
   jsr lcd_send_instruction
-  ;ldy #$0 
-  ;lda (keymapLow),Y
-  lda #$31 ;load letter ascii
+  ldy #$0 
+  lda (keymapLow),Y
+  ;lda #$31 ;load letter ascii
   jsr print_char 
   jsr delay_1_sec
   jsr welcomeMessage
