@@ -390,6 +390,8 @@ keyboardScanRowsEnd:
   rts
 
 writeKeyboardBuffer:
+  lda "1" ;load letter ascii
+  jsr print_char 
   jsr bin_2_ascii_Row
   jsr bin_2_ascii_Column
   rts
