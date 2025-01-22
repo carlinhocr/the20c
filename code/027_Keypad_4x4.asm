@@ -960,7 +960,7 @@ initialScreen:
   .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
   
 keyboardMap:
-  .ascii "1","2","3","A" 
+  ;.ascii "1","2","3","A" 
   .byte $31,$32,$33,$41 
   .ascii "4","5","6","B"
   .ascii "7","7","9","C"
