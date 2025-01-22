@@ -384,6 +384,8 @@ keyboardScanRowsEnd:
   rts
 
 writeKeyboardBuffer:
+  lda #$0
+  sta rowDetected
   jsr buttonPressed
   jsr delay_1_sec
   jsr welcomeMessage
