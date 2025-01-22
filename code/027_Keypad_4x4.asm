@@ -385,6 +385,8 @@ keyboardScanRowsEnd:
 
 writeKeyboardBuffer:
   jsr buttonPressed
+  jsr delay_1_sec
+  jsr welcomeMessage
   ;lda "1" ;load letter ascii
   ;jsr print_char 
   ;jsr bin_2_ascii_Row
