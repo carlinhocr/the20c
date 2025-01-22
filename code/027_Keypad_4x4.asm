@@ -84,25 +84,14 @@ lcdROMPositionsLowZeroPage =$3a
 lcdROMPositionsHighZeroPage =$3b
 initialScreenZeroPageLow=$3c
 initialScreenZeroPageHigh=$3d
-aliensArrayZPL=$3E
-aliensArrayZPH=$3F
+
 
 temporaryY=$40
-posScreenAlienInitial=$41 ;variable
-alienTotal=$42
-calien=$43
-xVariable=$44
-xDirection=$45 ; 0 right 1 left
 
-firePosition=$46
-fireInPlay=$47 ;0 no fire 1 fire
 
 
 cursor_position=$a1
 cursor_position_relative=$a2
-aliensRemaining=$a3
-aliensRemainingExtra=$a4
-gameStatus=$a4 ;0 not started, 1 playing, 2 over
 
 record_lenght=$CC ;it is a memory position
 record_lenght_plus1=$CD
@@ -115,9 +104,6 @@ screenBufferHigh =$30
 
 lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
 lcdCharPositionsHigh =$31
-
-aliensArrayMemoryPositionCinv1L=$50
-aliensArrayMemoryPositionCinv1H=$32
 
 ;variables
 
@@ -389,10 +375,8 @@ writeKeyboardBufferFindKeyMapPositionLoop:
   lda #$d4 ;position cursor at the start of sthe fourth line
   jsr lcd_send_instruction
   ldy keyPressedPosition 
-  lda keyPressedPosition
-  jsr print_char
-  ;lda (keymapLow),Y
-  ;jsr print_char 
+  lda (keymapLow),Y
+  jsr print_char 
   ;jsr buttonPressed
   ;lda #$d4 ;position cursor at the start of sthe fourth line
   ;jsr lcd_send_instruction
@@ -977,6 +961,7 @@ initialScreen:
   
 keyboardMap:
   .ascii "1","2","3","A" 
+  .byte $31,$32,$33,$41 
   .ascii "4","5","6","B"
   .ascii "7","7","9","C"
   .ascii "*","0","#","D"
