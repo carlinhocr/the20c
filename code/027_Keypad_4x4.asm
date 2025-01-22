@@ -348,13 +348,13 @@ writeKeyboardBuffer:
   beq row0Case
   lda #$1
   cmp rowNumberDetected
-  beq row0Case
+  beq row1Case
   lda #$2
   cmp rowNumberDetected
-  beq row0Case
+  beq row2Case
   lda #$3
   cmp rowNumberDetected
-  beq row0Case
+  beq row3Case
 
 row0Case: 
   jmp addColumnNumber
