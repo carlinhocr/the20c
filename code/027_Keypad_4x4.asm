@@ -141,34 +141,18 @@ fill=$43 ;letter C
 totalScreenLenght4Lines=$50
 totalScreenLenght=$3c ;make it only 3 lines long 3c = 60 decimal
 end_char=$ff
-cship=$00
-cinv1=$01
-cinv2=$fc
-cfire=$7c
-cexplosion=$f3
 
 xLimit=$04 ; how much the shift moves left and right
 
 cblank=$20
-posScreenAlienInitialCinv1=$09
-alienTotalCinv1=$05
-posScreenAlienInitialCinv2=$1C
-alienTotalCinv2=$07
 
-pos_line1_invaders=$8B
-pos_line2_invaders=$CB
-pos_line3_invaders=$9F
-pos_line4_invaders=$DF
-inv_line_lenght=$0A ; make the record lenght of 10 elements (one for position, 9 for graphics)
-;center_cursor=$9d
-center_cursor=$e1
 
 diff_1_0=$40
 diff_2_1=$2c
 diff_3_2=$40
 
 
-
+;bin 2 ascii values
 value =$0200 ;2 bytes, Low 16 bit half
 mod10 =$0202 ;2 bytes, high 16 bit half and as it has the remainder of dividing by 10
              ;it is the mod 10 of the division (the remainder)
@@ -400,7 +384,8 @@ keyboardScanRowsEnd:
   rts
 
 writeKeyboardBuffer:
-  lda "1" ;load letter ascii
+  jsr buttonPressed
+  ;lda "1" ;load letter ascii
   ;jsr print_char 
   ;jsr bin_2_ascii_Row
   ;jsr bin_2_ascii_Column
