@@ -54,15 +54,22 @@ totalKeymapLenght=$0F ;16 key positions
 ;vectors
 
 
-keyboardBufferLow = $00 
-keyboardBufferHigh = $33 ;256 positions from $3000 to $30FF
+
 
 
 ;Memory Mappings
+
+screenBufferLow =$00 ;goes to $50 which is 80 decimal
+screenBufferHigh =$30
+
+lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
+lcdCharPositionsHigh =$31
+
 keymapLow = $00
 keymapHigh =$32
 
-
+keyboardBufferLow = $00 
+keyboardBufferHigh = $33 ;256 positions from $3000 to $30FF
 
 
 ;Vectors
@@ -88,22 +95,13 @@ initialScreenZeroPageHigh=$3d
 
 temporaryY=$40
 
-
-
-cursor_position=$a1
-cursor_position_relative=$a2
-
 record_lenght=$CC ;it is a memory position
 record_lenght_plus1=$CD
 
 
 ;Memory Mappings
 
-screenBufferLow =$00 ;goes to $50 which is 80 decimal
-screenBufferHigh =$30
 
-lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
-lcdCharPositionsHigh =$31
 
 ;variables
 
@@ -364,20 +362,19 @@ writeKeyboardBuffer:
   lda #$0
   sta keyPressedPosition
   ldx #$FF
-  clc
 writeKeyboardBufferFindKeyMapPositionLoop:  
-  inx
-  lda keyPressedPosition
-  adc columnNumberDetected
-  sta keyPressedPosition
-  cpx rowNumberDetected
-  bne writeKeyboardBufferFindKeyMapPositionLoop
-  jsr buttonPressed
+;   inx
+;   lda keyPressedPosition
+;   adc columnNumberDetected
+;   sta keyPressedPosition
+;   cpx rowNumberDetected
+;   bne writeKeyboardBufferFindKeyMapPositionLoop
+;   jsr buttonPressed
   lda #$d4 ;position cursor at the start of sthe fourth line
   jsr lcd_send_instruction
-  ;ldy keyPressedPosition 
-  ;lda (keymapLow),Y
-  lda #$31 ;load letter ascii
+  ldy #$0 
+  lda (keymapLow),Y
+  ;lda #$31 ;load letter ascii
   jsr print_char 
   jsr delay_1_sec
   jsr welcomeMessage
@@ -428,7 +425,7 @@ loadKeymap:
   ldy #$ff
 loadKeymapLoop:
   iny
-  cpy #totalKeymapLenght ;80 decimal it counts from 0 to 49 and then at 50 is the 81 number quit
+  cpy #totalKeymapLenght ;16 decimal it counts from 0 to E and then at 50 is the 81 number quit
   beq loadKeymapEnd
   ; copy from ROM to RAM the LCD positions
   lda (keymapROMZeroPageLow),Y
