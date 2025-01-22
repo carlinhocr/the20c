@@ -37,10 +37,11 @@ rowDetected = $b6
 rowNumberDetected = $b7
 columnNumberDetected = $b8
 
-keymapMemoryLowZeroPage=$b9
-keymapMemoryHighZeroPage=$ba
-keymapROMZeroPageLow=$bb
-keymapROMZeroPageHigh=$bc
+keymapMemoryLowZeroPage=$ba
+keymapMemoryHighZeroPage=$bb
+
+keymapROMZeroPageLow=$bc
+keymapROMZeroPageHigh=$bd
 
 keyPressedAscii=$bd
 keyPressedPosition=$be
@@ -49,7 +50,7 @@ startRAMData =$2000
 
 
 ;constants
-totalKeymapLenght=$0F ;16 key positions
+totalKeymapLenght=$0f ;16 key positions
 
 
 ;Vectors
@@ -64,21 +65,15 @@ screenMemoryLow=$34 ;80 bytes
 screenMemoryHigh=$35 
 screenMemoryLow2=$36 ;80 bytes
 screenMemoryHigh2=$37 
-
 lcdCharPositionsLowZeroPage =$38 
 lcdCharPositionsHighZeroPage =$39
 lcdROMPositionsLowZeroPage =$3a 
 lcdROMPositionsHighZeroPage =$3b
 initialScreenZeroPageLow=$3c
 initialScreenZeroPageHigh=$3d
-
-
 temporaryY=$40
-
 record_lenght=$CC ;it is a memory position
 record_lenght_plus1=$CD
-
-
 ;Memory Mappings
 
 screenBufferLow =$00 ;goes to $50 which is 80 decimal
@@ -359,43 +354,14 @@ writeKeyboardBufferFindKeyMapPositionLoop:
   lda #$d4 ;position cursor at the start of sthe fourth line
   jsr lcd_send_instruction
   ldy #$0 
-  lda (keymapLow),Y
+  lda (keymapMemoryLowZeroPage),Y
   ;lda #$31 ;load letter ascii
   jsr print_char 
   jsr delay_1_sec
   jsr welcomeMessage
   rts
 
-bin_2_ascii_Row:
-  lda #0 ;this signals the empty string
-  sta message ;initialize the string we will use for the results
-  ;BEGIN Initialization of the 4 bytes
-  ; initializae value to be the counter to ccount interrupts 
-  sei ;disable interrupts so as to update properly the counter
-  lda rowNumberDetected
-  sta value 
-  lda #$00
-  sta value + 1
-  cli ; reenable interrupts after updating
-  jsr bin_2_ascii
-  rts
-
-bin_2_ascii_Column:
-  lda #0 ;this signals the empty string
-  sta message ;initialize the string we will use for the results
-  ;BEGIN Initialization of the 4 bytes
-  ; initializae value to be the counter to ccount interrupts 
-  sei ;disable interrupts so as to update properly the counter
-  lda columnNumberDetected
-  sta value 
-  lda #$00
-  sta value + 1
-  cli ; reenable interrupts after updating
-  jsr bin_2_ascii
-  rts  
-
 printKeyboardBuffer:
-  lda #$4
   rts
 
 loadKeymap:
@@ -411,7 +377,7 @@ loadKeymap:
   ldy #$ff
 loadKeymapLoop:
   iny
-  cpy #totalKeymapLenght ;16 decimal it counts from 0 to E and then at 50 is the 81 number quit
+  cpy #totalKeymapLenght ;16 decimal it counts from 0 to E and then at F is the 16 number quit
   beq loadKeymapEnd
   ; copy from ROM to RAM the LCD positions
   lda (keymapROMZeroPageLow),Y
