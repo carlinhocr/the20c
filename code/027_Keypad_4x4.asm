@@ -309,21 +309,21 @@ programLoop:
 keyboardScan:
   ;scan column 0 at PB0
   ;write 0 to column 0 at PB0
-  lda #%11111110
   lda #$0
   sta columnNumberDetected
+  lda #%11111110
   jsr keyboardScanColumn
   ;scan column 1 at PB0
   ;write 0 to column 1 at PB0
-  lda #%11111101
   lda #$1
   sta columnNumberDetected
+  lda #%11111101
   jsr keyboardScanColumn
   ;scan column 2 at PB0
   ;write 0 to column 2 at PB0
-  lda #%11111011
   lda #$2
   sta columnNumberDetected
+  lda #%11111011
   jsr keyboardScanColumn
   ;scan column 3 at PB0
   ;write 0 to column 3 at PB0
@@ -392,8 +392,8 @@ keyboardScanRowsEnd:
 writeKeyboardBuffer:
   lda "1" ;load letter ascii
   jsr print_char 
-  jsr bin_2_ascii_Row
-  jsr bin_2_ascii_Column
+  ;jsr bin_2_ascii_Row
+  ;jsr bin_2_ascii_Column
   rts
 
 bin_2_ascii_Row:
