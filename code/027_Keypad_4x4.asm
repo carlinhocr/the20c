@@ -42,6 +42,9 @@ keymapMemoryHighZeroPage=$ba
 keymapROMZeroPageLow=$bb
 keymapROMZeroPageHigh=$bc
 
+keyPressedAscii=$bd
+keyPressedPosition=$be
+
 startRAMData =$2000
 
 
@@ -372,15 +375,27 @@ keyboardScanRowsEnd:
 writeKeyboardBuffer:
   lda #$0
   sta rowDetected
-  jsr buttonPressed
+  lda #$0
+  sta keyPressedPosition
+  ldx #$FF
+  clc
+writeKeyboardBufferFindKeyMapPositionLoop:  
+  inx
+  lda keyPressedPosition
+  adc columnNumberDetected
+  sta keyPressedPosition
+  cpx rowNumberDetected
+  bne writeKeyboardBufferFindKeyMapPositionLoop
   lda #$d4 ;position cursor at the start of sthe fourth line
   jsr lcd_send_instruction
-  lda #"1" ;load letter ascii
+  ldy keyPressedPosition 
+  lda (keymapLow),Y
   jsr print_char 
-  jsr bin_2_ascii_Row
-  lda #$d7 ;position cursor at the start of sthe fourth line
-  jsr lcd_send_instruction
-  jsr bin_2_ascii_Column
+  ;jsr buttonPressed
+  ;lda #$d4 ;position cursor at the start of sthe fourth line
+  ;jsr lcd_send_instruction
+  ;lda #"1" ;load letter ascii
+  ;jsr print_char 
   jsr delay_1_sec
   jsr welcomeMessage
   rts
