@@ -51,26 +51,6 @@ startRAMData =$2000
 ;constants
 totalKeymapLenght=$0F ;16 key positions
 
-;vectors
-
-
-
-
-
-;Memory Mappings
-
-screenBufferLow =$00 ;goes to $50 which is 80 decimal
-screenBufferHigh =$30
-
-lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
-lcdCharPositionsHigh =$31
-
-keymapLow = $00
-keymapHigh =$32
-
-keyboardBufferLow = $00 
-keyboardBufferHigh = $33 ;256 positions from $3000 to $30FF
-
 
 ;Vectors
 
@@ -101,11 +81,17 @@ record_lenght_plus1=$CD
 
 ;Memory Mappings
 
+screenBufferLow =$00 ;goes to $50 which is 80 decimal
+screenBufferHigh =$30
 
+lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
+lcdCharPositionsHigh =$31
 
-;variables
+keymapLow = $00
+keymapHigh =$32
 
-
+keyboardBufferLow = $00 
+keyboardBufferHigh = $33 ;256 positions from $3000 to $30FF
 
 ;constants
 cursor_char=$00 ;this selects a ship
