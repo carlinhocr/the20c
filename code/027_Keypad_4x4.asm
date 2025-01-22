@@ -1,14 +1,9 @@
-;CIA Ports and Constants
-;PORTB = $6001
-;PORTA = $6000
-;LCD_DDRB = $6003
-;DDRA = $6002
-
 ;define ports and constansts VIA1 (6000) VIA2 (7000)
 ;define LCD primitives for showing one message VIA1 or VIA2
-;define LED primitives for showing lights on LCD_PORTA and PORTB VIA1 or VIA2
+;define KEYBOARD primitives for showing lights on KB_PORTA and KB_PORTB VIA1 or VIA2
+;scan keyboard on VIA2
 ;Show message on LCD on VIA1
-;show light show with LEDs on VIA2
+;show light show with LEDs 
 
 ;PORTA rows input #$00
 ;PORTB columns output #$FF
@@ -27,17 +22,21 @@ LCD_PCR = $600c
 LCD_IFR = $600d
 LCD_IER = $600e
 
-LED_PORTB = $7000
-LED_PORTA = $7001
-LED_DDRB = $7002
-LED_DDRA = $7003
-LED_PCR = $700c
-LED_IFR = $700d
-LED_IER = $700e
+KB_PORTB = $7000
+KB_PORTA = $7001
+KB_DDRB = $7002
+KB_DDRA = $7003
+KB_PCR = $700c
+KB_IFR = $700d
+KB_IER = $700e
 
 PORTSTATUS=$A0
 PATTERN=$A1
-
+keyboardBufferPointer = $A3
+keyboardBufferLow = $A4
+keyboardBufferHigh = $A5
+rowDetected = $A6
+columnDetected = $A7
 
 
 startRAMData =$2000
@@ -153,10 +152,6 @@ diff_3_2=$40
 
 
 
-
-
-
-
 value =$0200 ;2 bytes, Low 16 bit half
 mod10 =$0202 ;2 bytes, high 16 bit half and as it has the remainder of dividing by 10
              ;it is the mod 10 of the division (the remainder)
@@ -210,25 +205,28 @@ RESET:
   sta LCD_DDRA ;store the accumulator in the data direction register for Port A
   ;END Configure Ports A & B
 
-  ;BEGIN enable interrupts LED VIA
+  ;BEGIN enable interrupts KEYBOARD VIA
   ;enable CA1 for interrupts
   ;bits set/clear,timer1,timer2,CB1,CB2,ShiftReg,CA1,CA2
   lda #%10000010
-  sta LED_IER 
-  ;enable negative edge transition ca1 LCD_PCR register
+  sta KB_IER 
+  ;enable negative edge transition ca1 KB_PCR register
   ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
   lda #%00000000
-  sta LED_PCR 
+  sta KB_PCR 
   ;END enable interrupts
 
   ;BEGIN Configure Ports A & B
-  ;set all port B pins as output
-  lda #%11111111  ;load all ones equivalent to $FF
-  sta LED_DDRB ;store the accumulator in the data direction register for Port B
 
-  ;set all port A pins as output
+  ;set all port A pins as input for rows
+  lda #%00000000  ;load all ones equivalent to $FF
+  sta KB_DDRA ;store the accumulator in the data direction register for Port A
+
+  ;set all port B pins as output for columns
   lda #%11111111  ;load all ones equivalent to $FF
-  sta LED_DDRA ;store the accumulator in the data direction register for Port A
+  sta KB_DDRB ;store the accumulator in the data direction register for Port B
+
+
   ;END Configure Ports A & B
 
 ;END--------------------------------------------------------------------------------
@@ -261,25 +259,15 @@ RESET:
 ; 3C, 3D, 3E, 3F, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 4A, 4B, 4C, 4D, 4E, 4F
 
 
-
-; PLAN
-; create a matrix of cursor positions in memory 4x20
-;
-; create a videoRAM MAP 4x20 from ROM
-;
-; create a function that reads the video ram and position by position puts it in the
-; correct lcd position drawing the screen
-;
-; an array of aliens with the realtive position of each
-;
-; a function that reads that array and writes to the screen 
-;
-;
-
 programStart:
   jsr screenInit
   jsr welcomeMessage
-  jsr ledLights
+  jsr keyboardInit 
+  jsr programLoop
+
+keyboardInit:
+  lda #$0
+  sta keyboardBufferPointer
 
 welcomeMessage:
   jsr clear_display
@@ -298,54 +286,46 @@ welcomeMessage:
   sta charDataVectorHigh
   jsr print_message
 
-;led lights will shift lights to the right when all the shift is done
-;it will go to the other port  
-ledLights:
-  lda #%00000000 ;light pattern the first inc turns it on  
-  ;turn off both ports
-  sta LED_PORTB
-  sta LED_PORTA
-  jsr DELAY_SEC
-  lda #%10101010
-  sta LED_PORTB
-  sta LED_PORTA
-  jsr DELAY_SEC
-  lda #%01010101
-  sta LED_PORTB
-  sta LED_PORTA
-  jsr DELAY_SEC
-  jmp ledLights
-
-ledLightsPortALoop: 
-  jsr DELAY_SEC
-  lda PATTERN
-  clc
-  rol PATTERN ;rol after displaying
-  sta LED_PORTA
-  bpl ledLightsPortALoop
-  sta LED_PORTA ;write the last light of port A 1000 0000
-  clc
-  rol PATTERN ; 0000 0000
-  rol PATTERN ; 0000 0001
-  lda #%00000000 ;light pattern the first inc turns it on
-  sta LED_PORTA ;turn  off port a lights
-  lda PATTERN
-  sta LED_PORTB
-ledLightsPortBLoop: 
-  jsr DELAY_SEC
-  clc
-  rol PATTERN
-  lda PATTERN
-  sta LED_PORTB  
-  bpl ledLightsPortBLoop ;if the form is 0xxx xxxx keep going on port b
-  ;here the form is 1000 0000 
-  clc
-  rol PATTERN
-  sta LED_PORTB ;write the last light of port A 1000 0000
-  jmp ledLights
 
 programLoop:  
+  jsr keyboardScan
+  jsr printKeyboardBuffer
   jmp programLoop
+
+keyboardScan:
+  ;scan column 0 at PB0
+  ;write 0 to column 0 at PB0
+  lda #$11111110
+  sta KB_PORTB
+  jsr keyboardScanRows
+
+keyboardScanRows:
+  ;scan rows to detect if one is 0
+  lda KB_PORTA
+  ;detect which row was zero
+  ;compare to 0 on row 0
+  cmp #$11111110
+  beq row0Detected
+  ;compare to 0 on row 1
+  cmp #$11111101
+  beq row1Detected
+  ;compare to 0 on row 2
+  cmp #$11111011
+  beq row2Detected
+  ;compare to 0 on row 3
+  cmp #$11110111
+  beq row3Detected
+  ;if we are here no rows intersecting with column were detected we move to another column.
+  ;we just return
+  jmp keyboardScanRowsEnd
+row0Detected:
+  lda #$0
+  sta rowDetected
+
+keyboardScanRowsEnd:
+  rti
+
+
 
 
 ;BEGIN------------------------------------------------------------------------------
