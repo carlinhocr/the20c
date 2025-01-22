@@ -342,25 +342,43 @@ writeKeyboardBuffer:
   sta rowDetected
   lda #$0
   sta keyPressedPosition
+  lda #$0
+  cmp rowNumberDetected
+  beq writeKeyboardBufferRow0
   ldx #$FF
 writeKeyboardBufferFindKeyMapPositionLoop:  
-  inx
   ;add the number of row if row is 0 the column is the number
   ;if row is 1 the column + 4 is the number
   ;ex for key "2" row 1 column 1
   ;the number is 5 from 0,1,2,3,4,5
+  inx
+  cpx rowNumberDetected
+  bne writeKeyboardBufferFindKeyMapAddOneRow
+  ;it is equal we are on the last row so we add the column number
   lda keyPressedPosition
   clc
-  adc columnNumberDetected 
+  adc columnNumberDetected
   sta keyPressedPosition
-  cpx rowNumberDetected
-  bne writeKeyboardBufferFindKeyMapPositionLoop
+  jmp writeKeyboardBufferRow0
 
-;   jsr buttonPressed
+writeKeyboardBufferFindKeyMapAddOneRow:
+  lda keyPressedPosition
+  clc
+  adc #$3 ; the number of elements in a row 
+  sta keyPressedPosition
+  jmp writeKeyboardBufferFindKeyMapPositionLoop
+
+
+writeKeyboardBufferRow0:
+  lda columnNumberDetected
+  sta keyPressedPosition
+  jmp writeKeyboardBufferMapKey
+
+
+writeKeyboardBufferMapKey:  
   lda #$d4 ;position cursor at the start of sthe fourth line
   jsr lcd_send_instruction
   ldy keyPressedPosition
-  ;ldy #$3
   lda (keymapMemoryLowZeroPage),Y
   ;lda #$31 ;load letter ascii
   jsr print_char 
