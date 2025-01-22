@@ -50,7 +50,7 @@ startRAMData =$2000
 
 
 ;constants
-totalKeymapLenght=$0f ;16 key positions
+totalKeymapLenght=$10 ;16 key positions one more
 
 
 ;Vectors
