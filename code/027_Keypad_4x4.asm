@@ -104,20 +104,6 @@ gameStatus=$a4 ;0 not started, 1 playing, 2 over
 record_lenght=$CC ;it is a memory position
 record_lenght_plus1=$CD
 
-rightCursorVectorLow=$d0
-rightCursorVectorHigh=$d1
-leftCursorVectorLow=$d2
-leftCursorVectorHigh=$d3
-upCursorVectorLow=$d4
-upCursorVectorHigh=$d5
-downCursorVectorLow=$d6
-downCursorVectorHigh=$d7
-fireCursorVectorLow=$d8
-fireCursorVectorHigh=$d9
-line_cursor=$da
-scoreMessageVectorLow=$db 
-scoreMessageVectorHigh=$dc
-
 
 ;Memory Mappings
 
@@ -388,11 +374,15 @@ writeKeyboardBuffer:
   sta rowDetected
   jsr buttonPressed
   jsr delay_1_sec
-  jsr welcomeMessage
   ;lda "1" ;load letter ascii
   ;jsr print_char 
-  ;jsr bin_2_ascii_Row
-  ;jsr bin_2_ascii_Column
+  lda #$d4 ;position cursor at the start of sthe fourth line
+  jsr lcd_send_instruction
+  jsr bin_2_ascii_Row
+  lda #$d7 ;position cursor at the start of sthe fourth line
+  jsr lcd_send_instruction
+  jsr bin_2_ascii_Column
+  jsr welcomeMessage
   rts
 
 bin_2_ascii_Row:
