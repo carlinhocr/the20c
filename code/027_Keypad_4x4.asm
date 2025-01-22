@@ -373,7 +373,6 @@ writeKeyboardBuffer:
   lda #$0
   sta rowDetected
   jsr buttonPressed
-  jsr delay_1_sec
   lda #$d4 ;position cursor at the start of sthe fourth line
   jsr lcd_send_instruction
   lda #"1" ;load letter ascii
@@ -382,6 +381,7 @@ writeKeyboardBuffer:
   lda #$d7 ;position cursor at the start of sthe fourth line
   jsr lcd_send_instruction
   jsr bin_2_ascii_Column
+  jsr delay_1_sec
   jsr welcomeMessage
   rts
 
