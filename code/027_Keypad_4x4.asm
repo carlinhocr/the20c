@@ -928,8 +928,8 @@ initialScreen:
   .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
   
 keyboardMap:
-  ;.ascii "1","2","3","A" 
-  .byte $31,$32,$33,$41 
+  .ascii "1","2","3","A" 
+  ;.byte $31,$32,$33,$41 
   .byte $34,$35,$36,$42
   .byte $37,$38,$39,$43
   .byte $2a,$30,$23,$44
