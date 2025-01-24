@@ -30,10 +30,17 @@ KB_PCR = $700c
 KB_IFR = $700d
 KB_IER = $700e
 
+;zero page memory positions for Vectors and Data
+
 PORTSTATUS=$b0
 PATTERN=$b1
+rowDetected = $b2
 keyboardBufferPointer = $b3 ;points to the next free space on the keyboard buffer
-rowDetected = $b6
+keyboardBufferZPLow = $b5 
+keyboardBufferZPHigh = $b6 ;256 positions from $3000 to $30FF
+screenCursor=$b7
+characterToBuffer=$b8
+
 rowNumberDetected = $b7
 columnNumberDetected = $b8
 
@@ -46,35 +53,27 @@ keymapROMZeroPageHigh=$bd
 keyPressedAscii=$bd
 keyPressedPosition=$be
 
-startRAMData =$2000
-
-
-;constants
-totalKeymapLenght=$10 ;16 key positions one more
-
-
-;Vectors
-
-charLoadLow=$28
-charLoadHigh=$29
 charDataVectorLow = $30
 charDataVectorHigh = $31
 delay_COUNT_A = $32        
 delay_COUNT_B = $33
 screenMemoryLow=$34 ;80 bytes
 screenMemoryHigh=$35 
-screenMemoryLow2=$36 ;80 bytes
-screenMemoryHigh2=$37 
-lcdCharPositionsLowZeroPage =$38 
-lcdCharPositionsHighZeroPage =$39
-lcdROMPositionsLowZeroPage =$3a 
-lcdROMPositionsHighZeroPage =$3b
-initialScreenZeroPageLow=$3c
-initialScreenZeroPageHigh=$3d
-temporaryY=$40
-record_lenght=$CC ;it is a memory position
-record_lenght_plus1=$CD
+lcdCharPositionsLowZeroPage =$36 
+lcdCharPositionsHighZeroPage =$36
+lcdROMPositionsLowZeroPage =$38 
+lcdROMPositionsHighZeroPage =$39
+initialScreenZeroPageLow=$3a
+initialScreenZeroPageHigh=$3b
+record_lenght=$3c ;it is a memory position
+
+
+
+;constants
+totalKeymapLenght=$10 ;16 key positions one more
+cursorInitialPosition=$d4
 ;Memory Mappings
+;these are constants where we reflect the number of the memory position
 
 screenBufferLow =$00 ;goes to $50 which is 80 decimal
 screenBufferHigh =$30
@@ -89,22 +88,11 @@ keyboardBufferLow = $00
 keyboardBufferHigh = $33 ;256 positions from $3000 to $30FF
 
 ;constants
-cursor_char=$00 ;this selects a ship
-blank_char=$20
 fill=$43 ;letter C
 totalScreenLenght4Lines=$50
 totalScreenLenght=$3c ;make it only 3 lines long 3c = 60 decimal
 end_char=$ff
-
-xLimit=$04 ; how much the shift moves left and right
-
 cblank=$20
-
-
-diff_1_0=$40
-diff_2_1=$2c
-diff_3_2=$40
-
 
 ;bin 2 ascii values
 value =$0200 ;2 bytes, Low 16 bit half
@@ -193,7 +181,7 @@ RESET:
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------GAME-----------------------------------------------
+;--------------------------------MAIN-----------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
@@ -220,9 +208,20 @@ programStart:
   jsr keyboardInit 
   jsr programLoop
 
+programLoop:  
+  jsr keyboardScan
+  jsr printKeyboardBuffer
+  jmp programLoop  
+
+
 keyboardInit:
   lda #$0
   sta keyboardBufferPointer
+  sta screenCursor
+  lda #keyboardBufferLow
+  sta keyboardBufferZPLow
+  lda #keyboardBufferHigh
+  sta keyboardBufferZPHigh
   jsr loadKeymap
   lda #$94 ;position cursor at the start of third line
   jsr lcd_send_instruction
@@ -248,11 +247,6 @@ buttonPressed:
   sta charDataVectorHigh
   jsr print_message
   rts  
-
-programLoop:  
-  jsr keyboardScan
-  jsr printKeyboardBuffer
-  jmp programLoop
 
 keyboardScan:
   ;scan column 0 at PB0
@@ -385,7 +379,8 @@ addColumnNumber:
   clc
   adc columnNumberDetected
   sta keyPressedPosition
-  jmp writeKeyboardBufferMapKey
+  ;jmp writeKeyboardBufferMapKey
+  jmp addKeyToKeyboardBufferMapKey
 
 writeKeyboardBufferMapKey:  
   lda #$d4 ;position cursor at the start of sthe fourth line
@@ -397,7 +392,33 @@ writeKeyboardBufferMapKey:
   jsr welcomeMessage
   rts
 
+addKeyToKeyboardBufferMapKey:  
+  ldy keyPressedPosition
+  lda (keymapMemoryLowZeroPage),Y ;store character in accumulator
+  ldy keyboardBufferPointer
+  sta (keyboardBufferZPLow),Y ;save character to pointer
+  lda #$1
+  clc 
+  adc keyboardBufferPointer
+  rts
+
 printKeyboardBuffer:
+  ldy #$FF
+printKeyboardBufferLoop:
+  iny
+  cpy #keyboardBufferPointer 
+  beq printKeyboardBufferEnd
+  lda #cursorInitialPosition ;position cursor at the start of sthe fourth line
+  clc   
+  adc screenCursor
+  jsr lcd_send_instruction
+  lda #$1
+  adc screenCursor
+  lda (keyboardBufferZPLow),Y 
+  jsr print_char 
+  jsr delay_1_sec
+  jmp printKeyboardBufferLoop
+printKeyboardBufferEnd:
   rts
 
 loadKeymap:
