@@ -379,8 +379,8 @@ addColumnNumber:
   clc
   adc columnNumberDetected
   sta keyPressedPosition
-  ;jmp writeKeyboardBufferMapKey
-  jmp addKeyToKeyboardBufferMapKey
+  jmp writeKeyboardBufferMapKey
+  ;jmp addKeyToKeyboardBufferMapKey
 
 writeKeyboardBufferMapKey:  
   lda #$d4 ;position cursor at the start of sthe fourth line
