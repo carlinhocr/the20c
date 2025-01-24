@@ -389,7 +389,7 @@ addKeyToKeyboardBufferMapKey:
   ldy keyboardBufferPointer
   sta (keyboardBufferZPLow),Y ;save character to pointer
   inc keyboardBufferPointer
-  jsr DELAY_onetenth_SEC ;for debouncing
+  jsr DELAY_HALF_SEC ;for debouncing
   rts
 
 printKeyboardBuffer:
