@@ -389,6 +389,7 @@ addKeyToKeyboardBufferMapKey:
   ldy keyboardBufferPointer
   sta (keyboardBufferZPLow),Y ;save character to pointer
   inc keyboardBufferPointer
+  jsr DELAY_onetenth_SEC ;for debouncing
   rts
 
 printKeyboardBuffer:
@@ -406,7 +407,6 @@ printKeyboardBufferLoop:
   inc screenCursor ;always points to the first free
   lda characterToPrint
   jsr print_char 
-  jsr delay_1_sec
   jmp printKeyboardBufferLoop
 printKeyboardBufferEnd:
   lda #$0
