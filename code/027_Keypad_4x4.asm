@@ -36,13 +36,12 @@ PORTSTATUS=$b0
 PATTERN=$b1
 rowDetected = $b2
 keyboardBufferPointer = $b3 ;points to the next free space on the keyboard buffer
-keyboardBufferZPLow = $b5 
-keyboardBufferZPHigh = $b6 ;256 positions from $3000 to $30FF
-screenCursor=$b7
-characterToBuffer=$b8
-
-rowNumberDetected = $b7
-columnNumberDetected = $b8
+keyboardBufferZPLow = $b4 
+keyboardBufferZPHigh = $b5 ;256 positions from $3000 to $30FF
+screenCursor=$b6
+characterToBuffer=$b7
+rowNumberDetected = $b8
+columnNumberDetected = $b9
 
 keymapMemoryLowZeroPage=$ba
 keymapMemoryHighZeroPage=$bb
@@ -50,8 +49,8 @@ keymapMemoryHighZeroPage=$bb
 keymapROMZeroPageLow=$bc
 keymapROMZeroPageHigh=$bd
 
-keyPressedAscii=$bd
-keyPressedPosition=$be
+keyPressedAscii=$be
+keyPressedPosition=$bf
 
 charDataVectorLow = $30
 charDataVectorHigh = $31
@@ -72,6 +71,12 @@ record_lenght=$3c ;it is a memory position
 ;constants
 totalKeymapLenght=$10 ;16 key positions one more
 cursorInitialPosition=$d4
+fill=$43 ;letter C
+totalScreenLenght4Lines=$50
+totalScreenLenght=$3c ;make it only 3 lines long 3c = 60 decimal
+end_char=$ff
+cblank=$20
+
 ;Memory Mappings
 ;these are constants where we reflect the number of the memory position
 
@@ -87,12 +92,7 @@ keymapHigh =$32
 keyboardBufferLow = $00 
 keyboardBufferHigh = $33 ;256 positions from $3000 to $30FF
 
-;constants
-fill=$43 ;letter C
-totalScreenLenght4Lines=$50
-totalScreenLenght=$3c ;make it only 3 lines long 3c = 60 decimal
-end_char=$ff
-cblank=$20
+
 
 ;bin 2 ascii values
 value =$0200 ;2 bytes, Low 16 bit half
