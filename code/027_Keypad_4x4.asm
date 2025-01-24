@@ -39,7 +39,7 @@ keyboardBufferPointer = $b3 ;points to the next free space on the keyboard buffe
 keyboardBufferZPLow = $b4 
 keyboardBufferZPHigh = $b5 ;256 positions from $3000 to $30FF
 screenCursor=$b6
-characterToBuffer=$b7
+characterToPrint=$b7
 rowNumberDetected = $b8
 columnNumberDetected = $b9
 
@@ -399,13 +399,15 @@ printKeyboardBufferLoop:
   iny
   cpy #keyboardBufferPointer 
   beq printKeyboardBufferEnd
+  lda (keyboardBufferZPLow),Y 
+  sta characterToPrint
   lda #cursorInitialPosition ;position cursor at the start of sthe fourth line
   clc   
   adc screenCursor
   jsr lcd_send_instruction
   lda #$1
   adc screenCursor
-  lda (keyboardBufferZPLow),Y 
+  lda characterToPrint
   jsr print_char 
   jsr delay_1_sec
   jmp printKeyboardBufferLoop
