@@ -71,6 +71,7 @@ record_lenght=$3c ;it is a memory position
 ;constants
 totalKeymapLenght=$10 ;16 key positions one more
 cursorInitialPosition=$d4
+cursorFinalPosition=$e7
 fill=$43 ;letter C
 totalScreenLenght4Lines=$50
 totalScreenLenght=$3c ;make it only 3 lines long 3c = 60 decimal
@@ -404,7 +405,11 @@ printKeyboardBufferLoop:
   clc   
   adc screenCursor
   jsr lcd_send_instruction
+  lda screenCursor
+  cmp #cursorFinalPosition
+  beq printKeyboardBufferCharacter ;keep cursor so not to overrun the line
   inc screenCursor ;always points to the first free
+printKeyboardBufferCharacter:  
   lda characterToPrint
   jsr print_char 
   jmp printKeyboardBufferLoop
