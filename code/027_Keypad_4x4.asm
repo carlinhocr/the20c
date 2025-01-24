@@ -388,16 +388,14 @@ addKeyToKeyboardBufferMapKey:
   lda (keymapMemoryLowZeroPage),Y ;store character in accumulator
   ldy keyboardBufferPointer
   sta (keyboardBufferZPLow),Y ;save character to pointer
-  lda #$1
-  clc 
-  adc keyboardBufferPointer
+  inc keyboardBufferPointer
   rts
 
 printKeyboardBuffer:
   ldy #$FF
 printKeyboardBufferLoop:
   iny
-  cpy #keyboardBufferPointer 
+  cpy keyboardBufferPointer 
   beq printKeyboardBufferEnd
   lda (keyboardBufferZPLow),Y 
   sta characterToPrint
@@ -405,13 +403,14 @@ printKeyboardBufferLoop:
   clc   
   adc screenCursor
   jsr lcd_send_instruction
-  lda #$1
-  adc screenCursor
+  inc screenCursor ;always points to the first free
   lda characterToPrint
   jsr print_char 
   jsr delay_1_sec
   jmp printKeyboardBufferLoop
 printKeyboardBufferEnd:
+  lda #$0
+  sta keyboardBufferPointer
   rts
 
 loadKeymap:
