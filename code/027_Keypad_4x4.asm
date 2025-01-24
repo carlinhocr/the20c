@@ -210,8 +210,15 @@ programStart:
 
 programLoop:  
   jsr keyboardScan
-  jsr printKeyboardBuffer
+  ;jsr printKeyboardBuffer
   jmp programLoop  
+
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------MAIN-----------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------  
 
 
 keyboardInit:
@@ -392,15 +399,15 @@ writeKeyboardBufferMapKey:
   jsr welcomeMessage
   rts
 
-addKeyToKeyboardBufferMapKey:  
-  ldy keyPressedPosition
-  lda (keymapMemoryLowZeroPage),Y ;store character in accumulator
-  ldy keyboardBufferPointer
-  sta (keyboardBufferZPLow),Y ;save character to pointer
-  lda #$1
-  clc 
-  adc keyboardBufferPointer
-  rts
+; addKeyToKeyboardBufferMapKey:  
+;   ldy keyPressedPosition
+;   lda (keymapMemoryLowZeroPage),Y ;store character in accumulator
+;   ldy keyboardBufferPointer
+;   sta (keyboardBufferZPLow),Y ;save character to pointer
+;   lda #$1
+;   clc 
+;   adc keyboardBufferPointer
+;   rts
 
 printKeyboardBuffer:
   ldy #$FF
