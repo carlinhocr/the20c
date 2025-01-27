@@ -70,11 +70,12 @@ record_lenght=$3c ;it is a memory position
 
 ;constants
 totalKeymapLenght=$10 ;16 key positions one more
-cursorInitialPosition=$e7
+cursorInitialPosition=$d4
 cursorFinalPosition=$e7
 fill=$43 ;letter C
 totalScreenLenght4Lines=$50
 totalScreenLenght=$3c ;make it only 3 lines long 3c = 60 decimal
+totalLineLenght=$13 ;20 positions in hexadecimal is 13
 end_char=$ff
 cblank=$20
 
@@ -494,11 +495,10 @@ printKeyboardBufferLoop:
   clc   
   adc screenCursor
   jsr lcd_send_instruction
-  lda #cursorFinalPosition
+  lda #totalLineLenght
   cmp screenCursor 
-  bmi printKeyboardBufferCharacterIncCursor ;keep cursor so not to overrun the line
-  lda #cursorFinalPosition
-  jsr lcd_send_instruction
+  beq printKeyboardBufferCharacter ;keep cursor so not to overrun the line
+  inc screenCursor ;always points to the first free
 printKeyboardBufferCharacter:  
   lda characterToPrint
   jsr print_char 
@@ -507,9 +507,6 @@ printKeyboardBufferEnd:
   lda #$0
   sta keyboardBufferPointer
   rts
-printKeyboardBufferCharacterIncCursor:  
-  inc screenCursor ;always points to the first free
-  jmp printKeyboardBufferCharacter
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
