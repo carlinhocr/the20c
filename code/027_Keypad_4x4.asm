@@ -496,7 +496,7 @@ printKeyboardBufferLoop:
   jsr lcd_send_instruction
   lda screenCursor
   cmp #cursorFinalPosition
-  beq printKeyboardBufferCharacter ;keep cursor so not to overrun the line
+  bmi printKeyboardBufferCharacter ;keep cursor so not to overrun the line
   inc screenCursor ;always points to the first free
 printKeyboardBufferCharacter:  
   lda characterToPrint
