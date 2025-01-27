@@ -71,7 +71,7 @@ record_lenght=$3c ;it is a memory position
 ;constants
 totalKeymapLenght=$10 ;16 key positions one more
 cursorInitialPosition=$d4
-cursorFinalPosition=$e7
+cursorFinalPosition=$e6
 fill=$43 ;letter C
 totalScreenLenght4Lines=$50
 totalScreenLenght=$3c ;make it only 3 lines long 3c = 60 decimal
