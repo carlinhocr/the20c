@@ -144,6 +144,8 @@ RESET:
 
 
 programStart:
+  ;initialize variables, vectors, memory mappings and constans
+  ;configure stack and enable interrupts
   jsr viaLcdInit
   jsr viaKeyboardInit
   jsr screenInit
