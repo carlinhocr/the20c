@@ -282,6 +282,28 @@ keyboardInit:
   jsr lcd_send_instruction
   rts
 
+loadKeymap:
+  ;load vectors
+  lda #keymapLow
+  sta keymapMemoryLowZeroPage ; to use indirect addressing with y
+  lda #keymapHigh
+  sta keymapMemoryHighZeroPage
+  lda #<keyboardMap
+  sta keymapROMZeroPageLow
+  lda #>keyboardMap
+  sta keymapROMZeroPageHigh
+  ldy #$ff
+loadKeymapLoop:
+  iny
+  cpy #totalKeymapLenght ;16 decimal it counts from 0 to E and then at F is the 16 number quit
+  beq loadKeymapEnd
+  ; copy from ROM to RAM the LCD positions
+  lda (keymapROMZeroPageLow),Y
+  sta (keymapMemoryLowZeroPage),Y
+  jmp loadKeymapLoop
+loadKeymapEnd:
+  rts    
+
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------KEYBOARD INIT--------------------------------------
@@ -484,29 +506,6 @@ printKeyboardBufferEnd:
   lda #$0
   sta keyboardBufferPointer
   rts
-
-loadKeymap:
-  ;load vectors
-  lda #keymapLow
-  sta keymapMemoryLowZeroPage ; to use indirect addressing with y
-  lda #keymapHigh
-  sta keymapMemoryHighZeroPage
-  lda #<keyboardMap
-  sta keymapROMZeroPageLow
-  lda #>keyboardMap
-  sta keymapROMZeroPageHigh
-  ldy #$ff
-loadKeymapLoop:
-  iny
-  cpy #totalKeymapLenght ;16 decimal it counts from 0 to E and then at F is the 16 number quit
-  beq loadKeymapEnd
-  ; copy from ROM to RAM the LCD positions
-  lda (keymapROMZeroPageLow),Y
-  sta (keymapMemoryLowZeroPage),Y
-  jmp loadKeymapLoop
-loadKeymapEnd:
-  rts
-
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
