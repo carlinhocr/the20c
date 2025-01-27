@@ -70,7 +70,7 @@ record_lenght=$3c ;it is a memory position
 
 ;constants
 totalKeymapLenght=$10 ;16 key positions one more
-cursorInitialPosition=$d4
+cursorInitialPosition=$e7
 cursorFinalPosition=$e7
 fill=$43 ;letter C
 totalScreenLenght4Lines=$50
