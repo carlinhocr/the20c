@@ -69,7 +69,9 @@ record_lenght=$3c ;it is a memory position
 
 
 ;constants
-totalKeymapLenght=$10 ;16 key positions one more
+;BEGIN COMMODORE KEYBOARD CONSTANT
+totalKeymapLenght=$40 ;64 key positions one more
+;END COMMODORE KEYBOARD CONSTANT
 cursorInitialPosition=$d4
 cursorFinalPosition=$e7
 fill=$43 ;letter C
@@ -298,7 +300,7 @@ loadKeymap:
   ldy #$ff
 loadKeymapLoop:
   iny
-  cpy #totalKeymapLenght ;16 decimal it counts from 0 to E and then at F is the 16 number quit
+  cpy #totalKeymapLenght ;64 decimal it counts from 0 to 63 and then at 64 quits
   beq loadKeymapEnd
   ; copy from ROM to RAM the LCD positions
   lda (keymapROMZeroPageLow),Y
@@ -1015,7 +1017,7 @@ irq:
 
 
 startMessage1:
-  .ascii "     KEYPAD 4x4"    
+  .ascii "     C64 KEYBOARD"    
 
 buttonPressedMessage:
   .ascii "   BUTTON PRESSED"
