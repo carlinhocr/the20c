@@ -426,6 +426,7 @@ keyboardScanRows:
   ;if we are here no rows intersecting with column were detected we move to another column.
   ;we just return
   jmp keyboardScanRowsEnd
+
 row0Detected:
   lda #$1
   sta rowDetected
@@ -1173,7 +1174,7 @@ keyboardMap:
 ;   .byte $41,$41,$41,$41,$41,$41,$41,$41
 
   .ascii "#","#","#","#","#","#","#","#"  
-  .ascii "3","W","A","4","Z","S","E","#"
+  .ascii "3","W","A","4","Z","S","E","l"
   .ascii "5","R","D","6","C","F","T","C"
   .ascii "7","Y","G","8","B","H","U","V" 
   .ascii "9","I","J","0","M","K","O","N" 
