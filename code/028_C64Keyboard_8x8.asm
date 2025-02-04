@@ -349,14 +349,50 @@ keyboardScan:
   jsr keyboardScanColumn
   rts
 
+  ;scan column 3 at PB0
+  ;write 0 to column 3 at PB0
+  lda #$4
+  sta columnNumberDetected
+  lda #%11101111
+  jsr keyboardScanColumn
+  rts
+
+    ;scan column 3 at PB0
+  ;write 0 to column 3 at PB0
+  lda #$5
+  sta columnNumberDetected
+  lda #%11011111
+  jsr keyboardScanColumn
+  rts
+
+  ;scan column 6 at PB0
+  ;write 0 to column 3 at PB0
+  lda #$6
+  sta columnNumberDetected
+  lda #%10111111
+  jsr keyboardScanColumn
+  rts
+
+  ;scan column 7 at PB0
+  ;write 0 to column 3 at PB0
+  lda #$7
+  sta columnNumberDetected
+  lda #%01111111
+  jsr keyboardScanColumn
+  rts
+
 keyboardScanColumn:  
   sta KB_PORTB
   jsr keyboardScanRows
   lda #$1 ;see if a row was detected
   cmp rowDetected
-  beq writeKeyboardBuffer
+  beq writeKeyboardBufferJump
   lda #$0
   sta rowDetected
+  rts
+
+writeKeyboardBufferJump:  
+  jsr writeKeyboardBuffer
   rts
 
 keyboardScanRows:
@@ -375,6 +411,18 @@ keyboardScanRows:
   ;compare to 0 on row 3
   cmp #%11110111
   beq row3Detected
+  ;compare to 0 on row 4
+  cmp #%11101111
+  beq row4Detected
+  ;compare to 0 on row 5
+  cmp #%11011111
+  beq row5Detected
+  ;compare to 0 on row 6
+  cmp #%10111111
+  beq row6Detected
+  ;compare to 0 on row 7
+  cmp #%01111111
+  beq row7Detected
   ;if we are here no rows intersecting with column were detected we move to another column.
   ;we just return
   jmp keyboardScanRowsEnd
@@ -402,6 +450,30 @@ row3Detected:
   lda #$3
   sta rowNumberDetected
   jmp keyboardScanRowsEnd
+row4Detected:
+  lda #$1
+  sta rowDetected
+  lda #$4
+  sta rowNumberDetected
+  jmp keyboardScanRowsEnd
+row5Detected:
+  lda #$1
+  sta rowDetected
+  lda #$5
+  sta rowNumberDetected
+  jmp keyboardScanRowsEnd
+row6Detected:
+  lda #$1
+  sta rowDetected
+  lda #$6
+  sta rowNumberDetected
+  jmp keyboardScanRowsEnd
+row7Detected:
+  lda #$1
+  sta rowDetected
+  lda #$7
+  sta rowNumberDetected
+  jmp keyboardScanRowsEnd
 keyboardScanRowsEnd:
   rts
 
@@ -423,6 +495,18 @@ writeKeyboardBuffer:
   lda #$3
   cmp rowNumberDetected
   beq row3Case
+  lda #$4
+  cmp rowNumberDetected
+  beq row4Case
+  lda #$5
+  cmp rowNumberDetected
+  beq row5Case
+  lda #$6
+  cmp rowNumberDetected
+  beq row7Case
+  lda #$7
+  cmp rowNumberDetected
+  beq row7Case
 
 row0Case: 
   jmp addColumnNumber
@@ -430,21 +514,49 @@ row0Case:
 row1Case: 
   lda keyPressedPosition
   clc
-  adc #$04
+  adc #$08
   sta keyPressedPosition
   jmp addColumnNumber
 
 row2Case: 
   lda keyPressedPosition
   clc
-  adc #$08
+  adc #$0f
   sta keyPressedPosition
   jmp addColumnNumber
 
 row3Case: 
   lda keyPressedPosition
   clc
-  adc #$0C
+  adc #$18
+  sta keyPressedPosition
+  jmp addColumnNumber
+
+row4Case: 
+  lda keyPressedPosition
+  clc
+  adc #$1f
+  sta keyPressedPosition
+  jmp addColumnNumber
+
+row5Case: 
+  lda keyPressedPosition
+  clc
+  adc #$28
+  sta keyPressedPosition
+  jmp addColumnNumber
+
+row6Case: 
+  lda keyPressedPosition
+  clc
+  adc #$2f
+  sta keyPressedPosition
+  jmp addColumnNumber
+
+row7Case: 
+  lda keyPressedPosition
+  clc
+  adc #$38
   sta keyPressedPosition
   jmp addColumnNumber
 
