@@ -585,7 +585,7 @@ addKeyToKeyboardBufferMapKey:
   ldy keyboardBufferPointer
   sta (keyboardBufferZPLow),Y ;save character to pointer
   inc keyboardBufferPointer
-  jsr DELAY_HALF_SEC ;for debouncing
+  jsr DELAY_onetenth_SEC ;for debouncing
   rts
 
 ;END--------------------------------------------------------------------------------
@@ -1166,10 +1166,10 @@ keyboardMap:
 ;all that i do not have a current core are #
   .byte $23,$23,$23,$23,$23,$23,$23,$23
   .byte $33,$57,$41,$34,$7a,$73,$45,$b6
-  .byte $35,$41,$41,$36,$41,$46,$41,$41
-  .byte $37,$41,$47,$38,$41,$41,$41,$41
-  .byte $39,$41,$41,$30,$41,$41,$41,$41
-  .byte $41,$41,$41,$41,$41,$41,$a0,$2c
+  .byte $35,$52,$44,$36,$43,$46,$54,$43
+  .byte $37,$59,$47,$38,$42,$48,$55,$56
+  .byte $39,$49,$4a,$30,$4d,$4b,$4f,$4c
+  .byte $2b,$50,$4c,$2d,$2c,$3a,$a0,$2c
   .byte $a1,$2a,$23,$23,$23,$3d,$23,$2f
   .byte $31,$23,$23,$32,$20,$23,$31,$a0
 
