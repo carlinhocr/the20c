@@ -163,7 +163,8 @@ programStart:
   jsr programLoop
 
 programLoop:  
-  jsr keyboardScan
+  jsr keyboardScanMini
+  ;jsr keyboardScan
   jsr printKeyboardBuffer
   jmp programLoop  
 
