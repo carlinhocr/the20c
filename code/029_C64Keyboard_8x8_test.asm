@@ -376,27 +376,32 @@ writeKeyboardBufferJumpMini:
 
 keyboardScanRecursive:
   ldy #$ff
-  lda #%11111111
+  lda #%11111110
   sta portColumn
   clc 
 keyboardScanRecLoop:
   iny
   sty columnScanned
   sty columnNumberDetected
-  rol portColumn ;because the carry is zero the first is 11111110 and the carry 1
-  lda portColumn
+  lda portColumn ; first attempt is #%1111110
   sta KB_PORTB    
   jsr keyboardScanRows
   lda #$1 ;see if a row was detected
   cmp rowDetected
-  beq writeKeyboardBufferJump
+  beq writeKeyboardBufferJump2
+keyboardScanRecLoopReturn:  
   lda #$0
   sta rowDetected ; deactivate any detected rows
   ldy columnScanned
   cpy #$7
+  sec
+  rol portColumn
   bne keyboardScanRecLoop
   rts
 
+writeKeyboardBufferJump2:  
+  jsr writeKeyboardBuffer
+  rts  
 
 keyboardScan:
   ;scan column 0 at PB0
