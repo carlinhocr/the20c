@@ -558,6 +558,8 @@ writeKeyboardBuffer:
   beq row7Case
 
 row0Case: 
+  lda #$00
+  sta keyPressedPosition
   jmp addColumnNumber
 
 row1Case: 
