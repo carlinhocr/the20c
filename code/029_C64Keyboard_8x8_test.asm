@@ -392,10 +392,10 @@ keyboardScanRecLoop:
 keyboardScanRecLoopReturn:  
   lda #$0
   sta rowDetected ; deactivate any detected rows
-  ldy columnScanned
-  cpy #$7
   sec
   rol portColumn
+  ldy columnScanned
+  cpy #$7
   bne keyboardScanRecLoop
   rts
 
