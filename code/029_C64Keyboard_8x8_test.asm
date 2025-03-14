@@ -328,6 +328,47 @@ loadKeymapEnd:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+keyboardScanMini:
+  ;scan column 0 at PB0
+  ;write 0 to column 0 at PB0
+  lda #$0
+  sta columnNumberDetected
+  lda #%11111110
+  jsr keyboardScanColumnMini
+
+keyboardScanColumnMini:  
+  sta KB_PORTB
+  jsr keyboardScanRowsMini
+  lda #$1 ;see if a row was detected
+  cmp rowDetected
+  beq writeKeyboardBufferJumpMini
+  lda #$0
+  sta rowDetected
+  rts 
+
+keyboardScanRowsMini:
+  ;scan rows to detect if one is 0
+  lda KB_PORTA
+  ;detect which row was zero
+  ;compare to 0 on row 0
+  cmp #%11111110
+  beq row0DetectedMini
+  jmp keyboardScanRowsEndMini
+
+row0DetectedMini:
+  lda #$1
+  sta rowDetected
+  lda #$0
+  sta rowNumberDetected
+  jmp keyboardScanRowsEndMini  
+
+keyboardScanRowsEndMini:  
+  rts
+
+writeKeyboardBufferJumpMini:  
+  jsr writeKeyboardBuffer
+  rts 
+
 keyboardScan:
   ;scan column 0 at PB0
   ;write 0 to column 0 at PB0
