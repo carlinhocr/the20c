@@ -58,6 +58,9 @@ keymapROMZeroPageHigh=$bd
 keyPressedAscii=$be
 keyPressedPosition=$bf
 
+columnScanned = $c0
+portColumn =$c1
+
 charDataVectorLow = $30
 charDataVectorHigh = $31
 delay_COUNT_A = $32        
@@ -164,7 +167,8 @@ programStart:
 
 programLoop:  
   ;jsr keyboardScanMini
-  jsr keyboardScan
+  jsr keyboardScanRecursive
+  ;jsr keyboardScan
   jsr printKeyboardBuffer
   jmp programLoop  
 
@@ -369,6 +373,25 @@ keyboardScanRowsEndMini:
 writeKeyboardBufferJumpMini:  
   jsr writeKeyboardBuffer
   rts 
+
+keyboardScanRecursive:
+  ldy #$ff
+  lda #%11111111
+  sta portColumn
+  clc 
+keyboardScanRecLoop:
+  iny
+  sty columnScanned
+  sty columnNumberDetected
+  rol portColumn ;because the carry is zero the first is 11111110 and the carry 1
+  lda portColumn
+  sta KB_PORTB    
+  jsr keyboardScanColumn
+  cpy #$7
+  bne keyboardScanRecLoop
+  rts
+
+
 
 keyboardScan:
   ;scan column 0 at PB0
@@ -1219,14 +1242,14 @@ initialScreen:
 
 keyboardMap: ;position of number
   ;all that i do not have a current core are #
-    .byte $30,$31,$32,$33,$34,$35,$36,$37 ; PA0
-    .byte $41,$42,$43,$44,$45,$46,$47,$48 ; PA1
-    .byte $35,$52,$44,$36,$43,$46,$54,$43 ; PA2
-    .byte $37,$59,$47,$38,$42,$48,$55,$56 ; PA3 
-    .byte $39,$49,$4a,$30,$4d,$4b,$4f,$4c ; PA4
-    .byte $23,$34,$4c,$4a,$47,$44,$41,$23 ; PA5
-    .byte $a1,$2a,$23,$23,$23,$3d,$23,$2f ; PA6
-    .byte $31,$23,$23,$32,$20,$23,$31,$a0 ; PA7  
+  .byte $30,$31,$32,$33,$34,$35,$36,$37 ; PA0
+  .byte $41,$42,$43,$44,$45,$46,$47,$48 ; PA1
+  .byte $35,$52,$44,$36,$43,$46,$54,$43 ; PA2
+  .byte $37,$59,$47,$38,$42,$48,$55,$56 ; PA3 
+  .byte $39,$49,$4a,$30,$4d,$4b,$4f,$4c ; PA4
+  .byte $23,$34,$4c,$4a,$47,$44,$41,$23 ; PA5
+  .byte $a1,$2a,$23,$23,$23,$3d,$23,$2f ; PA6
+  .byte $31,$23,$23,$32,$20,$23,$31,$a0 ; PA7  
 
 
 keyboardMap2:
