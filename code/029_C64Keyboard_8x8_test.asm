@@ -376,24 +376,28 @@ keyboardScan:
   lda #$0
   sta columnNumberDetected
   lda #%11111110
+  sta KB_PORTB
   jsr keyboardScanColumn
   ;scan column 1 at PB0
   ;write 0 to column 1 at PB0
   lda #$1
   sta columnNumberDetected
   lda #%11111101
+  sta KB_PORTB
   jsr keyboardScanColumn
   ;scan column 2 at PB0
   ;write 0 to column 2 at PB0
   lda #$2
   sta columnNumberDetected
   lda #%11111011
+  sta KB_PORTB
   jsr keyboardScanColumn
   ;scan column 3 at PB0
   ;write 0 to column 3 at PB0
   lda #$3
   sta columnNumberDetected
   lda #%11110111
+  sta KB_PORTB
   jsr keyboardScanColumn
   rts
   ;scan column 3 at PB0
@@ -401,6 +405,7 @@ keyboardScan:
   lda #$4
   sta columnNumberDetected
   lda #%11101111
+  sta KB_PORTB
   jsr keyboardScanColumn
   rts
   ;scan column 3 at PB0
@@ -408,6 +413,7 @@ keyboardScan:
   lda #$5
   sta columnNumberDetected
   lda #%11011111
+  sta KB_PORTB
   jsr keyboardScanColumn
   rts
   ;scan column 6 at PB0
@@ -415,6 +421,7 @@ keyboardScan:
   lda #$6
   sta columnNumberDetected
   lda #%10111111
+  sta KB_PORTB
   jsr keyboardScanColumn
   rts
   ;scan column 7 at PB0
@@ -422,11 +429,11 @@ keyboardScan:
   lda #$7
   sta columnNumberDetected
   lda #%01111111
+  sta KB_PORTB
   jsr keyboardScanColumn
   rts
 
 keyboardScanColumn:  
-  sta KB_PORTB
   jsr keyboardScanRows
   lda #$1 ;see if a row was detected
   cmp rowDetected
