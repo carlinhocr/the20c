@@ -401,7 +401,7 @@ keyboardScanRecLoopReturn:
 
 writeKeyboardBufferJump2:  
   jsr writeKeyboardBuffer
-  rts  
+  jmp keyboardScanRecLoopReturn  
 
 keyboardScan:
   ;scan column 0 at PB0
