@@ -396,7 +396,6 @@ keyboardScan:
   lda #%11110111
   jsr keyboardScanColumn
   rts
-
   ;scan column 3 at PB0
   ;write 0 to column 3 at PB0
   lda #$4
@@ -404,15 +403,13 @@ keyboardScan:
   lda #%11101111
   jsr keyboardScanColumn
   rts
-
-    ;scan column 3 at PB0
+  ;scan column 3 at PB0
   ;write 0 to column 3 at PB0
   lda #$5
   sta columnNumberDetected
   lda #%11011111
   jsr keyboardScanColumn
   rts
-
   ;scan column 6 at PB0
   ;write 0 to column 3 at PB0
   lda #$6
@@ -420,7 +417,6 @@ keyboardScan:
   lda #%10111111
   jsr keyboardScanColumn
   rts
-
   ;scan column 7 at PB0
   ;write 0 to column 3 at PB0
   lda #$7
