@@ -386,11 +386,16 @@ keyboardScanRecLoop:
   rol portColumn ;because the carry is zero the first is 11111110 and the carry 1
   lda portColumn
   sta KB_PORTB    
-  jsr keyboardScanColumn
+  jsr keyboardScanRows
+  lda #$1 ;see if a row was detected
+  cmp rowDetected
+  beq writeKeyboardBufferJump
+  lda #$0
+  sta rowDetected ; deactivate any detected rows
+  ldy columnScanned
   cpy #$7
   bne keyboardScanRecLoop
   rts
-
 
 
 keyboardScan:
