@@ -382,20 +382,13 @@ keyboardScanRowRecLoop:
   ldx rowScanned
   cpx #$7
   bne keyboardScanRowRecLoop
-  jmp keyboardScanRecLoopReturn
+  jmp keyboardScanRecLoopReturn ; all rows scanned nothing found go back to columns scanning
 
 keyFound:
   lda rowScanned
   sta rowNumberDetected
   lda columnScanned
   sta columnNumberDetected
-  jmp keyPosition
-  ;use the jmp or the rts not both
-  jmp keyboardScanRecLoopReturn  ; keep scanning columns and adding to the buffer
-  ;rts if i use rts it stop scanning columns because it found a key pressed and goes to print the buffer
-  ;this rts also returns to main programLoop
-
-keyPosition:
   ldx #$ff
   lda #$0
   sta keyPressedPosition
@@ -416,7 +409,7 @@ keyPositionAddColumn:
   clc
   adc columnNumberDetected
   sta keyPressedPosition
-  jmp addKeyToKeyboardBufferMapKeyRec
+  jmp addKeyToKeyboardBufferMapKeyRec ; just to separate both procedures
       
 addKeyToKeyboardBufferMapKeyRec:  
   ldy keyPressedPosition
