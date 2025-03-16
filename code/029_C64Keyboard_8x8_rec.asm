@@ -376,7 +376,7 @@ keyboardScanRowRecLoop:
   stx rowScanned
   lda STATUS_PORTA
   cmp portRow
-  beq writeKeyboardBufferJumpRec
+  beq keyFound
   sec
   rol portRow
   ldx rowScanned
@@ -384,16 +384,48 @@ keyboardScanRowRecLoop:
   bne keyboardScanRowRecLoop
   jmp keyboardScanRecLoopReturn
 
-writeKeyboardBufferJumpRec:
+keyFound:
   lda rowScanned
   sta rowNumberDetected
   lda columnScanned
   sta columnNumberDetected
-  jsr writeKeyboardBufferRec
+  jmp keyPosition
   ;use the jmp or the rts not both
   jmp keyboardScanRecLoopReturn  ; keep scanning columns and adding to the buffer
   ;rts if i use rts it stop scanning columns because it found a key pressed and goes to print the buffer
   ;this rts also returns to main programLoop
+
+keyPosition:
+  ldx #$ff
+  lda #$0
+  sta keyPressedPosition
+keyPositionLoop:
+  inx
+  cpx rowNumberDetected
+  beq keyPositionAddColumn ;stop looping when key found
+  lda keyPressedPosition
+  clc
+  adc #$08 ; keep going to the next row on the key map and add to the position of the pressed key
+  sta keyPressedPosition
+  cpx #$07
+  bne keyPositionLoop
+  rts ; return to main program loop as we have iterated more than 8 rows (from 0 to 7)
+
+keyPositionAddColumn:
+  lda keyPressedPosition
+  clc
+  adc columnNumberDetected
+  sta keyPressedPosition
+  jmp addKeyToKeyboardBufferMapKeyRec
+      
+addKeyToKeyboardBufferMapKeyRec:  
+  ldy keyPressedPosition
+  lda (keymapMemoryLowZeroPage),Y ;store character in accumulator
+  ldy keyboardBufferPointer
+  sta (keyboardBufferZPLow),Y ;save character to pointer
+  inc keyboardBufferPointer
+  jsr DELAY_onetenth_SEC ;for debouncing
+  rts ;this rts also returns to main programLoop     
 
 keyboardScan:
   ;scan column 0 at PB0
