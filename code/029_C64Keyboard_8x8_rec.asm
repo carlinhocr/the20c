@@ -409,269 +409,30 @@ keyPositionAddColumn:
   clc
   adc columnNumberDetected
   sta keyPressedPosition
-  jmp addKeyToKeyboardBufferMapKeyRec ; just to separate both procedures
+  jsr addKeyToKeyboardBufferMapKey ; just to separate both procedures
+  rts ;this rts also returns to main programLoop
       
-addKeyToKeyboardBufferMapKeyRec:  
-  ldy keyPressedPosition
-  lda (keymapMemoryLowZeroPage),Y ;store character in accumulator
-  ldy keyboardBufferPointer
-  sta (keyboardBufferZPLow),Y ;save character to pointer
-  inc keyboardBufferPointer
-  jsr DELAY_onetenth_SEC ;for debouncing
-  rts ;this rts also returns to main programLoop     
-
-keyboardScan:
-  ;scan column 0 at PB0
-  ;write 0 to column 0 at PB0
-  lda #$0
-  sta columnNumberDetected
-  lda #%11111110
-  sta KB_PORTB
-  jsr keyboardScanColumn
-  ;scan column 1 at PB0
-  ;write 0 to column 1 at PB0
-  lda #$1
-  sta columnNumberDetected
-  lda #%11111101
-  sta KB_PORTB
-  jsr keyboardScanColumn
-  ;scan column 2 at PB0
-  ;write 0 to column 2 at PB0
-  lda #$2
-  sta columnNumberDetected
-  lda #%11111011
-  sta KB_PORTB
-  jsr keyboardScanColumn
-  ;scan column 3 at PB0
-  ;write 0 to column 3 at PB0
-  lda #$3
-  sta columnNumberDetected
-  lda #%11110111
-  sta KB_PORTB
-  jsr keyboardScanColumn
-  rts
-  ;scan column 3 at PB0
-  ;write 0 to column 3 at PB0
-  lda #$4
-  sta columnNumberDetected
-  lda #%11101111
-  sta KB_PORTB
-  jsr keyboardScanColumn
-  rts
-  ;scan column 3 at PB0
-  ;write 0 to column 3 at PB0
-  lda #$5
-  sta columnNumberDetected
-  lda #%11011111
-  sta KB_PORTB
-  jsr keyboardScanColumn
-  rts
-  ;scan column 6 at PB0
-  ;write 0 to column 3 at PB0
-  lda #$6
-  sta columnNumberDetected
-  lda #%10111111
-  sta KB_PORTB
-  jsr keyboardScanColumn
-  rts
-  ;scan column 7 at PB0
-  ;write 0 to column 3 at PB0
-  lda #$7
-  sta columnNumberDetected
-  lda #%01111111
-  sta KB_PORTB
-  jsr keyboardScanColumn
-  rts
-
-keyboardScanColumn:  
-  jsr keyboardScanRows
-  lda #$1 ;see if a row was detected
-  cmp rowDetected
-  beq writeKeyboardBufferJump
-  lda #$0
-  sta rowDetected
-  rts
-
-writeKeyboardBufferJump:  
-  jsr writeKeyboardBuffer
-  rts
-
-keyboardScanRows:
-  ;scan rows to detect if one is 0
-  lda KB_PORTA
-  ;detect which row was zero
-  ;compare to 0 on row 0
-  cmp #%11111110
-  beq row0Detected
-  ;compare to 0 on row 1
-  cmp #%11111101
-  beq row1Detected
-  ;compare to 0 on row 2
-  cmp #%11111011
-  beq row2Detected
-  ;compare to 0 on row 3
-  cmp #%11110111
-  beq row3Detected
-  ;compare to 0 on row 4
-  cmp #%11101111
-  beq row4Detected
-  ;compare to 0 on row 5
-  cmp #%11011111
-  beq row5Detected
-  ;compare to 0 on row 6
-  cmp #%10111111
-  beq row6Detected
-  ;compare to 0 on row 7
-  cmp #%01111111
-  beq row7Detected
-  ;if we are here no rows intersecting with column were detected we move to another column.
-  ;we just return
-  jmp keyboardScanRowsEnd
-
-row0Detected:
-  lda #$1
-  sta rowDetected
-  lda #$0
-  sta rowNumberDetected
-  jmp keyboardScanRowsEnd
-row1Detected:
-  lda #$1
-  sta rowDetected
-  lda #$1
-  sta rowNumberDetected
-  jmp keyboardScanRowsEnd
-row2Detected:
-  lda #$1
-  sta rowDetected
-  lda #$2
-  sta rowNumberDetected
-  jmp keyboardScanRowsEnd
-row3Detected:
-  lda #$1
-  sta rowDetected
-  lda #$3
-  sta rowNumberDetected
-  jmp keyboardScanRowsEnd
-row4Detected:
-  lda #$1
-  sta rowDetected
-  lda #$4
-  sta rowNumberDetected
-  jmp keyboardScanRowsEnd
-row5Detected:
-  lda #$1
-  sta rowDetected
-  lda #$5
-  sta rowNumberDetected
-  jmp keyboardScanRowsEnd
-row6Detected:
-  lda #$1
-  sta rowDetected
-  lda #$6
-  sta rowNumberDetected
-  jmp keyboardScanRowsEnd
-row7Detected:
-  lda #$1
-  sta rowDetected
-  lda #$7
-  sta rowNumberDetected
-  jmp keyboardScanRowsEnd
-keyboardScanRowsEnd:
-  rts
+; addKeyToKeyboardBufferMapKeyRec:  
+;   ldy keyPressedPosition
+;   lda (keymapMemoryLowZeroPage),Y ;store character in accumulator
+;   ldy keyboardBufferPointer
+;   sta (keyboardBufferZPLow),Y ;save character to pointer
+;   inc keyboardBufferPointer
+;   jsr DELAY_onetenth_SEC ;for debouncing
+;   rts ;this rts also returns to main programLoop     
 
 
-writeKeyboardBuffer:
-  lda #$0
-  sta rowDetected
-  lda #$0
-  sta keyPressedPosition
-  ldx #$FF
-  lda #$0
-  cmp rowNumberDetected
-  beq row0Case
-  lda #$1
-  cmp rowNumberDetected
-  beq row1Case
-  lda #$2
-  cmp rowNumberDetected
-  beq row2Case
-  lda #$3
-  cmp rowNumberDetected
-  beq row3Case
-  lda #$4
-  cmp rowNumberDetected
-  beq row4Case
-  lda #$5
-  cmp rowNumberDetected
-  beq row5Case
-  lda #$6
-  cmp rowNumberDetected
-  beq row7Case
-  lda #$7
-  cmp rowNumberDetected
-  beq row7Case
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------KEYBOARD SCAN--------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------    
 
-row0Case: 
-  lda #$00
-  sta keyPressedPosition
-  jmp addColumnNumber
-
-row1Case: 
-  lda keyPressedPosition
-  clc
-  adc #$08
-  sta keyPressedPosition
-  jmp addColumnNumber
-
-row2Case: 
-  lda keyPressedPosition
-  clc
-  adc #$0f
-  sta keyPressedPosition
-  jmp addColumnNumber
-
-row3Case: 
-  lda keyPressedPosition
-  clc
-  adc #$18
-  sta keyPressedPosition
-  jmp addColumnNumber
-
-row4Case: 
-  lda keyPressedPosition
-  clc
-  adc #$1f
-  sta keyPressedPosition
-  jmp addColumnNumber
-
-row5Case: 
-  lda keyPressedPosition
-  clc
-  adc #$28
-  sta keyPressedPosition
-  jmp addColumnNumber
-
-row6Case: 
-  lda keyPressedPosition
-  clc
-  adc #$2f
-  sta keyPressedPosition
-  jmp addColumnNumber
-
-row7Case: 
-  lda keyPressedPosition
-  clc
-  adc #$38
-  sta keyPressedPosition
-  jmp addColumnNumber
-
-addColumnNumber:  
-  lda keyPressedPosition
-  clc
-  adc columnNumberDetected
-  sta keyPressedPosition
-  ;jmp writeKeyboardBufferMapKey
-  jmp addKeyToKeyboardBufferMapKey
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------PRINT KEYBOARD BUFFER------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------  
 
 ; writeKeyboardBufferMapKey:  
 ;   lda #$d4 ;position cursor at the start of sthe fourth line
@@ -691,18 +452,6 @@ addKeyToKeyboardBufferMapKey:
   inc keyboardBufferPointer
   jsr DELAY_onetenth_SEC ;for debouncing
   rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------KEYBOARD SCAN--------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------    
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------PRINT KEYBOARD BUFFER------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------  
 
 printKeyboardBuffer:
   ldy #$FF
@@ -1282,6 +1031,7 @@ keyboardMaptest: ;position of number
 
 keyboardMap:
 ;all that i do not have a current core are #
+;       PB0,Pb1,PB2,PB3,PB4,PB5,PB6,Pb7
   .byte $23,$23,$2d,$30,$38,$36,$34,$32 ; PA0
   .byte $23,$41,$44,$47,$4a,$4c,$23,$23
   .byte $23,$34,$36,$38,$4e,$4a,$23,$32
@@ -1291,18 +1041,8 @@ keyboardMap:
   .byte $23,$2a,$50,$49,$59,$52,$57,$23 ; PA6
   .byte $23,$ed,$2b,$39,$37,$35,$33,$31 ; PA7
 
-;       PB0,Pb1,PB2,PB3,PB4,PB5,PB6,Pb7
-;.ascii "#","#","#","#","#","#","#","#" PA0
-;.ascii "3","W","A","4","I","S","E","#" PA1
-;.ascii "5","R","D","6","J","F","T","X" PA2
-;.ascii "7","Y","G","8","N","H","U","J" PA3
-;.ascii "#","Z","J","0","M","B","C","N" PA4
-;.ascii "+",";","L","J","K","D","A","#" PA5
-;.ascii "£","*","#","#","#","=","#","/" PA6
-;.ascii "1","#","#","2"," ","#","Q","#" PA7
 
-
-
+; PB0,Pb1,PB2,PB3,PB4,PB5,PB6,Pb7
 ; "#","#","-","0","8","6","4","2" PA0
 ; "#",";","L","J","G","D","A","#" Pa5 
 ; "#","*","P","I","Y","R","W","#" PA6
