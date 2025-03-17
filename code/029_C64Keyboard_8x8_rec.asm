@@ -1268,7 +1268,7 @@ initialScreen:
 
   
 
-keyboardMap: ;position of number
+keyboardMaptest: ;position of number
   ;all that i do not have a current core are #
   .byte $30,$31,$32,$33,$34,$35,$36,$37 ; PA0
   .byte $41,$42,$43,$44,$45,$46,$47,$48 ; PA1
@@ -1280,7 +1280,7 @@ keyboardMap: ;position of number
   .byte $41,$42,$43,$44,$45,$46,$47,$48 ; PA7  
 
 
-keyboardMap2:
+keyboardMap:
 ;all that i do not have a current core are #
   .byte $23,$23,$23,$23,$23,$23,$23,$23 ; PA0
   .byte $33,$57,$41,$34,$7a,$73,$45,$b6 ; PA1
