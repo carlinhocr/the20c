@@ -1282,14 +1282,14 @@ keyboardMaptest: ;position of number
 
 keyboardMap:
 ;all that i do not have a current core are #
-  .byte $23,$57,$52,$59,$7a,$34,$2a,$23
+  .byte $23,$23,$2d,$30,$38,$36,$34,$32 ; PA0
   .byte $23,$41,$44,$47,$4a,$4c,$23,$23
   .byte $23,$34,$36,$38,$4e,$4a,$23,$32
   .byte $23,$49,$4a,$30,$4d,$4b,$23,$20
   .byte $23,$73,$46,$48,$42,$44,$3d,$23
   .byte $23,$45,$54,$55,$43,$41,$23,$31
   .byte $23,$b6,$43,$56,$4a,$23,$2f,$a0  
-  .byte $23,$ed,$2b,$39,$37,$35,$33,$21 ; PA7
+  .byte $23,$ed,$2b,$39,$37,$35,$33,$31 ; PA7
 
 ;       PB0,Pb1,PB2,PB3,PB4,PB5,PB6,Pb7
 ;.ascii "#","#","#","#","#","#","#","#" PA0
@@ -1301,7 +1301,10 @@ keyboardMap:
 ;.ascii "£","*","#","#","#","=","#","/" PA6
 ;.ascii "1","#","#","2"," ","#","Q","#" PA7
 
-; "#","£","+","9","7","5","3","!" PA7
+
+; "#","#","-","0","8","6","4","2, PA0
+
+; "#","£","+","9","7","5","3","1" PA7
 
 keyboardMapAlternative:
 ;all that i do not have a current core are #
