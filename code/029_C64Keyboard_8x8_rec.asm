@@ -409,17 +409,9 @@ keyPositionAddColumn:
   clc
   adc columnNumberDetected
   sta keyPressedPosition
+  jsr DELAY_two_tenth_SEC  ;for debouncing
   jsr addKeyToKeyboardBufferMapKey ; just to separate both procedures
-  rts ;this rts also returns to main programLoop
-      
-; addKeyToKeyboardBufferMapKeyRec:  
-;   ldy keyPressedPosition
-;   lda (keymapMemoryLowZeroPage),Y ;store character in accumulator
-;   ldy keyboardBufferPointer
-;   sta (keyboardBufferZPLow),Y ;save character to pointer
-;   inc keyboardBufferPointer
-;   jsr DELAY_onetenth_SEC ;for debouncing
-;   rts ;this rts also returns to main programLoop     
+  rts ;this rts also returns to main programLoop  
 
 
 ;END--------------------------------------------------------------------------------
@@ -450,7 +442,7 @@ addKeyToKeyboardBufferMapKey:
   ldy keyboardBufferPointer
   sta (keyboardBufferZPLow),Y ;save character to pointer
   inc keyboardBufferPointer
-  jsr DELAY_onetenth_SEC ;for debouncing
+  ;jsr DELAY_onetenth_SEC ;for debouncing
   rts
 
 printKeyboardBuffer:
@@ -933,6 +925,13 @@ DELAY_onetenth_SEC:
   lda #$FF
   sta delay_COUNT_B
   jmp DELAY_MAIN
+
+DELAY_two_tenth_SEC:
+  lda #$10
+  sta delay_COUNT_A
+  lda #$FF
+  sta delay_COUNT_B
+  jmp DELAY_MAIN   
 
 DELAY_SEC:
   lda #$FF
