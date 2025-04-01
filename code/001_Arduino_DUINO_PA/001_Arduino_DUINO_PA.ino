@@ -20,6 +20,9 @@ const char EXP[] = {62,63,64,65,66,67,68,69,52,50,48,46,44,42,40,38};
 //#define CS1 4 cia only
 //#define CS2 5 cia only
 #define CSRAM 6
+#define CSROM 7
+#define VIA1 8
+#define CIA2 9
 
 
 void setup() {
