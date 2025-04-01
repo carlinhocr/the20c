@@ -28,7 +28,8 @@ const char EXP[] = {62,63,64,65,66,67,68,69,52,50,48,46,44,42,40,38};
 void setup() {
   for (int n=0;n<16;n++){
     pinMode(ADDR[n], INPUT);
-  }
+    pinMode(EXP[n], INPUT);
+  };
    for (int n=0;n<8;n++){
     pinMode(DATA[n], INPUT);
   }
@@ -43,6 +44,21 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(CLOCK), onClock, RISING); 
   Serial.begin(115200);
   Serial.print("Hola    ");
+  unsigned int addressBus = 0;
+  unsigned int expansionBus = 0;
+  for (int n=0;n<16;n++){
+    int bit = digitalRead(ADDR[n]) ? 1:0; //? ternary operator if TRUE then 1 else 0
+    int bit2 = digitalRead(EXP[n]) ? 1:0; //? ternary operator if TRUE then 1 else 0
+    Serial.print(bit);
+    Serial.print(bit2);
+    addressBus = (addressBus << 1) + bit;
+    expansionBus = (expansionBus << 1) + bit2;
+  }
+  Serial.print("  ADDRESS BUS: ");
+  Serial.print(addressBus);
+  Serial.print("  EXPANSION BUS: ");
+  Serial.print(expansionBus);
+  Serial.print(CLOCK);
 }
 
 void onClock (){
@@ -52,8 +68,8 @@ void onClock (){
 //  int CSRAM_VALUE = digitalRead(CSRAM) ? 1:0;
 //  Serial.print(CS1_VALUE);
 //  Serial.print(CS2_VALUE);
-char SYNC_VALUE = digitalRead(SYNC) ? 'S':'n';
-char RESET_VALUE = digitalRead(RESET) ? 'n':'R';
+  char SYNC_VALUE = digitalRead(SYNC) ? 'S':'n';
+  char RESET_VALUE = digitalRead(RESET) ? 'n':'R';
   Serial.print("    ");
 //  Serial.print(CSRAM_VALUE);
   Serial.print(" ");
