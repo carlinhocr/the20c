@@ -42,9 +42,11 @@ void setup() {
   // each time that on pin 2 (clock) i receive a HIGH on the rising edge run the onClock function
   attachInterrupt(digitalPinToInterrupt(CLOCK), onClock, RISING); 
   Serial.begin(115200);
+  Serial.print("Hola    ");
 }
 
 void onClock (){
+  Serial.print("Reloj    ");
 //  int CS1_VALUE = digitalRead(CS1) ? 1:0;
 //  int CS2_VALUE = digitalRead(CS2) ? 1:0;
 //  int CSRAM_VALUE = digitalRead(CSRAM) ? 1:0;
