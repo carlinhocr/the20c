@@ -13,16 +13,16 @@ const char EXP[] = {62,63,64,65,66,67,68,69,52,50,48,46,44,42,40,38};
 // #define SYNC 4
 // #define CSRAM 6
 
-#define RESET 38
-#define CLOCK 40
-#define READ_WRITE 42
-#define SYNC 62
+#define RESET 38 //E0
+#define CLOCK 40 //E1
+#define READ_WRITE 42 //E2
+#define SYNC 68 //E9
 //#define CS1 4 cia only
 //#define CS2 5 cia only
-#define CSRAM 6
-#define CSROM 7
-#define VIA1 8
-#define CIA2 9
+//#define CSRAM 6
+//#define CSROM 7
+//#define VIA1 8
+//#define CIA2 9
 
 
 void setup() {
