@@ -14,7 +14,7 @@ const char EXP[] = {62,63,64,65,66,67,68,69,52,50,48,46,44,42,40,38};
 // #define CSRAM 6
 
 #define RESET 38 //E0
-#define CLOCK 40 //E1
+#define CLOCK 2 //E1 40
 #define READ_WRITE 42 //E2
 #define SYNC 68 //E9
 //#define CS1 4 cia only
@@ -43,7 +43,6 @@ void setup() {
   // each time that on pin 2 (clock) i receive a HIGH on the rising edge run the onClock function
   attachInterrupt(digitalPinToInterrupt(CLOCK), onClock, RISING); 
   Serial.begin(115200);
-  Serial.print("Hola    ");
   unsigned int addressBus = 0;
   unsigned int expansionBus = 0;
   for (int n=0;n<16;n++){
@@ -54,15 +53,9 @@ void setup() {
     addressBus = (addressBus << 1) + bit;
     expansionBus = (expansionBus << 1) + bit2;
   }
-  Serial.print("  ADDRESS BUS: ");
-  Serial.print(addressBus);
-  Serial.print("  EXPANSION BUS: ");
-  Serial.print(expansionBus);
-  Serial.print(CLOCK);
 }
 
 void onClock (){
-  Serial.print("Reloj    ");
 //  int CS1_VALUE = digitalRead(CS1) ? 1:0;
 //  int CS2_VALUE = digitalRead(CS2) ? 1:0;
 //  int CSRAM_VALUE = digitalRead(CSRAM) ? 1:0;
@@ -134,6 +127,7 @@ char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
       return "INVALID";
       case 0x20:
       return "JSR abs";
+//----------------------------OPCODES COMPLETE FROM HERE
       case 0x40:
       return "RTI impl";  
       case 0x41:
@@ -170,20 +164,67 @@ char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
       return "BVC rel";
       case 0x51:
       return "EOR ind,Y";
+      case 0x52:
+      return "INVALID";
+      case 0x53:
+      return "INVALID";
+      case 0x54:
+      return "INVALID";
       case 0x55:
       return "EOR zpg,X";
       case 0x56:
       return "LSR zpg,X";
+      case 0x57:
+      return "INVALID";
       case 0x58:
       return "CLI impl";
       case 0x59:
       return "EOR zpg,Y";
+      case 0x5a:
+      return "INVALID";
+      case 0x5b:
+      return "INVALID";
+      case 0x5c:
+      return "INVALID";
       case 0x5d:
       return "EOR abs,X"; 
       case 0x5e:
       return "LSR abs,X";
+      case 0x5f:
+      return "INVALID";
       case 0x60:
-      return "SEI impl";
+      return "RTS impl";
+      case 0x61:
+      return "ADC X,ind";
+      case 0x62:
+      return "INVALID";
+      case 0x63:
+      return "INVALID";
+      case 0x64:
+      return "INVALID";
+      case 0x65:
+      return "ADC zpg";
+      case 0x66:
+      return "ROR zpg";
+      case 0x67:
+      return "INVALID";
+      case 0x68:
+      return "PLA impl";
+      case 0x69:
+      return "ADC #";
+      case 0x6a:
+      return "ROR A";
+      case 0x6b:
+      return "INVALID";
+      case 0x6c:
+      return "JMP ind";
+      case 0x6d:
+      return "ADC abs";
+      case 0x6e:
+      return "ROR abs";
+      case 0x6f:
+      return "INVALID";
+//----------------------------OPCODES COMPLETE UNTIL HERE
       case 0x78:
       return "SEI impl";
       case 0x85:
