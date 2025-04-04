@@ -410,6 +410,8 @@ keyPositionAddColumn:
   adc columnNumberDetected
   sta keyPressedPosition
   jsr DELAY_two_tenth_SEC  ;for debouncing
+  jsr DELAY_two_tenth_SEC  ;for debouncing
+  jsr DELAY_two_tenth_SEC  ;for debouncing
   jsr addKeyToKeyboardBufferMapKey ; just to separate both procedures
   rts ;this rts also returns to main programLoop  
 
