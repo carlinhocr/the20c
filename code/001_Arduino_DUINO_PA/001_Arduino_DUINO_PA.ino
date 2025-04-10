@@ -81,11 +81,29 @@ void onClock (){
     data = (data << 1) + bit;
   }
   char *instruction=sync_string(SYNC_VALUE,RESET_VALUE,data);
-  sprintf(output, " %04x  %04c %01c %02x %01c",address,digitalRead(READ_WRITE)?'r':'W',SYNC_VALUE,data,' ');
+  unsigned int prefix_address = 0;
+  for (int n=0;n<4;n++){
+    int bit=address[n];
+    prefix_address=(prefix_address << 1) +bit;
+  }
+  char *chip=find_chip(prefix_address);
+  sprintf(output, " %04x  %04c %01c %02x %01c %04c",address,digitalRead(READ_WRITE)?'r':'W',SYNC_VALUE,data,' ',chip,' ');
   Serial.print(output);
   Serial.println(instruction);
-
 }
+
+char *find_chip(unsigned int prefix_address) {
+  if (prefix_address >= 8000){
+    return "RAM ";
+  } else if (prefix_address >= 0000 and prefix_address < 4000){
+    return "ROM ";
+ } else if (prefix_address >= 6000 and prefix_address < 7000){
+    return "VIA1";
+ }  else if (prefix_address >= 7000 and prefix_address < 8000){
+    return "VIA2";
+ } else {
+    return "UNKW";
+ };
 
 char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
   if (RESET_VALUE == 'R'){
