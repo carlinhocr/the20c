@@ -1,3 +1,7 @@
+// with DUINO CONNECTOR
+const char ADDR[] = {23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53}; //char is one byte from -127 to 127
+const char DATA[] = {36,34,32,30,28,26,24,22};
+//const char EXP[] = {62,63,64,65,66,67,68,69,52,50,48,46,44,42,40,38};
 
 // with ARDUINO CONNECTOR
 const char ADDR[] = {23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53}; //char is one byte from -127 to 127
@@ -7,12 +11,8 @@ const char DATA[] = {36,34,32,30,28,26,24,22};
 // const char ADDR[] = {22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52}; //char is one byte from -127 to 127
 // const char DATA[] = {39,41,43,45,47,49,51,53};
 
-
 #define CLOCK 2
-#define READ_WRITE 3
-//#define CS1 4 cia only
-//#define CS2 5 cia only
-#define CSRAM 6
+#define READ_WRITE 42 //E2
 
 
 void setup() {
@@ -24,22 +24,13 @@ void setup() {
   }
   pinMode(CLOCK, INPUT);
   pinMode(READ_WRITE, INPUT);
-//  pinMode(CS1, INPUT);
-//  pinMode(CS2, INPUT);
-// pinMode(CSRAM, INPUT);
   // each time that on pin 2 (clock) i receive a HIGH on the rising edge run the onClock function
   attachInterrupt(digitalPinToInterrupt(CLOCK), onClock, RISING); 
   Serial.begin(115200);
 }
 
 void onClock (){
-//  int CS1_VALUE = digitalRead(CS1) ? 1:0;
-//  int CS2_VALUE = digitalRead(CS2) ? 1:0;
-//  int CSRAM_VALUE = digitalRead(CSRAM) ? 1:0;
-//  Serial.print(CS1_VALUE);
-//  Serial.print(CS2_VALUE);
   Serial.print("    ");
-//  Serial.print(CSRAM_VALUE);
   Serial.print(" ");
   char output[15];
   unsigned int address = 0;
