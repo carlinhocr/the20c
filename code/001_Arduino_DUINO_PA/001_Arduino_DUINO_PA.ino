@@ -43,6 +43,7 @@ void setup() {
   // each time that on pin 2 (clock) i receive a HIGH on the rising edge run the onClock function
   attachInterrupt(digitalPinToInterrupt(CLOCK), onClock, RISING); 
   Serial.begin(115200);
+    Serial.print("Hola");
   unsigned int addressBus = 0;
   unsigned int expansionBus = 0;
   for (int n=0;n<16;n++){
@@ -87,9 +88,11 @@ void onClock (){
   //}
   char *instruction=sync_string(SYNC_VALUE,RESET_VALUE,data);
   char *chip=find_chip(address);
-  sprintf(output, " %04x  %04c %01c %02x %01c %04c %04c",address,digitalRead(READ_WRITE)?'r':'W',SYNC_VALUE,data,' ',chip,' ');
+  sprintf(output, " %04x %01c %01c %02x ",address,digitalRead(READ_WRITE)?'r':'W',SYNC_VALUE,data,chip);
   Serial.print(output);
+  Serial.print(chip);
   Serial.println(instruction);
+
 }
 
 char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
@@ -296,16 +299,18 @@ char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
 } 
 
 char *find_chip(unsigned int prefix_address) {
-  if (prefix_address >= 8000){
+  if (prefix_address >= 32768){ //8000 hex
+    return "ROM  ";
+   } else if (prefix_address >= 256 and prefix_address < 512){ //$0000 y $4000
+    return "STACK ";   
+  } else if (prefix_address >= 0 and prefix_address < 16386){ //$0000 y $4000
     return "RAM ";
-  } else if (prefix_address >= 0000 and prefix_address < 4000){
-    return "ROM ";
- } else if (prefix_address >= 6000 and prefix_address < 7000){
-    return "VIA1";
- }  else if (prefix_address >= 7000 and prefix_address < 8000){
-    return "VIA2";
+ } else if (prefix_address >= 24576 and prefix_address < 28672){ //$6000 $7000
+    return "VIA1 ";
+ }  else if (prefix_address >= 28672 and prefix_address < 32768){//$7000 $8000
+    return "VIA2 ";
  } else {
-    return "UNKW";
+    return "UNKWO";
  };
 }
 
