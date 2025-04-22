@@ -235,10 +235,40 @@ char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
 //----------------------------OPCODES COMPLETE UNTIL HERE
       case 0x78:
       return "SEI impl";
+      case 0x80:
+      return "INVALID";
+      case 0x81:
+      return "STA X,ind";
+      case 0x82:
+      return "INVALID";
+      case 0x83:
+      return "INVALID";
+      case 0x84:
+      return "STY zpg";
       case 0x85:
       return "STA zpg";
+      case 0x86:
+      return "STX zpg";
+      case 0x87:
+      return "INVALID";
+      case 0x88:
+      return "DEY impl";
+      case 0x89:
+      return "INVALID";
+      case 0x8a:
+      return "TXA impl";
+      case 0x8b:
+      return "INVALID";
+      case 0x8c:
+      return "STY abs";
       case 0x8d:
       return "STA abs";
+      case 0x8e:
+      return "STX abs";      
+      case 0x8f:
+      return "INVALID";
+      case 0x90:
+      return "BCC rel";
       case 0x91:
       return "STA ind,Y";
       case 0x9a:
@@ -251,16 +281,34 @@ char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
       return "LDA X,ind";
       case 0xa2:
       return "LDX #";
+      case 0xa3:
+      return "INVALID";
+      case 0xa4:
+      return "LDY zpg";
       case 0xa5:
       return "LDA zpg";
+      case 0xa6:
+      return "LDX zpg";      
+      case 0xa7:
+      return "INVALID";
       case 0xa8:
       return "TAY impl";
       case 0xa9:
       return "LDA #";
       case 0xaa:
       return "TAX impl";
+      case 0xab:
+      return "INVALID";
+      case 0xac:
+      return "LDY abs";
       case 0xad:
       return "LDA abs";
+      case 0xae:
+      return "LDX abs";
+      case 0xaf:
+      return "INVALID";
+      case 0xb0:
+      return "BCS Rel";
       case 0xb1:
       return "LDA ind,Y";
       case 0xb5:
