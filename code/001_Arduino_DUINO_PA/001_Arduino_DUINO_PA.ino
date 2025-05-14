@@ -2,7 +2,7 @@
 // with ARDUINO CONNECTOR
 const char ADDR[] = {23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53}; //char is one byte from -127 to 127
 const char DATA[] = {36,34,32,30,28,26,24,22};
-const char EXP[] = {62,63,64,65,66,67,68,69,52,50,48,46,44,42,40,38};
+const char EXP[] = {62,63,64,65,66,67,68,69,52,50,48,46,44,42,2,38}; // pin 2 is clock because you can attach interrupts
 
 // with regular cables
 // const char ADDR[] = {22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52}; //char is one byte from -127 to 127
