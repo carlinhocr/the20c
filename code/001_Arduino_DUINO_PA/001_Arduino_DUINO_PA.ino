@@ -331,6 +331,8 @@ char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
       return "CPX #";
       case 0xea:
       return "NOP";
+      case 0xee:
+      return "INC abs";
       case 0xf0:
       return "BEQ rel";
       case 0xf8:
