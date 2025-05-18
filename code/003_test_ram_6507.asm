@@ -2,7 +2,8 @@
 
 ;test simpre instructions in an epprom
 
-  .org $0800 ;changed for the 6507 to use with A12 to A0 addresses
+  .org $1000 ;changed for the 6507 to use with A12 to A0 addresses A12=1
+             ;the rest is zero
 
 RESET:
   ;initialize stack
