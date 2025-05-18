@@ -28,8 +28,8 @@ void setup() {
 void onClock (){
   char SYNC_VALUE = digitalRead(SYNC) ? 'S':'n';
   char RESET_VALUE = digitalRead(RESET) ? 'n':'R';
-  Serial.print(" ");
-  char output[15];
+  char READ_WRITE_VALUE = digitalRead(READ_WRITE)?'r':'W';
+  char output[25];
   unsigned int address = 0;
   for (int n=0;n<16;n++){
     int bit = digitalRead(ADDR[n]) ? 1:0; //? ternary operator if TRUE then 1 else 0
@@ -45,9 +45,8 @@ void onClock (){
   };
   char *instruction=sync_string(SYNC_VALUE,RESET_VALUE,data);
   char *chip=find_chip(address);
-  sprintf(output, " %04x %01c %01c %02x ",address,digitalRead(READ_WRITE)?'r':'W',SYNC_VALUE,data);
+  sprintf(output, " %04x %01c %01c %02x %05c",address,READ_WRITE_VALUE,SYNC_VALUE,data,chip);
   Serial.print(output);
-  Serial.print(chip);
   Serial.println(instruction);
 }
 
@@ -310,15 +309,15 @@ char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
 
 char *find_chip(unsigned int prefix_address) {
   if (prefix_address >= 32768){ //8000 hex
-    return "ROM  ";
+    return "ROM";
    } else if (prefix_address >= 256 and prefix_address < 512){ //$0000 y $4000
-    return "STACK ";   
+    return "STACK";   
   } else if (prefix_address >= 0 and prefix_address < 16386){ //$0000 y $4000
-    return "RAM ";
+    return "RAM";
  } else if (prefix_address >= 24576 and prefix_address < 28672){ //$6000 $7000
-    return "VIA1 ";
+    return "VIA1";
  }  else if (prefix_address >= 28672 and prefix_address < 32768){//$7000 $8000
-    return "VIA2 ";
+    return "VIA2";
  } else {
     return "UNKWO";
  };
