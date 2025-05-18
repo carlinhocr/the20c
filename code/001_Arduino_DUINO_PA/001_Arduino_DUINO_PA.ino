@@ -51,7 +51,6 @@ void onClock (){
   Serial.print(output);
   Serial.print(chip);
   Serial.println(instruction);
-
 }
 
 char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
