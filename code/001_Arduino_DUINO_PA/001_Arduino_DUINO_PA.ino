@@ -23,8 +23,6 @@ void setup() {
   // each time that on pin 2 (clock) i receive a HIGH on the rising edge run the onClock function
   attachInterrupt(digitalPinToInterrupt(CLOCK), onClock, RISING); 
   Serial.begin(115200);
-  unsigned int addressBus = 0;
-  unsigned int expansionBus = 0;
 }
 
 void onClock (){
@@ -63,6 +61,7 @@ char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
       return "BRK";
       case 0x01:
       return "ORA X,ind";
+//----------------------------CASE INSTRUCTIONS       
       case 0x02:
       return "INVALID";
       case 0x03:
@@ -299,6 +298,7 @@ char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
       return "SED impl";
       case 0xfa:
       return "BEQ rel";
+//----------------------------DEFAULT CASE      
       default:
       return "UNKNOWN";
     };
