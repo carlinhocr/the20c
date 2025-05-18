@@ -15,7 +15,7 @@ void setup() {
   };
    for (int n=0;n<8;n++){
     pinMode(DATA[n], INPUT);
-  }
+  };
   pinMode(CLOCK, INPUT);
   pinMode(READ_WRITE, INPUT);
   pinMode(SYNC, INPUT);
@@ -35,7 +35,7 @@ void onClock (){
     int bit = digitalRead(ADDR[n]) ? 1:0; //? ternary operator if TRUE then 1 else 0
     Serial.print(bit);
     address = (address << 1) + bit;
-  }
+  };
   Serial.print("    ");
   unsigned int data = 0;
   for (int n=0;n<8;n++){
