@@ -4,26 +4,10 @@ const char ADDR[] = {23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53}; //char is
 const char DATA[] = {36,34,32,30,28,26,24,22};
 const char EXP[] = {62,63,64,65,66,67,68,69,52,50,48,46,44,42,2,38}; // pin 2 is clock because you can attach interrupts
 
-// with regular cables
-// const char ADDR[] = {22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52}; //char is one byte from -127 to 127
-// const char DATA[] = {39,41,43,45,47,49,51,53};
-// #define CLOCK 2
-// #define READ_WRITE 3
-// #define RESET 5
-// #define SYNC 4
-// #define CSRAM 6
-
 #define RESET 38 //E0
 #define CLOCK 2 //E1 40
 #define READ_WRITE 42 //E2
 #define SYNC 68 //E9
-//#define CS1 4 cia only
-//#define CS2 5 cia only
-//#define CSRAM 6
-//#define CSROM 7
-//#define VIA1 8
-//#define CIA2 9
-
 
 void setup() {
   for (int n=0;n<16;n++){
@@ -37,35 +21,16 @@ void setup() {
   pinMode(READ_WRITE, INPUT);
   pinMode(SYNC, INPUT);
   pinMode(RESET, INPUT);
-//  pinMode(CS1, INPUT);
-//  pinMode(CS2, INPUT);
-// pinMode(CSRAM, INPUT);
   // each time that on pin 2 (clock) i receive a HIGH on the rising edge run the onClock function
   attachInterrupt(digitalPinToInterrupt(CLOCK), onClock, RISING); 
   Serial.begin(115200);
-    Serial.print("Hola");
   unsigned int addressBus = 0;
   unsigned int expansionBus = 0;
-  for (int n=0;n<16;n++){
-    int bit = digitalRead(ADDR[n]) ? 1:0; //? ternary operator if TRUE then 1 else 0
-    int bit2 = digitalRead(EXP[n]) ? 1:0; //? ternary operator if TRUE then 1 else 0
-    Serial.print(bit);
-    Serial.print(bit2);
-    addressBus = (addressBus << 1) + bit;
-    expansionBus = (expansionBus << 1) + bit2;
-  }
 }
 
 void onClock (){
-//  int CS1_VALUE = digitalRead(CS1) ? 1:0;
-//  int CS2_VALUE = digitalRead(CS2) ? 1:0;
-//  int CSRAM_VALUE = digitalRead(CSRAM) ? 1:0;
-//  Serial.print(CS1_VALUE);
-//  Serial.print(CS2_VALUE);
   char SYNC_VALUE = digitalRead(SYNC) ? 'S':'n';
   char RESET_VALUE = digitalRead(RESET) ? 'n':'R';
-  Serial.print("    ");
-//  Serial.print(CSRAM_VALUE);
   Serial.print(" ");
   char output[15];
   unsigned int address = 0;
@@ -81,14 +46,9 @@ void onClock (){
     Serial.print(bit);
     data = (data << 1) + bit;
   };
-  //unsigned int prefix_address = 0;
-  //for (int n=0;n<4;n++){
-  //  int bit=address[n];
-  //  prefix_address=(prefix_address << 1) +bit;
-  //}
   char *instruction=sync_string(SYNC_VALUE,RESET_VALUE,data);
   char *chip=find_chip(address);
-  sprintf(output, " %04x %01c %01c %02x ",address,digitalRead(READ_WRITE)?'r':'W',SYNC_VALUE,data,chip);
+  sprintf(output, " %04x %01c %01c %02x ",address,digitalRead(READ_WRITE)?'r':'W',SYNC_VALUE,data);
   Serial.print(output);
   Serial.print(chip);
   Serial.println(instruction);
@@ -275,6 +235,8 @@ char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
       return "TXS impl";
       case 0xe8:
       return "INX";
+      case 0xee:
+      return "INC abs";
       case 0xa0:
       return "LDY #";
       case 0xa1:
