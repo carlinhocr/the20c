@@ -11,9 +11,9 @@ RESET:
   
 
 ;complete the file
-  .org $0ffa
+  .org $1ffa
   .word RESET ;a word is 16 bits or two bytes in this case $fffa and $fffb
-  .org $0ffc ;go to memory address $fffc of the reset vector
+  .org $1ffc ;go to memory address $fffc of the reset vector
   .word RESET ;store in $FFFC & $FFFD the memory address of the RESET: label  00 80 ($8000 in little endian)
-  .org $0ffe
+  .org $1ffe
   .word RESET ;a word is 16 bits or two bytes in this case $fffe and $ffff
