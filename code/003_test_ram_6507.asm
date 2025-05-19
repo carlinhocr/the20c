@@ -2,7 +2,7 @@
 
 ; ;test simpre instructions in an epprom
 
-   .org $1000 ;changed for the 6507 to use with A12 to A0 addresses A12=1
+   .org $0000 ;changed for the 6507 to use with A12 to A0 addresses A12=1
 ;              ;the rest is zero
 
 RESET:
