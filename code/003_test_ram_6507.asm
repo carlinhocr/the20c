@@ -4,7 +4,7 @@
 
  .org $0000 ;changed for the 6507 to use with A12 to A0 addresses A12=1
 ;              ;the rest is zero
-  lda #$55
+  lda #$55 ;just to fill the memory from 0000 to $1000 and make it work fine
 
  .org $1000  
 RESET:
@@ -24,6 +24,6 @@ INCRAM:
   .org $1ffe
   .word RESET ;a word is 16 bits or two bytes in this case $fffe and $ffff
 
-  .org $7fff
+  .org $7fff;just to fill the memory from 2000 to $7fff and complete the 32 kb
   nop 
 
