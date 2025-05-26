@@ -229,10 +229,6 @@ char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
       return "STA ind,Y";
       case 0x9a:
       return "TXS impl";
-      case 0xe8:
-      return "INX";
-      case 0xee:
-      return "INC abs";
       case 0xa0:
       return "LDY #";
       case 0xa1:
@@ -287,6 +283,8 @@ char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
       return "BNE rel";
       case 0xe0:
       return "CPX #";
+      case 0xe8:
+      return "INX";
       case 0xea:
       return "NOP";
       case 0xee:
