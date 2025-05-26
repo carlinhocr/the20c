@@ -29,7 +29,7 @@ void onClock (){
   char SYNC_VALUE = digitalRead(SYNC) ? 'S':'n';
   char RESET_VALUE = digitalRead(RESET) ? 'n':'R';
   char READ_WRITE_VALUE = digitalRead(READ_WRITE)?'r':'W';
-  char output[35];
+  char output[40];
   unsigned int address = 0;
   for (int n=0;n<16;n++){
     int bit = digitalRead(ADDR[n]) ? 1:0; //? ternary operator if TRUE then 1 else 0
@@ -45,11 +45,10 @@ void onClock (){
   };
   char *instruction=sync_string(SYNC_VALUE,RESET_VALUE,data);
   char *chip=find_chip(address);
-  sprintf(output, " %04x %01c %01c %02x ",address,READ_WRITE_VALUE,SYNC_VALUE,data);
-  Serial.print(output);
-  Serial.print(chip);
-  Serial.println(instruction);
+  sprintf(output, " %04x %01c %01c %02x %s %s",address,READ_WRITE_VALUE,SYNC_VALUE,data,chip,instruction);
+  Serial.println(output);
 }
+
 
 char *sync_string(char SYNC_VALUE,char RESET_VALUE,unsigned int data) {
   if (RESET_VALUE == 'R'){
