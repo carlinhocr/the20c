@@ -1,17 +1,6 @@
 ;define ports and constansts VIA1 (6000) VIA2 (7000)
 ;define LCD primitives for showing one message VIA1 or VIA2
-;define KEYBOARD primitives for showing lights on KB_PORTA and KB_PORTB VIA1 or VIA2
-;scan keyboard on VIA2
-;Show message on LCD on VIA1
-;show light show with LEDs 
-
-;PORTA rows input #$00
-;PORTB columns output #$FF
-;write a zero to each column in turn (1110, 1101, 1011, 0111)
-;read the rows if one is in zero then it is because of a short circuit with the column
-;now we know the intersection column + row and we can establish which key was pressed
-;if no rows are zero then no key was pressed.
-
+;define RS232 primitives for showing lights on KB_PORTA and KB_PORTB VIA1 or VIA2
 
 ;VIA Ports and Constants
 LCD_PORTB = $6000
@@ -22,48 +11,22 @@ LCD_PCR = $600c
 LCD_IFR = $600d
 LCD_IER = $600e
 
-KB_PORTB = $7000
-KB_PORTA = $7001
-KB_DDRB = $7002
-KB_DDRA = $7003
-KB_PCR = $700c
-KB_IFR = $700d
-KB_IER = $700e
+RS_PORTB = $7000
+RS_PORTA = $7001
+RS_DDRB = $7002
+RS_DDRA = $7003
+RS_PCR = $700c
+RS_IFR = $700d
+RS_IER = $700e
 
 ;CIA Ports and Constants
-; KB_PORTB = $7001
-; KB_PORTA = $7000
-; KB_DDRB = $7003
-; KB_DDRA = $7002
+; RS_PORTB = $7001
+; RS_PORTA = $7000
+; RS_DDRB = $7003
+; RS_DDRA = $7002
 
 ;zero page memory positions for Vectors and Data
 
-PORTSTATUS=$b0
-PATTERN=$b1
-rowDetected = $b2
-keyboardBufferPointer = $b3 ;points to the next free space on the keyboard buffer
-keyboardBufferZPLow = $b4 
-keyboardBufferZPHigh = $b5 ;256 positions from $3000 to $30FF
-screenCursor=$b6
-characterToPrint=$b7
-rowNumberDetected = $b8
-columnNumberDetected = $b9
-
-keymapMemoryLowZeroPage=$ba
-keymapMemoryHighZeroPage=$bb
-
-keymapROMZeroPageLow=$bc
-keymapROMZeroPageHigh=$bd
-
-keyPressedAscii=$be
-keyPressedPosition=$bf
-
-columnScanned = $c0
-portColumn =$c1
-STATUS_PORTA=$c2
-STATUS_PORTB=$c3
-rowScanned=$C4
-portRow=$c5
 
 charDataVectorLow = $30
 charDataVectorHigh = $31
@@ -82,11 +45,6 @@ record_lenght=$3c ;it is a memory position
 
 
 ;constants
-;BEGIN COMMODORE KEYBOARD CONSTANT
-totalKeymapLenght=$40 ;64 key positions one more
-;END COMMODORE KEYBOARD CONSTANT
-cursorInitialPosition=$d4
-cursorFinalPosition=$e7
 fill=$43 ;letter C
 totalScreenLenght4Lines=$50
 totalScreenLenght=$3c ;make it only 3 lines long 3c = 60 decimal
@@ -103,23 +61,12 @@ screenBufferHigh =$30
 lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
 lcdCharPositionsHigh =$31
 
-keymapLow = $00
-keymapHigh =$32
-
-keyboardBufferLow = $00 
-keyboardBufferHigh = $33 ;256 positions from $3000 to $30FF
-
-
-
 ;bin 2 ascii values
 value =$0200 ;2 bytes, Low 16 bit half
 mod10 =$0202 ;2 bytes, high 16 bit half and as it has the remainder of dividing by 10
              ;it is the mod 10 of the division (the remainder)
 message = $0204 ; the result up to 6 bytes
 counter = $020a ; 2 bytes
-score = $020c ; 2 bytes
-; scoreLow=$0c 
-; scoreHigh=$02
 
 ;define LCD signals
 E = %10000000 ;Enable Signal
@@ -165,12 +112,12 @@ programStart:
   jsr viaLcdInit
   jsr viaSerialInit
   jsr screenInit
-  jsr welcomeMessage
+;  jsr welcomeMessage
 ;   jsr keyboardInit 
   jsr programLoop
 
 programLoop:  
-;   jsr keyboardScanMini
+   jsr serialProcessing
 ;   jsr keyboardScanRecursive
 ;   ;jsr keyboardScan
 ;   jsr printKeyboardBuffer
@@ -221,263 +168,35 @@ viaLcdInit:
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------VIAKEYCOARDINIT------------------------------------
+;--------------------------------VIASERIALINIT------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-viaKeyboardInit:
+viaSerialInit:
 
-  ;BEGIN enable interrupts KEYBOARD VIA
-  ;enable CA1 for interrupts
-  ;bits set/clear,timer1,timer2,CB1,CB2,ShiftReg,CA1,CA2
-  ;lda #%10000010
-  ;sta KB_IER 
-  ;enable negative edge transition ca1 KB_PCR register
-  ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
-  ;lda #%00000000
-  ;sta KB_PCR 
-  ;END enable interrupts
-
-  ;BEGIN Configure Ports A & B
- 
-  ; WE ARE SCANNING THE KEYBOARD DIFFERENTLY C64 USES PORT A ROWS AS OUTPUT
-  ; AND PORB COLUMNS AS INPUTS, it works the same
-  ;set all port A pins as input
-  lda #%00000000  ;load all ones equivalent to $FF
-  sta KB_DDRA ;store the accumulator in the data direction register for Port A
+  ;set all port A pins as output but bit 6
+  ;bit 6 is the input from the serial protocol
+  lda #%10111111  ;load all ones equivalent to $FF but bit 6
+  sta RS_DDRA ;store the accumulator in the data direction register for Port A
 
   ;set all port B pins as output
   lda #%11111111  ;load all ones equivalent to $FF
-  sta KB_DDRB ;store the accumulator in the data direction register for Port B
-
-
-  ;END Configure Ports A & B
+  sta RS_DDRB ;store the accumulator in the data direction register for Port B
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------VIAKEYCOARDINIT------------------------------------
+;--------------------------------VIASERIALINIT------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------WELCOME MESSAGE------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
+serialProcessing:
 
-welcomeMessage:
-  jsr clear_display
-  lda #$80 ;position cursor at the start of sthe first line
-  jsr lcd_send_instruction
-  lda #<startMessage1
-  sta charDataVectorLow
-  lda #>startMessage1
-  sta charDataVectorHigh
-  jsr print_message
-  rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------WELCOME MESSAGE------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------  
-
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------KEYBOARD INIT--------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-keyboardInit:
-  lda #$0
-  sta keyboardBufferPointer
-  sta screenCursor
-  lda #keyboardBufferLow
-  sta keyboardBufferZPLow
-  lda #keyboardBufferHigh
-  sta keyboardBufferZPHigh
-  jsr loadKeymap
-  lda #$94 ;position cursor at the start of third line
-  jsr lcd_send_instruction
-  rts
-
-loadKeymap:
-  ;load vectors
-  lda #keymapLow
-  sta keymapMemoryLowZeroPage ; to use indirect addressing with y
-  lda #keymapHigh
-  sta keymapMemoryHighZeroPage
-  lda #<keyboardMap
-  sta keymapROMZeroPageLow
-  lda #>keyboardMap
-  sta keymapROMZeroPageHigh
-  ldy #$ff
-loadKeymapLoop:
-  iny
-  cpy #totalKeymapLenght ;64 decimal it counts from 0 to 63 and then at 64 quits
-  beq loadKeymapEnd
-  ; copy from ROM to RAM the LCD positions
-  lda (keymapROMZeroPageLow),Y
-  sta (keymapMemoryLowZeroPage),Y
-  jmp loadKeymapLoop
-loadKeymapEnd:
-  rts    
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------KEYBOARD INIT--------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------  
-
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------KEYBOARD SCAN--------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-keyboardScanRecursive:
-  ldy #$ff
-  lda #%11111110
-  sta portColumn
-  clc 
-keyboardScanRecLoop:
-  iny
-  sty columnScanned
-  sty columnNumberDetected
-  lda portColumn ; first attempt is #%1111110
-  sta KB_PORTB ;writes to portB   
-  lda KB_PORTA ; load PA status it is #%11111111 if no key was pressed because of pullups
-  sta STATUS_PORTA
-  cmp #%11111111
-  bne keyboardScanRowRecursive ; it means a key was pressed see which one
-  ;jsr keyboardScanRows
-  ;lda #$1 ;see if a row was detected
-  ;cmp rowDetected
-  ;beq writeKeyboardBufferJump2
-keyboardScanRecLoopReturn:  
-  ;lda #$0
-  ;sta rowDetected ; deactivate any detected rows
-  sec
-  rol portColumn
-  ldy columnScanned
-  cpy #$7
-  bne keyboardScanRecLoop
-  rts ; return to main programLoop
-
-keyboardScanRowRecursive:
-  ldx #$ff
-  lda #%11111110
-  sta portRow
-  clc
-keyboardScanRowRecLoop:
-  inx
-  stx rowScanned
-  lda STATUS_PORTA
-  cmp portRow
-  beq keyFound
-  sec
-  rol portRow
-  ldx rowScanned
-  cpx #$7
-  bne keyboardScanRowRecLoop
-  jmp keyboardScanRecLoopReturn ; all rows scanned nothing found go back to columns scanning
-
-keyFound:
-  lda rowScanned
-  sta rowNumberDetected
-  lda columnScanned
-  sta columnNumberDetected
-  ldx #$ff
-  lda #$0
-  sta keyPressedPosition
-keyPositionLoop:
-  inx
-  cpx rowNumberDetected
-  beq keyPositionAddColumn ;stop looping when key found
-  lda keyPressedPosition
-  clc
-  adc #$08 ; keep going to the next row on the key map and add to the position of the pressed key
-  sta keyPressedPosition
-  cpx #$07
-  bne keyPositionLoop
-  rts ; return to main program loop as we have iterated more than 8 rows (from 0 to 7)
-
-keyPositionAddColumn:
-  lda keyPressedPosition
-  clc
-  adc columnNumberDetected
-  sta keyPressedPosition
-  jsr DELAY_two_tenth_SEC  ;for debouncing
-  jsr DELAY_two_tenth_SEC  ;for debouncing
-  jsr DELAY_two_tenth_SEC  ;for debouncing
-  jsr addKeyToKeyboardBufferMapKey ; just to separate both procedures
-  rts ;this rts also returns to main programLoop  
-
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------KEYBOARD SCAN--------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------    
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------PRINT KEYBOARD BUFFER------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------  
-
-; writeKeyboardBufferMapKey:  
-;   lda #$d4 ;position cursor at the start of sthe fourth line
-;   jsr lcd_send_instruction
-;   ldy keyPressedPosition
-;   lda (keymapMemoryLowZeroPage),Y
-;   jsr print_char 
-;   jsr delay_1_sec
-;   jsr welcomeMessage
-;   rts
-
-addKeyToKeyboardBufferMapKey:  
-  ldy keyPressedPosition
-  lda (keymapMemoryLowZeroPage),Y ;store character in accumulator
-  ldy keyboardBufferPointer
-  sta (keyboardBufferZPLow),Y ;save character to pointer
-  inc keyboardBufferPointer
-  ;jsr DELAY_onetenth_SEC ;for debouncing
-  rts
-
-printKeyboardBuffer:
-  ldy #$FF
-printKeyboardBufferLoop:
-  iny
-  cpy keyboardBufferPointer 
-  beq printKeyboardBufferEnd
-  lda (keyboardBufferZPLow),Y 
-  sta characterToPrint
-  lda #cursorInitialPosition ;position cursor at the start of sthe fourth line
-  clc   
-  adc screenCursor
-  jsr lcd_send_instruction
-  lda #totalLineLenght
-  cmp screenCursor 
-  beq printKeyboardBufferCharacter ;keep cursor so not to overrun the line
-  inc screenCursor ;always points to the first free
-printKeyboardBufferCharacter:  
-  lda characterToPrint
-  jsr print_char 
-  jmp printKeyboardBufferLoop
-printKeyboardBufferEnd:
-  lda #$0
-  sta keyboardBufferPointer
-  rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------PRINT KEYBOARD BUFFER------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------    
-
+rx_wait:
+  bit RS_PORTA ; put PORTA.bit6 into overflow V flag
+  bvs rx_wait ; check for overflow flag and keep looping if it s high
+  lda #"x" ; if bit 6 is low then we received a character lets say it is x
+  jsr print_char ; pint the character
+  jmp rx_wait ; wait for the next characgter
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -621,15 +340,6 @@ clearScreenBufferLoop:
 clearScreenBufferEnd: 
   rts    
 
-buttonPressed:
-  lda #$94 ;position cursor at the start of sthe third line
-  jsr lcd_send_instruction
-  lda #<buttonPressedMessage
-  sta charDataVectorLow
-  lda #>buttonPressedMessage
-  sta charDataVectorHigh
-  jsr print_message
-  rts    
 
 ;END--------------------------------------------------------------------------------  
 ;-----------------------------------------------------------------------------------
@@ -645,19 +355,7 @@ buttonPressed:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-bin_2_ascii_score:
-  lda #0 ;this signals the empty string
-  sta message ;initialize the string we will use for the results
-  ;BEGIN Initialization of the 4 bytes
-  ; initializae value to be the counter to ccount interrupts 
-  sei ;disable interrupts so as to update properly the counter
-  lda score
-  sta value 
-  lda score + 1
-  sta value + 1
-  cli ; reenable interrupts after updating
-  jsr bin_2_ascii
-  rts
+
 
 bin_2_ascii:
 divide:
@@ -984,11 +682,8 @@ irq:
 
 
 startMessage1:
-  .ascii "    C64 KEYBOARD"    
+  .ascii "    RS232 TERMINAL    "    
 
-buttonPressedMessage:
-  .ascii "   BUTTON PRESSED"
- 
 
 lcd_positions:
 lcd_positions_line0:
@@ -1015,43 +710,6 @@ initialScreen:
   .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
   .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
   .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
-
-  
-
-keyboardMaptest: ;position of number
-  ;all that i do not have a current core are #
-  .byte $30,$31,$32,$33,$34,$35,$36,$37 ; PA0
-  .byte $41,$42,$43,$44,$45,$46,$47,$48 ; PA1
-  .byte $30,$31,$32,$33,$34,$35,$36,$37 ; PA2
-  .byte $41,$42,$43,$44,$45,$46,$47,$48 ; PA3 
-  .byte $30,$31,$32,$33,$34,$35,$36,$37 ; PA4
-  .byte $41,$42,$43,$44,$45,$46,$47,$48 ; PA5
-  .byte $30,$31,$32,$33,$34,$35,$36,$37 ; PA6
-  .byte $41,$42,$43,$44,$45,$46,$47,$48 ; PA7  
-
-
-keyboardMap:
-;all that i do not have a current core are #
-;       PB0,Pb1,PB2,PB3,PB4,PB5,PB6,Pb7
-  .byte $23,$23,$2d,$30,$38,$36,$34,$32 ; PA0
-  .byte $23,$23,$40,$4f,$55,$54,$45,$51 ; PA1
-  .byte $23,$3d,$3a,$4b,$48,$46,$53,$23 ; PA2
-  .byte $23,$23,$2e,$4d,$42,$43,$5a,$20 ; PA3
-  .byte $23,$2f,$2c,$4e,$56,$58,$23,$23 ; PA4
-  .byte $23,$3b,$4c,$4a,$47,$44,$41,$23 ; PA5
-  .byte $23,$2a,$50,$49,$59,$52,$57,$23 ; PA6
-  .byte $23,$ed,$2b,$39,$37,$35,$33,$31 ; PA7
-
-;       PB0,Pb1,PB2,PB3,PB4,PB5,PB6,Pb7
-;       "#","#","-","0","8","6","4","2" PA0
-;       "#","#","@","O","U","T","E","Q" PA1
-;       "#","=",":","K","H","F","S","#" PA2
-;       "#","#",".","M","B","C","Z"," " PA3
-;       "#","/",",","N","V","X","#","#" PA4
-;       "#",";","L","J","G","D","A","#" PA5 
-;       "#","*","P","I","Y","R","W","#" PA6
-;       "#","£","+","9","7","5","3","1" PA7
-
 
 left_cursor_endings:
  ; .byte  $80,$c0,$94,$d4
