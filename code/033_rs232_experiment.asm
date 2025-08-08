@@ -22,19 +22,19 @@ LCD_PCR = $600c
 LCD_IFR = $600d
 LCD_IER = $600e
 
-;KB_PORTB = $7000
-;KB_PORTA = $7001
-;KB_DDRB = $7002
-;KB_DDRA = $7003
-;KB_PCR = $700c
-;KB_IFR = $700d
-;KB_IER = $700e
+KB_PORTB = $7000
+KB_PORTA = $7001
+KB_DDRB = $7002
+KB_DDRA = $7003
+KB_PCR = $700c
+KB_IFR = $700d
+KB_IER = $700e
 
 ;CIA Ports and Constants
-KB_PORTB = $7001
-KB_PORTA = $7000
-KB_DDRB = $7003
-KB_DDRA = $7002
+; KB_PORTB = $7001
+; KB_PORTA = $7000
+; KB_DDRB = $7003
+; KB_DDRA = $7002
 
 ;zero page memory positions for Vectors and Data
 
@@ -163,18 +163,18 @@ programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
   jsr viaLcdInit
-  jsr viaKeyboardInit
+  jsr viaSerialInit
   jsr screenInit
   jsr welcomeMessage
-  jsr keyboardInit 
+;   jsr keyboardInit 
   jsr programLoop
 
 programLoop:  
-  ;jsr keyboardScanMini
-  jsr keyboardScanRecursive
-  ;jsr keyboardScan
-  jsr printKeyboardBuffer
-  jmp programLoop  
+;   jsr keyboardScanMini
+;   jsr keyboardScanRecursive
+;   ;jsr keyboardScan
+;   jsr printKeyboardBuffer
+;   jmp programLoop  
 
 
 ;END--------------------------------------------------------------------------------
@@ -242,11 +242,11 @@ viaKeyboardInit:
  
   ; WE ARE SCANNING THE KEYBOARD DIFFERENTLY C64 USES PORT A ROWS AS OUTPUT
   ; AND PORB COLUMNS AS INPUTS, it works the same
-  ;set all port A pins as input for rows
+  ;set all port A pins as input
   lda #%00000000  ;load all ones equivalent to $FF
   sta KB_DDRA ;store the accumulator in the data direction register for Port A
 
-  ;set all port B pins as output for columns
+  ;set all port B pins as output
   lda #%11111111  ;load all ones equivalent to $FF
   sta KB_DDRB ;store the accumulator in the data direction register for Port B
 
