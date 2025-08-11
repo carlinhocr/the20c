@@ -109,15 +109,16 @@ RESET:
 programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
-  jsr viaLcdInit
+  ;jsr viaLcdInit
   jsr viaSerialInit
-  jsr screenInit
+  ;jsr screenInit
+  jsr portBTest
 ;  jsr welcomeMessage
 ;   jsr keyboardInit 
-  jsr programLoop
+;  jsr programLoop
 
 programLoop:  
-   jsr serialProcessing
+   ;jsr serialProcessing
 ;   jsr keyboardScanRecursive
 ;   ;jsr keyboardScan
 ;   jsr printKeyboardBuffer
@@ -130,6 +131,15 @@ programLoop:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------  
 
+portBTest:
+; blibk pin 0 of PORT B
+  lda #%00000001 
+  sta RS_PORTB
+  jsr delay_2_sec
+  lda #%00000000 
+  sta RS_PORTB
+  jsr delay_2_sec
+  jmp portBTest
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
