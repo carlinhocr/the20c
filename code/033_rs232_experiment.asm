@@ -123,10 +123,10 @@ portBTest:
 ; blibk pin 0 of PORT B
   lda #%11111111 
   sta RS_PORTB
-  ;jsr delay_2_sec
+  jsr delay_2_sec
   lda #%00000000 
   sta RS_PORTB
-  ;jsr delay_2_sec
+  jsr delay_2_sec
   jmp portBTest
 
 ;programLoop:  
