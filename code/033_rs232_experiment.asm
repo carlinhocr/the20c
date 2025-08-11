@@ -98,6 +98,26 @@ RESET:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+startTestPortB
+
+  ;set all port A pins as output but bit 6
+  ;bit 6 is the input from the serial protocol
+  lda #%10111111  ;load all ones equivalent to $FF but bit 6
+  sta RS_DDRA ;store the accumulator in the data direction register for Port A
+
+  ;set all port B pins as output
+  lda #%11111111  ;load all ones equivalent to $FF
+  sta RS_DDRB ;store the accumulator in the data direction register for Port B
+
+portBTest:
+; blibk pin 0 of PORT B
+  lda #%00000001 
+  sta RS_PORTB
+  jsr delay_2_sec
+  lda #%00000000 
+  sta RS_PORTB
+  jsr delay_2_sec
+  jmp portBTest
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -131,15 +151,6 @@ programLoop:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------  
 
-portBTest:
-; blibk pin 0 of PORT B
-  lda #%00000001 
-  sta RS_PORTB
-  jsr delay_2_sec
-  lda #%00000000 
-  sta RS_PORTB
-  jsr delay_2_sec
-  jmp portBTest
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
