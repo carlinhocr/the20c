@@ -113,11 +113,19 @@ programStart:
   jsr viaLcdInit
   jsr viaSerialInit
   jsr screenInit
+  jsr welcomeMessage
   jsr portBTest
-;  jsr welcomeMessage
-;   jsr keyboardInit 
 ;  jsr programLoop
 
+welcomeMessage:
+  lda #"h" ;
+  jsr print_char
+  lda #"o" ;
+  jsr print_char
+  lda #"l" ;
+  jsr print_char
+  lda #"a" ;
+  jsr print_char
 
 portBTest:
 ; blibk pin 0 of PORT B
