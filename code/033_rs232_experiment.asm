@@ -98,26 +98,7 @@ RESET:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-startTestPortB
 
-  ;set all port A pins as output but bit 6
-  ;bit 6 is the input from the serial protocol
-  lda #%11111111  ;load all ones equivalent to $FF but bit 6
-  sta RS_DDRA ;store the accumulator in the data direction register for Port A
-
-  ;set all port B pins as output
-  lda #%11111111  ;load all ones equivalent to $FF
-  sta RS_DDRB ;store the accumulator in the data direction register for Port B
-
-portBTest:
-; blibk pin 0 of PORT B
-  lda #%11111111 
-  sta RS_PORTB
-  ;jsr delay_2_sec
-  lda #%00000000 
-  sta RS_PORTB
-  ;jsr delay_2_sec
-  jmp portBTest
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -129,15 +110,26 @@ portBTest:
 programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
-  ;jsr viaLcdInit
+  jsr viaLcdInit
   jsr viaSerialInit
-  ;jsr screenInit
+  jsr screenInit
   jsr portBTest
 ;  jsr welcomeMessage
 ;   jsr keyboardInit 
 ;  jsr programLoop
 
-programLoop:  
+
+portBTest:
+; blibk pin 0 of PORT B
+  lda #%11111111 
+  sta RS_PORTB
+  ;jsr delay_2_sec
+  lda #%00000000 
+  sta RS_PORTB
+  ;jsr delay_2_sec
+  jmp portBTest
+
+;programLoop:  
    ;jsr serialProcessing
 ;   jsr keyboardScanRecursive
 ;   ;jsr keyboardScan
@@ -179,6 +171,7 @@ viaLcdInit:
   lda #%11100000  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
   sta LCD_DDRA ;store the accumulator in the data direction register for Port A
   ;END Configure Ports A & B
+  rts
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -203,6 +196,7 @@ viaSerialInit:
   ;set all port B pins as output
   lda #%11111111  ;load all ones equivalent to $FF
   sta RS_DDRB ;store the accumulator in the data direction register for Port B
+  rts
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
