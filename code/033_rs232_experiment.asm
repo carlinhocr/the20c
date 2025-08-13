@@ -114,7 +114,8 @@ programStart:
   jsr viaSerialInit
   jsr screenInit
   jsr welcomeMessage
-  jsr portBTest
+; jsr portBTest
+  jsr serialTesting1
 ;  jsr programLoop
 
 welcomeMessage:
@@ -127,15 +128,6 @@ welcomeMessage:
   lda #"a" ;
   jsr print_char
 
-portBTest:
-; blibk pin 0 of PORT B
-  lda #%11111111 
-  sta RS_PORTB
-  jsr delay_2_sec
-  lda #%00000000 
-  sta RS_PORTB
-  jsr delay_2_sec
-  jmp portBTest
 
 ;programLoop:  
    ;jsr serialProcessing
@@ -212,11 +204,34 @@ viaSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-serialProcessing:
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SERIALTESTING------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+portBTest:
+; blibk pin 0 of PORT B
+  lda #%11111111 
+  sta RS_PORTB
+  jsr delay_2_sec
+  lda #%00000000 
+  sta RS_PORTB
+  jsr delay_2_sec
+  jmp portBTest
+  rti
+
+serialTesting1:
+;use BIT instruction because it test bit 7 and 6 on the negative and overflow flag
+;we will be using the overflow flag to check on bit 6 of PORTA
+;BVC branch if overflow is zero CLEAR
+;BVS branch if overflow is one SET
 
 rx_wait:
+  ;loop waiting on the start BIT
   bit RS_PORTA ; put PORTA.bit6 into overflow V flag
-  bvs rx_wait ; check for overflow flag and keep looping if it s high
+  bvs rx_wait ; check for overflow flag and keep looping if it is high
+  ;if we are here the bit was 0
   lda #"x" ; if bit 6 is low then we received a character lets say it is x
   jsr print_char ; pint the character
   jmp rx_wait ; wait for the next characgter
