@@ -115,7 +115,7 @@ programStart:
   jsr screenInit
   jsr welcomeMessage
 ; jsr portBTest
-  jsr serialTesting1
+  jsr serialTesting2
 ;  jsr programLoop
 
 welcomeMessage:
@@ -221,20 +221,56 @@ portBTest:
   jmp portBTest
   rti
 
-serialTesting1:
+; serialTesting1:
+; ;use BIT instruction because it test bit 7 and 6 on the negative and overflow flag
+; ;we will be using the overflow flag to check on bit 6 of PORTA
+; ;BVC branch if overflow is zero CLEAR
+; ;BVS branch if overflow is one SET
+ 
+; rx_wait:
+;   ;loop waiting on the start BIT
+;   bit RS_PORTA ; put PORTA.bit6 into overflow V flag
+;   bvs rx_wait ; check for overflow flag and keep looping if it is high
+;   ;if we are here the bit was 0
+;   lda #"x" ; if bit 6 is low then we received a character lets say it is x
+;   jsr print_char ; pint the character
+;   jmp rx_wait ; wait for the next characgter
+
+serialTesting2:
 ;use BIT instruction because it test bit 7 and 6 on the negative and overflow flag
 ;we will be using the overflow flag to check on bit 6 of PORTA
 ;BVC branch if overflow is zero CLEAR
 ;BVS branch if overflow is one SET
-
+ 
 rx_wait:
   ;loop waiting on the start BIT
   bit RS_PORTA ; put PORTA.bit6 into overflow V flag
   bvs rx_wait ; check for overflow flag and keep looping if it is high
-  ;if we are here the bit was 0
-  lda #"x" ; if bit 6 is low then we received a character lets say it is x
+  ;loop to load 8 bits
+  ldx #8 ;set to read 8 bits
+read_bit:
+  jsr bit_delay ;have a delay so we can time the charcters for 104 microsecons of 9600 bps 
+  bit RS_PORTA ;put PORTA.6 bit on the overflow flag
+  ;put the overflow flag on the carry bit
+  bvs recv_1
+  clc ;if here we received a zero
+  jmp rx_done
+recv_1:
+  sec ;set carry flag because we read a one
+rx_done:
+  ror ;get the carry bit into bit 7 of the accumulator
+  dex ;decrement the number of bits read
+  bne read_bit
+  ;All bits now in accumulator
   jsr print_char ; pint the character
-  jmp rx_wait ; wait for the next characgter
+  jmp rx_wait ; return after 8 bits were read
+
+bit_delay:
+  ldy #13
+bit_delay_loop:
+  dey
+  bne bit_delay  
+  rts
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
