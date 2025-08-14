@@ -219,7 +219,7 @@ portBTest:
   sta RS_PORTB
   jsr delay_2_sec
   jmp portBTest
-  rti
+  rts
 
 ; serialTesting1:
 ; ;use BIT instruction because it test bit 7 and 6 on the negative and overflow flag
@@ -246,6 +246,7 @@ rx_wait:
   ;loop waiting on the start BIT
   bit RS_PORTA ; put PORTA.bit6 into overflow V flag
   bvs rx_wait ; check for overflow flag and keep looping if it is high
+  jsr half_bit_delay ; wait after the start bit to sample midbit the rs232 signals
   ;loop to load 8 bits
   ldx #8 ;set to read 8 bits
 read_bit:
@@ -263,14 +264,22 @@ rx_done:
   bne read_bit
   ;All bits now in accumulator
   jsr print_char ; pint the character
+  jsr bit_delay ;wait out the stop bit
   jmp rx_wait ; return after 8 bits were read
 
 bit_delay:
-  ldy #13
+  ldy #13 ;decimal 13 to wait 104 microseconds because the former code takes 39 or 40 microseconds
 bit_delay_loop:
   dey
-  bne bit_delay  
+  bne bit_delay_loop  
   rts
+
+half_bit_delay:
+  ldy #6 ;decimal 6 to wait 52 microseconds to read in the middle of the bits
+half_bit_delay_loop:
+  dey
+  bne half_bit_delay_loop  
+  rts  
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
