@@ -258,6 +258,8 @@ read_bit:
   jmp rx_done
 recv_1:
   sec ;set carry flag because we read a one
+  nop ;compensate for branch duration
+  nop
 rx_done:
   ror ;get the carry bit into bit 7 of the accumulator
   dex ;decrement the number of bits read
@@ -268,10 +270,14 @@ rx_done:
   jmp rx_wait ; return after 8 bits were read
 
 bit_delay:
+  nop ;compensate because i am not using phx +4
+  nop
   ldy #13 ;decimal 13 to wait 104 microseconds because the former code takes 39 or 40 microseconds
 bit_delay_loop:
   dey
   bne bit_delay_loop  
+  nop ;compensate because i am not using plx
+  nop 
   rts
 
 half_bit_delay:
