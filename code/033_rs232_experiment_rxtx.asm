@@ -115,7 +115,7 @@ programStart:
   jsr screenInit
   jsr welcomeMessage
 ; jsr portBTest
-  jsr serialTesting2
+  jsr serialTesting3_rxtx
 ;  jsr programLoop
 
 welcomeMessage:
@@ -221,26 +221,54 @@ portBTest:
   jmp portBTest
   rts
 
-; serialTesting1:
-; ;use BIT instruction because it test bit 7 and 6 on the negative and overflow flag
-; ;we will be using the overflow flag to check on bit 6 of PORTA
-; ;BVC branch if overflow is zero CLEAR
-; ;BVS branch if overflow is one SET
- 
-; rx_wait:
-;   ;loop waiting on the start BIT
-;   bit RS_PORTA ; put PORTA.bit6 into overflow V flag
-;   bvs rx_wait ; check for overflow flag and keep looping if it is high
-;   ;if we are here the bit was 0
-;   lda #"x" ; if bit 6 is low then we received a character lets say it is x
-;   jsr print_char ; pint the character
-;   jmp rx_wait ; wait for the next characgter
-
-serialTesting2:
+serialTesting3_rxtx:
 ;use BIT instruction because it test bit 7 and 6 on the negative and overflow flag
 ;we will be using the overflow flag to check on bit 6 of PORTA
 ;BVC branch if overflow is zero CLEAR
 ;BVS branch if overflow is one SET
+
+  ;set high the transmit bit , transmitting from the 20c
+  ;pin 0 of port A must be output
+  ;the mas 232 will translate +5v to +7v so it is a zero in the rs-232 protocol
+  lda #1
+  sta RS_PORTA
+
+  lda #"*"
+  sta $0200
+
+ ;set a 0 in port A pin 0
+ ;send the start bit as the first bit ZERO
+  lda #%11111110
+  and RS_PORTA
+  sta RS_PORTA
+
+  ;loop through all 8 bits of the character
+write_bit:  
+  ldx #8
+  ;delay for 104 microseconds
+  jsr bit_delay
+  ror $0200 ;get the each bit in turn on the carry flag
+  bcs send_1
+  ;send 0
+  lda #%11111110
+  and RS_PORTA
+  sta RS_PORTA
+  jmp tx_done
+send_1:
+  ;set a 1 in port A pin 0
+  lda #%00000001
+  ora RS_PORTA
+  sta RS_PORTA 
+tx_done:   
+  dex 
+  bne write_bit
+  jsr bit_delay
+  ;set a 1 in port A pin 0
+  ;set the transmit pin high for the stop bit
+  lda #%00000001
+  ora RS_PORTA
+  sta RS_PORTA 
+  jsr bit_delay
  
 rx_wait:
   ;loop waiting on the start BIT
