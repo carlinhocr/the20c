@@ -244,11 +244,9 @@ serialTesting3_rxtx:
 
  ;set a 0 in port A pin 0
  ;send the start bit as the first bit ZERO
-  lda #$01          ;2
+  lda #%11111110          ;2
   and RS_PORTA      ;4
   sta RS_PORTA      ;4
-  jsr bit_delay
-  jsr bit_delay
   ;loop through all 8 bits of the character
   ldx #8            ;2
   ;wait start bit for 104 microseconds add 28 more cycles = 14 nops
