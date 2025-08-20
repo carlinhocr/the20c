@@ -322,7 +322,7 @@ bit_delay_write:
   ;x=83
   ;loop =4 cycles
   ;wait = 83/4 =21
-  ldy #21   ;2
+  ldy #20   ;2
 bit_delay_loop_write:
   dey       ;2
   bne bit_delay_loop_write  ;2
