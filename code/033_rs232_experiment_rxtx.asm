@@ -290,6 +290,13 @@ tx_done:
   bne write_bit     ;2
   ;total bit 0 = 6+6+2+2+4+4+3+2+2 = 29
   ;total bit 1 = 6+6+2+2+1+4+4+2+2 = 28
+  ;wait 104 microsecons for the last bit  
+  ldx #20 ;2
+  nop ;2
+  ;2+2+20*5
+wait_104:  
+  dex ;2
+  bne wait_104 ;3
   ;set a 1 in port A pin 0
   ;set the transmit pin high for the stop bit
   lda #%00000001
@@ -341,16 +348,16 @@ bit_delay_write:
   ;37+x=104
   ;x=67
   ;loop =4 cycles
-  ;wait = 67/4 =16,75
+  ;wait = 67/5 =13,4
 
   ;36+y=104
   ;y=66
-  ;loop 4 cycles
-  ;wait =66/4= 16.5
-  ldy #17   ;2
+  ;loop 5 cycles
+  ;wait =66/5= 13,2
+  ldy #13   ;2
 bit_delay_loop_write:
   dey       ;2
-  bne bit_delay_loop_write  ;2
+  bne bit_delay_loop_write  ;5
   rts       ;6
 
 half_bit_delay:
