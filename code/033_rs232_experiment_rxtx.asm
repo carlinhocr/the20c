@@ -196,6 +196,9 @@ viaSerialInit:
   ;set all port B pins as output
   lda #%11111111  ;load all ones equivalent to $FF
   sta RS_DDRB ;store the accumulator in the data direction register for Port B
+
+  lda #1
+  sta RS_PORTA
   rts
 
 ;END--------------------------------------------------------------------------------
