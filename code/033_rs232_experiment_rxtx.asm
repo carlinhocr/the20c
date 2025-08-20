@@ -247,8 +247,9 @@ serialTesting3_rxtx:
 
   ;loop through all 8 bits of the character
   ldx #8            ;2
-  ;wait start bit for 104 microseconds add 26 more cycles = 13 nops
-  ;this equals 26 cycles
+  ;wait start bit for 104 microseconds add 28 more cycles = 14 nops
+  ;this equals 30 cycles
+  nop
   nop
   nop
   nop
@@ -286,7 +287,7 @@ tx_done:
   bne write_bit     ;2
   ;total bit 0 = 6+6+2+2+4+4+3+2+2 = 29
   ;total bit 1 = 6+6+2+2+1+4+4+2+2 = 28
-  jsr bit_delay
+  jsr bit_delay_write
   ;set a 1 in port A pin 0
   ;set the transmit pin high for the stop bit
   lda #%00000001
@@ -344,7 +345,7 @@ bit_delay_write:
   ;y=66
   ;loop 4 cycles
   ;wait =66/4= 16.5
-  ldy #18   ;2
+  ldy #17   ;2
 bit_delay_loop_write:
   dey       ;2
   bne bit_delay_loop_write  ;2
