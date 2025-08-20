@@ -249,7 +249,7 @@ serialTesting3_rxtx:
   ldx #8
 write_bit:  
   ;delay for 104 microseconds
-  jsr bit_delay_write ; ?
+  jsr bit_delay_write ; 6
   ;get the each bit in turn on the carry flag
   ror $0200         ;6
   bcs send_1
@@ -268,8 +268,8 @@ send_1:
 tx_done:   
   dex               ;2
   bne write_bit     ;2
-  ;total bit 0 = 6+2+4+4+3+2+2 = 21
-  ;total bit 1 = 6+2+4+4+2+2 = 19
+  ;total bit 0 = 6+6+2+4+4+3+2+2 = 27
+  ;total bit 1 = 6+6+2+4+4+2+2 = 25
   jsr bit_delay
   ;set a 1 in port A pin 0
   ;set the transmit pin high for the stop bit
@@ -317,20 +317,17 @@ bit_delay_loop:
   rts
 
 bit_delay_write:
-;decimal 13 to wait 104 microseconds because the former code takes 21 or 19 microseconds
-  ;19+2+X=104
-  ;x=83
+;decimal 13 to wait 104 microseconds because the former code takes 27 or 25 microseconds
+  ;27+2(ldy)+6(rts)+X=104
+  ;35+x=104
+  ;x=69
   ;loop =4 cycles
-  ;wait = 83/4 =21
-  nop
-  nop
-  ldy #21   ;2
+  ;wait = 69/4 =17.25
+  ldy #17   ;2
 bit_delay_loop_write:
   dey       ;2
   bne bit_delay_loop_write  ;2
-  nop
-  nop
-  rts  
+  rts       ;6
 
 half_bit_delay:
   ldy #6 ;decimal 6 to wait 52 microseconds to read in the middle of the bits
