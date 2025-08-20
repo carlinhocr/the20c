@@ -246,7 +246,7 @@ serialTesting3_rxtx:
   ldx #8
 write_bit:  
   ;delay for 104 microseconds
-  jsr bit_delay
+  jsr bit_delay_write
   ror $0200 ;get the each bit in turn on the carry flag
   bcs send_1
   ;send 0
