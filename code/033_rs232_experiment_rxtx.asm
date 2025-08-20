@@ -248,6 +248,7 @@ serialTesting3_rxtx:
   and RS_PORTA      ;4
   sta RS_PORTA      ;4
   jsr bit_delay
+  jsr bit_delay
   ;loop through all 8 bits of the character
   ldx #8            ;2
   ;wait start bit for 104 microseconds add 28 more cycles = 14 nops
