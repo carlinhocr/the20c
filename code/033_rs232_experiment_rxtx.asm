@@ -241,30 +241,35 @@ serialTesting3_rxtx:
 
  ;set a 0 in port A pin 0
  ;send the start bit as the first bit ZERO
-  lda #$01
-  and RS_PORTA
-  sta RS_PORTA
+  lda #$01          ;2
+  and RS_PORTA      ;4
+  sta RS_PORTA      ;4
 
   ;loop through all 8 bits of the character
   ldx #8
 write_bit:  
   ;delay for 104 microseconds
-  jsr bit_delay
-  ror $0200 ;get the each bit in turn on the carry flag
+  jsr bit_delay_write ; ?
+  ;get the each bit in turn on the carry flag
+  ror $0200         ;6
   bcs send_1
   ;send 0
-  lda #%11111110
-  and RS_PORTA
-  sta RS_PORTA
-  jmp tx_done
+  lda #%11111110    ;2
+  and RS_PORTA      ;4
+  sta RS_PORTA      ;4
+  jmp tx_done       ;3
+  ;write bit 0 = 6+2+4+4+3
 send_1:
   ;set a 1 in port A pin 0
-  lda #%00000001
-  ora RS_PORTA
-  sta RS_PORTA 
+  lda #%00000001    ;2
+  ora RS_PORTA      ;4
+  sta RS_PORTA      ;4
+  ;write bit 1 = 6+2+4+4
 tx_done:   
-  dex 
-  bne write_bit
+  dex               ;2
+  bne write_bit     ;2
+  ;total bit 0 = 6+2+4+4+3+2+2 = 21
+  ;total bit 1 = 6+2+4+4+2+2 = 19
   jsr bit_delay
   ;set a 1 in port A pin 0
   ;set the transmit pin high for the stop bit
@@ -305,17 +310,22 @@ bit_delay:
   nop
   ldy #13 ;decimal 13 to wait 104 microseconds because the former code takes 39 or 40 microseconds
 bit_delay_loop:
-  dey
+  dey       
   bne bit_delay_loop  
   nop ;compensate because i am not using plx
   nop 
   rts
 
 bit_delay_write:
-  ldy #13 ;decimal 13 to wait 104 microseconds because the former code takes 39 or 40 microseconds
+;decimal 13 to wait 104 microseconds because the former code takes 21 or 19 microseconds
+  ;19+2+X=104
+  ;x=83
+  ;loop =4 cycles
+  ;wait = 83/4 =21
+  ldy #21   ;2
 bit_delay_loop_write:
-  dey
-  bne bit_delay_loop_write  
+  dey       ;2
+  bne bit_delay_loop_write  ;2
   rts  
 
 half_bit_delay:
