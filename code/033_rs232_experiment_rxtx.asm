@@ -269,6 +269,7 @@ tx_done:
   ora RS_PORTA
   sta RS_PORTA 
   jsr bit_delay
+  rts
  
 rx_wait:
   ;loop waiting on the start BIT
