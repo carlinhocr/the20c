@@ -243,8 +243,8 @@ serialTesting3_rxtx:
   sta RS_PORTA
 
   ;loop through all 8 bits of the character
-write_bit:  
   ldx #8
+write_bit:  
   ;delay for 104 microseconds
   jsr bit_delay
   ror $0200 ;get the each bit in turn on the carry flag
