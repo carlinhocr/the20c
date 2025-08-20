@@ -269,7 +269,6 @@ tx_done:
   ora RS_PORTA
   sta RS_PORTA 
   jsr bit_delay
-  rts
  
 rx_wait:
   ;loop waiting on the start BIT
@@ -308,6 +307,16 @@ bit_delay_loop:
   nop ;compensate because i am not using plx
   nop 
   rts
+
+bit_delay_write:
+  ;compensate because i am not utrb but lda and sta
+  ldy #13 ;decimal 13 to wait 104 microseconds because the former code takes 39 or 40 microseconds
+bit_delay_loop_write:
+  dey
+  bne bit_delay_loop_write  
+  nop ;compensate because i am not using plx
+  nop 
+  rts  
 
 half_bit_delay:
   ldy #6 ;decimal 6 to wait 52 microseconds to read in the middle of the bits
