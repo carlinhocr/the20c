@@ -238,7 +238,7 @@ serialTesting3_rxtx:
 
  ;set a 0 in port A pin 0
  ;send the start bit as the first bit ZERO
-  lda #%11111110
+  lda #$01
   and RS_PORTA
   sta RS_PORTA
 
@@ -309,13 +309,10 @@ bit_delay_loop:
   rts
 
 bit_delay_write:
-  nop ;compensate because i am not utrb but lda and sta
-  nop
   ldy #13 ;decimal 13 to wait 104 microseconds because the former code takes 39 or 40 microseconds
 bit_delay_loop_write:
   dey
   bne bit_delay_loop_write  
-  nop ;compensate because i am not using plx
   rts  
 
 half_bit_delay:
