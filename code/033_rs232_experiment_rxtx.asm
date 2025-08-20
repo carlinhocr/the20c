@@ -249,7 +249,7 @@ serialTesting3_rxtx:
   ldx #8
 write_bit:  
   ;delay for 104 microseconds
-  jsr bit_delay_write
+  jsr bit_delay
   ror $0200 ;get the each bit in turn on the carry flag
   bcs send_1
   ;send 0
@@ -272,7 +272,6 @@ tx_done:
   ora RS_PORTA
   sta RS_PORTA 
   jsr bit_delay
-  jmp serialTesting3_rxtx
  
 rx_wait:
   ;loop waiting on the start BIT
