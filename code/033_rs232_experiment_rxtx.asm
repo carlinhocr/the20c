@@ -247,7 +247,9 @@ serialTesting3_rxtx:
 
   ;loop through all 8 bits of the character
   ldx #8            ;2
-  ;wait start bit for 104 microseconds add 24 more cycles = 12 nops
+  ;wait start bit for 104 microseconds add 26 more cycles = 13 nops
+  ;this equals 26 cycles
+  nop
   nop
   nop
   nop
@@ -266,7 +268,7 @@ write_bit:
   jsr bit_delay_write ; 6
   ;get the each bit in turn on the carry flag
   ror $0200         ;6
-  bcs send_1
+  bcs send_1        ;2 +1if the branch is taken
   ;send 0
   lda #%11111110    ;2
   and RS_PORTA      ;4
@@ -282,8 +284,8 @@ send_1:
 tx_done:   
   dex               ;2
   bne write_bit     ;2
-  ;total bit 0 = 6+6+2+4+4+3+2+2 = 27
-  ;total bit 1 = 6+6+2+4+4+2+2 = 25
+  ;total bit 0 = 6+6+2+2+4+4+3+2+2 = 29
+  ;total bit 1 = 6+6+2+2+1+4+4+2+2 = 28
   jsr bit_delay
   ;set a 1 in port A pin 0
   ;set the transmit pin high for the stop bit
@@ -331,18 +333,18 @@ bit_delay_loop:
   rts
 
 bit_delay_write:
-;decimal 13 to wait 104 microseconds because the former code takes 27 or 25 microseconds
-  ;27+2(ldy)+6(rts)+X=104
-  ;35+x=104
-  ;x=69
+;decimal 13 to wait 104 microseconds because the former code takes 29 or 28 microseconds
+  ;29+2(ldy)+6(rts)+X=104
+  ;37+x=104
+  ;x=67
   ;loop =4 cycles
-  ;wait = 69/4 =17.25
+  ;wait = 67/4 =16,75
 
-  ;33+y=104
-  ;y=67
+  ;36+y=104
+  ;y=66
   ;loop 4 cycles
-  ;wait =67/4= 16.75
-  ldy #18   ;2
+  ;wait =66/4= 16.5
+  ldy #17   ;2
 bit_delay_loop_write:
   dey       ;2
   bne bit_delay_loop_write  ;2
