@@ -246,7 +246,21 @@ serialTesting3_rxtx:
   sta RS_PORTA      ;4
 
   ;loop through all 8 bits of the character
-  ldx #8
+  ldx #8            ;2
+  ;wait start bit for 104 microseconds add 24 more cycles = 12 nops
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+
 write_bit:  
   ;delay for 104 microseconds
   jsr bit_delay_write ; 6
@@ -323,7 +337,12 @@ bit_delay_write:
   ;x=69
   ;loop =4 cycles
   ;wait = 69/4 =17.25
-  ldy #14   ;2
+
+  ;33+y=104
+  ;y=67
+  ;loop 4 cycles
+  ;wait =67/4= 16.75
+  ldy #17   ;2
 bit_delay_loop_write:
   dey       ;2
   bne bit_delay_loop_write  ;2
