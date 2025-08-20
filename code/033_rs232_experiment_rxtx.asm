@@ -232,6 +232,9 @@ serialTesting3_rxtx:
   ;the mas 232 will translate +5v to +7v so it is a zero in the rs-232 protocol
   lda #1
   sta RS_PORTA
+  jsr bit_delay
+  jsr bit_delay
+  jsr bit_delay
 
   lda #"*"
   sta $0200
@@ -269,6 +272,7 @@ tx_done:
   ora RS_PORTA
   sta RS_PORTA 
   jsr bit_delay
+  jmp serialTesting3_rxtx
  
 rx_wait:
   ;loop waiting on the start BIT
