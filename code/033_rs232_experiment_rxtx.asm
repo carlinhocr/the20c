@@ -247,25 +247,11 @@ serialTesting3_rxtx:
   lda #$01          ;2
   and RS_PORTA      ;4
   sta RS_PORTA      ;4
-
+  jsr bit_delay
   ;loop through all 8 bits of the character
   ldx #8            ;2
   ;wait start bit for 104 microseconds add 28 more cycles = 14 nops
   ;this equals 30 cycles
-  nop
-  nop
-  nop
-  nop
-  nop
-  nop
-  nop
-  nop
-  nop
-  nop
-  nop
-  nop
-  nop
-  nop
 
 write_bit:  
   ;delay for 104 microseconds
