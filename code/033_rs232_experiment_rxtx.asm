@@ -324,6 +324,8 @@ bit_delay_write:
   ;loop =4 cycles
   ;wait = 69/4 =17.25
   nop
+  nop
+  nop
   ldy #17   ;2
 bit_delay_loop_write:
   dey       ;2
