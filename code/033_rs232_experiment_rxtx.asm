@@ -309,13 +309,13 @@ bit_delay_loop:
   rts
 
 bit_delay_write:
-  ;compensate because i am not utrb but lda and sta
+  nop ;compensate because i am not utrb but lda and sta
+  nop
   ldy #13 ;decimal 13 to wait 104 microseconds because the former code takes 39 or 40 microseconds
 bit_delay_loop_write:
   dey
   bne bit_delay_loop_write  
   nop ;compensate because i am not using plx
-  nop 
   rts  
 
 half_bit_delay:
