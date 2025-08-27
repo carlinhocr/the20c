@@ -13,7 +13,7 @@ ACIA_CTRL = $5003
 ;VIA Ports and Constant ds
 LCD_PORTB = $6000
 LCD_PORTA = $6001
-LCD_DDRB = $6002
+LCD_DDRB = $6002 
 LCD_DDRA = $6003
 LCD_PCR = $600c
 LCD_IFR = $600d
@@ -119,11 +119,12 @@ programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
   jsr viaLcdInit
-  jsr viaSerialInit
+  jsr uartSerialInit
   jsr screenInit
   jsr welcomeMessage
+  jsr serialUART
 ; jsr portBTest
-  jsr serialTesting3_rxtx
+;  jsr serialTesting3_rxtx
 ;  jsr programLoop
 
 welcomeMessage:
@@ -217,7 +218,65 @@ viaSerialInit:
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------SERIALTESTING------------------------------------
+;--------------------------------UARTSERIALINIT-------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+uartSerialInit:
+
+  ;reset UART 6551 by writting to thestatus register
+  lda #$00
+  sta ACIA_STATUS
+
+  ;configure the control register
+  ;bit 7 = 0 -> 1 Stop Bit
+  ;bit 6 =0 and bit 5=0 -> 8 bits word lenght
+  ;bit 4 = 1 -> receiver clock source is baud rate
+  ;bit 3 =1 bit 2=1 bit 1=1 bit 0=0 -> 9600 baudios as a baud rate
+  ;bit 3 =1 bit 2=1 bit 1=1 bit 0=1 -> 19200 baudios as a baud rate
+  ;lda #%00011110 ;N-8-1 = No parity, 8 bits, 1 Stop Bit, 9600 baudios
+  lda #%00011111 ;N-8-1 = No parity, 8 bits, 1 Stop Bit, 19200 baudios
+  sta ACIA_CTRL
+
+  ;configure the command register
+  ;bit 7 = 0 and bit 6 =0 -> odd parity but we will not be using parity
+  ;bit 5=0 -> disable parity
+  ;bit 4 = 0 -> disable ECHO
+  ;bit 3 =1 bit 2=0 -> RTSB Active Low and Interrupts Disable
+  ;bit 1 =1 -> Receiver interrupt request disable
+  ;bit 0 =1 -> Data terminal Ready (DTRB Low)
+  lda #%00001011 ;N-8-1 = No parity, 8 bits, 1 Stop Bit, 9600 baudios
+  sta ACIA_CMD
+
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------UARTSERIALINIT-------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SERIALUART-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+serialUART:
+  ;wait until the status register bit 3 receive data register is full =1, then 
+  ;read the data register
+loopReceiveData:
+  lda ACIA_STATUS
+  and #%00001000; and it to see if bit 3 is one, delete all the other bits
+  beq loopReceiveData ; if zero we have not received anything
+  ;if we are here we have a byte to read
+  lda ACIA_DATA ;read character
+  jsr print_char
+  jmp loopReceiveData ;go to wait for next character
+
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SERIALUART-----------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
@@ -231,6 +290,13 @@ portBTest:
   jsr delay_2_sec
   jmp portBTest
   rts
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SERIALTESTING------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
 
 serialTesting3_rxtx:
 ;use BIT instruction because it test bit 7 and 6 on the negative and overflow flag
