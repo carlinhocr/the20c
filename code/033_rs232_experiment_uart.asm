@@ -267,13 +267,10 @@ serialUART:
 send_rs232_message:
   ;lets send a message
   lda rs232_message,x ;test for the NULL char that ends all ASCII strings
-  beq send_rs232_message_done
+  beq loopReceiveData
   jsr send_rs232_char
   inx
   jmp send_rs232_message
-
-send_rs232_message_done:  
-
 
   ;wait until the status register bit 3 receive data register is full =1, then 
   ;read the data register
@@ -287,7 +284,7 @@ loopReceiveData:
   jmp loopReceiveData ;go to wait for next character
   rts
 
-rs232_message: .asciiz " 20c RetroTerm Ready"
+rs232_message: .asciiz "20c RetroTerm Ready"
 
 send_rs232_char:
   sta ACIA_DATA ;wrie whatever is on the accumulator to the transmit register
