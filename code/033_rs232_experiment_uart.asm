@@ -280,6 +280,7 @@ loopReceiveData:
   beq loopReceiveData ; if zero we have not received anythinßg
   ;if we are here we have a byte to read
   lda ACIA_DATA ;read character
+  jsr print_char ;print the char on the local lcd of the 20 c
   jsr send_rs232_char ;echo the character typed
   jmp loopReceiveData ;go to wait for next character
   rts
