@@ -262,17 +262,53 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 serialUART:
+
+  ldx #0
+send_rs232_message:
+  ;lets send a message
+  lda rs232_message,x ;test for the NULL char that ends all ASCII strings
+  beq send_rs232_message_done
+  jsr send_rs232_char
+  inx
+  jmp send_rs232_message
+
+send_rs232_message_done:  
+
+
   ;wait until the status register bit 3 receive data register is full =1, then 
   ;read the data register
 loopReceiveData:
   lda ACIA_STATUS
   and #%00001000; and it to see if bit 3 is one, delete all the other bits
-  beq loopReceiveData ; if zero we have not received anything
+  beq loopReceiveData ; if zero we have not received anythinßg
   ;if we are here we have a byte to read
   lda ACIA_DATA ;read character
-  jsr print_char
+  jsr send_rs232_char ;echo the character typed
   jmp loopReceiveData ;go to wait for next character
+  rts
 
+rs232_message: .asciiz " 20c RetroTerm Ready"
+
+send_rs232_char:
+  sta ACIA_DATA ;wrie whatever is on the accumulator to the transmit register
+  pha ; preserve accumulator
+  ;check to see if the transmit data register is empty bit 4 of the status register
+tx_wait:  
+  lda ACIA_STATUS
+  and #%00010000 ;leave vae only bit 4 on the accumulator
+  beq tx_wait ;if zero the transmit buffer is full so we wait
+  jsr tx_delay ; solve bit 4 hardware issue on the wdc issue
+  pla ; recover accumulator
+  rts
+
+tx_delay:
+  ;at 19200 bauds it is 1 bit every 52 clock cycles
+  ;so 8 bits + start and stop bit it is 10 bits or 520 cycles
+  ldy #102
+tx_delay_loop:  
+  dey ;2 cycles
+  bne tx_delay_loop ; 3 cycles
+  rts
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
