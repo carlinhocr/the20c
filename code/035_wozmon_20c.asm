@@ -1188,7 +1188,8 @@ PRHEX:
 ECHO:
   PHA    ; Save A.
   STA ACIA_DATA  ; Output character.
-  LDA #$FF   ; Initialize delay loop.
+  ;LDA #$FF   ; Initialize delay loop.
+  LDA #$30   ; Initialize delay loop.
 TXDELAY:    
   ;DEC    ; Decrement A. use something more compatible
   sta DECACUM
