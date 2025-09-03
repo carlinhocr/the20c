@@ -1190,15 +1190,15 @@ ECHO:
   PHA    ; Save A.
   STA ACIA_DATA  ; Output character.
   ;LDA #$FF   ; Initialize delay loop.
-  lda #51 ;51 decimal
+  ;lda #51 ;51 decimal
+  lda #D0
+  sta DECACUM
 TXDELAY:    
   ;DEC    ; Decrement A. use something more compatible 2 cycles
   ;try to do 256 * 2 cycles 512 cycles then LDA$FF
   ;with the new instructions it takes 3+3+4 =10 cycles
   ;512 /10 = 51 tymes
-  sta DECACUM ;3 cycles
   dec DECACUM ;3 cycles
-  lda DECACUM ;4 cycles
   BNE TXDELAY    ; Until A gets to 0.
   nop ;get from 510 cycles to 512 cycles
   PLA    ; Restore A.
