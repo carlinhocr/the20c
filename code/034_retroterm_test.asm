@@ -273,7 +273,7 @@ serialUART:
 send_rs232_message:
   ;lets send a message
   lda rs232_message,x ;test for the NULL char that ends all ASCII strings
-  beq loopReceiveData
+  beq send_rs232_message_end
   jsr send_rs232_char
   inx
   jmp send_rs232_message
