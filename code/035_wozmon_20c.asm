@@ -1189,15 +1189,23 @@ ECHO:
   PHA    ; Save A.
   STA ACIA_DATA  ; Output character.
   ;LDA #$FF   ; Initialize delay loop.
-  LDA #$30   ; Initialize delay loop.
-TXDELAY:    
-  ;DEC    ; Decrement A. use something more compatible
-  sta DECACUM
-  dec DECACUM
-  lda DECACUM
-  BNE TXDELAY    ; Until A gets to 0.
-  PLA    ; Restore A.
-  RTS    ; Return.
+tx_delay_woz:
+  ;at 19200 bauds it is 1 bit every 52 clock cycles
+  ;so 8 bits + start and stop bit it is 10 bits or 520 cycles
+  ldy #102
+tx_delay_loop_woz:  
+  dey ;2 cycles
+  bne tx_delay_loop_woz ; 3 cycles
+  rts  
+
+; TXDELAY:    
+;   ;DEC    ; Decrement A. use something more compatible
+;   sta DECACUM
+;   dec DECACUM
+;   lda DECACUM
+;   BNE TXDELAY    ; Until A gets to 0.
+;   PLA    ; Restore A.
+;   RTS    ; Return.
 
   .org $FFFA
 
