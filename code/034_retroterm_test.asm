@@ -276,6 +276,11 @@ send_rs232_message:
   ;wait until the status register bit 3 receive data register is full =1, then 
   ;read the data register
 loopReceiveData:
+  ;print cr
+  lda #$0d
+  jsr send_rs232_char
+  lda #$0a
+  jsr send_rs232_char    
   lda ACIA_STATUS
   and #%00001000; and it to see if bit 3 is one, delete all the other bits
   beq loopReceiveData ; if zero we have not received anythinßg
@@ -286,7 +291,7 @@ loopReceiveData:
   jmp loopReceiveData ;go to wait for next character
   rts
 
-rs232_message: .asciiz "20c RetroTerm Ready\r\n" ;\r carriage return \n line feed
+rs232_message: .asciiz "20c RetroTerm Ready" ;\r carriage return \n line feed
 
 send_rs232_char:
   sta ACIA_DATA ;wrie whatever is on the accumulator to the transmit register
