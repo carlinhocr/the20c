@@ -128,14 +128,19 @@ programStart:
 ;  jsr programLoop
 
 welcomeMessage:
-  lda #"h" ;
+  ldx #0
+send_welcome_message:
+  ;lets send a message
+  lda welcome_ascii_message,x ;test for the NULL char that ends all ASCII strings
+  beq send_welcome_message_end
   jsr print_char
-  lda #"o" ;
-  jsr print_char
-  lda #"l" ;
-  jsr print_char
-  lda #"a" ;
-  jsr print_char
+  inx
+  jmp send_welcome_message
+
+send_welcome_message_end:
+  rts
+
+welcome_ascii_message: .asciiz "Retroterm 20c"  
 
 
 
@@ -273,14 +278,18 @@ send_rs232_message:
   inx
   jmp send_rs232_message
 
-  ;wait until the status register bit 3 receive data register is full =1, then 
-  ;read the data register
-loopReceiveData:
+send_rs232_message_end:
   ;print cr
   lda #$0d
   jsr send_rs232_char
   lda #$0a
-  jsr send_rs232_char    
+  jsr send_rs232_char 
+  jmp loopReceiveData ;go to listening mode
+
+  ;wait until the status register bit 3 receive data register is full =1, then 
+  ;read the data register
+loopReceiveData:
+   
   lda ACIA_STATUS
   and #%00001000; and it to see if bit 3 is one, delete all the other bits
   beq loopReceiveData ; if zero we have not received anythinßg
