@@ -1048,7 +1048,8 @@ GETLINE:
   JSR ECHO
 
   LDY #$01   ; Initialize text index.
-BACKSPACE:  DEY    ; Back up text index.
+BACKSPACE:  
+  DEY    ; Back up text index.
   BMI GETLINE    ; Beyond start of line, reinitialize.
 
 NEXTCHAR:
@@ -1099,7 +1100,7 @@ DIG:
   ASL    ; Hex digit to MSD of A.
   ASL
   ASL
-
+  
   LDX #$04   ; Shift count.
 HEXSHIFT:
   ASL    ; Hex digit left, MSB to carry.
@@ -1189,23 +1190,19 @@ ECHO:
   PHA    ; Save A.
   STA ACIA_DATA  ; Output character.
   ;LDA #$FF   ; Initialize delay loop.
-tx_delay_woz:
-  ;at 19200 bauds it is 1 bit every 52 clock cycles
-  ;so 8 bits + start and stop bit it is 10 bits or 520 cycles
-  ldy #102
-tx_delay_loop_woz:  
-  dey ;2 cycles
-  bne tx_delay_loop_woz ; 3 cycles
-  rts  
-
-; TXDELAY:    
-;   ;DEC    ; Decrement A. use something more compatible
-;   sta DECACUM
-;   dec DECACUM
-;   lda DECACUM
-;   BNE TXDELAY    ; Until A gets to 0.
-;   PLA    ; Restore A.
-;   RTS    ; Return.
+  lda #51 ;51 decimal
+TXDELAY:    
+  ;DEC    ; Decrement A. use something more compatible 2 cycles
+  ;try to do 256 * 2 cycles 512 cycles then LDA$FF
+  ;with the new instructions it takes 3+3+4 =10 cycles
+  ;512 /10 = 51 tymes
+  sta DECACUM ;3 cycles
+  dec DECACUM ;3 cycles
+  lda DECACUM ;4 cycles
+  BNE TXDELAY    ; Until A gets to 0.
+  nop ;get from 510 cycles to 512 cycles
+  PLA    ; Restore A.
+  RTS    ; Return.
 
   .org $FFFA
 
