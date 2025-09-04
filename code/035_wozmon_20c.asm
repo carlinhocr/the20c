@@ -1191,7 +1191,7 @@ ECHO:
   STA ACIA_DATA  ; Output character.
   ;LDA #$FF   ; Initialize delay loop.
   ;lda #51 ;51 decimal
-  lda #D0
+  lda #170 ;512/3cycles
   sta DECACUM
 TXDELAY:    
   ;DEC    ; Decrement A. use something more compatible 2 cycles
@@ -1200,7 +1200,6 @@ TXDELAY:
   ;512 /10 = 51 tymes
   dec DECACUM ;3 cycles
   BNE TXDELAY    ; Until A gets to 0.
-  nop ;get from 510 cycles to 512 cycles
   PLA    ; Restore A.
   RTS    ; Return.
 
