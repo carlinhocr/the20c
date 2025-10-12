@@ -318,13 +318,21 @@ init_mario_lenghts:
   sta serialDataVectorHigh
   lda #49 ;integer 49 lenght of record
   sta serialCharperLines
+  ;here print first line
+  ;
+  ;
+  ;here increment on additional lines
   clc
   lda serialDataVectorLow ;load marioascii low
   adc serialCharperLines ; add the number of records
   ;if there is a carry it is in the carry flag
   lda serialDataVectorHigh
-  adc #0; adds the carry
+  adc #0; adds the carry if there is one
   sta serialDataVectorHigh
+  ;here printing the new mario line
+  ;
+  ;
+  ;return and increment according to the lenght of the mario screen
 
 listeningMode: 
   jmp loopReceiveData ;go to listening mode
