@@ -334,7 +334,7 @@ mario_lenghts_loop:
   sta serialDataVectorHigh
   ;here printing the new mario line
   jsr send_rs232_line
-  cpx #10 ;check to see if ten lines where printed
+  cpx #27 ;check to see if ten lines where printed
   bne mario_lenghts_loop
   ;return and increment according to the lenght of the mario screen
   ;end by jumping to listening mode
