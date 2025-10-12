@@ -59,6 +59,9 @@ lcdROMPositionsHighZeroPage =$39
 initialScreenZeroPageLow=$3a
 initialScreenZeroPageHigh=$3b
 record_lenght=$3c ;it is a memory position
+serialDataVectorLow = $3d
+serialDataVectorHigh = $3e
+serialCharperLines = $3f
 
 
 
@@ -307,6 +310,21 @@ send_mario_end:
   jsr send_rs232_char
   lda #$0a
   jsr send_rs232_char   
+
+init_mario_lenghts:
+  lda #< marioAscii
+  sta serialDataVectorLow
+  lda #> marioAscii 
+  sta serialDataVectorHigh
+  lda #49 ;integer 49 lenght of record
+  sta serialCharperLines
+  clc
+  lda serialDataVectorLow ;load marioascii low
+  adc serialCharperLines ; add the number of records
+  ;if there is a carry it is in the carry flag
+  lda serialDataVectorHigh
+  adc #0; adds the carry
+  sta serialDataVectorHigh
 
 listeningMode: 
   jmp loopReceiveData ;go to listening mode
