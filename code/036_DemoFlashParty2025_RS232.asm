@@ -334,6 +334,21 @@ init_mario_lenghts:
   ;
   ;return and increment according to the lenght of the mario screen
 
+send_rs232_line:
+  ldy #$0
+send_rs232_line_loop:
+  lda (serialDataVectorLow),y 
+  ;test for the NULL char that ends all ASCII strings
+  beq send_rs232_line_end
+  jsr send_rs232_char
+  inx
+  jmp send_rs232_message 
+send_rs232_line_end:
+  lda #$0d
+  jsr send_rs232_char
+  lda #$0a
+  jsr send_rs232_char 
+
 listeningMode: 
   jmp loopReceiveData ;go to listening mode
   
