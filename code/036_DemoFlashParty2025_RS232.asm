@@ -286,7 +286,7 @@ send_rs232_message:
   beq send_rs232_message_end
   jsr send_rs232_char
   inx
-  jmp send_rs232_message
+  jmp send_rs232_message  
 
 send_rs232_message_end:
   ;print cr
@@ -294,8 +294,24 @@ send_rs232_message_end:
   jsr send_rs232_char
   lda #$0a
   jsr send_rs232_char 
-  jmp loopReceiveData ;go to listening mode
 
+  ldx #0
+send_mario:
+  lda marioAscii,x ;test for the NULL char that ends all ASCII strings
+  beq send_mario_end
+  jsr send_rs232_char
+  inx
+  jmp send_rs232_message 
+send_mario_end:
+  lda #$0d
+  jsr send_rs232_char
+  lda #$0a
+  jsr send_rs232_char   
+
+listeningMode: 
+  jmp loopReceiveData ;go to listening mode
+  
+  
   ;wait until the status register bit 3 receive data register is full =1, then 
   ;read the data register
 loopReceiveData:
@@ -971,7 +987,7 @@ irq:
 startMessage1:
   .ascii "    RS-232 TERMINAL    "    
 
-mario:
+marioAscii:
   .ascii " ── ── ── ── ── ── ── ██ ██ ██ ██ ── ██ ██ ██ ── "
   .ascii " ── ── ── ── ── ██ ██ ▓▓ ▓▓ ▓▓ ██ ██ ░░ ░░ ░░ ██ "
   .ascii " ── ── ── ── ██ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ██ ░░ ░░ ░░ ██ "
