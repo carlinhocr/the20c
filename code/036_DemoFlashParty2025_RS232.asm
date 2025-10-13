@@ -298,8 +298,8 @@ init_mario_lenghts:
   sta serialDataVectorLow
   lda #> marioAscii 
   sta serialDataVectorHigh
-  lda #90 ;integer 49 lenght of record
-  sta serialCharperLines
+  ;lda #90 ;integer 49 lenght of record
+  ;sta serialCharperLines
   ;here print first line
   jsr send_rs232_line
   
@@ -309,7 +309,7 @@ mario_lenghts_loop:
   ;here increment on additional lines
   clc
   lda serialDataVectorLow ;load marioascii low
-  adc serialCharperLines ; add the number of records
+  adc serialCharperLines ; add the number of records of the last send_rs232_line
   sta serialDataVectorLow ; store the new value
   bcc mario_lenghts_no_carry ;branch on carry clear or no carry
   ;if there is a carry it is in the carry flag
@@ -369,6 +369,7 @@ send_rs232_line_loop:
   iny
   jmp send_rs232_line_loop 
 send_rs232_line_end:
+  sty serialCharperLines
   jsr send_rs232_CRLF
   rts  
 
@@ -1075,6 +1076,8 @@ marioAsciiMessage:
   .asciiz "y puedo hacer un mario"
 
 marioAscii:
+  .ascii "123456"
+  .ascii "abcdef"
   .ascii " ── ── ── ── ── ── ── ██ ██ ██ ██ ── ██ ██ ██ ── "
   .ascii " ── ── ── ── ── ██ ██ ▓▓ ▓▓ ▓▓ ██ ██ ░░ ░░ ░░ ██ "
   .ascii " ── ── ── ── ██ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ██ ░░ ░░ ░░ ██ "
