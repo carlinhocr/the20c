@@ -393,14 +393,29 @@ loopReceiveData:
 
 send_rs232_char:
   sta ACIA_DATA ;wrie whatever is on the accumulator to the transmit register
-  pha ; preserve accumulator
+  ; preserve accumulator
+  pha 
+  ; preserve Y register
+  tya  
+  pha
+  ; preserve X register
+  txa  
+  pha  
+
   ;check to see if the transmit data register is empty bit 4 of the status register
 tx_wait:  
   lda ACIA_STATUS
   and #%00010000 ;leave vae only bit 4 on the accumulator
   beq tx_wait ;if zero the transmit buffer is full so we wait
   jsr tx_delay ; solve bit 4 hardware issue on the wdc issue
-  pla ; recover accumulator
+  ;recover X register
+  pla
+  tax
+  ;recover y register
+  pla
+  tay
+  ; recover accumulator
+  pla 
   rts
 
 tx_delay:
