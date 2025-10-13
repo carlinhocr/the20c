@@ -310,6 +310,7 @@ mario_lenghts_loop:
   clc
   lda serialDataVectorLow ;load marioascii low
   adc serialCharperLines ; add the number of records
+  sta serialDataVectorLow ; store the new value
   bcc mario_lenghts_no_carry ;branch on carry clear or no carry
   ;if there is a carry it is in the carry flag
   ; clear the carry and add one to the high order byte
