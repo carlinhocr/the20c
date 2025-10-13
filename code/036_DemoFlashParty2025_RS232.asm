@@ -316,63 +316,63 @@ send_rs232_message_end:
 
 rs232_message: .asciiz "y puedo hacer un mario" ;\r carriage return \n line feed  
 
-;   ldx #0
-; send_mario:
-;   lda marioAscii,x ;test for the NULL char that ends all ASCII strings
-;   beq send_mario_end
-;   jsr send_rs232_char
-;   inx
-;   jmp send_rs232_message 
-; send_mario_end:
-;   lda #$0d
-;   jsr send_rs232_char
-;   lda #$0a
-;   jsr send_rs232_char   
+  ldx #0
+send_mario:
+  lda marioAscii,x ;test for the NULL char that ends all ASCII strings
+  beq send_mario_end
+  jsr send_rs232_char
+  inx
+  jmp send_rs232_message 
+send_mario_end:
+  lda #$0d
+  jsr send_rs232_char
+  lda #$0a
+  jsr send_rs232_char   
 
 
-; init_mario_lenghts:
-;   lda #< marioAscii
-;   sta serialDataVectorLow
-;   lda #> marioAscii 
-;   sta serialDataVectorHigh
-;   lda #49 ;integer 49 lenght of record
-;   sta serialCharperLines
-;   ;here print first line
-;   jsr send_rs232_line
-;   ldx #$0 ;the first line 0 we aleready printed
-; mario_lenghts_loop:
-;   inx ;now going to line 1
-;   ;here increment on additional lines
-;   clc
-;   lda serialDataVectorLow ;load marioascii low
-;   adc serialCharperLines ; add the number of records
-;   ;if there is a carry it is in the carry flag
-;   lda serialDataVectorHigh
-;   adc #0; adds the carry if there is one
-;   sta serialDataVectorHigh
-;   ;here printing the new mario line
-;   jsr send_rs232_line
-;   cpx #27 ;check to see if ten lines where printed
-;   bne mario_lenghts_loop
-;   ;return and increment according to the lenght of the mario screen
-;   ;end by jumping to listening mode
-;   jmp listeningMode
+init_mario_lenghts:
+  lda #< marioAscii
+  sta serialDataVectorLow
+  lda #> marioAscii 
+  sta serialDataVectorHigh
+  lda #49 ;integer 49 lenght of record
+  sta serialCharperLines
+  ;here print first line
+  jsr send_rs232_line
+  ldx #$0 ;the first line 0 we aleready printed
+mario_lenghts_loop:
+  inx ;now going to line 1
+  ;here increment on additional lines
+  clc
+  lda serialDataVectorLow ;load marioascii low
+  adc serialCharperLines ; add the number of records
+  ;if there is a carry it is in the carry flag
+  lda serialDataVectorHigh
+  adc #0; adds the carry if there is one
+  sta serialDataVectorHigh
+  ;here printing the new mario line
+  jsr send_rs232_line
+  cpx #27 ;check to see if ten lines where printed
+  bne mario_lenghts_loop
+  ;return and increment according to the lenght of the mario screen
+  ;end by jumping to listening mode
+  jmp listeningMode
 
-; send_rs232_line:
-;   ldy #$0
-; send_rs232_line_loop:
-;   lda (serialDataVectorLow),y 
-;   ;test for the NULL char that ends all ASCII strings
-;   beq send_rs232_line_end
-;   jsr send_rs232_char
-;   inx
-;   jmp send_rs232_message 
-; send_rs232_line_end:
-;   lda #$0d
-;   jsr send_rs232_char
-;   lda #$0a
-;   jsr send_rs232_char 
-;   rts
+send_rs232_line:
+  ldy #$0
+send_rs232_line_loop:
+  lda (serialDataVectorLow),y 
+  ;test for the NULL char that ends all ASCII strings
+  beq send_rs232_line_end
+  jsr send_rs232_char
+  inx
+  jmp send_rs232_message 
+send_rs232_line_end:
+  lda #$0d
+  jsr send_rs232_char
+  lda #$0a
+  jsr send_rs232_char 
+  rts
 
 listeningMode: 
   jmp loopReceiveData ;go to listening mode
