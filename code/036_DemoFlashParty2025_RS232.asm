@@ -310,13 +310,17 @@ mario_lenghts_loop:
   clc
   lda serialDataVectorLow ;load marioascii low
   adc serialCharperLines ; add the number of records
+  bcc mario_lenghts_no_carry ;branch on carry clear or no carry
   ;if there is a carry it is in the carry flag
+  ; clear the carry and add one to the high order byte
+  clc
   lda serialDataVectorHigh
-  adc #0; adds the carry if there is one
+  adc #1; adds the carry if there is one
   sta serialDataVectorHigh
+mario_lenghts_no_carry  
   ;here printing the new mario line
   jsr send_rs232_line
-  cpx #27 ;check to see if ten lines where printed
+  cpx #26 ;check to see if 27 lines where printed from 1 to 26
   bne mario_lenghts_loop
   ;return and increment according to the lenght of the mario screen
   ;end by jumping to listening mode
