@@ -298,7 +298,7 @@ init_mario_lenghts:
   sta serialDataVectorLow
   lda #> marioAscii 
   sta serialDataVectorHigh
-  lda #49 ;integer 49 lenght of record
+  lda #60 ;integer 49 lenght of record
   sta serialCharperLines
   ;here print first line
   jsr send_rs232_line
