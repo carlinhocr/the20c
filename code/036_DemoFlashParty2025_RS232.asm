@@ -284,7 +284,7 @@ uartSerialInit:
 mainProgram:
   ldx #0
 send_mario:
-  lda marioAscii,x ;test for the NULL char that ends all ASCII strings
+  lda marioAsciiMessage,x ;test for the NULL char that ends all ASCII strings
   beq send_mario_end
   jsr send_rs232_char
   inx
@@ -360,13 +360,10 @@ send_rs232_line_loop:
   ;test for the NULL char that ends all ASCII strings
   beq send_rs232_line_end
   jsr send_rs232_char
-  inx
+  iny
   jmp send_rs232_message 
 send_rs232_line_end:
-  lda #$0d
-  jsr send_rs232_char
-  lda #$0a
-  jsr send_rs232_char 
+  jsr send_rs232_CRLF
   rts  
 
 send_rs232_CRLF:
@@ -1053,10 +1050,10 @@ irq:
 startMessage1:
   .ascii "    RS-232 TERMINAL    "   
 
-
+marioAsciiMessage:
+  .asciiz "y puedo hacer un mario"
 
 marioAscii:
-  .asciiz "y puedo hacer un mario"
   .ascii " ── ── ── ── ── ── ── ██ ██ ██ ██ ── ██ ██ ██ ── "
   .ascii " ── ── ── ── ── ██ ██ ▓▓ ▓▓ ▓▓ ██ ██ ░░ ░░ ░░ ██ "
   .ascii " ── ── ── ── ██ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ██ ░░ ░░ ░░ ██ "
