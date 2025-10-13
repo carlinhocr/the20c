@@ -73,6 +73,9 @@ serialCharperLines = $3f
 serialTotalLinesAscii =$40
 serialDrawindEndChar=$41
 
+soundLowByte=$50
+soundHighByte=$51
+
 
 
 ;constants
@@ -176,7 +179,7 @@ viaSoundInit:
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------SOUNDPROGRAM------------------------------------
+;--------------------------------SOUNDPROGRAM---------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
@@ -192,23 +195,24 @@ testSquareWave:
   jmp testSquareWave
   rts
 
-
-  ;set all port A pins as output but bit 6
-  ;bit 6 is the input from the serial protocol
-  lda #%10111111  ;load all ones equivalent to $FF but bit 6
-  sta RS_DDRA ;store the accumulator in the data direction register for Port A
-
-  ;set all port B pins as output
-  lda #%11111111  ;load all ones equivalent to $FF
-  sta RS_DDRB ;store the accumulator in the data direction register for Port B
-
-  lda #1
-  sta RS_PORTA
+squareWave:
+  lda #$e8
+  sta soundLowByte
+  lda #$03
+  sta soundHighByte
+  
+playSquareWave: 
+  lda soundLowByte
+  sta SOUND_T1CL
+  lda soundHighByte
+  sta SOUND_T1CH
   rts
+
+
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------VIASERIALINIT------------------------------------
+;--------------------------------SOUNDPROGRAM---------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
