@@ -339,7 +339,7 @@ printAsciiDrawing_lenghts_no_carry
   cmp "e"
   beq printAsciiDrawing_end
   jsr send_rs232_line
-  jmp asciiDrawing_lenghts_loop
+  jmp printAsciiDrawing_lenghts_loop
   ;cpx serialTotalLinesAscii ;check to see if 27 lines where printed from 1 to 26
   ;bne printAsciiDrawing_lenghts_loop
   ;return and increment according to the lenght of the mario screen
@@ -1159,7 +1159,7 @@ lunarLanderAscii:
   .ascii " '--..__..--'               '-.____.-'                '--..__..-'"
   .ascii "e"
 
-  
+
 lcd_positions:
 lcd_positions_line0:
   .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8E,$8F,$90,$91,$92,$93
