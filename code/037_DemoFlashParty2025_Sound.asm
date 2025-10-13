@@ -166,8 +166,8 @@ programStart:
 viaSoundInit:
 
   ;Enable timer 1 to square wave output on pin PB7
-  lda #%11000000 ;$c0
-  sta SOUND_ACR 
+  ;lda #%11000000 ;$c0
+  ;sta SOUND_ACR 
 
   rts
 
@@ -195,19 +195,33 @@ testSquareWave:
   jmp testSquareWave
   rts
 
+
+
+
 squareWave:
   lda #$e8
   sta soundLowByte
   lda #$03
   sta soundHighByte
+  jsr playSquareWave
   
 playSquareWave: 
+  lda soundLowByte
+  ora soundHighByte ;if the OR is zero both bytes are zeroes a wave of aero lenght is empty
+  beq squareWaveSilent
   lda soundLowByte
   sta SOUND_T1CL
   lda soundHighByte
   sta SOUND_T1CH
+  ;Enable timer 1 to square wave output on pin PB7
+  lda #%11000000 ;$c0
+  sta SOUND_ACR 
   rts
 
+
+squareWaveSilent:
+  lda #%00000000
+  sta SOUND_ACR
 
 
 ;END--------------------------------------------------------------------------------
