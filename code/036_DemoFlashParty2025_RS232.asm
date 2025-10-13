@@ -281,54 +281,16 @@ uartSerialInit:
 ;--------------------------------MAIN PROGRAM---------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------MAIN PROGRAM-------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------SERIALUART-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-serialUART:
-
-  ldx #0
-send_rs232_message:
-  ;lets send a message
-  lda rs232_message,x ;test for the NULL char that ends all ASCII strings
-  beq send_rs232_message_end
-  jsr send_rs232_char
-  inx
-  jmp send_rs232_message  
-
-send_rs232_message_end:
-  ;print cr
-  lda #$0d
-  jsr send_rs232_char
-  lda #$0a
-  jsr send_rs232_char 
-
-  ;end by jumping to listening mode
-  jmp listeningMode  
-
-rs232_message: .asciiz "y puedo hacer un mario" ;\r carriage return \n line feed  
-
+mainProgram:
   ldx #0
 send_mario:
   lda marioAscii,x ;test for the NULL char that ends all ASCII strings
   beq send_mario_end
   jsr send_rs232_char
   inx
-  jmp send_rs232_message 
+  jmp send_mario 
 send_mario_end:
-  lda #$0d
-  jsr send_rs232_char
-  lda #$0a
-  jsr send_rs232_char   
-
+  jsr send_rs232_CRLF  
 
 init_mario_lenghts:
   lda #< marioAscii
@@ -358,6 +320,38 @@ mario_lenghts_loop:
   ;end by jumping to listening mode
   jmp listeningMode
 
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------MAIN PROGRAM-------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SERIALUART-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+serialUART:
+
+  ldx #0
+send_rs232_message:
+  ;lets send a message
+  lda rs232_message,x ;test for the NULL char that ends all ASCII strings
+  beq send_rs232_message_end
+  jsr send_rs232_char
+  inx
+  jmp send_rs232_message  
+
+send_rs232_message_end:
+  ;print cr
+  lda #$0d
+  jsr send_rs232_char
+  lda #$0a
+  jsr send_rs232_char 
+  rts
+
+rs232_message: .asciiz "RS-232 Terminal for 20c" ;\r carriage return \n line feed 
+
 send_rs232_line:
   ldy #$0
 send_rs232_line_loop:
@@ -372,7 +366,14 @@ send_rs232_line_end:
   jsr send_rs232_char
   lda #$0a
   jsr send_rs232_char 
-  rts
+  rts  
+
+send_rs232_CRLF:
+  lda #$0d
+  jsr send_rs232_char
+  lda #$0a
+  jsr send_rs232_char 
+  rts   
 
 listeningMode: 
   jmp loopReceiveData ;go to listening mode
@@ -1049,9 +1050,12 @@ irq:
 
 
 startMessage1:
-  .ascii "    RS-232 TERMINAL    "    
+  .ascii "    RS-232 TERMINAL    "   
+
+
 
 marioAscii:
+  .asciiz "y puedo hacer un mario"
   .ascii " ── ── ── ── ── ── ── ██ ██ ██ ██ ── ██ ██ ██ ── "
   .ascii " ── ── ── ── ── ██ ██ ▓▓ ▓▓ ▓▓ ██ ██ ░░ ░░ ░░ ██ "
   .ascii " ── ── ── ── ██ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ██ ░░ ░░ ░░ ██ "
