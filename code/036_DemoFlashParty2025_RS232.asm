@@ -301,21 +301,22 @@ init_mario_lenghts:
   sta serialCharperLines
   ;here print first line
   jsr send_rs232_line
-  ldx #$0 ;the first line 0 we aleready printed
-mario_lenghts_loop:
-  inx ;now going to line 1
-  ;here increment on additional lines
-  clc
-  lda serialDataVectorLow ;load marioascii low
-  adc serialCharperLines ; add the number of records
-  ;if there is a carry it is in the carry flag
-  lda serialDataVectorHigh
-  adc #0; adds the carry if there is one
-  sta serialDataVectorHigh
-  ;here printing the new mario line
-  jsr send_rs232_line
-  cpx #27 ;check to see if ten lines where printed
-  bne mario_lenghts_loop
+  
+;   ldx #$0 ;the first line 0 we aleready printed
+; mario_lenghts_loop:
+;   inx ;now going to line 1
+;   ;here increment on additional lines
+;   clc
+;   lda serialDataVectorLow ;load marioascii low
+;   adc serialCharperLines ; add the number of records
+;   ;if there is a carry it is in the carry flag
+;   lda serialDataVectorHigh
+;   adc #0; adds the carry if there is one
+;   sta serialDataVectorHigh
+;   ;here printing the new mario line
+;   jsr send_rs232_line
+;   cpx #27 ;check to see if ten lines where printed
+;   bne mario_lenghts_loop
   ;return and increment according to the lenght of the mario screen
   ;end by jumping to listening mode
   jmp listeningMode
