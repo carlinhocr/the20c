@@ -336,7 +336,7 @@ printAsciiDrawing_lenghts_no_carry
   ;here printing the new mario line
   ldy #0
   lda (serialDataVectorLow),y 
-  cmp "e"
+  cmp #$65;"e"
   beq printAsciiDrawing_end
   jsr send_rs232_line
   jmp printAsciiDrawing_lenghts_loop
