@@ -361,7 +361,7 @@ send_rs232_line_loop:
   beq send_rs232_line_end
   jsr send_rs232_char
   iny
-  jmp send_rs232_message 
+  jmp send_rs232_line_loop 
 send_rs232_line_end:
   jsr send_rs232_CRLF
   rts  
@@ -1054,6 +1054,7 @@ marioAsciiMessage:
   .asciiz "y puedo hacer un mario"
 
 marioAscii:
+  .ascii "aaa ── ── ── ── ── ── ██ ██ ██ ██ ── ██ ██ ██ ── "
   .ascii " ── ── ── ── ── ── ── ██ ██ ██ ██ ── ██ ██ ██ ── "
   .ascii " ── ── ── ── ── ██ ██ ▓▓ ▓▓ ▓▓ ██ ██ ░░ ░░ ░░ ██ "
   .ascii " ── ── ── ── ██ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ██ ░░ ░░ ░░ ██ "
