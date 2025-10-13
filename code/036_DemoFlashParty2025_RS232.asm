@@ -1094,8 +1094,6 @@ marioAsciiMessage:
   .asciiz "y puedo hacer un mario"
 
 marioAscii:
-  .ascii "123456"
-  .ascii "abcdef"
   .ascii "y puedo hacer un mario"
   .ascii " ── ── ── ── ── ── ── ██ ██ ██ ██ ── ██ ██ ██ ── "
   .ascii " ── ── ── ── ── ██ ██ ▓▓ ▓▓ ▓▓ ██ ██ ░░ ░░ ░░ ██ "
@@ -1126,9 +1124,7 @@ marioAscii:
   .ascii " ── ██ ██ ── ── ── ── ── ── ── ── ── ── ── ── ── "
 
 lunarLanderAscii:
-  .ascii "123456"
-  .ascii "abcdef"
-  .ascii "y puedo Lunar Lander"
+  .ascii "y puedo un Lunar Lander"
   .ascii "                  ____"
   .ascii "                 /___.`--.____ .--. ____.--("
   .ascii "                        .'_.- (    ) -._'."
