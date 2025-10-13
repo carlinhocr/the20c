@@ -369,7 +369,12 @@ send_rs232_line_loop:
   iny
   jmp send_rs232_line_loop 
 send_rs232_line_end:
-  sty serialCharperLines
+  ;add the number of characters printed + 1 for the null char
+  ;store in serialCharperLines
+  clc
+  tya
+  adc #1
+  sta serialCharperLines
   jsr send_rs232_CRLF
   rts  
 
