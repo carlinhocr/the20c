@@ -285,15 +285,15 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 mainProgram:
-;   ldx #0
-; send_mario:
-;   lda marioAsciiMessage,x ;test for the NULL char that ends all ASCII strings
-;   beq send_mario_end
-;   jsr send_rs232_char
-;   inx
-;   jmp send_mario 
-; send_mario_end:
-;   jsr send_rs232_CRLF  
+
+printthe20cAscii:
+  lda #< the20cAscii
+  sta serialDataVectorLow
+  lda #> the20cAscii 
+  sta serialDataVectorHigh
+  lda #26
+  sta serialTotalLinesAscii
+  jsr printAsciiDrawing
 
 printMarioAscii:
   lda #< marioAscii
@@ -1097,8 +1097,18 @@ irq:
 startMessage1:
   .ascii "    RS-232 TERMINAL    "   
 
-marioAsciiMessage:
-  .asciiz "y puedo hacer un mario"
+the20cAscii:
+  .ascii "  _  _     _                            "
+  .ascii " | || |___| |__ _                       "
+  .ascii " | __ / _ \ / _` |                      "
+  .ascii " |_||_\___/_\__,_|_        ___ __       "
+  .ascii " / __| ___ _  _  | |__ _  |_  )  \ __   "
+  .ascii " \__ \/ _ \ || | | / _` |  / / () / _|_ "
+  .ascii " |___/\___/\_, | |_\__,_| /___\__/\__( )"
+  .ascii "  __| |___ |__/_ _  _ _____ _____    |/ "
+  .ascii " / _` / -_) | ' \ || / -_) V / _ \      "
+  .ascii " \__,_\___| |_||_\_,_\___|\_/\___/      "
+  .ascii "e"                                       
 
 marioAscii:
   .ascii "y puedo hacer un mario"
