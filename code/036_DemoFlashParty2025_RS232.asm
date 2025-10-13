@@ -62,6 +62,7 @@ record_lenght=$3c ;it is a memory position
 serialDataVectorLow = $3d
 serialDataVectorHigh = $3e
 serialCharperLines = $3f
+serialTotalLinesAscii =$40
 
 
 
@@ -283,46 +284,58 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 mainProgram:
-  ldx #0
-send_mario:
-  lda marioAsciiMessage,x ;test for the NULL char that ends all ASCII strings
-  beq send_mario_end
-  jsr send_rs232_char
-  inx
-  jmp send_mario 
-send_mario_end:
-  jsr send_rs232_CRLF  
+;   ldx #0
+; send_mario:
+;   lda marioAsciiMessage,x ;test for the NULL char that ends all ASCII strings
+;   beq send_mario_end
+;   jsr send_rs232_char
+;   inx
+;   jmp send_mario 
+; send_mario_end:
+;   jsr send_rs232_CRLF  
 
-init_mario_lenghts:
+printMarioAscii:
   lda #< marioAscii
   sta serialDataVectorLow
   lda #> marioAscii 
   sta serialDataVectorHigh
-  ;lda #90 ;integer 49 lenght of record
-  ;sta serialCharperLines
+  lda #29
+  sta serialTotalLinesAscii
+  jsr printAsciiDrawing
+
+printLunarLanderAscii:
+  lda #< lunarLanderAscii
+  sta serialDataVectorLow
+  lda #> lunarLanderAscii 
+  sta serialDataVectorHigh
+  lda #27
+  sta serialTotalLinesAscii
+  jsr printAsciiDrawing
+  rts
+
+printAsciiDrawing:
   ;here print first line
   jsr send_rs232_line
-  
   ldx #$0 ;the first line 0 we aleready printed
-mario_lenghts_loop:
+printAsciiDrawing_lenghts_loop:
   inx ;now going to line 1
   ;here increment on additional lines
   clc
   lda serialDataVectorLow ;load marioascii low
   adc serialCharperLines ; add the number of records of the last send_rs232_line
   sta serialDataVectorLow ; store the new value
-  bcc mario_lenghts_no_carry ;branch on carry clear or no carry
+  bcc printAsciiDrawing_lenghts_no_carry ;branch on carry clear or no carry
   ;if there is a carry it is in the carry flag
   ; clear the carry and add one to the high order byte
   clc
   lda serialDataVectorHigh
   adc #1; adds the carry if there is one
   sta serialDataVectorHigh
-mario_lenghts_no_carry  
+printAsciiDrawing_lenghts_no_carry  
   ;here printing the new mario line
   jsr send_rs232_line
-  cpx #26 ;check to see if 27 lines where printed from 1 to 26
-  bne mario_lenghts_loop
+  cpx serialTotalLinesAscii ;check to see if 27 lines where printed from 1 to 26
+  bne printAsciiDrawing_lenghts_loop
   ;return and increment according to the lenght of the mario screen
   ;end by jumping to listening mode
   rts
@@ -1083,6 +1096,7 @@ marioAsciiMessage:
 marioAscii:
   .ascii "123456"
   .ascii "abcdef"
+  .ascii "y puedo hacer un mario"
   .ascii " ── ── ── ── ── ── ── ██ ██ ██ ██ ── ██ ██ ██ ── "
   .ascii " ── ── ── ── ── ██ ██ ▓▓ ▓▓ ▓▓ ██ ██ ░░ ░░ ░░ ██ "
   .ascii " ── ── ── ── ██ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ██ ░░ ░░ ░░ ██ "
@@ -1111,7 +1125,34 @@ marioAscii:
   .ascii " ██ ▓▓ ▓▓ ██ ██ ── ── ── ── ── ── ── ██ ██ ██ ── "
   .ascii " ── ██ ██ ── ── ── ── ── ── ── ── ── ── ── ── ── "
 
-
+lunarLanderAscii:
+  .ascii "123456"
+  .ascii "abcdef"
+  .ascii "y puedo Lunar Lander"
+  .ascii "                  ____"
+  .ascii "                 /___.`--.____ .--. ____.--("
+  .ascii "                        .'_.- (    ) -._'."
+  .ascii "                      .'.'    |'..'|    '.'."
+  .ascii "               .-.  .' /'--.__|____|__.--'\ '.  .-."
+  .ascii "              (O).)-| |  \    |    |    /  | |-(.(O)"
+  .ascii "               `-'  '-'-._'-./      \.-'_.-'-'  `-'"
+  .ascii "                 _ | |   '-.________.-'   | | _"
+  .ascii "              .' _ | |     |   __   |     | | _ '."
+  .ascii "              / .' ''.|     | /    \ |     |.'' '. \"
+  .ascii "              | |( )| '.    ||      ||    .' |( )| |"
+  .ascii "              \ '._.'   '.  | \    / |  .'   '._.' /"
+  .ascii "               '.__ ______'.|__'--'__|.'______ __.'"
+  .ascii "              .'_.-|         |------|         |-._'."
+  .ascii "             //\\  |         |--::--|         |  //\\"
+  .ascii "            //  \\ |         |--::--|         | //  \\"
+  .ascii "           //    \\|        /|--::--|\        |//    \\"
+  .ascii "          / '._.-'/|_______/ |--::--| \_______|\`-._.' \"
+  .ascii "         / __..--'        /__|--::--|__\        `--..__ \"
+  .ascii "        / /               '-.|--::--|.-'               \ \"
+  .ascii "       / /                   |--::--|                   \ \"
+  .ascii "      / /                    |--::--|                    \ \"
+  .ascii "  _.-'  `-._                 _..||.._                  _.-` ‘-._"
+  .ascii " '--..__..--'               '-.____.-'                '--..__..-'"
 
 lcd_positions:
 lcd_positions_line0:
