@@ -63,6 +63,7 @@ serialDataVectorLow = $3d
 serialDataVectorHigh = $3e
 serialCharperLines = $3f
 serialTotalLinesAscii =$40
+serialDrawindEndChar=$41
 
 
 
@@ -299,7 +300,7 @@ printMarioAscii:
   sta serialDataVectorLow
   lda #> marioAscii 
   sta serialDataVectorHigh
-  lda #29
+  lda #26
   sta serialTotalLinesAscii
   jsr printAsciiDrawing
 
@@ -333,11 +334,17 @@ printAsciiDrawing_lenghts_loop:
   sta serialDataVectorHigh
 printAsciiDrawing_lenghts_no_carry  
   ;here printing the new mario line
+  ldy #0
+  lda (serialDataVectorLow),y 
+  cmp "e"
+  beq printAsciiDrawing_end
   jsr send_rs232_line
-  cpx serialTotalLinesAscii ;check to see if 27 lines where printed from 1 to 26
-  bne printAsciiDrawing_lenghts_loop
+  jmp asciiDrawing_lenghts_loop
+  ;cpx serialTotalLinesAscii ;check to see if 27 lines where printed from 1 to 26
+  ;bne printAsciiDrawing_lenghts_loop
   ;return and increment according to the lenght of the mario screen
   ;end by jumping to listening mode
+printAsciiDrawing_end:
   rts
 
 ;END--------------------------------------------------------------------------------
@@ -1122,6 +1129,7 @@ marioAscii:
   .ascii " ██ ▓▓ ▓▓ ██ ██ ██ ██ ██ ── ── ── ██ ▓▓ ▓▓ ██ ██ "
   .ascii " ██ ▓▓ ▓▓ ██ ██ ── ── ── ── ── ── ── ██ ██ ██ ── "
   .ascii " ── ██ ██ ── ── ── ── ── ── ── ── ── ── ── ── ── "
+  .ascii "e"
 
 lunarLanderAscii:
   .ascii "y puedo un Lunar Lander"
@@ -1149,7 +1157,9 @@ lunarLanderAscii:
   .ascii "      / /                    |--::--|                    \ \"
   .ascii "  _.-'  `-._                 _..||.._                  _.-` ‘-._"
   .ascii " '--..__..--'               '-.____.-'                '--..__..-'"
+  .ascii "e"
 
+  
 lcd_positions:
 lcd_positions_line0:
   .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8E,$8F,$90,$91,$92,$93
