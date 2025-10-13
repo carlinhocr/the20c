@@ -135,7 +135,7 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr welcomeMessage
-  jsr serialUART
+  jsr mainProgram
 ; jsr portBTest
 ;  jsr serialTesting3_rxtx
 ;  jsr programLoop
@@ -153,7 +153,7 @@ send_welcome_message:
 send_welcome_message_end:
   rts
 
-welcome_ascii_message: .asciiz "Ahora tengo Puerto Serial"  
+welcome_ascii_message: .asciiz "Ahora tengo RS-232"  
 
 
 
