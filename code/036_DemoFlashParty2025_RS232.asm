@@ -358,21 +358,21 @@ rs232_message: .asciiz "y puedo hacer un mario" ;\r carriage return \n line feed
 ;   ;end by jumping to listening mode
 ;   jmp listeningMode
 
-send_rs232_line:
-  ldy #$0
-send_rs232_line_loop:
-  lda (serialDataVectorLow),y 
-  ;test for the NULL char that ends all ASCII strings
-  beq send_rs232_line_end
-  jsr send_rs232_char
-  inx
-  jmp send_rs232_message 
-send_rs232_line_end:
-  lda #$0d
-  jsr send_rs232_char
-  lda #$0a
-  jsr send_rs232_char 
-  rts
+; send_rs232_line:
+;   ldy #$0
+; send_rs232_line_loop:
+;   lda (serialDataVectorLow),y 
+;   ;test for the NULL char that ends all ASCII strings
+;   beq send_rs232_line_end
+;   jsr send_rs232_char
+;   inx
+;   jmp send_rs232_message 
+; send_rs232_line_end:
+;   lda #$0d
+;   jsr send_rs232_char
+;   lda #$0a
+;   jsr send_rs232_char 
+;   rts
 
 listeningMode: 
   jmp loopReceiveData ;go to listening mode
