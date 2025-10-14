@@ -1378,8 +1378,7 @@ marioAscii:
   .ascii "e"
 
 marioReverseAscii:
-  .ascii "y puedo hacer un mario"
-  .ascii "█████████████████████████████████"
+  .ascii "     y puedo hacer un mario"
   .ascii "█████████████████████████████████"
   .ascii "██████████████        ██      ███"
   .ascii "██████████    ░░░░░░    ▓▓▓▓▓▓ ██"
@@ -1408,7 +1407,7 @@ marioReverseAscii:
   .ascii "  ░░░░           ██████  ░░░░   █"
   .ascii "  ░░░░   ███████████████       ██"
   .ascii "██    ███████████████████████████"
-  .ascii ""
+  .ascii "█████████████████████████████████"
   .ascii "        y esa musiquita????     "
   .ascii "e"
 
