@@ -383,19 +383,16 @@ mainProgram:
   jsr printMessage07
   jsr delayClear   
   jsr printCommodoreAscii
-  ;jsr delayClear   
-;   jsr printMarioAscii
-;   
-;   
-
-
-;   
+  jsr delayClear 
+  jsr printMarioAscii
+  ;jsr delayClear     
 ;   jsr print20cAscii
   rts
 
 delayClear:
   jsr delay_3_sec  
   jsr printClearRS232Screen
+  rts
 
 printthe20cAscii:
   lda #< the20cAscii
@@ -1347,6 +1344,8 @@ the20cAscii:
 
 marioAscii:
   .ascii "y puedo hacer un mario"
+  .ascii ""
+  .ascii ""
   .ascii "──────────────████████──██████──"
   .ascii "──────────████▓▓▓▓▓▓████░░░░░░██"
   .ascii "────────██▓▓▓▓▓▓▓▓▓▓▓▓██░░░░░░██"
@@ -1481,7 +1480,7 @@ trucoAscii:
   .ascii "e"
 
 arcadeAscii:
-    .ascii "                                                                           "
+  .ascii "                                                                           "
   .ascii "                             jugar NO es opcional                          "
   .ascii "                                                                           "
   .ascii "                                ╔═══════════╗                              "
@@ -1557,7 +1556,7 @@ narcoPoliceAscii:
 
 
 commodoreAscii: 
- .ascii ""
+  .ascii ""
   .ascii ""
   .ascii "              DREAN COMMODORE 64, desde San Luis a Villa Martelli"
   .ascii ""
