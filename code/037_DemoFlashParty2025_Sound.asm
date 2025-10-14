@@ -223,9 +223,9 @@ viaSoundInit:
 ;-----------------------------------------------------------------------------------
 
 squareWaveTest:
-  lda #$50
+  lda #$70
   sta soundLowByte
-  lda #$00
+  lda #$04
   sta soundHighByte
   jsr playSquareWave
   rts
