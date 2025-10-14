@@ -2141,11 +2141,6 @@ la20cAscii:
   .ascii "                    │ ▀▀▀▀▀▀▀▀  │ 12v  ♣    │        ☻  ├"
   .ascii "                    └───────────┴───────────┴───────────┘"
   .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
   .ascii "e" 
 
 
@@ -2248,6 +2243,10 @@ message06:
   .ascii ""
   .ascii ""
   .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""  
   .ascii "e"   
 
 
@@ -2257,6 +2256,10 @@ message07:
   .ascii ""
   .ascii "                aaaaa mira quien volvio ....."
   .ascii ""  
+  .ascii "                    volvio COMMODORE!!!      "
+  .ascii ""
+  .ascii "                Pero nada como una DREAN     "
+  .ascii ""
   .ascii ""
   .ascii ""
   .ascii ""
@@ -2268,6 +2271,8 @@ message07:
 
 message08:
   .ascii "    y también gracias por tanto a...."
+  .ascii ""
+  .ascii ""
   .ascii ""
   .ascii "     ESPACIO TEC (nuetra casa)"
   .ascii ""    
@@ -2286,6 +2291,8 @@ message08:
 
 message09:
   .ascii "     Esta Demo fui traida a ustedes por.."
+  .ascii ""
+  .ascii ""  
   .ascii ""
   .ascii ""  
   .ascii "     BERDYX (su arte nos honra)"
