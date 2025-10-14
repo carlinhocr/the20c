@@ -368,6 +368,13 @@ mainProgram:
   jsr delay_3_sec   
   jsr printClearRS232Screen
   jsr printTrucoAscii
+  jsr delay_3_sec   
+  jsr printClearRS232Screen
+  jsr printMessage05
+  jsr delay_3_sec  
+  jsr printClearRS232Screen
+  jsr printEspacioTecAscii    
+  jsr delay_3_sec  
 ;   jsr printMarioAscii
 ;   jsr printLunarLanderAscii
 ;   jsr printCiberCirujas
@@ -468,6 +475,14 @@ print20cAscii:
   jsr printAsciiDrawing
   rts  
 
+printEspacioTecAscii:
+  lda #< espacioTecAscii
+  sta serialDataVectorLow
+  lda #> espacioTecAscii 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts   
+
 printClearRS232Screen:
   lda #< clearRS232Screen
   sta serialDataVectorLow
@@ -515,6 +530,14 @@ printMessage05:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts      
+
+printMessage06:
+  lda #< message06
+  sta serialDataVectorLow
+  lda #> message06 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts   
 
 printAsciiDrawing:
   ;here print first line
@@ -1656,6 +1679,20 @@ la20cAscii:
   .ascii ""
   .ascii "e" 
 
+espacioTecAscii:
+  .ascii " ██████████  █████████  ███████████    █████████     █████████  █████    ███████       ███████████ ██████████   █████████ "
+  .ascii "░░███░░░░░█ ███░░░░░███░░███░░░░░███  ███░░░░░███   ███░░░░░███░░███   ███░░░░░███    ░█░░░███░░░█░░███░░░░░█  ███░░░░░███"
+  .ascii " ░███  █ ░ ░███    ░░░  ░███    ░███ ░███    ░███  ███     ░░░  ░███  ███     ░░███   ░   ░███  ░  ░███  █ ░  ███     ░░░ "
+  .ascii " ░██████   ░░█████████  ░██████████  ░███████████ ░███          ░███ ░███      ░███       ░███     ░██████   ░███         "
+  .ascii " ░███░░█    ░░░░░░░░███ ░███░░░░░░   ░███░░░░░███ ░███          ░███ ░███      ░███       ░███     ░███░░█   ░███         "
+  .ascii " ░███ ░   █ ███    ░███ ░███         ░███    ░███ ░░███     ███ ░███ ░░███     ███        ░███     ░███ ░   █░░███     ███"
+  .ascii " ██████████░░█████████  █████        █████   █████ ░░█████████  █████ ░░░███████░         █████    ██████████ ░░█████████ "
+  .ascii "░░░░░░░░░░  ░░░░░░░░░  ░░░░░        ░░░░░   ░░░░░   ░░░░░░░░░  ░░░░░    ░░░░░░░          ░░░░░    ░░░░░░░░░░   ░░░░░░░░░  "
+  .ascii "                                                                                                                          "
+  .ascii "                                                                                                                          "
+  .ascii "                                                                                                                          "
+  .ascii "e" 
+
 clearRS232Screen:
   .ascii ""
   .ascii ""
@@ -1738,11 +1775,24 @@ message05:
   .ascii ""
   .ascii ""
   .ascii ""
-  .ascii "pero mejor traigo a un artista"
-  .ascii "El Principe de las 286"
-  .ascii "     Berdyx"
+  .ascii "Pero mejor traigo a un artista"
+  .ascii "      El Principe de las 286"
+  .ascii ""  
+  .ascii "           Berdyx"
   .ascii ""
   .ascii "e" 
+
+message06:
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "         Tenemos muchos Amigos"
+  .ascii ""  
+  .ascii "   El mejor Museo de Informática del Mundo"
+  .ascii ""  
+  .ascii ""
+  .ascii ""
+  .ascii "e"   
 
 lcd_positions:
 lcd_positions_line0:
