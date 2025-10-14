@@ -137,6 +137,7 @@ RESET:
 programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
+  jsr viaLcdInit
   jsr viaSoundInit
   jsr squareWaveTest;
 loop:
@@ -150,6 +151,41 @@ loop:
 ;--------------------------------MAIN-----------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------  
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------VIALCDINIT-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+viaLcdInit:
+
+  ;BEGIN enable interrupts LCD VIA
+  ;enable CA1 for interrupts
+  ;bits set/clear,timer1,timer2,CB1,CB2,ShiftReg,CA1,CA2
+  lda #%10000010
+  sta LCD_IER 
+  ;enable negative edge transition ca1 LCD_PCR register
+  ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
+  lda #%00000000
+  sta LCD_PCR 
+  ;END enable interrupts
+
+  ;BEGIN Configure Ports A & B
+  ;set all port B pins as output
+  lda #%11111111  ;load all ones equivalent to $FF
+  sta LCD_DDRB ;store the accumulator in the data direction register for Port B
+
+  lda #%11100000  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
+  sta LCD_DDRA ;store the accumulator in the data direction register for Port A
+  ;END Configure Ports A & B
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------VIALCDINIT-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
 
 ;BEGIN------------------------------------------------------------------------------
@@ -185,7 +221,6 @@ viaSoundInit:
 ;--------------------------------SOUNDPROGRAM---------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-
 
 squareWaveTest:
   lda #$64
