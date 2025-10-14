@@ -293,6 +293,7 @@ mainProgram:
   jsr printReplay
   jsr printTrucoAscii
   jsr printArcadeAscii
+  jsr printModoHistoriaAscii
   rts
 
 printthe20cAscii:
@@ -350,6 +351,14 @@ printArcadeAscii:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts   
+
+printModoHistoriaAscii:
+  lda #< modoHistoriaAscii
+  sta serialDataVectorLow
+  lda #> modoHistoriaAscii 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts    
 
 printAsciiDrawing:
   ;here print first line
@@ -1343,6 +1352,43 @@ arcadeAscii:
   .ascii "    └───┐ ┌┘ │  ─┘ │ └───┐ ┌┘                                              "
   .ascii "        └─┘  └─────┘     └─┘                                               "
   .ascii "e" 
+
+modoHistoriaAscii:
+
+  .ascii "                                                                                "
+  .ascii "                                                                                "
+  .ascii "                                                                                "
+  .ascii "                                                                                "
+  .ascii "                                                                                "
+  .ascii "                                                 █                              "
+  .ascii "                                               ███                              "
+  .ascii "                                                ██                              "
+  .ascii "                   █ ███  ██       ████       ████      ████                    "
+  .ascii "                 █████ ███  ██   ██    ██   ██  ██    ██    ██                  "
+  .ascii "                  ██   ██   ██   ██    ██  ██   ██    ██    ██                  "
+  .ascii "                  ██   ██   ██   ██    ██  ██   ██ █  ██    ██                  "
+  .ascii "                  ██   ██   ███   ██   █    ██  ███    ██   █                   "
+  .ascii "                  █    █    █      ████      ███  █     ████                    "
+  .ascii "                                                                                "
+  .ascii "           ██       █               █                       █                   "
+  .ascii "          ███                     ███                                           "
+  .ascii "           ██  █     █      ███    ████    ████     ██ ██    █     ████         "
+  .ascii "           ██████  ███    ███  █   ██    ██    ██  ██████  ███    █   ██        "
+  .ascii "           ██  ██   ██   ███       ██    ██    ██  ██   █   ██   ██   ██        "
+  .ascii "           ██  ██   ██     ████    ██    ██    ██  ██       ██   ██   ██        "
+  .ascii "           ██  ██   ███  █    ██   ██ █   ██   █   ██       ███   ██ ██         "
+  .ascii "           █   █    ██    ████      ██     ████    █        ██     ███ ██       "
+  .ascii "              █                                                                 "
+  .ascii "                                                                                "
+  .ascii "                                                                                "
+  .ascii "                             videojuegos en contexto                            "
+  .ascii "                                                                                "
+  .ascii "                                                                                "
+  .ascii "                                                                                "
+  .ascii "                          (N. del A.: hablen del X-COM)                         "
+  .ascii "                                                                                "
+  .ascii "                                                                                "
+  .ascii "e"
 
 lcd_positions:
 lcd_positions_line0:
