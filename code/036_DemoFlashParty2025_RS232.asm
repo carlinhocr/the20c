@@ -137,6 +137,7 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr welcomeMessage
+  jsr rs232Message
   jsr mainProgram
   jmp listeningMode
 ; jsr portBTest
@@ -147,16 +148,35 @@ welcomeMessage:
   ldx #0
 send_welcome_message:
   ;lets send a message
-  lda welcome_ascii_message,x ;test for the NULL char that ends all ASCII strings
+  lda hola_ascii_message,x ;test for the NULL char that ends all ASCII strings
   beq send_welcome_message_end
   jsr print_char
   inx
   jmp send_welcome_message
+  jsr DELAY_SEC   
+  jsr clearScreenBuffer
+  jsr drawScreen 
 
 send_welcome_message_end:
   rts
 
-welcome_ascii_message: .asciiz "Ahora tengo RS-232"  
+rs232Message:
+  ldx #0
+send_rs232Message_message:
+  ;lets send a message
+  lda rs232_ascii_message,x ;test for the NULL char that ends all ASCII strings
+  beq send_rs232Message_message_end
+  jsr print_char
+  inx
+  jmp send_rs232Message_message
+  ;jsr DELAY_SEC   
+  ;jsr clearScreenBuffer
+  ;jsr drawScreen 
+send_rs232Message_message_end:
+  rts
+
+hola_ascii_message: .asciiz "Hola de Nuevo, Soy la 20c"
+rs232_ascii_message: .asciiz "Ahora tengo RS-232"  
 
 
 
@@ -295,6 +315,8 @@ mainProgram:
   jsr printArcadeAscii
   jsr printModoHistoriaAscii
   jsr printCommodoreAscii
+  jsr printVentilastationAscii
+  jsr print20cAscii
   rts
 
 printthe20cAscii:
@@ -365,6 +387,22 @@ printCommodoreAscii:
   lda #< commodoreAscii
   sta serialDataVectorLow
   lda #> commodoreAscii 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts  
+
+printVentilastationAscii:
+  lda #< ventilastationAscii
+  sta serialDataVectorLow
+  lda #> ventilastationAscii 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts  
+
+print20cAscii:
+  lda #< la20cAscii
+  sta serialDataVectorLow
+  lda #> la20cAscii 
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts  
@@ -1438,6 +1476,76 @@ commodoreAscii:
   .ascii ""
   .ascii "e" 
 
+ventilastationAscii:
+    .ascii "                                                                                "
+  .ascii "                           V E N T I L A S T A T I O N                          "
+  .ascii "                                                                                "
+  .ascii "              La primer consola del mundo corriendo en un ventilador            "
+  .ascii "                                                                                "
+  .ascii "                       Y, obviamente, creada en Argentina                       "
+  .ascii "                                                                                "
+  .ascii "                                                                                "
+  .ascii "                                 ░░░░░░░▓▓▓▓▓▓▓                                 "
+  .ascii "                             ░░░░░░░░░░░▓▓▓▓▓▓▓▓▓▓▓                             "
+  .ascii "                          ░░░░░░░░░░░░░░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓                         "
+  .ascii "                        ░░░░░░░░░░░░░░░░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓                       "
+  .ascii "                      ▓░░░░░░░░░░░░░░░░░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░                     "
+  .ascii "                     ▓▓▓▓░░░░░░░░░░░░░░░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░                    "
+  .ascii "                    ▓▓▓▓▓▓▓░░░░░░░░░░░░░███▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░                   "
+  .ascii "                   ▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░██████▓▓▓▓▓▓▓░░░░░░░░░                  "
+  .ascii "                  ▓▓▓▓▓▓▓▓▓▓▓░░░░░░░☻░░░████████▓▓▓░░░░░░░░░░░░                 "
+  .ascii "                  ▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░☻▒▒▒▒███████░░░░░░░░░░░░░░                 "
+  .ascii "                 ▓▓▓▓▓▓▓▓▓▓▓▓▓███░░░░▒████▒███████░░░░░░░░░░░░░░                "
+  .ascii "                 ▓▓▓▓▓▓▓▓▓▓▓▓▓████▓▓▓▒█  █▒███████░░░░░░░░░░░░░░                "
+  .ascii "                 ▓▓▓▓▓▓▓▓▓▓▓▓▓████▓▓▓▒█  █▒░██████░░░░░░░░░░░░░░                "
+  .ascii "                 ▓▓▓▓▓▓▓▓▓▓▓▓▓████▓▓░▒████▒░██████░░░░░░░░░░░░░░                "
+  .ascii "                  ▓▓▓▓▓▓▓▓▓▓▓▓▓████░░░▒▒▒▒░░█████░░░░░░░░░░░░░░                 "
+  .ascii "                  ▓▓▓▓▓▓▓▓▓▓▓▓░░█████░░░░░░█████▓▓▓░░░░░░░░░░░░                 "
+  .ascii "                   ▓▓▓▓▓▓▓▓▓░░░░░░████████████▓▓▓▓▓▓▓░░░░░░░░░                  "
+  .ascii "                    ▓▓▓▓▓▓░░░░░░░░░░░██████▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░                   "
+  .ascii "                     ▓▓▓░░░░░░░░░░░░░░░░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░                    "
+  .ascii "                      ▓░░░░░░░░░░░░░░░░░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░                     "
+  .ascii "                        ░░░░░░░░░░░░░░░░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓                       "
+  .ascii "                          ░░░░░░░░░░░░░░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓                         "
+  .ascii "                             ░░░░░░░░░░░▓▓▓▓▓▓▓▓▓▓▓                             "
+  .ascii "                                 ░░░░berdyx▓▓▓▓                                 "
+  .ascii "                                       ║║                                       "
+  .ascii "e" 
+
+la20cAscii:
+  .ascii ""
+  .ascii "                    ┌─┴─┴─┴─┴─┴─┬─┴─┴─┴─┴─┴─┬─┴─┴─┴─┴─┴─┐"
+  .ascii "                    │  4F53 4F  │    RAM    │    RAM    ├"
+  .ascii "                    │  ■■■■ ■■  │           │           ├"
+  .ascii "                    │  Address  │    ▐░▌    │    ▐▒▌    ├"
+  .ascii "                    │   Data    │           │           ├"
+  .ascii "                    │  Display  │    ROM    │    ROM    ├"
+  .ascii "                    ├───────────├───────────├───────────┤───────┐"
+  .ascii "                    │    BUS    ▌    BUS    ▌    BUS    │ D P A │"
+  .ascii "                    │           ▌           ▌           │ U R N │"
+  .ascii "                    │  Address  ▌  Address  ▌  Address  │ I O L │"
+  .ascii "                    │   Data    ▌   Data    ▌   Data    │ N T Y │"
+  .ascii "                    │ Expansion ▌ Expansion ▌ Expansion │ O . Z │"
+  .ascii "                    ├───────────┬───────────┬───────────┤───────┘"
+  .ascii "                    │ VIA 6522  │   GLUE    │  CPU 6502 ├"
+  .ascii "                    │           │   LOGIC   │   .....   ├"
+  .ascii "                    │   ....    │....  .... │   ▓▓▓▓▓   ├"
+  .ascii "                    │   ░░░░    │))))  (((( │   ·····   ├"
+  .ascii "                    │   ····    │····  ···· │           ├"
+  .ascii "                    ├───────────┬───────────┬───────────┤"
+  .ascii "                    │  I/0 LCD  │   POWER   │   CLOCK   ├"
+  .ascii "                    │           │   module  │    OSO    ├"
+  .ascii "                    │ ▄▄▄▄▄▄▄▄  │  5v  ♥    │           ├"
+  .ascii "                    │ █berdyx█  │  9v  ♦    │           ├"
+  .ascii "                    │ ▀▀▀▀▀▀▀▀  │ 12v  ♣    │        ☻  ├"
+  .ascii "                    └───────────┴───────────┴───────────┘"
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "e" 
 
 lcd_positions:
 lcd_positions_line0:
