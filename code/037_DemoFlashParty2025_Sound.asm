@@ -139,6 +139,8 @@ programStart:
   ;configure stack and enable interrupts
   ;jsr viaSoundInit
   jsr squareWaveTest;
+loop:
+  jmp loop
 
 
 
@@ -282,7 +284,9 @@ squareWaveSilentDelayDone:
 ;--------------------------------SOUNDPROGRAM---------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-
+nmi:
+irq:
+    rti
 
 ;complete the file
   .org $fffa
