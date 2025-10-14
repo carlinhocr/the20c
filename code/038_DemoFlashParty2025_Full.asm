@@ -364,11 +364,15 @@ mainProgram:
   jsr delay_3_sec
   jsr printMessage04
   jsr delay_3_sec  
+  jsr printMessage04
+  jsr delay_3_sec   
+  jsr printClearRS232Screen
+  jsr printTrucoAscii
 ;   jsr printMarioAscii
 ;   jsr printLunarLanderAscii
 ;   jsr printCiberCirujas
 ;   jsr printReplay
-;   jsr printTrucoAscii
+
 ;   jsr printArcadeAscii
 ;   jsr printModoHistoriaAscii
 ;   jsr printCommodoreAscii
@@ -463,6 +467,14 @@ print20cAscii:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts  
+
+printClearRS232Screen:
+  lda #< clearRS232Screen
+  sta serialDataVectorLow
+  lda #> clearRS232Screen 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts 
 
 printMessage01:
   lda #< message01
@@ -1664,10 +1676,11 @@ clearRS232Screen:
   .ascii "e" 
 
 screen1_demo:
-  .asciiz "Hola                "
-  .asciiz "de Nuevo,           "
-  .asciiz "         Soy        "
-  .asciiz "            la 20c. "
+  .asciiz "   Hola de nuevo,   "
+  .asciiz "                    "  
+  .asciiz "   Soy, la  20c.    "
+  .asciiz "                    "
+
 
 screen2_demo:
   .asciiz "                    "
@@ -1713,7 +1726,15 @@ message04:
   .ascii ""
   .ascii "e"    
 
-
+message05:
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "pero mejor traigo a un artista"
+  .ascii "El Principe de las 286"
+  .ascii "     Berdyx"
+  .ascii ""
+  .ascii "e" 
 
 lcd_positions:
 lcd_positions_line0:
