@@ -291,7 +291,7 @@ mainProgram:
   jsr printLunarLanderAscii
   jsr printCiberCirujas
   jsr printReplay
-  jsr trucoAscii
+  jsr printTrucoAscii
   rts
 
 printthe20cAscii:
@@ -341,6 +341,14 @@ printReplay:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts   
+
+printTrucoAscii:
+  lda #< trucoAscii
+  sta serialDataVectorLow
+  lda #> trucoAscii 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts    
 
 printAsciiDrawing:
   ;here print first line
