@@ -141,7 +141,7 @@ programStart:
   jsr viaSoundInit
   ;jsr squareWaveTest;
   ;jsr playMiddleCDelay
-  jsr playScale
+  ;jsr playScale
   jsr playMario
 loop:
   jmp loop
