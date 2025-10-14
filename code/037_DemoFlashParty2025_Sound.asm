@@ -138,7 +138,7 @@ programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
   ;jsr viaSoundInit
-  jsr squareWaveTest
+  jsr squareWaveTest;
 
 
 
