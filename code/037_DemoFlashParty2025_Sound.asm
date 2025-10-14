@@ -140,7 +140,8 @@ programStart:
   jsr viaLcdInit
   jsr viaSoundInit
   ;jsr squareWaveTest;
-  jsr playMiddleCDelay
+  ;jsr playMiddleCDelay
+  jsr playScale
 loop:
   jmp loop
 
@@ -290,6 +291,104 @@ playMiddleCDelay:
   sta soundDelay
   jsr playSquareWaveDelay
   rts
+
+playScale:
+   ;sound delay 60 always
+  lda #60
+  sta soundDelay
+  ;here are the different notes
+  ;956 
+  ;852
+  ;759
+  ;716
+  ;638
+  ;568
+  ;506
+  ;478
+  ;506
+  ;568
+  ;638
+  ;716
+  ;759
+  ;852
+  ;956
+  lda #$bc
+  sta soundLowByte
+  lda #$03
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$54
+  sta soundLowByte
+  lda #$03
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$f7
+  sta soundLowByte
+  lda #$02
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$cc
+  sta soundLowByte
+  lda #$02
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$7e
+  sta soundLowByte
+  lda #$02
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$38
+  sta soundLowByte
+  lda #$02
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$fa
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$de
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$fa
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$38
+  sta soundLowByte
+  lda #$02
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$7e
+  sta soundLowByte
+  lda #$02
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$cc
+  sta soundLowByte
+  lda #$02
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$f7
+  sta soundLowByte
+  lda #$02
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$54
+  sta soundLowByte
+  lda #$03
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$bc
+  sta soundLowByte
+  lda #$03
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  rts
+
 
   
 playSquareWaveDelay: 
