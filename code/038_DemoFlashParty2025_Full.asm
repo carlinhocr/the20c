@@ -1373,6 +1373,8 @@ marioAscii:
   .ascii "██▓▓▓▓██████████      ██▓▓▓▓████"
   .ascii "██▓▓▓▓████              ██████  "
   .ascii "  ████                          "
+  .ascii ""
+  .ascii "        y esa musiquita????     "
   .ascii "e"
 
 
