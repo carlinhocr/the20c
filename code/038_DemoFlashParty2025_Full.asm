@@ -365,27 +365,37 @@ mainProgram:
   jsr printMessage04
   jsr delay_3_sec  
   jsr printMessage05
-  jsr delay_3_sec   
-  jsr printClearRS232Screen
+  jsr delayClear 
   jsr printTrucoAscii
-  jsr delay_3_sec   
-  jsr printClearRS232Screen
-  jsr printMessage05
-  jsr delay_3_sec  
-  jsr printClearRS232Screen
-  jsr printEspacioTecAscii    
-  jsr delay_3_sec  
+  jsr delayClear 
+  jsr printMessage06
+  jsr delayClear   
+  jsr printCiberCirujas  
+  jsr delayClear   
+  jsr printArcadeAscii
+  jsr delayClear   
+  jsr printModoHistoriaAscii
+  jsr delayClear   
+  jsr printVentilastationAscii
+  jsr delayClear  
+  jsr printReplay
+  jsr delayClear    
+  jsr printMessage07
+  jsr delayClear   
+  jsr printCommodoreAscii
+  ;jsr delayClear   
 ;   jsr printMarioAscii
-;   jsr printLunarLanderAscii
-;   jsr printCiberCirujas
-;   jsr printReplay
+;   
+;   
 
-;   jsr printArcadeAscii
-;   jsr printModoHistoriaAscii
-;   jsr printCommodoreAscii
-;   jsr printVentilastationAscii
+
+;   
 ;   jsr print20cAscii
   rts
+
+delayClear:
+  jsr delay_3_sec  
+  jsr printClearRS232Screen
 
 printthe20cAscii:
   lda #< the20cAscii
@@ -399,14 +409,6 @@ printMarioAscii:
   lda #< marioAscii
   sta serialDataVectorLow
   lda #> marioAscii 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts
-
-printLunarLanderAscii:
-  lda #< lunarLanderAscii
-  sta serialDataVectorLow
-  lda #> lunarLanderAscii 
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts
@@ -475,13 +477,13 @@ print20cAscii:
   jsr printAsciiDrawing
   rts  
 
-printEspacioTecAscii:
-  lda #< espacioTecAscii
-  sta serialDataVectorLow
-  lda #> espacioTecAscii 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts   
+; printEspacioTecAscii:
+;   lda #< espacioTecAscii
+;   sta serialDataVectorLow
+;   lda #> espacioTecAscii 
+;   sta serialDataVectorHigh
+;   jsr printAsciiDrawing
+;   rts   
 
 printClearRS232Screen:
   lda #< clearRS232Screen
@@ -538,6 +540,14 @@ printMessage06:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts   
+
+printMessage07:
+  lda #< message07
+  sta serialDataVectorLow
+  lda #> message07 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts    
 
 printAsciiDrawing:
   ;here print first line
@@ -1366,33 +1376,6 @@ marioAscii:
   .ascii "──████──────────────────────────"
   .ascii "e"
 
-lunarLanderAscii:
-  .ascii "y puedo un Lunar Lander"
-  .ascii "                  ____"
-  .ascii "                 /___.`--.____ .--. ____.--("
-  .ascii "                        .'_.- (    ) -._'."
-  .ascii "                      .'.'    |'..'|    '.'."
-  .ascii "               .-.  .' /'--.__|____|__.--'\ '.  .-."
-  .ascii "              (O).)-| |  \    |    |    /  | |-(.(O)"
-  .ascii "               `-'  '-'-._'-./      \.-'_.-'-'  `-'"
-  .ascii "                 _ | |   '-.________.-'   | | _"
-  .ascii "              .' _ | |     |   __   |     | | _ '."
-  .ascii "              / .' ''.|     | /    \ |     |.'' '. \"
-  .ascii "              | |( )| '.    ||      ||    .' |( )| |"
-  .ascii "              \ '._.'   '.  | \    / |  .'   '._.' /"
-  .ascii "               '.__ ______'.|__'--'__|.'______ __.'"
-  .ascii "              .'_.-|         |------|         |-._'."
-  .ascii "             //\\  |         |--::--|         |  //\\"
-  .ascii "            //  \\ |         |--::--|         | //  \\"
-  .ascii "           //    \\|        /|--::--|\        |//    \\"
-  .ascii "          / '._.-'/|_______/ |--::--| \_______|\`-._.' \"
-  .ascii "         / __..--'        /__|--::--|__\        `--..__ \"
-  .ascii "        / /               '-.|--::--|.-'               \ \"
-  .ascii "       / /                   |--::--|                   \ \"
-  .ascii "      / /                    |--::--|                    \ \"
-  .ascii "  _.-'  `-._                 _..||.._                  _.-` ‘-._"
-  .ascii " '--..__..--'               '-.____.-'                '--..__..-'"
-  .ascii "e"
 
 cyberCirujasAscii:
   .ascii ""
@@ -1679,19 +1662,6 @@ la20cAscii:
   .ascii ""
   .ascii "e" 
 
-espacioTecAscii:
-  .ascii " ██████████  █████████  ███████████    █████████     █████████  █████    ███████       ███████████ ██████████   █████████ "
-  .ascii "░░███░░░░░█ ███░░░░░███░░███░░░░░███  ███░░░░░███   ███░░░░░███░░███   ███░░░░░███    ░█░░░███░░░█░░███░░░░░█  ███░░░░░███"
-  .ascii " ░███  █ ░ ░███    ░░░  ░███    ░███ ░███    ░███  ███     ░░░  ░███  ███     ░░███   ░   ░███  ░  ░███  █ ░  ███     ░░░ "
-  .ascii " ░██████   ░░█████████  ░██████████  ░███████████ ░███          ░███ ░███      ░███       ░███     ░██████   ░███         "
-  .ascii " ░███░░█    ░░░░░░░░███ ░███░░░░░░   ░███░░░░░███ ░███          ░███ ░███      ░███       ░███     ░███░░█   ░███         "
-  .ascii " ░███ ░   █ ███    ░███ ░███         ░███    ░███ ░░███     ███ ░███ ░░███     ███        ░███     ░███ ░   █░░███     ███"
-  .ascii " ██████████░░█████████  █████        █████   █████ ░░█████████  █████ ░░░███████░         █████    ██████████ ░░█████████ "
-  .ascii "░░░░░░░░░░  ░░░░░░░░░  ░░░░░        ░░░░░   ░░░░░   ░░░░░░░░░  ░░░░░    ░░░░░░░          ░░░░░    ░░░░░░░░░░   ░░░░░░░░░  "
-  .ascii "                                                                                                                          "
-  .ascii "                                                                                                                          "
-  .ascii "                                                                                                                          "
-  .ascii "e" 
 
 clearRS232Screen:
   .ascii ""
@@ -1786,13 +1756,23 @@ message06:
   .ascii ""
   .ascii ""
   .ascii ""
-  .ascii "         Tenemos muchos Amigos"
+  .ascii "            Tenemos muchos Amigos"
   .ascii ""  
-  .ascii "   El mejor Museo de Informática del Mundo"
+  .ascii "   A los que les queremos Agradecer y Nombrar"
   .ascii ""  
-  .ascii ""
+  .ascii "            todos de la scene Retro "
   .ascii ""
   .ascii "e"   
+
+
+message07:
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "            aaaaa mira quien volvio ....."
+  .ascii ""  
+  .ascii ""
+  .ascii "e"    
 
 lcd_positions:
 lcd_positions_line0:
