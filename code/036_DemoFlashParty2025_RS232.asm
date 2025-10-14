@@ -286,6 +286,12 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 mainProgram:
 
+  jsr printthe20cAscii
+  jsr printMarioAscii
+  jsr printLunarLanderAscii
+  jsr printCiberCirujas
+  rts
+
 printthe20cAscii:
   lda #< the20cAscii
   sta serialDataVectorLow
@@ -294,6 +300,7 @@ printthe20cAscii:
   lda #26
   sta serialTotalLinesAscii
   jsr printAsciiDrawing
+  rts
 
 printMarioAscii:
   lda #< marioAscii
@@ -303,6 +310,7 @@ printMarioAscii:
   lda #26
   sta serialTotalLinesAscii
   jsr printAsciiDrawing
+  rts
 
 printLunarLanderAscii:
   lda #< lunarLanderAscii
@@ -313,6 +321,16 @@ printLunarLanderAscii:
   sta serialTotalLinesAscii
   jsr printAsciiDrawing
   rts
+
+printCiberCirujas:
+  lda #< cyberCirujasAscii
+  sta serialDataVectorLow
+  lda #> cyberCirujasAscii 
+  sta serialDataVectorHigh
+  lda #27
+  sta serialTotalLinesAscii
+  jsr printAsciiDrawing
+  rts  
 
 printAsciiDrawing:
   ;here print first line
@@ -1169,6 +1187,38 @@ lunarLanderAscii:
   .ascii " '--..__..--'               '-.____.-'                '--..__..-'"
   .ascii "e"
 
+cyberCirujasAscii:
+  .ascii ""
+  .ascii ""
+  .ascii "                         █████ █   █ ████  █████ ████            n"
+  .ascii "                         █   █ █   █ █  █  █     █  █            i"
+  .ascii "              n          █     █████ █████ ███   █████"
+  .ascii "              i          █         █ █   █ █     █   █           o"
+  .ascii "                         █████ █████ █████ █████ █   █           c"
+  .ascii "              h                                                  i"
+  .ascii "              a                  ▓▓▓ ▓▓▓ ▓▓▓                     s"
+  .ascii "              r                 ▓   ▓   ▓   ▓▓▓▓                 x"
+  .ascii "              d                 ▓   ▓   ▓   ▓   ▓                s"
+  .ascii "              w       ▒▒▒▒▒▒▒▒▒▒▓▓▓▓ ▓▓▓▓   ▓   ▓▒▒▒▒▒▒▒▒"
+  .ascii "              a       ▒▒  ▒▒  ▒▓         ▓▓▓    ▓▒  ▒  ▒▒        c"
+  .ascii "              r       ▒▒▒▒▒▒▒▒▒▓       ▓▓▒▒▒▒▓▓▓▒▒▒▒▒▒▒▒▒        o"
+  .ascii "              e       ░░░░░░░░░▓   ▓▓▓▓░░░░░░░░░░░░░░░░░░        n"
+  .ascii "                                ▓               ▓"
+  .ascii "              o                  ▓             ▓                 h"
+  .ascii "              c                   ▓▓▓▓▓▓▓▓▓▓▓▓▓                  a"
+  .ascii "              i                                                  r"
+  .ascii "              o      █████ ███ ████  █   █     █ █████ █████     d"
+  .ascii "              s      █   █  █  █  █  █   █     █ █   █ █         w"
+  .ascii "              o      █      █  █████ █   █     █ █████ █████     a"
+  .ascii "                     █      █  █   █ █   █ █   █ █   █     █     r"
+  .ascii "                     █████ ███ █   █ █████ █████ █   █ █████     e"
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "e"
 
 lcd_positions:
 lcd_positions_line0:
