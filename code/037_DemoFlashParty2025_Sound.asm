@@ -305,8 +305,9 @@ playSquareWaveDelay:
   sta SOUND_ACR 
 
 squareWaveSilentDelay:
-  lda #$0
-  cmp soundDelay
+  lda soundDelay
+  tax
+  cpx #$0
   beq squareWaveSilentDelayDone
 playSquareWaveDelayLoop:
   ldy #$FF
@@ -315,7 +316,7 @@ playSquareWaveDelayInnerLoop:
   nop  
   dey
   bne playSquareWaveDelayInnerLoop
-  dec soundDelay
+  dex
   bne playSquareWaveDelayLoop
 
   lda #%00000000
