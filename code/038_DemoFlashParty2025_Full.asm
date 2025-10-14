@@ -8,9 +8,16 @@ SOUND_PORTB = $4000
 SOUND_PORTA = $4001
 SOUND_DDRB = $4002 
 SOUND_DDRA = $4003
+SOUND_T1CL = $4004
+SOUND_T1CH = $4005
+
+
+SOUND_SR = $400a
+SOUND_ACR = $400b
 SOUND_PCR = $400c
 SOUND_IFR = $400d
 SOUND_IER = $400e
+SOUND_PORTANH = $400f ;port A no handshake
 
 ;ACIA/UART ports
 ACIA_DATA = $5000
@@ -65,7 +72,9 @@ serialCharperLines = $3f
 serialTotalLinesAscii =$40
 serialDrawindEndChar=$41
 
-
+soundLowByte=$50
+soundHighByte=$51
+soundDelay=$52
 
 ;constants
 fill=$43 ;letter C
@@ -149,6 +158,7 @@ programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
   jsr viaLcdInit
+  jsr viaSoundInit
   jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
@@ -279,6 +289,33 @@ viaLcdInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------VIASOUNDINIT---------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+viaSoundInit:
+
+  ;Enable timer 1 to square wave output on pin PB7
+  ;lda #%11000000 ;$c0
+  ;sta SOUND_ACR 
+  ;BEGIN Configure Ports A & B
+  ;set all port B pins as output
+  lda #%11111111  ;load all ones equivalent to $FF
+  sta SOUND_DDRB ;store the accumulator in the data direction register for Port B
+
+  lda #%11111111  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
+  sta SOUND_DDRA ;store the accumulator in the data direction register for Port A
+  ;END Configure Ports A & B
+
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------VIASOUNDINIT---------------------------------------
+;-----------------------------------------------------------------------------------
+
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -385,6 +422,7 @@ mainProgram:
   jsr printCommodoreAscii
   jsr delayClear 
   jsr printMarioAscii
+  jsr playMario
   ;jsr delayClear     
 ;   jsr print20cAscii
   rts
@@ -584,6 +622,442 @@ printAsciiDrawing_end:
 ;--------------------------------MAIN PROGRAM-------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SOUNDPROGRAM---------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+playMario:
+  ;sound delay 75 always
+  lda #75
+  sta soundDelay
+  lda #$be
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$be
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$ef
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$be
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$9f
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$3f
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$ef
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$3f
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$7b
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$1c
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$fd
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$0c
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$1c
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$3f
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$be
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$9f
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$8e
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$b3
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$9f
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$be
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$ef
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$d5
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$fd
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$ef
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$3f
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$7b
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$1c
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$fd
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$0d
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$1c
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$3f
+  sta soundLowByte
+  lda #$01
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$be
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$9f
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$8e
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$b3
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$9f
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$be
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$ef
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$d5
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$fd
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  lda #$00
+  sta soundLowByte
+  lda #$00
+  sta soundHighByte
+  jsr playSquareWaveDelay
+  rts
+  
+playSquareWaveDelay: 
+  lda soundLowByte
+  ora soundHighByte ;if the OR is zero both bytes are zeroes a wave of aero lenght is empty
+  beq squareWaveSilentDelay
+  lda soundLowByte
+  sta SOUND_T1CL
+  lda soundHighByte
+  sta SOUND_T1CH
+  ;Enable timer 1 to square wave output on pin PB7
+  lda #%11000000 ;$c0
+  sta SOUND_ACR 
+
+squareWaveSilentDelay:
+  lda soundDelay
+  tax
+  cpx #$0
+  beq squareWaveSilentDelayDone
+playSquareWaveDelayLoop:
+  ldy #$FF
+playSquareWaveDelayInnerLoop:
+  nop
+  nop  
+  dey
+  bne playSquareWaveDelayInnerLoop
+  dex
+  bne playSquareWaveDelayLoop
+
+  lda #%00000000
+  sta SOUND_ACR
+squareWaveSilentDelayDone:
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SOUNDPROGRAM---------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
