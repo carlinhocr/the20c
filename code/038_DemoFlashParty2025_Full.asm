@@ -164,9 +164,6 @@ programStart:
   jsr lcdDemoMessage
   jsr mainProgram
   jmp listeningMode
-; jsr portBTest
-;  jsr serialTesting3_rxtx
-;  jsr programLoop
 
 lcdDemoMessage:
 
@@ -423,8 +420,13 @@ mainProgram:
   jsr delayClear 
   jsr printMarioAscii
   jsr playMario
-  ;jsr delayClear     
-;   jsr print20cAscii
+  jsr playMario
+  jsr delayClear
+  jsr printMessage08
+  jsr delayClear    
+  jsr printMessage09
+  jsr delayClear  
+  jsr print20cAscii
   rts
 
 delayClear:
@@ -510,15 +512,7 @@ print20cAscii:
   lda #> la20cAscii 
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  rts  
-
-; printEspacioTecAscii:
-;   lda #< espacioTecAscii
-;   sta serialDataVectorLow
-;   lda #> espacioTecAscii 
-;   sta serialDataVectorHigh
-;   jsr printAsciiDrawing
-;   rts   
+  rts    
 
 printClearRS232Screen:
   lda #< clearRS232Screen
@@ -583,6 +577,22 @@ printMessage07:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts    
+
+printMessage08:
+  lda #< message08
+  sta serialDataVectorLow
+  lda #> message08 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts   
+
+printMessage09:
+  lda #< message09
+  sta serialDataVectorLow
+  lda #> message09 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts       
 
 printAsciiDrawing:
   ;here print first line
@@ -2101,7 +2111,10 @@ ventilastationAscii:
   .ascii "e" 
 
 la20cAscii:
-  .ascii ""
+  .ascii "                                    LA 20c               "
+  .ascii ""  
+  .ascii "                                 OSOLABS.TECH            "
+  .ascii ""  
   .ascii "                    ┌─┴─┴─┴─┴─┴─┬─┴─┴─┴─┴─┴─┬─┴─┴─┴─┴─┴─┐"
   .ascii "                    │  4F53 4F  │    RAM    │    RAM    ├"
   .ascii "                    │  ■■■■ ■■  │           │           ├"
@@ -2214,10 +2227,11 @@ message05:
   .ascii ""
   .ascii ""
   .ascii ""
-  .ascii "Pero mejor traigo a un artista"
-  .ascii "      El Principe de las 286"
+  .ascii "        Pero mejor traigo a un artista"
   .ascii ""  
-  .ascii "           Berdyx"
+  .ascii "            El Principe de las 286"
+  .ascii ""  
+  .ascii "                    Berdyx"
   .ascii ""
   .ascii "e" 
 
@@ -2225,11 +2239,14 @@ message06:
   .ascii ""
   .ascii ""
   .ascii ""
-  .ascii "            Tenemos muchos Amigos"
+  .ascii "                 Tenemos muchos Amigos"
   .ascii ""  
-  .ascii "   A los que les queremos Agradecer y Nombrar"
+  .ascii "        A los que les queremos Agradecer y Nombrar"
   .ascii ""  
-  .ascii "            todos de la scene Retro "
+  .ascii "                todos de la scene Retro "
+  .ascii ""
+  .ascii ""
+  .ascii ""
   .ascii ""
   .ascii "e"   
 
@@ -2238,10 +2255,52 @@ message07:
   .ascii ""
   .ascii ""
   .ascii ""
-  .ascii "            aaaaa mira quien volvio ....."
+  .ascii "                aaaaa mira quien volvio ....."
   .ascii ""  
   .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
   .ascii "e"    
+
+message08:
+  .ascii "    y también gracias por tanto a...."
+  .ascii ""
+  .ascii "     ESPACIO TEC (nuetra casa)"
+  .ascii ""    
+  .ascii "     PVM (si no fuera por haber visto la demo del eternauta, no estariamos aca"   
+  .ascii ""  
+  .ascii "     ALECU (siempre coordinando y alentando"
+  .ascii ""  
+  .ascii "     Nahuel (que siempre organiza todos los eventos)"
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "e" 
+
+message09:
+  .ascii "     Esta Demo fui traida a ustedes por.."
+  .ascii ""
+  .ascii ""  
+  .ascii "     BERDYX (su arte nos honra)"
+  .ascii ""    
+  .ascii "     KRAKATOA (Arte, espíritu y magia)"   
+  .ascii ""  
+  .ascii "     CARLINHO (el OSO de OSOLABs,  assembler y hardware"
+  .ascii ""  
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "     y también por la computadora OpenSource que corre todo esto"
+  .ascii ""
+  .ascii "e"   
 
 lcd_positions:
 lcd_positions_line0:
