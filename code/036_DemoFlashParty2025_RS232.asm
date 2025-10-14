@@ -292,6 +292,7 @@ mainProgram:
   jsr printCiberCirujas
   jsr printReplay
   jsr printTrucoAscii
+  jsr printArcadeAscii
   rts
 
 printthe20cAscii:
@@ -299,8 +300,6 @@ printthe20cAscii:
   sta serialDataVectorLow
   lda #> the20cAscii 
   sta serialDataVectorHigh
-  lda #26
-  sta serialTotalLinesAscii
   jsr printAsciiDrawing
   rts
 
@@ -309,8 +308,6 @@ printMarioAscii:
   sta serialDataVectorLow
   lda #> marioAscii 
   sta serialDataVectorHigh
-  lda #26
-  sta serialTotalLinesAscii
   jsr printAsciiDrawing
   rts
 
@@ -319,8 +316,6 @@ printLunarLanderAscii:
   sta serialDataVectorLow
   lda #> lunarLanderAscii 
   sta serialDataVectorHigh
-  lda #27
-  sta serialTotalLinesAscii
   jsr printAsciiDrawing
   rts
 
@@ -329,8 +324,6 @@ printCiberCirujas:
   sta serialDataVectorLow
   lda #> cyberCirujasAscii 
   sta serialDataVectorHigh
-  lda #27
-  sta serialTotalLinesAscii
   jsr printAsciiDrawing
   rts  
 
@@ -349,6 +342,14 @@ printTrucoAscii:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts    
+
+printArcadeAscii:
+  lda #< arcadeAscii
+  sta serialDataVectorLow
+  lda #> arcadeAscii 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts   
 
 printAsciiDrawing:
   ;here print first line
@@ -1274,7 +1275,7 @@ replayAscii:
 
 trucoAscii:
 
-  .ascii "[0m"
+  .ascii ""
   .ascii ""
   .ascii ""
   .ascii ""
@@ -1307,6 +1308,41 @@ trucoAscii:
   .ascii ""
   .ascii ""
   .ascii "e"
+
+arcadeAscii:
+    .ascii "                                                                           "
+  .ascii "                             jugar NO es opcional                          "
+  .ascii "                                                                           "
+  .ascii "                                ╔═══════════╗                              "
+  .ascii "                                ║  N A V E  ║                              "
+  .ascii "                                ╠═══════════╣                              "
+  .ascii "                                ║           ║                              "
+  .ascii "                                ║   never   ║                              "
+  .ascii "                                ║  give up  ║                              "
+  .ascii "                                ║           ║                              "
+  .ascii "                               ╔╩═══════════╩╗                             "
+  .ascii "                               ║     ! o     ║                             "
+  .ascii "                               ╚╦═══════════╦╝                             "
+  .ascii "                                ║     ▄     ║                              "
+  .ascii "                                ║    ▄█▄    ║                              "
+  .ascii "                                ║   █▀ ▀█   ║                              "
+  .ascii "                                ║  ███████  ║                              "
+  .ascii "                                ║   ▀   ▀   ║                              "
+  .ascii "                                ║           ║                              "
+  .ascii "                                ║   berdyx  ║                              "
+  .ascii "                                ╚═══════════╝                              "
+  .ascii " ┌─────┐ ┌─┐    ┌─┐ ┌─┐ ┌────┐                                             "
+  .ascii " │ ┌───┘ │ │    │ │ │ │ │ ┌┐ │                                             "
+  .ascii " │ │     │ │    │ │ │ │ │    └┐                █████      ████       ████  "
+  .ascii " │ └───┐ │ └──┐ │ └─┘ │ │ └┘  │               ██   ██    ██  ██     ██  ██ "
+  .ascii " └─────┘ └────┘ └─────┘ └─────┘              ██         ██    ██   ██    ██"
+  .ascii "                                             ██         ████████   ████████"
+  .ascii "    ┌─┐ ┌─┐  ┌─────┐ ┌─┐ ┌─┐                  ██   ██   ██    ██   ██    ██"
+  .ascii "    │ │ │ │  │ ┌─  │ │ │ │ │                   █████    ██    ██   ██    ██"
+  .ascii "    │ └─┘ └┐ │ │ │ │ │ └─┘ └┐                                              "
+  .ascii "    └───┐ ┌┘ │  ─┘ │ └───┐ ┌┘                                              "
+  .ascii "        └─┘  └─────┘     └─┘                                               "
+  .ascii "e" 
 
 lcd_positions:
 lcd_positions_line0:
