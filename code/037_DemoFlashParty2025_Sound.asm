@@ -163,6 +163,14 @@ viaSoundInit:
   ;Enable timer 1 to square wave output on pin PB7
   ;lda #%11000000 ;$c0
   ;sta SOUND_ACR 
+  ;BEGIN Configure Ports A & B
+  ;set all port B pins as output
+  lda #%11111111  ;load all ones equivalent to $FF
+  sta LCD_DDRB ;store the accumulator in the data direction register for Port B
+
+  lda #%11111111  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
+  sta LCD_DDRA ;store the accumulator in the data direction register for Port A
+  ;END Configure Ports A & B
 
   rts
 
