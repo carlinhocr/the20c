@@ -403,9 +403,9 @@ printthe20cAscii:
   rts
 
 printMarioAscii:
-  lda #< marioAscii
+  lda #< marioReverseAscii
   sta serialDataVectorLow
-  lda #> marioAscii 
+  lda #> marioReverseAscii 
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts
@@ -1377,6 +1377,40 @@ marioAscii:
   .ascii "        y esa musiquita????     "
   .ascii "e"
 
+marioReverseAscii:
+  .ascii "y puedo hacer un mario"
+  .ascii "████████████████████████████████"
+  .ascii "████████████████████████████████"
+  .ascii "██████████████        ██      ██"
+  .ascii "██████████    ░░░░░░    ▓▓▓▓▓▓  "
+  .ascii "████████  ░░░░░░░░░░░░  ▓▓▓▓▓▓  "
+  .ascii "██████  ░░░░░░            ▓▓▓▓  "
+  .ascii "████  ░░░░░░                ▓▓  "
+  .ascii "    ██▓▓████░░░░░░░░░░░░██████  "
+  .ascii "  ████████░░░░░░██░░██░░██▓▓▓▓██"
+  .ascii "  ██░░████░░░░░░██░░██░░██▓▓▓▓██"
+  .ascii "██░░░░██████░░░░░░░░░░░░░░██▓▓██"
+  .ascii "██░░░░░░██░░░░██░░░░░░░░░░██▓▓██"
+  .ascii "██░░░░░░██░░░░██░░░░░░░░░░██▓▓██"
+  .ascii "  ██░░░░░░░░████████░░░░██████  "
+  .ascii "    ████░░░░░░░░██████████▓▓██  "
+  .ascii "      ██████░░░░░░░░░░██▓▓▓▓██  "
+  .ascii "  ░░██▓▓▓▓██████████████▓▓██    "
+  .ascii "  ██▓▓▓▓▓▓▓▓████░░░░░░████      "
+  .ascii "████▓▓▓▓▓▓▓▓██░░░░░░░░░░██      "
+  .ascii "████▓▓▓▓▓▓▓▓██░░░░░░░░░░██      "
+  .ascii "██████▓▓▓▓▓▓▓▓██░░░░░░████████  "
+  .ascii "  ██████▓▓▓▓▓▓████████████████  "
+  .ascii "    ██████████████████████▓▓▓▓██"
+  .ascii "  ██▓▓▓▓████████████████▓▓▓▓▓▓██"
+  .ascii "████▓▓██████████████████▓▓▓▓▓▓██"
+  .ascii "██▓▓▓▓██████████████████▓▓▓▓▓▓██"
+  .ascii "██▓▓▓▓██████████      ██▓▓▓▓████"
+  .ascii "██▓▓▓▓████              ██████  "
+  .ascii "  ████                          "
+  .ascii ""
+  .ascii "        y esa musiquita????     "
+  .ascii "e"
 
 cyberCirujasAscii:
   .ascii ""
