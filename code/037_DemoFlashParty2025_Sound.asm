@@ -223,7 +223,7 @@ viaSoundInit:
 ;-----------------------------------------------------------------------------------
 
 squareWaveTest:
-  lda #$ff
+  lda #$50
   sta soundLowByte
   lda #$00
   sta soundHighByte
