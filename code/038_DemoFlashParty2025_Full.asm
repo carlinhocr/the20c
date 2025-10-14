@@ -152,7 +152,6 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
-  ;jsr rs232Message
   jsr mainProgram
   jmp listeningMode
 ; jsr portBTest
@@ -177,55 +176,18 @@ lcdDemoMessage:
   jsr delay_3_sec
   rts 
 
-welcomeMessage:
-  ldx #0
-send_welcome_message:
-  ;lets send a message
-  lda hola_ascii_message,x ;test for the NULL char that ends all ASCII strings
-  beq send_welcome_message_end
-  jsr print_char
-  inx
-  jmp send_welcome_message
-  jsr DELAY_SEC   
-  jsr clearScreenBuffer
-  jsr drawScreen 
-
-send_welcome_message_end:
-  rts
-
-rs232Message:
-  ldx #0
-send_rs232Message_message:
-  ;lets send a message
-  lda rs232_ascii_message,x ;test for the NULL char that ends all ASCII strings
-  beq send_rs232Message_message_end
-  jsr print_char
-  inx
-  jmp send_rs232Message_message
-  ;jsr DELAY_SEC   
-  ;jsr clearScreenBuffer
-  ;jsr drawScreen 
-send_rs232Message_message_end:
-  rts
-
-hola_ascii_message: .asciiz "Hola de Nuevo, Soy la 20c"
-rs232_ascii_message: .asciiz "Ahora tengo RS-232"  
-
-
-
-;programLoop:  
-   ;jsr serialProcessing
-;   jsr keyboardScanRecursive
-;   ;jsr keyboardScan
-;   jsr printKeyboardBuffer
-;   jmp programLoop  
-
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------MAIN-----------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------  
+
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------ASCII----------------------------------------------
+;-----------------------------------------------------------------------------------
 
 set_position_lcd_line0:
   lda #pos_lcd_initial_line0
@@ -274,6 +236,13 @@ print_ascii_screen_eeprom:
 print_ascii_screen_end:
   rts 
   ;END print_ascii_screen
+
+
+;END---------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------ASCII----------------------------------------------
+;-----------------------------------------------------------------------------------
+
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -385,7 +354,12 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 mainProgram:
-
+  jsr printMessage01
+  jsr delay_3_sec
+  jsr printMessage02
+  jsr delay_3_sec
+  jsr printMessage03
+  jsr delay_3_sec
   jsr printthe20cAscii
   jsr printMarioAscii
   jsr printLunarLanderAscii
@@ -486,6 +460,30 @@ print20cAscii:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts  
+
+printMessage01:
+  lda #< message01
+  sta serialDataVectorLow
+  lda #> message01 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts   
+
+printMessage02:
+  lda #< message02
+  sta serialDataVectorLow
+  lda #> message02 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts 
+
+printMessage03:
+  lda #< message03
+  sta serialDataVectorLow
+  lda #> message03 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts     
 
 printAsciiDrawing:
   ;here print first line
@@ -1627,17 +1625,73 @@ la20cAscii:
   .ascii ""
   .ascii "e" 
 
+clearRS232Screen:
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "e" 
+
 screen1_demo:
-  .asciiz "       Hola         "
-  .asciiz "     de Nuevo,      "
-  .asciiz "    Soy la 20c.     "
-  .asciiz "                    "
+  .asciiz "Hola                "
+  .asciiz "de Nuevo,           "
+  .asciiz "         Soy        "
+  .asciiz "            la 20c. "
 
 screen2_demo:
   .asciiz "                    "
   .asciiz "    Ahora tengo     "
-  .asciiz "      RS-2323       "
+  .asciiz "      RS-232        "
   .asciiz "                    "  
+
+
+message01:
+  .ascii "Ahora si! tengo RS-232"
+  .ascii "e" 
+
+message02:
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "pero bueno muestro texto"
+  .ascii "e" 
+
+message03:
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "a ver....hagamos fuerza"
+  .ascii ""
+  .ascii "mmmmmmffff"
+  .ascii "mmmpppppfffffff"
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "e"   
+
 
 
 lcd_positions:
