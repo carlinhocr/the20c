@@ -290,6 +290,7 @@ mainProgram:
   jsr printMarioAscii
   jsr printLunarLanderAscii
   jsr printCiberCirujas
+  jsr printReplay
   rts
 
 printthe20cAscii:
