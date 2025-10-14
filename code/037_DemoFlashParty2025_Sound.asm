@@ -139,7 +139,8 @@ programStart:
   ;configure stack and enable interrupts
   jsr viaLcdInit
   jsr viaSoundInit
-  jsr squareWaveTest;
+  ;jsr squareWaveTest;
+  jsr playMiddleCDelay
 loop:
   jmp loop
 
