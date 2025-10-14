@@ -332,6 +332,14 @@ printCiberCirujas:
   jsr printAsciiDrawing
   rts  
 
+printReplay:
+  lda #< replayAscii
+  sta serialDataVectorLow
+  lda #> replayAscii 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts   
+
 printAsciiDrawing:
   ;here print first line
   jsr send_rs232_line
@@ -1215,6 +1223,40 @@ cyberCirujasAscii:
   .ascii ""
   .ascii ""
   .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "e"
+
+replayAscii:
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "                                                  q6g"
+  .ascii "                                                 ewrf"
+  .ascii "         eweewefd                               fyu9     q66qo      q6q    q6."
+  .ascii "      ewesadd  bttf     .(oog.   gg  g66g      345    gfhvvsas0   wqe.   ssf."
+  .ascii "    6esadsd4   ndsg    6rjh43g  455v9. 4ng    s5    gsaw   sag   345   qsrv9"
+  .ascii "  6we  xcvs   65ng   689(  .9)  wte   asbg   re    gsd    df9   fsv  .vcvxz"
+  .ascii "  6g  qefuvmv52g   6hn1  .zg   45w   sfv6   aw    sfw   sfsd  sagv vs.vrg9"
+  .ascii "     6bsd$w#6     6wefgfhg)  dfhn   sfxg  sde   nnmbb v1sav as dssdv dds."
+  .ascii "    6pf   szp   63$32      6ssxc   asad sg saxvg vsxc97 sadxv  ogo  dwr"
+  .ascii "   6fv    qwg dfg  fvbaxve5wsfgdggggi9)v   oggo   ogo   ogo        ddf"
+  .ascii "   sd      dqs+     6vb9)  afs                                66.fdf9"
+  .ascii "   o                      sas                                  669."
+  .ascii "                          oo"
+  .ascii ""
+  .ascii "                              . . . . . . . . ."
+  .ascii "                              | | | | | | | | |"
+  .ascii "                             @@@@@@@@@@@@@@@@@@@"
+  .ascii "                             (                 )"
+  .ascii "                             )    F E L I Z    ("
+  .ascii "                             (                 )"
+  .ascii "                        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+  .ascii "                        (                           )"
+  .ascii "                        )   A N I V E R S A R I O   ("
+  .ascii "                        (                           )"
+  .ascii "                        @@@@@@@@@@@@berdyx@@@@@@@@@@@"
   .ascii ""
   .ascii ""
   .ascii ""
