@@ -361,16 +361,19 @@ mainProgram:
   jsr printMessage03
   jsr delay_3_sec
   jsr printthe20cAscii
-  jsr printMarioAscii
-  jsr printLunarLanderAscii
-  jsr printCiberCirujas
-  jsr printReplay
-  jsr printTrucoAscii
-  jsr printArcadeAscii
-  jsr printModoHistoriaAscii
-  jsr printCommodoreAscii
-  jsr printVentilastationAscii
-  jsr print20cAscii
+  jsr delay_3_sec
+  jsr printMessage04
+  jsr delay_3_sec  
+;   jsr printMarioAscii
+;   jsr printLunarLanderAscii
+;   jsr printCiberCirujas
+;   jsr printReplay
+;   jsr printTrucoAscii
+;   jsr printArcadeAscii
+;   jsr printModoHistoriaAscii
+;   jsr printCommodoreAscii
+;   jsr printVentilastationAscii
+;   jsr print20cAscii
   rts
 
 printthe20cAscii:
@@ -484,6 +487,14 @@ printMessage03:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts     
+
+printMessage04:
+  lda #< message04
+  sta serialDataVectorLow
+  lda #> message04 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts    
 
 printAsciiDrawing:
   ;here print first line
@@ -1691,6 +1702,16 @@ message03:
   .ascii ""
   .ascii ""
   .ascii "e"   
+
+message04:
+  .ascii ""
+  .ascii ""
+  .ascii ""
+  .ascii "vaaaaamoooos"
+  .ascii "puedo hacer ascii ART"
+  .ascii ""
+  .ascii ""
+  .ascii "e"    
 
 
 
