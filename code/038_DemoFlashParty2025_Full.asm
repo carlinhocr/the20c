@@ -364,7 +364,7 @@ mainProgram:
   jsr delay_3_sec
   jsr printMessage04
   jsr delay_3_sec  
-  jsr printMessage04
+  jsr printMessage05
   jsr delay_3_sec   
   jsr printClearRS232Screen
   jsr printTrucoAscii
@@ -507,6 +507,14 @@ printMessage04:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts    
+
+printMessage05:
+  lda #< message05
+  sta serialDataVectorLow
+  lda #> message05 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts      
 
 printAsciiDrawing:
   ;here print first line
