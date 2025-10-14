@@ -291,6 +291,7 @@ mainProgram:
   jsr printLunarLanderAscii
   jsr printCiberCirujas
   jsr printReplay
+  jsr trucoAscii
   rts
 
 printthe20cAscii:
