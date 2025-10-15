@@ -401,10 +401,12 @@ mainProgram:
   jsr printMessage04
   jsr delay_3_sec  
   jsr printMessage05
+  jsr delay_3_sec
   jsr delayClear 
   jsr printTrucoAscii
   jsr delayClear 
   jsr printMessage06
+  jsr delay_3_sec
   jsr delayClear   
   jsr printCiberCirujas  
   jsr delayClear   
@@ -421,6 +423,7 @@ mainProgram:
   jsr printReplay
   jsr delayClear    
   jsr printMessage07
+  jsr delay_3_sec
   jsr delayClear   
   jsr printCommodoreAscii
   jsr delayClear 
@@ -429,8 +432,10 @@ mainProgram:
   jsr playMario
   jsr delayClear
   jsr printMessage08
+  jsr delay_3_sec
   jsr delayClear    
   jsr printMessage09
+  jsr delay_3_sec
   jsr delayClear  
   jsr print20cAscii
   rts
