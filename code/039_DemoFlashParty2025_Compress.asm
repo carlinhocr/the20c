@@ -107,7 +107,7 @@ lcdCharPositionsHigh =$31
 romNarcoPoliceLow=$00
 romNarcoPoliceHigh=$70
 
-romAlfaLow=$90
+romAlfaLow=$80
 romAlfaHigh=$70
 
 ;bin 2 ascii values
