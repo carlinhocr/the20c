@@ -1,3 +1,6 @@
+  .org $0000
+  .ascii "padeate todo maestrooooo"
+
   .org $7000
 narcoPoliceAscii:
   .ascii "░░  ░ ░░░░ ░░░░  ░░░░  ░░░                             IRONBYTE SOFTWARE/DINAMIC"
