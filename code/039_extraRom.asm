@@ -28,7 +28,6 @@ narcoPoliceAscii:
   .ascii "e"
   .ascii "PPPPPPPPPPPPPPPPPPPPPP"
 
-;    .org $7
 ; freddyAscii:
 ;   .ascii "kr4k4"
 ;   .ascii "       ██                               ▄                      ▄"
@@ -57,6 +56,7 @@ narcoPoliceAscii:
 ;   .ascii "e"
 ;   .ascii "PPPPPPPPPPPPPPPPPPPPPP"
 
+  .org $7800
 alfaAscii:  
   .ascii ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::kr4k4::"
   .ascii ":::::::::~~~~~~~^:::^~~^:::::::::::::^~~~~~~~~~~~~~::::::^~~~~~~::::::::::::::::"
