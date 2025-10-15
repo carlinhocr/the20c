@@ -104,8 +104,11 @@ screenBufferHigh =$30
 lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
 lcdCharPositionsHigh =$31
 
-romExtraLow=$00
-romExtraHigh=$70
+romNarcoPoliceLow=$00
+romNarcoPoliceHigh=$70
+
+romAlfaLow=$90
+romAlfaHigh=$70
 
 ;bin 2 ascii values
 ; value =$0200 ;2 bytes, Low 16 bit half
@@ -435,13 +438,21 @@ delayClear:
   jsr printClearRS232Screen
   rts
 
-; printextraRomAscii:
-;   lda #< romExtraLow
-;   sta serialDataVectorLow
-;   lda #> romExtraHigh 
-;   sta serialDataVectorHigh
-;   jsr printAsciiDrawing
-;   rts  
+printextraRomNarcoPoliceAscii:
+  lda romNarcoPoliceLow
+  sta serialDataVectorLow
+  lda romNarcoPoliceHigh 
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts  
+
+printextraRomAlfaAscii:
+  lda romAlfaLow
+  sta serialDataVectorLow
+  lda romAlfaHigh
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts    
 
 printthe20cAscii:
   lda #< the20cAscii
