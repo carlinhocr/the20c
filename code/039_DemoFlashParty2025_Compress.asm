@@ -412,10 +412,10 @@ mainProgram:
   jsr delayClear   
   jsr printArcadeAscii
   jsr delayClear   
-  jsr printextraRomNarcoPoliceAscii
-  jsr delayClear  
-  jsr printextraRomFreddyAscii 
-  jsr delayClear  
+  ;jsr printextraRomNarcoPoliceAscii
+  ;jsr delayClear  
+  ;jsr printextraRomFreddyAscii 
+  ;jsr delayClear  
   jsr printModoHistoriaAscii
   jsr delayClear   
   jsr printVentilastationAscii
