@@ -1,3 +1,4 @@
+  .org $7000
 narcoPoliceAscii:
   .ascii "░░  ░ ░░░░ ░░░░  ░░░░  ░░░                             IRONBYTE SOFTWARE/DINAMIC"
   .ascii "░░░ ░ ░  ░ ░  ░ ░░    ░░  ░░"
