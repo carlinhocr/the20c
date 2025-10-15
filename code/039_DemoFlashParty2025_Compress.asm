@@ -552,8 +552,6 @@ printAlfaAscii:
   jsr printAsciiDrawing
   rts      
 
-  alfaAscii
-
 printClearRS232Screen:
   lda #< clearRS232Screen
   sta serialDataVectorLow
