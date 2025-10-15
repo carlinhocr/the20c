@@ -107,8 +107,8 @@ lcdCharPositionsHigh =$31
 romNarcoPoliceLow=$00
 romNarcoPoliceHigh=$70
 
-romAlfaLow=$80
-romAlfaHigh=$70
+romFreddyLow=$80
+romFreddyHigh=$70
 
 ;bin 2 ascii values
 ; value =$0200 ;2 bytes, Low 16 bit half
@@ -412,6 +412,10 @@ mainProgram:
   jsr delayClear   
   jsr printArcadeAscii
   jsr delayClear   
+  jsr printextraRomNarcoPoliceAscii
+  jsr delayClear  
+  jsr printextraRomFreddyAscii 
+  jsr delayClear  
   jsr printModoHistoriaAscii
   jsr delayClear   
   jsr printVentilastationAscii
@@ -453,10 +457,10 @@ printextraRomNarcoPoliceAscii:
   jsr printAsciiDrawing
   rts  
 
-printextraRomAlfaAscii:
-  lda romAlfaLow
+printextraRomFreddyAscii:
+  lda romFreddyLow
   sta serialDataVectorLow
-  lda romAlfaHigh
+  lda romFreddyHigh
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts    
