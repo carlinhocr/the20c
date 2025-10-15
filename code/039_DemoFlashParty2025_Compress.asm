@@ -10,8 +10,6 @@ SOUND_DDRB = $4002
 SOUND_DDRA = $4003
 SOUND_T1CL = $4004
 SOUND_T1CH = $4005
-
-
 SOUND_SR = $400a
 SOUND_ACR = $400b
 SOUND_PCR = $400c
@@ -25,8 +23,6 @@ ACIA_STATUS = $5001
 ACIA_CMD = $5002
 ACIA_CTRL = $5003
 
-
-
 ;VIA Ports and Constant ds
 LCD_PORTB = $6000
 LCD_PORTA = $6001
@@ -36,13 +32,13 @@ LCD_PCR = $600c
 LCD_IFR = $600d
 LCD_IER = $600e
 
-RS_PORTB = $7000
-RS_PORTA = $7001
-RS_DDRB = $7002
-RS_DDRA = $7003
-RS_PCR = $700c
-RS_IFR = $700d
-RS_IER = $700e
+; RS_PORTB = $7000
+; RS_PORTA = $7001
+; RS_DDRB = $7002
+; RS_DDRA = $7003
+; RS_PCR = $700c
+; RS_IFR = $700d
+; RS_IER = $700e
 
 ;CIA Ports and Constants
 ; RS_PORTB = $7001
@@ -108,12 +104,15 @@ screenBufferHigh =$30
 lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
 lcdCharPositionsHigh =$31
 
+romExtraLow=$00
+romExtraHigh=$70
+
 ;bin 2 ascii values
-value =$0200 ;2 bytes, Low 16 bit half
-mod10 =$0202 ;2 bytes, high 16 bit half and as it has the remainder of dividing by 10
-             ;it is the mod 10 of the division (the remainder)
-message = $0204 ; the result up to 6 bytes
-counter = $020a ; 2 bytes
+; value =$0200 ;2 bytes, Low 16 bit half
+; mod10 =$0202 ;2 bytes, high 16 bit half and as it has the remainder of dividing by 10
+;              ;it is the mod 10 of the division (the remainder)
+; message = $0204 ; the result up to 6 bytes
+; counter = $020a ; 2 bytes
 
 ;define LCD signals
 E = %10000000 ;Enable Signal
@@ -320,20 +319,20 @@ viaSoundInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-viaSerialInit:
+; viaSerialInit:
 
-  ;set all port A pins as output but bit 6
-  ;bit 6 is the input from the serial protocol
-  lda #%10111111  ;load all ones equivalent to $FF but bit 6
-  sta RS_DDRA ;store the accumulator in the data direction register for Port A
+;   ;set all port A pins as output but bit 6
+;   ;bit 6 is the input from the serial protocol
+;   lda #%10111111  ;load all ones equivalent to $FF but bit 6
+;   sta RS_DDRA ;store the accumulator in the data direction register for Port A
 
-  ;set all port B pins as output
-  lda #%11111111  ;load all ones equivalent to $FF
-  sta RS_DDRB ;store the accumulator in the data direction register for Port B
+;   ;set all port B pins as output
+;   lda #%11111111  ;load all ones equivalent to $FF
+;   sta RS_DDRB ;store the accumulator in the data direction register for Port B
 
-  lda #1
-  sta RS_PORTA
-  rts
+;   lda #1
+;   sta RS_PORTA
+;   rts
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -436,13 +435,21 @@ delayClear:
   jsr printClearRS232Screen
   rts
 
+; printextraRomAscii:
+;   lda #< romExtraLow
+;   sta serialDataVectorLow
+;   lda #> romExtraHigh 
+;   sta serialDataVectorHigh
+;   jsr printAsciiDrawing
+;   rts  
+
 printthe20cAscii:
   lda #< the20cAscii
   sta serialDataVectorLow
   lda #> the20cAscii 
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  rts
+  rts  
 
 printMarioAscii:
   lda #< marioReverseAscii
@@ -1086,25 +1093,6 @@ squareWaveSilentDelayDone:
 ;-----------------------------------------------------------------------------------
 serialUART:
 
-  ldx #0
-send_rs232_message:
-  ;lets send a message
-  lda rs232_message,x ;test for the NULL char that ends all ASCII strings
-  beq send_rs232_message_end
-  jsr send_rs232_char
-  inx
-  jmp send_rs232_message  
-
-send_rs232_message_end:
-  ;print cr
-  lda #$0d
-  jsr send_rs232_char
-  lda #$0a
-  jsr send_rs232_char 
-  rts
-
-rs232_message: .asciiz "RS-232 Terminal for 20c" ;\r carriage return \n line feed 
-
 send_rs232_line:
   ldy #$0
 send_rs232_line_loop:
@@ -1191,151 +1179,6 @@ tx_delay_loop:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-portBTest:
-; blibk pin 0 of PORT B
-  lda #%11111111 
-  sta RS_PORTB
-  jsr delay_2_sec
-  lda #%00000000 
-  sta RS_PORTB
-  jsr delay_2_sec
-  jmp portBTest
-  rts
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------SERIALTESTING------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-
-serialTesting3_rxtx:
-;use BIT instruction because it test bit 7 and 6 on the negative and overflow flag
-;we will be using the overflow flag to check on bit 6 of PORTA
-;BVC branch if overflow is zero CLEAR
-;BVS branch if overflow is one SET
-
-  ;set high the transmit bit , transmitting from the 20c
-  ;pin 0 of port A must be output
-  ;the mas 232 will translate +5v to +7v so it is a zero in the rs-232 protocol
-  lda #1
-  sta RS_PORTA
-  jsr bit_delay
-  jsr bit_delay
-  jsr bit_delay
-
-  lda #"*"
-  sta $0200
-
- ;set a 0 in port A pin 0
- ;send the start bit as the first bit ZERO
-  lda #%11111110          ;2
-  and RS_PORTA      ;4
-  sta RS_PORTA      ;4
-  ;loop through all 8 bits of the character
-  ldx #8            ;2
-  ;wait start bit for 104 microseconds add 28 more cycles = 14 nops
-  ;this equals 30 cycles
-
-write_bit:  
-  ;delay for 104 microseconds
-  jsr bit_delay_write ; 6
-  ;get the each bit in turn on the carry flag
-  ror $0200         ;6
-  bcs send_1        ;2 +1if the branch is taken
-  ;send 0
-  lda #%11111110    ;2
-  and RS_PORTA      ;4
-  sta RS_PORTA      ;4
-  jmp tx_done       ;3
-  ;write bit 0 = 6+2+4+4+3
-send_1:
-  ;set a 1 in port A pin 0
-  lda #%00000001    ;2
-  ora RS_PORTA      ;4
-  sta RS_PORTA      ;4
-  ;write bit 1 = 6+2+4+4
-tx_done:   
-  dex               ;2
-  bne write_bit     ;2
-  ;total bit 0 = 6+6+2+2+4+4+3+2+2 = 29
-  ;total bit 1 = 6+6+2+2+1+4+4+2+2 = 28
-  ;wait 104 microsecons for the last bit  
-  ldx #20 ;2
-  nop ;2
-  ;2+2+20*5
-wait_104:  
-  dex ;2
-  bne wait_104 ;3
-  ;set a 1 in port A pin 0
-  ;set the transmit pin high for the stop bit
-  lda #%00000001
-  ora RS_PORTA
-  sta RS_PORTA 
-  jsr bit_delay
- 
-rx_wait:
-  ;loop waiting on the start BIT
-  bit RS_PORTA ; put PORTA.bit6 into overflow V flag
-  bvs rx_wait ; check for overflow flag and keep looping if it is high
-  jsr half_bit_delay ; wait after the start bit to sample midbit the rs232 signals
-  ;loop to load 8 bits
-  ldx #8 ;set to read 8 bits
-read_bit:
-  jsr bit_delay ;have a delay so we can time the charcters for 104 microsecons of 9600 bps 
-  bit RS_PORTA ;put PORTA.6 bit on the overflow flag
-  ;put the overflow flag on the carry bit
-  bvs recv_1
-  clc ;if here we received a zero
-  jmp rx_done
-recv_1:
-  sec ;set carry flag because we read a one
-  nop ;compensate for branch duration
-  nop
-rx_done:
-  ror ;get the carry bit into bit 7 of the accumulator
-  dex ;decrement the number of bits read
-  bne read_bit
-  ;All bits now in accumulator
-  jsr print_char ; pint the character
-  jsr bit_delay ;wait out the stop bit
-  jmp rx_wait ; return after 8 bits were read
-
-bit_delay:
-  nop ;compensate because i am not using phx +4
-  nop
-  ldy #13 ;decimal 13 to wait 104 microseconds because the former code takes 39 or 40 microseconds
-bit_delay_loop:
-  dey       
-  bne bit_delay_loop  
-  nop ;compensate because i am not using plx
-  nop 
-  rts
-
-bit_delay_write:
-;decimal 13 to wait 104 microseconds because the former code takes 29 or 28 microseconds
-  ;29+2(ldy)+6(rts)+X=104
-  ;37+x=104
-  ;x=67
-  ;loop =4 cycles
-  ;wait = 67/5 =13,4
-
-  ;36+y=104
-  ;y=66
-  ;loop 5 cycles
-  ;wait =66/5= 13,2
-  ldy #13   ;2
-bit_delay_loop_write:
-  dey       ;2
-  bne bit_delay_loop_write  ;5
-  rts       ;6
-
-half_bit_delay:
-  ldy #6 ;decimal 6 to wait 52 microseconds to read in the middle of the bits
-half_bit_delay_loop:
-  dey
-  bne half_bit_delay_loop  
-  rts  
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -1490,110 +1333,6 @@ clearScreenBufferEnd:
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------Binary to Ascii------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-
-
-bin_2_ascii:
-divide:
-  ;initialize the remainder to be 0
-  lda #0
-  sta mod10
-  sta mod10 + 1
-  clc ; we will clear the carry bit
-  ;END Initialization of the 4 bytes
-
-  ldx #16
-divloop:
-  ;rotate the quotient and the remainder
-  rol value
-  rol value + 1
-  rol mod10
-  rol mod10 + 1
-
-  ;substract 1010, we will do it 8 bits at a time
-   sec ; set the carry bit
-  lda mod10
-  sbc #10 ;substract with carry from 10
-  tay ; save the low part of the 16 bits of the remainder to register y
-  lda mod10 + 1
-  sbc #0 ;substract with carry zero as the 8 high bits are all zeroes from 10 division
-  ; the answer is on the combination of the a register and the y register
-  ; a,y = dividend - divisor
-  ; if the carry is clear for a then the dividend was less that the divisor and we will
-  ; discard the result and do a shift left
-  bcc ignore_result ; we will branch if the carry bit is clear (the carry of the last operation)
-  ; if we do not ignore the result we want to store the intermediate result a,y
-  ; in mod10+1 for a register and mod10 for the y register
-  sty mod10
-  sta mod10 + 1
-
-  ; and then we will keep with the division if we did less than 16 left shifts
-
-ignore_result:
-  dex ; decrement the X time that we shifted left
-    ; dex affects the Z flag if the content of the x register is zero
-  bne divloop ;if what is on the X register
-  ;we will rotate the carry bit inside value to have the result of the division
-  rol value
-  rol value + 1
-
-  ;now we have to store the remainder
-  lda mod10
-  clc
-  adc #"0" ;by adding zero to the a register we will have the ascii number of its value
-  jsr push_char ;and now we store our character in the string
-  ; we will be done dividen whne the result of the division is a zero
-  ; we will check value and value + 1 and if any bit is one we are not done
-  lda value
-  ora value + 1 ; combine all ones from the 16 bits of value
-  bne divide ; if a is not zero keep dividing
-  rts
-
-print_message_ascii:  
-  ;BEGIN Write all the letters
-  ldx #0 ;start on FF so when i add one it will be 0
-
-print_message_eeprom_ascii:  
-  lda message,x ;load letter from eeprom position message + the value of register X
-  beq print_message_ascii_end ; jump to end if I load a 0 on lda a zero means the end  of a n .asciiz string
-  jsr print_char 
-  inx
-  jmp print_message_eeprom_ascii
-  ;END Write all the letters  
-print_message_ascii_end:
-  rts   
-
-number: .word 1729 ;the number we will convert
-
-;add the content of the a register to a null terminated string message
-push_char:
-  pha ;push new character into the stack first 
-  ldy #0
-
-char_loop:
-  lda message,y ;get char on string and put into x
-  tax
-  pla
-  sta message,y ; we replaced the old first character with the new one
-  iny ; lets go to the next character
-  txa
-  pha ; we have the character that used to be on the beginning of the message on the stack
-  ;if a is zero we are at the end of the string
-  bne char_loop
-  pla
-  sta message,y ; store the null terminator again
-  rts
-;END-----------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------Binary to Ascii------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
 ;--------------------------------LCD COMMANDS---------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------  
@@ -1695,26 +1434,6 @@ print_char:
   pla ;pull the accumulator value to the stack so we can have it back a the end of the subroutine
   rts
 
-lcd_send_data:
-  ;print_char is equal to send data
-  pha ;push the accumulator value to the stack so we can have it back a the end of the subroutine
-  jsr lcd_wait
-  sta LCD_PORTB
-
-  ;RS is one so we are sending data
-  ;RW is zero so we are writing
-  lda #RS  ;Set RS, and clear RW and E bit on Port A  
-  sta LCD_PORTA ;     
-
-  ;togle the enable bit in order to send the instruction
-  lda #(RS | E );RS and enable bit are 1 , we OR them and send the data
-  sta LCD_PORTA ; 
-
-  lda #RS  ;Set RS, and clear RW and E bit on Port A  
-  sta LCD_PORTA ; 
-  pla ;pull the accumulator value to the stack so we can have it back a the end of the subroutine
-  rts
-
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------LCD COMMANDS---------------------------------------
@@ -1728,14 +1447,14 @@ lcd_send_data:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-delay_1_sec:
-  jsr DELAY_SEC
-  rts
+; delay_1_sec:
+;   jsr DELAY_SEC
+;   rts
 
-delay_2_sec:
-  jsr DELAY_SEC
-  jsr DELAY_SEC
-  rts
+; delay_2_sec:
+;   jsr DELAY_SEC
+;   jsr DELAY_SEC
+;   rts
 
 delay_3_sec:
   jsr DELAY_SEC
@@ -1743,34 +1462,34 @@ delay_3_sec:
   jsr DELAY_SEC
   rts
 
-delay_4_sec:
-  jsr DELAY_SEC
-  jsr DELAY_SEC
-  jsr DELAY_SEC
-  jsr DELAY_SEC
-  rts 
+; delay_4_sec:
+;   ; jsr DELAY_SEC
+;   ; jsr DELAY_SEC
+;   ; jsr DELAY_SEC
+;   ; jsr DELAY_SEC
+;   ; rts 
 
-delay_5_sec:
-  jsr DELAY_SEC
-  jsr DELAY_SEC
-  jsr DELAY_SEC
-  jsr DELAY_SEC
-  jsr DELAY_SEC
-  rts
+; delay_5_sec:
+;   jsr DELAY_SEC
+;   jsr DELAY_SEC
+;   jsr DELAY_SEC
+;   jsr DELAY_SEC
+;   jsr DELAY_SEC
+;   rts
 
-DELAY_onetenth_SEC:
-  lda #$10
-  sta delay_COUNT_A
-  lda #$FF
-  sta delay_COUNT_B
-  jmp DELAY_MAIN
+; DELAY_onetenth_SEC:
+;   lda #$10
+;   sta delay_COUNT_A
+;   lda #$FF
+;   sta delay_COUNT_B
+;   jmp DELAY_MAIN
 
-DELAY_two_tenth_SEC:
-  lda #$10
-  sta delay_COUNT_A
-  lda #$FF
-  sta delay_COUNT_B
-  jmp DELAY_MAIN   
+; DELAY_two_tenth_SEC:
+;   lda #$10
+;   sta delay_COUNT_A
+;   lda #$FF
+;   sta delay_COUNT_B
+;   jmp DELAY_MAIN   
 
 DELAY_SEC:
   lda #$FF
@@ -1779,12 +1498,12 @@ DELAY_SEC:
   sta delay_COUNT_B
   jmp DELAY_MAIN
 
-DELAY_HALF_SEC:
-  lda #$50
-  sta delay_COUNT_A
-  lda #$FF
-  sta delay_COUNT_B
-  jmp DELAY_MAIN
+; DELAY_HALF_SEC:
+;   lda #$50
+;   sta delay_COUNT_A
+;   lda #$FF
+;   sta delay_COUNT_B
+;   jmp DELAY_MAIN
 
 DELAY_MAIN:
     LDX delay_COUNT_A     ; Load outer loop count
@@ -1816,12 +1535,7 @@ irq:
 ;-----------------------------------------------------------------------------------
 ;---------------------------------------DATA----------------------------------------
 ;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-
-
-startMessage1:
-  .ascii "    RS-232 TERMINAL    "   
+;-----------------------------------------------------------------------------------  
 
 the20cAscii:
   .ascii "  _  _     _                            "
@@ -1834,6 +1548,9 @@ the20cAscii:
   .ascii "  __| |___ |__/_ _  _ _____ _____    |/ "
   .ascii " / _` / -_) | ' \ || / -_) V / _ \      "
   .ascii " \__,_\___| |_||_\_,_\___|\_/\___/      "
+  .ascii ""
+  .ascii ""
+  .ascii ""    
   .ascii "e"                                       
 
 marioReverseAscii:
@@ -2312,9 +2029,9 @@ message08:
   .ascii ""
   .ascii "     ESPACIO TEC (nuetra casa)"
   .ascii ""    
-  .ascii "     PVM (si no fuera por haber visto la demo del eternauta, no estariamos aca"   
+  .ascii "     PVM (si no fuera por haber visto la demo del eternauta, no estariamos aca)"   
   .ascii ""  
-  .ascii "     ALECU (siempre coordinando y alentando"
+  .ascii "     ALECU (siempre coordinando y alentando)"
   .ascii ""  
   .ascii "     Nahuel (que siempre organiza todos los eventos)"
   .ascii ""
@@ -2335,7 +2052,7 @@ message09:
   .ascii ""    
   .ascii "     KRAKATOA (Arte, espíritu y magia)"   
   .ascii ""  
-  .ascii "     CARLINHO (el OSO de OSOLABs,  assembler y hardware"
+  .ascii "     CARLINHO (el OSO de OSOLABs,  assembler y hardware)"
   .ascii ""  
   .ascii ""
   .ascii ""
@@ -2371,20 +2088,20 @@ initialScreen:
   .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
   .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
 
-left_cursor_endings:
- ; .byte  $80,$c0,$94,$d4
-  .byte  $88,$c8,$9c,$dc  
+; left_cursor_endings:
+;  ; .byte  $80,$c0,$94,$d4
+;   .byte  $88,$c8,$9c,$dc  
 
-right_cursor_endings:
-  .byte  $93,$d3,$a7,$e7
+; right_cursor_endings:
+;   .byte  $93,$d3,$a7,$e7
 
-; up_cursor_endings:
-;   .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8F,$8E,$90,$91,$92,$93
-up_cursor_endings: ;so it is all in one line
-  .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$DD,$DE,$DF,$E0,$E1,$E2,$E3,$E4,$E5,$E6,$E7
+; ; up_cursor_endings:
+; ;   .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8F,$8E,$90,$91,$92,$93
+; up_cursor_endings: ;so it is all in one line
+;   .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$DD,$DE,$DF,$E0,$E1,$E2,$E3,$E4,$E5,$E6,$E7
   
-down_cursor_endings:
-  .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$DD,$DE,$DF,$E0,$E1,$E2,$E3,$E4,$E5,$E6,$E7
+; down_cursor_endings:
+;   .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$DD,$DE,$DF,$E0,$E1,$E2,$E3,$E4,$E5,$E6,$E7
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
