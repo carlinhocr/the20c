@@ -314,8 +314,8 @@ playScareBytesLoop:
   cpy 29
   bne playScareBytesLoop
   rts
-    
 
+  
 scaleNotes:
   .byte $03,$bc,$03,$54,$02,$f7,$02,$cc,$02,$7e,$02,$38,$01,$fa,$01,$de
   .byte $01,$fa,$02,$38,$02,$7e,$02,$cc,$02,$f7,$03,$54,$03,$bc
