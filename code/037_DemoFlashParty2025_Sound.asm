@@ -76,7 +76,8 @@ serialDrawindEndChar=$41
 soundLowByte=$50
 soundHighByte=$51
 soundDelay=$52
-
+musicalNotesLow=$53
+musicalNotesHigh=$54
 
 
 ;Memory Mappings
@@ -292,6 +293,34 @@ playMiddleCDelay:
   sta soundDelay
   jsr playSquareWaveDelay
   rts
+
+
+playScaleBytes:
+  lda #60
+  sta soundDelay
+  lda #< scaleNotes
+  sta musicalNotesLow
+  lda #> scaleNotes
+  sta musicalNotesHigh
+  ldy #$ff
+  ;end at number 29 decimal
+playScareBytesLoop:
+  iny
+  lda (musicalNotesLow),y ;read high byte
+  sta soundHighByte
+  lda (musicalNotesLow),y ; read low byte
+  sta soundLowByte
+  jsr playSquareWaveDelay
+  cpy 29
+  bne playScareBytesLoop
+  rts
+    
+
+scaleNotes:
+  .byte $03,$bc,$03,$54,$02,$f7,$02,$cc,$02,$7e,$02,$38,$01,$fa,$01,$de
+  .byte $01,$fa,$02,$38,$02,$7e,$02,$cc,$02,$f7,$03,$54,$03,$bc
+  ;notes hexa 03bc,0354,02f7,02cc,027e,0238,01fa,01de,01fa,0238,027e,02cc,02f7,0354,03bc
+  ;notes decimal 956, 852, 759,716,638,568,506,478,506,568,638,716,759,852,956  
 
 playScale:
    ;sound delay 60 always
@@ -782,6 +811,12 @@ playMario:
   rts
   
 playSquareWaveDelay: 
+;save register accumulator, x and y
+  pha
+  txa
+  pha
+  tya
+  pha
   lda soundLowByte
   ora soundHighByte ;if the OR is zero both bytes are zeroes a wave of aero lenght is empty
   beq squareWaveSilentDelay
@@ -811,6 +846,11 @@ playSquareWaveDelayInnerLoop:
   lda #%00000000
   sta SOUND_ACR
 squareWaveSilentDelayDone:
+  pla 
+  tya ;recover y
+  pla
+  txa ; receover x
+  pla ; recover accummulator
   rts
 
 ;END--------------------------------------------------------------------------------
