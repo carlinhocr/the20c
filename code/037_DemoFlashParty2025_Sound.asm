@@ -303,24 +303,9 @@ playScaleBytes:
   sta musicalNotesLow
   lda #> scaleNotes
   sta musicalNotesHigh
-  ldy #$ff
-  ;end at number 29 decimal
-playScaleBytesLoop:
-  iny
-  lda (musicalNotesLow),y ;read high byte
-  sta soundHighByte
-  iny
-  lda (musicalNotesLow),y ; read low byte
-  sta soundLowByte
-  iny
-  lda (musicalNotesLow),y
-  sta soundDelay
-  jsr playSquareWaveDelay
-  cpy #44
-  bne playScaleBytesLoop
+  jsr playNotes
   rts
 
-  
 scaleNotes:
   ;format musical note hight byte, musical note low byte, duration
   .byte $03,$bc,60
@@ -340,6 +325,27 @@ scaleNotes:
   .byte $03,$bc,60
   ;notes hexa 03bc,0354,02f7,02cc,027e,0238,01fa,01de,01fa,0238,027e,02cc,02f7,0354,03bc
   ;notes decimal 956, 852, 759,716,638,568,506,478,506,568,638,716,759,852,956  
+
+
+playNotes:  
+  ldy #$ff
+  ;end at number 29 decimal
+playNotesLoop:
+  iny
+  lda (musicalNotesLow),y ;read high byte
+  sta soundHighByte
+  iny
+  lda (musicalNotesLow),y ; read low byte
+  sta soundLowByte
+  iny
+  lda (musicalNotesLow),y
+  sta soundDelay
+  jsr playSquareWaveDelay
+  cpy #44
+  bne playNotesLoop
+  rts
+
+  
 
 playScale:
    ;sound delay 60 always
