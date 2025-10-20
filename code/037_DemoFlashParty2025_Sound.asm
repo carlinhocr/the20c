@@ -143,7 +143,8 @@ programStart:
   ;jsr squareWaveTest;
   ;jsr playMiddleCDelay
   ;jsr playScale
-  jsr playMario
+  jsr playScaleBytes
+  ;jsr playMario
 loop:
   jmp loop
 
