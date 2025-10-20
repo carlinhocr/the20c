@@ -308,7 +308,7 @@ playScaleBytes:
   ;end at number 29 decimal
 playScaleBytesLoop:
   iny
-  lda (musicalNotesLow),y ;read high byte
+  lda (musicalNotesHigh),y ;read high byte
   sta soundHighByte
   lda (musicalNotesLow),y ; read low byte
   sta soundLowByte
