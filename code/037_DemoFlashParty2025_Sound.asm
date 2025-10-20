@@ -78,7 +78,8 @@ soundHighByte=$51
 soundDelay=$52
 musicalNotesLow=$53
 musicalNotesHigh=$54
-musicalDuration=$55
+musicalDurationLow=$55
+musicalDurationHigh=$56
 
 
 ;Memory Mappings
@@ -298,8 +299,6 @@ playMiddleCDelay:
 
 
 playScaleBytes:
-  lda #60
-  sta soundDelay
   lda #< scaleNotes
   sta musicalNotesLow
   lda #> scaleNotes
@@ -313,15 +312,32 @@ playScaleBytesLoop:
   iny
   lda (musicalNotesLow),y ; read low byte
   sta soundLowByte
+  iny
+  lda (musicalNotesLow),y
+  sta soundDelay
   jsr playSquareWaveDelay
-  cpy #29
+  cpy #44
   bne playScaleBytesLoop
   rts
 
   
 scaleNotes:
-  .byte $03,$bc,$03,$54,$02,$f7,$02,$cc,$02,$7e,$02,$38,$01,$fa,$01,$de
-  .byte $01,$fa,$02,$38,$02,$7e,$02,$cc,$02,$f7,$03,$54,$03,$bc
+  ;format musical note hight byte, musical note low byte, duration
+  .byte $03,$bc,60
+  .byte $03,$54,60
+  .byte $02,$f7,60
+  .byte $02,$cc,60
+  .byte $02,$7e,60
+  .byte $02,$38,60
+  .byte $01,$fa,60
+  .byte $01,$de,60
+  .byte $01,$fa,60
+  .byte $02,$38,60
+  .byte $02,$7e,60
+  .byte $02,$cc,60
+  .byte $02,$f7,60
+  .byte $03,$54,60
+  .byte $03,$bc,60
   ;notes hexa 03bc,0354,02f7,02cc,027e,0238,01fa,01de,01fa,0238,027e,02cc,02f7,0354,03bc
   ;notes decimal 956, 852, 759,716,638,568,506,478,506,568,638,716,759,852,956  
 
