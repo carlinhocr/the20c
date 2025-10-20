@@ -80,6 +80,7 @@ musicalNotesLow=$53
 musicalNotesHigh=$54
 musicalDurationLow=$55
 musicalDurationHigh=$56
+totalMusicalBytes=$57
 
 
 ;Memory Mappings
@@ -146,6 +147,7 @@ programStart:
   ;jsr playMiddleCDelay
   jsr playScale
   jsr playScaleBytes
+  jsr playMarioBytes
   ;jsr playMario
 loop:
   jmp loop
@@ -326,6 +328,31 @@ scaleNotes:
   ;notes hexa 03bc,0354,02f7,02cc,027e,0238,01fa,01de,01fa,0238,027e,02cc,02f7,0354,03bc
   ;notes decimal 956, 852, 759,716,638,568,506,478,506,568,638,716,759,852,956  
 
+playMarioBytes:
+  lda #< marioNotes
+  sta musicalNotesLow
+  lda #> marioNotes
+  sta musicalNotesHigh
+  jsr playNotes
+  rts
+
+marioNotes:
+  .byte $00,$be,75
+  .byte $00,$be,75
+  .byte $00,$00,75
+  .byte $00,$00,75
+  .byte $00,$ef,75
+  .byte $00,$be,75  
+  .byte $00,$00,75
+  .byte $00,$9f,75  
+  .byte $00,$00,75
+  .byte $00,$00,75
+  .byte $00,$00,75   
+  .byte $01,$3f,75  
+  .byte $00,$00,75
+  .byte $00,$00,75
+  .byte $00,$00,75   
+  .byte $00,$ef,75  
 
 playNotes:  
   ldy #$ff
