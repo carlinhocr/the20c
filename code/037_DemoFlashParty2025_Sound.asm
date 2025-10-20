@@ -308,8 +308,9 @@ playScaleBytes:
   ;end at number 29 decimal
 playScaleBytesLoop:
   iny
-  lda (musicalNotesHigh),y ;read high byte
+  lda (musicalNotesLow),y ;read high byte
   sta soundHighByte
+  iny
   lda (musicalNotesLow),y ; read low byte
   sta soundLowByte
   jsr playSquareWaveDelay
