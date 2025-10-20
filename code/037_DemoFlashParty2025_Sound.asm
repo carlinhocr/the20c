@@ -848,9 +848,9 @@ playSquareWaveDelayInnerLoop:
   sta SOUND_ACR
 squareWaveSilentDelayDone:
   pla 
-  tya ;recover y
+  tay ;recover y
   pla
-  txa ; receover x
+  tax ; recover x
   pla ; recover accummulator
   rts
 
