@@ -78,6 +78,7 @@ soundHighByte=$51
 soundDelay=$52
 musicalNotesLow=$53
 musicalNotesHigh=$54
+musicalDuration=$55
 
 
 ;Memory Mappings
@@ -305,15 +306,15 @@ playScaleBytes:
   sta musicalNotesHigh
   ldy #$ff
   ;end at number 29 decimal
-playScareBytesLoop:
+playScaleBytesLoop:
   iny
   lda (musicalNotesLow),y ;read high byte
   sta soundHighByte
   lda (musicalNotesLow),y ; read low byte
   sta soundLowByte
   jsr playSquareWaveDelay
-  cpy 29
-  bne playScareBytesLoop
+  cpy #29
+  bne playScaleBytesLoop
   rts
 
   
@@ -813,11 +814,11 @@ playMario:
   
 playSquareWaveDelay: 
 ;save register accumulator, x and y
-  pha
-  txa
-  pha
-  tya
-  pha
+  pha ;store accumulator
+  txa ;store x
+  pha ;store x
+  tya ;store y
+  pha ;store y
   lda soundLowByte
   ora soundHighByte ;if the OR is zero both bytes are zeroes a wave of aero lenght is empty
   beq squareWaveSilentDelay
@@ -847,11 +848,11 @@ playSquareWaveDelayInnerLoop:
   lda #%00000000
   sta SOUND_ACR
 squareWaveSilentDelayDone:
-  pla 
+  pla ;recover y
   tay ;recover y
-  pla
-  tax ; recover x
-  pla ; recover accummulator
+  pla ;recover x
+  tax ;recover x
+  pla ;recover accummulator
   rts
 
 ;END--------------------------------------------------------------------------------
