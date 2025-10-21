@@ -341,6 +341,8 @@ playScaleBytes:
   sta musicalNotesLow
   lda #> scaleNotes
   sta musicalNotesHigh
+  lda #44 ;zero t 75
+  sta totalMusicalBytes
   jsr playNotes
   rts
 
@@ -369,6 +371,8 @@ playHappyBirthdayBytes:
   sta musicalNotesLow
   lda #> happyBirthdayNotes
   sta musicalNotesHigh
+  lda #74 ;zero t 75
+  sta totalMusicalBytes
   jsr playNotes
   rts
 
@@ -419,6 +423,8 @@ playMarioBytes:
   sta musicalNotesLow
   lda #> marioNotes
   sta musicalNotesHigh
+  lda #44 ;zero t 75
+  sta totalMusicalBytes
   jsr playNotes
   rts
 
@@ -454,7 +460,7 @@ playNotesLoop:
   lda (musicalNotesLow),y
   sta soundDelay
   jsr playSquareWaveDelay
-  cpy #44
+  cpy totalMusicalBytes
   bne playNotesLoop
   rts
 
