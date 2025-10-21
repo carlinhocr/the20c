@@ -24,5 +24,9 @@ for key_number in range(1, 89):  # Teclas 1 a 88
 
     high_byte_str = f"${high_byte:02X}"
     low_byte_str = f"${low_byte:02X}"
+    directive_byte="  .byte"
 
     print(f"{full_note}, {frequency:.2f}, {extra_value}, {hex_value}, {high_byte_str}, {low_byte_str}")
+
+    print(f"  .byte {high_byte_str}, {low_byte_str} ;{full_note}")
+ 
