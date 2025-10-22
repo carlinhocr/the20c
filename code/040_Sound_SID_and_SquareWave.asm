@@ -116,7 +116,10 @@ musicalNotesHigh=$54
 musicalDurationLow=$55
 musicalDurationHigh=$56
 totalMusicalBytes=$57
-
+sidLocationLow=$58
+sidLocationHigh=$59
+sidNotesLow=$5a
+sidNotesHigh=$5b
 
 ;Memory Mappings
 ;these are constants where we reflect the number of the memory position
@@ -263,7 +266,158 @@ viaSoundInit:
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------SOUNDPROGRAM---------------------------------------
+;-----------------------------------SIDINIT-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;clear sid register
+sidInit:
+  ;SID_V1FL is where all sid registers start
+  lda #< SID_V1FL
+  sta sidLocationLow
+  lda #> SID_V1FL
+  sta sidLocationHigh
+  ldy #$FF
+  lda #$0
+sidInitLoop:
+  iny 
+  sta (sidLocationLow),y 
+  cpy #$28
+  bne sidInitLoop
+  rts
+
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------SIDINIT-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SOUND SID -----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+sidNotesExamplePlay:
+  ;load note address
+  lda #< sidNotesExample
+  sta sidNotesLow
+  lda #> sidNotesExample
+  sta sidNotesHigh
+  jsr soundSid
+  rts
+
+soundSid:
+  jsr sidInit
+  ;set attacj/decay for Voice 1
+  lda #9
+  sta SID_V1AD
+  ;set sustain/release for Voice 1
+  lda #6
+  sta SID_V1SR
+  ;set Volume to maximum
+  lda #15
+  sta SID_FILTER_MV
+playSidNotes:  
+  ;play notes
+  ldy #$FF
+playSidNotesLoop:
+  iny 
+  lda (sidNotesLow),y 
+  cmp #$FF
+  beq playSidNotesEnd 
+  ;store high frequency for Voice 1
+  sta SID_V1FH
+  ;load and store low frequency for Voice 1
+  iny
+  lda (sidNotesLow),y 
+  sta SID_V1FL
+  ;load and wait duration for Voice 1
+  iny
+  lda (sidNotesLow),y 
+  sta soundDelay
+  ;set wave form sawtooth
+  lda #33
+  sta SID_V1CTRL
+  ;wait soundDelay time
+  jsr sidSoundDelay
+  ;release of wave form sawtooth
+  lda #32
+  sta SID_V1CTRL
+  ;wait 50 for the duration of the release before next note
+  lda #50
+  sta soundDelay
+  jsr sidSoundDelay
+  ;play next note
+  jmp playSidNotesLoop
+
+playSidNotesEnd:  
+  ;it reaches here when the hight byte for
+  ;the ound note is $FF
+  rts
+  
+sidSoundDelay:
+  ;save state to the stack
+  pha ;store accumulator
+  txa ;store x
+  pha ;store x
+  tya ;store y
+  pha ;store y
+  lda soundDelay
+  tax
+  cpx #$0
+  beq sidSoundDelayDone
+sidSoundDelayLoop:
+  ldy #$FF
+sidSoundDelayInnerLoop:
+  nop
+  nop  
+  dey
+  bne sidSoundDelayInnerLoop
+  dex
+  bne sidSoundDelayLoop
+sidSoundDelayDone:  
+  pla ;recover y
+  tay ;recover y
+  pla ;recover x
+  tax ;recover x
+  pla ;recover accummulator
+  rts
+
+
+sidNotesExample:
+;all in decimal high byte, low byte, duration
+;example from the programmers reference guide
+  .byte 25,177,250
+  .byte 28,214,250
+  .byte 25,177,250
+  .byte 25,177,250
+  .byte 25,177,125
+  .byte 28,214,125
+  .byte 32,94,250
+  .byte 25,177,250
+  .byte 28,214,250
+  .byte 19,63,250
+  .byte 21,154,63
+  .byte 24,63,63
+  .byte 25,177,250
+  .byte 24,63,125
+  .byte 19,63,250
+  .byte $FF,$FF,$FF    
+
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SOUND SID -----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------SOUND SQUARE PROGRAM-------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
@@ -1181,7 +1335,7 @@ notesInHexa:
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------SOUNDPROGRAM---------------------------------------
+;------------------------------SOUND SQUARE PROGRAM---------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 nmi:
