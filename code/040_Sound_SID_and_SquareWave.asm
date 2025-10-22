@@ -399,21 +399,21 @@ sidSoundDelayDone:
 sidNotesExample:
 ;all in decimal high byte, low byte, duration
 ;example from the programmers reference guide
-  .byte 25,177,250
-  .byte 28,214,250
-  .byte 25,177,250
-  .byte 25,177,250
-  .byte 25,177,125
-  .byte 28,214,125
-  .byte 32,94,250
-  .byte 25,177,250
-  .byte 28,214,250
-  .byte 19,63,250
-  .byte 21,154,63
-  .byte 24,63,63
-  .byte 25,177,250
-  .byte 24,63,125
-  .byte 19,63,250
+  .byte 25,177,250 ;g4
+  .byte 28,214,250 ;a4
+  .byte 25,177,250 ;g4
+  .byte 25,177,250 ;g4
+  .byte 25,177,125 ;g4
+  .byte 28,214,125 ;a4
+  .byte 32,94,250  ;b4
+  .byte 25,177,250 ;g4
+  .byte 28,214,250 ;a4
+  .byte 19,63,250  ;d4
+  .byte 21,154,63  ;e4
+  .byte 24,63,63   ;f#4
+  .byte 25,177,250 ;g4
+  .byte 24,63,125  ;f#4
+  .byte 19,63,250  ;d4
   .byte $FF,$FF,$FF    
 
 
