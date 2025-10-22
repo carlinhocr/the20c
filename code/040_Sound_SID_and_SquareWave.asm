@@ -186,7 +186,7 @@ loop:
   jmp loop
 
 squareTest:
-  jsr viaSoundInit
+  jsr viaSoundInit ;j
   ;jsr squareWaveTest;
   ;jsr playMiddleCDelay
   jsr playScale
