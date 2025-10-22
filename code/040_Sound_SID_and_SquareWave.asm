@@ -180,6 +180,12 @@ programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
   jsr viaLcdInit
+  jsr squareTest
+  jsr sidTest
+loop:
+  jmp loop
+
+squareTest:
   jsr viaSoundInit
   ;jsr squareWaveTest;
   ;jsr playMiddleCDelay
@@ -188,8 +194,12 @@ programStart:
   jsr playHappyBirthdayBytes
   jsr playMarioBytes
   ;jsr playMario
-loop:
-  jmp loop
+  rts
+
+sidTest:
+  jsr sidNotesExamplePlay
+  rts
+
 
 
 
