@@ -179,8 +179,8 @@ RESET:
 programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
-  jsr viaLcdInit
-  jsr squareTest
+  ;jsr viaLcdInit
+  ;jsr squareTest
   jsr sidTest
 loop:
   jmp loop
@@ -194,10 +194,6 @@ squareTest:
   jsr playHappyBirthdayBytes
   jsr playMarioBytes
   ;jsr playMario
-  rts
-
-sidTest:
-  jsr sidNotesExamplePlay
   rts
 
 
@@ -308,6 +304,37 @@ sidInitLoop:
 ;--------------------------------SOUND SID -----------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+
+sidTest:
+  jsr sidInit
+  ;set attacj/decay for Voice 1
+  ;bits 7-4 attack bits 3-0 decay
+  ;9 is 0001 0001
+  ;8ms of attack and 24ms of decay
+  ;measured on a 1Mhz clock
+  ;for other frecuency multiple 1Mhz/other freq
+  lda #9;0001 0001
+  sta SID_V1AD
+  ;set sustain/release for Voice 1
+  ;bits 7-4 sustain bits 3-0 release
+  ;6 is 0000 0110
+  ;sustain at zero amplitud
+  ;decay identical to release scale
+  ;6 is 204ms
+  lda #6
+  sta SID_V1SR
+  ;set Volume to maximum
+  lda #15
+  sta SID_FILTER_MV
+  lda #$1C ;a4 high byte
+  sta SID_V1FH
+  lda #$D5; a4 low byte
+  sta SID_V1FL
+  lda #33 ;
+  sta SID_V1CTRL
+testSidLoop:
+  jmp testSidLoop
+
 
 sidNotesExamplePlay:
   ;load note address
