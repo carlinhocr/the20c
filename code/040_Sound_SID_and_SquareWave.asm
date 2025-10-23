@@ -321,9 +321,19 @@ sidNotesExamplePlay:
 soundSid:
   jsr sidInit
   ;set attacj/decay for Voice 1
-  lda #9
+  ;bits 7-4 attack bits 3-0 decay
+  ;9 is 0001 0001
+  ;8ms of attack and 24ms of decay
+  ;measured on a 1Mhz clock
+  ;for other frecuency multiple 1Mhz/other freq
+  lda #9;0001 0001
   sta SID_V1AD
   ;set sustain/release for Voice 1
+  ;bits 7-4 sustain bits 3-0 release
+  ;6 is 0000 0110
+  ;sustain at zero amplitud
+  ;decay identical to release scale
+  ;6 is 204ms
   lda #6
   sta SID_V1SR
   ;set Volume to maximum
@@ -347,13 +357,19 @@ playSidNotesLoop:
   iny
   lda (sidNotesLow),y 
   sta soundDelay
-  ;set wave form sawtooth
-  lda #33
+  ;bit 5 selects sawtooth
+  ;00100001 
+  ;the third bit turn on sawtooth
+  ;the last bit turns on the Attack Delay Sustain cycle
+  ;this starts playing the note
+  lda #33 ;
   sta SID_V1CTRL
   ;wait soundDelay time
   jsr sidSoundDelay
-  ;release of wave form sawtooth
-  lda #32
+  ;00100001 
+  ;bit 5 selects sawtooth
+  ;the last bit turns off starts the Release Phase
+  lda #32 ;0010000
   sta SID_V1CTRL
   ;wait 50 for the duration of the release before next note
   lda #50
