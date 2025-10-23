@@ -181,7 +181,9 @@ programStart:
   ;configure stack and enable interrupts
   ;jsr viaLcdInit
   ;jsr squareTest
-  jsr sidTest
+  ;jsr sidTest
+  jsr sidNotesExamplePlay
+  jmp programStart
 loop:
   jmp loop
 
