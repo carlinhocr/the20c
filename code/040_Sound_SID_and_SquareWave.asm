@@ -330,8 +330,26 @@ sidTest:
   sta SID_V1FH
   lda #$D5; a4 low byte
   sta SID_V1FL
-  lda #33 ;
+  ;bit 5 selects sawtooth
+  ;00100001 
+  ;the third bit turn on sawtooth
+  ;the last bit turns on the Attack Delay Sustain cycle
+  ;this starts playing the note
+  ;lda #33 ;
+  ;sta SID_V1CTRL
+  ;bit 5 selects sawtooth
+  ;00100001 
+  ;the third bit turn on sawtooth
+  ;the last bit turns on the Attack Delay Sustain cycle
+  ;this starts playing the note
+  lda #$03
+  sta $4002
+  lda #$FF
+  sta $4003
+  lda #%01000001 ;
   sta SID_V1CTRL
+  jmp sidTest
+
 testSidLoop:
   jmp testSidLoop
 
