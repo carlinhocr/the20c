@@ -104,6 +104,9 @@ RESET:
   ;initialize stack
   ldx #$ff
   txs ;transfer x index register to stack register
+  ;before interrupts are diseble we initialize the buffer
+  ;so the buffer is initialized before interrupts come in
+  jsr initializeBuffer
   ;clear interrupt disable bit
   cli ;sets at zero the interrupt disable bit 
       ;N Z C I D V
@@ -263,7 +266,9 @@ uartSerialInit:
   ;bit 0 =1 -> Data terminal Ready (DTRB Low)
   lda #%00001001 ;
   sta ACIA_CMD
+  rts
 
+initializeBuffer:  
   ;initialize inputBuffer both read and write pointers to the start of the buffer
   lda #< inputBuffer
   sta read_buffer_ptr_low
@@ -276,7 +281,6 @@ uartSerialInit:
   lda #$0
   sta readBufferPtr
   sta writeBufferPtr
-
   rts
 
 ;END--------------------------------------------------------------------------------
@@ -1052,7 +1056,23 @@ down_cursor_endings:
   
 nmi:
 irq:
-    rti
+   ;interrupt handler for character to store on the buffer
+   ;copies character from the read register ACIA_DATA of the 6551
+   pha ;save the old accumulator value
+   txa ;save the old x register value
+   pha ;save the old x register value
+   lda ACIA_STATUS ;to acknoledge the interrupt and check if it caused the interrupt
+   and %00001000 ;bit 3 receiver data register is bit 3
+   ;if it is zero the bit 3 was zero and the and was zero 
+   ;if it was one then the beq is false and we keep going through the ACIA handler
+   beq irqNextHandler 
+   lda ACIA_DATA ;read the receiver data register and clears de bit3 of Status Register
+   jsr write_buffer   
+irqNextHandler:   
+   pla ;retrieve the old x register value
+   tax ;retrieve the old x register value
+   pla ;retrieve the old accumulator value
+   rti
 
 
 ;complete the file
