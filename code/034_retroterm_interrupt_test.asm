@@ -311,23 +311,32 @@ send_rs232_message_end:
   jsr send_rs232_char
   lda #$0a
   jsr send_rs232_char 
-  jmp loopReceiveData ;go to listening mode
-
-  ;wait until the status register bit 3 receive data register is full =1, then 
-  ;read the data register
-loopReceiveData:
-   
-  lda ACIA_STATUS
-  and #%00001000; and it to see if bit 3 is one, delete all the other bits
-  beq loopReceiveData ; if zero we have not received anythinßg
-  ;if we are here we have a byte to read
-  lda ACIA_DATA ;read character
-  jsr print_char ;print the char on the local lcd of the 20 c
-  jsr send_rs232_char ;echo the character typed
-  jmp loopReceiveData ;go to wait for next character
-  rts
+  jmp receive_rs232_Data ;go to listening mode
 
 rs232_message: .asciiz "20c RetroTerm Ready" ;\r carriage return \n line feed
+
+;Modifies Flags, A
+receive_rs232_Data: ;CHRIN
+  ;lets preserve x and y
+  txa
+  pha
+  tya
+  pha
+receive_rs232_Data_loop: ;CHRIN
+  jsr read_buffer_size
+  beq receive_rs232_Data_NocharsLeft ;if no chars return
+  jsr read_buffer
+  jsr print_char ;print the char on the local lcd of the 20 c
+  jsr send_rs232_char ;echo the character typed
+  jmp receive_rs232_Data_loop ;as the buffer was not zero read the buffer and next character
+receive_rs232_Data_NocharsLeft:
+  ;lets reload y and X (always reverse the order as it a a stack)
+  pla
+  tay
+  pla
+  tax
+  clc
+  rts
 
 send_rs232_char:
   sta ACIA_DATA ;wrie whatever is on the accumulator to the transmit register
@@ -371,7 +380,19 @@ read_buffer_size:
   sbc readBufferPtr ;substract the read buffer pointer from the write pointer
   rts
 
-
+  ;wait until the status register bit 3 receive data register is full =1, then 
+  ;read the data register directly from hardware and not a buffer
+loopReceiveData:
+   
+  lda ACIA_STATUS
+  and #%00001000; and it to see if bit 3 is one, delete all the other bits
+  beq loopReceiveData ; if zero we have not received anythinßg
+  ;if we are here we have a byte to read
+  lda ACIA_DATA ;read character
+  jsr print_char ;print the char on the local lcd of the 20 c
+  jsr send_rs232_char ;echo the character typed
+  jmp loopReceiveData ;go to wait for next character
+  rts
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------SERIALUART-----------------------------------------
@@ -1058,11 +1079,13 @@ nmi:
 irq:
    ;interrupt handler for character to store on the buffer
    ;copies character from the read register ACIA_DATA of the 6551
+   ;CONNECT DSR and DCD to ground if not using them or to a button 
+   ;that ground them as to not use them if not needed
    pha ;save the old accumulator value
    txa ;save the old x register value
    pha ;save the old x register value
    lda ACIA_STATUS ;to acknoledge the interrupt and check if it caused the interrupt
-   and %00001000 ;bit 3 receiver data register is bit 3
+   and #%00001000 ;bit 3 receiver data register is bit 3
    ;if it is zero the bit 3 was zero and the and was zero 
    ;if it was one then the beq is false and we keep going through the ACIA handler
    beq irqNextHandler 
