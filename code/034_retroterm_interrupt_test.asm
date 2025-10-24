@@ -346,11 +346,28 @@ tx_delay_loop:
   bne tx_delay_loop ; 3 cycles
   rts
 
-
+;modifies flags, X
 write_buffer:
   ldx writeBufferPtr
   sta inputBuffer,x
+  inc writeBufferPtr
   rts
+
+;modifies flags, X, A
+read_buffer:
+  ldx readBufferPtr
+  lda inputBuffer,x
+  inc readBufferPtr
+  rts  
+
+;modifies flags, A
+read_buffer_size:
+  lda writeBufferPtr
+  sec ;set carry bit
+  sbc readBufferPtr ;substract the read buffer pointer from the write pointer
+  rts
+
+
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------SERIALUART-----------------------------------------
