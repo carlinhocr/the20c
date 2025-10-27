@@ -82,7 +82,7 @@ programStart:
   ;configure stack and enable interrupts
   jsr sidInit
   jsr sidTest
-  jmp programStart
+  jmp sidTest
 loop:
   jmp loop
 
@@ -131,13 +131,18 @@ sidInitLoop:
 ;-----------------------------------------------------------------------------------
 
 sidTest:
+  ;set Volume to maximum
+  lda #15 
+  sta SID_FILTER_MV ;$4018
+
+
   ;set attacj/decay for Voice 1
   ;bits 7-4 attack bits 3-0 decay
-  ;9 is 0001 0001
+  ;9 is 0000 1001
   ;8ms of attack and 24ms of decay
   ;measured on a 1Mhz clock
   ;for other frecuency multiple 1Mhz/other freq
-  lda #9;0001 0001
+  lda #9;0000 1001
   sta SID_V1AD ;$4005
   ;set sustain/release for Voice 1
   ;bits 7-4 sustain bits 3-0 release
@@ -147,9 +152,7 @@ sidTest:
   ;6 is 204ms
   lda #6
   sta SID_V1SR ;$4006
-  ;set Volume to maximum
-  lda #15 
-  sta SID_FILTER_MV ;$4018
+sidTestLoop:
   lda #$1C ;a4 high byte
   sta SID_V1FH
   lda #$D5; a4 low byte
@@ -160,16 +163,17 @@ sidTest:
   ;the last bit turns on the Attack Delay Sustain cycle
   ;this starts playing the note
   ;lda #33 ;
-  lda #%00100001
+  ;lda #%00100001
+  lda #33 ;triangle wave form
   sta SID_V1CTRL;$4004
   jsr sidSoundDelay ;wait
-  ;lda #32
+  lda #32
   ;start release
-  lda #%00100000
+  ;lda #%00100000
   sta SID_V1CTRL;$4004
   jsr sidSoundDelay ;wait
   ;loop again
-  jmp sidTest
+  jmp sidTestLoop
 
   
 sidSoundDelay:
@@ -182,9 +186,9 @@ sidSoundDelay:
   ;lda soundDelay
   lda #$FF
   tax
+sidSoundDelayLoop:
   cpx #$0
   beq sidSoundDelayDone
-sidSoundDelayLoop:
   ldy #$FF
 sidSoundDelayInnerLoop:
   nop
