@@ -184,7 +184,7 @@ sidSoundDelay:
   tya ;store y
   pha ;store y
   ;lda soundDelay
-  lda #$FF
+  lda #$20
   tax
 sidSoundDelayLoop:
   cpx #$0
