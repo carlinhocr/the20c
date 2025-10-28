@@ -500,6 +500,7 @@ sidScale:
   .byte $2B, $34,60 ;e5
   .byte $26, $7D,60 ;d5
   .byte $22, $4A,60 ;c5  
+  .byte $FF,$FF,$FF    
 
 
 notesInHexaSID_1Mhz:
