@@ -183,7 +183,6 @@ programStart:
   ;jsr squareTest
   ;jsr sidTest
   jsr sidNotesExamplePlay
-  jmp programStart
 loop:
   jmp loop
 
@@ -372,7 +371,7 @@ soundSid:
   ;9 is 0001 0001
   ;8ms of attack and 24ms of decay
   ;measured on a 1Mhz clock
-  ;for other frecuency multiple 1Mhz/other freq
+  ;for other frecuency multiple 1Mhz/other freq  
   lda #9;0001 0001
   sta SID_V1AD
   ;set sustain/release for Voice 1
@@ -426,6 +425,7 @@ playSidNotesLoop:
   jmp playSidNotesLoop
 
 playSidNotesEnd:  
+  jmp playSidNotes ;keep playing in loop
   ;it reaches here when the hight byte for
   ;the ound note is $FF
   rts
