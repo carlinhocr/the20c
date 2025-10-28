@@ -219,6 +219,7 @@ sidPlayerMessage:
   lda #>screen1_sidPlayer
   sta charDataVectorHigh
   jsr print_ascii_screen  
+  rts
 
 screen1_sidPlayer:
   .asciiz "                    "
