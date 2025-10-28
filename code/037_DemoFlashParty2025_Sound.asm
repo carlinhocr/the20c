@@ -310,7 +310,7 @@ playScaleBytes:
 
 scaleNotes:
   ;format musical note hight byte, musical note low byte, duration
-  .byte $03,$bc,60 ;a5 956
+  .byte $03,$bc,60 ;c5 956
   .byte $03,$54,60 ;d5 852
   .byte $02,$f7,60 ;e5
   .byte $02,$cc,60 ;f5
@@ -324,7 +324,7 @@ scaleNotes:
   .byte $02,$cc,60 ;f5
   .byte $02,$f7,60 ;e5
   .byte $03,$54,60 ;d5
-  .byte $03,$bc,60 ;a5
+  .byte $03,$bc,60 ;c5
   ;notes hexa 03bc,0354,02f7,02cc,027e,0238,01fa,01de,01fa,0238,027e,02cc,02f7,0354,03bc
   ;notes decimal 956, 852, 759,716,638,568,506,478,506,568,638,716,759,852,956  
 
