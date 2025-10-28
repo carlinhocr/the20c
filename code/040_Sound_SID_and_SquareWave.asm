@@ -362,6 +362,11 @@ sidNotesExamplePlay:
   lda #> sidNotesExample
   sta sidNotesHigh
   jsr soundSid
+  lda #< sidScale
+  sta sidNotesLow
+  lda #> sidScale
+  sta sidNotesHigh
+  jsr soundSid
   rts
 
 soundSid:
@@ -425,7 +430,7 @@ playSidNotesLoop:
   jmp playSidNotesLoop
 
 playSidNotesEnd:  
-  jmp playSidNotes ;keep playing in loop
+  ;jmp playSidNotes ;keep playing in loop
   ;it reaches here when the hight byte for
   ;the ound note is $FF
   rts
@@ -478,6 +483,23 @@ sidNotesExample:
   .byte 24,63,125  ;f#4
   .byte 19,63,250  ;d4
   .byte $FF,$FF,$FF    
+
+sidScale:
+  .byte $22, $4A,60 ;c5 956
+  .byte $26, $7D,60 ;d5 852
+  .byte $2B, $34,60 ;e5
+  .byte $2D, $C6,60 ;f5
+  .byte $33, $61,60 ;g5
+  .byte $39, $AB,60 ;a5
+  .byte $40, $BB,60 ;b5
+  .byte $44, $95,60 ;c6
+  .byte $40, $BB,60 ;b5
+  .byte $39, $AB,60 ;a5
+  .byte $33, $61,60 ;g5
+  .byte $2D, $C6,60 ;f5
+  .byte $2B, $34,60 ;e5
+  .byte $26, $7D,60 ;d5
+  .byte $22, $4A,60 ;c5  
 
 
 notesInHexaSID_1Mhz:
