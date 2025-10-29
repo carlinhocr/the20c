@@ -108,6 +108,9 @@ serialCharperLines = $3f
 serialTotalLinesAscii =$40
 serialDrawindEndChar=$41
 
+waveFormV1=$4d
+waveFormV2=$4e
+waveFormV3=$4f
 soundLowByte=$50
 soundHighByte=$51
 soundDelay=$52
@@ -118,8 +121,12 @@ musicalDurationHigh=$56
 totalMusicalBytes=$57
 sidLocationLow=$58
 sidLocationHigh=$59
-sidNotesLow=$5a
-sidNotesHigh=$5b
+sidNotesLowV1=$5a
+sidNotesHighV1=$5b
+sidNotesLowV2=$5c
+sidNotesHighV2=$5d
+sidNotesLowV3=$5e
+sidNotesHighV3=$5f
 
 ;constants
 fill=$43 ;letter C
@@ -454,19 +461,142 @@ sidTest:
 testSidLoop:
   jmp testSidLoop
 
+sidTestMultiNotes:
+  jsr sidInit
+  ;store contro byte wave form for each voice
+  lda #%00010001 ; triangle 17 set the code bit and start
+  sta waveFormV1
+  lda #%01000001 ; square 65 set the code bit and start
+  sta waveFormV2
+  lda #%00100001 ; sawtooth 17 set the code bit and start
+  sta waveFormV3
+  ldy #$FF
+sidTestMultiNotesDecodeNotes:
+  iny 
+  rts
+
 
 sidNotesExamplePlay:
   ;load note address
   lda #< sidNotesExample
-  sta sidNotesLow
+  sta sidNotesLowV1
   lda #> sidNotesExample
-  sta sidNotesHigh
+  sta sidNotesHighV1
   jsr soundSid
   lda #< sidScale
-  sta sidNotesLow
+  sta sidNotesLowV1
   lda #> sidScale
-  sta sidNotesHigh
+  sta sidNotesHighV1
   jsr soundSid
+  lda #< sidScale
+  sta sidNotesLowV1
+  lda #> sidScale
+  sta sidNotesHighV1
+  lda #< sidScale
+  sta sidNotesLowV2
+  lda #> sidScale
+  sta sidNotesHighV2
+  lda #< sidScale
+  sta sidNotesLowV3
+  lda #> sidScale
+  sta sidNotesHighV3
+  jsr soundSid3VoicesExample
+  rts
+
+soundSid3VoicesExample:
+  jsr sidInit
+  ;set attacj/decay for Voice 1,2,3
+  ;bits 7-4 attack bits 3-0 decay
+  ;9 is 0001 0001
+  ;8ms of attack and 24ms of decay
+  ;measured on a 1Mhz clock
+  ;for other frecuency multiple 1Mhz/other freq  
+  ;
+  lda #9;0001 0001
+  sta SID_V1AD
+  ;organ for voice 2
+  lda #0;0000 0000 
+  sta SID_V2AD
+  ;violin for voice 3
+  lda #$A8;1010 1000 
+  sta SID_V3AD
+  ;set sustain/release for Voice 1,2,3
+  ;bits 7-4 sustain bits 3-0 release
+  ;6 is 0000 0110
+  ;sustain at zero amplitud
+  ;decay identical to release scale
+  ;6 is 204ms
+  lda #6
+  sta SID_V1SR
+    ;organ for voice 2
+  lda #15;0000 1111 
+  sta SID_V2SR
+  ;violin for voice 3
+  lda #$A9;1010 1001 
+  sta SID_V3SR
+
+  ;set Volume to maximum
+  lda #15
+  sta SID_FILTER_MV
+playSidNotes3Voices:  
+  ;play notes
+  ldy #$FF
+playSidNotesLoop3Voices:
+  iny 
+  lda (sidNotesLowV1),y 
+  cmp #$FF
+  beq playSidNotesEnd3Voices 
+  ;store high frequency for Voice 1,2,3
+  sta SID_V1FH
+  lda (sidNotesLowV2),y 
+  sta SID_V2FH
+  lda (sidNotesLowV3),y 
+  sta SID_V3FH
+  ;load and store low frequency for Voice 1,2,3
+  iny
+  lda (sidNotesLowV1),y 
+  sta SID_V1FL
+  lda (sidNotesLowV2),y 
+  sta SID_V2FL
+  lda (sidNotesLowV3),y 
+  sta SID_V3FL
+  ;load and wait duration for Voice 1 for the 3 voices
+  iny
+  lda (sidNotesLowV1),y 
+  sta soundDelay
+  ;bit 5 selects sawtooth
+  ;00100001 
+  ;the third bit turn on sawtooth
+  ;the last bit turns on the Attack Delay Sustain cycle
+  ;this starts playing the note
+  lda #33 ; sawtooth ;0010000
+  sta SID_V1CTRL
+  lda #%01000001 ;square
+  sta SID_V2CTRL
+  lda #%00010001 ;triangle
+  sta SID_V3CTRL
+  ;wait soundDelay time
+  jsr sidSoundDelay
+  ;00100001 
+  ;bit 5 selects sawtooth
+  ;the last bit turns off starts the Release Phase
+  lda #32 ;0010000
+  sta SID_V1CTRL
+  lda #%01000000 ;square
+  sta SID_V2CTRL
+  lda #%00010000 ;triangle
+  sta SID_V3CTRL
+  ;wait 50 for the duration of the release before next note
+  lda #50
+  sta soundDelay
+  jsr sidSoundDelay
+  ;play next note
+  jmp playSidNotesLoop3Voices
+
+playSidNotesEnd3Voices:  
+  ;jmp playSidNotes ;keep playing in loop
+  ;it reaches here when the hight byte for
+  ;the ound note is $FF
   rts
 
 soundSid:
@@ -495,18 +625,18 @@ playSidNotes:
   ldy #$FF
 playSidNotesLoop:
   iny 
-  lda (sidNotesLow),y 
+  lda (sidNotesLowV1),y 
   cmp #$FF
   beq playSidNotesEnd 
   ;store high frequency for Voice 1
   sta SID_V1FH
   ;load and store low frequency for Voice 1
   iny
-  lda (sidNotesLow),y 
+  lda (sidNotesLowV1),y 
   sta SID_V1FL
   ;load and wait duration for Voice 1
   iny
-  lda (sidNotesLow),y 
+  lda (sidNotesLowV1),y 
   sta soundDelay
   ;bit 5 selects sawtooth
   ;00100001 
@@ -563,6 +693,9 @@ sidSoundDelayDone:
   pla ;recover accummulator
   rts
 
+parseNotes:
+  rts
+
 
 sidNotesExample:
 ;all in decimal high byte, low byte, duration
@@ -602,6 +735,22 @@ sidScale:
   .byte $22, $4A,60 ;c5  
   .byte $FF,$FF,$FF    
 
+sidScaleMultinote:
+  
+
+frequenciesSid_1Mhz
+  .byte $89, $2A ;C7
+  .byte $91, $52 ;C#7
+  .byte $99, $F7 ;D7
+  .byte $A3, $1E ;D#7
+  .byte $AC, $D1 ;E7
+  .byte $B7, $18 ;F7
+  .byte $C1, $FB ;F#7
+  .byte $CD, $84 ;G7
+  .byte $D9, $BD ;G#7
+  .byte $E6, $AF ;A7
+  .byte $F4, $67 ;A#7
+  .byte $02, $EF ;B7 set the carry bit to 1
 
 notesInHexaSID_1Mhz:
 ;SID values con 1Mhz
@@ -691,6 +840,7 @@ notesInHexaSID_1Mhz:
   .byte $D9, $BD ;G#7
   .byte $E6, $AF ;A7
   .byte $F4, $67 ;A#7
+  .byte $02, $EF ;B7 set the carry bit to 1
 
 ; SID values con 1Mhz
 ; Nota, Frecuencia (Hz), Valor Extra, Hexadecimal, High Byte, Low Byte
@@ -780,6 +930,7 @@ notesInHexaSID_1Mhz:
 ; G#7, 3322.44, 55741, 0xD9BD, $D9, $BD
 ; A7, 3520.00, 59055, 0xE6AF, $E6, $AF
 ; A#7, 3729.31, 62567, 0xF467, $F4, $67
+; B7   $01 $02, $EF set the carry bit to 1
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
