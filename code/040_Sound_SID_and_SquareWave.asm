@@ -108,6 +108,10 @@ serialCharperLines = $3f
 serialTotalLinesAscii =$40
 serialDrawindEndChar=$41
 
+musicNote=$49
+musicOctave=$4a
+notesParseLow=$4b
+notesParseHigh=$4c
 waveFormV1=$4d
 waveFormV2=$4e
 waveFormV3=$4f
@@ -938,6 +942,69 @@ notesInHexaSID_1Mhz:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------PARSER NOTES --------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+songExampleNotes:
+  .asciiz "a4,c4,z"
+
+parserNotes:
+  ldx #$FF
+parserNotesLoop:
+  inx
+  lda songExampleNotes,x
+  cmp #$7a;"z"
+  beq parserNotesEnd
+noteC:
+  inx  
+  lda songExampleNotes,x
+  cmp #$23;"#"
+  beq noteCNumeral
+  lda #$0 ;0 note for C
+  sta musicNote
+  beq parseOctave
+noteCNumeral:
+  lda #$1 ;1 note for c#
+  sta musicNote
+  inx
+  beq parseOctave
+
+noteD:
+  inx  
+  lda songExampleNotes,x
+  cmp #$23;"#"
+  beq noteCNumeral
+  lda #$2 ;2 note for D
+  sta musicNote
+  beq parseOctave
+noteDNumeral:
+  lda #$3 ;3 note for D#
+  sta musicNote
+  inx
+  beq parseOctave
+
+parseOctave:
+  lda songExampleNotes,x
+  sec ;lets substract 30 to obtain the number instead of ascii code
+  sbc #$30
+  sta musicOctave
+  inx
+  lda songExampleNotes,x
+  cmp #$2C ;" ,  "
+  beq parserNotesLoop
+  
+parserNotesEnd:
+  rts
+ 
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------PARSER NOTES --------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
 
 ;BEGIN------------------------------------------------------------------------------
