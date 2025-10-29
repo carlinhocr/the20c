@@ -742,6 +742,25 @@ sidScale:
 sidScaleMultinote:
   
 
+frequenciesSid_1Mhz_alphabetic:
+  .byte $E6, $AF ;A7
+  .byte $02, $EF ;B7 set the carry bit to 1
+  .byte $89, $2A ;C7
+  .byte $99, $F7 ;D7
+  .byte $AC, $D1 ;E7
+  .byte $B7, $18 ;F7
+  .byte $CD, $84 ;G7
+  .byte $F4, $67 ;A#7
+  .byte $00, $00 ;B#7 false note 
+  .byte $91, $52 ;C#7
+  .byte $A3, $1E ;D#7
+  .byte $00, $00 ;E#7 false note  
+  .byte $C1, $FB ;F#7
+  .byte $D9, $BD ;G#7
+
+
+
+
 frequenciesSid_1Mhz
   .byte $89, $2A ;C7
   .byte $91, $52 ;C#7
@@ -949,43 +968,30 @@ notesInHexaSID_1Mhz:
 ;-----------------------------------------------------------------------------------
 
 songExampleNotes:
-  .asciiz "a4,c4,z"
+  .asciiz "c5,d5,e5,f5,g5,a5,b5,a5,g5,f5,e5,d5,c5,z"
 
 parserNotes:
   ldx #$FF
 parserNotesLoop:
   inx
-  lda songExampleNotes,x
+  lda songExampleNotes,x ;here I load note
   cmp #$7a;"z"
   beq parserNotesEnd
-noteC:
-  inx  
-  lda songExampleNotes,x
+  sec
+  sbc #$61
+  sta musicNote ;0=a,1=b,etc ...8=b#7 9=b#7
+  inx  ;the X is for the octave or #
+  lda songExampleNotes,x ;here i load octave or #
   cmp #$23;"#"
-  beq noteCNumeral
-  lda #$0 ;0 note for C
-  sta musicNote
-  beq parseOctave
-noteCNumeral:
-  lda #$1 ;1 note for c#
-  sta musicNote
-  inx
-  beq parseOctave
+  bne parseOctave ;jumping with the octave on the accumulator and x index
+  lda #$7
+  clc
+  adc musicNote
 
-noteD:
-  inx  
-  lda songExampleNotes,x
-  cmp #$23;"#"
-  beq noteCNumeral
-  lda #$2 ;2 note for D
-  sta musicNote
-  beq parseOctave
-noteDNumeral:
-  lda #$3 ;3 note for D#
-  sta musicNote
-  inx
-  beq parseOctave
-
+  ;if musicNote was a then its value was 0
+  ;if I find de # the value is 0+7
+  ;finding its place in frequenciesSid_1Mhz_alphabetic
+  inx ; get X index to the octave after #
 parseOctave:
   lda songExampleNotes,x
   sec ;lets substract 30 to obtain the number instead of ascii code
@@ -998,6 +1004,119 @@ parseOctave:
   
 parserNotesEnd:
   rts
+
+
+;   cmp #$63 ;"c" and "c#"
+;   beq noteC
+;   cmp #$64 ;"d" and "d#"
+;   beq noteD
+;   cmp #$65 ;"e"
+;   beq noteE
+;   cmp #$66 ;"f" and "f#"
+;   beq noteF
+;   cmp #$67 ;"g" and "g#"
+;   beq noteG
+;   cmp #$61 ;"a" and "a#"
+;   beq noteA
+;   cmp #$62 ;"b"
+;   beq noteB
+
+; noteC:
+;   inx  ;the X is for the octave or #
+;   lda songExampleNotes,x ;here i load octave or #
+;   cmp #$23;"#"
+;   beq noteCNumeral
+;   lda #$0 ;0 note for C ;if not # save the note
+;   sta musicNote
+;   beq parseOctave
+; noteCNumeral:
+;   lda #$1 ;1 note for c#
+;   sta musicNote
+;   inx
+;   beq parseOctave
+
+; noteD:
+;   inx ;the X is for the octave or # 
+;   lda songExampleNotes,x 
+;   cmp #$23;"#"
+;   beq noteDNumeral
+;   lda #$2 ;2 note for D
+;   sta musicNote
+;   beq parseOctave
+; noteDNumeral:
+;   lda #$3 ;3 note for D#
+;   sta musicNote
+;   inx
+;   beq parseOctave
+
+; noteE:
+;   inx ;the X is for the octave or # 
+;   lda songExampleNotes,x 
+;   lda #$4 ;2 note for D
+;   sta musicNote
+;   beq parseOctave
+
+; noteF:
+;   inx  ;the X is for the octave or #
+;   lda songExampleNotes,x ;here i load octave or #
+;   cmp #$23;"#"
+;   beq noteFNumeral
+;   lda #$5 ;0 note for f ;if not # save the note
+;   sta musicNote
+;   beq parseOctave
+; noteFNumeral:
+;   lda #$6 ;1 note for f#
+;   sta musicNote
+;   inx
+;   beq parseOctave  
+
+; noteG:
+;   inx  ;the X is for the octave or #
+;   lda songExampleNotes,x ;here i load octave or #
+;   cmp #$23;"#"
+;   beq noteGNumeral
+;   lda #$7 ;0 note for g ;if not # save the note
+;   sta musicNote
+;   beq parseOctave
+; noteGNumeral:
+;   lda #$8 ;1 note for g#
+;   sta musicNote
+;   inx
+;   beq parseOctave  
+
+; noteA:
+;   inx  ;the X is for the octave or #
+;   lda songExampleNotes,x ;here i load octave or #
+;   cmp #$23;"#"
+;   beq noteANumeral
+;   lda #$9 ;0 note for g ;if not # save the note
+;   sta musicNote
+;   beq parseOctave
+; noteANumeral:
+;   lda #$a ;1 note for g#
+;   sta musicNote
+;   inx
+;   beq parseOctave 
+
+; noteB:
+;   inx ;the X is for the octave or # 
+;   lda songExampleNotes,x 
+;   lda #$b ;2 note for D
+;   sta musicNote
+;   beq parseOctave  
+
+; parseOctave:
+;   lda songExampleNotes,x
+;   sec ;lets substract 30 to obtain the number instead of ascii code
+;   sbc #$30
+;   sta musicOctave
+;   inx
+;   lda songExampleNotes,x
+;   cmp #$2C ;" ,  "
+;   beq parserNotesLoop
+  
+; parserNotesEnd:
+;   rts
  
 
 ;END--------------------------------------------------------------------------------
