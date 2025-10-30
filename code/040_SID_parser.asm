@@ -973,7 +973,38 @@ notesInHexaSID_1Mhz:
 songExampleNotes:
   .asciiz "c5,d5,e5,f5,g5,a5,b5,a5,g5,f5,e5,d5,c5,z"
 
+parseSong:
+  jsr songSIDInit
+  jsr parserNotes
+  rts
+
+songSIDInit:
+  jsr sidInit
+  ;set attacj/decay for Voice 1
+  ;bits 7-4 attack bits 3-0 decay
+  ;9 is 0001 0001
+  ;8ms of attack and 24ms of decay
+  ;measured on a 1Mhz clock
+  ;for other frecuency multiple 1Mhz/other freq  
+  lda #9;0001 0001
+  sta SID_V1AD
+  ;set sustain/release for Voice 1
+  ;bits 7-4 sustain bits 3-0 release
+  ;6 is 0000 0110
+  ;sustain at zero amplitud
+  ;decay identical to release scale
+  ;6 is 204ms
+  lda #6
+  sta SID_V1SR
+  ;set Volume to maximum
+  lda #15
+  sta SID_FILTER_MV
+  rts
+
 parserNotes:
+  pha ;save accumulator
+  txa
+  pha
   ldx #$FF
 parserNotesLoop:
   inx
@@ -1000,15 +1031,30 @@ parseOctave:
   sec ;lets substract 30 to obtain the number instead of ascii code
   sbc #$30
   sta musicOctave
+  ;now we can get the frequency of the note
+  jsr noteToFrequency
+  ;now we have the right frequency note and octave on the variables noteFreqHigh and noteFreqLow
+  ;ready to play at the SID
+  ; lets play the note at the SID
+  jsr playOneNote
+  ;keep reading
   inx
   lda songExampleNotes,x
   cmp #$2C ;" ,  "
   beq parserNotesLoop
   
 parserNotesEnd:
+  pla
+  tax
+  pla ;retreive accumulator
   rts
 
 noteToFrequency:
+  pha ;save accumulator
+  txa
+  pha
+  tya
+  pha
   lda musicNote
   cmp #0 ;it is the note a
   beq calculateNote ;calculating the case it was a
@@ -1034,16 +1080,75 @@ calculateNote:
   clc ;clear carry to roll for all notes but B
   lda musicNote ;already multiplied if 2 it is note B
   bne calculateOctave
-  sec ;set carry for note B
+  ;calculate firt ocurrence for note B
   ldy octaveOffset
+  cpy #$0 ;if zero it is done but not reproduceable for the sid b7 note
+  beq noteToFrequencyDone 
+  sec ;set the carry for notB at the 7 octave
+  rol noteFreqHigh ;keep the carry for the low byte
+  rol noteFreqLow
+  dey
+  ;now keep going on the calculate octave loop
+  jmp calculateOctaveLoop
 calculateOctave:
+  ldy octaveOffset
+calculateOctaveLoop:  
   cpy #$0
   beq noteToFrequencyDone
-  
+  clc ;clear carry for rol
+  rol noteFreqHigh ;keep the carry for the low byte
+  rol noteFreqLow
+  dey ;decrease y and keep going
+  jmp calculateOctaveLoop
+noteToFrequencyDone:
+  ;now we have the right frequency note and octave on the variables noteFreqHigh and noteFreqLow
+  ;ready to play at the SID
+  pla
+  tay
+  pla
+  tax
+  pla
+  rts
 
-
-
-
+playOneNote:
+  pha ;save accumulator
+  txa
+  pha
+  tya
+  pha
+  ;load and store High frequency for Voice 1  
+  lda noteFreqHigh 
+  sta SID_V1FH
+  ;load and store low frequency for Voice 1
+  lda noteFreqLow 
+  sta SID_V1FL
+  ;load and wait duration for Voice 1
+  lda #100 
+  sta soundDelay
+  ;bit 5 selects sawtooth
+  ;00100001 
+  ;the third bit turn on sawtooth
+  ;the last bit turns on the Attack Delay Sustain cycle
+  ;this starts playing the note
+  lda #33 ;
+  sta SID_V1CTRL
+  ;wait soundDelay time
+  jsr sidSoundDelay
+  ;00100001 
+  ;bit 5 selects sawtooth
+  ;the last bit turns off starts the Release Phase
+  lda #32 ;0010000
+  sta SID_V1CTRL
+  ;wait 50 for the duration of the release before next note
+  lda #50
+  sta soundDelay
+  jsr sidSoundDelay
+  pla
+  tay
+  pla
+  tax
+  pla
+  rts
 
 
 ;   cmp #$63 ;"c" and "c#"
