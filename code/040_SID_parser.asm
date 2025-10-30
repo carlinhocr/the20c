@@ -971,8 +971,11 @@ notesInHexaSID_1Mhz:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-songExampleNotes:
+songScale:
   .asciiz "c5,d5,e5,f5,g5,a5,b5,c6,b5,a5,g5,f5,e5,d5,c5,z"
+
+songExampleNotes:
+  .asciiz "c5,c6,g5,f5,f6,g5,e6,g5,c5,c6,g5,f5,f6,g5,e6,g5,d5,c6,g5,f5,f6,g5,e6,g5,d5,c6,g5,f5,f6,g5,e6,g5,f5,c6,g5,f5,f6,g5,e6,g5,f5,c6,g5,f5,f6,g5,e6,g5,c5,c6,g5,f5,f6,g5,e6,g5,c6,g5,f5,f6,g5,e6,g5,z"  
 
 parseSong:
   jsr songSIDInit
