@@ -1078,8 +1078,8 @@ calculateNote:
   sbc musicOctave
   sta octaveOffset
   ;rol according to octave
-  clc ;clear carry to roll for all notes but B
   lda musicNote ;already multiplied if 2 it is note B
+  cmp #2
   bne calculateOctave
   ;calculate firt ocurrence for note B
   ldy octaveOffset
