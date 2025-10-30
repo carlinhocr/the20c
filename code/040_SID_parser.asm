@@ -1086,8 +1086,8 @@ calculateNote:
   cpy #$0 ;if zero it is done but not reproduceable for the sid b7 note
   beq noteToFrequencyDone 
   sec ;set the carry for notB at the 7 octave
-  rol noteFreqHigh ;keep the carry for the low byte
-  rol noteFreqLow
+  ror noteFreqHigh ;keep the carry for the low byte
+  ror noteFreqLow
   dey
   ;now keep going on the calculate octave loop
   jmp calculateOctaveLoop
