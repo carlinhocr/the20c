@@ -1097,8 +1097,8 @@ calculateOctaveLoop:
   cpy #$0
   beq noteToFrequencyDone
   clc ;clear carry for rol
-  rol noteFreqHigh ;keep the carry for the low byte
-  rol noteFreqLow
+  ror noteFreqHigh ;keep the carry for the low byte
+  ror noteFreqLow
   dey ;decrease y and keep going
   jmp calculateOctaveLoop
 noteToFrequencyDone:
