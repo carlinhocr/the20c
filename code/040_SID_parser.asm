@@ -1008,38 +1008,38 @@ parseOctave:
 parserNotesEnd:
   rts
 
-; noteToFrequency:
-;   lda musicNote
-;   cmp #0 ;it is the note a
-;   beq calculateNote ;calculating the case it was a
-;   ;multiply by 2 musicNote to position the byte offset
-;   ;for all othe notes
-;   clc
-;   rol musicNote
-; calculateNote:  
-;   ;load high byte and save it
-;   ldx musicNote
-;   lda frequenciesSid_1Mhz_alphabetic,x
-;   sta noteFreqHigh
-;   ;load low byte and save it
-;   inx
-;   lda frequenciesSid_1Mhz_alphabetic,x
-;   sta noteFreqLow
-;   ;calculate octave offset
-;   lda #7 ;highest octave
-;   sec
-;   sbc musicOctave
-;   sta octaveOffset
-;   ;rol according to octave
-;   clc ;clear carry to roll for all notes but B
-;   lda musicNote ;already multiplied if 2 it is note B
-;   bne calculateOctave
-;   sec ;set carry for note B
-;   ldy octaveOffset
-; calculateOctave:
-;   cpy #$0
-;   beq noteToFrequencyDone
-
+noteToFrequency:
+  lda musicNote
+  cmp #0 ;it is the note a
+  beq calculateNote ;calculating the case it was a
+  ;multiply by 2 musicNote to position the byte offset
+  ;for all othe notes
+  clc
+  rol musicNote
+calculateNote:  
+  ;load high byte and save it
+  ldx musicNote
+  lda frequenciesSid_1Mhz_alphabetic,x
+  sta noteFreqHigh
+  ;load low byte and save it
+  inx
+  lda frequenciesSid_1Mhz_alphabetic,x
+  sta noteFreqLow
+  ;calculate octave offset
+  lda #7 ;highest octave
+  sec
+  sbc musicOctave
+  sta octaveOffset
+  ;rol according to octave
+  clc ;clear carry to roll for all notes but B
+  lda musicNote ;already multiplied if 2 it is note B
+  bne calculateOctave
+  sec ;set carry for note B
+  ldy octaveOffset
+calculateOctave:
+  cpy #$0
+  beq noteToFrequencyDone
+  
 
 
 
