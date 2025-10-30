@@ -485,29 +485,29 @@ sidTestMultiNotesDecodeNotes:
 
 sidNotesExamplePlay:
   ;load note address
-  lda #< sidNotesExample
-  sta sidNotesLowV1
-  lda #> sidNotesExample
-  sta sidNotesHighV1
-  jsr soundSid
+  ; lda #< sidNotesExample
+  ; sta sidNotesLowV1
+  ; lda #> sidNotesExample
+  ; sta sidNotesHighV1
+  ; jsr soundSid
   lda #< sidScale
   sta sidNotesLowV1
   lda #> sidScale
   sta sidNotesHighV1
   jsr soundSid
-  lda #< sidScale
-  sta sidNotesLowV1
-  lda #> sidScale
-  sta sidNotesHighV1
-  lda #< sidScale
-  sta sidNotesLowV2
-  lda #> sidScale
-  sta sidNotesHighV2
-  lda #< sidScale
-  sta sidNotesLowV3
-  lda #> sidScale
-  sta sidNotesHighV3
-  jsr soundSid3VoicesExample
+  ; lda #< sidScale
+  ; sta sidNotesLowV1
+  ; lda #> sidScale
+  ; sta sidNotesHighV1
+  ; lda #< sidScale
+  ; sta sidNotesLowV2
+  ; lda #> sidScale
+  ; sta sidNotesHighV2
+  ; lda #< sidScale
+  ; sta sidNotesLowV3
+  ; lda #> sidScale
+  ; sta sidNotesHighV3
+  ; jsr soundSid3VoicesExample
   jsr parseSong
   rts
 
