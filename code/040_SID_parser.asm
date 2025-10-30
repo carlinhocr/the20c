@@ -508,6 +508,7 @@ sidNotesExamplePlay:
   lda #> sidScale
   sta sidNotesHighV3
   jsr soundSid3VoicesExample
+  jsr parseSong
   rts
 
 soundSid3VoicesExample:
