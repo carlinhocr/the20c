@@ -972,7 +972,7 @@ notesInHexaSID_1Mhz:
 ;-----------------------------------------------------------------------------------
 
 songExampleNotes:
-  .asciiz "c5,d5,e5,f5,g5,a5,b5,a5,g5,f5,e5,d5,c5,z"
+  .asciiz "c5,d5,e5,f5,g5,a5,b5,c6,b5,a5,g5,f5,e5,d5,c5,z"
 
 parseSong:
   jsr songSIDInit
@@ -1085,14 +1085,14 @@ calculateNote:
   ldy octaveOffset
   cpy #$0 ;if zero it is done but not reproduceable for the sid b7 note
   beq noteToFrequencyDone 
-  ; sec ;set the carry for notB at the 7 octave
-  ; ror noteFreqHigh ;keep the carry for the low byte
-  ; ror noteFreqLow
+  sec ;set the carry for notB at the 7 octave
+  ror noteFreqHigh ;keep the carry for the low byte
+  ror noteFreqLow
   ;save the correct note for b6
-  lda #$81
-  sta noteFreqHigh
-  lda #$77
-  sta noteFreqLow
+  ; lda #$81
+  ; sta noteFreqHigh
+  ; lda #$77
+  ; sta noteFreqLow
   dey
   ;now keep going on the calculate octave loop
   jmp calculateOctaveLoop
