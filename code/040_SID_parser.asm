@@ -108,7 +108,7 @@ serialCharperLines = $3f
 serialTotalLinesAscii =$40
 serialDrawindEndChar=$41
 
-musicDuration=$44
+noteDuration=$44
 noteIndex=$45
 octaveOffset=$46
 noteFreqLow=$47
@@ -1052,7 +1052,8 @@ parseOctave:
   lda noteIndex
   tax 
   lda songExampleDuration,x
-  sta soundDelay
+  sta noteDuration
+  inc noteIndex
   pla
   tax ;return old x index
   ;ready to play at the SID
@@ -1152,6 +1153,8 @@ playOneNote:
   ;sound delay already loaded before playinf the note
   ;lda #60 
   ;sta soundDelay
+  lda noteDuration
+  sta soundDelay
   ;bit 5 selects sawtooth
   ;00100001 
   ;the third bit turn on sawtooth
