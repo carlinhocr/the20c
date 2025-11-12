@@ -1149,8 +1149,9 @@ playOneNote:
   lda noteFreqLow 
   sta SID_V1FL
   ;load and wait duration for Voice 1
-  lda #60 
-  sta soundDelay
+  ;sound delay already loaded before playinf the note
+  ;lda #60 
+  ;sta soundDelay
   ;bit 5 selects sawtooth
   ;00100001 
   ;the third bit turn on sawtooth
