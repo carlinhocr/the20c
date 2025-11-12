@@ -997,7 +997,8 @@ songExampleNotes:
 
 songPRGp1Duration:
 songExampleDuration:
-  .byte 250,250,250,250,250,125,250,250,250,250,250,250,63,63,250,125,250
+  .byte 63,63,63,63,63,32,63,63,63,63,63,63,16,16,63,32,16
+  ;.byte 250,250,250,250,250,125,250,250,250,250,250,250,63,63,250,125,250
 
 
 songExampleNotesSwitchChildOfMine:
