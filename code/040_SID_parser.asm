@@ -975,12 +975,30 @@ notesInHexaSID_1Mhz:
 ;-----------------------------------------------------------------------------------
 
 songScale:
-songExampleNotes:
   .asciiz "c5,d5,e5,f5,g5,a5,b5,c6,b5,a5,g5,f5,e5,d5,c5,z"
 
 songScaleDuration:
-songExampleDuration:
   .byte $60,$60,$60,$60,$60,$60,$ff,$ff,$60,$60,$60,$60,$ff,$ff,$60  
+
+
+songPRGp1:
+songExampleNotes:
+  .asciiz "g4,a4,g4,g4,g4,a4,b4,g4,a4,d#4,d#4,d#4,e4,f#4,g4,f#4,d#4,z"
+
+; 320 data 25,177,250,28,214,250: rem g4,a4
+; 330 data 25,177,250,25,177,250: rem g4,g4
+; 340 data 25,177,250,28,214,125: rem g4,a4 
+; 350 data 32,94,250,25,177,250 : rem b4,g4
+; 360 data 28,214,250,19,63,250 : rem a4,d#4
+; 370 data 19,63,250,19,63,250  : rem d#4,d#4
+; 380 data 21,154,63,24,63,63   : rem e4,f#4
+; 390 data 25,177,250,24,63,125 : rem g4,f#4
+; 400 data 19,63,250,-1,-1,-1   : rem d#4
+
+songPRGp1Duration:
+songExampleDuration:
+  .byte 250,250,250,250,250,125,250,250,250,250,250,250,63,63,250,125,250
+
 
 songExampleNotesSwitchChildOfMine:
   .asciiz "c5,c6,g5,f5,f6,g5,e6,g5,c5,c6,g5,f5,f6,g5,e6,g5,d5,c6,g5,f5,f6,g5,e6,g5,d5,c6,g5,f5,f6,g5,e6,g5,f5,c6,g5,f5,f6,g5,e6,g5,f5,c6,g5,f5,f6,g5,e6,g5,c5,c6,g5,f5,f6,g5,e6,g5,c6,g5,f5,f6,g5,e6,g5,z"  
