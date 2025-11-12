@@ -108,6 +108,8 @@ serialCharperLines = $3f
 serialTotalLinesAscii =$40
 serialDrawindEndChar=$41
 
+musicDuration=$44
+noteIndex=$45
 octaveOffset=$46
 noteFreqLow=$47
 noteFreqHigh=$48
@@ -400,6 +402,7 @@ sidInit:
   sta sidLocationHigh
   ldy #$FF
   lda #$0
+  sta noteIndex ;initialize the note Index for duration and note position in song
 sidInitLoop:
   iny 
   sta (sidLocationLow),y 
@@ -972,9 +975,14 @@ notesInHexaSID_1Mhz:
 ;-----------------------------------------------------------------------------------
 
 songScale:
+songExampleNotes:
   .asciiz "c5,d5,e5,f5,g5,a5,b5,c6,b5,a5,g5,f5,e5,d5,c5,z"
 
-songExampleNotes:
+songScaleDuration:
+songExampleDuration:
+  .byte $60,$60,$60,$60,$60,$60,$ff,$ff,$60,$60,$60,$60,$ff,$ff,$60  
+
+songExampleNotesSwitchChildOfMine:
   .asciiz "c5,c6,g5,f5,f6,g5,e6,g5,c5,c6,g5,f5,f6,g5,e6,g5,d5,c6,g5,f5,f6,g5,e6,g5,d5,c6,g5,f5,f6,g5,e6,g5,f5,c6,g5,f5,f6,g5,e6,g5,f5,c6,g5,f5,f6,g5,e6,g5,c5,c6,g5,f5,f6,g5,e6,g5,c6,g5,f5,f6,g5,e6,g5,z"  
 
 parseSong:
@@ -1025,7 +1033,6 @@ parserNotesLoop:
   lda #$7
   clc
   adc musicNote
-
   ;if musicNote was a then its value was 0
   ;if I find de # the value is 0+7
   ;finding its place in frequenciesSid_1Mhz_alphabetic
@@ -1038,6 +1045,16 @@ parseOctave:
   ;now we can get the frequency of the note
   jsr noteToFrequency
   ;now we have the right frequency note and octave on the variables noteFreqHigh and noteFreqLow
+  ;load duration of the note
+  ; function to load duration
+  txa ;store x index
+  pha 
+  lda noteIndex
+  tax 
+  lda songExampleDuration,x
+  sta soundDelay
+  pla
+  tax ;return old x index
   ;ready to play at the SID
   ; lets play the note at the SID
   jsr playOneNote
