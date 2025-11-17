@@ -319,6 +319,13 @@ moveServo:
   jsr DELAY_SEC
 moveServoLoop:  
   jsr movePlus90
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr moveMinus90
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
   jmp moveServoLoop
 
 ;commands for SG90
