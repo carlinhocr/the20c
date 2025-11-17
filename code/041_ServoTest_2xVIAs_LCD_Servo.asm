@@ -317,16 +317,26 @@ moveServo:
   lda #%00000000
   sta SERVO_PORTA
   jsr DELAY_SEC
-  jsr move0
+  jsr move0m1
   jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr move0m2
   jsr DELAY_SEC
   jsr DELAY_SEC
 moveServoLoop:  
-  jsr movePlus90
+  jsr movePlus90m1
   jsr DELAY_SEC
   jsr DELAY_SEC
   jsr DELAY_SEC
-  jsr moveMinus90
+  jsr moveMinus90m1
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr movePlus90m2
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr moveMinus90m2
   jsr DELAY_SEC
   jsr DELAY_SEC
   jsr DELAY_SEC
@@ -334,9 +344,39 @@ moveServoLoop:
 
 ;commands for SG90
 
+movePlus90m1:
+  lda #%10000000 ;bit 7 of port a to 1 turn on output
+  jsr movePlus90
+  rts
+
+moveMinus90m1:
+  lda #%10000000 ;bit 7 of port a to 1 turn on output
+  jsr moveMinus90
+  rts
+
+move0m1:
+  lda #%10000000 ;bit 7 of port a to 1 turn on output
+  jsr move0
+  rts    
+
+movePlus90m2:
+  lda #%01000000 ;bit 7 of port a to 1 turn on output
+  jsr movePlus90
+  rts
+
+moveMinus90m2:
+  lda #%01000000 ;bit 7 of port a to 1 turn on output
+  jsr moveMinus90
+  rts
+
+move0m2:
+  lda #%01000000 ;bit 7 of port a to 1 turn on output
+  jsr move0
+  rts   
+
 movePlus90:
   ;send 2ms pulse on a duty cycle of 20ms
-  lda #%10000000 ;bit 7 of port a to 1 turn on output
+  ;lda #%10000000 ;bit 7 of port a to 1 turn on output
   sta SERVO_PORTA
   jsr wait_2ms
   lda #%00000000 ;bit 7 of port a to 0 turn off output
@@ -346,7 +386,7 @@ movePlus90:
 
 moveMinus90:
   ;send 2ms pulse on a duty cycle of 20ms
-  lda #%10000000 ;bit 7 of port a to 1 turn on output
+  ;lda #%10000000 ;bit 7 of port a to 1 turn on output
   sta SERVO_PORTA
   jsr wait_1ms
   lda #%00000000 ;bit 7 of port a to 0 turn off output
@@ -356,7 +396,7 @@ moveMinus90:
 
 move0:
   ;send 2ms pulse on a duty cycle of 20ms
-  lda #%10000000 ;bit 7 of port a to 1 turn on output
+  ;lda #%10000000 ;bit 7 of port a to 1 turn on output
   sta SERVO_PORTA
   jsr wait_1_5ms
   lda #%00000000 ;bit 7 of port a to 0 turn off output
