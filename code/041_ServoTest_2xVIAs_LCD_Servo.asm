@@ -280,6 +280,7 @@ RESET:
 programStart:
   jsr screenInit
   jsr welcomeMessage
+  jsr moveServo
   jsr ledLights
 
 welcomeMessage:
@@ -354,6 +355,10 @@ programLoop:
 ;----------------------------------SERVO TEST---------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+
+moveServo:
+  jsr movePlus90
+  rts
 
 ;commands for SG90
 
@@ -980,7 +985,7 @@ startMessage1:
   .ascii " LCD on VIA 1 $6000"  
 
 startMessage2:
-  .ascii " LED on VIA 2 $7000"   
+  .ascii " SERVO on VIA 2 $7000"   
  
 
 lcd_positions:
