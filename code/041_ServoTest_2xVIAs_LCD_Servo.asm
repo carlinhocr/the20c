@@ -324,12 +324,18 @@ moveServo:
   jsr DELAY_SEC
   jsr DELAY_SEC
 moveServoLoop:  
+  jsr move0m1
+  jsr DELAY_SEC
+  jsr DELAY_SEC
   jsr movePlus90m1
   jsr DELAY_SEC
   jsr DELAY_SEC
   jsr DELAY_SEC
   jsr moveMinus90m1
   jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr move0m2
   jsr DELAY_SEC
   jsr DELAY_SEC
   jsr movePlus90m2
