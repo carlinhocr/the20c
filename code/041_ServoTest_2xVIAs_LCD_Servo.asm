@@ -281,7 +281,9 @@ programStart:
   jsr screenInit
   jsr welcomeMessage
   jsr moveServo
-  jsr ledLights
+
+programLoop:  
+  jmp programLoop
 
 welcomeMessage:
   jsr clear_display
@@ -300,54 +302,7 @@ welcomeMessage:
   sta charDataVectorHigh
   jsr print_message
 
-;led lights will shift lights to the right when all the shift is done
-;it will go to the other port  
-ledLights:
-  lda #%00000000 ;light pattern the first inc turns it on  
-  ;turn off both ports
-  sta LED_PORTB
-  sta LED_PORTA
-  jsr DELAY_SEC
-  lda #%10101010
-  sta LED_PORTB
-  sta LED_PORTA
-  jsr DELAY_SEC
-  lda #%01010101
-  sta LED_PORTB
-  sta LED_PORTA
-  jsr DELAY_SEC
-  jmp ledLights
 
-ledLightsPortALoop: 
-  jsr DELAY_SEC
-  lda PATTERN
-  clc
-  rol PATTERN ;rol after displaying
-  sta LED_PORTA
-  bpl ledLightsPortALoop
-  sta LED_PORTA ;write the last light of port A 1000 0000
-  clc
-  rol PATTERN ; 0000 0000
-  rol PATTERN ; 0000 0001
-  lda #%00000000 ;light pattern the first inc turns it on
-  sta LED_PORTA ;turn  off port a lights
-  lda PATTERN
-  sta LED_PORTB
-ledLightsPortBLoop: 
-  jsr DELAY_SEC
-  clc
-  rol PATTERN
-  lda PATTERN
-  sta LED_PORTB  
-  bpl ledLightsPortBLoop ;if the form is 0xxx xxxx keep going on port b
-  ;here the form is 1000 0000 
-  clc
-  rol PATTERN
-  sta LED_PORTB ;write the last light of port A 1000 0000
-  jmp ledLights
-
-programLoop:  
-  jmp programLoop
 
 
 ;BEGIN------------------------------------------------------------------------------
