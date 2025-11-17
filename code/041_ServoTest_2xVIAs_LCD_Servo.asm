@@ -301,6 +301,7 @@ welcomeMessage:
   lda #>startMessage2
   sta charDataVectorHigh
   jsr print_message
+  rts
 
 
 
@@ -945,7 +946,7 @@ startMessage1:
   .ascii " LCD on VIA 1 $6000"  
 
 startMessage2:
-  .ascii " SERVO on VIA 2 $7000"   
+  .ascii "SERVO on VIA 2 $7000"   
  
 
 lcd_positions:
