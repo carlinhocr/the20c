@@ -312,8 +312,13 @@ welcomeMessage:
 ;-----------------------------------------------------------------------------------
 
 moveServo:
+  ;init the port to zero
+  lda #%00000000
+  sta SERVO_PORTA
+  jmp DELAY_SEC
+moveServoLoop:  
   jsr movePlus90
-  rts
+  jmp moveServoLoop
 
 ;commands for SG90
 
