@@ -317,6 +317,10 @@ moveServo:
   lda #%00000000
   sta SERVO_PORTA
   jsr DELAY_SEC
+  jsr move0
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
 moveServoLoop:  
   jsr movePlus90
   jsr DELAY_SEC
