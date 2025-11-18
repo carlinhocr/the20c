@@ -1,3 +1,29 @@
+def octaveNotes(note):
+    #notesFreqOct7=[35114,37202,39415,41758,44241,46872,
+    #               49659,52612,55741,59055,62567,66287];
+    noteFreqOct7 ={
+                "C":35114,
+                "C#":37202,
+                "D":39415,
+                "D#":41758,
+                "E":44241,
+                "F": 46872,
+                "F#": 49659,
+                "G": 52612,
+                "G#": 55741,
+                "A": 59055,
+                "A#": 62567,
+                "B": 66287,
+                }
+
+    if len(note) == 2:
+        noteLetter = note[0];
+        noteOctave = note[-1];
+    elif len(note) ==3:
+        noteLetter = note[:2];
+        noteOctave = note[-1];
+    print (note,noteLetter,noteOctave,noteFreqOct7[noteLetter.upper()]);
+
 def noteDecoder(noteDecode): 
     print("Note Decoder");
     notes=["c","c#","d","d#","e","f","f#","g","g#","a","a#","b"];
@@ -77,12 +103,14 @@ def formatAssembler(vSplitted,vSplitWave):
 def main():
     #print(noteDecoder());
     #voiceSplitter();
+    octaveNotes("a4");
+    octaveNotes("c#7");
     v1Wave=17;
     v1Source=[594,594,594,596,596,1618,587,592,587,585,331,336,
              1097,583,585,585,585,587,587,1609,585,331,337,594,594,593,
              1618,594,596,594,592,587,1616,587,585,331,336,841,327,1607];
-    vSplitNotes,vSplitWave=sliceNotes(v1Source,v1Wave);
-    formatAssembler(vSplitNotes,vSplitWave);
+    # vSplitNotes,vSplitWave=sliceNotes(v1Source,v1Wave);
+    # formatAssembler(vSplitNotes,vSplitWave);
     v2Wave=65;
     v2Source=[583,585,583,583,327,329,1611,583,585,578,578,578,
               196,198,583,326,578,326,327,329,327,329,326,578,583,
