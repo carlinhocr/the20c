@@ -995,6 +995,41 @@ songExampleNotes:
 ; 390 data 25,177,250,24,63,125 : rem g4,f#4
 ; 400 data 19,63,250,-1,-1,-1   : rem d#4
 
+;initialize sidChip
+;set voice 1
+;set ad
+;set sr
+;set voice 2
+;set ad
+;set sr
+;set voice 3
+;set ad
+;set sr
+;set volume and filters
+;loop to read every note
+    ;read note v1  
+    ;translate frequency hl (maybe I can do it before playing)
+    ;set frequency h
+    ;set frequency l
+    ;read wavecontrol (gate bit)
+    ;set controlwavecontrol (gate bit)
+    ;read note v2
+    ;translate frequency hl (maybe I can do it before playing)
+    ;set frequency h
+    ;set frequency l
+    ;read wavecontrol (gate bit)
+    ;set controlwavecontrol (gate bit)
+    ;read note v3
+    ;translate frequency hl 
+    ;set frequency h
+    ;set frequency l
+    ;read wavecontrol (gate bit)
+    ;set controlwavecontrol (gate bit)
+    ;wait /16 of a measure
+;wait 1 second
+;turn volume off
+    
+
 songPRGp1Duration:
 songExampleDuration:
   .byte 125,125,125,125,125,64,125,125,125,125,125,125,32,32,125,64,125
