@@ -23,7 +23,7 @@ for key_number in range(1, 89):  # Teclas 1 a 88
     # Obtener high y low bytes
     high_byte = (extra_value >> 8) & 0xFF
     low_byte = extra_value & 0xFF
-
+    extra_value_str = str(extra_value)
     high_byte_str = f"${high_byte:02X}"
     low_byte_str = f"${low_byte:02X}"
     directive_byte="  .byte"
@@ -32,5 +32,5 @@ for key_number in range(1, 89):  # Teclas 1 a 88
 
     #print(f"{full_note}, {frequency:.2f}, {extra_value}, {hex_value}, {high_byte_str}, {low_byte_str}")
 
-    print(f"  .byte {high_byte_str}, {low_byte_str} ;{full_note}")
+    print(f"  .byte {high_byte_str}, {low_byte_str} ;{full_note} {extra_value_str}")
  
