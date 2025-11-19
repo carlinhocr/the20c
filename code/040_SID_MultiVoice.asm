@@ -993,7 +993,8 @@ notesInHexaSID_1Mhz:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-playExampleSong:
+playExampleSong3Voices:
+  ;From the programmers reference guide p2
   lda #< voice1HighFrequencies
   sta v1hf_high
   lda #> voice1HighFrequencies
@@ -1006,21 +1007,70 @@ playExampleSong:
   sta v1w_high
   lda #> voice1Waves
   sta v1w_low
-  
-;initialize sidChip
-;set voice 1
-;set ad
-;set sr
-;set voice 2
-;set ad
-;set sr
-;set voice 3
-;set ad
-;set sr
-;set volume and filters
+  ;initialize sidChip
+  jsr sidInit
+  ;set attacj/decay for Voice 1,2,3
+  ;bits 7-4 attack bits 3-0 decay
+  ;9 is 0001 0001
+  ;8ms of attack and 24ms of decay
+  ;measured on a 1Mhz clock
+  ;for other frecuency multiple 1Mhz/other freq  
+  lda #0;(a=0,s=0)
+  sta SID_V1AD
+  ;ad voice 2
+  lda #85; (a=5,d=5)
+  sta SID_V2AD
+  ;ad voice 3
+  lda #10; (a=0,d=10)
+  sta SID_V3AD
+  ;set sustain/release for Voice 1,2,3
+  ;bits 7-4 sustain bits 3-0 release
+  ;6 is 0000 0110
+  ;sustain at zero amplitud
+  ;decay identical to release scale
+  ;6 is 204ms
+  lda #240 ;(S=15, R=0) 
+  sta SID_V1SR
+  ;sr  voice 2
+  lda #133;(S=15, R=0)
+  sta SID_V2SR
+  ;sr voice 3
+  lda #197;(S=15, R=0)
+  sta SID_V3SR
+  ;set Volume and low pass filter
+  lda #31 ;0001 1111
+  sta SID_FILTER_MV  
+;loop to read every note
+playSIDMultiVoice:
+  ;play notes
+  ldy #$FF
+playSIDMultiVoiceLoop:
+  ;add management of hight byte for more 256 rollover
+  iny 
+  lda (v1hf_low),y
+  cmp #$FF
+  beq playSIDMultiVoiceEnd 
+  sta SID_V1FH
+  lda (v1lf_low),y
+  sta SID_V1FL
+  lda (v1w_low),y
+  sta SID_V1FL
+
+playSIDMultiVoiceEnd:
+  ;wait 1 second
+  jsr delay_1_sec
+  ;turn volume off   
+  lda #00 ;0000 0000
+  sta SID_FILTER_MV 
+
+
+;OK initialize SID
+;OK set adsr v1
+;OK set adsr v2
+;OK set adsr v3
+;OK set volume and filters
 ;loop to read every note
     ;read note v1  
-    ;translate frequency hl (maybe I can do it before playing)
     ;set frequency h
     ;set frequency l
     ;read wavecontrol (gate bit)
@@ -1038,8 +1088,8 @@ playExampleSong:
     ;read wavecontrol (gate bit)
     ;set controlwavecontrol (gate bit)
     ;wait /16 of a measure
-;wait 1 second
-;turn volume off
+;OK wait 1 second
+;OK turn volume off
 
 voice1Notes:
   .ascii "d5,d5,d5,d5,d5,d5,d5,d5,d5,d5"
@@ -1103,7 +1153,7 @@ voice1HighFrequencies:
   .byte $20,$20,$20,$20,$1C,$1C,$1C,$1C,$20,$20
   .byte $22,$22,$1C,$1C,$1C,$1C,$1C,$1C,$19,$19
   .byte $19,$19,$19,$19,$19,$19,$19,$19,$19,$19
-  .byte $19,$19
+  .byte $19,$19,$ff
 voice1LowFrequencies:
   .byte $7D,$7D,$7D,$7D,$7D,$7D,$7D,$7D,$7D,$7D
   .byte $7D,$7D,$34,$34,$34,$34,$34,$34,$34,$34
