@@ -1040,6 +1040,15 @@ playExampleSong3Voices:
   ;set Volume and low pass filter
   lda #31 ;0001 1111
   sta SID_FILTER_MV  
+  ;set high pulse width voice 2 (SPECIFIC TO THIS SONG)
+  lda #8
+  sta SID_V2PWLH
+  ;set high freq for filter cutt off (SPECIFIC TO THIS SONG)
+  lda #128
+  sta SID_FILTER_FCH
+  ;set resonance for filter and filter voice 3 (SPECIFIC TO THIS SONG)
+  lda #244
+  sta SID_FILTER_RF
 ;loop to read every note
 playSIDMultiVoice:
   ;play notes
@@ -1054,14 +1063,17 @@ playSIDMultiVoiceLoop:
   lda (v1lf_low),y
   sta SID_V1FL
   lda (v1w_low),y
-  sta SID_V1FL
-
+  sta SID_V1CTRL
+  ;wait 1/16 of a measure
+  jsr DELAY_onetenth_SEC 
+  jmp playSIDMultiVoiceLoop
 playSIDMultiVoiceEnd:
   ;wait 1 second
   jsr delay_1_sec
   ;turn volume off   
   lda #00 ;0000 0000
   sta SID_FILTER_MV 
+  rts
 
 
 ;OK initialize SID
@@ -1070,11 +1082,11 @@ playSIDMultiVoiceEnd:
 ;OK set adsr v3
 ;OK set volume and filters
 ;loop to read every note
-    ;read note v1  
-    ;set frequency h
-    ;set frequency l
-    ;read wavecontrol (gate bit)
-    ;set controlwavecontrol (gate bit)
+    ;OK read note v1  
+    ;OK set frequency h
+    ;OK set frequency l
+    ;OK read wavecontrol (gate bit)
+    ;OK set controlwavecontrol (gate bit)
     ;read note v2
     ;translate frequency hl (maybe I can do it before playing)
     ;set frequency h
@@ -1087,7 +1099,7 @@ playSIDMultiVoiceEnd:
     ;set frequency l
     ;read wavecontrol (gate bit)
     ;set controlwavecontrol (gate bit)
-    ;wait /16 of a measure
+    ;OK wait /16 of a measure ajustar mejor el tiempo
 ;OK wait 1 second
 ;OK turn volume off
 
