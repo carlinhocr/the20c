@@ -242,7 +242,8 @@ programStart:
   jsr sidPlayerMessage  
   ;jsr squareTest
   ;jsr sidTest
-  jsr sidNotesExamplePlay
+  ;jsr sidNotesExamplePlay
+  jsr playExampleSong3Voices
 loop:
   jmp loop
 
@@ -256,10 +257,10 @@ sidPlayerMessage:
   rts
 
 screen1_sidPlayer:
+  .asciiz "     SID PLAYER     "
   .asciiz "                    "
-  .asciiz "       SID          "
-  .asciiz "      PLAYER        "
-  .asciiz "                    "    
+  .asciiz "     MULTIVOICE     "    
+  .asciiz "                    "
 
 squareTest:
   jsr viaSoundInit ;j
