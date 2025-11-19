@@ -133,7 +133,7 @@ def formatAssembler(vSplitted,vSplitWave,vSplitHF,vSplitLF):
         lineAssemblerByteHF= "  .byte "
         for element in line:
             lineAssemblerByteHF += f"${element:02X}" + ","
-        print (lineAssemblerByteHF[:-1]);  
+        print (lineAssemblerByteHF[:]+"$FF");  
     print ("voiceLowFrequencies:")
     for i in range(0, len(vSplitLF), chunk_size):
         vLFToPrint.append(vSplitLF[i:i + chunk_size]);
@@ -144,28 +144,33 @@ def formatAssembler(vSplitted,vSplitWave,vSplitHF,vSplitLF):
         print (lineAssemblerByteLF[:-1]);  
 
 
-
+def makeVoice(vSource,vWave):
+    vSplitNotes,vSplitWave=sliceNotes(vSource,vWave);
+    vSplitHF,VSplitLF=freqFromNotes(vSplitNotes);
+    formatAssembler(vSplitNotes,vSplitWave,vSplitHF,VSplitLF);
 
 
 def main():
     #print(noteDecoder());
     #voiceSplitter();
-    octaveNotes("a4");
-    octaveNotes("c#7");
-    octaveNotes("c#9");
-    octaveNotes("s0");
+    # octaveNotes("a4");
+    # octaveNotes("c#7");
+    # octaveNotes("c#9");
+    # octaveNotes("s0");
     v1Wave=17;
     v1Source=[594,594,594,596,596,1618,587,592,587,585,331,336,
              1097,583,585,585,585,587,587,1609,585,331,337,594,594,593,
              1618,594,596,594,592,587,1616,587,585,331,336,841,327,1607];
-    v1SplitNotes,v1SplitWave=sliceNotes(v1Source,v1Wave);
-    v1SplitHF,V1SplitLF=freqFromNotes(v1SplitNotes);
-    formatAssembler(v1SplitNotes,v1SplitWave,v1SplitHF,V1SplitLF);
+    # makeVoice(v1Source,v1Wave);
+    # v1SplitNotes,v1SplitWave=sliceNotes(v1Source,v1Wave);
+    # v1SplitHF,V1SplitLF=freqFromNotes(v1SplitNotes);
+    # formatAssembler(v1SplitNotes,v1SplitWave,v1SplitHF,V1SplitLF);
     v2Wave=65;
     v2Source=[583,585,583,583,327,329,1611,583,585,578,578,578,
               196,198,583,326,578,326,327,329,327,329,326,578,583,
               1606,582,322,324,582,587,329,327,1606,583,327,329,587,331,329,
               329,328,1609,578,834,324,322,327,585,1602];
+    makeVoice(v2Source,v2Wave);
     v3Wave=33;
     v3Source=[567,566,567,304,306,308,310,1591,567,311,310,567,
               306,304,299,308,304,171,176,306,291,551,306,308,
