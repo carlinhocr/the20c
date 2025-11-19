@@ -1081,8 +1081,22 @@ playSIDMultiVoice:
   ;play notes
   ldy #$FF
 playSIDMultiVoiceLoop:
-  ;add management of hight byte for more 256 rollover
   iny 
+  ;add management of hight byte for more 256 rollover
+  tya
+  sec
+  adc v1hf_low
+  bcs addOneV1hf_high
+  tya
+  sec
+  adc v1lf_low
+  bcs addOneV1lf_high
+  tya
+  sec
+  adc v1w_low
+  bcs addOneV1w_high
+
+playSIDMultiVoiceNoExtraByteHigh:
   lda (v1hf_low),y
   cmp #$FF
   beq playSIDMultiVoiceEnd 
@@ -1117,6 +1131,21 @@ playSIDMultiVoiceEnd:
   sta SID_FILTER_MV 
   rts
 
+addOneV1hf_high
+  sec 
+  lda #1
+  adc v1hf_high
+  rts
+addOneV1lf_high
+  sec 
+  lda #1
+  adc v1lf_high
+  rts
+addOneV1w_high
+  sec 
+  lda #1
+  adc v1w_high 
+  rts 
 
 ;OK initialize SID
 ;OK set adsr v1
