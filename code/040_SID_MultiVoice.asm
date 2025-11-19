@@ -1021,6 +1021,19 @@ playExampleSong3Voices:
   sta v2w_low
   lda #> voice2Waves
   sta v2w_high
+    ;voice 3
+  lda #< voice3HighFrequencies
+  sta v3hf_low
+  lda #> voice3HighFrequencies
+  sta v3hf_high
+  lda #< voice3LowFrequencies
+  sta v3lf_low
+  lda #> voice3LowFrequencies
+  sta v3lf_high
+  lda #< voice3Waves
+  sta v3w_low
+  lda #> voice3Waves
+  sta v3w_high
   ;initialize sidChip
   jsr sidInit
   ;set attacj/decay for Voice 1,2,3
@@ -1035,8 +1048,8 @@ playExampleSong3Voices:
   lda #85; (a=5,d=5)
   sta SID_V2AD
   ; ;ad voice 3
-  ; lda #10; (a=0,d=10)
-  ; sta SID_V3AD
+  lda #10; (a=0,d=10)
+  sta SID_V3AD
   ;set sustain/release for Voice 1,2,3
   ;bits 7-4 sustain bits 3-0 release
   ;6 is 0000 0110
@@ -1049,20 +1062,20 @@ playExampleSong3Voices:
   lda #133;(S=15, R=0)
   sta SID_V2SR
   ;sr voice 3
-  ; lda #197;(S=15, R=0)
-  ; sta SID_V3SR
+  lda #197;(S=15, R=0)
+  sta SID_V3SR
   ;set Volume and low pass filter
   lda #31 ;0001 1111
   sta SID_FILTER_MV  
   ;set high pulse width voice 2 (SPECIFIC TO THIS SONG)
   lda #8
   sta SID_V2PWLH
-  ; ;set high freq for filter cutt off (SPECIFIC TO THIS SONG)
-  ; lda #128
-  ; sta SID_FILTER_FCH
-  ; ;set resonance for filter and filter voice 3 (SPECIFIC TO THIS SONG)
-  ; lda #244
-  ; sta SID_FILTER_RF
+  ;set high freq for filter cutt off (SPECIFIC TO THIS SONG)
+  lda #128
+  sta SID_FILTER_FCH
+  ;set resonance for filter and filter voice 3 (SPECIFIC TO THIS SONG)
+  lda #244
+  sta SID_FILTER_RF
 ;loop to read every note
 playSIDMultiVoice:
   ;play notes
@@ -1076,14 +1089,20 @@ playSIDMultiVoiceLoop:
   sta SID_V1FH
   lda (v2hf_low),y
   sta SID_V2FH
+  lda (v3hf_low),y
+  sta SID_V3FH
   lda (v1lf_low),y
   sta SID_V1FL
   lda (v2lf_low),y
   sta SID_V2FL
+  lda (v3lf_low),y
+  sta SID_V3FL
   lda (v1w_low),y
   sta SID_V1CTRL
   lda (v2w_low),y
   sta SID_V2CTRL
+  lda (v3w_low),y
+  sta SID_V3CTRL
   
   ;wait 1/16 of a measure
   lda #60
@@ -1295,6 +1314,94 @@ voice2LowFrequencies:
   .byte $9A,$9A,$3E,$3E,$B0,$B0,$D5,$D5,$D5,$D5
   .byte $3E,$3E,$3E,$3E,$3E,$3E,$3E,$3E,$3E,$3E
   .byte $3E,$3E
+
+voice3Notes:
+  .ascii "g3,g3,g3,g3,f#3,f#3,f#3,f#3,g3,g3"
+  .ascii "g3,g3,c3,c3,d3,d3,e3,e3,f#3,f#3"
+  .ascii "g3,g3,g3,g3,g3,g3,g3,g3,g3,g3"
+  .ascii "g3,g3,g3,g3,g3,g3,g3,g3,f#3,f#3"
+  .ascii "g3,g3,g3,g3,d3,d3,c3,c3,b2,b2"
+  .ascii "e3,e3,c3,c3,b2,c3,d3,d3,d#2,d#2"
+  .ascii "g2,g2,g2,g2,d3,d3,e3,e3,f#3,f#3"
+  .ascii "e3,e3,f#3,f#3,d3,d3,g2,g2,a2,a2"
+  .ascii "b2,b2,c3,c3,d3,d3,d3,d3,d3,d3"
+  .ascii "d3,d3,d3,d3,d3,d3,d3,d3,d3,d3"
+  .ascii "g3,g3,g3,g3,f#3,f#3,b3,b3,g3,g3"
+  .ascii "e3,e3,a3,a3,a2,a2,d3,d3,d3,d3"
+  .ascii "d3,d3,d3,d3,d3,d3,d3,d3,g3,g3"
+  .ascii "g3,g3,c3,c3,c3,c3,g3,g3,f3,f3"
+  .ascii "e3,e3,f3,f3,d3,d3,e3,e3,a2,a2"
+  .ascii "a2,a2,a2,a2,a2,a2,a2,a2,a2,a2"
+  .ascii "b2,b2,g2,g2,d3,d3,f#3,f#3,g3,g3"
+  .ascii "c3,c3,d3,d3,d3,d3,d2,d2,d2,d2"
+  .ascii "g2,g2,g2,g2,g2,g2,g2,g2,g2,g2"
+  .ascii "g2,g2"
+voice3Waves:
+  .byte 33,33,33,32,33,33,33,32,33,33
+  .byte 33,32,33,32,33,32,33,32,33,32
+  .byte 33,33,33,33,33,33,33,33,33,33
+  .byte 33,32,33,33,33,32,33,32,33,32
+  .byte 33,33,33,32,33,32,33,32,33,32
+  .byte 33,32,33,32,32,32,33,32,33,32
+  .byte 33,33,33,32,33,32,33,32,33,32
+  .byte 33,32,33,32,33,32,33,32,33,32
+  .byte 33,32,33,32,33,33,33,33,33,33
+  .byte 33,33,33,33,33,32,33,33,33,32
+  .byte 33,33,33,32,33,32,33,32,33,32
+  .byte 33,32,33,32,33,32,33,33,33,33
+  .byte 33,33,33,33,33,33,33,32,33,33
+  .byte 33,32,33,33,33,32,33,32,33,32
+  .byte 33,32,33,32,33,32,33,32,33,33
+  .byte 33,33,33,33,33,33,33,33,33,32
+  .byte 33,32,33,32,33,32,33,32,33,32
+  .byte 33,32,33,33,33,32,33,33,33,32
+  .byte 33,33,33,33,33,33,33,33,33,33
+  .byte 33,32
+voice3HighFrequencies:
+  .byte $0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$FF
+  .byte $0C,$0C,$08,$08,$09,$09,$0A,$0A,$0C,$0C,$FF
+  .byte $0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$FF
+  .byte $0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$FF
+  .byte $0C,$0C,$0C,$0C,$09,$09,$08,$08,$08,$08,$FF
+  .byte $0A,$0A,$08,$08,$08,$08,$09,$09,$05,$05,$FF
+  .byte $06,$06,$06,$06,$09,$09,$0A,$0A,$0C,$0C,$FF
+  .byte $0A,$0A,$0C,$0C,$09,$09,$06,$06,$07,$07,$FF
+  .byte $08,$08,$08,$08,$09,$09,$09,$09,$09,$09,$FF
+  .byte $09,$09,$09,$09,$09,$09,$09,$09,$09,$09,$FF
+  .byte $0C,$0C,$0C,$0C,$0C,$0C,$10,$10,$0C,$0C,$FF
+  .byte $0A,$0A,$0E,$0E,$07,$07,$09,$09,$09,$09,$FF
+  .byte $09,$09,$09,$09,$09,$09,$09,$09,$0C,$0C,$FF
+  .byte $0C,$0C,$08,$08,$08,$08,$0C,$0C,$0B,$0B,$FF
+  .byte $0A,$0A,$0B,$0B,$09,$09,$0A,$0A,$07,$07,$FF
+  .byte $07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$FF
+  .byte $08,$08,$06,$06,$09,$09,$0C,$0C,$0C,$0C,$FF
+  .byte $08,$08,$09,$09,$09,$09,$04,$04,$04,$04,$FF
+  .byte $06,$06,$06,$06,$06,$06,$06,$06,$06,$06,$FF
+  .byte $06,$06,$FF
+voice3LowFrequencies:
+  .byte $D8,$D8,$D8,$D8,$1F,$1F,$1F,$1F,$D8,$D8
+  .byte $D8,$D8,$92,$92,$9F,$9F,$CD,$CD,$1F,$1F
+  .byte $D8,$D8,$D8,$D8,$D8,$D8,$D8,$D8,$D8,$D8
+  .byte $D8,$D8,$D8,$D8,$D8,$D8,$D8,$D8,$1F,$1F
+  .byte $D8,$D8,$D8,$D8,$9F,$9F,$92,$92,$17,$17
+  .byte $CD,$CD,$92,$92,$17,$92,$9F,$9F,$18,$18
+  .byte $6C,$6C,$6C,$6C,$9F,$9F,$CD,$CD,$1F,$1F
+  .byte $CD,$CD,$1F,$1F,$9F,$9F,$6C,$6C,$35,$35
+  .byte $17,$17,$92,$92,$9F,$9F,$9F,$9F,$9F,$9F
+  .byte $9F,$9F,$9F,$9F,$9F,$9F,$9F,$9F,$9F,$9F
+  .byte $D8,$D8,$D8,$D8,$1F,$1F,$2E,$2E,$D8,$D8
+  .byte $CD,$CD,$6A,$6A,$35,$35,$9F,$9F,$9F,$9F
+  .byte $9F,$9F,$9F,$9F,$9F,$9F,$9F,$9F,$D8,$D8
+  .byte $D8,$D8,$92,$92,$92,$92,$D8,$D8,$71,$71
+  .byte $CD,$CD,$71,$71,$9F,$9F,$CD,$CD,$35,$35
+  .byte $35,$35,$35,$35,$35,$35,$35,$35,$35,$35
+  .byte $17,$17,$6C,$6C,$9F,$9F,$1F,$1F,$D8,$D8
+  .byte $92,$92,$9F,$9F,$9F,$9F,$CF,$CF,$CF,$CF
+  .byte $6C,$6C,$6C,$6C,$6C,$6C,$6C,$6C,$6C,$6C
+  .byte $6C,$6C
+
+
+
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------SOUND SID MULTIVOICE ------------------------------
