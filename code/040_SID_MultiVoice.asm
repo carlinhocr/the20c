@@ -997,17 +997,17 @@ notesInHexaSID_1Mhz:
 playExampleSong3Voices:
   ;From the programmers reference guide p2
   lda #< voice1HighFrequencies
-  sta v1hf_high
-  lda #> voice1HighFrequencies
   sta v1hf_low
+  lda #> voice1HighFrequencies
+  sta v1hf_high
   lda #< voice1LowFrequencies
-  sta v1lf_high
-  lda #> voice1LowFrequencies
   sta v1lf_low
+  lda #> voice1LowFrequencies
+  sta v1lf_high
   lda #< voice1Waves
-  sta v1w_high
-  lda #> voice1Waves
   sta v1w_low
+  lda #> voice1Waves
+  sta v1w_high
   ;initialize sidChip
   jsr sidInit
   ;set attacj/decay for Voice 1,2,3
