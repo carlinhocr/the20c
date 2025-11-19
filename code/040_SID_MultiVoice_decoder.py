@@ -14,6 +14,7 @@ def octaveNotes(note):
                 "A": 59055,
                 "A#": 62567,
                 "B": 66287,
+                "S": 0, #the silence
                 }
 
     if len(note) == 2:
@@ -22,7 +23,17 @@ def octaveNotes(note):
     elif len(note) ==3:
         noteLetter = note[:2];
         noteOctave = note[-1];
-    print (note,noteLetter,noteOctave,noteFreqOct7[noteLetter.upper()]);
+    intOctave=int(noteOctave);
+    if intOctave == 7:
+        freqNote = noteFreqOct7[noteLetter.upper()];
+    elif intOctave >=0 and intOctave <7:
+        freqNote = noteFreqOct7[noteLetter.upper()];
+        for i in range(0,7-intOctave):
+            freqNote = int(freqNote/2);   
+    else:
+        freqNote = noteFreqOct7["S"]; 
+    print (note,noteLetter,noteOctave,freqNote);
+    return (freqNote)
 
 def noteDecoder(noteDecode): 
     print("Note Decoder");
@@ -79,18 +90,34 @@ def sliceNotes(vSource,vWave):
     vSplitted,vSpliWave = voiceSplitter(vNo,vDu,vWave);
     return vSplitted,vSpliWave
 
-def formatAssembler(vSplitted,vSplitWave):
-    chunk_size = 10
-    vToPrint=[]
-    vWaveToPrint=[]
+def freqFromNotes(vSplitNotes):
+    vSplitHF=[];
+    VSplitLF=[];
+    print (vSplitNotes);
+    for note in vSplitNotes:
+        print (note);
+        freqNote = octaveNotes(note);
+        # Obtener high y low bytes
+        high_byte = (freqNote >> 8) & 0xFF;
+        low_byte = freqNote & 0xFF;
+        vSplitHF.append(high_byte);
+        VSplitLF.append(low_byte);
+    return vSplitHF,VSplitLF
+
+def formatAssembler(vSplitted,vSplitWave,vSplitHF,vSplitLF):
+    chunk_size = 10;
+    vToPrint=[];
+    vWaveToPrint=[];
+    vHFToPrint=[];
+    vLFToPrint=[];
     print("voiceNotes:");
     for i in range(0, len(vSplitted), chunk_size):
         vToPrint.append(vSplitted[i:i + chunk_size]);
     for line in vToPrint:
-        lineAssemblerAscii= "  .ascii "
+        lineAssemblerAscii= "  .ascii \""
         for element in line:
             lineAssemblerAscii += element + ","
-        print (lineAssemblerAscii[:-1]);   
+        print (lineAssemblerAscii[:-1]+"\"");   
     print("voiceWaves:");  
     for i in range(0, len(vSplitWave), chunk_size):
         vWaveToPrint.append(vSplitWave[i:i + chunk_size]);
@@ -99,18 +126,41 @@ def formatAssembler(vSplitted,vSplitWave):
         for element in line:
             lineAssemblerByte += str(element) + ","
         print (lineAssemblerByte[:-1]);  
+    print ("voiceHighFrequencies:")
+    for i in range(0, len(vSplitHF), chunk_size):
+        vHFToPrint.append(vSplitHF[i:i + chunk_size]);
+    for line in vHFToPrint:
+        lineAssemblerByteHF= "  .byte "
+        for element in line:
+            lineAssemblerByteHF += f"${element:02X}" + ","
+        print (lineAssemblerByteHF[:-1]);  
+    print ("voiceLowFrequencies:")
+    for i in range(0, len(vSplitLF), chunk_size):
+        vLFToPrint.append(vSplitLF[i:i + chunk_size]);
+    for line in vLFToPrint:
+        lineAssemblerByteLF= "  .byte "
+        for element in line:
+            lineAssemblerByteLF += f"${element:02X}" + ","
+        print (lineAssemblerByteLF[:-1]);  
+
+
+
+
 
 def main():
     #print(noteDecoder());
     #voiceSplitter();
     octaveNotes("a4");
     octaveNotes("c#7");
+    octaveNotes("c#9");
+    octaveNotes("s0");
     v1Wave=17;
     v1Source=[594,594,594,596,596,1618,587,592,587,585,331,336,
              1097,583,585,585,585,587,587,1609,585,331,337,594,594,593,
              1618,594,596,594,592,587,1616,587,585,331,336,841,327,1607];
-    # vSplitNotes,vSplitWave=sliceNotes(v1Source,v1Wave);
-    # formatAssembler(vSplitNotes,vSplitWave);
+    v1SplitNotes,v1SplitWave=sliceNotes(v1Source,v1Wave);
+    v1SplitHF,V1SplitLF=freqFromNotes(v1SplitNotes);
+    formatAssembler(v1SplitNotes,v1SplitWave,v1SplitHF,V1SplitLF);
     v2Wave=65;
     v2Source=[583,585,583,583,327,329,1611,583,585,578,578,578,
               196,198,583,326,578,326,327,329,327,329,326,578,583,
