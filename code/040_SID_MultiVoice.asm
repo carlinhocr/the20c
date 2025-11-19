@@ -1019,11 +1019,11 @@ playExampleSong3Voices:
   lda #0;(a=0,s=0)
   sta SID_V1AD
   ;ad voice 2
-  lda #85; (a=5,d=5)
-  sta SID_V2AD
-  ;ad voice 3
-  lda #10; (a=0,d=10)
-  sta SID_V3AD
+  ; lda #85; (a=5,d=5)
+  ; sta SID_V2AD
+  ; ;ad voice 3
+  ; lda #10; (a=0,d=10)
+  ; sta SID_V3AD
   ;set sustain/release for Voice 1,2,3
   ;bits 7-4 sustain bits 3-0 release
   ;6 is 0000 0110
@@ -1033,23 +1033,23 @@ playExampleSong3Voices:
   lda #240 ;(S=15, R=0) 
   sta SID_V1SR
   ;sr  voice 2
-  lda #133;(S=15, R=0)
-  sta SID_V2SR
-  ;sr voice 3
-  lda #197;(S=15, R=0)
-  sta SID_V3SR
+  ; lda #133;(S=15, R=0)
+  ; sta SID_V2SR
+  ; ;sr voice 3
+  ; lda #197;(S=15, R=0)
+  ; sta SID_V3SR
   ;set Volume and low pass filter
   lda #31 ;0001 1111
   sta SID_FILTER_MV  
   ;set high pulse width voice 2 (SPECIFIC TO THIS SONG)
-  lda #8
-  sta SID_V2PWLH
-  ;set high freq for filter cutt off (SPECIFIC TO THIS SONG)
-  lda #128
-  sta SID_FILTER_FCH
-  ;set resonance for filter and filter voice 3 (SPECIFIC TO THIS SONG)
-  lda #244
-  sta SID_FILTER_RF
+  ; lda #8
+  ; sta SID_V2PWLH
+  ; ;set high freq for filter cutt off (SPECIFIC TO THIS SONG)
+  ; lda #128
+  ; sta SID_FILTER_FCH
+  ; ;set resonance for filter and filter voice 3 (SPECIFIC TO THIS SONG)
+  ; lda #244
+  ; sta SID_FILTER_RF
 ;loop to read every note
 playSIDMultiVoice:
   ;play notes
@@ -1066,7 +1066,9 @@ playSIDMultiVoiceLoop:
   lda (v1w_low),y
   sta SID_V1CTRL
   ;wait 1/16 of a measure
-  jsr DELAY_onetenth_SEC 
+  lda #60
+  sta soundDelay
+  jsr sidSoundDelay
   jmp playSIDMultiVoiceLoop
 playSIDMultiVoiceEnd:
   ;wait 1 second
