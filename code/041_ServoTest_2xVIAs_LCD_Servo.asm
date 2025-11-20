@@ -427,9 +427,9 @@ wait_0_5ms_loop_end:
   rts  ;6 cycles
 
 wait_1ms:
-  ;1 millisecond with a 1Mhz clock is 1000 clock cycles
+  ;1 millisecond with a 1Mhz clock is 1000 clock cycles or microseconds
   ;one operation is 2 clock cycles so 500 operations is 1 milisecond
-  ldx #100
+  ldx #100 ; 2 cycles
   ;10 cycles total per loop
   ;1000 cycles are 100 runnings of the loop = 1 millisecond
   ;adding the rts that is 6 cycles ~ 1 millisecond
@@ -441,6 +441,19 @@ wait_1ms_jump_to_wait:
   jmp wait_1ms_loop ;3cycles
 wait_1ms_loop_end:
   rts  ;6 cycles
+  ;ldx 2 +
+  ;loop 2+2+3+6 = 10 
+  ;  dex 2
+  ;  beq 2 on branch not taken
+  ;  jmp1 3 cycles
+  ;  jmp2 3 cycles
+  ; done the loop 100 times is 1000 microseconds = 1 millisecond 
+  ; + 1 extracycle on the beq + 6 extra cycles on the rts 
+  ; 1007 microseconds
+  ; + lda 2 cycles
+  ; + sta abs 4 cycles
+  ; to stop de pulse total
+  ; 1013
 
 wait_1_5ms:
   ;1.5 millisecond with a 1Mhz clock is 1500 clock cycles
@@ -474,6 +487,7 @@ wait_2ms_jump_to_wait:
   jmp wait_1ms_loop ;3cycles
 wait_2ms_loop_end:
   rts  ;6 cycles
+  ;2+2+3
 
 wait_18ms:
   ;2 millisecond with a 1Mhz clock is 2000 clock cycles
