@@ -1083,10 +1083,10 @@ playSIDMultiVoice:
   ldy #$FF
 playSIDMultiVoiceLoop:
   iny 
-  tya
-  sta indexY
-  ;add management of hight byte for more 256 rollover
-  jsr checkHighByte
+  ; tya
+  ; sta indexY
+  ; ;add management of hight byte for more 256 rollover
+  ; jsr checkHighByte
 
   lda (v1hf_low),y
   cmp #$FF
