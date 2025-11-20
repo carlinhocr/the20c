@@ -1105,10 +1105,10 @@ playSIDMultiVoiceLoop:
   sta SID_V3FL
   ; lda (v1w_low),y
   ; sta SID_V1CTRL
-  ; lda (v2w_low),y
-  ; sta SID_V2CTRL
-  lda (v3w_low),y
-  sta SID_V3CTRL
+  lda (v2w_low),y
+  sta SID_V2CTRL
+  ; lda (v3w_low),y
+  ; sta SID_V3CTRL
   
   ;wait 1/16 of a measure
   lda #128
