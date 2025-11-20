@@ -1091,20 +1091,20 @@ playSIDMultiVoiceLoop:
   sta SID_V1FH
   lda (v2hf_low),y
   sta SID_V2FH
-  ; lda (v3hf_low),y
-  ; sta SID_V3FH
+  lda (v3hf_low),y
+  sta SID_V3FH
   lda (v1lf_low),y
   sta SID_V1FL
   lda (v2lf_low),y
   sta SID_V2FL
-  ; lda (v3lf_low),y
-  ; sta SID_V3FL
+  lda (v3lf_low),y
+  sta SID_V3FL
   lda (v1w_low),y
   sta SID_V1CTRL
   lda (v2w_low),y
   sta SID_V2CTRL
-  ; lda (v3w_low),y
-  ; sta SID_V3CTRL
+  lda (v3w_low),y
+  sta SID_V3CTRL
   
   ;wait 1/16 of a measure
   lda #128
@@ -1128,6 +1128,7 @@ checkv1hf:
   sec 
   lda #1
   adc v1hf_high
+  sta v1hf_high
 checkv1lf:  
   tya
   sec
@@ -1136,6 +1137,7 @@ checkv1lf:
   sec 
   lda #1
   adc v1lf_high
+  sta v1lf_high
 checkv1w:  
   tya
   sec
@@ -1144,6 +1146,7 @@ checkv1w:
   sec 
   lda #1
   adc v1w_high
+  sta v1w_high
 checkv2hf:
   tya
   sec
@@ -1152,6 +1155,7 @@ checkv2hf:
   sec 
   lda #1
   adc v2hf_high
+  sta v2hf_high
 checkv2lf:  
   tya
   sec
@@ -1160,6 +1164,7 @@ checkv2lf:
   sec 
   lda #1
   adc v2lf_high
+  sta v2lf_high
 checkv2w:  
   tya
   sec
@@ -1168,6 +1173,7 @@ checkv2w:
   sec 
   lda #1
   adc v2w_high 
+  sta v2w_high
 checkv3hf:
   tya
   sec
@@ -1176,6 +1182,7 @@ checkv3hf:
   sec 
   lda #1
   adc v3hf_high
+  sta v3hf_high
 checkv3lf:  
   tya
   sec
@@ -1184,6 +1191,7 @@ checkv3lf:
   sec 
   lda #1
   adc v3lf_high
+  sta v3lf_high
 checkv3w:  
   tya
   sec
@@ -1192,6 +1200,7 @@ checkv3w:
   sec 
   lda #1
   adc v3w_high
+  sta v3w_high
 checkHighByteEnd:  
   rts
 
