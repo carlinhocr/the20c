@@ -1089,22 +1089,22 @@ playSIDMultiVoiceLoop:
   cmp #$FF
   beq playSIDMultiVoiceEnd 
   sta SID_V1FH
-  lda (v2hf_low),y
-  sta SID_V2FH
-  lda (v3hf_low),y
-  sta SID_V3FH
+  ; lda (v2hf_low),y
+  ; sta SID_V2FH
+  ; lda (v3hf_low),y
+  ; sta SID_V3FH
   lda (v1lf_low),y
   sta SID_V1FL
-  lda (v2lf_low),y
-  sta SID_V2FL
-  lda (v3lf_low),y
-  sta SID_V3FL
+  ; lda (v2lf_low),y
+  ; sta SID_V2FL
+  ; lda (v3lf_low),y
+  ; sta SID_V3FL
   lda (v1w_low),y
   sta SID_V1CTRL
   lda (v2w_low),y
-  sta SID_V2CTRL
-  lda (v3w_low),y
-  sta SID_V3CTRL
+  ; sta SID_V2CTRL
+  ; lda (v3w_low),y
+  ; sta SID_V3CTRL
   
   ;wait 1/16 of a measure
   lda #128
