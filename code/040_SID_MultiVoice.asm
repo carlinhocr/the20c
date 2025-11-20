@@ -1107,7 +1107,7 @@ playSIDMultiVoiceLoop:
   sta SID_V3CTRL
   
   ;wait 1/16 of a measure
-  lda #60
+  lda #90
   sta soundDelay
   jsr sidSoundDelay
   jmp playSIDMultiVoiceLoop
