@@ -1127,55 +1127,55 @@ checkv1hf:
   lda indexY
   sec
   adc v1hf_low
-  bcc checkv1lf
+  bne checkv1lf
   inc v1hf_high
 checkv1lf:  
-  tya
+  lda indexY
   sec
   adc v1lf_low
-  bcc checkv1w
+  bne checkv1w
   inc v1lf_high
 checkv1w:  
-  tya
+  lda indexY
   sec
   adc v1w_low
-  bcc checkv2hf
+  bne checkv2hf
   inc v1w_high
 checkv2hf:
-  tya
+  lda indexY
   sec
   adc v2hf_low
-  bcc checkv2lf
+  bne checkv2lf
   inc v2hf_high
 checkv2lf:  
-  tya
+  lda indexY
   sec
   adc v2lf_low
-  bcc checkv2w
+  bne checkv2w
   inc v2lf_high
 checkv2w:  
-  tya
+  lda indexY
   sec
   adc v2w_low
-  bcc checkv3hf
+  bne checkv3hf
   inc v2w_high
 checkv3hf:
-  tya
+  lda indexY
   sec
   adc v3hf_low
-  bcc checkv3lf
+  bne checkv3lf
   inc v3hf_high
 checkv3lf:  
-  tya
+  lda indexY
   sec
   adc v3lf_low
-  bcc checkv3w
+  bne checkv3w
   inc v3lf_high
 checkv3w:  
-  tya
+  lda indexY
   sec
   adc v3w_low
-  bcc checkHighByteEnd
+  bne checkHighByteEnd
   inc v3w_high
 checkHighByteEnd:  
   rts
