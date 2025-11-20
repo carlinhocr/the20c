@@ -108,6 +108,7 @@ serialCharperLines = $3f
 serialTotalLinesAscii =$40
 serialDrawindEndChar=$41
 
+indexY=$43
 noteDuration=$44
 noteIndex=$45
 octaveOffset=$46
@@ -1082,6 +1083,8 @@ playSIDMultiVoice:
   ldy #$FF
 playSIDMultiVoiceLoop:
   iny 
+  tya
+  sta indexY
   ;add management of hight byte for more 256 rollover
   jsr checkHighByte
 
@@ -1121,7 +1124,7 @@ playSIDMultiVoiceEnd:
 
 checkHighByte:
 checkv1hf:
-  tya
+  lda indexY
   sec
   adc v1hf_low
   bcc checkv1lf
@@ -1171,7 +1174,7 @@ checkv3lf:
 checkv3w:  
   tya
   sec
-  adc v1w_low
+  adc v3w_low
   bcc checkHighByteEnd
   inc v3w_high
 checkHighByteEnd:  
