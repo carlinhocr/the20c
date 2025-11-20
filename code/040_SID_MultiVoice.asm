@@ -1084,7 +1084,7 @@ playSIDMultiVoiceLoop:
   iny 
   ;add management of hight byte for more 256 rollover
   jsr checkHighByte
-  
+
   lda (v1hf_low),y
   cmp #$FF
   beq playSIDMultiVoiceEnd 
@@ -1107,7 +1107,7 @@ playSIDMultiVoiceLoop:
   sta SID_V3CTRL
   
   ;wait 1/16 of a measure
-  lda #90
+  lda #128
   sta soundDelay
   jsr sidSoundDelay
   jmp playSIDMultiVoiceLoop
