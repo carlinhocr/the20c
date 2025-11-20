@@ -1125,82 +1125,55 @@ checkv1hf:
   sec
   adc v1hf_low
   bcc checkv1lf
-  sec 
-  lda #1
-  adc v1hf_high
-  sta v1hf_high
+  inc v1hf_high
 checkv1lf:  
   tya
   sec
   adc v1lf_low
   bcc checkv1w
-  sec 
-  lda #1
-  adc v1lf_high
-  sta v1lf_high
+  inc v1lf_high
 checkv1w:  
   tya
   sec
   adc v1w_low
   bcc checkv2hf
-  sec 
-  lda #1
-  adc v1w_high
-  sta v1w_high
+  inc v1w_high
 checkv2hf:
   tya
   sec
   adc v2hf_low
   bcc checkv2lf
-  sec 
-  lda #1
-  adc v2hf_high
-  sta v2hf_high
+  inc v2hf_high
 checkv2lf:  
   tya
   sec
   adc v2lf_low
   bcc checkv2w
-  sec 
-  lda #1
-  adc v2lf_high
-  sta v2lf_high
+  inc v2lf_high
 checkv2w:  
   tya
   sec
   adc v2w_low
   bcc checkv3hf
-  sec 
-  lda #1
-  adc v2w_high 
-  sta v2w_high
+  inc v2w_high
 checkv3hf:
   tya
   sec
   adc v3hf_low
   bcc checkv3lf
-  sec 
-  lda #1
-  adc v3hf_high
-  sta v3hf_high
+  inc v3hf_high
 checkv3lf:  
   tya
   sec
   adc v3lf_low
   bcc checkv3w
-  sec 
-  lda #1
-  adc v3lf_high
-  sta v3lf_high
+  inc v3lf_high
 checkv3w:  
   tya
   sec
   adc v1w_low
   bcc checkHighByteEnd
-  sec 
-  lda #1
-  adc v3w_high
-  sta v3w_high
+  inc v3w_high
 checkHighByteEnd:  
   rts
 
