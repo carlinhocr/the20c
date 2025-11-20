@@ -1083,20 +1083,8 @@ playSIDMultiVoice:
 playSIDMultiVoiceLoop:
   iny 
   ;add management of hight byte for more 256 rollover
-  tya
-  sec
-  adc v1hf_low
-  bcs addOneV1hf_high
-  tya
-  sec
-  adc v1lf_low
-  bcs addOneV1lf_high
-  tya
-  sec
-  adc v1w_low
-  bcs addOneV1w_high
-
-playSIDMultiVoiceNoExtraByteHigh:
+  jsr checkHighByte
+  
   lda (v1hf_low),y
   cmp #$FF
   beq playSIDMultiVoiceEnd 
@@ -1131,45 +1119,103 @@ playSIDMultiVoiceEnd:
   sta SID_FILTER_MV 
   rts
 
-addOneV1hf_high
+checkHighByte:
+checkv1hf:
+  tya
+  sec
+  adc v1hf_low
+  bcc checkv1lf
   sec 
   lda #1
   adc v1hf_high
-  rts
-addOneV1lf_high
+checkv1lf:  
+  tya
+  sec
+  adc v1lf_low
+  bcc checkv1w
   sec 
   lda #1
   adc v1lf_high
-  rts
-addOneV1w_high
+checkv1w:  
+  tya
+  sec
+  adc v1w_low
+  bcc checkv2hf
   sec 
   lda #1
-  adc v1w_high 
-  rts 
+  adc v1w_high
+checkv2hf:
+  tya
+  sec
+  adc v2hf_low
+  bcc checkv2lf
+  sec 
+  lda #1
+  adc v2hf_high
+checkv2lf:  
+  tya
+  sec
+  adc v2lf_low
+  bcc checkv2w
+  sec 
+  lda #1
+  adc v2lf_high
+checkv2w:  
+  tya
+  sec
+  adc v2w_low
+  bcc checkv3hf
+  sec 
+  lda #1
+  adc v2w_high 
+checkv3hf:
+  tya
+  sec
+  adc v3hf_low
+  bcc checkv3lf
+  sec 
+  lda #1
+  adc v3hf_high
+checkv3lf:  
+  tya
+  sec
+  adc v3lf_low
+  bcc checkv3w
+  sec 
+  lda #1
+  adc v3lf_high
+checkv3w:  
+  tya
+  sec
+  adc v1w_low
+  bcc checkHighByteEnd
+  sec 
+  lda #1
+  adc v3w_high
+checkHighByteEnd:  
+  rts
 
 ;OK initialize SID
 ;OK set adsr v1
 ;OK set adsr v2
 ;OK set adsr v3
 ;OK set volume and filters
-;loop to read every note
+;OK loop to read every note
     ;OK read note v1  
     ;OK set frequency h
     ;OK set frequency l
     ;OK read wavecontrol (gate bit)
     ;OK set controlwavecontrol (gate bit)
-    ;read note v2
-    ;translate frequency hl (maybe I can do it before playing)
-    ;set frequency h
-    ;set frequency l
-    ;read wavecontrol (gate bit)
-    ;set controlwavecontrol (gate bit)
-    ;read note v3
-    ;translate frequency hl 
-    ;set frequency h
-    ;set frequency l
-    ;read wavecontrol (gate bit)
-    ;set controlwavecontrol (gate bit)
+    ;OK read note v2
+    ;OK set frequency h
+    ;OK set frequency l
+    ;OK read wavecontrol (gate bit)
+    ;OK set controlwavecontrol (gate bit)
+    ;OK read note v3
+    ;OK set frequency h
+    ;OK set frequency l
+    ;OK read wavecontrol (gate bit)
+    ;OK set controlwavecontrol (gate bit)
     ;OK wait /16 of a measure ajustar mejor el tiempo
 ;OK wait 1 second
 ;OK turn volume off
