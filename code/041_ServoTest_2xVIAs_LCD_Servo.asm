@@ -316,10 +316,10 @@ moveServo:
   ;init the port to zero
   lda #%00000000
   sta SERVO_PORTA
-  jsr DELAY_SEC
-  jsr moveMinus90
-  jsr DELAY_SEC
-  jsr DELAY_SEC
+  ; jsr DELAY_SEC
+  ; jsr moveMinus90
+  ; jsr DELAY_SEC
+  ; jsr DELAY_SEC
   jsr movePlus90
   jsr DELAY_SEC
   jsr DELAY_SEC
@@ -391,7 +391,7 @@ movePlus90:
   lda #%00000000 ;bit 7 of port a to 0 turn off output
   sta SERVO_PORTA
   jsr wait_18ms
-  jsr wait_18ms ; i can wait a lot here  
+  jmp movePlus90
   rts
 
 moveMinus90:
