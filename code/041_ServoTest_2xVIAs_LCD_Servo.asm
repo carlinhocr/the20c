@@ -317,12 +317,15 @@ moveServo:
   lda #%00000000
   sta SERVO_PORTA
   jsr DELAY_SEC
-  jsr move0m1
+  jsr moveMinus90
   jsr DELAY_SEC
   jsr DELAY_SEC
-  jsr move0m2
+  jsr movePlus90
   jsr DELAY_SEC
   jsr DELAY_SEC
+  jmp moveServo
+
+
 moveServoLoop:  
   jsr move0m1
   jsr DELAY_SEC
@@ -388,6 +391,7 @@ movePlus90:
   lda #%00000000 ;bit 7 of port a to 0 turn off output
   sta SERVO_PORTA
   jsr wait_18ms
+  jsr wait_18ms ; i can wait a lot here  
   rts
 
 moveMinus90:
@@ -398,6 +402,7 @@ moveMinus90:
   lda #%00000000 ;bit 7 of port a to 0 turn off output
   sta SERVO_PORTA
   jsr wait_19ms
+  jsr wait_19ms ; i can wait a lot here
   rts  
 
 move0:
@@ -429,7 +434,7 @@ wait_0_5ms_loop_end:
 wait_1ms:
   ;1 millisecond with a 1Mhz clock is 1000 clock cycles or microseconds
   ;one operation is 2 clock cycles so 500 operations is 1 milisecond
-  ldx #100 ; 2 cycles
+  ldx #99 ; 2 cycles
   ;10 cycles total per loop
   ;1000 cycles are 100 runnings of the loop = 1 millisecond
   ;adding the rts that is 6 cycles ~ 1 millisecond
@@ -447,13 +452,13 @@ wait_1ms_loop_end:
   ;  beq 2 on branch not taken
   ;  jmp1 3 cycles
   ;  jmp2 3 cycles
-  ; done the loop 100 times is 1000 microseconds = 1 millisecond 
+  ; done the loop 99 times is 990 microseconds ~ 1 millisecond 
   ; + 1 extracycle on the beq + 6 extra cycles on the rts 
-  ; 1007 microseconds
+  ; 997 microseconds
   ; + lda 2 cycles
   ; + sta abs 4 cycles
   ; to stop de pulse total
-  ; 1013
+  ; 1003 microseconds
 
 wait_1_5ms:
   ;1.5 millisecond with a 1Mhz clock is 1500 clock cycles
@@ -484,10 +489,22 @@ wait_2ms_loop:
   beq wait_2ms_loop_end ;2cycles to evaluate + 1 or to 2 to take branch
   jmp wait_2ms_jump_to_wait ;3cycles
 wait_2ms_jump_to_wait:  
-  jmp wait_1ms_loop ;3cycles
+  jmp wait_2ms_loop ;3cycles
 wait_2ms_loop_end:
   rts  ;6 cycles
-  ;2+2+3
+  ;ldx 2 +
+  ;loop 2+2+3+6 = 10 
+  ;  dex 2
+  ;  beq 2 on branch not taken
+  ;  jmp1 3 cycles
+  ;  jmp2 3 cycles
+  ; done the loop 199 times is 1990 microseconds ~ 2 millisecond 
+  ; + 1 extracycle on the beq + 6 extra cycles on the rts 
+  ; 1997 microseconds
+  ; + lda 2 cycles
+  ; + sta abs 4 cycles
+  ; to stop de pulse total
+  ; 2003 microseconds
 
 wait_18ms:
   ;2 millisecond with a 1Mhz clock is 2000 clock cycles
