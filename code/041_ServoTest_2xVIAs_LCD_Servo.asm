@@ -413,6 +413,7 @@ move0:
   lda #%00000000 ;bit 7 of port a to 0 turn off output
   sta SERVO_PORTA
   jsr wait_18_5ms
+  jmp move0
   rts  
 
 wait_0_5ms:
