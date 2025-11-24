@@ -408,7 +408,7 @@ moveMinus90:
 
 move0:
   ;send 2ms pulse on a duty cycle of 20ms
-  ;lda #%10000000 ;bit 7 of port a to 1 turn on output
+  lda #%10000000 ;bit 7 of port a to 1 turn on output
   sta SERVO_PORTA
   jsr wait_1_5ms
   lda #%00000000 ;bit 7 of port a to 0 turn off output
