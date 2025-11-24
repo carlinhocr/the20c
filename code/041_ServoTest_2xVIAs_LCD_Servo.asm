@@ -322,6 +322,11 @@ moveServo:
   jsr moveMinus90
   jsr moveMinus90
   jsr moveMinus90
+  jsr moveMinus90
+  jsr moveMinus90
+  jsr moveMinus90
+  jsr moveMinus90
+  jsr moveMinus90  
   jsr DELAY_SEC
   jsr DELAY_SEC
   jsr movePlus90
