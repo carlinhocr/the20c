@@ -389,7 +389,7 @@ movePlus90:
   lda #%10000000 ;bit 7 of port a to 1 turn on output
   sta SERVO_PORTA
 wait_2ms:
-  ldx #99 ; 2 cycles
+  ldx #199 ; 2 cycles
 wait_2ms_loop:
   dex ;2 cycles
   beq wait_2ms_loop_end ;2cycles to evaluate + 1 or to 2 to take branch
@@ -405,7 +405,7 @@ wait_18ms:
 wait_18ms_inner:  
   dey
   beq wait_18ms_end
-  ldx #99 ; 2 cycles
+  ldx #199 ; 2 cycles
 wait_18ms_wait_2ms_loop:
   dex ;2 cycles
   beq wait_18ms_inner 
