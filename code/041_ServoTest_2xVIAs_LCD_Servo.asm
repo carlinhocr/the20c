@@ -317,10 +317,10 @@ moveServo:
   lda #%00000000
   sta SERVO_PORTA
   ; jsr DELAY_SEC
-  jsr moveMinus90
+  ;jsr moveMinus90
   ; jsr DELAY_SEC
   ; jsr DELAY_SEC
-  ;jsr movePlus90
+  jsr movePlus90
   ;jsr move0
   jsr DELAY_SEC
   jsr DELAY_SEC
@@ -388,11 +388,31 @@ movePlus90:
   ;send 2ms pulse on a duty cycle of 20ms
   lda #%10000000 ;bit 7 of port a to 1 turn on output
   sta SERVO_PORTA
-  jsr wait_2ms
+wait_2ms:
+  ldx #99 ; 2 cycles
+wait_2ms_loop:
+  dex ;2 cycles
+  beq wait_2ms_loop_end ;2cycles to evaluate + 1 or to 2 to take branch
+  jmp wait_2ms_jump_to_wait ;3cycles
+wait_2ms_jump_to_wait:  
+  jmp wait_2ms_loop ;3cycles
+wait_2ms_loop_end:
   lda #%00000000 ;bit 7 of port a to 0 turn off output
   sta SERVO_PORTA
-  jsr wait_18ms
-  jmp movePlus90
+  ;jsr wait_19ms
+wait_18ms:
+  ldy #18
+wait_18ms_inner:  
+  dey
+  beq wait_18ms_end
+  ldx #99 ; 2 cycles
+wait_18ms_wait_2ms_loop:
+  dex ;2 cycles
+  beq wait_18ms_inner 
+  jmp wait_18ms_wait_2ms_jump_to_wait ;3cycles
+wait_18ms_wait_2ms_jump_to_wait:  
+  jmp wait_18ms_wait_2ms_loop ;3cycles
+wait_18ms_end:
   rts
 
 moveMinus90:
@@ -500,21 +520,21 @@ wait_1_5ms_loop_end:
   rts  ;6 cycles
 
 
-wait_2ms:
-  ;2 millisecond with a 1Mhz clock is 2000 clock cycles
-  ;one operation is 2 clock cycles so 1000 operations is 2 milisecond
-  ldx #200
-  ;10 cycles total per loop
-  ;2000 cycles are 200 runnings of the loop = 2 millisecond
-  ;adding the rts that is 6 cycles ~ 2 millisecond
-wait_2ms_loop:
-  dex ;2 cycles
-  beq wait_2ms_loop_end ;2cycles to evaluate + 1 or to 2 to take branch
-  jmp wait_2ms_jump_to_wait ;3cycles
-wait_2ms_jump_to_wait:  
-  jmp wait_2ms_loop ;3cycles
-wait_2ms_loop_end:
-  rts  ;6 cycles
+; wait_2ms:
+;   ;2 millisecond with a 1Mhz clock is 2000 clock cycles
+;   ;one operation is 2 clock cycles so 1000 operations is 2 milisecond
+;   ldx #200
+;   ;10 cycles total per loop
+;   ;2000 cycles are 200 runnings of the loop = 2 millisecond
+;   ;adding the rts that is 6 cycles ~ 2 millisecond
+; wait_2ms_loop:
+;   dex ;2 cycles
+;   beq wait_2ms_loop_end ;2cycles to evaluate + 1 or to 2 to take branch
+;   jmp wait_2ms_jump_to_wait ;3cycles
+; wait_2ms_jump_to_wait:  
+;   jmp wait_2ms_loop ;3cycles
+; wait_2ms_loop_end:
+;   rts  ;6 cycles
   ;ldx 2 +
   ;loop 2+2+3+6 = 10 
   ;  dex 2
@@ -529,15 +549,15 @@ wait_2ms_loop_end:
   ; to stop de pulse total
   ; 2003 microseconds
 
-wait_18ms:
-  ;2 millisecond with a 1Mhz clock is 2000 clock cycles
-  ;one operation is 2 clock cycles so 1000 operations is 2 milisecond
-  ldy #9 ;the first evaluation is at 9 since i start decreasing
-wait_18ms_outer_loop:  
-  jsr wait_2ms
-  dey ;2cycles
-  bne wait_18ms_outer_loop
-  rts  ;6 cycles
+; wait_18ms:
+;   ;2 millisecond with a 1Mhz clock is 2000 clock cycles
+;   ;one operation is 2 clock cycles so 1000 operations is 2 milisecond
+;   ldy #9 ;the first evaluation is at 9 since i start decreasing
+; wait_18ms_outer_loop:  
+;   jsr wait_2ms
+;   dey ;2cycles
+;   bne wait_18ms_outer_loop
+;   rts  ;6 cycles
 
 wait_18_5ms:
   ;2 millisecond with a 1Mhz clock is 2000 clock cycles
