@@ -1067,13 +1067,13 @@ playExampleSong3Voices:
   sta SID_V3SR
   ;set Volume and low pass filter
   lda #31 ;0001 1111
-  lda #15 
+  ;lda #15 
   sta SID_FILTER_MV  
   ;set high pulse width voice 2 (SPECIFIC TO THIS SONG )
   lda #8
   sta SID_V2PWLH
   ;set high freq for filter cutt off (SPECIFIC TO THIS SONG)
-  lda #16
+  lda #128
   sta SID_FILTER_FCH
   ;set resonance for filter and filter voice 3 (SPECIFIC TO THIS SONG)
   lda #244
