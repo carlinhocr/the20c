@@ -1070,7 +1070,7 @@ playExampleSong3Voices:
   ;lda #15 
   sta SID_FILTER_MV  
   ;set high pulse width voice 2 (SPECIFIC TO THIS SONG )
-  lda #8
+  lda #2
   sta SID_V2PWLH
   ;set high freq and low for filter cutt off (SPECIFIC TO THIS SONG)
   ;for all voices
