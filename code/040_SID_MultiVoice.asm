@@ -1070,13 +1070,13 @@ playExampleSong3Voices:
   ;lda #15 
   sta SID_FILTER_MV  
   ;set high pulse width voice 2 (SPECIFIC TO THIS SONG )
-  lda #2
+  lda #8
   sta SID_V2PWLH
   ;set high freq and low for filter cutt off (SPECIFIC TO THIS SONG)
   ;for all voices
   lda #0
   sta SID_FILTER_FCL
-  lda #32
+  lda #16
   sta SID_FILTER_FCH
   ;set resonance for filter and filter voice 3 (SPECIFIC TO THIS SONG)
   ;244 1111 0100 = resonance->1111 maximum filter 0100 only apply to voice3
