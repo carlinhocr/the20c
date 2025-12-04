@@ -1114,6 +1114,7 @@ playSIDMultiVoiceLoop:
   sta SID_V3CTRL
   
   ;wait 1/16 of a measure
+  ;this number defines how long to wait for 1/16
   lda #128
   sta soundDelay
   jsr sidSoundDelay
