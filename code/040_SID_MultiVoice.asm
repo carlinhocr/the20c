@@ -1073,7 +1073,7 @@ playExampleSong3Voices:
   lda #8
   sta SID_V2PWLH
   ;set high freq for filter cutt off (SPECIFIC TO THIS SONG)
-  lda #64
+  lda #100
   sta SID_FILTER_FCH
   ;set resonance for filter and filter voice 3 (SPECIFIC TO THIS SONG)
   lda #244
