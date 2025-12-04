@@ -1051,9 +1051,9 @@ playExampleSong3Voices:
   ; ;ad voice 3
   lda #10; (a=0,d=10)
   sta SID_V3AD
-  ;set sustain/release for Voice 1,2,3
-  ;bits 7-4 sustain bits 3-0 release
-  ;6 is 0000 0110
+  ; set sustain/release for Voice 1,2,3
+  ; bits 7-4 sustain bits 3-0 release
+  ; 6 is 0000 0110
   ;sustain at zero amplitud
   ;decay identical to release scale
   ;6 is 204ms
@@ -1066,12 +1066,12 @@ playExampleSong3Voices:
   lda #197;(S=15, R=0)
   sta SID_V3SR
   ;set Volume and low pass filter
-  ;lda #31 ;0001 1111
-  lda #31 
+  lda #31 ;0001 1111
+  lda #15 
   sta SID_FILTER_MV  
   ;set high pulse width voice 2 (SPECIFIC TO THIS SONG )
-  lda #8
-  sta SID_V2PWLH
+  ; lda #8
+  ; sta SID_V2PWLH
   ;set high freq for filter cutt off (SPECIFIC TO THIS SONG)
   lda #128
   sta SID_FILTER_FCH
@@ -1088,7 +1088,6 @@ playSIDMultiVoiceLoop:
   ; sta indexY
   ; ;add management of hight byte for more 256 rollover
   ; jsr checkHighByte
-
   lda (v1hf_low),y
   cmp #$FF
   beq playSIDMultiVoiceEnd 
@@ -1103,12 +1102,12 @@ playSIDMultiVoiceLoop:
   sta SID_V2FL
   lda (v3lf_low),y
   sta SID_V3FL
-  ; lda (v1w_low),y
-  ; sta SID_V1CTRL
+  lda (v1w_low),y
+  sta SID_V1CTRL
   lda (v2w_low),y
   sta SID_V2CTRL
-  ; lda (v3w_low),y
-  ; sta SID_V3CTRL
+  lda (v3w_low),y
+  sta SID_V3CTRL
   
   ;wait 1/16 of a measure
   lda #128
