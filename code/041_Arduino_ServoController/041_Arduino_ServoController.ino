@@ -35,7 +35,8 @@ void senseDirection() {
     portA = (portA << 1) + pinA;
   };
   //checkOneMotor(portA);
-  checkTwoMotors(portA);
+  //checkTwoMotors(portA);
+  checkFourMotors(portA);
   delay(1000);
 }
 
@@ -65,7 +66,7 @@ void checkTwoMotors(unsigned int port) {
   };
 }
 
-void checkFourotors(unsigned int port) {  
+void checkFourMotors(unsigned int port) {  
   if (port == 3) {
     myServo1.write(180);
   } else if (port == 2){
