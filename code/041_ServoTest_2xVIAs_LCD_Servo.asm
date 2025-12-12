@@ -280,7 +280,7 @@ RESET:
 programStart:
   jsr screenInit
   jsr welcomeMessage
-  jsr moveServo
+  jsr moveServoArduino
 
 programLoop:  
   jmp programLoop
@@ -311,6 +311,19 @@ welcomeMessage:
 ;----------------------------------SERVO TEST---------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+
+moveServoArduino:
+  lda #%00000000
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000010
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000011
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  jmp moveServoArduino
+
 
 moveServo:
   ;init the port to zero
