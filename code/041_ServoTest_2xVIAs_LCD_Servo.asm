@@ -280,7 +280,7 @@ RESET:
 programStart:
   jsr screenInit
   jsr welcomeMessage
-  jsr moveServoArduino
+  jsr moveServoArduinoTwoMotors
 
 programLoop:  
   jmp programLoop
@@ -323,6 +323,27 @@ moveServoArduino:
   sta SERVO_PORTA
   jsr delay_2_sec
   jmp moveServoArduino
+
+moveServoArduinoTwoMotors:
+  lda #%00000001
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000010
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000011
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000100
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000101
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000110
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  jmp moveServoArduinoTwoMotors  
 
 
 moveServo:

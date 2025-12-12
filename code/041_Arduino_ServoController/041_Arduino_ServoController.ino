@@ -1,9 +1,9 @@
-const char PA[] = {7,6,5,4,3,2,1,0}; //char is one byte from -127 to 127
+const char PA[] = {9,8,7,6,5,4,3,2}; //char is one byte from -127 to 127
 
 #include <Servo.h>
 
 
-Servo myServo;
+Servo myServo, myServoTwo;
 
 void setup() {
   Serial.println("Hola");
@@ -12,6 +12,7 @@ void setup() {
     pinMode(PA[n], INPUT);
   }
   myServo.attach(13);
+  myServoTwo.attach(9);
   Serial.begin(9600);
 }
 
@@ -31,12 +32,34 @@ void senseDirection() {
     Serial.print(pinA);
     portA = (portA << 1) + pinA;
   };
-  if (portA == 3) {
+  //checkOneMotor(portA);
+  checkTwoMotors(portA);
+  delay(1000);
+}
+
+void checkOneMotor(unsigned int port) {  
+  if (port == 3) {
     myServo.write(180);
-  } else if (portA == 2){
+  } else if (port == 2){
     myServo.write(90);
   }  else {
     myServo.write(0);  
+  };
+}
+
+void checkTwoMotors(unsigned int port) {  
+  if (port == 3) {
+    myServo.write(180);
+  } else if (port == 2){
+    myServo.write(90);
+  } else if (port == 1){
+    myServo.write(0);  
+  } else if (port == 6){
+    myServoTwo.write(180);   
+  } else if (port == 5){
+    myServoTwo.write(90); 
+  } else if (port == 4){
+    myServoTwo.write(0);     
   };
 }
 
