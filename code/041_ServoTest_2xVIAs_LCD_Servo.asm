@@ -280,7 +280,7 @@ RESET:
 programStart:
   jsr screenInit
   jsr welcomeMessage
-  jsr moveServoArduinoTwoMotors
+  jsr moveServoArduinoFourMotors
 
 programLoop:  
   jmp programLoop
