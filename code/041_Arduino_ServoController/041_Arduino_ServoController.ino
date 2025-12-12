@@ -12,7 +12,7 @@ void setup() {
     pinMode(PA[n], INPUT);
   }
   myServo.attach(13);
-  myServoTwo.attach(9);
+  myServoTwo.attach(12);
   Serial.begin(9600);
 }
 
