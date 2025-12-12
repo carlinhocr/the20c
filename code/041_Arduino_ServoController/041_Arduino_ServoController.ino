@@ -13,6 +13,8 @@ void setup() {
   }
   myServo1.attach(13);
   myServo2.attach(12);
+  myServo3.attach(11);
+  myServo4.attach(10);  
   Serial.begin(9600);
 }
 
