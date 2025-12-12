@@ -3,7 +3,7 @@ const char PA[] = {9,8,7,6,5,4,3,2}; //char is one byte from -127 to 127
 #include <Servo.h>
 
 
-Servo myServo, myServoTwo;
+Servo myServo, myServo1, myServo2, myServo3, myServo4;
 
 void setup() {
   Serial.println("Hola");
@@ -11,8 +11,8 @@ void setup() {
   for (int n=0;n<8;n++){
     pinMode(PA[n], INPUT);
   }
-  myServo.attach(13);
-  myServoTwo.attach(12);
+  myServo1.attach(13);
+  myServo2.attach(12);
   Serial.begin(9600);
 }
 
@@ -20,7 +20,7 @@ void testMotor() {
   for (int i=0;i<181;i=i+15){
     i;
     Serial.println(i);
-    myServo.write(i);
+    myServo1.write(i);
     delay (2000) ;
   }
 }
@@ -39,29 +39,58 @@ void senseDirection() {
 
 void checkOneMotor(unsigned int port) {  
   if (port == 3) {
-    myServo.write(180);
+    myServo1.write(180);
   } else if (port == 2){
-    myServo.write(90);
+    myServo1.write(90);
   }  else {
-    myServo.write(0);  
+    myServo1.write(0);  
   };
 }
 
 void checkTwoMotors(unsigned int port) {  
   if (port == 3) {
-    myServo.write(180);
+    myServo1.write(180);
   } else if (port == 2){
-    myServo.write(90);
+    myServo1.write(90);
   } else if (port == 1){
-    myServo.write(0);  
+    myServo1.write(0);  
   } else if (port == 6){
-    myServoTwo.write(180);   
+    myServo2.write(180);   
   } else if (port == 5){
-    myServoTwo.write(90); 
+    myServo2.write(90); 
   } else if (port == 4){
-    myServoTwo.write(0);     
+    myServo2.write(0);     
   };
 }
+
+void checkFourotors(unsigned int port) {  
+  if (port == 3) {
+    myServo1.write(180);
+  } else if (port == 2){
+    myServo1.write(90);
+  } else if (port == 1){
+    myServo1.write(0);  
+  } else if (port == 6){
+    myServo2.write(180);   
+  } else if (port == 5){
+    myServo2.write(90); 
+  } else if (port == 4){
+    myServo2.write(0);   
+  } else  if (port == 9) {
+    myServo3.write(180);
+  } else if (port == 8){
+    myServo3.write(90);
+  } else if (port == 7){
+    myServo3.write(0);  
+  } else if (port == 12){
+    myServo4.write(180);   
+  } else if (port == 11){
+    myServo4.write(90); 
+  } else if (port == 10){
+    myServo4.write(0);    
+  };
+}
+
 
 void loop() {
   // put your main code here, to run repeatedly:

@@ -346,6 +346,45 @@ moveServoArduinoTwoMotors:
   jmp moveServoArduinoTwoMotors  
 
 
+moveServoArduinoFourMotors:
+  lda #%00000001
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000010
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000011
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000100
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000101
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000110
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00000111
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00001000
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00001001
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00001010
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00001011
+  sta SERVO_PORTA
+  jsr delay_2_sec
+  lda #%00001100
+  sta SERVO_PORTA
+  jsr delay_2_sec  
+  jmp moveServoArduinoFourMotors 
+
 moveServo:
   ;init the port to zero
   lda #%00000000
