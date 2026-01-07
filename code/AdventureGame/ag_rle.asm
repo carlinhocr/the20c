@@ -731,22 +731,52 @@ rle_expand_loop:
   sta #$1
   sta rleTimes
   ;print the char
+  jsr rle_print_char
   dey ;decrement y as it was a new character there and not times Byte
   jmp rle_expand_loop
 
 rle_expand_several_times:
   sta rleTimes
   ;print the char
+  jsr rle_print_char
   jmp rle_expand_loop 
 rle_expand_print_one_and_end:
   sta rleChar
   lda #1
   sta rleTimes
-  ;print the char 
-
+  ;print the char
+  jsr rle_print_char
 rle_expand_end:
   ;print line feed and carriege return
+  jsr send_rs232_CRLF
   rts  
+
+rle_print_char:
+  pha
+  tya
+  pha 
+  txa
+  pha 
+  ldx #$0
+rle_print_char_loop:
+  lda rleTimes
+  cpx 
+  beq rle_print_char_end
+  txa
+  pha 
+  lda rleChar
+  jsr send_rs232_char   
+  pla
+  tax
+  inx
+  jmp rle_print_char_loop
+rle_print_char_end:
+  pla
+  tax
+  pla
+  tay
+  pla
+  rts
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
