@@ -708,6 +708,8 @@ rle_init:
   sta rleVectorLow
   lda #> rle_data 
   sta rleVectorHigh
+  lda #64
+  sta rleChar
   rts
 
 rle_expand:
