@@ -116,14 +116,25 @@ def comprimir_ascii_rle3chars(cadena: str) -> str:
 def compress_screen(filename):
     screen = read_screen(filename)
     screen_compressed = []
-    for line_uncompress in screen:
-        screen_compressed.append(comprimir_ascii_rle3chars(line_uncompress))
-    return screen_compressed    
+    for line_uncompress in screen: 
+        screen_compressed.append(comprimir_ascii_rle3chars(line_uncompress))    
+    return screen_compressed  
 
-filename= "screen_la20c.txt"
-screen_compressed = compress_screen(filename)
-for line in screen_compressed:
-    print(line)
+def format_screen(screen):  
+    screen_format = []
+    for line in screen: 
+        line_formatted = "  .byte "+line
+        screen_format.append(line_formatted)
+    return screen_format    
+
+def process_screen():
+    filename= "screen_la20c.txt"
+    screen_compressed = compress_screen(filename)
+    screen_format = format_screen(screen_compressed)
+    for line in screen_format:
+        print(line)
+
+process_screen()
 # Ejemplo de uso
 #texto = "aaabbc"
 # texto = "aaabb                                        cecaffbb hola como estas"
