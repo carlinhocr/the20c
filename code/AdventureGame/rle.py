@@ -1,3 +1,9 @@
+def read_screen(filename: str):
+    # Open the file and read all lines into a list
+    with open(filename, "r") as file:
+        lines = file.read().splitlines()
+    return lines
+
 def comprimir_ascii(cadena: str) -> str:
     if not cadena:
         return ""
@@ -104,23 +110,34 @@ def comprimir_ascii_rle3chars(cadena: str) -> str:
             # 1 o 2 repeticiones → escribir ASCII por separado
             for _ in range(contador):
                 resultado.append(str(ord(actual)))
-
+    resultado.append("255") #add line termination character for asm processing
     return ",".join(resultado)
 
+def compress_screen(filename):
+    screen = read_screen(filename)
+    screen_compressed = []
+    for line_uncompress in screen:
+        screen_compressed.append(comprimir_ascii_rle3chars(line_uncompress))
+    return screen_compressed    
+
+filename= "screen_la20c.txt"
+screen_compressed = compress_screen(filename)
+for line in screen_compressed:
+    print(line)
 # Ejemplo de uso
 #texto = "aaabbc"
-texto = "aaabb                                        cecaffbb hola como estas"
-comprimido = comprimir_ascii(texto)
-comprimido2 = comprimir_ascii_5chars(texto)
-comprimido3 = comprimir_ascii_limit31(texto)
-comprimido4 =  comprimir_ascii_rle3chars(texto)
-print(texto)
-print(len(texto))
-print(comprimido)
-print (comprimido.count(",")+1)
-print (comprimido2)
-print (comprimido2.count(",")+1)
-print (comprimido3)
-print (comprimido3.count(",")+1)
-print (comprimido4)
-print (comprimido4.count(",")+1)
+# texto = "aaabb                                        cecaffbb hola como estas"
+# comprimido = comprimir_ascii(texto)
+# comprimido2 = comprimir_ascii_5chars(texto)
+# comprimido3 = comprimir_ascii_limit31(texto)
+# comprimido4 =  comprimir_ascii_rle3chars(texto)
+# print(texto)
+# print(len(texto))
+# print(comprimido)
+# print (comprimido.count(",")+1)
+# print (comprimido2)
+# print (comprimido2.count(",")+1)
+# print (comprimido3)
+# print (comprimido3.count(",")+1)
+# print (comprimido4)
+# print (comprimido4.count(",")+1)
