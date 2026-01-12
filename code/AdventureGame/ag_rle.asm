@@ -738,7 +738,6 @@ rle_expand_several_times:
   jsr rle_print_char
   jmp rle_expand_loop 
 rle_expand_print_one_and_end:
-  sta rleChar
   lda #1
   sta rleTimes
   ;print the char
