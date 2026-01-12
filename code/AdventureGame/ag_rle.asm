@@ -168,7 +168,7 @@ programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
   jsr viaLcdInit
-  jsr viaSoundInit
+  ;jsr viaSoundInit
   jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
@@ -184,13 +184,7 @@ lcdDemoMessage:
   sta charDataVectorHigh
   jsr print_ascii_screen
   jsr delay_3_sec
-  ;Draw Screen 2 Final Demo
-  lda #<screen2_demo
-  sta charDataVectorLow
-  lda #>screen2_demo
-  sta charDataVectorHigh
-  jsr print_ascii_screen
-  jsr delay_3_sec
+
   rts 
 
 
@@ -398,58 +392,60 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 mainProgram:
-  jsr printMessage01
-  jsr delay_3_sec
-  jsr printMessage02
-  jsr delay_3_sec
-  jsr printMessage03
-  jsr delay_3_sec
-  jsr printthe20cAscii
-  jsr delay_3_sec
-  jsr printMessage04
-  jsr delay_3_sec  
-  jsr printMessage05
-  jsr delay_3_sec
-  jsr delayClear 
-  jsr printTrucoAscii
-  jsr delayClear 
-  jsr printMessage06
-  jsr delay_3_sec
-  jsr delayClear   
-  jsr printCiberCirujas  
-  jsr delayClear   
-  jsr printArcadeAscii
-  jsr delayClear   
+  jsr rle_init
+  jsr rle_expand
+  ; jsr printMessage01
+  ; jsr delay_3_sec
+  ; jsr printMessage02
+  ; jsr delay_3_sec
+  ; jsr printMessage03
+  ; jsr delay_3_sec
+  ; jsr printthe20cAscii
+  ; jsr delay_3_sec
+  ; jsr printMessage04
+  ; jsr delay_3_sec  
+  ; jsr printMessage05
+  ; jsr delay_3_sec
+  ; jsr delayClear 
+  ; jsr printTrucoAscii
+  ; jsr delayClear 
+  ; jsr printMessage06
+  ; jsr delay_3_sec
+  ; jsr delayClear   
+  ; jsr printCiberCirujas  
+  ; jsr delayClear   
+  ; jsr printArcadeAscii
+  ; jsr delayClear   
   ;jsr printextraRomNarcoPoliceAscii
   ;jsr delayClear  
   ;jsr printextraRomFreddyAscii 
   ;jsr delayClear  
-  jsr printModoHistoriaAscii
-  jsr delayClear   
-  jsr printVentilastationAscii
-  jsr delayClear
-  jsr printInformaticaClasica  
-  jsr delayClear
-  jsr printAlfaAscii  
-  jsr delayClear
-  jsr printReplay
-  jsr delayClear    
-  jsr printMessage07
-  jsr delay_3_sec
-  jsr delayClear   
-  jsr printCommodoreAscii
-  jsr delayClear 
-  jsr printMarioAscii
-  jsr playMario
-  jsr playMario
-  jsr delayClear
-  jsr printMessage08
-  jsr delay_3_sec
-  jsr delayClear    
-  jsr printMessage09
-  jsr delay_3_sec
-  jsr delayClear  
-  jsr print20cAscii
+  ; jsr printModoHistoriaAscii
+  ; jsr delayClear   
+  ; jsr printVentilastationAscii
+  ; jsr delayClear
+  ; jsr printInformaticaClasica  
+  ; jsr delayClear
+  ; jsr printAlfaAscii  
+  ; jsr delayClear
+  ; jsr printReplay
+  ; jsr delayClear    
+  ; jsr printMessage07
+  ; jsr delay_3_sec
+  ; jsr delayClear   
+  ; jsr printCommodoreAscii
+  ; jsr delayClear 
+  ; jsr printMarioAscii
+  ; jsr playMario
+  ; jsr playMario
+  ; jsr delayClear
+  ; jsr printMessage08
+  ; jsr delay_3_sec
+  ; jsr delayClear    
+  ; jsr printMessage09
+  ; jsr delay_3_sec
+  ; jsr delayClear  
+  ; jsr print20cAscii
   rts
 
 delayClear:
@@ -712,6 +708,7 @@ rle_init:
   sta rleVectorLow
   lda #> rle_data 
   sta rleVectorHigh
+  rts
 
 rle_expand:
   ldy #$ff
@@ -728,7 +725,7 @@ rle_expand_loop:
   cmp #$ff
   beq rle_expand_print_one_and_end
   ;if we are here is just print one time and continue
-  sta #$1
+  lda #$1
   sta rleTimes
   ;print the char
   jsr rle_print_char
@@ -759,8 +756,7 @@ rle_print_char:
   pha 
   ldx #$0
 rle_print_char_loop:
-  lda rleTimes
-  cpx 
+  cpx rleTimes
   beq rle_print_char_end
   txa
   pha 
@@ -2086,9 +2082,9 @@ clearRS232Screen:
   .ascii "e" 
 
 screen1_demo:
-  .asciiz "   Hola de nuevo,   "
-  .asciiz "                    "  
-  .asciiz "   Soy, la  20c.    "
+  .asciiz "     Adventure      "
+  .asciiz "       Game         "  
+  .asciiz "        RLE         "
   .asciiz "                    "
 
 
