@@ -720,10 +720,10 @@ rle_expand_loop:
   sta rleChar
   iny
   lda (rleVectorLow),y 
-  cmp #32
-  bmi rle_expand_several_times
   cmp #$ff
   beq rle_expand_print_one_and_end
+  cmp #32
+  bmi rle_expand_several_times
   ;if we are here is just print one time and continue
   lda #$1
   sta rleTimes
