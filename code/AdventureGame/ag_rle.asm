@@ -740,7 +740,7 @@ rle_screen_end:
 rle_expand:
   txa 
   pha
-  ldy #$ff
+  ldy #$00
 rle_expand_loop:
   iny
   cpy #$0
