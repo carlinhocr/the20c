@@ -785,6 +785,10 @@ rle_expand_end:
   clc
   adc rleVectorLow
   sta rleVectorLow
+  bcc rle_expand_end_end
+  inc rleVectorHigh
+rle_expand_end_end:  
+  ;retreive x value for each line
   pla
   tax 
   rts  
