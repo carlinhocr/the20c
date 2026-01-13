@@ -1,8 +1,4 @@
-def read_screen(filename: str):
-    # Open the file and read all lines into a list
-    with open(filename, "r") as file:
-        lines = file.read().splitlines()
-    return lines
+
 
 def comprimir_ascii(cadena: str) -> str:
     if not cadena:
@@ -113,6 +109,12 @@ def comprimir_ascii_rle3chars(cadena: str) -> str:
     resultado.append("255") #add line termination character for asm processing
     return ",".join(resultado)
 
+def read_screen(filename: str):
+    # Open the file and read all lines into a list
+    with open(filename, "r", encoding="latin-1") as file:
+        lines = file.read().splitlines()
+    return lines
+
 def compress_screen(filename):
     screen = read_screen(filename)
     screen_compressed = []
@@ -120,11 +122,24 @@ def compress_screen(filename):
         screen_compressed.append(comprimir_ascii_rle3chars(line_uncompress))    
     return screen_compressed  
 
+def split_into_chunks(input_string, chunk_size=10):
+    # Split the string into elements
+    elements = [e.strip() for e in input_string.split(",")]
+
+    # Group elements into chunks
+    result = []
+    for i in range(0, len(elements), chunk_size):
+        chunk = elements[i:i + chunk_size]
+        result.append(",".join(chunk))
+    return result
+
 def format_screen(screen):  
     screen_format = []
+    header = "  .byte "
     for line in screen: 
-        line_formatted = "  .byte "+line
-        screen_format.append(line_formatted)
+        chunks = split_into_chunks(line,10)
+        for chunk in chunks:
+            screen_format.append(header + chunk)
     return screen_format    
 
 def process_screen():
