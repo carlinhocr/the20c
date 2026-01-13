@@ -758,7 +758,7 @@ rle_expand_loop_cont2:
   beq rle_expand_print_one_and_end
   lda (rleVectorLow),y   
   cmp #32
-  bmi rle_expand_several_times
+  bcc rle_expand_several_times
   ;if we are here is just print one time and continue
   lda #$1
   sta rleTimes
