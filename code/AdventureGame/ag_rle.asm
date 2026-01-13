@@ -758,6 +758,7 @@ rle_expand_loop_cont2:
   beq rle_expand_print_one_and_end
   lda (rleVectorLow),y   
   cmp #32
+  ;when accumulator is minor that data (do not use bmi)
   bcc rle_expand_several_times
   ;if we are here is just print one time and continue
   lda #$1
@@ -2263,9 +2264,9 @@ message09:
   .ascii "e"   
 
 screen_20c_compressed:
-  .byte 5
-  .byte 32,32,34,160,32,31,32,5,76,65,32
-  .byte 50,48,99,226,148,140,34,255
+  .byte 31
+  .byte 32,32,34,32,31,32,5,76,65,32
+  .byte 50,48,99,34,255
   .byte 32,32,34,34,32,32,255
   .byte 32,32,34,32,31,32,32,79,83,79
   .byte 76,65,66,83,46,84,69,67,72,34
