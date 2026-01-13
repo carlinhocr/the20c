@@ -782,6 +782,9 @@ rle_expand_print_one_and_end:
 rle_expand_end:
   ;print line feed and carriege return
   jsr send_rs232_CRLF
+  tya
+  clc
+  adc rleVectorLow
   pla
   tax 
   rts  
