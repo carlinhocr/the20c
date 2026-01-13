@@ -144,8 +144,10 @@ def format_screen(screen):
 
 def process_screen():
     filename= "screen_la20c.txt"
+    header = "  .byte "
     screen_compressed = compress_screen(filename)
     screen_format = format_screen(screen_compressed)
+    print (header + str(len(screen_compressed)))
     for line in screen_format:
         print(line)
 
