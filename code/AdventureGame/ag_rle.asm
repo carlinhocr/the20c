@@ -732,18 +732,19 @@ rle_screen_process_line:
   inx
   cpx rleScreenLines
   beq rle_screen_end
-  jsr rle_expand
+  jsr rle_expand_screen
   jmp rle_screen_process_line
 rle_screen_end:
   rts
 
-rle_expand:
+rle_expand_screen:
   txa 
   pha
   ldy #$00
 rle_expand_loop:
-  iny
-  cpy #$0
+  inc rleVectorLow
+  lda rleVectorLow
+  cmp #$0
   bne rle_expand_loop_cont1
   inc rleVectorHigh
 rle_expand_loop_cont1:  
@@ -751,8 +752,9 @@ rle_expand_loop_cont1:
   cmp #$ff
   beq rle_expand_end
   sta rleChar
-  iny
-  cpy #$0
+  inc rleVectorLow
+  lda rleVectorLow
+  cmp #$0
   bne rle_expand_loop_cont2
   inc rleVectorHigh
 rle_expand_loop_cont2:   
@@ -782,13 +784,64 @@ rle_expand_print_one_and_end:
 rle_expand_end:
   ;print line feed and carriege return
   jsr send_rs232_CRLF
-  tya
-  clc
-  adc rleVectorLow
-  sta rleVectorLow
   pla
   tax 
   rts  
+
+
+
+; rle_expand:
+;   txa 
+;   pha
+;   ldy #$ff
+; rle_expand_loop:
+;   iny
+;   cpy #$0
+;   bne rle_expand_loop_cont1
+;   inc rleVectorHigh
+; rle_expand_loop_cont1:  
+;   lda (rleVectorLow),y  
+;   cmp #$ff
+;   beq rle_expand_end
+;   sta rleChar
+;   iny
+;   cpy #$0
+;   bne rle_expand_loop_cont2
+;   inc rleVectorHigh
+; rle_expand_loop_cont2:   
+;   lda (rleVectorLow),y 
+;   cmp #$ff
+;   beq rle_expand_print_one_and_end
+;   cmp #32
+;   bmi rle_expand_several_times
+;   ;if we are here is just print one time and continue
+;   lda #$1
+;   sta rleTimes
+;   ;print the char
+;   jsr rle_print_char
+;   dey ;decrement y as it was a new character there and not times Byte
+;   jmp rle_expand_loop
+
+; rle_expand_several_times:
+;   sta rleTimes
+;   ;print the char
+;   jsr rle_print_char
+;   jmp rle_expand_loop 
+; rle_expand_print_one_and_end:
+;   lda #1
+;   sta rleTimes
+;   ;print the char
+;   jsr rle_print_char
+; rle_expand_end:
+;   ;print line feed and carriege return
+;   jsr send_rs232_CRLF
+;   tya
+;   clc
+;   adc rleVectorLow
+;   sta rleVectorLow
+;   pla
+;   tax 
+;   rts  
 
 rle_print_char:
   pha
