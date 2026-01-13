@@ -119,7 +119,18 @@ def compress_screen(filename):
     screen = read_screen(filename)
     screen_compressed = []
     for line_uncompress in screen: 
-        screen_compressed.append(comprimir_ascii_rle3chars(line_uncompress))    
+        screen_compressed.append(comprimir_ascii_rle3chars(line_uncompress))
+
+    count_chars_uncompressed = 0     
+    count_chars_compressed = 0
+    for line in screen:
+        for char in line:
+              count_chars_uncompressed +=1
+    for line_comp in screen_compressed:
+        count_chars_compressed+= len(line_comp.split(','))           
+    print (count_chars_uncompressed) 
+    print (count_chars_compressed)  
+    print (count_chars_compressed/count_chars_uncompressed)       
     return screen_compressed  
 
 def split_into_chunks(input_string, chunk_size=10):
