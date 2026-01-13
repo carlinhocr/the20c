@@ -733,6 +733,7 @@ rle_screen_process_line:
   cpx rleScreenLines
   beq rle_screen_end
   jsr rle_expand
+  jmp rle_screen_process_line
 rle_screen_end:
   rts
 
