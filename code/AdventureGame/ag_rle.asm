@@ -720,12 +720,7 @@ rle_screen:
   ;first byte is size
   ldy #$00
   lda (rleVectorLow),y 
-  sta rleScreenLines
-  inc rleVectorLow ;so now we are positioned where the screen data starts
-  lda rleVectorLow ; find out if we went to the next byte
-  cmp #$0
-  bne rle_screen_cont
-  inc rleVectorHigh  
+  sta rleScreenLines 
 rle_screen_cont:  
   ldx #$ff
 rle_screen_process_line:
@@ -742,7 +737,7 @@ rle_screen_end:
 rle_expand:
   txa 
   pha
-  ldy #$ff
+  ldy #$00 ;to bypass the first byte of number of lines
 rle_expand_loop:
   iny
   cpy #$0
