@@ -78,6 +78,7 @@ rleVectorHigh=$a1
 ;Memory locations RLE
 rleChar=$0200
 rleTimes=$0201
+rleScreenLines=$0202
 
 
 ;constants
@@ -392,8 +393,9 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 mainProgram:
-  jsr rle_init
-  jsr rle_expand
+  jsr rle_screen
+  ;jsr rle_init
+  ;jsr rle_expand
   ; jsr printMessage01
   ; jsr delay_3_sec
   ; jsr printMessage02
@@ -715,10 +717,28 @@ rle_screen:
   sta rleVectorLow
   lda #> screen_20c_compressed
   sta rleVectorHigh
-
-
+  ;first byte is size
+  ldy #$00
+  lda (rleVectorLow),y 
+  sta rleScreenLines
+  inc rleVectorLow ;so now we are positioned where the screen data starts
+  lda rleVectorLow ; find out if we went to the next byte
+  cmp #$0
+  bne rle_screen_cont
+  inc rleVectorHigh  
+rle_screen_cont:  
+  ldx #$ff
+rle_screen_process_line:
+  inx
+  cpx rleScreenLines
+  beq rle_screen_end
+  jsr rle_expand
+rle_screen_end:
+  rts
 
 rle_expand:
+  txa 
+  pha
   ldy #$ff
 rle_expand_loop:
   iny
@@ -761,6 +781,8 @@ rle_expand_print_one_and_end:
 rle_expand_end:
   ;print line feed and carriege return
   jsr send_rs232_CRLF
+  pla
+  tax 
   rts  
 
 rle_print_char:
@@ -2238,6 +2260,7 @@ message09:
   .ascii "e"   
 
 screen_20c_compressed:
+  .byte 31
   .byte 32,32,34,32,31,32,5,76,65,32
   .byte 50,48,99,34,255
   .byte 32,32,34,34,32,32,255
