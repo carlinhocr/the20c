@@ -785,6 +785,7 @@ rle_expand_end:
   tya
   clc
   adc rleVectorLow
+  sta rleVectorLow
   pla
   tax 
   rts  
