@@ -755,6 +755,7 @@ rle_expand_loop_cont1:
   clc
   adc rleVectorLow
   bcc rle_expand_loop_cont2
+  inc rleVectorHigh
 rle_expand_loop_cont2:   
   lda (rleVectorLow),y 
   cmp #$ff
