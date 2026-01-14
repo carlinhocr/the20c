@@ -740,22 +740,12 @@ rle_expand:
   ldy #$00 ;to bypass the first byte of number of lines
 rle_expand_loop:
   iny
-  tya 
-  clc
-  adc rleVectorLow
-  bcc rle_expand_loop_cont1
-  inc rleVectorHigh
 rle_expand_loop_cont1:  
   lda (rleVectorLow),y  
   cmp #$ff
   beq rle_expand_end
   sta rleChar
   iny
-  tya 
-  clc
-  adc rleVectorLow
-  bcc rle_expand_loop_cont2
-  inc rleVectorHigh
 rle_expand_loop_cont2:   
   lda (rleVectorLow),y 
   cmp #$ff
@@ -790,7 +780,7 @@ rle_expand_end:
   adc rleVectorLow
   sta rleVectorLow
   bcc rle_expand_end_end
-  ;inc rleVectorHigh
+  inc rleVectorHigh
 rle_expand_end_end:  
   ;retreive x value for each line
   pla
