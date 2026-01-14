@@ -750,6 +750,7 @@ rle_expand_loop_cont1:
   cmp #$ff
   beq rle_expand_end
   sta rleChar
+  iny
   tya 
   clc
   adc rleVectorLow
