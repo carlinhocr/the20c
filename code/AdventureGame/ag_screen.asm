@@ -731,6 +731,20 @@ draw_current_screen:
   jsr printAsciiDrawing
   rts
 
+draw_objects:
+  ldy #$ff
+draw_objects_loop:
+  iny
+  cpy #3
+  beq draw_objects_end
+  lda (screenCurrentObjects_Low),y 
+  cmp #2
+  beq set_object2  
+set_object2:
+  
+
+draw_objects_end:
+  rts
 ;next step draw current objects on screen
 ;if they are visible
 
