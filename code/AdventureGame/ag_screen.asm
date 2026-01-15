@@ -741,7 +741,11 @@ draw_objects_loop:
   cmp #2
   beq set_object2  
 set_object2:
-  
+  ;se puede hacer como una tabla con inderecciones
+  ;se que el primer byte es el id el segundo si es takable etc
+  ;al principio del descripción se dice cuantos bytes es el nombre
+  ;al principio del ascii se dice cuantos bytes es el dibujo
+  ;con eso con tener solo la primera dirección se calculan después los valores
 
 draw_objects_end:
   rts
@@ -750,14 +754,19 @@ draw_objects_end:
 
 ;Screen Definition
 ;ID 1 byte
-;IDOB1 1 byte
+;IDOBJECT 3 bytes, One per objec present
 ;IDOB2 2 byte
 ;IDOB1 3 byte
 
+screen_pointers:
+  .word screen_0  ; Screen zero
+screen_0:
 screen_0_id:
   .byte 0 ;id
 screen_0_object:
   .byte 2,4,5
+screen_0_description_lenght:
+  .byte 30  
 screen_0_description:
   .ascii "Te encuentras a los pies de una montaña, puedes ver a lo lejos una cueva"
   .ascii "a tus pies encuentras"
