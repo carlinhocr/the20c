@@ -759,20 +759,21 @@ draw_objects_end:
 ;IDOB1 3 byte
 
 set_current_screen_table:
-  lda screenCurrentID
-  lda screen_pointers+screenCurrentID
+  lda #$0
+  sta screenCurrentID
+  lda screen_pointers+screenCurrentID+6;the ascii position
   sta serialDataVectorLow
-  lda #> screenCurrentASCII_High 
+  lda screen_pointers+screenCurrentID+7;the ascii positions 
   sta serialDataVectorHigh  
   jsr printAsciiDrawing
   rts
 
 
 screen_pointers:
-  .word screen_0  ; Screen zero
-  .word screen_0_object
-  .word screen_0_description
-  .word screen_0_ASCII
+  .word screen_0  ; 0,1
+  .word screen_0_object ;2,3
+  .word screen_0_description ;4,5
+  .word screen_0_ASCII ;6,7
 
 screen_0:
 screen_0_id:
