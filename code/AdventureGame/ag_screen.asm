@@ -94,7 +94,8 @@ rleTimes=$0201
 rleScreenLines=$0202
 
 screenCurrentID=$0210
-
+screenMultiple=$0211
+screenRecordSize=$0212
 
 
 ;constants
@@ -409,7 +410,8 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 mainProgram:
-  jsr rle_screen
+  jsr draw_current_screen_table
+  ;jsr rle_screen
   ;jsr rle_init
   ;jsr rle_expand
   ; jsr printMessage01
@@ -758,16 +760,38 @@ draw_objects_end:
 ;IDOB2 2 byte
 ;IDOB1 3 byte
 
-set_current_screen_table:
+screen_multiple:
+  ;screen table record size
+  ;8 bytes
+  lda #$0
+  sta screenMultiple
+  lda #$8
+  sta screenRecordSize
+  ldx #$ff
+screen_multiple_loop:
+  inx
+  cpx screenCurrentID
+  beq screen_multiple_end
+  lda screenRecordSize
+  clc
+  adc screenMultiple
+  sta screenMultiple
+  jmp screen_multiple_loop 
+screen_multiple_end:
+  rts
+
+draw_current_screen_table:
   lda #$0
   sta screenCurrentID
-  lda screen_pointers+screenCurrentID+6;the ascii position
+  sta screenMultiple
+  ;lda screen_pointers+screenCurrentID+6;the ascii position
+  ;adjust for when the sum goes beyond 256 increasing next byte
+  lda screen_pointers+screenMultiple+6
   sta serialDataVectorLow
-  lda screen_pointers+screenCurrentID+7;the ascii positions 
+  lda screen_pointers+screenMultiple+7;the ascii positions 
   sta serialDataVectorHigh  
   jsr printAsciiDrawing
   rts
-
 
 screen_pointers:
   .word screen_0  ; 0,1
