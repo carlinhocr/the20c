@@ -760,7 +760,7 @@ draw_objects_end:
 
 set_current_screen_table:
   lda screenCurrentID
-  lda screen_pointers+0
+  lda screen_pointers+screenCurrentID
   sta serialDataVectorLow
   lda #> screenCurrentASCII_High 
   sta serialDataVectorHigh  
