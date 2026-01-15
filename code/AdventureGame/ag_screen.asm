@@ -760,13 +760,15 @@ draw_objects_end:
 
 screen_pointers:
   .word screen_0  ; Screen zero
+  .word screen_0_object
+  .word screen_0_description
+  .word screen_0_ASCII
+
 screen_0:
 screen_0_id:
   .byte 0 ;id
 screen_0_object:
-  .byte 2,4,5
-screen_0_description_lenght:
-  .byte 30  
+  .byte 0,1,2
 screen_0_description:
   .ascii "Te encuentras a los pies de una montaña, puedes ver a lo lejos una cueva"
   .ascii "a tus pies encuentras"
@@ -791,42 +793,62 @@ screen_0_ASCII:
   .ascii "................................................................................"
   .ascii "e" 
 
+objects_pointers:
+  .word object_0 ; Screen zero
+  .word object_0_takable
+  .word object_0_visible
+  .word object_0_name
+  .word object_0_description
+  .word object_1 ; Screen zero
+  .word object_1_takable
+  .word object_1_visible
+  .word object_1_name
+  .word object_1_description
+  .word object_2 ; Screen zero
+  .word object_2_takable
+  .word object_2_visible
+  .word object_2_name
+  .word object_2_description
+
+object_0:
+object_0_id:
+  .byte 0
+object_0_takable:
+  .byte 0
+object_0_visible:
+  .byte 0  
+object_0_name:
+  .ascii "rama"
+  .ascii "e"  
+object_0_description:
+  .ascii "Es una rama de un arbol, parece muy resistente"
+  .ascii "e" 
+  
+object_1:  
+object_1_id:
+  .byte 1
+object_1_takable:
+  .byte 0
+object_1_visible:
+  .byte 0    
+object_1_name:
+  .ascii "unguento"
+  .ascii "e"  
+object_1_description:
+  .ascii "Es como si fuera una crema"
+  .ascii "e"
+
+object_2:
 object_2_id:
   .byte 2
 object_2_takable:
   .byte 0
 object_2_visible:
-  .byte 0  
+  .byte 0    
 object_2_name:
-  .ascii "rama"
-  .ascii "e"  
-object_2_description:
-  .ascii "Es una rama de un arbol, parece muy resistente"
-  .ascii "e" 
-  
-object_4_id:
-  .byte 4
-object_4_takable:
-  .byte 0
-object_4_visible:
-  .byte 0    
-object_4_name:
-  .ascii "unguento"
-  .ascii "e"  
-object_4_description:
-  .ascii "Es como si fuera una crema"
-  .ascii "e"
-
-object_5_id:
-  .byte 4
-object_5_takable:
-  .byte 0
-object_5_visible:
-  .byte 0    
-object_5_name:
   .ascii "cueva"
   .ascii "e"  
-object_5_description:
+object_2_description:
   .ascii "Parece muy oscura, algo te lleva a querer acercarte a ella"
   .ascii "e"  
 
