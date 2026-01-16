@@ -818,9 +818,17 @@ draw_current_screen_table:
   sta screenMultiple  
   lda screenMultiple
   clc
-  adc #$6
+  adc #$4 ;print ascii
   tax 
   lda screen_pointers,x 
+  sta serialDataVectorLow  
+  inx 
+  lda screen_pointers,x
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  ;print description
+  inx
+    lda screen_pointers,x 
   sta serialDataVectorLow  
   inx 
   lda screen_pointers,x
@@ -833,8 +841,9 @@ draw_current_screen_table:
 screen_pointers:
   .word screen_0  ; 0,1
   .word screen_0_object ;2,3
-  .word screen_0_description ;4,5
-  .word screen_0_ASCII ;6,7
+  .word screen_0_ASCII ;4,5
+  .word screen_0_description ;6,7
+
 
 screen_0:
 screen_0_id:
