@@ -818,6 +818,8 @@ dcst_draw:
   jsr printAsciiDrawing
   rts
 
+  byte 00,00,00,00,00,00,00,00,00,00
+
 screen_pointers:
   .word screen_0  ; 0,1
   .word screen_0_object ;2,3
