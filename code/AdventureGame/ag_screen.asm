@@ -816,7 +816,9 @@ draw_current_screen_table:
   ; lda screenCurrentBaseAddressHigh
   ; sta serialDataVectorHigh
   ; lda #$6
-  ldx #$6
+  lda screenMultiple
+  adc #$6
+  tax 
   lda screen_pointers,x 
   sta serialDataVectorLow  
   inx 
