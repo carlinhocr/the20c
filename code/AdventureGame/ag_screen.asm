@@ -768,7 +768,7 @@ draw_objects_end:
 ;IDOB2 2 byte
 ;IDOB1 3 byte
 
-screen_multiple:
+screen_multiple_calculate:
   ;screen table record size
   ;8 bytes
   lda #$0
@@ -789,9 +789,9 @@ screen_multiple_end:
   rts
 
 draw_current_screen_table:
-; lda #$0
+    lda #$0
 ;   sta screenCurrentID
-;   sta screenMultiple
+    sta screenMultiple
 ;   ;lda screen_pointers+screenCurrentID+6;the ascii position
 ;   ;adjust for when the sum goes beyond 256 increasing next byte
 ;   lda screen_pointers + 1
@@ -815,9 +815,11 @@ draw_current_screen_table:
   ; sta serialDataVectorLow
   ; lda screenCurrentBaseAddressHigh
   ; sta serialDataVectorHigh
-  lda screen_pointers + 6
+  ; lda #$6
+  
+  lda screen_pointers + 6 + screenMultiple
   sta serialDataVectorLow   
-  lda screen_pointers + 7
+  lda screen_pointers + 6 + screenMultiple
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts
