@@ -96,6 +96,10 @@ rleScreenLines=$0202
 screenCurrentID=$0210
 screenMultiple=$0211
 screenRecordSize=$0212
+screenCurrentBaseAddressLow=$0213
+screenCurrentBaseAddressHigh=$0214
+
+
 
 
 ;constants
@@ -412,7 +416,7 @@ uartSerialInit:
 mainProgram:
   ;jsr select_screen
   jsr draw_current_screen
-  ;jsr draw_current_screen_table
+  jsr draw_current_screen_table
   ;jsr rle_screen
   ;jsr rle_init
   ;jsr rle_expand
@@ -790,9 +794,25 @@ draw_current_screen_table:
   sta screenMultiple
   ;lda screen_pointers+screenCurrentID+6;the ascii position
   ;adjust for when the sum goes beyond 256 increasing next byte
-  lda screen_pointers+screenMultiple+6
+  lda screen_pointers + 1
+  sta screenCurrentBaseAddressHigh
+  lda screen_pointers
+  clc
+  adc screenMultiple
+  sta screenCurrentBaseAddressLow
+  bcc dcst_addOffset
+  ;add one byte to highbyte
+  inc screenCurrentBaseAddressHigh
+dcst_addOffset
+  lda screenCurrentBaseAddressLow
+  clc
+  adc #$6   
+  bcc dcst_draw
+  inc screenCurrentBaseAddressHigh
+dcst_draw:
+  lda screenCurrentBaseAddressLow
   sta serialDataVectorLow
-  lda screen_pointers+screenMultiple+7;the ascii positions 
+  lda screenCurrentBaseAddressHigh
   sta serialDataVectorHigh  
   jsr printAsciiDrawing
   rts
