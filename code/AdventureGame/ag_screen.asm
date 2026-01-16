@@ -816,13 +816,11 @@ draw_current_screen_table:
   ; lda screenCurrentBaseAddressHigh
   ; sta serialDataVectorHigh
   ; lda #$6
-  lda #$6
-  sta screenMultiple
-  lda screen_pointers + screenMultiple 
+  ldx #$6
+  lda screen_pointers,x 
   sta serialDataVectorLow  
-  lda #$7
-  sta screenMultiple 
-  lda screen_pointers + screenMultiple 
+  inx 
+  lda screen_pointers,x
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts
