@@ -415,7 +415,7 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 mainProgram:
   ;jsr select_screen
-  jsr draw_current_screen
+  ;jsr draw_current_screen
   jsr draw_current_screen_table
   ;jsr rle_screen
   ;jsr rle_init
@@ -712,73 +712,18 @@ printAsciiDrawing_end:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+  
+
 select_screen:
   lda #$0
   sta screenCurrentID
+  jsr screen_multiple_calculate
+  jsr draw_current_screen_table
+  lda #$1
+  sta screenCurrentID
+  jsr screen_multiple_calculate
+  jsr draw_current_screen_table
 
-set_current_screen:
-  lda screenCurrentID
-  cmp #$0
-  beq set_screen_0
-
-set_screen_0:
-  lda #< screen_0_object
-  sta screenCurrentObjects_Low
-  lda #> screen_0_object
-  sta screenCurrentObjects_High
-
-  lda #< screen_0_description
-  sta screenCurrentDescription_Low
-  lda #> screen_0_description
-  sta screenCurrentDescription_High
-
-  lda #< screen_0_ASCII
-  sta screenCurrentASCII_Low
-  lda #> screen_0_ASCII
-  sta screenCurrentASCII_High
-
-draw_current_screen:
-  ;lda #< screenCurrentASCII_Low
-  lda #< screen_0_ASCII
-  sta serialDataVectorLow
-  ;lda #> screenCurrentASCII_High 
-  lda #> screen_0_ASCII
-  sta serialDataVectorHigh  
-  jsr printAsciiDrawing
-
-  ; lda #< screenCurrentDescription_Low
-  ; sta serialDataVectorLow
-  ; lda #> screenCurrentDescription_High 
-  ; sta serialDataVectorHigh  
-  ; jsr printAsciiDrawing
-  rts
-
-draw_objects:
-  ldy #$ff
-draw_objects_loop:
-  iny
-  cpy #3
-  beq draw_objects_end
-  lda (screenCurrentObjects_Low),y 
-  cmp #2
-  beq set_object2  
-set_object2:
-  ;se puede hacer como una tabla con inderecciones
-  ;se que el primer byte es el id el segundo si es takable etc
-  ;al principio del descripción se dice cuantos bytes es el nombre
-  ;al principio del ascii se dice cuantos bytes es el dibujo
-  ;con eso con tener solo la primera dirección se calculan después los valores
-
-draw_objects_end:
-  rts
-;next step draw current objects on screen
-;if they are visible
-
-;Screen Definition
-;ID 1 byte
-;IDOBJECT 3 bytes, One per objec present
-;IDOB2 2 byte
-;IDOB1 3 byte
 
 screen_multiple_calculate:
   ;screen table record size
@@ -801,33 +746,9 @@ screen_multiple_end:
   rts
 
 draw_current_screen_table:
-;   ;lda screen_pointers+screenCurrentID+6;the ascii position
-;   ;adjust for when the sum goes beyond 256 increasing next byte
-;   lda screen_pointers + 1
-;   sta screenCurrentBaseAddressHigh
-;   lda screen_pointers
-;   clc
-;   adc screenMultiple
-;   sta screenCurrentBaseAddressLow
-;   bcc dcst_addOffset
-;   ;add one byte to highbyte
-;   inc screenCurrentBaseAddressHigh
-; dcst_addOffset
-;   lda screenCurrentBaseAddressLow
-;   clc
-;   adc #$6
-;   sta screenCurrentBaseAddressLow   
-;   bcc dcst_draw
-;   inc screenCurrentBaseAddressHigh
-; dcst_draw:
-  ; lda screenCurrentBaseAddressLow
-  ; sta serialDataVectorLow
-  ; lda screenCurrentBaseAddressHigh
-  ; sta serialDataVectorHigh
-  ; lda #$6
-  lda #$0
-; sta screenCurrentID
-  sta screenMultiple  
+;  lda #$0
+;  sta screenCurrentID
+;  sta screenMultiple  
   lda screenMultiple
   clc
   adc #$4 ;print ascii
@@ -855,6 +776,10 @@ screen_pointers:
   .word screen_0_object ;2,3
   .word screen_0_ASCII ;4,5
   .word screen_0_description ;6,7
+  .word screen_1  ; 0,1
+  .word screen_1_object ;2,3
+  .word screen_1_ASCII ;4,5
+  .word screen_1_description ;6,7
 
 
 screen_0:
@@ -885,6 +810,37 @@ screen_0_ASCII:
   .ascii "................................................................................"
   .ascii "................................................................................"
   .ascii "e" 
+
+screen_1:
+screen_1_id:
+  .byte 1 ;id
+screen_1_object:
+  .byte 0,1,2
+screen_1_description:
+  .ascii "La entrada de la cueva esta colapsada, no puedes salir por ahí"
+  .ascii "a tus pies encuentras"
+  .ascii "e"
+screen_1_ASCII:
+  .ascii "################################################################################"
+  .ascii "###########################^^^^^#^^^##^^^^^^^####################################"
+  .ascii "######################^^^^^########################^^^^^^########################"
+  .ascii "##################^^^^^^###############################^^^^^#####################"
+  .ascii "###############^^^^^#########################################^^^^^###############"
+  .ascii "###########^^^^^##########################%%%%#####################^^^^^#########"
+  .ascii "########^^^^^######################%%%%%%%@@@@@@%%%%%%%################^^^######"
+  .ascii "#####^^^^^###################%%%%%%%@@@@@@@@@@@@@@@@%%%%%%%################^^^^##"
+  .ascii "###^^^^^##################%%%%%%%@@@@@@@@@@@######@@@@@@@@@@@%%%%%%%########^^^^#"
+  .ascii "##^^^^^#################%%%%%%%@@@@@@@@######################@@@@@@@@%%%%%%%^^^^#"
+  .ascii "##^^^^^###############%%%%%%%@@@@@@@@############################@@@@@@@@%%%%%%%#"
+  .ascii "###^^^^^###############%%%%%%%@@@@@@################################@@@@@@%%%%%%%#"
+  .ascii "#####^^^^^###############%%%%%%%@@@@####################################%%%%%%%##"
+  .ascii "########^^^^^##########################^^^^^^^^^^^^^^^^################^^^######"
+  .ascii "############^^^^^##########################################^^^^^###############"
+  .ascii "################^^^^^######################################^^^^^################"
+  .ascii "######################^^^^^############################^^^^^####################"
+  .ascii "###############################^^^^^#^^^##^^^^^^^################################"
+  .ascii "################################################################################"
+  .ascii "################################################################################"
 
 objects_pointers:
   .word object_0 ; Screen zero
