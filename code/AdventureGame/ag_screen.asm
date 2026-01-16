@@ -414,9 +414,9 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 mainProgram:
-  ;jsr select_screen
+  jsr select_screen
   ;jsr draw_current_screen
-  jsr draw_current_screen_table
+  ;jsr draw_current_screen_table
   ;jsr rle_screen
   ;jsr rle_init
   ;jsr rle_expand
@@ -478,70 +478,6 @@ delayClear:
   jsr delay_3_sec  
   jsr printClearRS232Screen
   rts
-
-printextraRomNarcoPoliceAscii:
-  lda romNarcoPoliceLow
-  sta serialDataVectorLow
-  lda romNarcoPoliceHigh 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts  
-
-printextraRomFreddyAscii:
-  lda romFreddyLow
-  sta serialDataVectorLow
-  lda romFreddyHigh
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts    
-
-printthe20cAscii:
-  lda #< the20cAscii
-  sta serialDataVectorLow
-  lda #> the20cAscii 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts  
-
-printMarioAscii:
-  lda #< marioReverseAscii
-  sta serialDataVectorLow
-  lda #> marioReverseAscii 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts
-
-printCiberCirujas:
-  lda #< cyberCirujasAscii
-  sta serialDataVectorLow
-  lda #> cyberCirujasAscii 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts    
-
-printArcadeAscii:
-  lda #< arcadeAscii
-  sta serialDataVectorLow
-  lda #> arcadeAscii 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts   
-
-printModoHistoriaAscii:
-  lda #< modoHistoriaAscii
-  sta serialDataVectorLow
-  lda #> modoHistoriaAscii 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts    
-
-printCommodoreAscii:
-  lda #< commodoreAscii
-  sta serialDataVectorLow
-  lda #> commodoreAscii 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts  
 
 printVentilastationAscii:
   lda #< ventilastationAscii
@@ -723,6 +659,7 @@ select_screen:
   sta screenCurrentID
   jsr screen_multiple_calculate
   jsr draw_current_screen_table
+  rts
 
 
 screen_multiple_calculate:
