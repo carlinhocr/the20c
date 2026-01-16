@@ -819,7 +819,7 @@ draw_current_screen_table:
   
   lda screen_pointers + 6 + screenMultiple
   sta serialDataVectorLow   
-  lda screen_pointers + 6 + screenMultiple
+  lda screen_pointers + 7 + screenMultiple
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts
