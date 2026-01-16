@@ -789,9 +789,6 @@ screen_multiple_end:
   rts
 
 draw_current_screen_table:
-    lda #$0
-;   sta screenCurrentID
-    sta screenMultiple
 ;   ;lda screen_pointers+screenCurrentID+6;the ascii position
 ;   ;adjust for when the sum goes beyond 256 increasing next byte
 ;   lda screen_pointers + 1
@@ -816,6 +813,9 @@ draw_current_screen_table:
   ; lda screenCurrentBaseAddressHigh
   ; sta serialDataVectorHigh
   ; lda #$6
+  lda #$0
+; sta screenCurrentID
+  sta screenMultiple  
   lda screenMultiple
   adc #$6
   tax 
