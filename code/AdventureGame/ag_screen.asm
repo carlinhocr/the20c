@@ -656,6 +656,12 @@ printMessage09:
   rts       
 
 printAsciiDrawing:
+  ;save accumulator x and y registers
+  pha
+  txa
+  pha
+  tya
+  pha
   ;here print first line
   jsr send_rs232_line
   ldx #$0 ;the first line 0 we aleready printed
@@ -686,6 +692,12 @@ printAsciiDrawing_lenghts_no_carry
   ;return and increment according to the lenght of the mario screen
   ;end by jumping to listening mode
 printAsciiDrawing_end:
+  ;save accumulator x and y registers
+  pla
+  tya
+  pla
+  txa
+  pla
   rts
 
 ;END--------------------------------------------------------------------------------
@@ -828,7 +840,7 @@ draw_current_screen_table:
   jsr printAsciiDrawing
   ;print description
   inx
-    lda screen_pointers,x 
+  lda screen_pointers,x 
   sta serialDataVectorLow  
   inx 
   lda screen_pointers,x
