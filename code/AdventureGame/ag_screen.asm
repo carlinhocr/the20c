@@ -817,6 +817,7 @@ draw_current_screen_table:
 ; sta screenCurrentID
   sta screenMultiple  
   lda screenMultiple
+  clc
   adc #$6
   tax 
   lda screen_pointers,x 
