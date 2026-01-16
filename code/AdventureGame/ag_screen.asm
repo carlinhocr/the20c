@@ -694,9 +694,9 @@ printAsciiDrawing_lenghts_no_carry
 printAsciiDrawing_end:
   ;save accumulator x and y registers
   pla
-  tya
+  tay
   pla
-  txa
+  tax
   pla
   rts
 
