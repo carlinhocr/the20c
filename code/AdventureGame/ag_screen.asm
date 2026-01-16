@@ -410,7 +410,8 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 mainProgram:
-  jsr draw_current_screen_table
+  jsr select_screen
+  ;jsr draw_current_screen_table
   ;jsr rle_screen
   ;jsr rle_init
   ;jsr rle_expand
@@ -720,15 +721,16 @@ set_screen_0:
   sta screenCurrentASCII_High
 
 draw_current_screen:
-  lda #< screenCurrentDescription_Low
-  sta serialDataVectorLow
-  lda #> screenCurrentDescription_High 
-  sta serialDataVectorHigh  
-  jsr printAsciiDrawing
 
   lda #< screenCurrentASCII_Low
   sta serialDataVectorLow
   lda #> screenCurrentASCII_High 
+  sta serialDataVectorHigh  
+  jsr printAsciiDrawing
+
+  lda #< screenCurrentDescription_Low
+  sta serialDataVectorLow
+  lda #> screenCurrentDescription_High 
   sta serialDataVectorHigh  
   jsr printAsciiDrawing
   rts
