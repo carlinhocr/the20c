@@ -789,32 +789,36 @@ screen_multiple_end:
   rts
 
 draw_current_screen_table:
-  lda #$0
-  sta screenCurrentID
-  sta screenMultiple
-  ;lda screen_pointers+screenCurrentID+6;the ascii position
-  ;adjust for when the sum goes beyond 256 increasing next byte
-  lda screen_pointers + 1
-  sta screenCurrentBaseAddressHigh
-  lda screen_pointers
-  clc
-  adc screenMultiple
-  sta screenCurrentBaseAddressLow
-  bcc dcst_addOffset
-  ;add one byte to highbyte
-  inc screenCurrentBaseAddressHigh
-dcst_addOffset
-  lda screenCurrentBaseAddressLow
-  clc
-  adc #$6
-  sta screenCurrentBaseAddressLow   
-  bcc dcst_draw
-  inc screenCurrentBaseAddressHigh
-dcst_draw:
-  lda screenCurrentBaseAddressLow
-  sta serialDataVectorLow
-  lda screenCurrentBaseAddressHigh
-  sta serialDataVectorHigh  
+; lda #$0
+;   sta screenCurrentID
+;   sta screenMultiple
+;   ;lda screen_pointers+screenCurrentID+6;the ascii position
+;   ;adjust for when the sum goes beyond 256 increasing next byte
+;   lda screen_pointers + 1
+;   sta screenCurrentBaseAddressHigh
+;   lda screen_pointers
+;   clc
+;   adc screenMultiple
+;   sta screenCurrentBaseAddressLow
+;   bcc dcst_addOffset
+;   ;add one byte to highbyte
+;   inc screenCurrentBaseAddressHigh
+; dcst_addOffset
+;   lda screenCurrentBaseAddressLow
+;   clc
+;   adc #$6
+;   sta screenCurrentBaseAddressLow   
+;   bcc dcst_draw
+;   inc screenCurrentBaseAddressHigh
+; dcst_draw:
+  ; lda screenCurrentBaseAddressLow
+  ; sta serialDataVectorLow
+  ; lda screenCurrentBaseAddressHigh
+  ; sta serialDataVectorHigh
+  lda screen_pointers + 6
+  sta serialDataVectorLow   
+  lda screen_pointers + 7
+  sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts
 
