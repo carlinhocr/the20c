@@ -806,7 +806,8 @@ draw_current_screen_table:
 dcst_addOffset
   lda screenCurrentBaseAddressLow
   clc
-  adc #$6   
+  adc #$6
+  sta screenCurrentBaseAddressLow   
   bcc dcst_draw
   inc screenCurrentBaseAddressHigh
 dcst_draw:
