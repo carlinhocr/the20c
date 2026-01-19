@@ -191,13 +191,13 @@ programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
   jsr viaLcdInit
-  jsr viaRsInit
+  ;jsr viaRsInit
   ;jsr viaSoundInit
-  jsr uartSerialInit
+  ;jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
-  jsr mainProgram
-  jmp listeningMode
+  ;jsr mainProgram
+  ;jmp listeningMode
 
 lcdDemoMessage:
 
