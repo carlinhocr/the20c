@@ -519,33 +519,37 @@ heartbeatStart:
   rts
 
 heartbeatZero:
-  lda #%00000000 ;bit 1 and 0 equal to zero slow heartrate
+  lda #%01000000 ;bit 1 and 0 equal to zero slow heartrate
   sta heartRate
   jsr heartbeatSet
   rts
 
 heartbeatOne:
-  lda #%00000001 ;bit 1 and 0 equal to zero slow heartrate
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bits 1 and 0
+  lda #%01000001 ;bit 1 and 0 equal to zero slow heartrate
   sta heartRate
   jsr heartbeatSet
   rts
 
 heartbeatTwo:
-  lda #%00000010 ;bit 1 and 0 equal to zero slow heartrate
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bits 1 and 0
+  lda #%01000010 ;bit 1 and 0 equal to zero slow heartrate
   sta heartRate
   jsr heartbeatSet
   rts
 
 heartbeatThree:
-  lda #%00000011 ;bit 1 and 0 equal to zero slow heartrate
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bits 1 and 0
+  lda #%01000011 ;bit 1 and 0 equal to zero slow heartrate
   sta heartRate
   jsr heartbeatSet
   rts
 
 heartbeatSet:
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bits 1 and 0
   ;we will modify port b bits PB1 and PB0
   lda RS_PORTB ;load what is already on port B
-  and #%11111100 ;keep bits 7,6,5,4,3 and reset bits 1 and 0 of port b
+  and #%10111100 ;keep bits 7,6,5,4,3 and reset bits 6, 1 and 0 of port b
   ora heartRate ;set only bits 1 and 0.
   sta RS_PORTB ;set the new value
   rts
