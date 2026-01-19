@@ -19,6 +19,7 @@ void onSync()
 {
   int bit0 = digitalRead(PB0) ? 1:0; //? ternary operator if TRUE then 1 else 0
   int bit1 = digitalRead(PB1) ? 1:0; //? ternary operator if TRUE then 1 else 0
+  Serial.print(bit1,bit0);
   if (bit1 == 0 and bit0 == 0){
     beatDelay = 1000;
   }
@@ -43,6 +44,7 @@ void setup()
   // each time that on pin 2 (SYNC) i receive a HIGH on the rising edge run the onSync function
   attachInterrupt(digitalPinToInterrupt(SYNC), onSync, RISING); 
   Serial.begin(115200);
+  Serial.print("Arranca Arduino");
 }
 
 void loop() {
