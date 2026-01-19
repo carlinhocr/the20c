@@ -435,6 +435,7 @@ mainProgram:
   ;jsr rle_expand
   ; jsr printMessage01
   ; jsr delay_3_sec
+  jmp mainProgram
   rts
 
 delayClear:
