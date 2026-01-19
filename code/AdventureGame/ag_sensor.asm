@@ -509,17 +509,15 @@ printAsciiDrawing_end:
 ;-----------------------------------------------------------------------------------
 
 heartbeatStart:
-  lda #%01000000
-  sta RS_PORTB
+  jsr heartbeatZero
+  jsr delay_3_sec
+  jsr heartbeatOne
+  jsr delay_3_sec
+  jsr heartbeatTwo
+  jsr delay_3_sec
+  jsr heartbeatThree
+  jsr delay_3_sec
   jmp heartbeatStart
-  ; jsr heartbeatZero
-  ; jsr delay_3_sec
-  ; jsr heartbeatOne
-  ; jsr delay_3_sec
-  ; jsr heartbeatTwo
-  ; jsr delay_3_sec
-  ; jsr heartbeatThree
-  ; jsr delay_3_sec
   ; rts
 
 heartbeatZero:
