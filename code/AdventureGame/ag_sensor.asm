@@ -552,6 +552,7 @@ heartbeatSet:
   ;we will modify port b bits PB1 and PB0
   lda RS_PORTB ;load what is already on port B
   and #%10111100 ;keep bits 7,6,5,4,3 and reset bits 6, 1 and 0 of port b
+  sta RS_PORTB
   ora heartRate ;set only bits 1 and 0.
   sta RS_PORTB ;set the new value
   rts
