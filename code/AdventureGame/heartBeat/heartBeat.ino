@@ -1,6 +1,6 @@
 // We define the heartbeat of the Adventure Game
 
-#define SYNC  2 ;sync is PB6
+#define SYNC  2 //sync is PB6
 #define PB0  8
 #define PB1  9
 #define OUT3  10
