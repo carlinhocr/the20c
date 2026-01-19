@@ -17,10 +17,11 @@ void beat()
 
 void onSync()
 {
-  Serial.println("Entra onSync");
+  Serial.print("Entra onSyn: ");
   int bit0 = digitalRead(PB0) ? 1:0; //? ternary operator if TRUE then 1 else 0
   int bit1 = digitalRead(PB1) ? 1:0; //? ternary operator if TRUE then 1 else 0
-  Serial.print(bit1,bit0);
+  Serial.print(bit1);
+  Serial.println(bit0);
   if (bit1 == 0 and bit0 == 0){
     beatDelay = 1000;
   }
