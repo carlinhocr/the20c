@@ -191,12 +191,12 @@ programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
   jsr viaLcdInit
-  ;jsr viaRsInit
+  jsr viaRsInit
   ;jsr viaSoundInit
   ;jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
-  ;jsr mainProgram
+  jsr mainProgram
   ;jmp listeningMode
 
 lcdDemoMessage:
@@ -326,11 +326,11 @@ viaRsInit:
   ;enable CA1 for interrupts
   ;bits set/clear,timer1,timer2,CB1,CB2,ShiftReg,CA1,CA2
   lda #%10000010
-  sta LCD_IER 
+  sta RS_IER 
   ;enable negative edge transition ca1 RS_PCR register
   ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
   lda #%00000000
-  sta LCD_PCR 
+  sta RS_PCR 
   ;END enable interrupts
 
   ;BEGIN Configure Ports A & B
@@ -340,7 +340,7 @@ viaRsInit:
   
   ;set all port A pins as Inputs
   lda #%00000000  ;set as input PA7, PA6, PA5, PA4,PA3,PA2,PA1,PA0
-  sta LCD_DDRA ;store the accumulator in the data direction register for Port A
+  sta RS_DDRA ;store the accumulator in the data direction register for Port A
   ;END Configure Ports A & B
   rts
 
