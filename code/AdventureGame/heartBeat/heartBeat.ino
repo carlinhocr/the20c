@@ -18,7 +18,7 @@ void beat()
 void onSync()
 {
   int bit0 = digitalRead(PB0) ? 1:0; //? ternary operator if TRUE then 1 else 0
-  int bit1 = digitalRead(PB0) ? 1:0; //? ternary operator if TRUE then 1 else 0
+  int bit1 = digitalRead(PB1) ? 1:0; //? ternary operator if TRUE then 1 else 0
   if (bit1 == 0 and bit0 == 0){
     beatDelay = 1000;
   }
