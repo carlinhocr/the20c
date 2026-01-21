@@ -427,7 +427,8 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 mainProgram:
-  jsr heartbeatStart
+  jsr relayStart
+  ;jsr heartbeatStart
   ;jsr select_screen
   ;jsr draw_current_screen
   ;jsr draw_current_screen_table
