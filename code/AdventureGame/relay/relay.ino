@@ -9,7 +9,7 @@
 #define OUT2  12
 
 int beatDelay = 50;
-int relayDelay = 300;
+int relayDelay = 1000;
 
 void beat()
 {
@@ -19,13 +19,14 @@ void beat()
   delay (beatDelay+50);
 }
 
-void relay()
+void relayOn()
 {
   digitalWrite(OUT1, 1);
-  delay (relayDelay);
-  digitalWrite(OUT1, 0);
-  delay (relayDelay+50);
+}
 
+void relayOff()
+{
+  digitalWrite(OUT1, 0);
 }
 
 void onSync()
@@ -39,7 +40,11 @@ void onSync()
   Serial.println(bit0);
   if (bit2 == 1){
     Serial.println("Activating Relay");
-    relay();
+    relayOn();
+  }
+  else {
+    Serial.println("Turning Off Relay");
+    relayOff();
   }
   if (bit1 == 0 and bit0 == 0){
     beatDelay = 1000;
