@@ -100,6 +100,7 @@ screenCurrentBaseAddressLow=$0213
 screenCurrentBaseAddressHigh=$0214
 
 heartRate=$0220
+relayStatus=$0221
 
 
 
@@ -507,6 +508,36 @@ printAsciiDrawing_end:
 ;----------------------------------SENSOR-------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+
+
+relayStart:
+  jsr openRelay
+  jsr delay_3_sec
+  jsr closeRelay
+  jsr delay_3_sec
+  jmp relayStart
+
+openRelay:
+  lda #%01000100 ;bit 2 in one Opens the Relay
+  sta relayStatus
+  jsr operateRelay
+  rts
+
+closeRelay:
+  lda #%01000000 ;bit 2 in zero closes the Relay
+  sta relayStatus
+  jsr operateRelay
+  rts  
+
+operateRelay:
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bits 2 for Status of relay
+  ;we will modify port b bits PB2
+  lda RS_PORTB ;load what is already on port B
+  and #%10111011 ;keep bits 7,5,4,2,1 and reset bits 3 of port b
+  sta RS_PORTB
+  ora relayStatus ;set only bits 1 and 0.
+  sta RS_PORTB ;set the new value
+  rts  
 
 heartbeatStart:
   jsr heartbeatZero
