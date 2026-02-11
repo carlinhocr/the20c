@@ -2,6 +2,10 @@
 // We also define how to run a relay
 // we add a water sensor to see how much water is the cave
 
+
+
+
+
 #define SYNC  2 //sync is PB6
 #define PB0  8
 #define PB1  9
@@ -11,6 +15,16 @@
 
 int beatDelay = 50;
 int relayDelay = 1000;
+int waterPin = A0; // Sensor connected to Analog Pin 0
+int waterValue = 0;
+
+void readWaterSensor() 
+{
+  waterValue = analogRead(waterPin); // Read the analog value
+  Serial.print("Water level: ");
+  Serial.println(waterValue); // Print value to Serial Monitor
+  delay(500); // Delay for better readability
+}
 
 void beat()
 {
@@ -77,8 +91,10 @@ void setup()
 }
 
 void loop() {
-  beat();
-  beat();
-;
+  // test heart beat
+  //beat();
+  //beat();
+  // test water sensor
+  readWaterSensor();
 }
 
