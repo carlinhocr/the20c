@@ -115,6 +115,7 @@ void ledWriteLine()
  
 void waterCopete(int rowsWave)
 {
+  lc.clearDisplay(0);
   for (int i = 0; i <= rowsWave; i++){
     lc.setRow(0, i, B11111111);
   };
@@ -124,26 +125,26 @@ void waterCopete(int rowsWave)
   delay(1000); // Delay for better readability 
 }
 
-void heartBeat(){
-  byte heartBig[8]={
+void heartBeatLED(){
+  byte heartBig[8]={                  
                     B00000000,
-                    B01100110,
-                    B11111111,
-                    B11111111,
-                    B01111110,
-                    B00111100,
                     B00011000,
-                    B00000000,
+                    B00111100,
+                    B01111110,
+                    B11111111,
+                    B11111111,
+                    B01100110,
+                    B00000000
   };
   byte heartSmall[8]={
                     B00000000,
                     B00000000,
-                    B00100100,
-                    B00111100,
                     B00011000,
-                    B00010000,
-                    B00000000,
-                    B00000000,
+                    B00111100,
+                    B01111110,           
+                    B01111110,           
+                    B00100100,
+                    B00000000
   };
   for (int i = 0; i < 8; i++){
     lc.setRow(3, i,heartBig[i]);
@@ -153,6 +154,7 @@ void heartBeat(){
     lc.setRow(3, i,heartSmall[i]);
   };
   delay(1000); // Delay for better readability
+  lc.clearDisplay(0);
 }
 
 void setup()
@@ -210,7 +212,11 @@ void loop() {
   waterCopete(0);
   waterCopete(1);
   waterCopete(2);
-  heartBeat();
-  heartBeat();
+  waterCopete(3);
+  waterCopete(4);
+  waterCopete(5);
+  waterCopete(6);  
+  heartBeatLED();
+  heartBeatLED();
 }
 
