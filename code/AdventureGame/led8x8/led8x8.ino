@@ -113,6 +113,48 @@ void ledWriteLine()
 //   }
 // }
  
+void waterCopete(int rowsWave)
+{
+  for (int i = 0; i <= rowsWave; i++){
+    lc.setRow(0, i, B11111111);
+  };
+  lc.setRow(0, rowsWave+1, B01010101);
+  delay(1000); // Delay for better readability 
+  lc.setRow(0, rowsWave+1, B10101010);
+  delay(1000); // Delay for better readability 
+}
+
+void heartBeat(){
+  byte heartBig[8]={
+                    B00000000,
+                    B01100110,
+                    B11111111,
+                    B11111111,
+                    B01111110,
+                    B00111100,
+                    B00011000,
+                    B00000000,
+  };
+  byte heartSmall[8]={
+                    B00000000,
+                    B00000000,
+                    B00100100,
+                    B00111100,
+                    B00011000,
+                    B00010000,
+                    B00000000,
+                    B00000000,
+  };
+  for (int i = 0; i < 8; i++){
+    lc.setRow(3, i,heartBig[i]);
+  };
+  delay(1000); // Delay for better readability 
+  for (int i = 0; i < 8; i++){
+    lc.setRow(3, i,heartSmall[i]);
+  };
+  delay(1000); // Delay for better readability
+}
+
 void setup()
 {
   // pinMode(SYNC, INPUT);
@@ -155,15 +197,20 @@ void loop() {
   //readWaterSensor();
   //turn on line of led
   //ledWriteLine();
-  lc.setRow(0, 0, B11111111);
-  lc.setRow(1, 0, B11111111);
-  lc.setRow(2, 0, B11111111);
-  lc.setRow(3, 0, B11111111);  
-  delay(1000); // Delay for better readability 
-  lc.setRow(0, 0, B00000000);
-  lc.setRow(1, 0, B00000000);
-  lc.setRow(2, 0, B00000000);
-  lc.setRow(3, 0, B00000000);  
-  delay(1000); // Delay for better readability 
+  // lc.setRow(0, 0, B11111111);
+  // lc.setRow(1, 0, B11111111);
+  // lc.setRow(2, 0, B11111111);
+  // lc.setRow(3, 0, B11111111);  
+  // delay(1000); // Delay for better readability 
+  // lc.setRow(0, 0, B00000000);
+  // lc.setRow(1, 0, B00000000);
+  // lc.setRow(2, 0, B00000000);
+  // lc.setRow(3, 0, B00000000);  
+  // delay(1000); // Delay for better readability 
+  waterCopete(0);
+  waterCopete(1);
+  waterCopete(2);
+  heartBeat();
+  heartBeat();
 }
 
