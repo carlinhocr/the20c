@@ -1,0 +1,12 @@
+{
+    "1": {
+        "ID": "1",
+        "Name": "cuevaOscura",
+        "Action": "usar",
+        "Object1": "encendedor",
+        "Object2": "vela",
+        "DescriptionSolved": "La cueva está muy oscura, no puedes ver nada",
+        "DescriptionNotSolved": "Ahora si se hizo la luz ve una salida al final de la cueva",
+        "Solved": false
+    }
+}

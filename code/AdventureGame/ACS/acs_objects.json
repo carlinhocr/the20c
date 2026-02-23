@@ -1,0 +1,65 @@
+{
+    "hola": {
+        "Name": "hola",
+        "Email": "",
+        "Phone": "",
+        "Address": "",
+        "Category": "Weapon",
+        "Quest Item": true
+    },
+    "hola2": {
+        "ObjectID": "",
+        "Name": "hola2",
+        "Description": "",
+        "Category": "Weapon",
+        "Takeable": true,
+        "Visible": false
+    },
+    "a": {
+        "Name": "a",
+        "Email": "",
+        "Phone": "",
+        "Address": "",
+        "Category": "Select a category",
+        "Quest Item": false
+    },
+    "vela": {
+        "Name": "vela",
+        "Email": "pedro",
+        "Phone": "",
+        "Address": "",
+        "Category": "Select a category",
+        "Quest Item": false
+    },
+    "encendedor": {
+        "ObjectID": "2",
+        "Name": "encendedor",
+        "Description": "es un encendedor sirve para prender cosas",
+        "Category": "Select a category",
+        "Takeable": true,
+        "Visible": true
+    },
+    "velon": {
+        "Name": "velon",
+        "Email": "",
+        "Phone": "",
+        "Address": "",
+        "Category": "Select a category",
+        "Quest Item": false
+    },
+    "vels": {
+        "Name": "vels",
+        "Email": "",
+        "Phone": "",
+        "Address": "",
+        "Category": "Select a category",
+        "Quest Item": false
+    },
+    "maza": {
+        "ObjectID": "",
+        "Name": "maza",
+        "Description": "",
+        "Category": "Select a category",
+        "Quest Item": true
+    }
+}
