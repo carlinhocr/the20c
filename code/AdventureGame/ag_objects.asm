@@ -88,11 +88,6 @@ screenCurrentObjects_High=$b5
 objectDataVectorLow=$b6
 objectDataVectorHigh=$b7
 
-objectVisibility
-
-
-
-
 
 ;Memory locations RLE
 rleChar=$0200
