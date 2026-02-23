@@ -741,10 +741,14 @@ selectObject_loop:
   lda (objectDataVectorLow),y
   sta objectCurrentID
   jsr processObject
-  inc currentObjectOffset
-  lda currentObjectOffset
-  cmp #$3
-  bne selectObject_loop
+  ldy #$1
+  lda (objectDataVectorLow),y
+  sta objectCurrentID
+  jsr processObject
+  ldy #$2
+  lda (objectDataVectorLow),y
+  sta objectCurrentID
+  jsr processObject
   rts
 
 processObject:
