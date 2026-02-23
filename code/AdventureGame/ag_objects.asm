@@ -85,6 +85,11 @@ screenCurrentDescription_High=$b3
 screenCurrentObjects_Low=$b4
 screenCurrentObjects_High=$b5
 
+objectDataVectorLow=$b6
+objectDataVectorHigh=$b7
+
+
+
 
 
 
@@ -99,7 +104,9 @@ screenRecordSize=$0212
 screenCurrentBaseAddressLow=$0213
 screenCurrentBaseAddressHigh=$0214
 
-
+objectCurrentID=$0215
+objectMultiple=$0216
+objectRecordSize=$0217
 
 
 ;constants
@@ -686,9 +693,10 @@ draw_current_screen_table:
 ;  lda #$0
 ;  sta screenCurrentID
 ;  sta screenMultiple  
+  ;print ascii
   lda screenMultiple
   clc
-  adc #$4 ;print ascii
+  adc #$4 ;ascii
   tax 
   lda screen_pointers,x 
   sta serialDataVectorLow  
@@ -697,14 +705,84 @@ draw_current_screen_table:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   ;print description
-  inx
+  lda screenMultiple
+  clc
+  adc #$6  ;description
+  tax
   lda screen_pointers,x 
   sta serialDataVectorLow  
   inx 
   lda screen_pointers,x
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  ;Print Object 1
+  lda screenMultiple
+  clc
+  adc #$2  ;object 1
+  tax
+  lda screen_pointers,x 
+  sta objectDataVectorLow  
+  inx 
+  lda screen_pointers,x
+  sta objectDataVectorHigh
+  ldy #$0
+  lda (objectDataVectorLow),y
+  sta objectCurrentID
+  jsr processObject
   rts
+
+processObject:
+  jsr object_multiple_calculate
+  jsr print_current_object_name
+  jsr print_current_object_description
+  rts
+
+object_multiple_calculate:
+  ;screen table record size
+  ;8 bytes
+  lda #$0
+  sta objectMultiple
+  lda #$a ;10 bytes
+  sta objectRecordSize
+  ldx #$ff
+object_multiple_loop:
+  inx
+  cpx objectCurrentID
+  beq object_multiple_end
+  lda objectRecordSize
+  clc
+  adc objectMultiple
+  sta objectMultiple
+  jmp object_multiple_loop 
+object_multiple_end:
+  rts  
+
+print_current_object_name:
+  lda objectMultiple
+  clc
+  adc #$6 ;ascii
+  tax 
+  lda objects_pointers,x 
+  sta serialDataVectorLow  
+  inx 
+  lda objects_pointers,x
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts
+
+print_current_object_description:
+  lda objectMultiple
+  clc
+  adc #$8 ;ascii
+  tax 
+  lda objects_pointers,x 
+  sta serialDataVectorLow  
+  inx 
+  lda objects_pointers,x
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts  
+
 
   byte 00,00,00,00,00,00,00,00,00,00
 
@@ -781,12 +859,14 @@ screen_1_ASCII:
   .ascii "#################################################################################"
   .ascii ""
   .ascii "e"
+
+
 objects_pointers:
-  .word object_0 ; Screen zero
-  .word object_0_takable
-  .word object_0_visible
-  .word object_0_name
-  .word object_0_description
+  .word object_0 ; Screen zero 0,1
+  .word object_0_takable ;2,3
+  .word object_0_visible ;4,5
+  .word object_0_name ;6,7
+  .word object_0_description ;8,9
   .word object_1 ; Screen zero
   .word object_1_takable
   .word object_1_visible
@@ -802,9 +882,9 @@ object_0:
 object_0_id:
   .byte 0
 object_0_takable:
-  .byte 0
+  .byte 1
 object_0_visible:
-  .byte 0  
+  .byte 1  
 object_0_name:
   .ascii "rama"
   .ascii "e"  
@@ -816,9 +896,9 @@ object_1:
 object_1_id:
   .byte 1
 object_1_takable:
-  .byte 0
+  .byte 1
 object_1_visible:
-  .byte 0    
+  .byte 1    
 object_1_name:
   .ascii "unguento"
   .ascii "e"  
