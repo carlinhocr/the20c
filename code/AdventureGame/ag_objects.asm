@@ -721,16 +721,12 @@ draw_current_screen_table:
   rts
 
 selectObject:
-  lda #$2
-  sta object1Offset
-  lda object1Offset  
-  sta currentObjectOffset
   ldy #$ff
 selectObject_loop:
   ;Print Object 1
   lda screenMultiple
   clc
-  adc currentObjectOffset  ;object 1
+  adc #$2  ;fist object byte
   tax
   lda screen_pointers,x 
   sta objectDataVectorLow  
@@ -752,9 +748,13 @@ selectObject_loop:
   rts
 
 processObject:
+  lda objectCurrentID
+  cmp #$ff
+  beq end_processObject
   jsr object_multiple_calculate
   jsr print_current_object_name
   jsr print_current_object_description
+end_processObject:  
   rts
 
 object_multiple_calculate:
@@ -821,7 +821,7 @@ screen_0:
 screen_0_id:
   .byte 0 ;id
 screen_0_object:
-  .byte 0,1,2
+  .byte 0,$ff,2
 screen_0_description:
   .ascii "Te encuentras a los pies de una montaña, puedes ver a lo lejos una cueva"
   .ascii "a tus pies encuentras"
@@ -851,7 +851,7 @@ screen_1:
 screen_1_id:
   .byte 1 ;id
 screen_1_object:
-  .byte 0,1,2
+  .byte 0,1,$ff
 screen_1_description:
   .ascii "La entrada de la cueva esta colapsada, no puedes salir por ahí"
   .ascii "a tus pies encuentras"
