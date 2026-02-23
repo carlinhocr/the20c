@@ -744,7 +744,7 @@ selectObject_loop:
   inc currentObjectOffset
   lda currentObjectOffset
   cmp #$3
-  bmi selectObject_loop
+  bne selectObject_loop
   rts
 
 processObject:
