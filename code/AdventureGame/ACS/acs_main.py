@@ -8,8 +8,8 @@ JSON_SCREENS_FILE = "acs_screens.json"
 JSON_ACTIONS_FILE = "acs_actions.json"
 JSON_PUZZLES_FILE = "acs_puzzles.json"
 
-SECTIONS = ["Objects", "Puzzles", "Screens", "Actions", "Elements"]
-ICONS    = ["📦",      "🧩",      "🖥️",      "⚡",       "🔮"]
+SECTIONS = ["Objects", "Puzzles", "Screens", "Actions", "Elements", "Map"]
+ICONS    = ["📦",      "🧩",      "🖥️",      "⚡",       "🔮",        "🗺️"]
 
 FIELD_STYLE = {
     "bg": "#1e0f05", "fg": "#f0c040", "insertbackground": "#f0c040",
@@ -60,6 +60,9 @@ def get_screen_names():
         if rec.get("Name", "").strip() or rid
     )
     return [""] + names
+
+def get_puzzle_names():
+    return [""] + sorted(load_json(JSON_PUZZLES_FILE).keys())
 
 def get_action_names():
     actions = load_json(JSON_ACTIONS_FILE)
@@ -424,6 +427,17 @@ def open_screens_window():
     exit_combos   = {}
     object_vars   = {}
     object_combos = {}
+    puzzle_vars   = {}
+    puzzle_combos = {}
+
+    # ── Load existing screen ──────────────────────────────────
+    section_lbl(form, "— Load Existing Screen —")
+    load_var = tk.StringVar(value="— select to load —")
+    load_dd  = ttk.Combobox(form, textvariable=load_var,
+                            values=get_screen_names()[1:],
+                            state="readonly", font=("Courier", 11))
+    load_dd.pack(fill="x", ipady=3)
+    tk.Frame(form, bg="#7a5520", height=2).pack(fill="x", pady=(10, 0))
 
     # ── Identity ─────────────────────────────────────────────
     section_lbl(form, "— Identity —")
@@ -448,15 +462,8 @@ def open_screens_window():
     section_lbl(form, "— Puzzles —")
     puz_frame = tk.Frame(form, bg="#2b1a0e")
     puz_frame.pack(fill="x")
-    puz_entries = {}
-    for i, pf in enumerate(["Puzzle1", "Puzzle2"]):
-        col = tk.Frame(puz_frame, bg="#2b1a0e")
-        col.grid(row=0, column=i, padx=4, sticky="ew")
-        puz_frame.columnconfigure(i, weight=1)
-        tk.Label(col, text=pf, **LABEL_STYLE).pack(fill="x", pady=(0, 2))
-        e = tk.Entry(col, **FIELD_STYLE)
-        e.pack(fill="x", ipady=4)
-        puz_entries[pf] = e
+    add_grid_combos(puz_frame, ["Puzzle1", "Puzzle2"],
+                    get_puzzle_names, puzzle_vars, puzzle_combos)
 
     # ── Description ──────────────────────────────────────────
     section_lbl(form, "— Description —")
@@ -476,23 +483,268 @@ def open_screens_window():
     tk.Frame(form, bg="#7a5520", height=2).pack(fill="x", pady=(18, 8))
     slbl = status_lbl(form)
 
+    def on_load_screen(e=None):
+        nm  = load_var.get()
+        screens = load_json(JSON_SCREENS_FILE)
+        # find record by Name field
+        rec = next((r for r in screens.values() if r.get("Name","") == nm), None)
+        if not rec:
+            return
+        for f in list(entries.keys()):
+            entries[f].delete(0, tk.END)
+            entries[f].insert(0, rec.get(f, ""))
+        for d, v in exit_vars.items():
+            v.set(rec.get(d, ""))
+        for o, v in object_vars.items():
+            v.set(rec.get(o, ""))
+        for p, v in puzzle_vars.items():
+            v.set(rec.get(p, ""))
+        desc_text.delete("1.0", tk.END)
+        desc_text.insert("1.0", rec.get("Description", ""))
+        ascii_text.delete("1.0", tk.END)
+        ascii_text.insert("1.0", rec.get("AsciiDrawing", ""))
+        slbl.config(text=f"✔  Loaded '{nm}'", fg="#c8a060")
+
+    load_dd.bind("<<ComboboxSelected>>", on_load_screen)
+
     def on_save():
         data = {f: entries[f].get() for f in entries}
         for d, v in exit_vars.items():
             data[d] = v.get()
         for o, v in object_vars.items():
             data[o] = v.get()
-        for p, e in puz_entries.items():
-            data[p] = e.get()
+        for p, v in puzzle_vars.items():
+            data[p] = v.get()
         data["Description"]  = desc_text.get("1.0", "end-1c")
         data["AsciiDrawing"] = ascii_text.get("1.0", "end-1c")
         save_to_json(JSON_SCREENS_FILE, "ID", data, slbl)
-        updated = get_screen_names()
+        updated = get_screen_names()[1:]
         for cb in exit_combos.values():
-            cb["values"] = updated
+            cb["values"] = [""] + updated
+        load_dd["values"] = updated
+        for cb in puzzle_combos.values():
+            cb["values"] = get_puzzle_names()
 
     save_btn(form, "💾  Save Screen", on_save)
 
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  Map window
+# ══════════════════════════════════════════════════════════════════════════════
+
+def open_map_window():
+    screens = load_json(JSON_SCREENS_FILE)
+    if not screens:
+        messagebox.showinfo("Map", "No screens found. Create some screens first.")
+        return
+
+    win = tk.Toplevel()
+    win.title("🗺️  Adventure Map")
+    win.geometry("900x700")
+    win.configure(bg="#1a0f06")
+    win.resizable(True, True)
+
+    tk.Label(win, text="🗺️  Adventure Map", font=("Georgia", 16, "bold"),
+             bg="#1a0f06", fg="#f0c040", pady=10).pack()
+    tk.Frame(win, bg="#7a5520", height=2).pack(fill="x", padx=20, pady=(0, 6))
+
+    # ── Toolbar ───────────────────────────────────────────────
+    toolbar = tk.Frame(win, bg="#1a0f06")
+    toolbar.pack(fill="x", padx=20, pady=(0, 6))
+    tk.Label(toolbar, text="Drag rooms to rearrange  •  Scroll to zoom",
+             font=("Courier", 9), bg="#1a0f06", fg="#7a5520").pack(side="left")
+    tk.Button(toolbar, text="⟳ Reset Layout", font=("Georgia", 9, "bold"),
+              bg="#3d2005", fg="#f0c040", activebackground="#5c3310",
+              activeforeground="#fff", relief="raised", bd=2, cursor="hand2",
+              command=lambda: redraw(reset=True)).pack(side="right")
+
+    # ── Canvas ────────────────────────────────────────────────
+    canvas = tk.Canvas(win, bg="#0d0804", highlightthickness=0)
+    hbar = ttk.Scrollbar(win, orient="horizontal", command=canvas.xview)
+    vbar = ttk.Scrollbar(win, orient="vertical",   command=canvas.yview)
+    canvas.configure(xscrollcommand=hbar.set, yscrollcommand=vbar.set)
+    hbar.pack(side="bottom", fill="x")
+    vbar.pack(side="right",  fill="y")
+    canvas.pack(side="left", fill="both", expand=True)
+
+    # ── Layout constants ──────────────────────────────────────
+    BOX_W, BOX_H  = 120, 50
+    GAP_X, GAP_Y  = 80, 60
+    STEP_X = BOX_W + GAP_X
+    STEP_Y = BOX_H + GAP_Y
+    ORIGIN = (100, 100)
+
+    # ── Build adjacency: name → {N,S,E,W} neighbour names ────
+    # Build a lookup: screen name → record
+    name_to_rec = {}
+    for rid, rec in screens.items():
+        nm = rec.get("Name", rid).strip() or rid
+        name_to_rec[nm] = rec
+
+    all_names = list(name_to_rec.keys())
+
+    # ── Auto-layout via BFS from first screen ─────────────────
+    positions = {}   # name → [cx, cy]  (mutable so drag works)
+
+    def auto_layout():
+        positions.clear()
+        start = all_names[0]
+        queue = [(start, 0, 0)]
+        visited = set()
+        while queue:
+            nm, gx, gy = queue.pop(0)
+            if nm in visited:
+                continue
+            visited.add(nm)
+            cx = ORIGIN[0] + gx * STEP_X
+            cy = ORIGIN[1] + gy * STEP_Y
+            positions[nm] = [cx, cy]
+            rec = name_to_rec.get(nm, {})
+            neighbors = {
+                "North": (gx,     gy - 1),
+                "South": (gx,     gy + 1),
+                "West":  (gx - 1, gy    ),
+                "East":  (gx + 1, gy    ),
+            }
+            for direction, (nx, ny) in neighbors.items():
+                neighbour = rec.get(direction, "").strip()
+                if neighbour and neighbour in name_to_rec and neighbour not in visited:
+                    queue.append((neighbour, nx, ny))
+        # any screens not reachable from first (disconnected) get placed below
+        placed_y = max((p[1] for p in positions.values()), default=ORIGIN[1])
+        col = 0
+        for nm in all_names:
+            if nm not in positions:
+                positions[nm] = [ORIGIN[0] + col * STEP_X, placed_y + STEP_Y * 2]
+                col += 1
+
+    auto_layout()
+
+    # ── Drawing ───────────────────────────────────────────────
+    BOX_COLOR    = "#3d2005"
+    BOX_OUTLINE  = "#f0c040"
+    TEXT_COLOR   = "#f0c040"
+    ARROW_COLOR  = "#c8a060"
+    DIR_LABELS   = {"North": "N", "South": "S", "East": "E", "West": "W"}
+
+    # direction offsets for arrow attachment points (fraction of box)
+    ATTACH = {
+        "North": (0.5,  0.0),
+        "South": (0.5,  1.0),
+        "East":  (1.0,  0.5),
+        "West":  (0.0,  0.5),
+    }
+
+    item_map   = {}   # name → {"rect": id, "text": id}
+    drawn_arcs = set()
+
+    def box_attach(nm, direction):
+        cx, cy = positions[nm]
+        fx, fy = ATTACH[direction]
+        return cx - BOX_W//2 + fx*BOX_W, cy - BOX_H//2 + fy*BOX_H
+
+    def redraw(reset=False):
+        nonlocal drawn_arcs
+        if reset:
+            auto_layout()
+        canvas.delete("all")
+        item_map.clear()
+        drawn_arcs = set()
+
+        # Draw arrows first (behind boxes)
+        for nm, rec in name_to_rec.items():
+            if nm not in positions:
+                continue
+            for direction, label in DIR_LABELS.items():
+                neighbour = rec.get(direction, "").strip()
+                if not neighbour or neighbour not in positions:
+                    continue
+                arc_key = tuple(sorted([nm, neighbour]))
+                # draw arrow from nm → neighbour
+                x1, y1 = box_attach(nm, direction)
+                # opposite direction for neighbour attachment
+                opp = {"North":"South","South":"North","East":"West","West":"East"}[direction]
+                x2, y2 = box_attach(neighbour, opp)
+                canvas.create_line(
+                    x1, y1, x2, y2,
+                    fill=ARROW_COLOR, width=2,
+                    arrow=tk.LAST, arrowshape=(10, 12, 4),
+                    tags="arrow"
+                )
+                # direction label near midpoint
+                mx, my = (x1+x2)/2, (y1+y2)/2
+                canvas.create_text(mx+6, my-8, text=label,
+                                   fill="#f0c040", font=("Courier", 8, "bold"),
+                                   tags="arrow")
+
+        # Draw boxes on top
+        for nm in all_names:
+            if nm not in positions:
+                continue
+            cx, cy = positions[nm]
+            x0, y0 = cx - BOX_W//2, cy - BOX_H//2
+            x1, y1 = cx + BOX_W//2, cy + BOX_H//2
+            rect = canvas.create_rectangle(x0, y0, x1, y1,
+                                           fill=BOX_COLOR, outline=BOX_OUTLINE,
+                                           width=2, tags=("box", nm))
+            # wrap long names
+            display = nm if len(nm) <= 14 else nm[:13]+"…"
+            txt  = canvas.create_text(cx, cy, text=display,
+                                      fill=TEXT_COLOR,
+                                      font=("Georgia", 9, "bold"),
+                                      width=BOX_W - 8,
+                                      tags=("box", nm))
+            item_map[nm] = {"rect": rect, "text": txt}
+
+        # Update scroll region
+        canvas.configure(scrollregion=canvas.bbox("all") or (0, 0, 900, 700))
+
+    redraw()
+
+    # ── Drag logic ────────────────────────────────────────────
+    drag_state = {"name": None, "ox": 0, "oy": 0}
+
+    def on_press(event):
+        cx = canvas.canvasx(event.x)
+        cy = canvas.canvasy(event.y)
+        for nm, ids in item_map.items():
+            items = canvas.find_overlapping(cx-1, cy-1, cx+1, cy+1)
+            if ids["rect"] in items or ids["text"] in items:
+                drag_state["name"] = nm
+                drag_state["ox"]   = cx
+                drag_state["oy"]   = cy
+                break
+
+    def on_drag(event):
+        nm = drag_state["name"]
+        if not nm:
+            return
+        cx = canvas.canvasx(event.x)
+        cy = canvas.canvasy(event.y)
+        dx, dy = cx - drag_state["ox"], cy - drag_state["oy"]
+        drag_state["ox"], drag_state["oy"] = cx, cy
+        positions[nm][0] += dx
+        positions[nm][1] += dy
+        redraw()
+
+    def on_release(event):
+        drag_state["name"] = None
+
+    # ── Zoom ─────────────────────────────────────────────────
+    scale = [1.0]
+
+    def on_zoom(event):
+        factor = 1.1 if event.delta > 0 else 0.9
+        cx = canvas.canvasx(event.x)
+        cy = canvas.canvasy(event.y)
+        canvas.scale("all", cx, cy, factor, factor)
+        canvas.configure(scrollregion=canvas.bbox("all"))
+
+    canvas.bind("<ButtonPress-1>",   on_press)
+    canvas.bind("<B1-Motion>",       on_drag)
+    canvas.bind("<ButtonRelease-1>", on_release)
+    canvas.bind("<MouseWheel>",      on_zoom)
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  Dispatch
@@ -504,6 +756,7 @@ def open_window(title):
         "Screens": open_screens_window,
         "Actions": open_actions_window,
         "Puzzles": open_puzzles_window,
+        "Map":     open_map_window,
     }
     if title in dispatch:
         dispatch[title]()
@@ -527,7 +780,7 @@ def open_window(title):
 def main():
     root = tk.Tk()
     root.title("Adventure Construction Set")
-    root.geometry("620x200")
+    root.geometry("730x200")
     root.configure(bg="#1a0f06")
     root.resizable(False, False)
 

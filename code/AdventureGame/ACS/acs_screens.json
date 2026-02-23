@@ -2,16 +2,31 @@
     "3": {
         "ID": "3",
         "Name": "EntradaCueva",
-        "Puzzle1": "",
-        "Puzzle2": "",
         "North": "",
         "South": "",
-        "East": "",
+        "East": "cuevaIntermedia",
         "West": "",
         "Object1": "encendedor",
         "Object2": "velon",
         "Object3": "",
+        "Puzzle1": "",
+        "Puzzle2": "",
         "Description": "Estas en la entrada de la cueva",
         "AsciiDrawing": "/////------------------------------------\\\\\\\\\\\n//------------------------------------------\\\\\n//------------------------------------------\\\\\n//------------------------------------------\\\\\n"
+    },
+    "2": {
+        "ID": "2",
+        "Name": "cuevaIntermedia",
+        "North": "",
+        "South": "",
+        "East": "",
+        "West": "EntradaCueva",
+        "Object1": "vela",
+        "Object2": "encendedor",
+        "Object3": "",
+        "Puzzle1": "",
+        "Puzzle2": "",
+        "Description": "estas cada vez mas profundo en la cueva, aca hay muchas estalactitas",
+        "AsciiDrawing": ""
     }
 }
