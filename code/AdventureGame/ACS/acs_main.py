@@ -198,12 +198,7 @@ def open_objects_window():
     for f in fields:
         add_field(form, f, entries)
 
-    tk.Label(form, text="Category", **LABEL_STYLE).pack(fill="x", pady=(12, 1))
-    cat_var = tk.StringVar(value="Select a category")
-    cat_cb  = ttk.Combobox(form, textvariable=cat_var,
-                           values=["Weapon", "Treasure", "Key Item"],
-                           state="readonly", font=("Courier", 11))
-    cat_cb.pack(fill="x", ipady=3)
+
 
     take_var = tk.BooleanVar()
     vis_var  = tk.BooleanVar()
@@ -222,8 +217,6 @@ def open_objects_window():
         for f in fields:
             entries[f].delete(0, tk.END)
             entries[f].insert(0, obj.get(f, ""))
-        cat = obj.get("Category", "")
-        cat_var.set(cat if cat in ["Weapon","Treasure","Key Item"] else "Select a category")
         take_var.set(obj.get("Takeable", False))
         vis_var.set(obj.get("Visible",   False))
         slbl.config(text=f"✔  Loaded '{nm}'", fg="#c8a060")
@@ -232,8 +225,7 @@ def open_objects_window():
 
     def on_save():
         data = {f: entries[f].get() for f in fields}
-        data.update({"Category": cat_var.get(),
-                     "Takeable": take_var.get(),
+        data.update({"Takeable": take_var.get(),
                      "Visible":  vis_var.get()})
         save_to_json(JSON_OBJECTS_FILE, "Name", data, slbl)
         load_dd["values"] = list(load_json(JSON_OBJECTS_FILE).keys())
