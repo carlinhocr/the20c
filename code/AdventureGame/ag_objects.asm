@@ -88,6 +88,7 @@ screenCurrentObjects_High=$b5
 objectDataVectorLow=$b6
 objectDataVectorHigh=$b7
 
+objectVisibility
 
 
 
@@ -749,9 +750,23 @@ selectObject_loop:
 
 processObject:
   lda objectCurrentID
-  cmp #$ff
+  cmp #$ff ;invalid object so that slot is empty do not process
   beq end_processObject
   jsr object_multiple_calculate
+  ;check visibility do not print invisible objects
+  lda objectMultiple
+  clc
+  adc #$4 ;visibility byte
+  tax 
+  lda objects_pointers,x 
+  sta serialDataVectorLow  
+  inx 
+  lda objects_pointers,x
+  sta serialDataVectorHigh
+  ldy #$0
+  lda (serialDataVectorLow),y
+  cmp #$1
+  bne end_processObject
   jsr print_current_object_name
   jsr print_current_object_description
 end_processObject:  
