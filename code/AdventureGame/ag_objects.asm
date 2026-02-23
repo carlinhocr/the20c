@@ -107,6 +107,8 @@ screenCurrentBaseAddressHigh=$0214
 objectCurrentID=$0215
 objectMultiple=$0216
 objectRecordSize=$0217
+object1Offset=$0218
+currentObjectOffset=$0219
 
 
 ;constants
@@ -715,10 +717,20 @@ draw_current_screen_table:
   lda screen_pointers,x
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  jsr selectObject
+  rts
+
+selectObject:
+  lda #$2
+  sta object1Offset
+  lda object1Offset  
+  sta currentObjectOffset
+  ldy #$ff
+selectObject_loop:
   ;Print Object 1
   lda screenMultiple
   clc
-  adc #$2  ;object 1
+  adc currentObjectOffset  ;object 1
   tax
   lda screen_pointers,x 
   sta objectDataVectorLow  
@@ -729,6 +741,10 @@ draw_current_screen_table:
   lda (objectDataVectorLow),y
   sta objectCurrentID
   jsr processObject
+  inc currentObjectOffset
+  lda currentObjectOffset
+  cmp #$3
+  bmi selectObject_loop
   rts
 
 processObject:
