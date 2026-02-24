@@ -7,7 +7,7 @@
         "Visible": true
     },
     "vela": {
-        "ObjectID": "3",
+        "ObjectID": "0",
         "Name": "vela",
         "Description": "sirve para iluminar",
         "Takeable": true,
@@ -18,6 +18,20 @@
         "Name": "unguento",
         "Description": "es una crema para curar heridas",
         "Takeable": true,
+        "Visible": true
+    },
+    "llave": {
+        "ObjectID": "3",
+        "Name": "llave",
+        "Description": "es una tipica llave para abrir puertas",
+        "Takeable": true,
+        "Visible": false
+    },
+    "puerta": {
+        "ObjectID": "4",
+        "Name": "puerta",
+        "Description": "es una puerta, quizas lleve a alguna salida",
+        "Takeable": false,
         "Visible": true
     }
 }

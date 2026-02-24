@@ -8,5 +8,10 @@
         "ID": "2",
         "Name": "usar",
         "Sensor": ""
+    },
+    "0": {
+        "ID": "0",
+        "Name": "ir",
+        "Sensor": ""
     }
 }
