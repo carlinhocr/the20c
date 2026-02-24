@@ -62,7 +62,13 @@ def get_screen_names():
     return [""] + names
 
 def get_puzzle_names():
-    return [""] + sorted(load_json(JSON_PUZZLES_FILE).keys())
+    puzzles = load_json(JSON_PUZZLES_FILE)
+    names = sorted(
+        rec.get("Name", rid)        # usa Name, y si no existe usa el ID como fallback
+        for rid, rec in puzzles.items()
+        if rec.get("Name", "").strip() or rid
+    )
+    return [""] + names
 
 def get_action_names():
     actions = load_json(JSON_ACTIONS_FILE)
@@ -443,12 +449,17 @@ def open_screens_window():
     add_grid_combos(exits_frame, ["North", "South", "East", "West"],
                     get_screen_names, exit_vars, exit_combos)
 
-    # ── Objects ──────────────────────────────────────────────
+    # ── Objects (2 rows of 3 = 6 total) ──────────────────────
     section_lbl(form, "— Objects in Screen —")
-    obj_frame = tk.Frame(form, bg="#2b1a0e")
-    obj_frame.pack(fill="x")
-    add_grid_combos(obj_frame, ["Object1", "Object2", "Object3"],
+    obj_frame1 = tk.Frame(form, bg="#2b1a0e")
+    obj_frame1.pack(fill="x")
+    add_grid_combos(obj_frame1, ["Object1", "Object2", "Object3"],
                     get_object_names, object_vars, object_combos)
+    obj_frame2 = tk.Frame(form, bg="#2b1a0e")
+    obj_frame2.pack(fill="x", pady=(6, 0))
+    add_grid_combos(obj_frame2, ["Object4", "Object5", "Object6"],
+                    get_object_names, object_vars, object_combos)
+
 
     # ── Puzzles ──────────────────────────────────────────────
     section_lbl(form, "— Puzzles —")
