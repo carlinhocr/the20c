@@ -88,6 +88,9 @@ screenCurrentObjects_High=$b5
 objectDataVectorLow=$b6
 objectDataVectorHigh=$b7
 
+puzzleDataVectorLow=$b8
+puzzleDataVectorHigh=$b9
+
 pivotZpLow=$fe
 pivotZpHigh=$ff
 
@@ -812,16 +815,16 @@ selectPuzzle_loop:
   adc #24  ;fist puzzle byte
   tax
   lda screens_pointers,x 
-  sta pivotZpLow  
+  sta puzzleDataVectorLow  
   inx 
   lda screens_pointers,x
-  sta pivotZpHigh
+  sta puzzleDataVectorHigh
   ldy #$0
-  lda (pivotZpLow),y
+  lda (puzzleDataVectorLow),y
   sta puzzleCurrentID
   jsr processPuzzle
   ldy #$1
-  lda (pivotZpLow),y
+  lda (puzzleDataVectorLow),y
   sta puzzleCurrentID
   jsr processPuzzle
   rts
