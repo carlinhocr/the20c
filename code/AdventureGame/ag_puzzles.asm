@@ -666,7 +666,7 @@ printAsciiDrawing_end:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-loadObjectsRAM:
+loadObjectsRAMtest:
   ldx #$00
   lda #$1 
   sta objectsRAM,X
@@ -678,24 +678,24 @@ loadObjectsRAM:
   sta objectsRAM,X
   rts
 
-loadObjectsRAM2:
+loadObjectsRAM:
   lda #$a ;10 bytes
   sta objectRecordSize
   lda #< objects_pointers ;so we can process the objects_pointers table
   sta pivotZpLow
   lda #> objects_pointers 
   sta pivotZpHigh
-  ldx #$00
-  ldy #$4 ;here starts the visibility property of objects
+  ldy #$00
+  ldx #$4 ;here starts the visibility property of objects
 loadObjectsRAM_loop:
-  lda (pivotZpLow),Y 
-  sta objectsRAM,X
-  tya
+  lda (pivotZpLow,x) 
+  sta objectsRAM,y
+  txa
   clc
   adc objectRecordSize
-  tay
-  inx 
-  cpx object_count
+  tax
+  iny 
+  cpy object_count
   bne loadObjectsRAM_loop
   rts
 
