@@ -64,7 +64,7 @@ def get_screen_names():
 def get_puzzle_names():
     puzzles = load_json(JSON_PUZZLES_FILE)
     names = sorted(
-        rec.get("Name", rid)        # usa Name, y si no existe usa el ID como fallback
+        rec.get("Name", rid)
         for rid, rec in puzzles.items()
         if rec.get("Name", "").strip() or rid
     )
@@ -572,20 +572,64 @@ def open_map_window():
     canvas.pack(side="left", fill="both", expand=True)
 
     # ── Layout constants ──────────────────────────────────────
-    BOX_W, BOX_H  = 120, 50
-    GAP_X, GAP_Y  = 80, 60
+    BOX_W, BOX_H  = 140, 50   # base box size (header area only)
+    GAP_X, GAP_Y  = 80, 80
     STEP_X = BOX_W + GAP_X
     STEP_Y = BOX_H + GAP_Y
     ORIGIN = (100, 100)
+    OBJ_LINE_H = 14   # height per object/puzzle line inside the box extension
 
     # ── Build adjacency: name → {N,S,E,W} neighbour names ────
-    # Build a lookup: screen name → record
     name_to_rec = {}
     for rid, rec in screens.items():
         nm = rec.get("Name", rid).strip() or rid
         name_to_rec[nm] = rec
 
     all_names = list(name_to_rec.keys())
+
+    # ── Load objects data for visibility lookup ───────────────
+    def get_objects_data():
+        return load_json(JSON_OBJECTS_FILE)
+
+    def get_screen_object_labels(rec):
+        """
+        Return a list of label strings for objects in a screen record.
+        Hidden objects (Visible=False) get a [H] suffix.
+        """
+        objects_data = get_objects_data()
+        labels = []
+        for slot in ["Object1", "Object2", "Object3", "Object4", "Object5", "Object6"]:
+            obj_name = rec.get(slot, "").strip()
+            if not obj_name:
+                continue
+            obj_rec = objects_data.get(obj_name, {})
+            visible = obj_rec.get("Visible", True)
+            if not visible:
+                labels.append(f"[H] {obj_name}")
+            else:
+                labels.append(obj_name)
+        return labels
+
+    def get_screen_puzzle_labels(rec):
+        """
+        Return a list of puzzle Name strings for puzzles in a screen record.
+        Looks up the puzzle Name from acs_puzzles.json using the puzzle ID stored in the screen.
+        Solved puzzles get a [S] prefix.
+        """
+        puzzles_data = load_json(JSON_PUZZLES_FILE)
+        labels = []
+        for slot in ["Puzzle1", "Puzzle2"]:
+            puzzle_id = rec.get(slot, "").strip()
+            if not puzzle_id:
+                continue
+            puzzle_rec = puzzles_data.get(puzzle_id, {})
+            name = puzzle_rec.get("Name", puzzle_id) or puzzle_id
+            solved = puzzle_rec.get("Solved", False)
+            if solved:
+                labels.append(f"[S] {name}")
+            else:
+                labels.append(name)
+        return labels
 
     # ── Auto-layout via BFS from first screen ─────────────────
     positions = {}   # name → [cx, cy]  (mutable so drag works)
@@ -625,13 +669,17 @@ def open_map_window():
     auto_layout()
 
     # ── Drawing ───────────────────────────────────────────────
-    BOX_COLOR    = "#3d2005"
-    BOX_OUTLINE  = "#f0c040"
-    TEXT_COLOR   = "#f0c040"
-    ARROW_COLOR  = "#c8a060"
-    DIR_LABELS   = {"North": "N", "South": "S", "East": "E", "West": "W"}
+    BOX_COLOR        = "#3d2005"
+    BOX_OUTLINE      = "#f0c040"
+    TEXT_COLOR       = "#f0c040"
+    OBJ_COLOR        = "#90d8a0"   # visible object text
+    OBJ_HIDDEN_COLOR = "#d08050"   # hidden object text (warm orange)
+    PUZ_COLOR        = "#a0c8f0"   # puzzle text (light blue)
+    PUZ_SOLVED_COLOR = "#7a9070"   # solved puzzle text (muted green-grey)
+    DIVIDER_COLOR    = "#7a5520"
+    ARROW_COLOR      = "#c8a060"
+    DIR_LABELS       = {"North": "N", "South": "S", "East": "E", "West": "W"}
 
-    # direction offsets for arrow attachment points (fraction of box)
     ATTACH = {
         "North": (0.5,  0.0),
         "South": (0.5,  1.0),
@@ -639,68 +687,200 @@ def open_map_window():
         "West":  (0.0,  0.5),
     }
 
-    item_map   = {}   # name → {"rect": id, "text": id}
-    drawn_arcs = set()
+    item_map   = {}   # name → {"rect": id, "text": id, "total_h": int}
+
+    def total_box_height(nm):
+        """Compute total rendered height of a room box including object and puzzle lines."""
+        rec = name_to_rec.get(nm, {})
+        obj_labels = get_screen_object_labels(rec)
+        puz_labels = get_screen_puzzle_labels(rec)
+        extra = 0
+        if obj_labels:
+            extra += len(obj_labels) * OBJ_LINE_H + 6
+        if puz_labels:
+            extra += len(puz_labels) * OBJ_LINE_H + 6
+        return BOX_H + extra
 
     def box_attach(nm, direction):
         cx, cy = positions[nm]
-        fx, fy = ATTACH[direction]
-        return cx - BOX_W//2 + fx*BOX_W, cy - BOX_H//2 + fy*BOX_H
+        th = total_box_height(nm)
+        # cx/cy is top-center of the header; we treat cy as the vertical center of header
+        top    = cy - BOX_H // 2
+        bottom = top + th
+        mid_y  = (top + bottom) / 2
+        if direction == "North":
+            return cx, top
+        elif direction == "South":
+            return cx, bottom
+        elif direction == "East":
+            return cx + BOX_W // 2, mid_y
+        elif direction == "West":
+            return cx - BOX_W // 2, mid_y
 
     def redraw(reset=False):
-        nonlocal drawn_arcs
         if reset:
             auto_layout()
         canvas.delete("all")
         item_map.clear()
-        drawn_arcs = set()
 
         # Draw arrows first (behind boxes)
+        # ── Collect all directed edges ────────────────────────
+        OPP = {"North":"South","South":"North","East":"West","West":"East"}
+        # PERP gives a perpendicular unit offset direction for each axis
+        # so parallel arrows don't overlap. Offset = 5px sideways.
+        OFFSET = 5
+        def perp_offset(direction):
+            """Return (dx, dy) perpendicular offset so parallel arrows are separated."""
+            if direction in ("North", "South"):
+                return (OFFSET, 0)   # shift East for the "first" arrow
+            else:
+                return (0, OFFSET)   # shift South for the "first" arrow
+
+        # Build set of all directed edges: (nm, neighbour, direction)
+        edges = []
         for nm, rec in name_to_rec.items():
             if nm not in positions:
                 continue
-            for direction, label in DIR_LABELS.items():
+            for direction in DIR_LABELS:
                 neighbour = rec.get(direction, "").strip()
-                if not neighbour or neighbour not in positions:
-                    continue
-                arc_key = tuple(sorted([nm, neighbour]))
-                # draw arrow from nm → neighbour
-                x1, y1 = box_attach(nm, direction)
-                # opposite direction for neighbour attachment
-                opp = {"North":"South","South":"North","East":"West","West":"East"}[direction]
-                x2, y2 = box_attach(neighbour, opp)
-                canvas.create_line(
-                    x1, y1, x2, y2,
-                    fill=ARROW_COLOR, width=2,
-                    arrow=tk.LAST, arrowshape=(10, 12, 4),
-                    tags="arrow"
-                )
-                # direction label near midpoint
-                mx, my = (x1+x2)/2, (y1+y2)/2
-                canvas.create_text(mx+6, my-8, text=label,
-                                   fill="#f0c040", font=("Courier", 8, "bold"),
-                                   tags="arrow")
+                if neighbour and neighbour in positions:
+                    edges.append((nm, neighbour, direction))
+
+        # Determine which edges have a reverse counterpart (bidirectional)
+        edge_set = {(nm, nb, d) for nm, nb, d in edges}
+
+        drawn_labels = []  # track label positions to avoid stacking
+
+        for nm, neighbour, direction in edges:
+            opp_dir = OPP[direction]
+            is_bidir = (neighbour, nm, opp_dir) in edge_set
+
+            x1, y1 = box_attach(nm, direction)
+            x2, y2 = box_attach(neighbour, opp_dir)
+
+            if is_bidir:
+                # Determine which of the two directions is "first" (canonical)
+                # so each pair offsets consistently in opposite sides.
+                pair = tuple(sorted([f"{nm}:{direction}", f"{neighbour}:{opp_dir}"]))
+                is_first = f"{nm}:{direction}" == pair[0]
+                pdx, pdy = perp_offset(direction)
+                sign = 1 if is_first else -1
+                ox, oy = pdx * sign, pdy * sign
+                ax1, ay1 = x1 + ox, y1 + oy
+                ax2, ay2 = x2 + ox, y2 + oy
+            else:
+                ax1, ay1 = x1, y1
+                ax2, ay2 = x2, y2
+
+            canvas.create_line(
+                ax1, ay1, ax2, ay2,
+                fill=ARROW_COLOR, width=2,
+                arrow=tk.LAST, arrowshape=(10, 12, 4),
+                tags="arrow"
+            )
+            # Direction label near the source end (1/3 of the way along)
+            lx = ax1 + (ax2 - ax1) * 0.25
+            ly = ay1 + (ay2 - ay1) * 0.25
+            # Nudge label slightly off the line
+            if direction in ("North", "South"):
+                lx += 10
+            else:
+                ly -= 10
+            canvas.create_text(lx, ly, text=DIR_LABELS[direction],
+                               fill="#f0c040", font=("Courier", 8, "bold"),
+                               tags="arrow")
 
         # Draw boxes on top
         for nm in all_names:
             if nm not in positions:
                 continue
             cx, cy = positions[nm]
-            x0, y0 = cx - BOX_W//2, cy - BOX_H//2
-            x1, y1 = cx + BOX_W//2, cy + BOX_H//2
-            rect = canvas.create_rectangle(x0, y0, x1, y1,
-                                           fill=BOX_COLOR, outline=BOX_OUTLINE,
-                                           width=2, tags=("box", nm))
-            # wrap long names
-            display = nm if len(nm) <= 14 else nm[:13]+"…"
-            txt  = canvas.create_text(cx, cy, text=display,
-                                      fill=TEXT_COLOR,
-                                      font=("Georgia", 9, "bold"),
-                                      width=BOX_W - 8,
-                                      tags=("box", nm))
-            item_map[nm] = {"rect": rect, "text": txt}
+            rec = name_to_rec.get(nm, {})
+            obj_labels = get_screen_object_labels(rec)
+            puz_labels = get_screen_puzzle_labels(rec)
 
-        # Update scroll region
+            # Compute full box height
+            obj_area_h = len(obj_labels) * OBJ_LINE_H + (6 if obj_labels else 0)
+            puz_area_h = len(puz_labels) * OBJ_LINE_H + (6 if puz_labels else 0)
+            full_h = BOX_H + obj_area_h + puz_area_h
+
+            x0 = cx - BOX_W // 2
+            y0 = cy - BOX_H // 2
+            x1 = cx + BOX_W // 2
+            y1_header = cy + BOX_H // 2
+            y1_full   = y0 + full_h
+
+            # Draw full box background
+            rect = canvas.create_rectangle(
+                x0, y0, x1, y1_full,
+                fill=BOX_COLOR, outline=BOX_OUTLINE,
+                width=2, tags=("box", nm)
+            )
+
+            # Room name in header area
+            display = nm if len(nm) <= 16 else nm[:15] + "…"
+            txt = canvas.create_text(
+                cx, cy,
+                text=display,
+                fill=TEXT_COLOR,
+                font=("Georgia", 9, "bold"),
+                width=BOX_W - 8,
+                tags=("box", nm)
+            )
+
+            # Divider line between header and object area
+            if obj_labels or puz_labels:
+                canvas.create_line(
+                    x0 + 2, y1_header,
+                    x1 - 2, y1_header,
+                    fill=DIVIDER_COLOR, width=1,
+                    tags=("box", nm)
+                )
+
+            # Object labels
+            for i, lbl in enumerate(obj_labels):
+                oy = y1_header + 4 + i * OBJ_LINE_H + OBJ_LINE_H // 2
+                is_hidden = lbl.startswith("[H]")
+                color = OBJ_HIDDEN_COLOR if is_hidden else OBJ_COLOR
+                # Truncate long names
+                max_chars = 17
+                display_lbl = lbl if len(lbl) <= max_chars else lbl[:max_chars - 1] + "…"
+                canvas.create_text(
+                    cx, oy,
+                    text=display_lbl,
+                    fill=color,
+                    font=("Courier", 8),
+                    width=BOX_W - 6,
+                    tags=("box", nm)
+                )
+
+            # Puzzle section
+            y1_puz_start = y1_header + obj_area_h
+            if puz_labels:
+                # Divider before puzzles
+                canvas.create_line(
+                    x0 + 2, y1_puz_start,
+                    x1 - 2, y1_puz_start,
+                    fill=DIVIDER_COLOR, width=1, dash=(4, 2),
+                    tags=("box", nm)
+                )
+                for i, lbl in enumerate(puz_labels):
+                    oy = y1_puz_start + 4 + i * OBJ_LINE_H + OBJ_LINE_H // 2
+                    is_solved = lbl.startswith("[S]")
+                    color = PUZ_SOLVED_COLOR if is_solved else PUZ_COLOR
+                    max_chars = 17
+                    display_lbl = lbl if len(lbl) <= max_chars else lbl[:max_chars - 1] + "…"
+                    canvas.create_text(
+                        cx, oy,
+                        text=display_lbl,
+                        fill=color,
+                        font=("Courier", 8, "italic"),
+                        width=BOX_W - 6,
+                        tags=("box", nm)
+                    )
+
+            item_map[nm] = {"rect": rect, "text": txt, "total_h": full_h}
+
         canvas.configure(scrollregion=canvas.bbox("all") or (0, 0, 900, 700))
 
     redraw()
