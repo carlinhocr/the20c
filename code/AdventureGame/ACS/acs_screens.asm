@@ -17,24 +17,36 @@ screens_pointers:
   .word screen_0_object6     ; EntradaCueva object6     [22,23]
   .word screen_0_puzzle1     ; EntradaCueva puzzle1     [24,25]
   .word screen_0_puzzle2     ; EntradaCueva puzzle2     [26,27]
-  .word screen_0_description ; EntradaCueva description [28,29]
-  .word screen_0_ascii       ; EntradaCueva ascii       [30,31]
-  .word screen_1_id          ; cuevaIntermedia id          [32,33]
-  .word screen_1_name        ; cuevaIntermedia name        [34,35]
-  .word screen_1_north       ; cuevaIntermedia north       [36,37]
-  .word screen_1_south       ; cuevaIntermedia south       [38,39]
-  .word screen_1_east        ; cuevaIntermedia east        [40,41]
-  .word screen_1_west        ; cuevaIntermedia west        [42,43]
-  .word screen_1_object1     ; cuevaIntermedia object1     [44,45]
-  .word screen_1_object2     ; cuevaIntermedia object2     [46,47]
-  .word screen_1_object3     ; cuevaIntermedia object3     [48,49]
-  .word screen_1_object4     ; cuevaIntermedia object4     [50,51]
-  .word screen_1_object5     ; cuevaIntermedia object5     [52,53]
-  .word screen_1_object6     ; cuevaIntermedia object6     [54,55]
-  .word screen_1_puzzle1     ; cuevaIntermedia puzzle1     [56,57]
-  .word screen_1_puzzle2     ; cuevaIntermedia puzzle2     [58,59]
-  .word screen_1_description ; cuevaIntermedia description [60,61]
-  .word screen_1_ascii       ; cuevaIntermedia ascii       [62,63]
+  .word screen_0_action1     ; EntradaCueva action1     [28,29]
+  .word screen_0_action2     ; EntradaCueva action2     [30,31]
+  .word screen_0_action3     ; EntradaCueva action3     [32,33]
+  .word screen_0_action4     ; EntradaCueva action4     [34,35]
+  .word screen_0_action5     ; EntradaCueva action5     [36,37]
+  .word screen_0_action6     ; EntradaCueva action6     [38,39]
+  .word screen_0_description ; EntradaCueva description [40,41]
+  .word screen_0_ascii       ; EntradaCueva ascii       [42,43]
+  .word screen_1_id          ; cuevaIntermedia id          [44,45]
+  .word screen_1_name        ; cuevaIntermedia name        [46,47]
+  .word screen_1_north       ; cuevaIntermedia north       [48,49]
+  .word screen_1_south       ; cuevaIntermedia south       [50,51]
+  .word screen_1_east        ; cuevaIntermedia east        [52,53]
+  .word screen_1_west        ; cuevaIntermedia west        [54,55]
+  .word screen_1_object1     ; cuevaIntermedia object1     [56,57]
+  .word screen_1_object2     ; cuevaIntermedia object2     [58,59]
+  .word screen_1_object3     ; cuevaIntermedia object3     [60,61]
+  .word screen_1_object4     ; cuevaIntermedia object4     [62,63]
+  .word screen_1_object5     ; cuevaIntermedia object5     [64,65]
+  .word screen_1_object6     ; cuevaIntermedia object6     [66,67]
+  .word screen_1_puzzle1     ; cuevaIntermedia puzzle1     [68,69]
+  .word screen_1_puzzle2     ; cuevaIntermedia puzzle2     [70,71]
+  .word screen_1_action1     ; cuevaIntermedia action1     [72,73]
+  .word screen_1_action2     ; cuevaIntermedia action2     [74,75]
+  .word screen_1_action3     ; cuevaIntermedia action3     [76,77]
+  .word screen_1_action4     ; cuevaIntermedia action4     [78,79]
+  .word screen_1_action5     ; cuevaIntermedia action5     [80,81]
+  .word screen_1_action6     ; cuevaIntermedia action6     [82,83]
+  .word screen_1_description ; cuevaIntermedia description [84,85]
+  .word screen_1_ascii       ; cuevaIntermedia ascii       [86,87]
 
 ; ── Screen 0: EntradaCueva ──────────────────────────
 screen_0_id:
@@ -79,6 +91,24 @@ screen_0_puzzle1:
 
 screen_0_puzzle2:
   .byte 1  ; abrir_puerta_llave
+
+screen_0_action1:
+  .byte 1  ; mirar
+
+screen_0_action2:
+  .byte 2  ; usar
+
+screen_0_action3:
+  .byte 0  ; ir
+
+screen_0_action4:
+  .byte 255  ; none
+
+screen_0_action5:
+  .byte 255  ; none
+
+screen_0_action6:
+  .byte 255  ; none
 
 screen_0_description:
   .ascii "Estas en la entrada de la cueva"
@@ -130,6 +160,24 @@ screen_1_puzzle1:
   .byte 255  ; none
 
 screen_1_puzzle2:
+  .byte 255  ; none
+
+screen_1_action1:
+  .byte 1  ; mirar
+
+screen_1_action2:
+  .byte 255  ; none
+
+screen_1_action3:
+  .byte 255  ; none
+
+screen_1_action4:
+  .byte 255  ; none
+
+screen_1_action5:
+  .byte 255  ; none
+
+screen_1_action6:
   .byte 255  ; none
 
 screen_1_description:

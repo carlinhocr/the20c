@@ -427,6 +427,8 @@ def open_screens_window():
     object_combos = {}
     puzzle_vars   = {}
     puzzle_combos = {}
+    action_vars   = {}
+    action_combos = {}
 
     # ── Load existing screen ──────────────────────────────────
     section_lbl(form, "— Load Existing Screen —")
@@ -468,6 +470,17 @@ def open_screens_window():
     add_grid_combos(puz_frame, ["Puzzle1", "Puzzle2"],
                     get_puzzle_names, puzzle_vars, puzzle_combos)
 
+    # ── Actions (2 rows of 3 = 6 total) ──────────────────────
+    section_lbl(form, "— Actions in Screen —")
+    act_frame1 = tk.Frame(form, bg="#2b1a0e")
+    act_frame1.pack(fill="x")
+    add_grid_combos(act_frame1, ["Action1", "Action2", "Action3"],
+                    get_action_names, action_vars, action_combos)
+    act_frame2 = tk.Frame(form, bg="#2b1a0e")
+    act_frame2.pack(fill="x", pady=(6, 0))
+    add_grid_combos(act_frame2, ["Action4", "Action5", "Action6"],
+                    get_action_names, action_vars, action_combos)
+
     # ── Description ──────────────────────────────────────────
     section_lbl(form, "— Description —")
     tk.Label(form, text="Description", **LABEL_STYLE).pack(fill="x", pady=(0, 2))
@@ -502,6 +515,8 @@ def open_screens_window():
             v.set(rec.get(o, ""))
         for p, v in puzzle_vars.items():
             v.set(rec.get(p, ""))
+        for a, v in action_vars.items():
+            v.set(rec.get(a, ""))
         desc_text.delete("1.0", tk.END)
         desc_text.insert("1.0", rec.get("Description", ""))
         ascii_text.delete("1.0", tk.END)
@@ -518,6 +533,8 @@ def open_screens_window():
             data[o] = v.get()
         for p, v in puzzle_vars.items():
             data[p] = v.get()
+        for a, v in action_vars.items():
+            data[a] = v.get()
         data["Description"]  = desc_text.get("1.0", "end-1c")
         data["AsciiDrawing"] = ascii_text.get("1.0", "end-1c")
         save_to_json(JSON_SCREENS_FILE, "ID", data, slbl)
@@ -527,6 +544,8 @@ def open_screens_window():
         load_dd["values"] = updated
         for cb in puzzle_combos.values():
             cb["values"] = get_puzzle_names()
+        for cb in action_combos.values():
+            cb["values"] = get_action_names()
 
     save_btn(form, "💾  Save Screen", on_save)
 

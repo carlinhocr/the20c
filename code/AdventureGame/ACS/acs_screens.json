@@ -14,6 +14,12 @@
         "Object6": "",
         "Puzzle1": "prender_vela",
         "Puzzle2": "abrir_puerta_llave",
+        "Action1": "mirar",
+        "Action2": "usar",
+        "Action3": "ir",
+        "Action4": "",
+        "Action5": "",
+        "Action6": "",
         "Description": "Estas en la entrada de la cueva",
         "AsciiDrawing": "/////------------------------------------\\\\\\\\\\\n//------------------------------------------\\\\\n//------------------------------------------\\\\\n//------------------------------------------\\\\\n"
     },
@@ -32,6 +38,12 @@
         "Object6": "",
         "Puzzle1": "",
         "Puzzle2": "",
+        "Action1": "mirar",
+        "Action2": "",
+        "Action3": "",
+        "Action4": "",
+        "Action5": "",
+        "Action6": "",
         "Description": "estas cada vez mas profundo en la cueva, aca hay muchas estalactitas",
         "AsciiDrawing": ""
     }
