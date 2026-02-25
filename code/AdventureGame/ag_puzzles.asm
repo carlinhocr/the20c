@@ -667,6 +667,18 @@ printAsciiDrawing_end:
 ;-----------------------------------------------------------------------------------
 
 loadObjectsRAM:
+  ldx #$00
+  lda #$1 
+  sta objectsRAM,X
+  inx
+  sta objectsRAM,X
+  inx
+  sta objectsRAM,X
+  inx
+  sta objectsRAM,X
+  rts
+
+loadObjectsRAM2:
   lda #$a ;10 bytes
   sta objectRecordSize
   lda #< objects_pointers ;so we can process the objects_pointers table
