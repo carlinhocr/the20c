@@ -791,7 +791,7 @@ draw_current_screen_table:
   ;print description
   lda screenMultiple
   clc
-  adc #$28  ;description
+  adc #28  ;description
   tax
   lda screens_pointers,x 
   sta serialDataVectorLow  
