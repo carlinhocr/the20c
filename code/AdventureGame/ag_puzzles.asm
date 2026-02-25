@@ -701,8 +701,8 @@ loadObjectsRAM_loop:
   lda (pivotZpLow),y
   sta objectsRAM,x
   inx 
-  cpx object_count
   stx object_RAM_index
+  cpx object_count
   bne loadObjectsRAM_loop
   lda object_pointers_index
   clc
