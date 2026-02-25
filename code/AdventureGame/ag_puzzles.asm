@@ -669,12 +669,12 @@ printAsciiDrawing_end:
 loadObjectsRAM:
   lda #$a ;10 bytes
   sta objectRecordSize
-  lda #< object_0_visible
+  lda #< objects_pointers ;so we can process the objects_pointers table
   sta pivotZpLow
-  lda #> object_0_visible 
+  lda #> objects_pointers 
   sta pivotZpHigh
   ldx #$00
-  ldy #$00
+  ldy #$4 ;here starts the visibility property of objects
 loadObjectsRAM_loop:
   lda (pivotZpLow),Y 
   sta objectsRAM,X
