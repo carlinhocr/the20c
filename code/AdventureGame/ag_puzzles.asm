@@ -114,6 +114,8 @@ puzzleRecordSize=$021c
 puzzle1Offset=$021d
 puzzleObjectOffset=$021e
 
+object_pointers_index=$021f
+object_RAM_index=$0220
 
 objectsRAM=$0300
 puzzlesRAM=$0400
@@ -681,22 +683,31 @@ loadObjectsRAMtest:
 loadObjectsRAM:
   lda #$a ;10 bytes
   sta objectRecordSize
-  lda #< objects_pointers ;so we can process the objects_pointers table
-  sta pivotZpLow
-  lda #> objects_pointers 
-  sta pivotZpHigh
-  ldy #$00
-  ldx #$4 ;here starts the visibility property of objects
+  ldx #$4
+  stx object_pointers_index
+  ldx #$0
+  stx object_RAM_index
+  ldy #$0 ;here starts the visibility property of objects
 loadObjectsRAM_loop:
-  lda (pivotZpLow,x) 
-  sta objectsRAM,y
-  txa
+  ldx object_pointers_index
+  lda objects_pointers,x ;load low byte address for visibility #$4
+  sta pivotZpLow
+  inx  
+  lda objects_pointers,x ;load high byte address for visibility #$4
+  sta pivotZpHigh
+  inx
+  stx object_pointers_index
+  ldx object_RAM_index
+  lda (pivotZpLow),y
+  sta objectsRAM,x
+  inx 
+  cpx object_count
+  stx object_RAM_index
+  bne loadObjectsRAM_loop
+  lda object_pointers_index
   clc
   adc objectRecordSize
-  tax
-  iny 
-  cpy object_count
-  bne loadObjectsRAM_loop
+  sta object_pointers_index
   rts
 
 loadPuzzlesRAM:
