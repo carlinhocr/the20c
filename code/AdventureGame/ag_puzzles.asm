@@ -802,7 +802,7 @@ draw_current_screen_table:
   lda screens_pointers,x
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  jsr selectPuzzle
+  ;jsr selectPuzzle
   jsr selectObject
   rts
 
