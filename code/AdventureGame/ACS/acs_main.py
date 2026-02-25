@@ -163,9 +163,15 @@ def checkbox_widget(parent, text, var):
 def apply_combo_style():
     s = ttk.Style()
     s.theme_use("default")
-    s.configure("TCombobox", fieldbackground="#1e0f05", background="#3d2005",
+    s.configure("TCombobox", fieldbackground="#000000", background="#000000",
                 foreground="#f0c040", selectbackground="#5c3310",
                 selectforeground="#ffffff", arrowcolor="#f0c040")
+    s.map("TCombobox",
+          fieldbackground=[("readonly", "#000000"), ("disabled", "#000000")],
+          background=[("readonly", "#000000"), ("disabled", "#000000")],
+          foreground=[("readonly", "#f0c040"), ("disabled", "#7a5520")],
+          selectbackground=[("readonly", "#5c3310")],
+          selectforeground=[("readonly", "#ffffff")])
 
 
 # ══════════════════════════════════════════════════════════════════════════════
