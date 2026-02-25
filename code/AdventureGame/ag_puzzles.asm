@@ -802,7 +802,7 @@ draw_current_screen_table:
   lda screens_pointers,x
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  ;jsr selectPuzzle
+  jsr selectPuzzle
   jsr selectObject
   rts
 
@@ -852,7 +852,7 @@ puzzle_multiple_calculate:
   ;8 bytes
   lda #$0
   sta puzzleMultiple
-  lda #$f ;16 bytes
+  lda #16 ;16 bytes
   sta puzzleRecordSize
   ldx #$ff
 puzzle_multiple_loop:
