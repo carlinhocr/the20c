@@ -758,7 +758,7 @@ screen_multiple_calculate:
   ;8 bytes
   lda #$0
   sta screenMultiple
-  lda #64
+  lda #32
   sta screenRecordSize
   ldx #$ff
 screen_multiple_loop:
