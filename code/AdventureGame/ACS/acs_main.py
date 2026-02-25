@@ -650,6 +650,20 @@ def open_map_window():
                 labels.append(name)
         return labels
 
+    def get_screen_action_labels(rec):
+        """Return a list of action Name strings for actions assigned to a screen record."""
+        actions_data = load_json(JSON_ACTIONS_FILE)
+        labels = []
+        for slot in ["Action1", "Action2", "Action3", "Action4", "Action5", "Action6"]:
+            act_name = rec.get(slot, "").strip()
+            if not act_name:
+                continue
+            # Look up display name from actions file (fall back to the stored name itself)
+            act_rec = actions_data.get(act_name, {})
+            name = act_rec.get("Name", act_name) or act_name
+            labels.append(name)
+        return labels
+
     # ── Auto-layout via BFS from first screen ─────────────────
     positions = {}   # name → [cx, cy]  (mutable so drag works)
 
@@ -695,6 +709,7 @@ def open_map_window():
     OBJ_HIDDEN_COLOR = "#d08050"   # hidden object text (warm orange)
     PUZ_COLOR        = "#a0c8f0"   # puzzle text (light blue)
     PUZ_SOLVED_COLOR = "#7a9070"   # solved puzzle text (muted green-grey)
+    ACT_COLOR        = "#e8b0e0"   # action text (soft purple/pink)
     DIVIDER_COLOR    = "#7a5520"
     ARROW_COLOR      = "#c8a060"
     DIR_LABELS       = {"North": "N", "South": "S", "East": "E", "West": "W"}
@@ -709,15 +724,18 @@ def open_map_window():
     item_map   = {}   # name → {"rect": id, "text": id, "total_h": int}
 
     def total_box_height(nm):
-        """Compute total rendered height of a room box including object and puzzle lines."""
+        """Compute total rendered height of a room box including object, puzzle and action lines."""
         rec = name_to_rec.get(nm, {})
         obj_labels = get_screen_object_labels(rec)
         puz_labels = get_screen_puzzle_labels(rec)
+        act_labels = get_screen_action_labels(rec)
         extra = 0
         if obj_labels:
             extra += len(obj_labels) * OBJ_LINE_H + 6
         if puz_labels:
             extra += len(puz_labels) * OBJ_LINE_H + 6
+        if act_labels:
+            extra += len(act_labels) * OBJ_LINE_H + 6
         return BOX_H + extra
 
     def box_attach(nm, direction):
@@ -817,11 +835,13 @@ def open_map_window():
             rec = name_to_rec.get(nm, {})
             obj_labels = get_screen_object_labels(rec)
             puz_labels = get_screen_puzzle_labels(rec)
+            act_labels = get_screen_action_labels(rec)
 
             # Compute full box height
             obj_area_h = len(obj_labels) * OBJ_LINE_H + (6 if obj_labels else 0)
             puz_area_h = len(puz_labels) * OBJ_LINE_H + (6 if puz_labels else 0)
-            full_h = BOX_H + obj_area_h + puz_area_h
+            act_area_h = len(act_labels) * OBJ_LINE_H + (6 if act_labels else 0)
+            full_h = BOX_H + obj_area_h + puz_area_h + act_area_h
 
             x0 = cx - BOX_W // 2
             y0 = cy - BOX_H // 2
@@ -848,7 +868,7 @@ def open_map_window():
             )
 
             # Divider line between header and object area
-            if obj_labels or puz_labels:
+            if obj_labels or puz_labels or act_labels:
                 canvas.create_line(
                     x0 + 2, y1_header,
                     x1 - 2, y1_header,
@@ -894,6 +914,29 @@ def open_map_window():
                         text=display_lbl,
                         fill=color,
                         font=("Courier", 8, "italic"),
+                        width=BOX_W - 6,
+                        tags=("box", nm)
+                    )
+
+            # Action section
+            y1_act_start = y1_header + obj_area_h + puz_area_h
+            if act_labels:
+                # Divider before actions (dotted)
+                canvas.create_line(
+                    x0 + 2, y1_act_start,
+                    x1 - 2, y1_act_start,
+                    fill=DIVIDER_COLOR, width=1, dash=(2, 3),
+                    tags=("box", nm)
+                )
+                for i, lbl in enumerate(act_labels):
+                    oy = y1_act_start + 4 + i * OBJ_LINE_H + OBJ_LINE_H // 2
+                    max_chars = 17
+                    display_lbl = lbl if len(lbl) <= max_chars else lbl[:max_chars - 1] + "…"
+                    canvas.create_text(
+                        cx, oy,
+                        text=display_lbl,
+                        fill=ACT_COLOR,
+                        font=("Courier", 8),
                         width=BOX_W - 6,
                         tags=("box", nm)
                     )
