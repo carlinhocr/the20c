@@ -695,19 +695,22 @@ loadObjectsRAM_loop:
   inx  
   lda objects_pointers,x ;load high byte address for visibility #$4
   sta pivotZpHigh
-  inx
-  stx object_pointers_index
-  ldx object_RAM_index
-  lda (pivotZpLow),y
-  sta objectsRAM,x
-  inx 
-  stx object_RAM_index
-  cpx object_count
-  bne loadObjectsRAM_loop
+  ;update next object_pointer_index
   lda object_pointers_index
   clc
   adc objectRecordSize
   sta object_pointers_index
+  ;load ram index and store visibility attribute 
+  ldx object_RAM_index
+  lda (pivotZpLow),y
+  sta objectsRAM,x
+  ;update object_RAM_index for next spot available
+  inx 
+  stx object_RAM_index
+  ;check if the last object was reached if it is break
+  cpx object_count
+  bne loadObjectsRAM_loop
+  ;end loop and return 
   rts
 
 loadPuzzlesRAM:
