@@ -899,7 +899,7 @@ selectObject:
   ;Print Object 1
   lda screenMultiple
   clc
-  adc #$2  ;fist object byte
+  adc #12  ;fist object byte
   tax
   lda screens_pointers,x 
   sta objectDataVectorLow  
