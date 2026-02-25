@@ -116,6 +116,9 @@ puzzleObjectOffset=$021e
 
 object_pointers_index=$021f
 object_RAM_index=$0220
+puzzle_pointers_index=$0221
+puzzle_RAM_index=$0222
+
 
 objectsRAM=$0300
 puzzlesRAM=$0400
@@ -668,32 +671,21 @@ printAsciiDrawing_end:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-loadObjectsRAMtest:
-  ldx #$00
-  lda #$1 
-  sta objectsRAM,X
-  inx
-  sta objectsRAM,X
-  inx
-  sta objectsRAM,X
-  inx
-  sta objectsRAM,X
-  rts
 
 loadObjectsRAM:
   lda #$a ;10 bytes
   sta objectRecordSize
-  ldx #$4
+  ldx #$4 ;here starts the visibility property of objects
   stx object_pointers_index
   ldx #$0
   stx object_RAM_index
-  ldy #$0 ;here starts the visibility property of objects
+  ldy #$0 
 loadObjectsRAM_loop:
   ldx object_pointers_index
   lda objects_pointers,x ;load low byte address for visibility #$4
   sta pivotZpLow
   inx  
-  lda objects_pointers,x ;load high byte address for visibility #$4
+  lda objects_pointers,x ;load high byte address for visibility #$5
   sta pivotZpHigh
   ;update next object_pointer_index
   lda object_pointers_index
@@ -716,23 +708,36 @@ loadObjectsRAM_loop:
 loadPuzzlesRAM:
   lda #$f ;16 bytes
   sta puzzleRecordSize
-  lda #< puzzle_0_solved
-  sta pivotZpLow
-  lda #> puzzle_0_solved 
-  sta pivotZpHigh
-  ldx #$00
-  ldy #$00
+  ldx #$a ;here starts the solved property of puzzles
+  stx puzzle_pointers_index
+  ldx #$0
+  stx puzzle_RAM_index
+  ldy #$0 
 loadPuzzlesRAM_loop:
-  lda (pivotZpLow),Y 
-  sta puzzlesRAM,X
-  tya
+  ldx puzzle_pointers_index
+  lda puzzles_pointers,x ;load low byte address for solved #$a
+  sta pivotZpLow
+  inx  
+  lda puzzles_pointers,x ;load high byte address for solved #$b
+  sta pivotZpHigh
+  ;update next puzzle_pointers_index
+  lda puzzle_pointers_index
   clc
   adc puzzleRecordSize
-  tay
+  sta puzzle_pointers_index
+  ;load ram index and store visibility attribute 
+  ldx puzzle_RAM_index
+  lda (pivotZpLow),y
+  sta puzzlesRAM,x
+  ;update puzzle_RAM_index for next spot available
   inx 
+  stx puzzle_RAM_index
+  ;check if the last puzzle was reached if it is break
   cpx puzzle_count
   bne loadPuzzlesRAM_loop
+  ;end loop and return 
   rts
+
 
     
 
@@ -753,7 +758,7 @@ screen_multiple_calculate:
   ;8 bytes
   lda #$0
   sta screenMultiple
-  lda #$8
+  lda #64
   sta screenRecordSize
   ldx #$ff
 screen_multiple_loop:
@@ -775,53 +780,141 @@ draw_current_screen_table:
   ;print ascii
   lda screenMultiple
   clc
-  adc #$4 ;ascii
+  adc #30 ;ascii
   tax 
-  lda screen_pointers,x 
+  lda screens_pointers,x 
   sta serialDataVectorLow  
   inx 
-  lda screen_pointers,x
+  lda screens_pointers,x
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   ;print description
   lda screenMultiple
   clc
-  adc #$6  ;description
+  adc #$28  ;description
   tax
-  lda screen_pointers,x 
+  lda screens_pointers,x 
   sta serialDataVectorLow  
   inx 
-  lda screen_pointers,x
+  lda screens_pointers,x
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  jsr selectPuzzle
   jsr selectObject
   rts
 
+selectPuzzle:
+  ldy #$ff
+selectPuzzle_loop:
+  ;Print Object 1
+  lda screenMultiple
+  clc
+  adc #24  ;fist puzzle byte
+  tax
+  lda screens_pointers,x 
+  sta pivotZpLow  
+  inx 
+  lda screens_pointers,x
+  sta pivotZpHigh
+  ldy #$0
+  lda (pivotZpLow),y
+  sta puzzleCurrentID
+  jsr processPuzzle
+  ldy #$1
+  lda (pivotZpLow),y
+  sta puzzleCurrentID
+  jsr processPuzzle
+  rts
+
+processPuzzle:
+  lda puzzleCurrentID
+  cmp #$ff ;invalid object so that slot is empty do not process
+  beq end_processPuzzle
+  jsr puzzle_multiple_calculate
+  ;check visibility do not print invisible objects
+  ldx puzzleCurrentID
+  lda puzzlesRAM,x
+  cmp #$1
+  bne puzzledNotSolved
+  jsr print_puzzle_solved
+  rts  
+puzzledNotSolved:  
+  jsr print_puzzle_notsolved
+  rts
+end_processPuzzle:  
+  rts  
+
+puzzle_multiple_calculate:
+  ;screen table record size
+  ;8 bytes
+  lda #$0
+  sta puzzleMultiple
+  lda #$f ;16 bytes
+  sta puzzleRecordSize
+  ldx #$ff
+puzzle_multiple_loop:
+  inx
+  cpx puzzleCurrentID
+  beq puzzle_multiple_end
+  lda puzzleRecordSize
+  clc
+  adc puzzleMultiple
+  sta puzzleMultiple
+  jmp puzzle_multiple_loop 
+puzzle_multiple_end:
+  rts  
+
+
+print_puzzle_solved:
+  lda puzzleMultiple
+  clc
+  adc #12 ;description solved
+  tax 
+  lda puzzles_pointers,x 
+  sta serialDataVectorLow  
+  inx 
+  lda puzzles_pointers,x
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts
+
+print_puzzle_notsolved:
+  lda puzzleMultiple
+  clc
+  adc #14 ;description not solved
+  tax 
+  lda puzzles_pointers,x 
+  sta serialDataVectorLow  
+  inx 
+  lda puzzles_pointers,x
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts  
+
 selectObject:
   ldy #$ff
-selectObject_loop:
   ;Print Object 1
   lda screenMultiple
   clc
   adc #$2  ;fist object byte
   tax
-  lda screen_pointers,x 
+  lda screens_pointers,x 
   sta objectDataVectorLow  
   inx 
-  lda screen_pointers,x
+  lda screens_pointers,x
   sta objectDataVectorHigh
   ldy #$0
+selectObject_loop:
   lda (objectDataVectorLow),y
   sta objectCurrentID
+  tya
+  pha
   jsr processObject
-  ldy #$1
-  lda (objectDataVectorLow),y
-  sta objectCurrentID
-  jsr processObject
-  ldy #$2
-  lda (objectDataVectorLow),y
-  sta objectCurrentID
-  jsr processObject
+  pla
+  tay
+  iny
+  cpy #$6 ;max objects per screen 0-6 for now 
+  bne selectObject_loop
   rts
 
 processObject:
@@ -888,27 +981,94 @@ print_current_object_description:
 
   byte 00,00,00,00,00,00,00,00,00,00
 
-screen_pointers:
-  .word screen_0  ; 0,1
-  .word screen_0_object ;2,3
-  .word screen_0_ASCII ;4,5
-  .word screen_0_description ;6,7
-  .word screen_1  ; 0,1
-  .word screen_1_object ;2,3
-  .word screen_1_ASCII ;4,5
-  .word screen_1_description ;6,7
+; ============================================================
+;  ACS Screens — auto-generated by acs_screens_to_asm.py
+; ============================================================
+
+screens_pointers:
+  .word screen_0_id          ; EntradaCueva id          [0,1]
+  .word screen_0_name        ; EntradaCueva name        [2,3]
+  .word screen_0_north       ; EntradaCueva north       [4,5]
+  .word screen_0_south       ; EntradaCueva south       [6,7]
+  .word screen_0_east        ; EntradaCueva east        [8,9]
+  .word screen_0_west        ; EntradaCueva west        [10,11]
+  .word screen_0_object1     ; EntradaCueva object1     [12,13]
+  .word screen_0_object2     ; EntradaCueva object2     [14,15]
+  .word screen_0_object3     ; EntradaCueva object3     [16,17]
+  .word screen_0_object4     ; EntradaCueva object4     [18,19]
+  .word screen_0_object5     ; EntradaCueva object5     [20,21]
+  .word screen_0_object6     ; EntradaCueva object6     [22,23]
+  .word screen_0_puzzle1     ; EntradaCueva puzzle1     [24,25]
+  .word screen_0_puzzle2     ; EntradaCueva puzzle2     [26,27]
+  .word screen_0_description ; EntradaCueva description [28,29]
+  .word screen_0_ascii       ; EntradaCueva ascii       [30,31]
+  .word screen_1_id          ; cuevaIntermedia id          [32,33]
+  .word screen_1_name        ; cuevaIntermedia name        [34,35]
+  .word screen_1_north       ; cuevaIntermedia north       [36,37]
+  .word screen_1_south       ; cuevaIntermedia south       [38,39]
+  .word screen_1_east        ; cuevaIntermedia east        [40,41]
+  .word screen_1_west        ; cuevaIntermedia west        [42,43]
+  .word screen_1_object1     ; cuevaIntermedia object1     [44,45]
+  .word screen_1_object2     ; cuevaIntermedia object2     [46,47]
+  .word screen_1_object3     ; cuevaIntermedia object3     [48,49]
+  .word screen_1_object4     ; cuevaIntermedia object4     [50,51]
+  .word screen_1_object5     ; cuevaIntermedia object5     [52,53]
+  .word screen_1_object6     ; cuevaIntermedia object6     [54,55]
+  .word screen_1_puzzle1     ; cuevaIntermedia puzzle1     [56,57]
+  .word screen_1_puzzle2     ; cuevaIntermedia puzzle2     [58,59]
+  .word screen_1_description ; cuevaIntermedia description [60,61]
+  .word screen_1_ascii       ; cuevaIntermedia ascii       [62,63]
 
 
-screen_0:
+; ── Screen 0: EntradaCueva ──────────────────────────
 screen_0_id:
-  .byte 0 ;id
-screen_0_object:
-  .byte 0,$ff,2
-screen_0_description:
-  .ascii "Te encuentras a los pies de una montaña, puedes ver a lo lejos una cueva"
-  .ascii "a tus pies encuentras"
+  .byte 0
+
+screen_0_name:
+  .ascii "EntradaCueva"
   .ascii "e"
-screen_0_ASCII:
+
+screen_0_north:
+  .byte 255  ; none
+
+screen_0_south:
+  .byte 255  ; none
+
+screen_0_east:
+  .byte 1  ; cuevaIntermedia
+
+screen_0_west:
+  .byte 255  ; none
+
+screen_0_object1:
+  .byte 1  ; encendedor
+
+screen_0_object2:
+  .byte 0  ; vela
+
+screen_0_object3:
+  .byte 3  ; llave
+
+screen_0_object4:
+  .byte 4  ; puerta
+
+screen_0_object5:
+  .byte 255  ; none
+
+screen_0_object6:
+  .byte 255  ; none
+
+screen_0_puzzle1:
+  .byte 0  ; prender_vela
+
+screen_0_puzzle2:
+  .byte 1  ; abrir_puerta_llave
+
+screen_0_description:
+  .ascii "Estas en la entrada de la cueva"
+  .ascii "e"
+
+screen_0_ascii:
   .ascii "................................................................................"
   .ascii "......................................./ \......................................"
   .ascii "....................................../   \....................................."
@@ -929,16 +1089,55 @@ screen_0_ASCII:
   .ascii ""
   .ascii "e" 
 
-screen_1:
+; ── Screen 1: cuevaIntermedia ──────────────────────────
 screen_1_id:
-  .byte 1 ;id
-screen_1_object:
-  .byte 0,1,$ff
-screen_1_description:
-  .ascii "La entrada de la cueva esta colapsada, no puedes salir por ahí"
-  .ascii "a tus pies encuentras"
+  .byte 1
+
+screen_1_name:
+  .ascii "cuevaIntermedia"
   .ascii "e"
-screen_1_ASCII:
+
+screen_1_north:
+  .byte 255  ; none
+
+screen_1_south:
+  .byte 255  ; none
+
+screen_1_east:
+  .byte 255  ; none
+
+screen_1_west:
+  .byte 0  ; EntradaCueva
+
+screen_1_object1:
+  .byte 0  ; vela
+
+screen_1_object2:
+  .byte 1  ; encendedor
+
+screen_1_object3:
+  .byte 255  ; none
+
+screen_1_object4:
+  .byte 255  ; none
+
+screen_1_object5:
+  .byte 255  ; none
+
+screen_1_object6:
+  .byte 255  ; none
+
+screen_1_puzzle1:
+  .byte 255  ; none
+
+screen_1_puzzle2:
+  .byte 255  ; none
+
+screen_1_description:
+  .ascii "estas cada vez mas profundo en la cueva, aca hay muchas estalactitas"
+  .ascii "e"
+
+screen_1_ascii:
   .ascii "#################################################################################"
   .ascii "###########################^^^^^#^^^##^^^^^^^####################################"
   .ascii "######################^^^^^########################^^^^^^########################"
@@ -962,16 +1161,97 @@ screen_1_ASCII:
   .ascii ""
   .ascii "e"
 
+; ── Total screen count ──────────────────────────────────────
+screen_count:
+  .byte 2
+
+
+
+; screens_pointers:
+;   .word screen_0  ; 0,1
+;   .word screen_0_object ;2,3
+;   .word screen_0_ASCII ;4,5
+;   .word screen_0_description ;6,7
+;   .word screen_1  ; 0,1
+;   .word screen_1_object ;2,3
+;   .word screen_1_ASCII ;4,5
+;   .word screen_1_description ;6,7
+
+
+; screen_0:
+; screen_0_id:
+;   .byte 0 ;id
+; screen_0_object:
+;   .byte 0,$ff,2
+; screen_0_description:
+;   .ascii "Te encuentras a los pies de una montaña, puedes ver a lo lejos una cueva"
+;   .ascii "a tus pies encuentras"
+;   .ascii "e"
+; screen_0_ASCII:
+;   .ascii "................................................................................"
+;   .ascii "......................................./ \......................................"
+;   .ascii "....................................../   \....................................."
+;   .ascii "...................................../     \...................................."
+;   .ascii "..................................../         \................................."
+;   .ascii "................................./             \................................"
+;   .ascii "................................/                 \............................."
+;   .ascii "............................./        ########        \........................."
+;   .ascii "............................/         ##########         \......................"
+;   .ascii "........................./           ############           \..................."
+;   .ascii "....................../                ############                \............"
+;   .ascii "................./                     ##########                     \........."
+;   .ascii "............../                         ########                         \......"
+;   .ascii "........./                                                              \......."
+;   .ascii "....../                                                                    \...."
+;   .ascii "................................................................................"
+;   .ascii "................................................................................"
+;   .ascii ""
+;   .ascii "e" 
+
+; screen_1:
+; screen_1_id:
+;   .byte 1 ;id
+; screen_1_object:
+;   .byte 0,1,$ff
+; screen_1_description:
+;   .ascii "La entrada de la cueva esta colapsada, no puedes salir por ahí"
+;   .ascii "a tus pies encuentras"
+;   .ascii "e"
+; screen_1_ASCII:
+;   .ascii "#################################################################################"
+;   .ascii "###########################^^^^^#^^^##^^^^^^^####################################"
+;   .ascii "######################^^^^^########################^^^^^^########################"
+;   .ascii "##################^^^^^^###############################^^^^^#####################"
+;   .ascii "###############^^^^^#########################################^^^^^###############"
+;   .ascii "###########^^^^^##########################%%%%#####################^^^^^#########"
+;   .ascii "########^^^^^######################%%%%%%%@@@@@@%%%%%%%################^^^#######"
+;   .ascii "#####^^^^^###################%%%%%%%@@@@@@@@@@@@@@@@%%%%%%%################^^^^##"
+;   .ascii "###^^^^^##################%%%%%%%@@@@@@@@@@@######@@@@@@@@@@@%%%%%%%########^^^^#"
+;   .ascii "##^^^^^#################%%%%%%%@@@@@@@@######################@@@@@@@@%%%%%%%^^^^#"
+;   .ascii "##^^^^^###############%%%%%%%@@@@@@@@############################@@@@@@@@%%%%%%%#"
+;   .ascii "###^^^^^###############%%%%%%%@@@@@@################################@@@@@@%%%%%%#"
+;   .ascii "#####^^^^^###############%%%%%%%@@@@####################################%%%%%%%##"
+;   .ascii "########^^^^^##########################^^^^^^^^^^^^^^^^################^^^#######"
+;   .ascii "############^^^^^##########################################^^^^^#################"
+;   .ascii "################^^^^^######################################^^^^^#################"
+;   .ascii "######################^^^^^############################^^^^^#####################"
+;   .ascii "###############################^^^^^#^^^##^^^^^^^################################"
+;   .ascii "#################################################################################"
+;   .ascii "#################################################################################"
+;   .ascii ""
+;   .ascii "e"
+
 ; ============================================================
 ;  ACS Objects — auto-generated by acs_objects_to_asm.py
 ; ============================================================
 
+
 objects_pointers:
-  .word object_0_id        ; rama id          [0,1]
-  .word object_0_takeable  ; rama takeable    [2,3]
-  .word object_0_visible   ; rama visible     [4,5]
-  .word object_0_name      ; rama name        [6,7]
-  .word object_0_description ; rama description [8,9]
+  .word object_0_id        ; vela id          [0,1]
+  .word object_0_takeable  ; vela takeable    [2,3]
+  .word object_0_visible   ; vela visible     [4,5]
+  .word object_0_name      ; vela name        [6,7]
+  .word object_0_description ; vela description [8,9]
   .word object_1_id        ; encendedor id          [10,11]
   .word object_1_takeable  ; encendedor takeable    [12,13]
   .word object_1_visible   ; encendedor visible     [14,15]
@@ -982,13 +1262,18 @@ objects_pointers:
   .word object_2_visible   ; unguento visible     [24,25]
   .word object_2_name      ; unguento name        [26,27]
   .word object_2_description ; unguento description [28,29]
-  .word object_3_id        ; vela id          [30,31]
-  .word object_3_takeable  ; vela takeable    [32,33]
-  .word object_3_visible   ; vela visible     [34,35]
-  .word object_3_name      ; vela name        [36,37]
-  .word object_3_description ; vela description [38,39]
+  .word object_3_id        ; llave id          [30,31]
+  .word object_3_takeable  ; llave takeable    [32,33]
+  .word object_3_visible   ; llave visible     [34,35]
+  .word object_3_name      ; llave name        [36,37]
+  .word object_3_description ; llave description [38,39]
+  .word object_4_id        ; puerta id          [40,41]
+  .word object_4_takeable  ; puerta takeable    [42,43]
+  .word object_4_visible   ; puerta visible     [44,45]
+  .word object_4_name      ; puerta name        [46,47]
+  .word object_4_description ; puerta description [48,49]
 
-; ── Object 0: rama ──────────────────────────
+; ── Object 0: vela ──────────────────────────
 object_0_id:
   .byte 0
 
@@ -999,11 +1284,11 @@ object_0_visible:
   .byte 1
 
 object_0_name:
-  .ascii "rama"
+  .ascii "vela"
   .ascii "e"
 
 object_0_description:
-  .ascii "es uan rama de arbol muy sólida"
+  .ascii "sirve para iluminar"
   .ascii "e"
 
 ; ── Object 1: encendedor ──────────────────────────
@@ -1042,7 +1327,7 @@ object_2_description:
   .ascii "es una crema para curar heridas"
   .ascii "e"
 
-; ── Object 3: vela ──────────────────────────
+; ── Object 3: llave ──────────────────────────
 object_3_id:
   .byte 3
 
@@ -1053,19 +1338,37 @@ object_3_visible:
   .byte 0
 
 object_3_name:
-  .ascii "vela"
+  .ascii "llave"
   .ascii "e"
 
 object_3_description:
-  .ascii "sirve para iluminar"
+  .ascii "es una tipica llave para abrir puertas"
+  .ascii "e"
+
+; ── Object 4: puerta ──────────────────────────
+object_4_id:
+  .byte 4
+
+object_4_takeable:
+  .byte 0
+
+object_4_visible:
+  .byte 1
+
+object_4_name:
+  .ascii "puerta"
+  .ascii "e"
+
+object_4_description:
+  .ascii "es una puerta, quizas lleve a alguna salida"
   .ascii "e"
 
 ; ── Total object count ──────────────────────────────────────
 object_count:
-  .byte 4
+  .byte 5
 
 
-  puzzles_pointers:
+puzzles_pointers:
   .word puzzle_0_id                   ; prender_vela id                   [0,1]
   .word puzzle_0_name                 ; prender_vela name                 [2,3]
   .word puzzle_0_action               ; prender_vela action               [4,5]
