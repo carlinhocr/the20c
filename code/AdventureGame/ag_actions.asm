@@ -760,7 +760,7 @@ draw_current_screen_table:
   jsr printAsciiDrawing
   jsr selectPuzzle
   jsr selectObject
-  jsr selectAction
+  ;jsr selectAction
   rts
 
 selectAction:
