@@ -38,6 +38,27 @@ def resolve(name, mapping, label, optional=False):
     return mapping[name]
 
 
+# Number of .word entries per screen in the pointer table.
+# id, name, north, south, east, west, object1..6, puzzle1..2, action1..6,
+# screen_object_offset, description, ascii = 23 entries × 2 bytes = 46 bytes/screen.
+ENTRIES_PER_SCREEN = 23          # total .word entries per screen (including screen_object_offset)
+BYTES_PER_ENTRY    = 2           # each pointer is a .word (2 bytes)
+BYTES_PER_SCREEN   = ENTRIES_PER_SCREEN * BYTES_PER_ENTRY   # 46
+
+# object1 is entry index 6 (0-based) within each screen block:
+#   0:id  1:name  2:north  3:south  4:east  5:west  6:object1 ...
+OBJECT1_ENTRY_INDEX = 6
+OBJECT1_BYTE_OFFSET = OBJECT1_ENTRY_INDEX * BYTES_PER_ENTRY  # 12
+
+
+def screen_object1_pointer_byte(screen_index):
+    """
+    Return the absolute byte offset of screen_N_object1 inside screens_pointers.
+    screen_index is the 0-based position of the screen in the sorted list.
+    """
+    return screen_index * BYTES_PER_SCREEN + OBJECT1_BYTE_OFFSET
+
+
 def to_asm(screens, object_ids, puzzle_ids, action_ids, screen_ids):
     lines = []
     lines.append("; ============================================================")
@@ -48,32 +69,67 @@ def to_asm(screens, object_ids, puzzle_ids, action_ids, screen_ids):
     # ── Pointer table ────────────────────────────────────────
     lines.append("screens_pointers:")
     offset = 0
+    screen_0_obj1_byte         = None
+    screen_0_puzzle1_byte      = None
+    screen_0_action1_byte      = None
+    screen_0_description_byte  = None
+    screen_0_ascii_byte        = None
+    screen_0_record_length     = None
+    screen_0_name              = None
     for index, (key, scr) in enumerate(screens.items()):
         scr_id = scr.get("ID", str(index)).strip()
         label  = f"screen_{scr_id}"
         name   = scr.get("Name", key)
-        lines.append(f"  .word {label}_id          ; {name} id          [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_name        ; {name} name        [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_north       ; {name} north       [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_south       ; {name} south       [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_east        ; {name} east        [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_west        ; {name} west        [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_object1     ; {name} object1     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_object2     ; {name} object2     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_object3     ; {name} object3     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_object4     ; {name} object4     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_object5     ; {name} object5     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_object6     ; {name} object6     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_puzzle1     ; {name} puzzle1     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_puzzle2     ; {name} puzzle2     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_action1     ; {name} action1     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_action2     ; {name} action2     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_action3     ; {name} action3     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_action4     ; {name} action4     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_action5     ; {name} action5     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_action6     ; {name} action6     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_description ; {name} description [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_ascii       ; {name} ascii       [{offset},{offset+1}]") ; offset += 2
+
+        # Byte offset of this screen's object1 entry in the pointer table.
+        obj1_ptr_byte = screen_object1_pointer_byte(index)
+        start_offset  = offset
+
+        lines.append(f"  .word {label}_id                ; {name} id                [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_name              ; {name} name              [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_north             ; {name} north             [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_south             ; {name} south             [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_east              ; {name} east              [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_west              ; {name} west              [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_object1           ; {name} object1           [{offset},{offset+1}]") ; _obj1 = offset ; offset += 2
+        lines.append(f"  .word {label}_object2           ; {name} object2           [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_object3           ; {name} object3           [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_object4           ; {name} object4           [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_object5           ; {name} object5           [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_object6           ; {name} object6           [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_puzzle1           ; {name} puzzle1           [{offset},{offset+1}]") ; _puz1 = offset ; offset += 2
+        lines.append(f"  .word {label}_puzzle2           ; {name} puzzle2           [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_action1           ; {name} action1           [{offset},{offset+1}]") ; _act1 = offset ; offset += 2
+        lines.append(f"  .word {label}_action2           ; {name} action2           [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_action3           ; {name} action3           [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_action4           ; {name} action4           [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_action5           ; {name} action5           [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_action6           ; {name} action6           [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_description       ; {name} description       [{offset},{offset+1}]") ; _desc = offset ; offset += 2
+        lines.append(f"  .word {label}_ascii             ; {name} ascii             [{offset},{offset+1}]") ; _asc  = offset ; offset += 2
+
+        if index == 0:
+            screen_0_obj1_byte        = _obj1
+            screen_0_puzzle1_byte     = _puz1
+            screen_0_action1_byte     = _act1
+            screen_0_description_byte = _desc
+            screen_0_ascii_byte       = _asc
+            screen_0_record_length    = offset - start_offset  # 44 bytes (22 × .word)
+            screen_0_name             = name
+
+    # ── Extra fields for screen 0, placed after all screen entries ────────────
+    lines.append(f"screen_object_offset:")
+    lines.append(f"  .byte {screen_0_obj1_byte}  ; (byte of screen_0_object1 in screens_pointers)")
+    lines.append(f"screen_puzzle_offset:")
+    lines.append(f"  .byte {screen_0_puzzle1_byte}  ; (byte of screen_0_puzzle1 in screens_pointers)")
+    lines.append(f"screen_action_offset:")
+    lines.append(f"  .byte {screen_0_action1_byte}  ; (byte of screen_0_action1 in screens_pointers)")
+    lines.append(f"screen_description_offset:")
+    lines.append(f"  .byte {screen_0_description_byte}  ; (byte of screen_0_description in screens_pointers)")
+    lines.append(f"screen_ascii_offset:")
+    lines.append(f"  .byte {screen_0_ascii_byte}  ; (byte of screen_0_ascii in screens_pointers)")
+    lines.append(f"screen_record_length:")
+    lines.append(f"  .byte {screen_0_record_length}  ; (total .word bytes per screen record)")
     lines.append("")
 
     for index, (key, scr) in enumerate(screens.items()):
