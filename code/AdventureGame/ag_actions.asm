@@ -438,66 +438,14 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 mainProgram:
+  ;initialize variables
   jsr loadObjectsRAM
   jsr loadPuzzlesRAM
+  ;initialize screen as screen zero
+mainProgramLoop:
   jsr select_screen
-  ;jsr draw_current_screen
-  ;jsr draw_current_screen_table
-  ;jsr rle_screen
-  ;jsr rle_init
-  ;jsr rle_expand
-  ; jsr printMessage01
-  ; jsr delay_3_sec
-  ; jsr printMessage02
-  ; jsr delay_3_sec
-  ; jsr printMessage03
-  ; jsr delay_3_sec
-  ; jsr printthe20cAscii
-  ; jsr delay_3_sec
-  ; jsr printMessage04
-  ; jsr delay_3_sec  
-  ; jsr printMessage05
-  ; jsr delay_3_sec
-  ; jsr delayClear 
-  ; jsr printTrucoAscii
-  ; jsr delayClear 
-  ; jsr printMessage06
-  ; jsr delay_3_sec
-  ; jsr delayClear   
-  ; jsr printCiberCirujas  
-  ; jsr delayClear   
-  ; jsr printArcadeAscii
-  ; jsr delayClear   
-  ;jsr printextraRomNarcoPoliceAscii
-  ;jsr delayClear  
-  ;jsr printextraRomFreddyAscii 
-  ;jsr delayClear  
-  ; jsr printModoHistoriaAscii
-  ; jsr delayClear   
-  ; jsr printVentilastationAscii
-  ; jsr delayClear
-  ; jsr printInformaticaClasica  
-  ; jsr delayClear
-  ; jsr printAlfaAscii  
-  ; jsr delayClear
-  ; jsr printReplay
-  ; jsr delayClear    
-  ; jsr printMessage07
-  ; jsr delay_3_sec
-  ; jsr delayClear   
-  ; jsr printCommodoreAscii
-  ; jsr delayClear 
-  ; jsr printMarioAscii
-  ; jsr playMario
-  ; jsr playMario
-  ; jsr delayClear
-  ; jsr printMessage08
-  ; jsr delay_3_sec
-  ; jsr delayClear    
-  ; jsr printMessage09
-  ; jsr delay_3_sec
-  ; jsr delayClear  
-  ; jsr print20cAscii
+
+
   rts
 
 delayClear:
@@ -513,29 +461,6 @@ printVentilastationAscii:
   jsr printAsciiDrawing
   rts  
 
-print20cAscii:
-  lda #< la20cAscii
-  sta serialDataVectorLow
-  lda #> la20cAscii 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts  
-
-printInformaticaClasica:
-  lda #< informaticaClasicaAscii
-  sta serialDataVectorLow
-  lda #> informaticaClasicaAscii 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts     
-
-printAlfaAscii:
-  lda #< alfaAscii
-  sta serialDataVectorLow
-  lda #> alfaAscii 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts      
 
 printClearRS232Screen:
   lda #< clearRS232Screen
@@ -709,9 +634,9 @@ loadObjectsRAM_loop:
   rts
 
 loadPuzzlesRAM:
-  lda #$f ;16 bytes
+  lda puzzle_record_length ;16 bytes
   sta puzzleRecordSize
-  ldx #$a ;here starts the solved property of puzzles
+  ldx puzzle_solved_offset ;here starts the solved property of puzzles
   stx puzzle_pointers_index
   ldx #$0
   stx puzzle_RAM_index
@@ -740,9 +665,6 @@ loadPuzzlesRAM_loop:
   bne loadPuzzlesRAM_loop
   ;end loop and return 
   rts
-
-
-    
 
 select_screen:
   lda #$0
@@ -777,10 +699,6 @@ screen_multiple_end:
   rts
 
 draw_current_screen_table:
-;  lda #$0
-;  sta screenCurrentID
-;  sta screenMultiple  
-  ;print ascii
   lda screenMultiple
   clc
   adc screen_ascii_offset ;ascii offset
@@ -852,7 +770,7 @@ puzzle_multiple_calculate:
   ;8 bytes
   lda #$0
   sta puzzleMultiple
-  lda #16 ;16 bytes
+  lda puzzle_record_length ;16 bytes
   sta puzzleRecordSize
   ldx #$ff
 puzzle_multiple_loop:
@@ -871,7 +789,7 @@ puzzle_multiple_end:
 print_puzzle_solved:
   lda puzzleMultiple
   clc
-  adc #12 ;description solved
+  adc puzzle_description_solved_offset ;description solved
   tax 
   lda puzzles_pointers,x 
   sta serialDataVectorLow  
@@ -884,7 +802,7 @@ print_puzzle_solved:
 print_puzzle_notsolved:
   lda puzzleMultiple
   clc
-  adc #14 ;description not solved
+  adc puzzle_description_notsolved_offset ;description not solved
   tax 
   lda puzzles_pointers,x 
   sta serialDataVectorLow  
@@ -1361,7 +1279,7 @@ object_count:
   .byte 5
 
 
-puzzles_pointers:
+  puzzles_pointers:
   .word puzzle_0_id                   ; prender_vela id                   [0,1]
   .word puzzle_0_name                 ; prender_vela name                 [2,3]
   .word puzzle_0_action               ; prender_vela action               [4,5]
@@ -1378,6 +1296,16 @@ puzzles_pointers:
   .word puzzle_1_solved               ; abrir_puerta_llave solved               [26,27]
   .word puzzle_1_description_solved   ; abrir_puerta_llave description_solved   [28,29]
   .word puzzle_1_description_notsolved; abrir_puerta_llave description_notsolved[30,31]
+puzzle_action_offset:
+  .byte 4  ; (byte of puzzle_0_action in puzzles_pointers)
+puzzle_solved_offset:
+  .byte 10  ; (byte of puzzle_0_solved in puzzles_pointers)
+puzzle_description_solved_offset:
+  .byte 12  ; (byte of puzzle_0_description_solved in puzzles_pointers)
+puzzle_description_notsolved_offset:
+  .byte 14  ; (byte of puzzle_0_description_notsolved in puzzles_pointers)
+puzzle_record_length:
+  .byte 16  ; (total .word bytes per puzzle record)
 
 ; ── Puzzle 0: prender_vela ──────────────────────────
 puzzle_0_id:
@@ -1394,7 +1322,7 @@ puzzle_0_object1:
   .byte 1  ; encendedor
 
 puzzle_0_object2:
-  .byte 3  ; vela
+  .byte 0  ; vela
 
 puzzle_0_solved:
   .byte 0
@@ -1439,65 +1367,60 @@ puzzle_1_description_notsolved:
 puzzle_count:
   .byte 2
 
+actions_pointers:
+  .word action_0_id     ; ir id     [0,1]
+  .word action_0_name   ; ir name   [2,3]
+  .word action_0_sensor ; ir sensor [4,5]
+  .word action_1_id     ; mirar id     [6,7]
+  .word action_1_name   ; mirar name   [8,9]
+  .word action_1_sensor ; mirar sensor [10,11]
+  .word action_2_id     ; usar id     [12,13]
+  .word action_2_name   ; usar name   [14,15]
+  .word action_2_sensor ; usar sensor [16,17]
+action_name_offset:
+  .byte 2  ; (byte of action_0_name in actions_pointers)
+action_record_length:
+  .byte 6  ; (total .word bytes per action record)
 
-; objects_pointers:
-;   .word object_0 ; Screen zero 0,1
-;   .word object_0_takable ;2,3
-;   .word object_0_visible ;4,5
-;   .word object_0_name ;6,7
-;   .word object_0_description ;8,9
-;   .word object_1 ; Screen zero
-;   .word object_1_takable
-;   .word object_1_visible
-;   .word object_1_name
-;   .word object_1_description
-;   .word object_2 ; Screen zero
-;   .word object_2_takable
-;   .word object_2_visible
-;   .word object_2_name
-;   .word object_2_description
+; ── Action 0: ir ──────────────────────────
+action_0_id:
+  .byte 0
 
-; object_0:
-; object_0_id:
-;   .byte 0
-; object_0_takable:
-;   .byte 1
-; object_0_visible:
-;   .byte 1  
-; object_0_name:
-;   .ascii "rama"
-;   .ascii "e"  
-; object_0_description:
-;   .ascii "Es una rama de un arbol, parece muy resistente"
-;   .ascii "e" 
-  
-; object_1:  
-; object_1_id:
-;   .byte 1
-; object_1_takable:
-;   .byte 1
-; object_1_visible:
-;   .byte 1    
-; object_1_name:
-;   .ascii "unguento"
-;   .ascii "e"  
-; object_1_description:
-;   .ascii "Es como si fuera una crema"
-;   .ascii "e"
+action_0_name:
+  .ascii "ir"
+  .ascii "e"
 
-; object_2:
-; object_2_id:
-;   .byte 2
-; object_2_takable:
-;   .byte 0
-; object_2_visible:
-;   .byte 0    
-; object_2_name:
-;   .ascii "cueva"
-;   .ascii "e"  
-; object_2_description:
-;   .ascii "Parece muy oscura, algo te lleva a querer acercarte a ella"
-;   .ascii "e"  
+action_0_sensor:
+  .ascii ""
+  .ascii "e"
+
+; ── Action 1: mirar ──────────────────────────
+action_1_id:
+  .byte 1
+
+action_1_name:
+  .ascii "mirar"
+  .ascii "e"
+
+action_1_sensor:
+  .ascii ""
+  .ascii "e"
+
+; ── Action 2: usar ──────────────────────────
+action_2_id:
+  .byte 2
+
+action_2_name:
+  .ascii "usar"
+  .ascii "e"
+
+action_2_sensor:
+  .ascii ""
+  .ascii "e"
+
+; ── Total action count ──────────────────────────────────────
+action_count:
+  .byte 3
 
 
 ;END--------------------------------------------------------------------------------
