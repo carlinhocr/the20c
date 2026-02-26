@@ -960,10 +960,10 @@ selectObject_loop:
   sta objectCurrentID
   tya
   pha
-  inc objectPosition
   jsr processObject
   pla
   tay
+  inc objectPosition
   iny
   cpy max_objects_per_screen ;max objects per screen 0-6 for now 
   bne selectObject_loop
