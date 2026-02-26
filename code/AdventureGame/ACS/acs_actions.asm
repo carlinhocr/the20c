@@ -12,6 +12,10 @@ actions_pointers:
   .word action_2_id     ; usar id     [12,13]
   .word action_2_name   ; usar name   [14,15]
   .word action_2_sensor ; usar sensor [16,17]
+action_name_offset:
+  .byte 2  ; (byte of action_0_name in actions_pointers)
+action_record_length:
+  .byte 6  ; (total .word bytes per action record)
 
 ; ── Action 0: ir ──────────────────────────
 action_0_id:
