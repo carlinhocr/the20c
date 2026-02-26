@@ -789,11 +789,9 @@ selectAction_loop:
   rts
 
 printActionsHeader:
-  ldx #$0
-  lda actions_header,x 
+  lda #< actions_header
   sta serialDataVectorLow  
-  inx 
-  lda actions_header,x
+  lda #> actions_header
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts 
@@ -954,13 +952,10 @@ selectObject_loop:
   rts
 
 printObjectsHeader:
-  ldx #$0
-  lda objects_header,x 
+  lda #< objects_header
   sta serialDataVectorLow  
-  inx 
-  lda objects_header,x
+  lda #> objects_header
   sta serialDataVectorHigh
-  jsr printAsciiDrawing
   rts  
 
 processObject:
