@@ -1383,7 +1383,7 @@ object_count:
   .byte 5
 
 
-  puzzles_pointers:
+puzzles_pointers:
   .word puzzle_0_id                   ; prender_vela id                   [0,1]
   .word puzzle_0_name                 ; prender_vela name                 [2,3]
   .word puzzle_0_action               ; prender_vela action               [4,5]
