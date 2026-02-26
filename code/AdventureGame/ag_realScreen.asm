@@ -947,7 +947,6 @@ selectObject_loop:
   tya
   pha
   sty objectPosition
-  jsr printNumbersObjects
   jsr processObject
   pla
   tay
@@ -986,6 +985,7 @@ processObject:
   lda objectsRAM,x
   cmp #$1
   bne end_processObject
+  jsr printNumbersObjects
   jsr print_current_object_name
   ;jsr print_current_object_description
 end_processObject:  
