@@ -760,14 +760,13 @@ draw_current_screen_table:
   jsr printAsciiDrawing
   jsr selectPuzzle
   jsr selectObject
-  ;jsr selectAction
+  jsr selectAction
   rts
 
 selectAction:
-  ldy #$ff
   lda screenMultiple
   clc
-  adc screen_object_offset  ;fist object byte offset
+  adc screen_action_offset  ;fist object byte offset
   tax
   lda screens_pointers,x 
   sta actionDataVectorLow  
