@@ -51,18 +51,48 @@ def to_asm(puzzles, action_ids, object_ids):
     # ── Pointer table ────────────────────────────────────────
     lines.append("puzzles_pointers:")
     offset = 0
+
+    # Captured from puzzle 0 for offset labels emitted after all entries
+    puz0_action_offset              = None
+    puz0_solved_offset              = None
+    puz0_desc_solved_offset         = None
+    puz0_desc_notsolved_offset      = None
+    puz0_record_length              = None
+
     for index, (key, puz) in enumerate(puzzles.items()):
         puz_id = puz.get("ID", str(index)).strip()
         label  = f"puzzle_{puz_id}"
         name   = puz.get("Name", key)
+
+        start_offset = offset
+
         lines.append(f"  .word {label}_id                   ; {name} id                   [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_name                 ; {name} name                 [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_action               ; {name} action               [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_action               ; {name} action               [{offset},{offset+1}]") ; _act = offset ; offset += 2
         lines.append(f"  .word {label}_object1              ; {name} object1              [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_object2              ; {name} object2              [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_solved               ; {name} solved               [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_description_solved   ; {name} description_solved   [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_description_notsolved; {name} description_notsolved[{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_solved               ; {name} solved               [{offset},{offset+1}]") ; _sol = offset ; offset += 2
+        lines.append(f"  .word {label}_description_solved   ; {name} description_solved   [{offset},{offset+1}]") ; _dsc_sol = offset ; offset += 2
+        lines.append(f"  .word {label}_description_notsolved; {name} description_notsolved[{offset},{offset+1}]") ; _dsc_not = offset ; offset += 2
+
+        if index == 0:
+            puz0_action_offset         = _act
+            puz0_solved_offset         = _sol
+            puz0_desc_solved_offset    = _dsc_sol
+            puz0_desc_notsolved_offset = _dsc_not
+            puz0_record_length         = offset - start_offset  # 16 bytes (8 × .word)
+
+    # ── Offset labels, placed after all puzzle entries ────────────────────────
+    lines.append(f"puzzle_action_offset:")
+    lines.append(f"  .byte {puz0_action_offset}  ; (byte of puzzle_0_action in puzzles_pointers)")
+    lines.append(f"puzzle_solved_offset:")
+    lines.append(f"  .byte {puz0_solved_offset}  ; (byte of puzzle_0_solved in puzzles_pointers)")
+    lines.append(f"puzzle_description_solved_offset:")
+    lines.append(f"  .byte {puz0_desc_solved_offset}  ; (byte of puzzle_0_description_solved in puzzles_pointers)")
+    lines.append(f"puzzle_description_notsolved_offset:")
+    lines.append(f"  .byte {puz0_desc_notsolved_offset}  ; (byte of puzzle_0_description_notsolved in puzzles_pointers)")
+    lines.append(f"puzzle_record_length:")
+    lines.append(f"  .byte {puz0_record_length}  ; (total .word bytes per puzzle record)")
     lines.append("")
 
     for index, (key, puz) in enumerate(puzzles.items()):
@@ -90,7 +120,7 @@ def to_asm(puzzles, action_ids, object_ids):
         lines.append('  .ascii "e"')
         lines.append("")
 
-        # Action  → numeric ID
+        # Action → numeric ID
         lines.append(f"{label}_action:")
         lines.append(f"  .byte {action_id}  ; {puz.get('Action', '')}")
         lines.append("")

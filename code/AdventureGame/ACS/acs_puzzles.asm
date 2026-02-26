@@ -19,6 +19,16 @@ puzzles_pointers:
   .word puzzle_1_solved               ; abrir_puerta_llave solved               [26,27]
   .word puzzle_1_description_solved   ; abrir_puerta_llave description_solved   [28,29]
   .word puzzle_1_description_notsolved; abrir_puerta_llave description_notsolved[30,31]
+puzzle_action_offset:
+  .byte 4  ; (byte of puzzle_0_action in puzzles_pointers)
+puzzle_solved_offset:
+  .byte 10  ; (byte of puzzle_0_solved in puzzles_pointers)
+puzzle_description_solved_offset:
+  .byte 12  ; (byte of puzzle_0_description_solved in puzzles_pointers)
+puzzle_description_notsolved_offset:
+  .byte 14  ; (byte of puzzle_0_description_notsolved in puzzles_pointers)
+puzzle_record_length:
+  .byte 16  ; (total .word bytes per puzzle record)
 
 ; ── Puzzle 0: prender_vela ──────────────────────────
 puzzle_0_id:
@@ -35,7 +45,7 @@ puzzle_0_object1:
   .byte 1  ; encendedor
 
 puzzle_0_object2:
-  .byte 3  ; vela
+  .byte 0  ; vela
 
 puzzle_0_solved:
   .byte 0
