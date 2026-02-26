@@ -783,6 +783,7 @@ selectAction_loop:
   sta actionCurrentID
   tya
   pha
+  sty actionPosition
   jsr processAction
   pla
   tay
@@ -790,6 +791,16 @@ selectAction_loop:
   cpy max_actions_per_screen ;max objects per screen 0-6 for now 
   bne selectAction_loop
   rts
+
+printLettersAction:
+  ldx actionPosition
+  lda numbersObjects,X
+  jsr send_rs232_char
+  lda #$29
+  jsr send_rs232_char
+  lda #$20
+  jsr send_rs232_char
+  rts  
 
 printActionsHeader:
   lda #< actions_header
@@ -804,6 +815,7 @@ processAction:
   cmp #$ff ;invalid object so that slot is empty do not process
   beq end_processAction
   jsr action_multiple_calculate
+  jsr printLettersAction
   jsr print_current_action_name
 end_processAction:  
   rts  
@@ -964,8 +976,6 @@ printNumbersObjects:
   lda #$20
   jsr send_rs232_char
   rts
-
-
 
 printObjectsHeader:
   lda #< objects_header
