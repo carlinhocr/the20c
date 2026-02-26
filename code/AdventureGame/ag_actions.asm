@@ -91,6 +91,9 @@ objectDataVectorHigh=$b7
 puzzleDataVectorLow=$b8
 puzzleDataVectorHigh=$b9
 
+actionDataVectorLow=$ba
+actionDataVectorHigh=$bb
+
 pivotZpLow=$fe
 pivotZpHigh=$ff
 
@@ -121,7 +124,15 @@ object_pointers_index=$021f
 object_RAM_index=$0220
 puzzle_pointers_index=$0221
 puzzle_RAM_index=$0222
+max_objects_per_screen=$0223
+max_puzzles_per_screen=$0224
+max_actions_per_screen=$0225
 
+actionCurrentID=$0226
+actionMultiple=$0227
+actionRecordSize=$0228
+action1Offset=$0229
+actionObjectOffset=$022a
 
 objectsRAM=$0300
 puzzlesRAM=$0400
@@ -438,9 +449,8 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 mainProgram:
-  ;initialize variables
-  jsr loadObjectsRAM
-  jsr loadPuzzlesRAM
+  ;initialize 
+  jsr initilizationRoutines
   ;initialize screen as screen zero
 mainProgramLoop:
   jsr select_screen
@@ -593,12 +603,18 @@ printAsciiDrawing_end:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;-----------------------------------SCREEN------------------------------------------
+;--------------------------------INITIALIZATION-------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+initilizationRoutines:
+  jsr loadObjectsRAM
+  jsr loadPuzzlesRAM
+  jsr loadConstants
+  rts
 
 loadObjectsRAM:
   lda object_record_length ;10 bytes
@@ -666,6 +682,28 @@ loadPuzzlesRAM_loop:
   ;end loop and return 
   rts
 
+loadConstants:
+  lda #$6
+  sta max_objects_per_screen
+  lda #$2
+  sta max_puzzles_per_screen 
+  lda #$6
+  sta max_actions_per_screen
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------INITIALIZATION-------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------SCREEN------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+
 select_screen:
   lda #$0
   sta screenCurrentID
@@ -722,6 +760,74 @@ draw_current_screen_table:
   jsr printAsciiDrawing
   jsr selectPuzzle
   jsr selectObject
+  jsr selectAction
+  rts
+
+selectAction:
+  ldy #$ff
+  lda screenMultiple
+  clc
+  adc screen_object_offset  ;fist object byte offset
+  tax
+  lda screens_pointers,x 
+  sta actionDataVectorLow  
+  inx 
+  lda screens_pointers,x
+  sta actionDataVectorHigh
+  ldy #$0
+selectAction_loop:
+  lda (actionDataVectorLow),y
+  sta actionCurrentID
+  tya
+  pha
+  jsr processAction
+  pla
+  tay
+  iny
+  cpy max_actions_per_screen ;max objects per screen 0-6 for now 
+  bne selectAction_loop
+  rts
+
+processAction:
+  lda actionCurrentID
+  cmp #$ff ;invalid object so that slot is empty do not process
+  beq end_processAction
+  jsr action_multiple_calculate
+  jsr print_current_action_name
+end_processAction:  
+  rts  
+
+action_multiple_calculate:
+  ;calcula the actionMultiple Variable
+  ;i can run it just once during initialization
+  lda #$0
+  sta actionMultiple
+  lda action_record_length
+  sta actionRecordSize
+  ldx #$ff
+action_multiple_loop:
+  inx
+  cpx actionCurrentID
+  beq action_multiple_end
+  lda actionRecordSize
+  clc
+  adc actionMultiple
+  sta actionMultiple
+  jmp action_multiple_loop 
+action_multiple_end:
+  rts    
+
+print_current_action_name:
+  lda actionMultiple
+  clc
+  adc action_name_offset
+  tax 
+  lda actions_pointers,x 
+  sta serialDataVectorLow  
+  inx 
+  lda actions_pointers,x
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
   rts
 
 selectPuzzle:
@@ -813,8 +919,6 @@ print_puzzle_notsolved:
   rts  
 
 selectObject:
-  ldy #$ff
-  ;Print Object 1
   lda screenMultiple
   clc
   adc screen_object_offset  ;fist object byte offset
@@ -834,7 +938,7 @@ selectObject_loop:
   pla
   tay
   iny
-  cpy #$6 ;max objects per screen 0-6 for now 
+  cpy max_objects_per_screen ;max objects per screen 0-6 for now 
   bne selectObject_loop
   rts
 
