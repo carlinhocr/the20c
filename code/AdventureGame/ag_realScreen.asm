@@ -999,6 +999,7 @@ processObject:
   bne end_processObjectInvisible
   jsr printNumbersObjects
   jsr print_current_object_name
+  jmp end_processObject
   ;jsr print_current_object_description
 end_processObjectInvisible:
   ;do not count invisible objects
