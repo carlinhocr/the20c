@@ -29,15 +29,41 @@ def to_asm(objects):
     # ── Pointer table ────────────────────────────────────────
     lines.append("objects_pointers:")
     offset = 0
+
+    # Captured from object 0 for the offset labels emitted after all entries
+    obj0_visible_offset     = None
+    obj0_name_offset        = None
+    obj0_description_offset = None
+    obj0_record_length      = None
+
     for index, (key, obj) in enumerate(objects.items()):
         obj_id = obj.get("ObjectID", str(index)).strip()
         label  = f"object_{obj_id}"
         name   = obj.get("Name", key)
-        lines.append(f"  .word {label}_id        ; {name} id          [{offset},{offset+1}]")   ; offset += 2
-        lines.append(f"  .word {label}_takeable  ; {name} takeable    [{offset},{offset+1}]")   ; offset += 2
-        lines.append(f"  .word {label}_visible   ; {name} visible     [{offset},{offset+1}]")   ; offset += 2
-        lines.append(f"  .word {label}_name      ; {name} name        [{offset},{offset+1}]")   ; offset += 2
-        lines.append(f"  .word {label}_description ; {name} description [{offset},{offset+1}]") ; offset += 2
+
+        start_offset = offset
+
+        lines.append(f"  .word {label}_id          ; {name} id          [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_takeable    ; {name} takeable    [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_visible     ; {name} visible     [{offset},{offset+1}]") ; _vis = offset ; offset += 2
+        lines.append(f"  .word {label}_name        ; {name} name        [{offset},{offset+1}]") ; _nam = offset ; offset += 2
+        lines.append(f"  .word {label}_description ; {name} description [{offset},{offset+1}]") ; _dsc = offset ; offset += 2
+
+        if index == 0:
+            obj0_visible_offset     = _vis
+            obj0_name_offset        = _nam
+            obj0_description_offset = _dsc
+            obj0_record_length      = offset - start_offset  # 10 bytes (5 × .word)
+
+    # ── Offset labels, placed after all object entries ────────────────────────
+    lines.append(f"object_visible_offset:")
+    lines.append(f"  .byte {obj0_visible_offset}  ; (byte of object_0_visible in objects_pointers)")
+    lines.append(f"object_name_offset:")
+    lines.append(f"  .byte {obj0_name_offset}  ; (byte of object_0_name in objects_pointers)")
+    lines.append(f"object_description_offset:")
+    lines.append(f"  .byte {obj0_description_offset}  ; (byte of object_0_description in objects_pointers)")
+    lines.append(f"object_record_length:")
+    lines.append(f"  .byte {obj0_record_length}  ; (total .word bytes per object record)")
     lines.append("")
 
     for index, (key, obj) in enumerate(objects.items()):

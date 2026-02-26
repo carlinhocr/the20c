@@ -3,31 +3,39 @@
 ; ============================================================
 
 objects_pointers:
-  .word object_0_id        ; vela id          [0,1]
-  .word object_0_takeable  ; vela takeable    [2,3]
-  .word object_0_visible   ; vela visible     [4,5]
-  .word object_0_name      ; vela name        [6,7]
+  .word object_0_id          ; vela id          [0,1]
+  .word object_0_takeable    ; vela takeable    [2,3]
+  .word object_0_visible     ; vela visible     [4,5]
+  .word object_0_name        ; vela name        [6,7]
   .word object_0_description ; vela description [8,9]
-  .word object_1_id        ; encendedor id          [10,11]
-  .word object_1_takeable  ; encendedor takeable    [12,13]
-  .word object_1_visible   ; encendedor visible     [14,15]
-  .word object_1_name      ; encendedor name        [16,17]
+  .word object_1_id          ; encendedor id          [10,11]
+  .word object_1_takeable    ; encendedor takeable    [12,13]
+  .word object_1_visible     ; encendedor visible     [14,15]
+  .word object_1_name        ; encendedor name        [16,17]
   .word object_1_description ; encendedor description [18,19]
-  .word object_2_id        ; unguento id          [20,21]
-  .word object_2_takeable  ; unguento takeable    [22,23]
-  .word object_2_visible   ; unguento visible     [24,25]
-  .word object_2_name      ; unguento name        [26,27]
+  .word object_2_id          ; unguento id          [20,21]
+  .word object_2_takeable    ; unguento takeable    [22,23]
+  .word object_2_visible     ; unguento visible     [24,25]
+  .word object_2_name        ; unguento name        [26,27]
   .word object_2_description ; unguento description [28,29]
-  .word object_3_id        ; llave id          [30,31]
-  .word object_3_takeable  ; llave takeable    [32,33]
-  .word object_3_visible   ; llave visible     [34,35]
-  .word object_3_name      ; llave name        [36,37]
+  .word object_3_id          ; llave id          [30,31]
+  .word object_3_takeable    ; llave takeable    [32,33]
+  .word object_3_visible     ; llave visible     [34,35]
+  .word object_3_name        ; llave name        [36,37]
   .word object_3_description ; llave description [38,39]
-  .word object_4_id        ; puerta id          [40,41]
-  .word object_4_takeable  ; puerta takeable    [42,43]
-  .word object_4_visible   ; puerta visible     [44,45]
-  .word object_4_name      ; puerta name        [46,47]
+  .word object_4_id          ; puerta id          [40,41]
+  .word object_4_takeable    ; puerta takeable    [42,43]
+  .word object_4_visible     ; puerta visible     [44,45]
+  .word object_4_name        ; puerta name        [46,47]
   .word object_4_description ; puerta description [48,49]
+object_visible_offset:
+  .byte 4  ; (byte of object_0_visible in objects_pointers)
+object_name_offset:
+  .byte 6  ; (byte of object_0_name in objects_pointers)
+object_description_offset:
+  .byte 8  ; (byte of object_0_description in objects_pointers)
+object_record_length:
+  .byte 10  ; (total .word bytes per object record)
 
 ; ── Object 0: vela ──────────────────────────
 object_0_id:
