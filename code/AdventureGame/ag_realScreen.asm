@@ -794,7 +794,7 @@ selectAction_loop:
 
 printLettersAction:
   ldx actionPosition
-  lda numbersObjects,X
+  lda letterActions,X
   jsr send_rs232_char
   lda #$29
   jsr send_rs232_char
@@ -953,12 +953,14 @@ selectObject:
   lda screens_pointers,x
   sta objectDataVectorHigh
   ldy #$0
+  lda #$0
+  sta objectPosition
 selectObject_loop:
   lda (objectDataVectorLow),y
   sta objectCurrentID
   tya
   pha
-  sty objectPosition
+  inc objectPosition
   jsr processObject
   pla
   tay
@@ -994,10 +996,13 @@ processObject:
   ldx objectCurrentID
   lda objectsRAM,x
   cmp #$1
-  bne end_processObject
+  bne end_processObjectInvisible
   jsr printNumbersObjects
   jsr print_current_object_name
   ;jsr print_current_object_description
+end_processObjectInvisible:
+  ;do not count invisible objects
+  dec objectPosition
 end_processObject:  
   rts
 
