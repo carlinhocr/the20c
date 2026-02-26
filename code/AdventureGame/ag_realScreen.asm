@@ -960,9 +960,9 @@ printNumbersObjects:
   ldx objectPosition
   lda numbersObjects,X
   jsr send_rs232_char
-  lda ")"
+  lda #$29
   jsr send_rs232_char
-  lda " "
+  lda #$20
   jsr send_rs232_char
   rts
 
