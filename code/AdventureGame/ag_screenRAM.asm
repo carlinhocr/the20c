@@ -1079,15 +1079,17 @@ object_multiple_end:
   rts  
 
 print_current_object_name:
-  lda objectCurrentID
-  asl ;multiply by two 
-  tax
-  lda objects_index,x
+  ; lda objectCurrentID
+  ; asl ;multiply by two 
+  ; tax
+  ; lda objects_index,x
+  ldx #$0
+  lda object_pointer_1,x
   clc
   adc object_name_offset
   sta serialDataVectorLow  
   inx 
-  lda objects_index,x
+  lda object_pointer_1,x
   ;add the high byte withput clc
   adc object_name_offset
   sta serialDataVectorHigh
