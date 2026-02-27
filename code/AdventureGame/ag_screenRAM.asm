@@ -740,29 +740,34 @@ load_screen_ram_simple_loop:
   rts
 
 load_screen_ram:
-  lda screenCurrentID
-  ;multiply by 2 the id
-  asl ;if not screen zero multiple by 2
-  sta current_screen_offset
-  ldx current_screen_offset ;byte 6 if it is screen 3
+  ; lda screenCurrentID
+  ; ;multiply by 2 the id
+  ; asl ;if not screen zero multiple by 2
+  ; sta current_screen_offset
+  ; ldx current_screen_offset ;byte 6 if it is screen 3
   ;store in sourceScreenVector the address of screen_x_id
+  ;use screen zero
+  ldx #$0
   lda screens_index,X
   sta sourceScreenVectorLow
   inx
   lda screens_index,X
   sta sourceScreenVectorHigh
   ;store in ramScreenVectorLow the address of the RAM portin for the screen
-  lda #<screenPointersRAM
+  lda #$00
   sta ramScreenVectorLow
-  lda #>screenPointersRAM
+  lda #$50
   sta ramScreenVectorHigh
-  ldy #$0
+  ldy #$ff
 load_screen_ram_loop:
-  lda (sourceScreenVectorLow),Y
-  sta screenPointersRAM,Y
   iny
   cpy screen_record_length
+  beq load_screen_ram_end
+  lda (sourceScreenVectorLow),Y
+  sta (ramScreenVectorLow),Y
+  jmp load_screen_ram_loop
   bne load_screen_ram_loop
+load_screen_ram_end:
   rts
 
 screen_multiple_calculate:
