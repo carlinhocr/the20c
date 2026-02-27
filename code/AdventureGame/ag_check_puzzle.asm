@@ -1019,11 +1019,11 @@ verify_one_puzzle:
   ldy #$0 
   lda (puzzlePivotLow),y ;now i have the value of the action
   sta currentPuzzleAction  
-  ldy #$2
-  lda (puzzlePivotLow),y ;no i have object1
+  ldy #$1
+  lda (puzzlePivotLow),y ;now i have object1
   sta currentPuzzleObject1
-  ldy #$4
-  lda (puzzlePivotLow),y ;no i have object2
+  ldy #$2
+  lda (puzzlePivotLow),y ;now i have object2
   sta currentPuzzleObject2
   ;now i have to compare the puzzles to the selected action and objects
   lda selectedAction
