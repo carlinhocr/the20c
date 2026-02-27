@@ -750,10 +750,10 @@ load_screen_ram:
   ;store in sourceScreenVector the address of screen_x_id
   ;use screen zero
   ldx #$0
-  lda #<screens_pointers
+  lda screens_index,x
   sta sourceScreenVectorLow
   inx
-  lda #>screens_pointers
+  lda screens_index,x
   sta sourceScreenVectorHigh
   ;store in ramScreenVectorLow the address of the RAM portin for the screen
   lda #$00
@@ -1132,13 +1132,14 @@ numbersObjects:
 ; ============================================================
 
 screens_index:
-  .word screen_0_id  ; EntradaCueva
-  .word screen_1_id  ; cuevaIntermedia
+  .word screens_pointers_0  ; EntradaCueva
+  .word screens_pointers_1  ; cuevaIntermedia
 screens_index_record_length:
   .byte 2  ; each screens_index entry is 1 .word (2 bytes)
 
 
 screens_pointers:
+screens_pointers_0:
   .word screen_0_id                ; EntradaCueva id                [0,1]
   .word screen_0_name              ; EntradaCueva name              [2,3]
   .word screen_0_north             ; EntradaCueva north             [4,5]
@@ -1161,6 +1162,7 @@ screens_pointers:
   .word screen_0_action6           ; EntradaCueva action6           [38,39]
   .word screen_0_description       ; EntradaCueva description       [40,41]
   .word screen_0_ascii             ; EntradaCueva ascii             [42,43]
+screens_pointers_1:  
   .word screen_1_id                ; cuevaIntermedia id                [44,45]
   .word screen_1_name              ; cuevaIntermedia name              [46,47]
   .word screen_1_north             ; cuevaIntermedia north             [48,49]
