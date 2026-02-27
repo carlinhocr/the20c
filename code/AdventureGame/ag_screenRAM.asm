@@ -921,7 +921,7 @@ processPuzzle:
   lda puzzleCurrentID
   cmp #$ff ;invalid object so that slot is empty do not process
   beq end_processPuzzle
-  jsr puzzle_multiple_calculate
+  ;jsr puzzle_multiple_calculate
   ;check visibility do not print invisible objects
   ldx puzzleCurrentID
   lda puzzlesRAM,x
@@ -935,36 +935,41 @@ puzzledNotSolved:
 end_processPuzzle:  
   rts  
 
-puzzle_multiple_calculate:
-  ;screen table record size
-  ;8 bytes
-  lda #$0
-  sta puzzleMultiple
-  lda puzzle_record_length ;16 bytes
-  sta puzzleRecordSize
-  ldx #$ff
-puzzle_multiple_loop:
-  inx
-  cpx puzzleCurrentID
-  beq puzzle_multiple_end
-  lda puzzleRecordSize
-  clc
-  adc puzzleMultiple
-  sta puzzleMultiple
-  jmp puzzle_multiple_loop 
-puzzle_multiple_end:
-  rts  
-
+; puzzle_multiple_calculate:
+;   ;screen table record size
+;   ;8 bytes
+;   lda #$0
+;   sta puzzleMultiple
+;   lda puzzle_record_length ;16 bytes
+;   sta puzzleRecordSize
+;   ldx #$ff
+; puzzle_multiple_loop:
+;   inx
+;   cpx puzzleCurrentID
+;   beq puzzle_multiple_end
+;   lda puzzleRecordSize
+;   clc
+;   adc puzzleMultiple
+;   sta puzzleMultiple
+;   jmp puzzle_multiple_loop 
+; puzzle_multiple_end:
+;   rts  
 
 print_puzzle_solved:
-  lda puzzleMultiple
-  clc
-  adc puzzle_description_solved_offset ;description solved
-  tax 
-  lda puzzles_pointers,x 
+  lda puzzleCurrentID
+  asl ;multiply by two 
+  tax
+  lda puzzles_index,x
+  sta pivotZpLow
+  inx
+  lda puzzles_index,x
+  sta pivotZpHigh
+  lda puzzle_description_solved_offset
+  tay
+  lda (pivotZpLow),Y
   sta serialDataVectorLow  
-  inx 
-  lda puzzles_pointers,x
+  iny 
+  lda (pivotZpLow),Y
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts
@@ -988,18 +993,6 @@ print_puzzle_notsolved:
   jsr printAsciiDrawing
   rts
 
-
-  ; lda puzzleMultiple
-  ; clc
-  ; adc puzzle_description_notsolved_offset ;description not solved
-  ; tax 
-  ; lda puzzles_pointers,x 
-  ; sta serialDataVectorLow  
-  ; inx 
-  ; lda puzzles_pointers,x
-  ; sta serialDataVectorHigh
-  ; jsr printAsciiDrawing
-  ; rts  
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------PUZZLE------------------------------------------
