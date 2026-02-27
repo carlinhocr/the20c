@@ -765,7 +765,7 @@ load_screen_ram_loop:
   iny
   cpy screen_record_length
   beq load_screen_ram_end
-  lda (sourceScreenVectorLow),Y
+  lda sourceScreenVectorLow,Y
   jsr send_rs232_char
   sta screenPointersRAM,Y
   jmp load_screen_ram_loop
