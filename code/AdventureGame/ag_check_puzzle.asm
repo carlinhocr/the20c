@@ -494,6 +494,7 @@ mainProgramLoop:
   sta selectedAction  
   jsr action_selector  
   jsr check_puzzle
+  jsr select_screen_noascii    
   rts
 
 delayClear:
@@ -1048,9 +1049,21 @@ foundOneObject:
   jmp end_verify_one_puzzle
 foundBothObjects:  
   jsr print_msj_objok2 
+  lda puzzleCurrentID
+  cmp #$0
+  jsr solve_puzzle_0
 end_verify_one_puzzle:
   rts
 
+solve_puzzle_0:
+  ldx puzzleCurrentID
+  lda #$1
+  sta puzzlesRAM,X
+  lda #$1
+  ldx #$3 ;object 3 is the key lets make it visible
+  sta objectsRAM,X
+  rts
+  
 selectPuzzle:
   ldx screen_puzzle_offset
   lda screenPointersRAM,x 
