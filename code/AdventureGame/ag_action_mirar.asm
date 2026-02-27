@@ -835,6 +835,8 @@ process_usar:
   lda #$1
   sta print_no_CRLF
   jsr print_current_object_name  
+  lda #$0
+  sta print_no_CRLF   
   jsr print_con
   jsr object_selection
   lda selectedObject  
