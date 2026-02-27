@@ -17,6 +17,17 @@ def to_asm(actions):
     lines.append("; ============================================================")
     lines.append("")
 
+    # ── Action index table (pointer to the start of each action record) ──────
+    lines.append("actions_index:")
+    for index, (key, act) in enumerate(actions.items()):
+        act_id = act.get("ID", str(index)).strip()
+        label  = f"action_{act_id}"
+        name   = act.get("Name", key)
+        lines.append(f"  .word {label}_id  ; {name}")
+    lines.append(f"actions_index_record_length:")
+    lines.append(f"  .byte 2  ; each actions_index entry is 1 .word (2 bytes)")
+    lines.append("")
+
     # ── Pointer table ────────────────────────────────────────
     lines.append("actions_pointers:")
     offset = 0

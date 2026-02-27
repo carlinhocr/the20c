@@ -48,6 +48,17 @@ def to_asm(puzzles, action_ids, object_ids):
     lines.append("; ============================================================")
     lines.append("")
 
+    # ── Puzzle index table (pointer to the start of each puzzle record) ──────
+    lines.append("puzzles_index:")
+    for index, (key, puz) in enumerate(puzzles.items()):
+        puz_id = puz.get("ID", str(index)).strip()
+        label  = f"puzzle_{puz_id}"
+        name   = puz.get("Name", key)
+        lines.append(f"  .word {label}_id  ; {name}")
+    lines.append(f"puzzles_index_record_length:")
+    lines.append(f"  .byte 2  ; each puzzles_index entry is 1 .word (2 bytes)")
+    lines.append("")
+
     # ── Pointer table ────────────────────────────────────────
     lines.append("puzzles_pointers:")
     offset = 0

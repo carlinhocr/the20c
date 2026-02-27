@@ -26,6 +26,17 @@ def to_asm(objects):
     lines.append("; ============================================================")
     lines.append("")
 
+    # ── Object index table (pointer to the start of each object record) ──────
+    lines.append("objects_index:")
+    for index, (key, obj) in enumerate(objects.items()):
+        obj_id = obj.get("ObjectID", str(index)).strip()
+        label  = f"object_{obj_id}"
+        name   = obj.get("Name", key)
+        lines.append(f"  .word {label}_id  ; {name}")
+    lines.append(f"objects_index_record_length:")
+    lines.append(f"  .byte 2  ; each objects_index entry is 1 .word (2 bytes)")
+    lines.append("")
+
     # ── Pointer table ────────────────────────────────────────
     lines.append("objects_pointers:")
     offset = 0
