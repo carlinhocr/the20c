@@ -707,7 +707,6 @@ draw_current_screen_table:
   rts
 
 draw_current_screen_table_noascii:
-  jsr draw_screen_ascii
   jsr draw_screen_description
   jsr selectPuzzle
   ;jsr selectObject
@@ -841,9 +840,6 @@ process_ir:
   rts  
 
 process_mirar:
-  lda #$0 ;with CRLF
-  sta print_no_CRLF
-  jsr print_mirar
   ;print the description of the selected object
   jsr object_selection
   lda #$1 ;without CRLF
