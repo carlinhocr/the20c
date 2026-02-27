@@ -825,15 +825,15 @@ process_ir:
   rts  
 
 process_mirar:
-  lda #$1 ;with CRLF
+  lda #$0 ;with CRLF
   sta print_no_CRLF
   jsr print_mirar
   ;print the description of the selected object
   jsr object_selection
-  lda #$0 ;without CRLF
+  lda #$1 ;without CRLF
   sta print_no_CRLF
   jsr print_mirar
-  lda #$1 ;with CRLF
+  lda #$0 ;with CRLF
   sta print_no_CRLF
   jsr print_mirar  
   jsr print_current_object_name 
@@ -846,10 +846,10 @@ process_usar:
   sta selectedObject1
   jsr print_usar
   ;print object name no CRLF
-  lda #$1 ;with CRLF
+  lda #$1 ;without CRLF
   sta print_no_CRLF
   jsr print_current_object_name  
-  lda #$0 ;without CRLF
+  lda #$0 ;with CRLF
   sta print_no_CRLF   
   jsr print_con
   jsr object_selection
