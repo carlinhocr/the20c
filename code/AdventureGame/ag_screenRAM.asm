@@ -722,7 +722,7 @@ select_screen:
   sta screenCurrentID
   jsr load_screen_ram
   ;jsr screen_multiple_calculate
-  jsr draw_current_screen_table
+  ;jsr draw_current_screen_table
 ;   lda #$1
 ;   sta screenCurrentID
 ;   jsr screen_multiple_calculate
@@ -765,11 +765,10 @@ load_screen_ram_loop:
   iny
   cpy screen_record_length
   beq load_screen_ram_end
-  ;lda (sourceScreenVectorLow),Y
-  lda screen_0_id,y
+  lda (sourceScreenVectorLow),Y
+  jsr send_rs232_char
   sta screenPointersRAM,Y
   jmp load_screen_ram_loop
-  bne load_screen_ram_loop
 load_screen_ram_end:
   rts
 
