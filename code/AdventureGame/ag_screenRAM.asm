@@ -1083,15 +1083,13 @@ print_current_object_name:
   ; asl ;multiply by two 
   ; tax
   ; lda objects_index,x
-  ldx #$0
+
+  lda object_name_offset
+  tax
   lda object_pointer_1,x
-  clc
-  adc object_name_offset
   sta serialDataVectorLow  
   inx 
   lda object_pointer_1,x
-  ;add the high byte withput clc
-  adc object_name_offset
   sta serialDataVectorHigh
 
   ; lda objectMultiple
