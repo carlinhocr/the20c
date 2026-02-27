@@ -481,6 +481,7 @@ mainProgramLoop:
   lda #$1
   sta selectedAction
   jsr action_selector
+  jsr select_screen_noascii  
   lda #$2
   sta selectedAction
   jsr action_selector  
@@ -660,6 +661,13 @@ select_screen:
   jsr draw_current_screen_table
   rts
 
+select_screen_noascii:
+  ;lda #$0
+  ;sta screenCurrentID
+  ;jsr load_screen_ram
+  jsr draw_current_screen_table_noascii
+  rts  
+
 load_screen_ram:
   lda screenCurrentID
   ;multiply by 2 the id
@@ -697,6 +705,14 @@ draw_current_screen_table:
   ;jsr selectObject
   jsr selectAction
   rts
+
+draw_current_screen_table_noascii:
+  jsr draw_screen_ascii
+  jsr draw_screen_description
+  jsr selectPuzzle
+  ;jsr selectObject
+  jsr selectAction
+  rts  
 
 draw_screen_ascii:
   lda screen_ascii_offset
