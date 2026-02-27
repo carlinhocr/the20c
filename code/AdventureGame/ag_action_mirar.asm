@@ -896,8 +896,7 @@ print_mirar:
   sta serialDataVectorLow  
   lda #> msj_mirar
   sta serialDataVectorHigh
-  ;jsr printAsciiDrawing
-  jsr send_rs232_line_noCRLF  
+  jsr print_with_or_without_CRLF
   rts
 
 print_usar:  
