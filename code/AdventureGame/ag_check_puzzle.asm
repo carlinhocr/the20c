@@ -1031,6 +1031,7 @@ verify_one_puzzle:
   bne end_verify_one_puzzle
   jsr print_msj_accok
   lda selectedObject1
+  lda #$1
   cmp currentPuzzleObject1
   bne checkother
   jsr print_msj_objok
