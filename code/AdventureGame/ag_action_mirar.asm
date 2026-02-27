@@ -836,10 +836,10 @@ process_usar:
   sta selectedObject1
   jsr print_usar
   ;print object name no CRLF
-  lda #$1
+  lda #$1 ;without CRLF
   sta print_no_CRLF
   jsr print_current_object_name  
-  lda #$0
+  lda #$0 ;with CRLF
   sta print_no_CRLF   
   jsr print_con
   jsr object_selection
@@ -856,9 +856,8 @@ process_usar:
   jsr print_con
   lda selectedObject2
   sta objectCurrentID
-  ;print object name with CRLF
   lda #$0
-  sta print_no_CRLF  
+  sta print_no_CRLF 
   jsr print_current_object_name  
   rts
   ;usar obj1 con obje2
@@ -897,8 +896,8 @@ print_con:
   sta serialDataVectorLow  
   lda #> msj_con
   sta serialDataVectorHigh
-  jsr printAsciiDrawing  
-  ;jsr send_rs232_line_noCRLF    
+  ;jsr printAsciiDrawing  
+  jsr send_rs232_line_noCRLF    
   rts
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
