@@ -827,11 +827,12 @@ process_ir:
 process_mirar:
   lda #$1 ;without CRLF
   sta print_no_CRLF
-  jsr print_with_or_without_CRLF
+  jsr print_mirar
   ;print the description of the selected object
   jsr object_selection
-  lda #$0 ;without CRLF
-  sta print_no_CRLF
+  lda #$0 ;with CRLF
+  sta print_no_CRLF  
+  jsr print_current_object_name 
   jsr print_current_object_description
   rts 
 
