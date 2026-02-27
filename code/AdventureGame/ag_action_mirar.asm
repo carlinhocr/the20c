@@ -707,6 +707,7 @@ draw_current_screen_table:
   rts
 
 draw_current_screen_table_noascii:
+  jsr send_rs232_CRLF ;add a blank line
   jsr draw_screen_description
   jsr selectPuzzle
   jsr selectObject
