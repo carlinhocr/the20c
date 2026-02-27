@@ -477,7 +477,13 @@ mainProgram:
   ;initialize screen as screen zero
 mainProgramLoop:
   jsr select_screen
+  ;jsr receiveUserInputAction
+  lda #$1
+  sta selectedAction
   jsr action_selector
+  lda #$2
+  sta selectedAction
+  jsr action_selector  
   rts
 
 delayClear:
@@ -798,7 +804,6 @@ print_current_action_name:
   rts  
 
 action_selector:
-  jsr receiveUserInputAction
   lda selectedAction  
   beq processAction0
   cmp #$1
@@ -903,7 +908,7 @@ print_con:
 print_con_NOCRLF:
   jsr send_rs232_line_noCRLF   
   rts
-  
+
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------ACTION------------------------------------------
