@@ -475,23 +475,12 @@ mainProgram:
 mainProgramLoop:
   jsr select_screen
   jsr action_selector
-
-
   rts
 
 delayClear:
   jsr delay_3_sec  
   jsr printClearRS232Screen
   rts
-
-printVentilastationAscii:
-  lda #< ventilastationAscii
-  sta serialDataVectorLow
-  lda #> ventilastationAscii 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts  
-
 
 printClearRS232Screen:
   lda #< clearRS232Screen
@@ -500,78 +489,6 @@ printClearRS232Screen:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts 
-
-printMessage01:
-  lda #< message01
-  sta serialDataVectorLow
-  lda #> message01 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts   
-
-printMessage02:
-  lda #< message02
-  sta serialDataVectorLow
-  lda #> message02 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts 
-
-printMessage03:
-  lda #< message03
-  sta serialDataVectorLow
-  lda #> message03 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts     
-
-printMessage04:
-  lda #< message04
-  sta serialDataVectorLow
-  lda #> message04 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts    
-
-printMessage05:
-  lda #< message05
-  sta serialDataVectorLow
-  lda #> message05 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts      
-
-printMessage06:
-  lda #< message06
-  sta serialDataVectorLow
-  lda #> message06 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts   
-
-printMessage07:
-  lda #< message07
-  sta serialDataVectorLow
-  lda #> message07 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts    
-
-printMessage08:
-  lda #< message08
-  sta serialDataVectorLow
-  lda #> message08 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts   
-
-printMessage09:
-  lda #< message09
-  sta serialDataVectorLow
-  lda #> message09 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts       
 
 printAsciiDrawing:
   ;save accumulator x and y registers
@@ -730,10 +647,6 @@ select_screen:
   sta screenCurrentID
   jsr load_screen_ram
   jsr draw_current_screen_table
-;   lda #$1
-;   sta screenCurrentID
-;   jsr screen_multiple_calculate
-;   jsr draw_current_screen_table
   rts
 
 load_screen_ram:
