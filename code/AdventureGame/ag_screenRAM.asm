@@ -758,7 +758,7 @@ load_screen_ram:
   sta ramScreenVectorHigh
   ldy #$0
 load_screen_ram_loop:
-  lda sourceScreenVectorLow,Y
+  lda (sourceScreenVectorLow),Y
   sta screenPointersRAM,Y
   iny
   cpy screen_record_length
