@@ -835,7 +835,6 @@ process_mirar:
   jsr print_mirar
   lda #$0 ;with CRLF
   sta print_no_CRLF
-  jsr print_mirar  
   jsr print_current_object_name 
   jsr print_current_object_description
   rts 
