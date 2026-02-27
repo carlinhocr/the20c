@@ -66,6 +66,17 @@ def to_asm(screens, object_ids, puzzle_ids, action_ids, screen_ids):
     lines.append("; ============================================================")
     lines.append("")
 
+    # ── Screen index table (pointer to the start of each screen record) ──────
+    lines.append("screens_index:")
+    for index, (key, scr) in enumerate(screens.items()):
+        scr_id = scr.get("ID", str(index)).strip()
+        label  = f"screen_{scr_id}"
+        name   = scr.get("Name", key)
+        lines.append(f"  .word {label}_id  ; {name}")
+    lines.append(f"screens_index_record_length:")
+    lines.append(f"  .byte 2  ; each screens_index entry is 1 .word (2 bytes)")
+    lines.append("")
+
     # ── Pointer table ────────────────────────────────────────
     lines.append("screens_pointers:")
     offset = 0
