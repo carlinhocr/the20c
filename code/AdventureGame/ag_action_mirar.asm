@@ -896,9 +896,14 @@ print_con:
   sta serialDataVectorLow  
   lda #> msj_con
   sta serialDataVectorHigh
-  ;jsr printAsciiDrawing  
-  jsr send_rs232_line_noCRLF    
+  lda print_no_CRLF
+  bne print_con_NOCRLF
+  jsr printAsciiDrawing
   rts
+print_con_NOCRLF:
+  jsr send_rs232_line_noCRLF   
+  rts
+  
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------ACTION------------------------------------------
