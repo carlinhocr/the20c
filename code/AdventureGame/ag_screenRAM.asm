@@ -1079,7 +1079,9 @@ object_multiple_end:
   rts  
 
 print_current_object_name:
-  ldx objectCurrentID
+  lda objectCurrentID
+  asl ;multiply by two 
+  tax
   lda objects_index,x
   clc
   adc object_name_offset
