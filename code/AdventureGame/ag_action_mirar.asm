@@ -855,7 +855,10 @@ process_mirar:
   jsr print_current_object_description
   rts 
 
-process_usar:
+process_usar:  
+  lda #$0 ;with CRLF
+  sta print_no_CRLF
+  jsr print_usar
   jsr object_selection
   lda selectedObject
   sta selectedObject1
