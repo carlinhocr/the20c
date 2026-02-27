@@ -1029,6 +1029,13 @@ verify_one_puzzle:
   lda selectedAction
   cmp currentPuzzleAction
   bne end_verify_one_puzzle
+  lda selectedObject1
+  cmp currentPuzzleObject1
+  beq oneObjectRight
+  cmp currentPuzzleObject2
+  beq oneObjectRight
+  jmp end_verify_one_puzzle
+oneObjectRight:
   jsr print_esporaca
 end_verify_one_puzzle:
   rts
