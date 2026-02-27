@@ -718,7 +718,7 @@ loadConstants:
 
 
 select_screen:
-  lda #$0
+  lda #$1
   sta screenCurrentID
   jsr load_screen_ram
   ;jsr screen_multiple_calculate
@@ -729,27 +729,14 @@ select_screen:
 ;   jsr draw_current_screen_table
   rts
 
-load_screen_ram_simple:
-  ldx #$0
-load_screen_ram_simple_loop:
-  lda screens_pointers,X
-  sta screenPointersRAM,X
-  inx 
-  lda screens_pointers,X
-  sta screenPointersRAM,X
-  cpx screen_record_length
-  bne load_screen_ram_simple_loop
-  rts
-
 load_screen_ram:
-  ; lda screenCurrentID
-  ; ;multiply by 2 the id
-  ; asl ;if not screen zero multiple by 2
-  ; sta current_screen_offset
-  ; ldx current_screen_offset ;byte 6 if it is screen 3
+  lda screenCurrentID
+  ;multiply by 2 the id
+  asl ;if not screen zero multiple by 2
+  sta current_screen_offset
+  ldx current_screen_offset ;byte 6 if it is screen 3
   ;store in sourceScreenVector the address of screen_x_id
   ;use screen zero
-  ldx #$0
   lda screens_index,x
   sta sourceScreenVectorLow
   inx
