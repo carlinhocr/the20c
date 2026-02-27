@@ -488,10 +488,12 @@ mainProgramLoop:
   lda #$1
   sta selectedAction
   jsr action_selector
+  jsr check_puzzle
   jsr select_screen_noascii  
   lda #$2
-  sta selectedAction
+  sta selectedAction  
   jsr action_selector  
+  jsr check_puzzle
   rts
 
 delayClear:
