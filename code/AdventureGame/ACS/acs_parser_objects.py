@@ -30,9 +30,8 @@ def to_asm(objects):
     lines.append("objects_index:")
     for index, (key, obj) in enumerate(objects.items()):
         obj_id = obj.get("ObjectID", str(index)).strip()
-        label  = f"object_{obj_id}"
         name   = obj.get("Name", key)
-        lines.append(f"  .word {label}_id  ; {name}")
+        lines.append(f"  .word object_pointer_{obj_id}  ; {name}")
     lines.append(f"objects_index_record_length:")
     lines.append(f"  .byte 2  ; each objects_index entry is 1 .word (2 bytes)")
     lines.append("")
@@ -54,6 +53,7 @@ def to_asm(objects):
 
         start_offset = offset
 
+        lines.append(f"object_pointer_{obj_id}:")
         lines.append(f"  .word {label}_id          ; {name} id          [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_takeable    ; {name} takeable    [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_visible     ; {name} visible     [{offset},{offset+1}]") ; _vis = offset ; offset += 2

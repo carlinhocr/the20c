@@ -21,9 +21,8 @@ def to_asm(actions):
     lines.append("actions_index:")
     for index, (key, act) in enumerate(actions.items()):
         act_id = act.get("ID", str(index)).strip()
-        label  = f"action_{act_id}"
         name   = act.get("Name", key)
-        lines.append(f"  .word {label}_id  ; {name}")
+        lines.append(f"  .word action_pointer_{act_id}  ; {name}")
     lines.append(f"actions_index_record_length:")
     lines.append(f"  .byte 2  ; each actions_index entry is 1 .word (2 bytes)")
     lines.append("")
@@ -43,6 +42,7 @@ def to_asm(actions):
 
         start_offset = offset
 
+        lines.append(f"action_pointer_{act_id}:")
         lines.append(f"  .word {label}_id     ; {name} id     [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_name   ; {name} name   [{offset},{offset+1}]") ; _nam = offset ; offset += 2
         lines.append(f"  .word {label}_sensor ; {name} sensor [{offset},{offset+1}]") ; offset += 2

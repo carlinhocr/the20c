@@ -3,19 +3,22 @@
 ; ============================================================
 
 actions_index:
-  .word action_0_id  ; ir
-  .word action_1_id  ; mirar
-  .word action_2_id  ; usar
+  .word action_pointer_0  ; ir
+  .word action_pointer_1  ; mirar
+  .word action_pointer_2  ; usar
 actions_index_record_length:
   .byte 2  ; each actions_index entry is 1 .word (2 bytes)
 
 actions_pointers:
+action_pointer_0:
   .word action_0_id     ; ir id     [0,1]
   .word action_0_name   ; ir name   [2,3]
   .word action_0_sensor ; ir sensor [4,5]
+action_pointer_1:
   .word action_1_id     ; mirar id     [6,7]
   .word action_1_name   ; mirar name   [8,9]
   .word action_1_sensor ; mirar sensor [10,11]
+action_pointer_2:
   .word action_2_id     ; usar id     [12,13]
   .word action_2_name   ; usar name   [14,15]
   .word action_2_sensor ; usar sensor [16,17]

@@ -3,12 +3,13 @@
 ; ============================================================
 
 screens_index:
-  .word screen_0_id  ; EntradaCueva
-  .word screen_1_id  ; cuevaIntermedia
+  .word screen_pointer_0  ; EntradaCueva
+  .word screen_pointer_1  ; cuevaIntermedia
 screens_index_record_length:
   .byte 2  ; each screens_index entry is 1 .word (2 bytes)
 
 screens_pointers:
+screen_pointer_0:
   .word screen_0_id                ; EntradaCueva id                [0,1]
   .word screen_0_name              ; EntradaCueva name              [2,3]
   .word screen_0_north             ; EntradaCueva north             [4,5]
@@ -31,6 +32,7 @@ screens_pointers:
   .word screen_0_action6           ; EntradaCueva action6           [38,39]
   .word screen_0_description       ; EntradaCueva description       [40,41]
   .word screen_0_ascii             ; EntradaCueva ascii             [42,43]
+screen_pointer_1:
   .word screen_1_id                ; cuevaIntermedia id                [44,45]
   .word screen_1_name              ; cuevaIntermedia name              [46,47]
   .word screen_1_north             ; cuevaIntermedia north             [48,49]

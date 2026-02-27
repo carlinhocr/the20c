@@ -52,9 +52,8 @@ def to_asm(puzzles, action_ids, object_ids):
     lines.append("puzzles_index:")
     for index, (key, puz) in enumerate(puzzles.items()):
         puz_id = puz.get("ID", str(index)).strip()
-        label  = f"puzzle_{puz_id}"
         name   = puz.get("Name", key)
-        lines.append(f"  .word {label}_id  ; {name}")
+        lines.append(f"  .word puzzle_pointer_{puz_id}  ; {name}")
     lines.append(f"puzzles_index_record_length:")
     lines.append(f"  .byte 2  ; each puzzles_index entry is 1 .word (2 bytes)")
     lines.append("")
@@ -77,6 +76,7 @@ def to_asm(puzzles, action_ids, object_ids):
 
         start_offset = offset
 
+        lines.append(f"puzzle_pointer_{puz_id}:")
         lines.append(f"  .word {label}_id                   ; {name} id                   [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_name                 ; {name} name                 [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_action               ; {name} action               [{offset},{offset+1}]") ; _act = offset ; offset += 2

@@ -3,12 +3,13 @@
 ; ============================================================
 
 puzzles_index:
-  .word puzzle_0_id  ; prender_vela
-  .word puzzle_1_id  ; abrir_puerta_llave
+  .word puzzle_pointer_0  ; prender_vela
+  .word puzzle_pointer_1  ; abrir_puerta_llave
 puzzles_index_record_length:
   .byte 2  ; each puzzles_index entry is 1 .word (2 bytes)
 
 puzzles_pointers:
+puzzle_pointer_0:
   .word puzzle_0_id                   ; prender_vela id                   [0,1]
   .word puzzle_0_name                 ; prender_vela name                 [2,3]
   .word puzzle_0_action               ; prender_vela action               [4,5]
@@ -17,6 +18,7 @@ puzzles_pointers:
   .word puzzle_0_solved               ; prender_vela solved               [10,11]
   .word puzzle_0_description_solved   ; prender_vela description_solved   [12,13]
   .word puzzle_0_description_notsolved; prender_vela description_notsolved[14,15]
+puzzle_pointer_1:
   .word puzzle_1_id                   ; abrir_puerta_llave id                   [16,17]
   .word puzzle_1_name                 ; abrir_puerta_llave name                 [18,19]
   .word puzzle_1_action               ; abrir_puerta_llave action               [20,21]
