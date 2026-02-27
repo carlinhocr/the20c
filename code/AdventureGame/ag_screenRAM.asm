@@ -730,13 +730,13 @@ select_screen:
 load_screen_ram:
   lda screenCurrentID
   ;multiply by 2 the id
-  asl 
+  asl ;if not screen zero multiple by 2
   sta current_screen_offset
   ldx current_screen_offset ;byte 6 if it is screen 3
-  lda screens_index,X
+  lda screens_pointers,X
   sta sourceScreenVectorLow
   inx
-  lda screens_index,X
+  lda screens_pointers,X
   sta sourceScreenVectorHigh
   lda #<screenPointersRAM
   sta ramScreenVectorLow
