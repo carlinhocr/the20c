@@ -808,8 +808,10 @@ action_selector:
   rts
 processAction0:
   jsr process_ir
+  rts
 processAction1:
-  jsr process_mirar  
+  jsr process_mirar
+  rts  
 processAction2:
   jsr process_usar   
   rts
@@ -844,6 +846,16 @@ process_usar:
   lda selectedObject  
   lda #$0 ;force a different object the candle
   sta selectedObject2  
+;printing "usar obj1 con obj2" with second object too
+  jsr print_usar
+  lda #$1
+  sta print_no_CRLF
+  lda selectedObject1
+  sta objectCurrentID
+  jsr print_current_object_name 
+  jsr print_con
+  lda selectedObject2
+  sta objectCurrentID
   ;print object name with CRLF
   lda #$0
   sta print_no_CRLF  
@@ -867,7 +879,7 @@ receiveUserInputObject:
   rts
 
 receiveUserInputAction:
-  lda #$1
+  lda #$2 ; 2 usar
   sta selectedAction
   rts  
 
