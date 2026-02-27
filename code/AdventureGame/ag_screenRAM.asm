@@ -1079,17 +1079,20 @@ object_multiple_end:
   rts  
 
 print_current_object_name:
-  ; lda objectCurrentID
-  ; asl ;multiply by two 
-  ; tax
-  ; lda objects_index,x
-
-  lda object_name_offset
+  lda objectCurrentID
+  asl ;multiply by two 
   tax
-  lda object_pointer_1,x
+  lda objects_index,x
+  sta pivotZpLow
+  inx
+  lda objects_index,x
+  sta pivotZpHigh
+  lda object_name_offset
+  tay
+  lda (pivotZpLow),Y
   sta serialDataVectorLow  
-  inx 
-  lda object_pointer_1,x
+  iny 
+  lda (pivotZpLow),Y
   sta serialDataVectorHigh
 
   ; lda objectMultiple
