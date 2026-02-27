@@ -722,7 +722,7 @@ select_screen:
   sta screenCurrentID
   jsr load_screen_ram
   ;jsr screen_multiple_calculate
-  ;jsr draw_current_screen_table
+  jsr draw_current_screen_table
 ;   lda #$1
 ;   sta screenCurrentID
 ;   jsr screen_multiple_calculate
