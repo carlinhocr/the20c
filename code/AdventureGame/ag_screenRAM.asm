@@ -970,17 +970,36 @@ print_puzzle_solved:
   rts
 
 print_puzzle_notsolved:
-  lda puzzleMultiple
-  clc
-  adc puzzle_description_notsolved_offset ;description not solved
-  tax 
-  lda puzzles_pointers,x 
+  lda puzzleCurrentID
+  asl ;multiply by two 
+  tax
+  lda puzzles_index,x
+  sta pivotZpLow
+  inx
+  lda puzzles_index,x
+  sta pivotZpHigh
+  lda puzzle_description_notsolved_offset
+  tay
+  lda (pivotZpLow),Y
   sta serialDataVectorLow  
-  inx 
-  lda puzzles_pointers,x
+  iny 
+  lda (pivotZpLow),Y
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  rts  
+  rts
+
+
+  ; lda puzzleMultiple
+  ; clc
+  ; adc puzzle_description_notsolved_offset ;description not solved
+  ; tax 
+  ; lda puzzles_pointers,x 
+  ; sta serialDataVectorLow  
+  ; inx 
+  ; lda puzzles_pointers,x
+  ; sta serialDataVectorHigh
+  ; jsr printAsciiDrawing
+  ; rts  
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------PUZZLE------------------------------------------
@@ -1042,7 +1061,6 @@ processObject:
   lda objectCurrentID
   cmp #$ff ;invalid object so that slot is empty do not process
   beq end_processObject
-  ; jsr object_multiple_calculate
   ;check visibility do not print invisible objects
   ldx objectCurrentID
   lda objectsRAM,x
@@ -1057,26 +1075,6 @@ end_processObjectInvisible:
   dec objectPosition
 end_processObject:  
   rts
-
-; object_multiple_calculate:
-;   ;screen table record size
-;   ;8 bytes
-;   lda #$0
-;   sta objectMultiple
-;   lda object_record_length
-;   sta objectRecordSize
-;   ldx #$ff
-; object_multiple_loop:
-;   inx
-;   cpx objectCurrentID
-;   beq object_multiple_end
-;   lda objectRecordSize
-;   clc
-;   adc objectMultiple
-;   sta objectMultiple
-;   jmp object_multiple_loop 
-; object_multiple_end:
-;   rts  
 
 print_current_object_name:
   lda objectCurrentID
@@ -1539,13 +1537,13 @@ object_count:
   .byte 5
 
 puzzles_index:
-  .word puzzle_0_id  ; prender_vela
-  .word puzzle_1_id  ; abrir_puerta_llave
+  .word puzzle_pointer_0  ; prender_vela
+  .word puzzle_pointer_1  ; abrir_puerta_llave
 puzzles_index_record_length:
   .byte 2  ; each puzzles_index entry is 1 .word (2 bytes)
 
-
 puzzles_pointers:
+puzzle_pointer_0:
   .word puzzle_0_id                   ; prender_vela id                   [0,1]
   .word puzzle_0_name                 ; prender_vela name                 [2,3]
   .word puzzle_0_action               ; prender_vela action               [4,5]
@@ -1554,6 +1552,7 @@ puzzles_pointers:
   .word puzzle_0_solved               ; prender_vela solved               [10,11]
   .word puzzle_0_description_solved   ; prender_vela description_solved   [12,13]
   .word puzzle_0_description_notsolved; prender_vela description_notsolved[14,15]
+puzzle_pointer_1:
   .word puzzle_1_id                   ; abrir_puerta_llave id                   [16,17]
   .word puzzle_1_name                 ; abrir_puerta_llave name                 [18,19]
   .word puzzle_1_action               ; abrir_puerta_llave action               [20,21]
