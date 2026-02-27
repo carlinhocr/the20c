@@ -145,6 +145,9 @@ actionPosition=$022c
 
 current_screen_offset=$022d
 puzzlePrintOffset=$022e
+objectPrintOffset=$022f
+actionPrintOffset=$0230
+screenPrintOffset=$0231
 
 objectsRAM=$0300
 puzzlesRAM=$0400
@@ -768,17 +771,19 @@ draw_current_screen_table:
   rts
 
 draw_screen_ascii:
-  ldx screen_ascii_offset ;ascii offset
-  lda screenPointersRAM,x 
-  sta serialDataVectorLow  
-  inx 
-  lda screenPointersRAM,x
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts 
+  lda screen_ascii_offset
+  sta screenPrintOffset
+  jsr draw_screen
+  rts  
 
 draw_screen_description:
-  ldx screen_description_offset  ;description offset
+  lda screen_description_offset
+  sta screenPrintOffset
+  jsr draw_screen
+  rts  
+
+draw_screen:  
+  ldx screenPrintOffset  ;description offset
   lda screenPointersRAM,x 
   sta serialDataVectorLow  
   inx 
@@ -786,7 +791,6 @@ draw_screen_description:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts  
-
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -961,43 +965,7 @@ print_puzzle:
   jsr printAsciiDrawing
   rts
 
-; print_puzzle_solved:
-;   lda puzzleCurrentID
-;   asl ;multiply by two 
-;   tax
-;   lda puzzles_index,x
-;   sta pivotZpLow
-;   inx
-;   lda puzzles_index,x
-;   sta pivotZpHigh
-;   lda puzzle_description_solved_offset
-;   tay
-;   lda (pivotZpLow),Y
-;   sta serialDataVectorLow  
-;   iny 
-;   lda (pivotZpLow),Y
-;   sta serialDataVectorHigh
-;   jsr printAsciiDrawing
-;   rts
 
-; print_puzzle_notsolved:
-;   lda puzzleCurrentID
-;   asl ;multiply by two 
-;   tax
-;   lda puzzles_index,x
-;   sta pivotZpLow
-;   inx
-;   lda puzzles_index,x
-;   sta pivotZpHigh
-;   lda puzzle_description_notsolved_offset
-;   tay
-;   lda (pivotZpLow),Y
-;   sta serialDataVectorLow  
-;   iny 
-;   lda (pivotZpLow),Y
-;   sta serialDataVectorHigh
-;   jsr printAsciiDrawing
-;   rts
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -1075,7 +1043,19 @@ end_processObjectInvisible:
 end_processObject:  
   rts
 
-print_current_object_name:
+print_current_object_name:  
+  lda object_name_offset
+  sta objectPrintOffset
+  jsr print_current_object
+  rts
+
+print_current_object_description:  
+  lda object_description_offset
+  sta objectPrintOffset
+  jsr print_current_object
+  rts  
+
+print_current_object:
   lda objectCurrentID
   asl ;multiply by two 
   tax
@@ -1084,7 +1064,7 @@ print_current_object_name:
   inx
   lda objects_index,x
   sta pivotZpHigh
-  lda object_name_offset
+  lda objectPrintOffset
   tay
   lda (pivotZpLow),Y
   sta serialDataVectorLow  
@@ -1094,24 +1074,6 @@ print_current_object_name:
   jsr printAsciiDrawing
   rts
 
-print_current_object_description:
-  lda objectCurrentID
-  asl ;multiply by two 
-  tax
-  lda objects_index,x
-  sta pivotZpLow
-  inx
-  lda objects_index,x
-  sta pivotZpHigh
-  lda object_description_offset
-  tay
-  lda (pivotZpLow),Y
-  sta serialDataVectorLow  
-  iny 
-  lda (pivotZpLow),Y
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts  
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------OBJECT------------------------------------------
