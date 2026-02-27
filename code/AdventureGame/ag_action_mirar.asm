@@ -825,13 +825,13 @@ process_ir:
   rts  
 
 process_mirar:
-  lda #< pasamos
-  sta serialDataVectorLow  
-  lda #> pasamos
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
+  lda #$1 ;without CRLF
+  sta print_no_CRLF
+  jsr print_with_or_without_CRLF
   ;print the description of the selected object
   jsr object_selection
+  lda #$0 ;without CRLF
+  sta print_no_CRLF
   jsr print_current_object_description
   rts 
 
@@ -887,6 +887,15 @@ receiveUserInputAction:
   sta selectedAction
   rts  
 
+print_mirar:  
+  lda #< msj_mirar 
+  sta serialDataVectorLow  
+  lda #> msj_mirar
+  sta serialDataVectorHigh
+  ;jsr printAsciiDrawing
+  jsr send_rs232_line_noCRLF  
+  rts
+
 print_usar:  
   lda #< msj_usar 
   sta serialDataVectorLow  
@@ -901,11 +910,15 @@ print_con:
   sta serialDataVectorLow  
   lda #> msj_con
   sta serialDataVectorHigh
+  jsr print_with_or_without_CRLF
+  rts
+
+print_with_or_without_CRLF  
   lda print_no_CRLF
-  bne print_con_NOCRLF
+  bne printing_NOCRLF
   jsr printAsciiDrawing
   rts
-print_con_NOCRLF:
+printing_NOCRLF:
   jsr send_rs232_line_noCRLF   
   rts
 
@@ -1091,12 +1104,7 @@ print_current_object:
   iny 
   lda (pivotZpLow),Y
   sta serialDataVectorHigh
-  lda print_no_CRLF
-  bne print_current_object_NOCRLF
-  jsr printAsciiDrawing
-  rts
-print_current_object_NOCRLF:
-  jsr send_rs232_line_noCRLF  
+  jsr print_with_or_without_CRLF
   rts
 
 ;END--------------------------------------------------------------------------------
@@ -1129,6 +1137,10 @@ pasamos:
   .ascii "Por aca pasamos"
   .ascii "e"
 
+msj_mirar:
+  .ascii "Mirar "
+  .ascii "e"
+  
 msj_usar:
   .ascii "Usar "
   .ascii "e"
