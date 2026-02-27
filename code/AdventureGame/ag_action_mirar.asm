@@ -702,14 +702,14 @@ draw_current_screen_table:
   jsr draw_screen_ascii
   jsr draw_screen_description
   jsr selectPuzzle
-  ;jsr selectObject
+  jsr selectObject
   jsr selectAction
   rts
 
 draw_current_screen_table_noascii:
   jsr draw_screen_description
   jsr selectPuzzle
-  ;jsr selectObject
+  jsr selectObject
   jsr selectAction
   rts  
 
