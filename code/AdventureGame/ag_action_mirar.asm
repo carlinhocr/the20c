@@ -630,6 +630,8 @@ loadConstants:
   sta max_puzzles_per_screen 
   lda #$6
   sta max_actions_per_screen
+  lda #$0
+  sta print_no_CRLF  
   rts
 
 ;END--------------------------------------------------------------------------------
@@ -883,8 +885,8 @@ print_con:
   sta serialDataVectorLow  
   lda #> msj_con
   sta serialDataVectorHigh
-  ;jsr printAsciiDrawing  
-  jsr send_rs232_line_noCRLF    
+  jsr printAsciiDrawing  
+  ;jsr send_rs232_line_noCRLF    
   rts
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
