@@ -840,6 +840,9 @@ process_ir:
   rts  
 
 process_mirar:
+  lda #$0 ;with CRLF
+  sta print_no_CRLF
+  jsr print_mirar
   ;print the description of the selected object
   jsr object_selection
   lda #$1 ;without CRLF
