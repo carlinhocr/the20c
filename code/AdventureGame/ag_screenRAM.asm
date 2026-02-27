@@ -765,7 +765,8 @@ load_screen_ram_loop:
   iny
   cpy screen_record_length
   beq load_screen_ram_end
-  lda (sourceScreenVectorLow),Y
+  ;lda (sourceScreenVectorLow),Y
+  lda screen_0_id,y
   sta screenPointersRAM,Y
   jmp load_screen_ram_loop
   bne load_screen_ram_loop
