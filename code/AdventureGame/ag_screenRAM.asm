@@ -780,10 +780,6 @@ screen_multiple_end:
   rts
 
 draw_current_screen_table:
-  ; lda screenMultiple
-  ; clc
-  ; adc screen_ascii_offset ;ascii offset
-  ; tax 
   ldx screen_ascii_offset ;ascii offset
   lda screenPointersRAM,x 
   sta serialDataVectorLow  
@@ -792,10 +788,6 @@ draw_current_screen_table:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   ;print description
-  ; lda screenMultiple
-  ; clc
-  ; adc screen_description_offset  ;description offset
-  ; tax
   ldx screen_description_offset  ;description offset
   lda screenPointersRAM,x 
   sta serialDataVectorLow  
@@ -803,7 +795,7 @@ draw_current_screen_table:
   lda screenPointersRAM,x
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  ;jsr selectPuzzle
+  jsr selectPuzzle
   ;jsr selectObject
   ;jsr selectAction
   rts
@@ -899,14 +891,16 @@ selectPuzzle:
   ldy #$ff
 selectPuzzle_loop:
   ;Print Object 1
-  lda screenMultiple
-  clc
-  adc screen_puzzle_offset  ;fist puzzle byte offset
-  tax
-  lda screens_pointers,x 
+  ; lda screenMultiple
+  ; clc
+  ; adc screen_puzzle_offset  ;fist puzzle byte offset
+  ; tax
+  ; lda screens_pointers,x 
+  ldx screen_puzzle_offset
+  lda screenPointersRAM,x 
   sta puzzleDataVectorLow  
   inx 
-  lda screens_pointers,x
+  lda screenPointersRAM,x 
   sta puzzleDataVectorHigh
   ldy #$0
   lda (puzzleDataVectorLow),y
@@ -1119,14 +1113,14 @@ numbersObjects:
 ; ============================================================
 
 screens_index:
-  .word screens_pointers_0  ; EntradaCueva
-  .word screens_pointers_1  ; cuevaIntermedia
+  .word screen_pointers_0  ; EntradaCueva
+  .word screen_pointers_1  ; cuevaIntermedia
 screens_index_record_length:
   .byte 2  ; each screens_index entry is 1 .word (2 bytes)
 
 
 screens_pointers:
-screens_pointers_0:
+screen_pointers_0:
   .word screen_0_id                ; EntradaCueva id                [0,1]
   .word screen_0_name              ; EntradaCueva name              [2,3]
   .word screen_0_north             ; EntradaCueva north             [4,5]
@@ -1149,7 +1143,7 @@ screens_pointers_0:
   .word screen_0_action6           ; EntradaCueva action6           [38,39]
   .word screen_0_description       ; EntradaCueva description       [40,41]
   .word screen_0_ascii             ; EntradaCueva ascii             [42,43]
-screens_pointers_1:  
+screen_pointers_1:  
   .word screen_1_id                ; cuevaIntermedia id                [44,45]
   .word screen_1_name              ; cuevaIntermedia name              [46,47]
   .word screen_1_north             ; cuevaIntermedia north             [48,49]
