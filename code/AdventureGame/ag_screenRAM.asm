@@ -850,44 +850,63 @@ processAction:
   lda actionCurrentID
   cmp #$ff ;invalid object so that slot is empty do not process
   beq end_processAction
-  jsr action_multiple_calculate
+  ;jsr action_multiple_calculate
   jsr printLettersAction
   jsr print_current_action_name
 end_processAction:  
   rts  
 
-action_multiple_calculate:
-  ;calcula the actionMultiple Variable
-  ;i can run it just once during initialization
-  lda #$0
-  sta actionMultiple
-  lda action_record_length
-  sta actionRecordSize
-  ldx #$ff
-action_multiple_loop:
-  inx
-  cpx actionCurrentID
-  beq action_multiple_end
-  lda actionRecordSize
-  clc
-  adc actionMultiple
-  sta actionMultiple
-  jmp action_multiple_loop 
-action_multiple_end:
-  rts    
+; action_multiple_calculate:
+;   ;calcula the actionMultiple Variable
+;   ;i can run it just once during initialization
+;   lda #$0
+;   sta actionMultiple
+;   lda action_record_length
+;   sta actionRecordSize
+;   ldx #$ff
+; action_multiple_loop:
+;   inx
+;   cpx actionCurrentID
+;   beq action_multiple_end
+;   lda actionRecordSize
+;   clc
+;   adc actionMultiple
+;   sta actionMultiple
+;   jmp action_multiple_loop 
+; action_multiple_end:
+;   rts    
+
+; print_current_action_name:
+;   lda actionMultiple
+;   clc
+;   adc action_name_offset
+;   tax 
+;   lda actions_pointers,x 
+;   sta serialDataVectorLow  
+;   inx 
+;   lda actions_pointers,x
+;   sta serialDataVectorHigh
+;   jsr printAsciiDrawing
+;   rts
 
 print_current_action_name:
-  lda actionMultiple
-  clc
-  adc action_name_offset
-  tax 
-  lda actions_pointers,x 
+  lda actionCurrentID
+  asl ;multiply by two 
+  tax
+  lda actions_index,x
+  sta pivotZpLow
+  inx
+  lda actions_index,x
+  sta pivotZpHigh
+  lda action_name_offset
+  tay
+  lda (pivotZpLow),Y
   sta serialDataVectorLow  
-  inx 
-  lda actions_pointers,x
+  iny 
+  lda (pivotZpLow),Y
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  rts
+  rts  
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -1593,20 +1612,24 @@ puzzle_1_description_notsolved:
 puzzle_count:
   .byte 2
 
+
 actions_index:
-  .word action_0_id  ; ir
-  .word action_1_id  ; mirar
-  .word action_2_id  ; usar
+  .word action_pointer_0  ; ir
+  .word action_pointer_1  ; mirar
+  .word action_pointer_2  ; usar
 actions_index_record_length:
   .byte 2  ; each actions_index entry is 1 .word (2 bytes)
 
 actions_pointers:
+action_pointer_0:
   .word action_0_id     ; ir id     [0,1]
   .word action_0_name   ; ir name   [2,3]
   .word action_0_sensor ; ir sensor [4,5]
+action_pointer_1:
   .word action_1_id     ; mirar id     [6,7]
   .word action_1_name   ; mirar name   [8,9]
   .word action_1_sensor ; mirar sensor [10,11]
+action_pointer_2:
   .word action_2_id     ; usar id     [12,13]
   .word action_2_name   ; usar name   [14,15]
   .word action_2_sensor ; usar sensor [16,17]
