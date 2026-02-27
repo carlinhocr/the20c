@@ -862,10 +862,10 @@ process_usar:
   jsr object_selection
   lda selectedObject
   sta selectedObject1
+  lda #$1 ;without CRLF
+  sta print_no_CRLF  
   jsr print_usar
   ;print object name no CRLF
-  lda #$1 ;without CRLF
-  sta print_no_CRLF
   jsr print_current_object_name  
   lda #$0 ;with CRLF
   sta print_no_CRLF   
