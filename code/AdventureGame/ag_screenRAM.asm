@@ -144,6 +144,7 @@ objectPosition=$022b
 actionPosition=$022c
 
 current_screen_offset=$022d
+puzzlePrintOffset=$022e
 
 objectsRAM=$0300
 puzzlesRAM=$0400
@@ -927,71 +928,76 @@ processPuzzle:
   lda puzzlesRAM,x
   cmp #$1
   bne puzzledNotSolved
-  jsr print_puzzle_solved
+  lda puzzle_description_solved_offset
+  sta puzzlePrintOffset
+  ;jsr print_puzzle_solved
+  jsr print_puzzle  
   rts  
 puzzledNotSolved:  
-  jsr print_puzzle_notsolved
+  ;jsr print_puzzle_notsolved
+  lda puzzle_description_notsolved_offset
+  sta puzzlePrintOffset
+  jsr print_puzzle 
   rts
 end_processPuzzle:  
-  rts  
+  rts   
 
-; puzzle_multiple_calculate:
-;   ;screen table record size
-;   ;8 bytes
-;   lda #$0
-;   sta puzzleMultiple
-;   lda puzzle_record_length ;16 bytes
-;   sta puzzleRecordSize
-;   ldx #$ff
-; puzzle_multiple_loop:
+print_puzzle:
+  lda puzzleCurrentID
+  asl ;multiply by two 
+  tax
+  lda puzzles_index,x
+  sta pivotZpLow
+  inx
+  lda puzzles_index,x
+  sta pivotZpHigh
+  lda puzzlePrintOffset
+  tay
+  lda (pivotZpLow),Y
+  sta serialDataVectorLow  
+  iny 
+  lda (pivotZpLow),Y
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts
+
+; print_puzzle_solved:
+;   lda puzzleCurrentID
+;   asl ;multiply by two 
+;   tax
+;   lda puzzles_index,x
+;   sta pivotZpLow
 ;   inx
-;   cpx puzzleCurrentID
-;   beq puzzle_multiple_end
-;   lda puzzleRecordSize
-;   clc
-;   adc puzzleMultiple
-;   sta puzzleMultiple
-;   jmp puzzle_multiple_loop 
-; puzzle_multiple_end:
-;   rts  
+;   lda puzzles_index,x
+;   sta pivotZpHigh
+;   lda puzzle_description_solved_offset
+;   tay
+;   lda (pivotZpLow),Y
+;   sta serialDataVectorLow  
+;   iny 
+;   lda (pivotZpLow),Y
+;   sta serialDataVectorHigh
+;   jsr printAsciiDrawing
+;   rts
 
-print_puzzle_solved:
-  lda puzzleCurrentID
-  asl ;multiply by two 
-  tax
-  lda puzzles_index,x
-  sta pivotZpLow
-  inx
-  lda puzzles_index,x
-  sta pivotZpHigh
-  lda puzzle_description_solved_offset
-  tay
-  lda (pivotZpLow),Y
-  sta serialDataVectorLow  
-  iny 
-  lda (pivotZpLow),Y
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts
-
-print_puzzle_notsolved:
-  lda puzzleCurrentID
-  asl ;multiply by two 
-  tax
-  lda puzzles_index,x
-  sta pivotZpLow
-  inx
-  lda puzzles_index,x
-  sta pivotZpHigh
-  lda puzzle_description_notsolved_offset
-  tay
-  lda (pivotZpLow),Y
-  sta serialDataVectorLow  
-  iny 
-  lda (pivotZpLow),Y
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts
+; print_puzzle_notsolved:
+;   lda puzzleCurrentID
+;   asl ;multiply by two 
+;   tax
+;   lda puzzles_index,x
+;   sta pivotZpLow
+;   inx
+;   lda puzzles_index,x
+;   sta pivotZpHigh
+;   lda puzzle_description_notsolved_offset
+;   tay
+;   lda (pivotZpLow),Y
+;   sta serialDataVectorLow  
+;   iny 
+;   lda (pivotZpLow),Y
+;   sta serialDataVectorHigh
+;   jsr printAsciiDrawing
+;   rts
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
