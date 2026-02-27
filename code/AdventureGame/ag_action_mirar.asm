@@ -153,6 +153,7 @@ selectedAction=$0232
 selectedObject=$0233
 selectedObject1=$0234
 selectedObject2=$0235
+print_no_CRLF=$0236
 
 objectsRAM=$0300
 puzzlesRAM=$0400
@@ -830,12 +831,18 @@ process_usar:
   lda selectedObject
   sta selectedObject1
   jsr print_usar
+  ;print object name no CRLF
+  lda #$1
+  sta print_no_CRLF
   jsr print_current_object_name  
   jsr print_con
   jsr object_selection
   lda selectedObject  
   lda #$0 ;force a different object the candle
   sta selectedObject2  
+  ;print object name with CRLF
+  lda #$0
+  sta print_no_CRLF  
   jsr print_current_object_name  
   rts
   ;usar obj1 con obje2
@@ -1059,7 +1066,12 @@ print_current_object:
   iny 
   lda (pivotZpLow),Y
   sta serialDataVectorHigh
+  lda print_no_CRLF
+  bne print_current_object_NOCRLF
   jsr printAsciiDrawing
+  rts
+print_current_object_NOCRLF:
+  jsr send_rs232_line_noCRLF  
   rts
 
 ;END--------------------------------------------------------------------------------
