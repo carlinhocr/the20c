@@ -718,7 +718,7 @@ loadConstants:
 
 
 select_screen:
-  lda #$1
+  lda #$0
   sta screenCurrentID
   jsr load_screen_ram
   ;jsr screen_multiple_calculate
