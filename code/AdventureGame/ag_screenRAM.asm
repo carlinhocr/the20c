@@ -721,7 +721,6 @@ select_screen:
   lda #$0
   sta screenCurrentID
   jsr load_screen_ram
-  ;jsr screen_multiple_calculate
   jsr draw_current_screen_table
 ;   lda #$1
 ;   sta screenCurrentID
@@ -759,27 +758,15 @@ load_screen_ram_loop:
 load_screen_ram_end:
   rts
 
-screen_multiple_calculate:
-  ;screen table record size
-  ;8 bytes
-  lda #$0
-  sta screenMultiple
-  lda screen_record_length
-  sta screenRecordSize
-  ldx #$ff
-screen_multiple_loop:
-  inx
-  cpx screenCurrentID
-  beq screen_multiple_end
-  lda screenRecordSize
-  clc
-  adc screenMultiple
-  sta screenMultiple
-  jmp screen_multiple_loop 
-screen_multiple_end:
+draw_current_screen_table:
+  jsr draw_screen_ascii
+  jsr draw_screen_description
+  jsr selectPuzzle
+  jsr selectObject
+  jsr selectAction
   rts
 
-draw_current_screen_table:
+draw_screen_ascii:
   ldx screen_ascii_offset ;ascii offset
   lda screenPointersRAM,x 
   sta serialDataVectorLow  
@@ -787,7 +774,9 @@ draw_current_screen_table:
   lda screenPointersRAM,x
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  ;print description
+  rts 
+
+draw_screen_description:
   ldx screen_description_offset  ;description offset
   lda screenPointersRAM,x 
   sta serialDataVectorLow  
@@ -795,21 +784,29 @@ draw_current_screen_table:
   lda screenPointersRAM,x
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  jsr selectPuzzle
-  jsr selectObject
-  ;jsr selectAction
-  rts
+  rts  
+
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------SCREEN------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------ACTION------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
 
 selectAction:
   jsr printActionsHeader
-  lda screenMultiple
-  clc
-  adc screen_action_offset  ;fist object byte offset
-  tax
-  lda screens_pointers,x 
+  ldx screen_action_offset  ;fist object byte offset
+  lda screenPointersRAM,x 
   sta actionDataVectorLow  
   inx 
-  lda screens_pointers,x
+  lda screenPointersRAM,x 
   sta actionDataVectorHigh
   ldy #$0
 selectAction_loop:
@@ -886,6 +883,18 @@ print_current_action_name:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------ACTION------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------PUZZLE------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
 selectPuzzle:
   ldx screen_puzzle_offset
@@ -972,6 +981,19 @@ print_puzzle_notsolved:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts  
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------PUZZLE------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------OBJECT------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
 
 selectObject:
   jsr printObjectsHeader
@@ -1081,6 +1103,11 @@ print_current_object_description:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts  
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------OBJECT------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
 
   byte 00,00,00,00,00,00,00,00,00,00
