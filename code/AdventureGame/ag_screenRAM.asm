@@ -733,10 +733,10 @@ load_screen_ram:
   asl 
   sta current_screen_offset
   ldx current_screen_offset ;byte 6 if it is screen 3
-  lda screen_index,X
+  lda screens_index,X
   sta sourceScreenVectorLow
   inx
-  lda screen_index,X
+  lda screens_index,X
   sta sourceScreenVectorHigh
   lda #<screenPointersRAM
   sta ramScreenVectorLow
