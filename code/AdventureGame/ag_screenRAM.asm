@@ -718,7 +718,7 @@ loadConstants:
 select_screen:
   lda #$0
   sta screenCurrentID
-  jsr load_screen_ram_simple
+  jsr load_screen_ram
   ;jsr screen_multiple_calculate
   jsr draw_current_screen_table
 ;   lda #$1
@@ -739,7 +739,7 @@ load_screen_ram_simple_loop:
   bne load_screen_ram_simple_loop
   rts
 
-load_screen_ram1:
+load_screen_ram:
   lda screenCurrentID
   ;multiply by 2 the id
   asl ;if not screen zero multiple by 2
@@ -758,8 +758,8 @@ load_screen_ram1:
   sta ramScreenVectorHigh
   ldy #$0
 load_screen_ram_loop:
-  lda (sourceScreenVectorLow),Y
-  sta (ramScreenVectorLow),Y
+  lda sourceScreenVectorLow,Y
+  sta screenPointersRAM,Y
   iny
   cpy screen_record_length
   bne load_screen_ram_loop
