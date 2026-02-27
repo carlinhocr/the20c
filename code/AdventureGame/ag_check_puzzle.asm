@@ -1047,6 +1047,7 @@ foundOneObject:
   beq foundBothObjects
   jmp end_verify_one_puzzle
 foundBothObjects:  
+  jsr print_msj_objok2 
 end_verify_one_puzzle:
   rts
 
