@@ -148,6 +148,8 @@ current_screen_offset=$022d
 objectsRAM=$0300
 puzzlesRAM=$0400
 screenPointersRAM=$0500
+
+
 ;constants
 fill=$43 ;letter C
 totalScreenLenght4Lines=$50
@@ -764,7 +766,7 @@ load_screen_ram_loop:
   cpy screen_record_length
   beq load_screen_ram_end
   lda (sourceScreenVectorLow),Y
-  sta (ramScreenVectorLow),Y
+  sta screenPointersRAM,Y
   jmp load_screen_ram_loop
   bne load_screen_ram_loop
 load_screen_ram_end:
