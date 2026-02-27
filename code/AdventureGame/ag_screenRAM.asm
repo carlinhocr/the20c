@@ -1042,7 +1042,7 @@ processObject:
   lda objectCurrentID
   cmp #$ff ;invalid object so that slot is empty do not process
   beq end_processObject
-  jsr object_multiple_calculate
+  ; jsr object_multiple_calculate
   ;check visibility do not print invisible objects
   ldx objectCurrentID
   lda objectsRAM,x
@@ -1058,25 +1058,25 @@ end_processObjectInvisible:
 end_processObject:  
   rts
 
-object_multiple_calculate:
-  ;screen table record size
-  ;8 bytes
-  lda #$0
-  sta objectMultiple
-  lda object_record_length
-  sta objectRecordSize
-  ldx #$ff
-object_multiple_loop:
-  inx
-  cpx objectCurrentID
-  beq object_multiple_end
-  lda objectRecordSize
-  clc
-  adc objectMultiple
-  sta objectMultiple
-  jmp object_multiple_loop 
-object_multiple_end:
-  rts  
+; object_multiple_calculate:
+;   ;screen table record size
+;   ;8 bytes
+;   lda #$0
+;   sta objectMultiple
+;   lda object_record_length
+;   sta objectRecordSize
+;   ldx #$ff
+; object_multiple_loop:
+;   inx
+;   cpx objectCurrentID
+;   beq object_multiple_end
+;   lda objectRecordSize
+;   clc
+;   adc objectMultiple
+;   sta objectMultiple
+;   jmp object_multiple_loop 
+; object_multiple_end:
+;   rts  
 
 print_current_object_name:
   lda objectCurrentID
@@ -1094,29 +1094,24 @@ print_current_object_name:
   iny 
   lda (pivotZpLow),Y
   sta serialDataVectorHigh
-
-  ; lda objectMultiple
-  ; clc
-  ; adc object_name_offset
-  ; tax 
-  ; lda objects_pointers,x 
-  ; lda objects_index
-  ; sta serialDataVectorLow  
-  ; inx 
-  ; lda objects_pointers,x
-  ; sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts
 
 print_current_object_description:
-  lda objectMultiple
-  clc
-  adc object_description_offset
-  tax 
-  lda objects_pointers,x 
+  lda objectCurrentID
+  asl ;multiply by two 
+  tax
+  lda objects_index,x
+  sta pivotZpLow
+  inx
+  lda objects_index,x
+  sta pivotZpHigh
+  lda object_description_offset
+  tay
+  lda (pivotZpLow),Y
   sta serialDataVectorLow  
-  inx 
-  lda objects_pointers,x
+  iny 
+  lda (pivotZpLow),Y
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts  
