@@ -750,24 +750,24 @@ load_screen_ram:
   ;store in sourceScreenVector the address of screen_x_id
   ;use screen zero
   ldx #$0
-  lda screens_pointers,X
+  lda #<screens_pointers
   sta sourceScreenVectorLow
   inx
-  lda screens_pointers,X
+  lda #>screens_pointers
   sta sourceScreenVectorHigh
   ;store in ramScreenVectorLow the address of the RAM portin for the screen
   lda #$00
   sta ramScreenVectorLow
-  lda #$50
+  lda #$05
   sta ramScreenVectorHigh
   ldy #$ff
 load_screen_ram_loop:
   iny
   cpy screen_record_length
   beq load_screen_ram_end
-  lda sourceScreenVectorLow,Y
+  lda (sourceScreenVectorLow),Y
   ;jsr send_rs232_char
-  sta screenPointersRAM,Y
+  sta (ramScreenVectorLow),Y
   jmp load_screen_ram_loop
 load_screen_ram_end:
   rts
