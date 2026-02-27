@@ -796,7 +796,7 @@ draw_current_screen_table:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   jsr selectPuzzle
-  ;jsr selectObject
+  jsr selectObject
   ;jsr selectAction
   rts
 
@@ -888,14 +888,6 @@ print_current_action_name:
   rts
 
 selectPuzzle:
-  ldy #$ff
-selectPuzzle_loop:
-  ;Print Object 1
-  ; lda screenMultiple
-  ; clc
-  ; adc screen_puzzle_offset  ;fist puzzle byte offset
-  ; tax
-  ; lda screens_pointers,x 
   ldx screen_puzzle_offset
   lda screenPointersRAM,x 
   sta puzzleDataVectorLow  
@@ -903,13 +895,17 @@ selectPuzzle_loop:
   lda screenPointersRAM,x 
   sta puzzleDataVectorHigh
   ldy #$0
+selectPuzzle_loop:
   lda (puzzleDataVectorLow),y
   sta puzzleCurrentID
+  tya
+  pha
   jsr processPuzzle
-  ldy #$1
-  lda (puzzleDataVectorLow),y
-  sta puzzleCurrentID
-  jsr processPuzzle
+  pla
+  tay
+  iny
+  cpy max_puzzles_per_screen ;max objects per screen 0-6 for now 
+  bne selectPuzzle_loop
   rts
 
 processPuzzle:
@@ -979,14 +975,11 @@ print_puzzle_notsolved:
 
 selectObject:
   jsr printObjectsHeader
-  lda screenMultiple
-  clc
-  adc screen_object_offset  ;fist object byte offset
-  tax
-  lda screens_pointers,x 
+  ldx screen_object_offset
+  lda screenPointersRAM,x 
   sta objectDataVectorLow  
   inx 
-  lda screens_pointers,x
+  lda screenPointersRAM,x 
   sta objectDataVectorHigh
   ldy #$0
   lda #$0
