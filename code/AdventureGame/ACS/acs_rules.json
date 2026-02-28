@@ -1,0 +1,18 @@
+{
+  "0": {
+    "ID": "0",
+    "PuzzleName": "prender_vela",
+    "Effects": [
+      {
+        "Type": "set_puzzle_solved",
+        "PuzzleName": "prender_vela",
+        "Value": true
+      },
+      {
+        "Type": "set_object_visible",
+        "ObjectName": "llave",
+        "Value": true
+      }
+    ]
+  }
+}
