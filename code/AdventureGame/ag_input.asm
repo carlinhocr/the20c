@@ -623,6 +623,13 @@ loadConstants:
   sta max_actions_per_screen
   lda #$0
   sta print_no_CRLF  
+  lda #$ff
+  ldx #$0
+initiatilizeObjectsIDs:  
+  sta objectIDOptionsRAM,x
+  inx
+  cmp max_objects_per_screen
+  bne initiatilizeObjectsIDs
   rts
 
 ;END--------------------------------------------------------------------------------
