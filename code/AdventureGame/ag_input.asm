@@ -1905,27 +1905,27 @@ pressed_buttons_pa0:
 ;   rts
 
 pa4_button_action:
-  lda 64 ;number 4 in ascii
+  lda #$34 ;number 4 in ascii
   jsr send_rs232_char
   rts
 
 pa3_button_action:
-  lda 63 ;number 3 in ascii
+  lda #$33 ;number 3 in ascii
   jsr send_rs232_char
   rts
 
 pa2_button_action:
-  lda 62 ;number 2 in ascii
+  lda #$32 ;number 2 in ascii
   jsr send_rs232_char
   rts
 
 pa1_button_action:
-  lda 61 ;number 1 in ascii
+  lda #$31 ;number 1 in ascii
   jsr send_rs232_char
   rts
 
 pa0_button_action:
-  lda 60 ;number 0 in ascii
+  lda #$20 ;number 0 in ascii
   jsr send_rs232_char
   rts
 
