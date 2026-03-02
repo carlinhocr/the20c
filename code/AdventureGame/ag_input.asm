@@ -459,7 +459,7 @@ mainProgramLoop:
   jsr draw_current_screen_table
   jsr receiveUserOptionSelection
   jsr action_selector  
-;  jsr check_puzzle
+  jsr check_puzzle
 ;   jsr select_screen_noascii  
 ;   lda #$2
 ;   sta selectedAction  
@@ -816,6 +816,17 @@ receiveUserOptionSelection_loop:
 
 action_selector:;
   lda userOptionSelection
+  clc 
+  adc screen_action_offset ; add the offset it gives me the address for action0
+  tax
+  lda screenPointersRAM,x  
+  sta pivotZpLow
+  inx
+  lda screenPointersRAM,x
+  sta pivotZpHigh
+  lda screenPointersRAM,x  
+  ldy #$0
+  lda (pivotZpLow),y;load the action id of the action at userOptinSelectionPosition
   sta selectedAction
   lda selectedAction  
   beq processAction0
