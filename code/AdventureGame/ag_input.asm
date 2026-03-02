@@ -929,6 +929,8 @@ object_selection:
   lda screenPointersRAM,x  
   ldy #$0
   lda (pivotZpLow),y;load the object id of the object at userOptinSelectionPosition
+  jsr send_rs232_char
+  brk
   sta selectedObject
   lda selectedObject
   sta objectCurrentID
