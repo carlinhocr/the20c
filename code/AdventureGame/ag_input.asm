@@ -1905,27 +1905,27 @@ pressed_buttons_pa0:
 ;   rts
 
 pa4_button_action:
-  lda "4"
+  lda 34 ;number 4 in ascii
   jsr send_rs232_char
   rts
 
 pa3_button_action:
-  lda "3"
+  lda 33 ;number 3 in ascii
   jsr send_rs232_char
   rts
 
 pa2_button_action:
-  lda "2"
+  lda 32 ;number 2 in ascii
   jsr send_rs232_char
   rts
 
 pa1_button_action:
-  lda "1"
+  lda 31 ;number 1 in ascii
   jsr send_rs232_char
   rts
 
 pa0_button_action:
-  lda "0"
+  lda 30 ;number 0 in ascii
   jsr send_rs232_char
   rts
 
@@ -3360,6 +3360,9 @@ irq:
   pha ; store the Y register in the stack
   ;bit command read the memory and compares just used to read the register
   ;bit PORTA ; clear the interrupt flag I am doing it with an LDA on test_buttons
+  
+  ;check that the input is enabled first (so the program is waiting for user input)
+  ;or we can disable interruptions and only enable them before accepting input from the user;
   jsr test_buttons ;test_buttons loads the message
 exit_irq:  
   ;reserve order of stacking to restore values
