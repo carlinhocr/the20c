@@ -454,13 +454,14 @@ mainProgram:
   ;initialize 
   jsr initilizationRoutines
   ;initialize screen as screen zero
-mainProgramLoop:
   jsr select_screen
   jsr draw_current_screen_table
+mainProgramLoop:
   jsr receiveUserOptionSelection
   jsr action_selector  
   jsr check_puzzle
-;   jsr select_screen_noascii  
+  jsr select_screen_noascii 
+  jmp mainProgramLoop 
 ;   lda #$2
 ;   sta selectedAction  
 ;   jsr action_selector  
