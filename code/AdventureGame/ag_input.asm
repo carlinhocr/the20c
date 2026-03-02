@@ -1192,14 +1192,15 @@ selectObject_loop:
   cmp #$1
   bne end_selectObject_ObjectInvisible  
   lda objectCurrentID
-  sta objectIDOptionsRAM,y
+  ldx objectPosition
+  sta objectIDOptionsRAM,x
   tya
   pha
   jsr processObject
   pla
   tay
-end_selectObject_ObjectInvisible:  
   inc objectPosition
+end_selectObject_ObjectInvisible:  
   iny
   cpy max_objects_per_screen ;max objects per screen 0-6 for now 
   bne selectObject_loop
