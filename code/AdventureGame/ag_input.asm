@@ -628,7 +628,7 @@ loadConstants:
 initiatilizeObjectsIDs:  
   sta objectIDOptionsRAM,x
   inx
-  cmp max_objects_per_screen
+  cpx max_objects_per_screen
   bne initiatilizeObjectsIDs
   rts
 
