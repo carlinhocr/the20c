@@ -1978,9 +1978,9 @@ pa2_button_action:
 
 pa1_button_action:
   ;down button on LCD PCB
-  lda #$1 ;option 1 es D option
+  lda #$4 ;option 1 es D option
   sta userOptionSelection
-  lda #$31 ;number 1 in ascii
+  lda #$34 ;number 1 in ascii
   jsr send_rs232_char
   rts
 
