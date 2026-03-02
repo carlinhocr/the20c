@@ -1958,7 +1958,7 @@ pa4_button_action:
   ;fire button on LCD PCB
   lda #$5 ;option 5 es e option
   sta userOptionSelection
-  lda #$34 ;number 4 in ascii
+  lda #$35 ;number 5 in ascii
   jsr send_rs232_char
   rts
 
@@ -1966,7 +1966,7 @@ pa3_button_action:
   ;up button on LCD PCB
   lda #$1 ;option 1 es B option
   sta userOptionSelection  
-  lda #$33 ;number 3 in ascii
+  lda #$31 ;number 1 in ascii
   jsr send_rs232_char
   rts
 
@@ -1980,7 +1980,7 @@ pa2_button_action:
 
 pa1_button_action:
   ;down button on LCD PCB
-  lda #$4 ;option 4 es D option
+  lda #$1 ;option 1 es D option
   sta userOptionSelection
   lda #$31 ;number 1 in ascii
   jsr send_rs232_char
