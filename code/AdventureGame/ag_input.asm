@@ -905,10 +905,18 @@ object_selection:
   ;receive input from user
   jsr receiveUserOptionSelection
   ;process user input
-  lda userOptionSelection
+  lda userOptionSelection ;example option 0
   clc 
-  adc screen_object_offset
-  lda screenPointersRAM,x  ;load the object id of the object at userOptinSelectionPosition
+  adc screen_object_offset ; add the offset it gives me the address for object0
+  tax
+  lda screenPointersRAM,x  
+  sta pivotZpLow
+  inx
+  lda screenPointersRAM,x
+  sta pivotZpHigh
+  lda screenPointersRAM,x  
+  ldy #$0
+  lda (pivotZpLow),y;load the object id of the object at userOptinSelectionPosition
   sta selectedObject
   lda selectedObject
   sta objectCurrentID
