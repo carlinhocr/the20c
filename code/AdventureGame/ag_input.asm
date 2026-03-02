@@ -825,7 +825,6 @@ action_selector:;
   inx
   lda screenPointersRAM,x
   sta pivotZpHigh
-  lda screenPointersRAM,x  
   ldy #$0
   lda (pivotZpLow),y;load the action id of the action at userOptinSelectionPosition
   sta selectedAction
@@ -926,11 +925,8 @@ object_selection:
   inx
   lda screenPointersRAM,x
   sta pivotZpHigh
-  lda screenPointersRAM,x  
   ldy #$0
   lda (pivotZpLow),y;load the object id of the object at userOptinSelectionPosition
-  jsr send_rs232_char
-  brk
   sta selectedObject
   lda selectedObject
   sta objectCurrentID
