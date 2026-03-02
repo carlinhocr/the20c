@@ -168,7 +168,8 @@ currentPuzzleObject2=$0239
 
 userOptionSelection=$023a
 
-objectsRAM=$0300
+objectsRAM=$0300 ;32 bytes but i only use 6
+objectIDOptionsRAM=$0320
 puzzlesRAM=$0400
 screenPointersRAM=$0500
 
@@ -916,17 +917,8 @@ object_selection:
   ;receive input from user
   jsr receiveUserOptionSelection
   ;process user input
-  lda userOptionSelection ;example option 0
-  clc 
-  adc screen_object_offset ; add the offset it gives me the address for object0
-  tax
-  lda screenPointersRAM,x  
-  sta pivotZpLow
-  inx
-  lda screenPointersRAM,x
-  sta pivotZpHigh
-  ldy #$0
-  lda (pivotZpLow),y;load the object id of the object at userOptinSelectionPosition
+  ldx userOptionSelection ;example option 0
+  lda objectIDOptionsRAM,x ;load the object id of the object 
   sta selectedObject
   lda selectedObject
   sta objectCurrentID
@@ -1195,11 +1187,18 @@ selectObject:
 selectObject_loop:
   lda (objectDataVectorLow),y
   sta objectCurrentID
+  ldx objectCurrentID
+  lda objectsRAM,x
+  cmp #$1
+  bne end_selectObject_ObjectInvisible  
+  lda objectCurrentID
+  sta objectIDOptionsRAM,y
   tya
   pha
   jsr processObject
   pla
   tay
+end_selectObject_ObjectInvisible:  
   inc objectPosition
   iny
   cpy max_objects_per_screen ;max objects per screen 0-6 for now 
@@ -1943,15 +1942,6 @@ pressed_buttons_pa0:
   jsr pa0_button_action
   rts
 
-; pa4_button_action:
-;   jsr clear_display
-;   lda #<button_press_pa4
-;   sta charDataVectorLow
-;   lda #>button_press_pa4
-;   sta charDataVectorHigh
-;   jsr print_message
-;   rts
-
 pa4_button_action:
   ;fire button on LCD PCB
   lda #$5 ;option 5 es e option
@@ -1978,9 +1968,9 @@ pa2_button_action:
 
 pa1_button_action:
   ;down button on LCD PCB
-  lda #$4 ;option 1 es D option
+  lda #$3 ;option 1 es D option
   sta userOptionSelection
-  lda #$34 ;number 1 in ascii
+  lda #$33 ;number 1 in ascii
   jsr send_rs232_char
   rts
 
