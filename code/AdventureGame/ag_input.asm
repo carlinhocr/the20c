@@ -169,7 +169,8 @@ currentPuzzleObject2=$0239
 userOptionSelection=$023a
 
 objectsRAM=$0300 ;32 bytes but i only use 6
-objectIDOptionsRAM=$0320
+objectIDOptionsRAM=$0320;32 bytes but i only use 6
+actionIDOptionsRAM=$0340 ;32 bytes but i only use 6
 puzzlesRAM=$0400
 screenPointersRAM=$0500
 
@@ -547,6 +548,7 @@ initilizationRoutines:
   jsr loadPuzzlesRAM
   jsr loadConstants
   jsr initiatilizeObjectsIDs
+  jsr initiatilizeActionsIDs
   rts
 
 loadObjectsRAM:
@@ -635,6 +637,16 @@ initiatilizeObjectsIDs_loop:
   cpx max_objects_per_screen
   bne initiatilizeObjectsIDs_loop
   rts
+
+initiatilizeActionsIDs:  
+  lda #$ff
+  ldx #$0
+initiatilizeActionsIDs_loop:
+  sta actionIDOptionsRAM,x
+  inx
+  cpx max_actions_per_screen
+  bne initiatilizeActionsIDs_loop
+  rts  
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -758,6 +770,9 @@ selectAction_loop:
   tya
   pha
   sty actionPosition
+  lda actionPosition
+  tax 
+  sta actionIDOptionsRAM,x
   jsr processAction
   pla
   tay
@@ -828,6 +843,7 @@ receiveUserOptionSelection_loop:
   rts  
 
 action_selector:;
+  jsr initiatilizeObjectsIDs
   lda userOptionSelection
   clc 
   adc screen_action_offset ; add the offset it gives me the address for action0
