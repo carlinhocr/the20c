@@ -945,7 +945,6 @@ process_usar:
   jsr print_con
   jsr object_selection
   lda selectedObject  
-  lda #$0 ;force a different object the candle
   sta selectedObject2  
 ;printing "usar obj1 con obj2" with second object too
   lda #$1 ;without CRLF
