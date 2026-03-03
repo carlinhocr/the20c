@@ -939,6 +939,7 @@ object_selection:
   jsr initiatilizeObjectsIDs ;put $ff on the objectsID Options
   jsr selectObject
   ;receive input from user
+object_selection_ask_again:  
   jsr receiveUserOptionSelection
   ;process user input
   ldx userOptionSelection ;example option 0
@@ -949,7 +950,7 @@ object_selection:
   cmp #$ff
   bne object_selection_option_ok
   jsr print_option_unknown 
-  jmp object_selection
+  jmp object_selection_ask_again
 object_selection_option_ok:
   lda selectedObject
   sta objectCurrentID
