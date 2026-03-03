@@ -546,6 +546,7 @@ initilizationRoutines:
   jsr loadObjectsRAM
   jsr loadPuzzlesRAM
   jsr loadConstants
+  jsr initiatilizeObjectsIDs
   rts
 
 loadObjectsRAM:
@@ -623,9 +624,11 @@ loadConstants:
   sta max_actions_per_screen
   lda #$0
   sta print_no_CRLF  
+  rts 
+
+initiatilizeObjectsIDs:  
   lda #$ff
   ldx #$0
-initiatilizeObjectsIDs:  
   sta objectIDOptionsRAM,x
   inx
   cpx max_objects_per_screen
