@@ -629,10 +629,11 @@ loadConstants:
 initiatilizeObjectsIDs:  
   lda #$ff
   ldx #$0
+initiatilizeObjectsIDs_loop:
   sta objectIDOptionsRAM,x
   inx
   cpx max_objects_per_screen
-  bne initiatilizeObjectsIDs
+  bne initiatilizeObjectsIDs_loop
   rts
 
 ;END--------------------------------------------------------------------------------
