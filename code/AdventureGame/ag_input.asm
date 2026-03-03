@@ -459,7 +459,6 @@ mainProgram:
   jsr select_screen
   jsr draw_current_screen_table
 mainProgramLoop:
-  jsr receiveUserOptionSelection
   jsr action_selector  
   jsr check_puzzle
   jsr select_screen_noascii 
@@ -844,18 +843,28 @@ receiveUserOptionSelection_loop:
 
 action_selector:;
   jsr initiatilizeObjectsIDs
-  lda userOptionSelection
-  clc 
-  adc screen_action_offset ; add the offset it gives me the address for action0
-  tax
-  lda screenPointersRAM,x  
-  sta pivotZpLow
-  inx
-  lda screenPointersRAM,x
-  sta pivotZpHigh
-  ldy #$0
-  lda (pivotZpLow),y;load the action id of the action at userOptinSelectionPosition
+action_selection_ask_again:  
+  jsr receiveUserOptionSelection  
+  ldx userOptionSelection
+  lda actionIDOptionsRAM,x ;here we have the action ID
   sta selectedAction
+  lda selectedAction
+  cmp #$ff
+  bne action_selection_option_ok
+  jsr print_option_unknown
+  jmp action_selection_ask_again
+;   clc 
+;   adc screen_action_offset ; add the offset it gives me the address for action0
+;   tax
+;   lda screenPointersRAM,x  
+;   sta pivotZpLow
+;   inx
+;   lda screenPointersRAM,x
+;   sta pivotZpHigh
+;   ldy #$0
+;   lda (pivotZpLow),y;load the action id of the action at userOptinSelectionPosition
+;   sta selectedAction
+action_selection_option_ok:  
   lda selectedAction  
   beq processAction0
   cmp #$1
