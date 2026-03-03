@@ -708,7 +708,7 @@ draw_current_screen_table:
   jsr draw_screen_description
   jsr selectPuzzle
   jsr selectObject
-  jsr selectAction
+  ;jsr selectAction
   rts
 
 draw_current_screen_table_noascii:
@@ -716,7 +716,7 @@ draw_current_screen_table_noascii:
   jsr draw_screen_description
   jsr selectPuzzle
   jsr selectObject
-  jsr selectAction
+  ;jsr selectAction
   rts  
 
 draw_screen_ascii:
@@ -771,6 +771,7 @@ selectAction_loop:
   sty actionPosition
   lda actionPosition
   tax 
+  lda actionCurrentID
   sta actionIDOptionsRAM,x
   jsr processAction
   pla
@@ -843,6 +844,7 @@ receiveUserOptionSelection_loop:
 
 action_selector:;
   jsr initiatilizeObjectsIDs
+  jsr selectAction
 action_selection_ask_again:  
   jsr receiveUserOptionSelection  
   ldx userOptionSelection
