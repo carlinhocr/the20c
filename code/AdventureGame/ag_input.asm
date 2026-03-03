@@ -754,7 +754,7 @@ draw_screen:
 ;-----------------------------------------------------------------------------------
 
 
-selectAction:
+loadScreenActionOptions:
   jsr printActionsHeader
   ldx screen_action_offset  ;fist object byte offset
   lda screenPointersRAM,x 
@@ -763,7 +763,7 @@ selectAction:
   lda screenPointersRAM,x 
   sta actionDataVectorHigh
   ldy #$0
-selectAction_loop:
+loadScreenActionOptions_loop:
   lda (actionDataVectorLow),y
   sta actionCurrentID
   tya
@@ -778,7 +778,7 @@ selectAction_loop:
   tay
   iny
   cpy max_actions_per_screen ;max objects per screen 0-6 for now 
-  bne selectAction_loop
+  bne loadScreenActionOptions_loop
   rts
 
 printLettersAction:
@@ -843,8 +843,8 @@ receiveUserOptionSelection_loop:
   rts  
 
 action_selector:;
-  jsr initiatilizeObjectsIDs
-  jsr selectAction
+  jsr initiatilizeActionsIDs
+  jsr loadScreenActionOptions
 action_selection_ask_again:  
   jsr receiveUserOptionSelection  
   ldx userOptionSelection
