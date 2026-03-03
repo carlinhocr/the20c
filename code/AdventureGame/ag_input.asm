@@ -2012,9 +2012,9 @@ pressed_buttons_pa0:
 
 pa4_button_action:
   ;fire button on LCD PCB
-  lda #$5 ;option 5 es e option
+  lda #$4 ;option 4 es e option
   sta userOptionSelection
-  lda #$35 ;number 5 in ascii
+  lda #$34 ;number 4 in ascii
   jsr send_rs232_char
   rts
 
