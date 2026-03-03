@@ -880,9 +880,9 @@ process_mirar:
   jsr print_mirar
   ;print the description of the selected object
   jsr object_selection
-  lda objectCurrentID
-  cmp #$ff
-  beq process_mirar_wrong_object_selection
+;   lda objectCurrentID
+;   cmp #$ff
+;   beq process_mirar_wrong_object_selection
   lda #$1 ;without CRLF
   sta print_no_CRLF
   jsr print_mirar
@@ -891,9 +891,9 @@ process_mirar:
   jsr print_current_object_name 
   jsr print_current_object_description
   rts 
-process_mirar_wrong_object_selection:
-  jsr print_option_unknown
-  rts
+; process_mirar_wrong_object_selection:
+;   jsr print_option_unknown
+;   rts
 
 
 
@@ -936,6 +936,7 @@ process_usar:
 
 object_selection:
   ;show available objects again
+  jsr initiatilizeObjectsIDs ;put $ff on the objectsID Options
   jsr selectObject
   ;receive input from user
   jsr receiveUserOptionSelection
@@ -944,6 +945,12 @@ object_selection:
   lda objectIDOptionsRAM,x ;load the object id of the object 
   ;HERE add that if the object is $ff it is wrong and should not happen
   sta selectedObject
+  lda selectedObject
+  cmp #$ff
+  bne object_selection_option_ok
+  jsr print_option_unknown 
+  jmp object_selection
+object_selection_option_ok:
   lda selectedObject
   sta objectCurrentID
   rts
