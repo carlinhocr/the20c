@@ -1086,7 +1086,9 @@ check_sensor:
   jsr delay_3_sec
   jsr turnOffHearRate
   jsr delay_3_sec
+  jsr increaseWaterLevel
   jmp check_sensor
+
 
 heartbeatOnSensor:
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
