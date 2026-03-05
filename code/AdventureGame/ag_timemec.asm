@@ -262,6 +262,7 @@ programStart:
   ;initialize variables, vectors, memory mappings and constans
   ;configure stack and enable interrupts
   jsr viaLcdInit
+  jsr viaRsInit
   ;jsr viaSoundInit
   jsr uartSerialInit
   jsr screenInit
@@ -1088,12 +1089,10 @@ check_sensor:
   jmp check_sensor
 
 heartbeatOnSensor:
-  sei ;disable interrupts
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   lda #%01000000 ;bit 0 on zero turn on heartrate (active low relay)
   sta heartRateSensor
   jsr heartbeatSet
-  cli
   rts
 
 heartbeatOffSensor:
@@ -1108,10 +1107,8 @@ heartbeatOffSensor:
 heartbeatSet:
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   ;we will modify port b bits PB1 and PB0
-  ; lda RS_PORTB ;load what is already on port B
-  ; and #%10111110 ;keep bits 7,5,4,3,2,1 and reset bits 6, 1 and 0 of port b
-  ; sta RS_PORTB
-  lda #%10111110 ;turn off bit 6 because SYNC activates on rising
+  lda RS_PORTB ;load what is already on port B
+  and #%10111110 ;keep bits 7,5,4,3,2,1 and reset bits 6, 1 and 0 of port b
   sta RS_PORTB
   ora heartRateSensor ;set bit 6 for sync and bit 0.
   sta RS_PORTB ;set the new value
