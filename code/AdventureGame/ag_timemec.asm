@@ -1090,18 +1090,16 @@ check_sensor:
 
 heartbeatOnSensor:
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
-  lda #%01000000 ;bit 0 on zero turn on heartrate (active low relay)
+  lda #%01000001 ;bit 0 on 1 turn on heartrate 
   sta heartRateSensor
   jsr heartbeatSet
   rts
 
 heartbeatOffSensor:
-  sei ;disable interrupts
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
-  lda #%01000001 ;bit 0 on 1 turn off heartrate (active low relay)
+  lda #%01000000 ;bit 0 on 0 turn off heartrate
   sta heartRateSensor
   jsr heartbeatSet
-  cli
   rts
 
 heartbeatSet:
