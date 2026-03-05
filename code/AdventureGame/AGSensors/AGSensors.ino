@@ -1,10 +1,9 @@
 // We define the heartbeat of the Adventure Game
 // We also define how to run a relay
 
-#define SYNC  2 //sync is PB7
+#define SYNC  2 //sync is PB6
 #define PB0  8
 #define PB1  9
-#define PB2  10
 #define OUT1  11
 #define OUT2  12
 
@@ -24,24 +23,26 @@ void beatOff()
   digitalWrite(OUT2, 1);
 }
 
-void relayOn()
+void waterOn()
 {
-  digitalWrite(OUT1, 1);
+//0 is using the relay to turn on
+  digitalWrite(OUT1, 0);
 }
 
-void relayOff()
+void waterOff()
 {
-  digitalWrite(OUT1, 0);
+//1 is using the relay to turn off
+  digitalWrite(OUT1, 1);
 }
 
 void onSync()
 {
   Serial.print("Entra onSync: ");
   int bit0 = digitalRead(PB0) ? 1:0; //? ternary operator if TRUE then 1 else 0
-  //int bit1 = digitalRead(PB1) ? 1:0; //? ternary operator if TRUE then 1 else 0
+  int bit1 = digitalRead(PB1) ? 1:0; //? ternary operator if TRUE then 1 else 0
   //int bit2 = digitalRead(PB2) ? 1:0; //? ternary operator if TRUE then 1 else 0
   //Serial.print(bit2);
-  //Serial.print(bit1);
+  Serial.print(bit1);
   Serial.println(bit0);
   if (bit0 == 1){
     Serial.println("Activating HeartBeat Relay");
@@ -50,6 +51,14 @@ void onSync()
   else {
     Serial.println("Turning Off HeartBeat Relay");
     beatOff();
+  };
+  if (bit1 == 1){
+    Serial.println("Activating Water Relay");
+    waterOn();  
+  }
+  else {
+    Serial.println("Turning Off Water Relay");
+    waterOff();
   };
 }
   // if (bit2 == 1){
@@ -79,7 +88,6 @@ void setup()
   pinMode(SYNC, INPUT);
   pinMode(PB0, INPUT);
   pinMode(PB1, INPUT);
-  // pinMode(PB2, INPUT);
   pinMode(OUT1, OUTPUT);
   pinMode(OUT2, OUTPUT);
 
