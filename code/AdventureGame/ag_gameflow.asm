@@ -814,10 +814,10 @@ draw_screen:
 
 draw_screen_by_hand:  
   ldx screenPrintOffset  ;description offset
-  lda #<screen_0_ascii
+  lda #<screen_0_flashlight_on
   sta serialDataVectorLow  
   inx 
-  lda #>screen_0_ascii
+  lda #>screen_0_flashlight_on
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts    
@@ -1783,15 +1783,19 @@ screen_0_ascii:
 screen_0_flashlight_on:
   .ascii "Despiertas sobre piedra húmeda."
   .ascii "La caverna se cerro detrás de ti." 
-  .ascii "Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental." 
-  .ascii "El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti."
+  .ascii "Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso"
+  .ascii "hubiera sido final, no accidental." 
+  .ascii "El frío no duele todavía." 
+  .ascii "Sientes un constante goteo de agua, cada vez mas cerca de ti."
   .ascii "e"
 
 screen_0_flashlight_off:
   .ascii "Despiertas sobre piedra húmeda."
   .ascii "La caverna se cerro detrás de ti." 
-  .ascii "Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental." 
-  .ascii "El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti."
+  .ascii "Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso"
+  .ascii "hubiera sido final, no accidental." 
+  .ascii "El frío no duele todavía." 
+  .ascii "Sientes un constante goteo de agua, cada vez mas cerca de ti."
   .ascii "e"
 
 ; ── Screen 1: s1s2 ──────────────────────────
