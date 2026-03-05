@@ -170,6 +170,8 @@ userOptionSelection=$023a
 
 heartRate=$023b
 waterLevel=$023c
+heartRateSensor=$023d
+waterLevelSensor=$023e
 
 objectsRAM=$0300 ;32 bytes but i only use 6
 objectIDOptionsRAM=$0320;32 bytes but i only use 6
@@ -1050,14 +1052,14 @@ check_sensor:
 heartbeatOnSensor:
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   lda #%01000000 ;bit 0 on zero turn on heartrate (active low relay)
-  sta heartRate
+  sta heartRateSensor
   jsr heartbeatSet
   rts
 
 heartbeatOffSensor:
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   lda #%01000001 ;bit 0 on 1 turn off heartrate (active low relay)
-  sta heartRate
+  sta heartRateSensor
   jsr heartbeatSet
   rts
 
@@ -1067,7 +1069,7 @@ heartbeatSet:
   lda RS_PORTB ;load what is already on port B
   and #%10111110 ;keep bits 7,5,4,3,2,1 and reset bits 6, 1 and 0 of port b
   sta RS_PORTB
-  ora heartRate ;set only bit 0.
+  ora heartRateSensor ;set only bit 0.
   sta RS_PORTB ;set the new value
   rts    
 
