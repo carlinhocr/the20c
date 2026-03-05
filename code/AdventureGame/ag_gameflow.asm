@@ -1465,7 +1465,7 @@ print_msj_objok2:
 
 selectObject:
   jsr printObjectsHeader
-  ldx screen_object_offset
+  ;ldx screen_object_offset
   lda screenPointersRAM,x 
   sta objectDataVectorLow  
   inx 
@@ -1770,11 +1770,17 @@ screen_0_ascii:
   .ascii "e" 
 
 screen_0_flashlight_on:
-  .ascii "Despiertas sobre piedra húmeda. La caverna se cerro detrás de ti. Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental. El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti."
+  .ascii "Despiertas sobre piedra húmeda."
+  .ascii "La caverna se cerro detrás de ti." 
+  .ascii "Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental." 
+  .ascii "El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti."
   .ascii "e"
 
 screen_0_flashlight_off:
-  .ascii "Despiertas sobre piedra húmeda. La caverna se cerro detrás de ti. Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental. El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti."
+  .ascii "Despiertas sobre piedra húmeda."
+  .ascii "La caverna se cerro detrás de ti." 
+  .ascii "Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental." 
+  .ascii "El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti."
   .ascii "e"
 
 ; ── Screen 1: s1s2 ──────────────────────────
@@ -2079,8 +2085,6 @@ object_description_offset:
   .byte 8  ; (byte of object_0_description in objects_pointers)
 object_record_length:
   .byte 10  ; (total .word bytes per object record)
-screen_object_offset:
-  .byte 6  
 
 ; ── Object 0: vela ──────────────────────────
 object_0_id:
