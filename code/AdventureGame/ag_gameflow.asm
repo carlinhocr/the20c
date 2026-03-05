@@ -717,7 +717,7 @@ initiatilizeActionsIDs_loop:
 select_screen:
   lda #$0
   sta screenCurrentID
-  jsr load_screen_ram
+  ;jsr load_screen_ram
   rts
 
 select_screen_noascii:
@@ -814,10 +814,10 @@ draw_screen:
 
 draw_screen_by_hand:  
   ldx screenPrintOffset  ;description offset
-  lda #<screen_0_flashlight_on
+  lda #<screen_0_ascii
   sta serialDataVectorLow  
   inx 
-  lda #>screen_0_flashlight_on
+  lda #>screen_0_ascii
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts    
