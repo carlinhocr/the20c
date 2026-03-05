@@ -1088,17 +1088,21 @@ check_sensor:
   jmp check_sensor
 
 heartbeatOnSensor:
+  sei ;disable interrupts
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   lda #%01000000 ;bit 0 on zero turn on heartrate (active low relay)
   sta heartRateSensor
   jsr heartbeatSet
+  cli
   rts
 
 heartbeatOffSensor:
+  sei ;disable interrupts
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   lda #%01000001 ;bit 0 on 1 turn off heartrate (active low relay)
   sta heartRateSensor
   jsr heartbeatSet
+  cli
   rts
 
 heartbeatSet:
@@ -1107,7 +1111,7 @@ heartbeatSet:
   lda RS_PORTB ;load what is already on port B
   and #%10111110 ;keep bits 7,5,4,3,2,1 and reset bits 6, 1 and 0 of port b
   sta RS_PORTB
-  ora heartRateSensor ;set only bit 0.
+  ora heartRateSensor ;set bit 6 for sync and bit 0.
   sta RS_PORTB ;set the new value
   rts    
 
