@@ -1,0 +1,17 @@
+{
+    "0": {
+        "ID": "0",
+        "Name": "water",
+        "Active": false
+    },
+    "1": {
+        "ID": "1",
+        "Name": "heart",
+        "Active": false
+    },
+    "2": {
+        "ID": "2",
+        "Name": "flashlight",
+        "Active": false
+    }
+}

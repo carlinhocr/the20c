@@ -1,0 +1,59 @@
+{
+    "0": {
+        "ID": "0",
+        "Name": "LEVANTARSE",
+        "SensorID": 0,
+        "SensorActive": true,
+        "Cost": 15,
+        "Description": "\"Con esfuerzo, te incorporas sin saber como. Semejante derrumbe deberia haber sido mortal. El frio no duele, todavia\"."
+    },
+    "1": {
+        "ID": "1",
+        "Name": "MIRAR ALREDEDOR",
+        "Sensor": "",
+        "Cost": 15,
+        "Description": "\"Desde el suelo solo se ve oscuridad\""
+    },
+    "2": {
+        "ID": "2",
+        "Name": "GRITAR POR AYUDA",
+        "Sensor": "",
+        "Cost": 15,
+        "Description": "\"Intentas gritar, pero tu boca esta llena de agua\""
+    },
+    "3": {
+        "ID": "3",
+        "Name": "MIRAR ENTRADA",
+        "Sensor": "",
+        "Cost": 15,
+        "Description": "\"Entre las rocas hay rendijas por donde entra aire viciado, pero ninguna lo bastante grande para pasar. Hay marcas irregulares, como si alguien hubiera intentado moverlas y se hubiera detenido a mitad de camino. Tal vez no sea una opcion volver por ahí, pero la idea de explorar una caverna a oscuras no parece tentadora.\""
+    },
+    "4": {
+        "ID": "4",
+        "Name": "GRITAR",
+        "Sensor": "",
+        "Cost": 10,
+        "Description": "\"El eco tarda demasiado en volver. Sientes que algo se mueve encima de ti. Debe ser tu imaginacion, te repites.\""
+    },
+    "5": {
+        "ID": "5",
+        "Name": "LINTERNA",
+        "Sensor": "",
+        "Cost": 5,
+        "Description": "La linterna se "
+    },
+    "6": {
+        "ID": "6",
+        "Name": "EXPLORAR CAMINO",
+        "Sensor": "",
+        "Cost": 20,
+        "Description": "La linterna se "
+    },
+    "7": {
+        "ID": "7",
+        "Name": "CAEAGUA",
+        "Sensor": "",
+        "Cost": 0,
+        "Description": ""
+    }
+}

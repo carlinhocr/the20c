@@ -1,0 +1,12 @@
+{
+    "0": {
+        "ID": "0",
+        "Name": "s1s1Levantarse",
+        "Action": "LEVANTARSE",
+        "Screen": "s1s2",
+        "ScreenID": "1",
+        "DescriptionSolved": "",
+        "DescriptionNotSolved": "",
+        "Solved": false
+    }
+}
