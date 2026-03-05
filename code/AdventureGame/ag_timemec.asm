@@ -464,6 +464,7 @@ mainProgram:
 mainProgramLoop:
   jsr action_selector  
   jsr check_puzzle
+  jsr check_sensor
   jsr select_screen_noascii 
   jmp mainProgramLoop 
 ;   lda #$2
@@ -1035,6 +1036,51 @@ printing_NOCRLF:
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+;-----------------------------------SENSORS------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+check_sensor:
+  jsr turnOnHearRate
+  jsr delay_3_sec
+  jsr turnOffHearRate
+  jsr delay_3_sec
+  jmp check_sensor
+
+heartbeatOnSensor:
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
+  lda #%01000000 ;bit 0 on zero turn on heartrate (active low relay)
+  sta heartRate
+  jsr heartbeatSet
+  rts
+
+heartbeatOffSensor:
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
+  lda #%01000001 ;bit 0 on 1 turn off heartrate (active low relay)
+  sta heartRate
+  jsr heartbeatSet
+  rts
+
+heartbeatSet:
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
+  ;we will modify port b bits PB1 and PB0
+  lda RS_PORTB ;load what is already on port B
+  and #%10111110 ;keep bits 7,5,4,3,2,1 and reset bits 6, 1 and 0 of port b
+  sta RS_PORTB
+  ora heartRate ;set only bit 0.
+  sta RS_PORTB ;set the new value
+  rts    
+
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------SENSORS------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 ;-----------------------------------HEARTRATE------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -1068,6 +1114,8 @@ turnOnHearRate:
   lda #> msj_heartOn
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  jsr heartbeatOnSensor
+  ;add jump to a routine to show hate rate on the sensor
   rts   
 
 turnOffHearRate:
@@ -1076,6 +1124,7 @@ turnOffHearRate:
   lda #> msj_heartOff
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  jsr heartbeatOffSensor
   rts     
 
 ;END--------------------------------------------------------------------------------
