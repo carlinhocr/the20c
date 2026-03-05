@@ -1056,7 +1056,7 @@ decreaseHeartRate:
 checkHearRateLevel:
   lda #$2
   cmp heartRate
-  bcs ;is_greater_or_equal Branch if Carry Set (variable >= 6502)
+  bcs checkHearRateLevel_greater ;is_greater_or_equal Branch if Carry Set (variable >= 6502)
   jsr turnOffHearRate 
 checkHearRateLevel_greater: 
   jsr turnOnHearRate
