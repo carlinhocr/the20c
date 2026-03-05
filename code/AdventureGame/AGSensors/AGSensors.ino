@@ -84,7 +84,7 @@ void setup()
   pinMode(OUT2, OUTPUT);
 
   // each time that on pin 2 (SYNC) i receive a HIGH on the rising edge run the onSync function
-  // attachInterrupt(digitalPinToInterrupt(SYNC), onSync, RISING); 
+  attachInterrupt(digitalPinToInterrupt(SYNC), onSync, RISING); 
   Serial.begin(115200);
   Serial.println("Arranca Arduino");
 }
