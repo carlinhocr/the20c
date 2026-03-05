@@ -1102,6 +1102,36 @@ heartbeatOffSensor:
   jsr heartbeatSet
   rts
 
+increaseWaterLevelSensor:
+  jsr waterOnSensor
+  jsr waterSet
+  jsr delay_3_sec
+  jsr waterOffSensor
+  jsr waterSet
+  rts
+
+waterSet:
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
+  ;we will modify port b bits PB1 
+  lda RS_PORTB ;load what is already on port B
+  and #%10111101 ;keep bits 7,5,4,3,2,0 and reset bits 6, 1 of port b
+  sta RS_PORTB
+  ora waterLevelSensor ;set bit 6 for sync and bit 0.
+  sta RS_PORTB ;set the new value
+  rts  
+  
+waterOnSensor:
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
+  lda #%01000010 ;bit 0 on 1 turn on heartrate 
+  sta waterLevelSensor
+  rts
+
+waterOffSensor:
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
+  lda #%01000000 ;bit 0 on 0 turn off heartrate
+  sta waterLevelSensor
+  rts
+
 heartbeatSet:
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   ;we will modify port b bits PB1 and PB0
@@ -1111,18 +1141,6 @@ heartbeatSet:
   ora heartRateSensor ;set bit 6 for sync and bit 0.
   sta RS_PORTB ;set the new value
   rts  
-
-; heartbeatSet:
-;   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
-;   ;we will modify port b bits PB1 and PB0
-;   lda RS_PORTB ;load what is already on port B
-;   and #%10111110 ;keep bits 7,5,4,3,2,1 and reset bits 6, 1 and 0 of port b
-;   sta RS_PORTB
-;   ora heartRateSensor ;set bit 6 for sync and bit 0.
-;   sta RS_PORTB ;set the new value
-;   rts    
-
-
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------SENSORS------------------------------------------
@@ -1198,6 +1216,12 @@ initializeWaterLevel:
 
 increaseWaterLevel:
   inc waterLevel
+  lda #< msj_waterOn
+  sta serialDataVectorLow  
+  lda #> msj_waterOn
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing  
+  jsr increaseWaterLevelSensor
   rts
 
 ;END--------------------------------------------------------------------------------
@@ -1575,6 +1599,9 @@ msj_heartOff:
   .ascii "Tu corazón esta tranquilo"
   .ascii "e"
 
+msj_waterOn:
+  .ascii "El Agua Sube"
+  .ascii "e"    
 
 actions_unknown:
   .ascii "Mmmm no puedes hacer eso"
