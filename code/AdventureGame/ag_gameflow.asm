@@ -820,6 +820,13 @@ draw_screen_by_hand:
   lda #>screen_0_ascii
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+
+  lda #<screen_0_flashlight_on
+  sta serialDataVectorLow  
+  inx 
+  lda #>screen_0_flashlight_on
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing  
   rts    
 
 ;END--------------------------------------------------------------------------------
@@ -1806,6 +1813,7 @@ screen_0_ascii:
   .ascii "  : .:::::☼     ☼        ☼☼      ☼             ☼☼     ☼☼          ☼  ☼:::.:.: .:"
   .ascii ":::.::.::☼☼    ☼         ☼       ☼            ☼☼       ☼           ☼ ☼:::::::.::"
   .ascii "::::: ::☼☼    ☼☼          ☼      ☼☼            ☼        ☼         ☼   ☼:: :::::."
+  .ascii "" 
   .ascii "e" 
 
 screen_0_flashlight_on:
