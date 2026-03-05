@@ -78,7 +78,7 @@ void setup()
 {
   pinMode(SYNC, INPUT);
   pinMode(PB0, INPUT);
-  // pinMode(PB1, INPUT);
+  pinMode(PB1, INPUT);
   // pinMode(PB2, INPUT);
   pinMode(OUT1, OUTPUT);
   pinMode(OUT2, OUTPUT);
