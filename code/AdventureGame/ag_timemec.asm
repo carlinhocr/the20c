@@ -1108,12 +1108,24 @@ heartbeatOffSensor:
 heartbeatSet:
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   ;we will modify port b bits PB1 and PB0
-  lda RS_PORTB ;load what is already on port B
-  and #%10111110 ;keep bits 7,5,4,3,2,1 and reset bits 6, 1 and 0 of port b
+  ; lda RS_PORTB ;load what is already on port B
+  ; and #%10111110 ;keep bits 7,5,4,3,2,1 and reset bits 6, 1 and 0 of port b
+  ; sta RS_PORTB
+  lda #%10111110 ;turn off bit 6 because SYNC activates on rising
   sta RS_PORTB
   ora heartRateSensor ;set bit 6 for sync and bit 0.
   sta RS_PORTB ;set the new value
-  rts    
+  rts  
+
+; heartbeatSet:
+;   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
+;   ;we will modify port b bits PB1 and PB0
+;   lda RS_PORTB ;load what is already on port B
+;   and #%10111110 ;keep bits 7,5,4,3,2,1 and reset bits 6, 1 and 0 of port b
+;   sta RS_PORTB
+;   ora heartRateSensor ;set bit 6 for sync and bit 0.
+;   sta RS_PORTB ;set the new value
+;   rts    
 
 
 ;END--------------------------------------------------------------------------------
