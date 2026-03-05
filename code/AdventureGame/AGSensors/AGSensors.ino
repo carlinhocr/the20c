@@ -1,7 +1,7 @@
 // We define the heartbeat of the Adventure Game
 // We also define how to run a relay
 
-#define SYNC  2 //sync is PB6
+#define SYNC  2 //sync is PB7
 #define PB0  8
 #define PB1  9
 #define PB2  10
