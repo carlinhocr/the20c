@@ -791,13 +791,13 @@ draw_screen:
   rts  
 
 draw_screen_by_ram_ascii:  
-  ;ldx #30  ; offset ascii
-  ;lda screenPointersRAM,x
-  lda $051e ;the 30 offset starting ascii low byte
+  ldx #30  ; offset ascii
+  lda screenPointersRAM,x
+  ;lda $051e ;the 30 offset starting ascii low byte
   sta serialDataVectorLow  
-  ;inx 
-  ;lda screenPointersRAM,x
-  lda $051f ;the 31 offset starting ascii high byte
+  inx 
+  lda screenPointersRAM,x
+  ;lda $051f ;the 31 offset starting ascii high byte
   sta serialDataVectorHigh
   jsr printAsciiDrawing
 
