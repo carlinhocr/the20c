@@ -600,39 +600,6 @@ initilizationRoutines:
   ;jsr initiatilizeActionsIDs
   rts
 
-; loadObjectsRAM:
-;   lda object_record_length ;10 bytes
-;   sta objectRecordSize
-;   ldx object_visible_offset ;here starts the visibility property of objects
-;   stx object_pointers_index
-;   ldx #$0
-;   stx object_RAM_index
-;   ldy #$0 
-; loadObjectsRAM_loop:
-;   ldx object_pointers_index
-;   lda objects_pointers,x ;load low byte address for visibility #$4
-;   sta pivotZpLow
-;   inx  
-;   lda objects_pointers,x ;load high byte address for visibility #$5
-;   sta pivotZpHigh
-;   ;update next object_pointer_index
-;   lda object_pointers_index
-;   clc
-;   adc objectRecordSize
-;   sta object_pointers_index
-;   ;load ram index and store visibility attribute 
-;   ldx object_RAM_index
-;   lda (pivotZpLow),y
-;   sta objectsRAM,x
-;   ;update object_RAM_index for next spot available
-;   inx 
-;   stx object_RAM_index
-;   ;check if the last object was reached if it is break
-;   cpx object_count
-;   bne loadObjectsRAM_loop
-;   ;end loop and return 
-;   rts
-
 loadPuzzlesRAM:
   lda puzzle_record_length ;16 bytes
   sta puzzleRecordSize
@@ -717,7 +684,7 @@ initiatilizeActionsIDs_loop:
 select_screen:
   lda #$0
   sta screenCurrentID
-  ;jsr load_screen_ram
+  jsr load_screen_ram
   rts
 
 select_screen_noascii:
@@ -758,8 +725,8 @@ load_screen_ram_end:
   rts
 
 draw_current_screen_table:
-  ;jsr draw_screen_ascii
-  jsr draw_screen_by_hand
+  jsr draw_screen_ascii
+  ;jsr draw_screen_by_hand
 ;  jsr draw_screen_description_flashlight
 ;  jsr draw_screen_description
 ;  jsr selectPuzzle
