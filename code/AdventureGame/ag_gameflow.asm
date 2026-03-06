@@ -753,6 +753,7 @@ draw_current_screen_table_noascii:
 
 draw_screen_ascii:
   lda screen_ascii_offset
+  lda #$10
   sta screenPrintOffset
   jsr draw_screen
   rts  
