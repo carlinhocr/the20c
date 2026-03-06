@@ -717,6 +717,15 @@ load_screen_ram_loop:
   iny
   cpy screen_record_length
   beq load_screen_ram_end
+  ;check if the address in sourceScreenVectorLow + Y
+  ;is an overflow if so add the carry to the high byte
+  tya 
+  clc
+  adc sourceScreenVectorLow
+  bne load_screen_ram_same_page
+  ;add 1 byte to the high address to have the correct page
+  inc sourceScreenVectorHigh
+load_screen_ram_same_page:  
   lda (sourceScreenVectorLow),Y
   ;jsr send_rs232_char
   sta (ramScreenVectorLow),Y
