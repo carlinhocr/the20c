@@ -735,9 +735,9 @@ load_screen_ram_end:
   rts
 
 draw_current_screen_table:
-  jsr draw_screen_ascii
+  ;jsr draw_screen_ascii
   ;jsr draw_screen_by_hand
-  jsr draw_screen_description_flashlight
+  ;jsr draw_screen_description_flashlight
   jsr draw_screen_by_ram_ascii  
 ;  jsr draw_screen_description
 ;  jsr selectPuzzle
