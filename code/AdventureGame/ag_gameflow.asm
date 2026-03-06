@@ -703,10 +703,12 @@ load_screen_ram:
   ldx current_screen_offset ;byte 6 if it is screen 3
   ;store in sourceScreenVector the address of screen_x_id
   ;use screen zero
-  lda screens_index,x
+  ;lda screens_index,x
+  lda #<screen_0_id
   sta sourceScreenVectorLow
   inx
-  lda screens_index,x
+  ;lda screens_index,x
+  lda #>screen_0_id  
   sta sourceScreenVectorHigh
   ;store in ramScreenVectorLow the address of the RAM portin for the screen
   lda #$00
