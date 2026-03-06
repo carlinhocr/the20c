@@ -507,6 +507,12 @@ initializePrinter:
   jsr send_rs232_char
   lda #$40 ;@
   jsr send_rs232_char
+  lda #$41 ;A
+  jsr send_rs232_char
+  jsr send_rs232_char
+  jsr send_rs232_char
+  jsr send_rs232_char
+  jsr send_rs232_char
   jsr probandoPrinter
   rts
 
