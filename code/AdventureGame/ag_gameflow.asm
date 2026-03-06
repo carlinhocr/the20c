@@ -600,38 +600,38 @@ initilizationRoutines:
   ;jsr initiatilizeActionsIDs
   rts
 
-loadObjectsRAM:
-  lda object_record_length ;10 bytes
-  sta objectRecordSize
-  ldx object_visible_offset ;here starts the visibility property of objects
-  stx object_pointers_index
-  ldx #$0
-  stx object_RAM_index
-  ldy #$0 
-loadObjectsRAM_loop:
-  ldx object_pointers_index
-  lda objects_pointers,x ;load low byte address for visibility #$4
-  sta pivotZpLow
-  inx  
-  lda objects_pointers,x ;load high byte address for visibility #$5
-  sta pivotZpHigh
-  ;update next object_pointer_index
-  lda object_pointers_index
-  clc
-  adc objectRecordSize
-  sta object_pointers_index
-  ;load ram index and store visibility attribute 
-  ldx object_RAM_index
-  lda (pivotZpLow),y
-  sta objectsRAM,x
-  ;update object_RAM_index for next spot available
-  inx 
-  stx object_RAM_index
-  ;check if the last object was reached if it is break
-  cpx object_count
-  bne loadObjectsRAM_loop
-  ;end loop and return 
-  rts
+; loadObjectsRAM:
+;   lda object_record_length ;10 bytes
+;   sta objectRecordSize
+;   ldx object_visible_offset ;here starts the visibility property of objects
+;   stx object_pointers_index
+;   ldx #$0
+;   stx object_RAM_index
+;   ldy #$0 
+; loadObjectsRAM_loop:
+;   ldx object_pointers_index
+;   lda objects_pointers,x ;load low byte address for visibility #$4
+;   sta pivotZpLow
+;   inx  
+;   lda objects_pointers,x ;load high byte address for visibility #$5
+;   sta pivotZpHigh
+;   ;update next object_pointer_index
+;   lda object_pointers_index
+;   clc
+;   adc objectRecordSize
+;   sta object_pointers_index
+;   ;load ram index and store visibility attribute 
+;   ldx object_RAM_index
+;   lda (pivotZpLow),y
+;   sta objectsRAM,x
+;   ;update object_RAM_index for next spot available
+;   inx 
+;   stx object_RAM_index
+;   ;check if the last object was reached if it is break
+;   cpx object_count
+;   bne loadObjectsRAM_loop
+;   ;end loop and return 
+;   rts
 
 loadPuzzlesRAM:
   lda puzzle_record_length ;16 bytes
@@ -681,15 +681,15 @@ loadConstants:
   sta actionCostTotal
   rts 
 
-initiatilizeObjectsIDs:  
-  lda #$ff
-  ldx #$0
-initiatilizeObjectsIDs_loop:
-  sta objectIDOptionsRAM,x
-  inx
-  cpx max_objects_per_screen
-  bne initiatilizeObjectsIDs_loop
-  rts
+; initiatilizeObjectsIDs:  
+;   lda #$ff
+;   ldx #$0
+; initiatilizeObjectsIDs_loop:
+;   sta objectIDOptionsRAM,x
+;   inx
+;   cpx max_objects_per_screen
+;   bne initiatilizeObjectsIDs_loop
+;   rts
 
 initiatilizeActionsIDs:  
   lda #$ff
@@ -771,7 +771,7 @@ draw_current_screen_table_noascii:
   jsr send_rs232_CRLF ;add a blank line
   jsr draw_screen_description
   jsr selectPuzzle
-  jsr selectObject
+  ;jsr selectObject
   ;jsr selectAction
   rts  
 
@@ -998,7 +998,7 @@ process_mirar:
   sta print_no_CRLF
   jsr print_mirar
   ;print the description of the selected object
-  jsr object_selection
+  ;jsr object_selection
 ;   lda objectCurrentID
 ;   cmp #$ff
 ;   beq process_mirar_wrong_object_selection
@@ -1007,8 +1007,8 @@ process_mirar:
   jsr print_mirar
   lda #$0 ;with CRLF
   sta print_no_CRLF
-  jsr print_current_object_name 
-  jsr print_current_object_description
+  ;jsr print_current_object_name 
+  ;jsr print_current_object_description
   rts 
 ; process_mirar_wrong_object_selection:
 ;   jsr print_option_unknown
@@ -1020,20 +1020,16 @@ process_usar:
   lda #$0 ;with CRLF
   sta print_no_CRLF
   jsr print_usar
-  jsr object_selection
-  lda selectedObject
-  sta selectedObject1
+  ;jsr object_selection
+  ;lda selectedObject
+  ;sta selectedObject1
   lda #$1 ;without CRLF
   sta print_no_CRLF  
   jsr print_usar
   ;print object name no CRLF
-  jsr print_current_object_name  
   lda #$0 ;with CRLF
   sta print_no_CRLF   
   jsr print_con
-  jsr object_selection
-  lda selectedObject  
-  sta selectedObject2  
 ;printing "usar obj1 con obj2" with second object too
   lda #$1 ;without CRLF
   sta print_no_CRLF 
@@ -1042,37 +1038,13 @@ process_usar:
   sta print_no_CRLF
   lda selectedObject1
   sta objectCurrentID
-  jsr print_current_object_name 
   jsr print_con
   lda selectedObject2
   sta objectCurrentID
   lda #$0
   sta print_no_CRLF 
-  jsr print_current_object_name  
   rts
   ;usar obj1 con obje2
-
-object_selection:
-  ;show available objects again
-  jsr initiatilizeObjectsIDs ;put $ff on the objectsID Options
-  jsr selectObject
-  ;receive input from user
-object_selection_ask_again:  
-  jsr receiveUserOptionSelection
-  ;process user input
-  ldx userOptionSelection ;example option 0
-  lda objectIDOptionsRAM,x ;load the object id of the object 
-  ;HERE add that if the object is $ff it is wrong and should not happen
-  sta selectedObject
-  lda selectedObject
-  cmp #$ff
-  bne object_selection_option_ok
-  jsr print_option_unknown 
-  jmp object_selection_ask_again
-object_selection_option_ok:
-  lda selectedObject
-  sta objectCurrentID
-  rts
 
 receiveUserInputAction:
   lda #$2 ; 2 usar
@@ -1354,7 +1326,6 @@ verify_one_puzzle:
   beq foundOneObject
   jmp end_verify_one_puzzle
 foundOneObject: 
-  jsr print_msj_objok
   lda selectedObject1
   cmp currentPuzzleObject2
   beq foundBothObjects
@@ -1363,7 +1334,6 @@ foundOneObject:
   beq foundBothObjects
   jmp end_verify_one_puzzle
 foundBothObjects:  
-  jsr print_msj_objok2 
   lda puzzleCurrentID
   cmp #$0
   jsr solve_puzzle_0
