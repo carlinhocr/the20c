@@ -724,11 +724,11 @@ load_screen_ram_loop:
   clc
   adc sourceScreenVectorLow
   bcc load_screen_ram_same_page
+  jsr print_msj_accok
   ;add 1 byte to the high address to have the correct page
   ;inc sourceScreenVectorHigh
 load_screen_ram_same_page:  
   lda (sourceScreenVectorLow),Y
-  ;jsr send_rs232_char
   sta (ramScreenVectorLow),Y
   jmp load_screen_ram_loop
 load_screen_ram_end:
