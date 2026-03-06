@@ -738,6 +738,7 @@ draw_current_screen_table:
   jsr draw_screen_ascii
   ;jsr draw_screen_by_hand
   jsr draw_screen_description_flashlight
+  jsr draw_screen_by_ram_ascii  
 ;  jsr draw_screen_description
 ;  jsr selectPuzzle
 ;  jsr selectObject
@@ -788,6 +789,15 @@ draw_screen:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts  
+
+draw_screen_by_ram_ascii:  
+  ldx #30  ; offset ascii
+  lda screenPointersRAM,x
+  sta serialDataVectorLow  
+  inx 
+  lda screenPointersRAM,x
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
 
 draw_screen_by_hand:  
   ldx screenPrintOffset  ;description offset
