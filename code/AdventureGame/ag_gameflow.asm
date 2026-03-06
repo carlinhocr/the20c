@@ -797,7 +797,7 @@ draw_screen_by_ram_ascii:
   sta serialDataVectorLow  
   ;inx 
   ;lda screenPointersRAM,x
-  lda $051e ;the 31 offset starting ascii high byte
+  lda $051f ;the 31 offset starting ascii high byte
   sta serialDataVectorHigh
   jsr printAsciiDrawing
 
