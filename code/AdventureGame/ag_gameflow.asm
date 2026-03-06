@@ -722,7 +722,7 @@ load_screen_ram_loop:
   tya 
   clc
   adc sourceScreenVectorLow
-  bne load_screen_ram_same_page
+  bcc load_screen_ram_same_page
   ;add 1 byte to the high address to have the correct page
   inc sourceScreenVectorHigh
 load_screen_ram_same_page:  
