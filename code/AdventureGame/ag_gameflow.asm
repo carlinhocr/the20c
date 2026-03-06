@@ -541,6 +541,9 @@ printAsciiDrawing:
   tya
   pha
   ;here print first line
+  ;initialize in cero serialCharperLines
+  lda #$0
+  sta serialCharperLines
   jsr send_rs232_line
   ldx #$0 ;the first line 0 we aleready printed
 printAsciiDrawing_lenghts_loop:
@@ -554,9 +557,7 @@ printAsciiDrawing_lenghts_loop:
   ;if there is a carry it is in the carry flag
   ; clear the carry and add one to the high order byte
   clc
-  lda serialDataVectorHigh
-  adc #1; adds the carry if there is one
-  sta serialDataVectorHigh
+  inc serialDataVectorHigh
 printAsciiDrawing_lenghts_no_carry  
   ;here printing the new mario line
   ldy #0
@@ -753,7 +754,6 @@ draw_current_screen_table_noascii:
 
 draw_screen_ascii:
   lda screen_ascii_offset
-  lda #$10
   sta screenPrintOffset
   jsr draw_screen
   rts  
