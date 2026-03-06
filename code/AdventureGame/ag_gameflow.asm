@@ -2369,6 +2369,12 @@ serialUART:
 send_rs232_line:
   ldy #$0
 send_rs232_line_loop:
+  tya 
+  clc
+  adc serialDataVectorLow
+  bcc send_rs232_line_loop_same_page
+  inc serialDataVectorHigh
+send_rs232_line_loop_same_page:  
   lda (serialDataVectorLow),y 
   ;test for the NULL char that ends all ASCII strings
   beq send_rs232_line_end
