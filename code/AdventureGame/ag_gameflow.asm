@@ -704,11 +704,11 @@ load_screen_ram:
   ;store in sourceScreenVector the address of screen_x_id
   ;use screen zero
   ;lda screens_index,x
-  lda #<screen_0_id
+  lda #<screens_pointers
   sta sourceScreenVectorLow
   inx
   ;lda screens_index,x
-  lda #>screen_0_id  
+  lda #>screens_pointers
   sta sourceScreenVectorHigh
   ;store in ramScreenVectorLow the address of the RAM portin for the screen
   lda #$00
