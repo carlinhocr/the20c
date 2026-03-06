@@ -791,7 +791,7 @@ draw_screen:
   rts  
 
 draw_screen_by_ram_ascii:  
-  ldx #30  ; offset ascii
+  ldx screen_ascii_offset  ; offset ascii
   lda screenPointersRAM,x
   ;lda $051e ;the 30 offset starting ascii low byte
   sta serialDataVectorLow  
