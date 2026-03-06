@@ -724,7 +724,7 @@ load_screen_ram_loop:
   adc sourceScreenVectorLow
   bcc load_screen_ram_same_page
   ;add 1 byte to the high address to have the correct page
-  inc sourceScreenVectorHigh
+  ;inc sourceScreenVectorHigh
 load_screen_ram_same_page:  
   lda (sourceScreenVectorLow),Y
   ;jsr send_rs232_char
