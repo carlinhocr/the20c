@@ -3,12 +3,13 @@
 ; ============================================================
 
 screens_index:
-  .word screen_0_id  ; s1s1
-  .word screen_1_id  ; s1s2
+  .word screen_pointers_0  ; s1s1
+  .word screen_pointers_1  ; s1s2
 screens_index_record_length:
   .byte 2  ; each screens_index entry is 1 .word (2 bytes)
 
 screens_pointers:
+screen_pointers_0:
   .word screen_0_id                ; s1s1 id                [0,1]
   .word screen_0_name              ; s1s1 name              [2,3]
   .word screen_0_north             ; s1s1 north             [4,5]
@@ -27,6 +28,7 @@ screens_pointers:
   .word screen_0_ascii             ; s1s1 ascii             [30,31]
   .word screen_0_flashlight_on     ; s1s1 flashlight_on     [32,33]
   .word screen_0_flashlight_off    ; s1s1 flashlight_off    [34,35]
+screen_pointers_1:
   .word screen_1_id                ; s1s2 id                [36,37]
   .word screen_1_name              ; s1s2 name              [38,39]
   .word screen_1_north             ; s1s2 north             [40,41]
