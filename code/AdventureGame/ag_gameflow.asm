@@ -727,7 +727,7 @@ load_screen_ram_loop:
   ;add 1 byte to the high address to have the correct page
   ;inc sourceScreenVectorHigh
 load_screen_ram_same_page:  
-  jsr print_msj_accok
+  ;jsr print_msj_accok
   lda (sourceScreenVectorLow),Y
   sta (ramScreenVectorLow),Y
   jmp load_screen_ram_loop
@@ -738,7 +738,7 @@ draw_current_screen_table:
   ;jsr draw_screen_ascii
   jsr draw_screen_by_hand
   ;jsr draw_screen_description_flashlight
-  ;jsr draw_screen_by_ram_ascii  
+  jsr draw_screen_by_ram_ascii  
 ;  jsr draw_screen_description
 ;  jsr selectPuzzle
 ;  jsr selectObject
@@ -791,11 +791,13 @@ draw_screen:
   rts  
 
 draw_screen_by_ram_ascii:  
-  ldx #30  ; offset ascii
-  lda screenPointersRAM,x
+  ;ldx #30  ; offset ascii
+  ;lda screenPointersRAM,x
+  lda #30
   sta serialDataVectorLow  
-  inx 
-  lda screenPointersRAM,x
+  ;inx 
+  ;lda screenPointersRAM,x
+  lda #$05
   sta serialDataVectorHigh
   jsr printAsciiDrawing
 
