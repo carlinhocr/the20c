@@ -793,11 +793,11 @@ draw_screen:
 draw_screen_by_ram_ascii:  
   ;ldx #30  ; offset ascii
   ;lda screenPointersRAM,x
-  lda #30
+  lda $051e ;the 30 offset starting ascii low byte
   sta serialDataVectorLow  
   ;inx 
   ;lda screenPointersRAM,x
-  lda #$05
+  lda $051e ;the 31 offset starting ascii high byte
   sta serialDataVectorHigh
   jsr printAsciiDrawing
 
