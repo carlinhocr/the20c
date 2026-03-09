@@ -525,6 +525,7 @@ testPrinter:
   jsr printerLetterSizeNormal
   jsr probandoPrinter
   jsr printerFeedManyLines
+  jsr printerCut
   rts
 
 printerReset:
@@ -533,6 +534,16 @@ printerReset:
   jsr send_rs232_char
   lda #$40 ;@
   jsr send_rs232_char
+  rts
+
+printerCut:
+  ;Initialization sequence ESC @
+  lda #$1d 
+  jsr send_rs232_char
+  lda #$56
+  jsr send_rs232_char
+  lda #$00
+  jsr send_rs232_char  
   rts
 
 printerBoldOn:
