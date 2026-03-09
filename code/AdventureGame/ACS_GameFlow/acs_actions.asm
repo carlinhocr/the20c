@@ -10,7 +10,7 @@ actions_index:
   .word action_pointer_4  ; GRITAR
   .word action_pointer_5  ; LINTERNA
   .word action_pointer_6  ; EXPLORAR CAMINO
-  .word action_pointer_7  ; CAEAGUA
+  .word action_pointer_7  ; VEO QUE CAE AGUA
 actions_index_record_length:
   .byte 2  ; each actions_index entry is 1 .word (2 bytes)
 
@@ -20,63 +20,75 @@ action_pointer_0:
   .word action_0_name          ; LEVANTARSE name          [2,3]
   .word action_0_sensor_id     ; LEVANTARSE sensor_id     [4,5]
   .word action_0_sensor_active ; LEVANTARSE sensor_active [6,7]
-  .word action_0_cost          ; LEVANTARSE cost          [8,9]
-  .word action_0_description   ; LEVANTARSE description   [10,11]
+  .word action_0_screen        ; LEVANTARSE screen        [8,9]
+  .word action_0_cost          ; LEVANTARSE cost          [10,11]
+  .word action_0_description   ; LEVANTARSE description   [12,13]
 action_pointer_1:
-  .word action_1_id            ; MIRAR ALREDEDOR id            [12,13]
-  .word action_1_name          ; MIRAR ALREDEDOR name          [14,15]
-  .word action_1_sensor_id     ; MIRAR ALREDEDOR sensor_id     [16,17]
-  .word action_1_sensor_active ; MIRAR ALREDEDOR sensor_active [18,19]
-  .word action_1_cost          ; MIRAR ALREDEDOR cost          [20,21]
-  .word action_1_description   ; MIRAR ALREDEDOR description   [22,23]
+  .word action_1_id            ; MIRAR ALREDEDOR id            [14,15]
+  .word action_1_name          ; MIRAR ALREDEDOR name          [16,17]
+  .word action_1_sensor_id     ; MIRAR ALREDEDOR sensor_id     [18,19]
+  .word action_1_sensor_active ; MIRAR ALREDEDOR sensor_active [20,21]
+  .word action_1_screen        ; MIRAR ALREDEDOR screen        [22,23]
+  .word action_1_cost          ; MIRAR ALREDEDOR cost          [24,25]
+  .word action_1_description   ; MIRAR ALREDEDOR description   [26,27]
 action_pointer_2:
-  .word action_2_id            ; GRITAR POR AYUDA id            [24,25]
-  .word action_2_name          ; GRITAR POR AYUDA name          [26,27]
-  .word action_2_sensor_id     ; GRITAR POR AYUDA sensor_id     [28,29]
-  .word action_2_sensor_active ; GRITAR POR AYUDA sensor_active [30,31]
-  .word action_2_cost          ; GRITAR POR AYUDA cost          [32,33]
-  .word action_2_description   ; GRITAR POR AYUDA description   [34,35]
+  .word action_2_id            ; GRITAR POR AYUDA id            [28,29]
+  .word action_2_name          ; GRITAR POR AYUDA name          [30,31]
+  .word action_2_sensor_id     ; GRITAR POR AYUDA sensor_id     [32,33]
+  .word action_2_sensor_active ; GRITAR POR AYUDA sensor_active [34,35]
+  .word action_2_screen        ; GRITAR POR AYUDA screen        [36,37]
+  .word action_2_cost          ; GRITAR POR AYUDA cost          [38,39]
+  .word action_2_description   ; GRITAR POR AYUDA description   [40,41]
 action_pointer_3:
-  .word action_3_id            ; MIRAR ENTRADA id            [36,37]
-  .word action_3_name          ; MIRAR ENTRADA name          [38,39]
-  .word action_3_sensor_id     ; MIRAR ENTRADA sensor_id     [40,41]
-  .word action_3_sensor_active ; MIRAR ENTRADA sensor_active [42,43]
-  .word action_3_cost          ; MIRAR ENTRADA cost          [44,45]
-  .word action_3_description   ; MIRAR ENTRADA description   [46,47]
+  .word action_3_id            ; MIRAR ENTRADA id            [42,43]
+  .word action_3_name          ; MIRAR ENTRADA name          [44,45]
+  .word action_3_sensor_id     ; MIRAR ENTRADA sensor_id     [46,47]
+  .word action_3_sensor_active ; MIRAR ENTRADA sensor_active [48,49]
+  .word action_3_screen        ; MIRAR ENTRADA screen        [50,51]
+  .word action_3_cost          ; MIRAR ENTRADA cost          [52,53]
+  .word action_3_description   ; MIRAR ENTRADA description   [54,55]
 action_pointer_4:
-  .word action_4_id            ; GRITAR id            [48,49]
-  .word action_4_name          ; GRITAR name          [50,51]
-  .word action_4_sensor_id     ; GRITAR sensor_id     [52,53]
-  .word action_4_sensor_active ; GRITAR sensor_active [54,55]
-  .word action_4_cost          ; GRITAR cost          [56,57]
-  .word action_4_description   ; GRITAR description   [58,59]
+  .word action_4_id            ; GRITAR id            [56,57]
+  .word action_4_name          ; GRITAR name          [58,59]
+  .word action_4_sensor_id     ; GRITAR sensor_id     [60,61]
+  .word action_4_sensor_active ; GRITAR sensor_active [62,63]
+  .word action_4_screen        ; GRITAR screen        [64,65]
+  .word action_4_cost          ; GRITAR cost          [66,67]
+  .word action_4_description   ; GRITAR description   [68,69]
 action_pointer_5:
-  .word action_5_id            ; LINTERNA id            [60,61]
-  .word action_5_name          ; LINTERNA name          [62,63]
-  .word action_5_sensor_id     ; LINTERNA sensor_id     [64,65]
-  .word action_5_sensor_active ; LINTERNA sensor_active [66,67]
-  .word action_5_cost          ; LINTERNA cost          [68,69]
-  .word action_5_description   ; LINTERNA description   [70,71]
+  .word action_5_id            ; LINTERNA id            [70,71]
+  .word action_5_name          ; LINTERNA name          [72,73]
+  .word action_5_sensor_id     ; LINTERNA sensor_id     [74,75]
+  .word action_5_sensor_active ; LINTERNA sensor_active [76,77]
+  .word action_5_screen        ; LINTERNA screen        [78,79]
+  .word action_5_cost          ; LINTERNA cost          [80,81]
+  .word action_5_description   ; LINTERNA description   [82,83]
 action_pointer_6:
-  .word action_6_id            ; EXPLORAR CAMINO id            [72,73]
-  .word action_6_name          ; EXPLORAR CAMINO name          [74,75]
-  .word action_6_sensor_id     ; EXPLORAR CAMINO sensor_id     [76,77]
-  .word action_6_sensor_active ; EXPLORAR CAMINO sensor_active [78,79]
-  .word action_6_cost          ; EXPLORAR CAMINO cost          [80,81]
-  .word action_6_description   ; EXPLORAR CAMINO description   [82,83]
+  .word action_6_id            ; EXPLORAR CAMINO id            [84,85]
+  .word action_6_name          ; EXPLORAR CAMINO name          [86,87]
+  .word action_6_sensor_id     ; EXPLORAR CAMINO sensor_id     [88,89]
+  .word action_6_sensor_active ; EXPLORAR CAMINO sensor_active [90,91]
+  .word action_6_screen        ; EXPLORAR CAMINO screen        [92,93]
+  .word action_6_cost          ; EXPLORAR CAMINO cost          [94,95]
+  .word action_6_description   ; EXPLORAR CAMINO description   [96,97]
 action_pointer_7:
-  .word action_7_id            ; CAEAGUA id            [84,85]
-  .word action_7_name          ; CAEAGUA name          [86,87]
-  .word action_7_sensor_id     ; CAEAGUA sensor_id     [88,89]
-  .word action_7_sensor_active ; CAEAGUA sensor_active [90,91]
-  .word action_7_cost          ; CAEAGUA cost          [92,93]
-  .word action_7_description   ; CAEAGUA description   [94,95]
+  .word action_7_id            ; VEO QUE CAE AGUA id            [98,99]
+  .word action_7_name          ; VEO QUE CAE AGUA name          [100,101]
+  .word action_7_sensor_id     ; VEO QUE CAE AGUA sensor_id     [102,103]
+  .word action_7_sensor_active ; VEO QUE CAE AGUA sensor_active [104,105]
+  .word action_7_screen        ; VEO QUE CAE AGUA screen        [106,107]
+  .word action_7_cost          ; VEO QUE CAE AGUA cost          [108,109]
+  .word action_7_description   ; VEO QUE CAE AGUA description   [110,111]
 action_name_offset:
   .byte 2  ; (byte of action_0_name in actions_pointers)
+action_sensor_id_offset:
+  .byte 4  ; (byte of action_0_sensor_id in actions_pointers)
+action_screen_offset:
+  .byte 8  ; (byte of action_0_screen in actions_pointers)
 action_description_offset:
-  .byte 10  ; (byte of action_0_description in actions_pointers)
+  .byte 12  ; (byte of action_0_description in actions_pointers)
 action_record_length:
-  .byte 12  ; (total .word bytes per action record)
+  .byte 14  ; (total .word bytes per action record)
 
 ; ── Action 0: LEVANTARSE ──────────────────────────
 action_0_id:
@@ -92,11 +104,14 @@ action_0_sensor_id:
 action_0_sensor_active:
   .byte 1  ; on
 
+action_0_screen:
+  .byte 1  ; screen id
+
 action_0_cost:
   .byte 15
 
 action_0_description:
-  .ascii "\"Con esfuerzo, te incorporas sin saber como. Semejante derrumbe deberia haber sido mortal. El frio no duele, todavia\"."
+  .ascii "Con esfuerzo, te incorporas sin saber como. Semejante derrumbe deberia haber sido mortal. El frio no duele, todavia."
   .ascii "e"
 
 ; ── Action 1: MIRAR ALREDEDOR ──────────────────────────
@@ -113,11 +128,14 @@ action_1_sensor_id:
 action_1_sensor_active:
   .byte 0  ; off
 
+action_1_screen:
+  .byte 255  ; screen id
+
 action_1_cost:
   .byte 15
 
 action_1_description:
-  .ascii "\"Desde el suelo solo se ve oscuridad\""
+  .ascii "Desde el suelo solo se ve oscuridad"
   .ascii "e"
 
 ; ── Action 2: GRITAR POR AYUDA ──────────────────────────
@@ -134,11 +152,14 @@ action_2_sensor_id:
 action_2_sensor_active:
   .byte 0  ; off
 
+action_2_screen:
+  .byte 255  ; screen id
+
 action_2_cost:
   .byte 15
 
 action_2_description:
-  .ascii "\"Intentas gritar, pero tu boca esta llena de agua\""
+  .ascii "Intentas gritar, pero tu boca esta llena de agua"
   .ascii "e"
 
 ; ── Action 3: MIRAR ENTRADA ──────────────────────────
@@ -155,11 +176,14 @@ action_3_sensor_id:
 action_3_sensor_active:
   .byte 0  ; off
 
+action_3_screen:
+  .byte 255  ; screen id
+
 action_3_cost:
   .byte 15
 
 action_3_description:
-  .ascii "\"Entre las rocas hay rendijas por donde entra aire viciado, pero ninguna lo bastante grande para pasar. Hay marcas irregulares, como si alguien hubiera intentado moverlas y se hubiera detenido a mitad de camino. Tal vez no sea una opcion volver por ahí, pero la idea de explorar una caverna a oscuras no parece tentadora.\""
+  .ascii "Entre las rocas hay rendijas por donde entra aire viciado, pero ninguna lo bastante grande para pasar. Hay marcas irregulares, como si alguien hubiera intentado moverlas y se hubiera detenido a mitad de camino. Tal vez no sea una opcion volver por ahí, pero la idea de explorar una caverna a oscuras no parece tentadora."
   .ascii "e"
 
 ; ── Action 4: GRITAR ──────────────────────────
@@ -176,11 +200,14 @@ action_4_sensor_id:
 action_4_sensor_active:
   .byte 0  ; off
 
+action_4_screen:
+  .byte 255  ; screen id
+
 action_4_cost:
   .byte 10
 
 action_4_description:
-  .ascii "\"El eco tarda demasiado en volver. Sientes que algo se mueve encima de ti. Debe ser tu imaginacion, te repites.\""
+  .ascii "El eco tarda demasiado en volver. Sientes que algo se mueve encima de ti. Debe ser tu imaginacion, te repites."
   .ascii "e"
 
 ; ── Action 5: LINTERNA ──────────────────────────
@@ -196,6 +223,9 @@ action_5_sensor_id:
 
 action_5_sensor_active:
   .byte 0  ; off
+
+action_5_screen:
+  .byte 255  ; screen id
 
 action_5_cost:
   .byte 5
@@ -218,32 +248,38 @@ action_6_sensor_id:
 action_6_sensor_active:
   .byte 0  ; off
 
+action_6_screen:
+  .byte 255  ; screen id
+
 action_6_cost:
   .byte 20
 
 action_6_description:
-  .ascii "La linterna se "
+  .ascii "Te dispones a explorar el camino que se abre en la oscuridad."
   .ascii "e"
 
-; ── Action 7: CAEAGUA ──────────────────────────
+; ── Action 7: VEO QUE CAE AGUA ──────────────────────────
 action_7_id:
   .byte 7
 
 action_7_name:
-  .ascii "CAEAGUA"
+  .ascii "VEO QUE CAE AGUA"
   .ascii "e"
 
 action_7_sensor_id:
-  .byte 255  ; none
+  .byte 0  ; none
 
 action_7_sensor_active:
-  .byte 0  ; off
+  .byte 1  ; on
+
+action_7_screen:
+  .byte 2  ; screen id
 
 action_7_cost:
   .byte 0
 
 action_7_description:
-  .ascii ""
+  .ascii "Si es verdad, ves como se empieza a llenar la caverna."
   .ascii "e"
 
 ; ── Total action count ──────────────────────────────────────

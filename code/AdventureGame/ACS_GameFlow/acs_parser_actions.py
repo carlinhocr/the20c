@@ -33,7 +33,9 @@ def to_asm(actions):
 
     # Captured from action 0 for offset labels emitted after all entries
     act0_name_offset        = None
+    act0_sensor_id_offset   = None
     act0_description_offset = None
+    act0_screen_offset      = None
     act0_record_length      = None
 
     for index, (key, act) in enumerate(actions.items()):
@@ -46,19 +48,26 @@ def to_asm(actions):
         lines.append(f"action_pointer_{act_id}:")
         lines.append(f"  .word {label}_id            ; {name} id            [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_name          ; {name} name          [{offset},{offset+1}]") ; _nam = offset ; offset += 2
-        lines.append(f"  .word {label}_sensor_id     ; {name} sensor_id     [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_sensor_id     ; {name} sensor_id     [{offset},{offset+1}]") ; _sid = offset ; offset += 2
         lines.append(f"  .word {label}_sensor_active ; {name} sensor_active [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_screen        ; {name} screen        [{offset},{offset+1}]") ; _scr = offset ; offset += 2
         lines.append(f"  .word {label}_cost          ; {name} cost          [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_description   ; {name} description   [{offset},{offset+1}]") ; _dsc = offset ; offset += 2
 
         if index == 0:
             act0_name_offset        = _nam
+            act0_sensor_id_offset   = _sid
+            act0_screen_offset      = _scr
             act0_description_offset = _dsc
-            act0_record_length      = offset - start_offset  # 12 bytes (6 x .word)
+            act0_record_length      = offset - start_offset  # 14 bytes (7 x .word)
 
     # -- Offset labels, placed after all action entries
     lines.append(f"action_name_offset:")
     lines.append(f"  .byte {act0_name_offset}  ; (byte of action_0_name in actions_pointers)")
+    lines.append(f"action_sensor_id_offset:")
+    lines.append(f"  .byte {act0_sensor_id_offset}  ; (byte of action_0_sensor_id in actions_pointers)")
+    lines.append(f"action_screen_offset:")
+    lines.append(f"  .byte {act0_screen_offset}  ; (byte of action_0_screen in actions_pointers)")
     lines.append(f"action_description_offset:")
     lines.append(f"  .byte {act0_description_offset}  ; (byte of action_0_description in actions_pointers)")
     lines.append(f"action_record_length:")
@@ -111,6 +120,17 @@ def to_asm(actions):
         # Sensor Active
         lines.append(f"{label}_sensor_active:")
         lines.append(f"  .byte {sensor_active_val}  ; {'on' if sensor_active_val else 'off'}")
+        lines.append("")
+
+        # Screen ID
+        try:
+            screen_id_val = int(act.get("ScreenID", 255))
+        except (ValueError, TypeError):
+            screen_id_val = 255
+        if screen_id_val < 0 or screen_id_val > 254:
+            screen_id_val = 255
+        lines.append(f"{label}_screen:")
+        lines.append(f"  .byte {screen_id_val}  ; screen id")
         lines.append("")
 
         # Cost

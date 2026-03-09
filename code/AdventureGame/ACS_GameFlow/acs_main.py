@@ -244,6 +244,30 @@ def open_actions_window():
     sensor_active_var = tk.BooleanVar(value=False)
     checkbox_widget(form, "Set Sensor Active (On)", sensor_active_var)
 
+    # ── Screen (combo from acs_screens.json) ──────────────────
+    section_lbl(form, "— Screen —")
+    add_combo(form, "Screen", get_screen_names(), combo_vars, combo_widgets)
+    action_screen_id_var = tk.StringVar(value="")
+    screen_id_row = tk.Frame(form, bg="#2b1a0e")
+    screen_id_row.pack(fill="x", pady=(2, 0))
+    tk.Label(screen_id_row, text="Screen ID:", **LABEL_STYLE).pack(side="left")
+    tk.Label(screen_id_row, textvariable=action_screen_id_var,
+             bg="#2b1a0e", fg="#50e878", font=("Courier", 11)).pack(side="left", padx=(6, 0))
+
+    def refresh_action_screen_id(*_):
+        name = combo_vars["Screen"].get().strip()
+        if not name:
+            action_screen_id_var.set("")
+            return
+        screens = load_json(JSON_SCREENS_FILE)
+        for rec in screens.values():
+            if rec.get("Name", "").strip() == name:
+                action_screen_id_var.set(rec.get("ID", "?"))
+                return
+        action_screen_id_var.set("?")
+
+    combo_vars["Screen"].trace_add("write", refresh_action_screen_id)
+
     # ── Cost field (numeric 0–256) ────────────────────────────
     section_lbl(form, "— Cost —")
     cost_var = tk.IntVar(value=0)
@@ -292,6 +316,21 @@ def open_actions_window():
                 except (ValueError, TypeError):
                     pass
         sensor_active_var.set(rec.get("SensorActive", False))
+        combo_vars["Screen"].set("")
+        stored_scr_id = rec.get("ScreenID", 255)
+        try:
+            stored_scr_id = int(stored_scr_id)
+        except (ValueError, TypeError):
+            stored_scr_id = 255
+        if stored_scr_id != 255:
+            screens = load_json(JSON_SCREENS_FILE)
+            for srec in screens.values():
+                try:
+                    if int(srec.get("ID", -1)) == stored_scr_id:
+                        combo_vars["Screen"].set(srec.get("Name", ""))
+                        break
+                except (ValueError, TypeError):
+                    pass
         try:
             cost_var.set(int(rec.get("Cost", 0)))
         except (ValueError, TypeError):
@@ -313,6 +352,14 @@ def open_actions_window():
                 sensor_id_num = 255
         data["SensorID"]     = sensor_id_num
         data["SensorActive"] = sensor_active_var.get()
+        screen_name = combo_vars["Screen"].get().strip()
+        screen_id_num = 255
+        if screen_name:
+            try:
+                screen_id_num = int(action_screen_id_var.get())
+            except (ValueError, TypeError):
+                screen_id_num = 255
+        data["ScreenID"] = screen_id_num
         try:
             cost_val = int(cost_var.get())
             cost_val = max(0, min(256, cost_val))
@@ -323,6 +370,7 @@ def open_actions_window():
         save_to_json(JSON_ACTIONS_FILE, "ID", data, slbl)
         load_dd["values"] = action_names_by_id()
         combo_widgets["Sensor"]["values"] = get_sensor_names()
+        combo_widgets["Screen"]["values"] = get_screen_names()
 
     save_btn(form, "💾  Save Action", on_save)
 

@@ -4,6 +4,7 @@
         "Name": "LEVANTARSE",
         "SensorID": 0,
         "SensorActive": true,
+        "ScreenID": 1,
         "Cost": 15,
         "Description": "Con esfuerzo, te incorporas sin saber como. Semejante derrumbe deberia haber sido mortal. El frio no duele, todavia."
     },
@@ -56,9 +57,11 @@
     },
     "7": {
         "ID": "7",
-        "Name": "CAEAGUA",
-        "Sensor": "",
+        "Name": "VEO QUE CAE AGUA",
+        "SensorID": 0,
+        "SensorActive": true,
+        "ScreenID": 2,
         "Cost": 0,
-        "Description": ""
+        "Description": "Si es verdad, ves como se empieza a llenar la caverna."
     }
 }

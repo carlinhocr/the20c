@@ -38,5 +38,25 @@
         "FlashlightOn": "\"Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constantemente, inundando la caverna. Como si midiera el tiempo.\"",
         "FlashlightOff": "\"Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constantemente, inundando la caverna. Como si midiera el tiempo.\"",
         "AsciiDrawing": ""
+    },
+    "2": {
+        "ID": "2",
+        "Name": "s1s3",
+        "North": "",
+        "South": "",
+        "East": "",
+        "West": "",
+        "Puzzle1": "",
+        "Puzzle2": "",
+        "Action1": "",
+        "Action2": "",
+        "Action3": "",
+        "Action4": "",
+        "Action5": "",
+        "Action6": "",
+        "Description": "",
+        "FlashlightOn": "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso; estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad.",
+        "FlashlightOff": "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso; estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad.\n",
+        "AsciiDrawing": ""
     }
 }
