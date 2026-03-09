@@ -1132,6 +1132,12 @@ runAction:
   lda action_screen_offset
   tay
   lda (pivotZpLow),Y
+  sta actionDataVectorLow
+  iny 
+  lda (pivotZpLow),Y
+  sta actionDataVectorHigh  
+  ldy #$0
+  lda (actionDataVectorLow),Y
   cmp #$ff ;invalid object so that slot is empty do not process
   beq runActionEnd
   sta screenCurrentID
