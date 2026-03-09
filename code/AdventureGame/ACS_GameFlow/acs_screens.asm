@@ -135,11 +135,11 @@ screen_0_ascii:
   .ascii "e"
 
 screen_0_flashlight_on:
-  .ascii "\"Despiertas sobre piedra húmeda. La caverna se cerro detrás de ti. Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental. El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti\"."
+  .ascii "Despiertas sobre piedra húmeda. La caverna se cerro detrás de ti. Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental. El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti."
   .ascii "e"
 
 screen_0_flashlight_off:
-  .ascii "\"Despiertas sobre piedra húmeda. La caverna se cerro detrás de ti. Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental. El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti\"."
+  .ascii "Despiertas sobre piedra húmeda. La caverna se cerro detrás de ti. Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental. El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti."
   .ascii "e"
 
 ; ── Screen 1: s1s2 ──────────────────────────
@@ -259,8 +259,7 @@ screen_2_flashlight_on:
   .ascii "e"
 
 screen_2_flashlight_off:
-  .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso; estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad.
-"
+  .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso; estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad."
   .ascii "e"
 
 ; ── Total screen count ──────────────────────────────────────
