@@ -678,13 +678,13 @@ msj_printer:
 ;-----------------------------------------------------------------------------------
 mainProgram:
   ;initialize 
-  jsr testPrinter
-  ;;jsr initilizationRoutines
+  ;jsr testPrinter
+  jsr initilizationRoutines
   ;initialize screen as screen zero
-  ;;jsr select_screen
-  ;;jsr draw_current_screen_table
+  jsr select_screen
+  jsr draw_current_screen_table
 mainProgramLoop:
-  ;;jsr action_selector  
+  jsr action_selector  
 ;   jsr check_puzzle
 ;   jsr check_sensor
 ;   jsr select_screen_noascii 
@@ -1079,17 +1079,18 @@ receiveUserOptionSelection_loop:
 action_selector:;
   jsr initiatilizeActionsIDs
   jsr loadScreenActionOptions
-; action_selection_ask_again:  
-;   jsr receiveUserOptionSelection  
-;   ldx userOptionSelection
-;   lda actionIDOptionsRAM,x ;here we have the action ID
-;   sta selectedAction
-;   lda selectedAction
-;   cmp #$ff
-;   bne action_selection_option_ok
-;   jsr print_option_unknown
-;   jmp action_selection_ask_again
-; action_selection_option_ok:  
+action_selection_ask_again:  
+  jsr receiveUserOptionSelection  
+  ldx userOptionSelection
+  lda actionIDOptionsRAM,x ;here we have the action ID
+  sta selectedAction
+  lda selectedAction
+  cmp #$ff
+  bne action_selection_option_ok
+  jsr print_option_unknown
+  jmp action_selection_ask_again
+action_selection_option_ok:  
+  jsr runAction
 ;   lda selectedAction  
 ;   beq processAction0
 ;   cmp #$1
@@ -1097,6 +1098,34 @@ action_selector:;
 ;   cmp #$2
 ;   beq processAction2
 ;   jsr printActionUnknown
+  rts
+
+runAction:
+  ;an action does three things
+  ;prints a description
+  ;moves you to a screen
+  ;turn off or off a sensor
+  ;select the offset of the Action
+  lda selectedAction
+  cmp #$ff ;invalid object so that slot is empty do not process
+  beq runActionEnd
+  asl ;multiply by two 
+  tax
+  lda actions_index,x
+  sta pivotZpLow
+  inx
+  lda actions_index,x
+  sta pivotZpHigh
+  ;prints the description of the action
+  lda action_description_offset
+  lda (pivotZpLow),Y
+  sta serialDataVectorLow  
+  iny 
+  lda (pivotZpLow),Y
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  ;prints a description:
+runActionEnd:
   rts
 
 processAction0:
