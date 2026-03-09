@@ -520,6 +520,8 @@ testPrinter:
 ;   jsr printerUnderlineOn
 ;   jsr probandoPrinter
 ;   jsr printerUnderlineOff
+  jsr printerLetterSizeBig
+  jsr probandoPrinter
   jsr printerLetterSizeMedium
   jsr probandoPrinter
   jsr printerLetterSizeNormal
@@ -643,6 +645,17 @@ printerLetterSizeMedium:
   jsr send_rs232_char  
   rts     
 
+printerLetterSizeBig:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$21 ;n
+  jsr send_rs232_char
+  ;bits 7 to 4 widht, bits 3 to 0 height 
+  ;00 normal size
+  lda #$77 ;big size 
+  jsr send_rs232_char  
+  rts   
+
 printerLetterSizeNormal:
   lda #$1b ;ESC 
   jsr send_rs232_char
@@ -650,7 +663,7 @@ printerLetterSizeNormal:
   jsr send_rs232_char
   ;bits 7 to 4 widht, bits 3 to 0 height 
   ;00 normal size
-  lda #$33 ;medium size 
+  lda #$00 ;medium size 
   jsr send_rs232_char  
   rts     
 msj_printer:
