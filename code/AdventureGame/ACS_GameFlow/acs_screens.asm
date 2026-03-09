@@ -5,6 +5,7 @@
 screens_index:
   .word screen_pointers_0  ; s1s1
   .word screen_pointers_1  ; s1s2
+  .word screen_pointers_2  ; s1s3
 screens_index_record_length:
   .byte 2  ; each screens_index entry is 1 .word (2 bytes)
 
@@ -47,6 +48,25 @@ screen_pointers_1:
   .word screen_1_ascii             ; s1s2 ascii             [66,67]
   .word screen_1_flashlight_on     ; s1s2 flashlight_on     [68,69]
   .word screen_1_flashlight_off    ; s1s2 flashlight_off    [70,71]
+screen_pointers_2:
+  .word screen_2_id                ; s1s3 id                [72,73]
+  .word screen_2_name              ; s1s3 name              [74,75]
+  .word screen_2_north             ; s1s3 north             [76,77]
+  .word screen_2_south             ; s1s3 south             [78,79]
+  .word screen_2_east              ; s1s3 east              [80,81]
+  .word screen_2_west              ; s1s3 west              [82,83]
+  .word screen_2_puzzle1           ; s1s3 puzzle1           [84,85]
+  .word screen_2_puzzle2           ; s1s3 puzzle2           [86,87]
+  .word screen_2_action1           ; s1s3 action1           [88,89]
+  .word screen_2_action2           ; s1s3 action2           [90,91]
+  .word screen_2_action3           ; s1s3 action3           [92,93]
+  .word screen_2_action4           ; s1s3 action4           [94,95]
+  .word screen_2_action5           ; s1s3 action5           [96,97]
+  .word screen_2_action6           ; s1s3 action6           [98,99]
+  .word screen_2_description       ; s1s3 description       [100,101]
+  .word screen_2_ascii             ; s1s3 ascii             [102,103]
+  .word screen_2_flashlight_on     ; s1s3 flashlight_on     [104,105]
+  .word screen_2_flashlight_off    ; s1s3 flashlight_off    [106,107]
 screen_puzzle_offset:
   .byte 12  ; (byte of screen_0_puzzle1 in screens_pointers)
 screen_action_offset:
@@ -149,7 +169,7 @@ screen_1_puzzle2:
   .byte 255  ; none
 
 screen_1_action1:
-  .byte 255  ; none
+  .byte 7  ; VEO QUE CAE AGUA
 
 screen_1_action2:
   .byte 255  ; none
@@ -175,13 +195,74 @@ screen_1_ascii:
   .ascii "e"
 
 screen_1_flashlight_on:
-  .ascii "\"Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constantemente, inundando la caverna. Como si midiera el tiempo.\""
+  .ascii "Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constantemente, inundando la caverna. Como si midiera el tiempo."
   .ascii "e"
 
 screen_1_flashlight_off:
-  .ascii "\"Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constantemente, inundando la caverna. Como si midiera el tiempo.\""
+  .ascii "Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constantemente, inundando la caverna. Como si midiera el tiempo."
+  .ascii "e"
+
+; ── Screen 2: s1s3 ──────────────────────────
+screen_2_id:
+  .byte 2
+
+screen_2_name:
+  .ascii "s1s3"
+  .ascii "e"
+
+screen_2_north:
+  .byte 255  ; none
+
+screen_2_south:
+  .byte 255  ; none
+
+screen_2_east:
+  .byte 255  ; none
+
+screen_2_west:
+  .byte 255  ; none
+
+screen_2_puzzle1:
+  .byte 255  ; none
+
+screen_2_puzzle2:
+  .byte 255  ; none
+
+screen_2_action1:
+  .byte 255  ; none
+
+screen_2_action2:
+  .byte 255  ; none
+
+screen_2_action3:
+  .byte 255  ; none
+
+screen_2_action4:
+  .byte 255  ; none
+
+screen_2_action5:
+  .byte 255  ; none
+
+screen_2_action6:
+  .byte 255  ; none
+
+screen_2_description:
+  .ascii ""
+  .ascii "e"
+
+screen_2_ascii:
+  .ascii ""
+  .ascii "e"
+
+screen_2_flashlight_on:
+  .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso; estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad."
+  .ascii "e"
+
+screen_2_flashlight_off:
+  .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso; estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad.
+"
   .ascii "e"
 
 ; ── Total screen count ──────────────────────────────────────
 screen_count:
-  .byte 2
+  .byte 3
