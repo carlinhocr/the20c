@@ -1901,8 +1901,10 @@ screen_2_description:
   .ascii "e"
 
 screen_2_ascii:
-  .ascii ""
-  .ascii "e"
+  .ascii "░░░░░░░░░##    #                 #            #                    # #░░░░░░░░░░"
+  .ascii "░░░░░░░░##    ##                 ##            #                  #   #░░░░░░░░░"
+  .ascii "" 
+  .ascii "e" 
 
 screen_2_flashlight_on:
   .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad."
