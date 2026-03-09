@@ -517,9 +517,9 @@ testPrinter:
   jsr probandoPrinter
   jsr printerJustificationLeft
   jsr probandoPrinter
-  jsr printerUnderlineOn
-  jsr probandoPrinter
-  jsr printerUnderlineOff
+;   jsr printerUnderlineOn
+;   jsr probandoPrinter
+;   jsr printerUnderlineOff
   jsr printerLetterSizeMedium
   jsr probandoPrinter
   jsr printerLetterSizeNormal
