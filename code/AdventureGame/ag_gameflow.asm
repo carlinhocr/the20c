@@ -641,7 +641,7 @@ printerLetterSizeMedium:
   jsr send_rs232_char
   ;bits 7 to 4 widht, bits 3 to 0 height 
   ;00 normal size
-  lda #$33 ;medium size 
+  lda #$11 ;medium size 
   jsr send_rs232_char  
   rts     
 
@@ -652,7 +652,7 @@ printerLetterSizeBig:
   jsr send_rs232_char
   ;bits 7 to 4 widht, bits 3 to 0 height 
   ;00 normal size
-  lda #$77 ;big size 
+  lda #$33 ;big size 
   jsr send_rs232_char  
   rts   
 
