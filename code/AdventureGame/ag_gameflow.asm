@@ -517,6 +517,13 @@ testPrinter:
   jsr probandoPrinter
   jsr printerJustificationLeft
   jsr probandoPrinter
+  jsr printerUnderlineOn
+  jsr probandoPrinter
+  jsr printerUnderlineOff
+  jsr printerLetterSizeMedium
+  jsr probandoPrinter
+  jsr printerLetterSizeNormal
+  jsr probandoPrinter
   jsr printerFeedManyLines
   rts
 
@@ -596,7 +603,45 @@ printerFeedManyLines:
   jsr send_rs232_char  
   rts    
 
+printerUnderlineOn:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$2d ;n
+  jsr send_rs232_char
+  lda #$1
+  jsr send_rs232_char  
+  rts    
 
+printerUnderlineOff:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$2d ;n
+  jsr send_rs232_char
+  lda #$0 
+  jsr send_rs232_char  
+  rts    
+  
+printerLetterSizeMedium:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$21 ;n
+  jsr send_rs232_char
+  ;bits 7 to 4 widht, bits 3 to 0 height 
+  ;00 normal size
+  lda #$33 ;medium size 
+  jsr send_rs232_char  
+  rts     
+
+printerLetterSizeNormal:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$21 ;n
+  jsr send_rs232_char
+  ;bits 7 to 4 widht, bits 3 to 0 height 
+  ;00 normal size
+  lda #$33 ;medium size 
+  jsr send_rs232_char  
+  rts     
 msj_printer:
   .ascii "Probando Printer"
   .ascii "e"   
