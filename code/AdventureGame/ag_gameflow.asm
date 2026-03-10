@@ -314,6 +314,8 @@ programStart:
   jsr screenInit
   jsr lcdDemoMessage
   jsr timerWaitOneSecond
+loop:
+  jmp loop  
   ;jsr mainProgram
   ;jmp listeningMode
 
@@ -934,6 +936,7 @@ timerCheckSecondElapsedTrue:
   lda #> msj_secondElapsed
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  jsr timerWaitOneSecond ;set the timer again
   rts  
 
 ;END--------------------------------------------------------------------------------
@@ -3718,8 +3721,6 @@ irq:
   lda LCD_IFR
   and #%01000000;#LCD_T1_FLAG
   beq irqNextInterruptSource
-  lda #$61 ;a 
-  jsr send_rs232_char
   jsr timerCheckSecondElapsed
 irqNextInterruptSource:
   jsr test_buttons ;test_buttons loads the message
