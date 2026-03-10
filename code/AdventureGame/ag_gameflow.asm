@@ -3712,7 +3712,9 @@ irq:
   ;check that the input is enabled first (so the program is waiting for user input)
   ;or we can disable interruptions and only enable them before accepting input from the user;
   lda LCD_IFR
-  and #LCD_T1_FLAG
+  and #%01000000;#LCD_T1_FLAG
+  lda #$61 ;b 
+  jsr send_rs232_char  
   beq irqNextInterruptSource
   lda #$61 ;a 
   jsr send_rs232_char
