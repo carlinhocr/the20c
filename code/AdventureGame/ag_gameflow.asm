@@ -900,6 +900,7 @@ initiatilizeActionsIDs_loop:
 ;-----------------------------------------------------------------------------------
 
 timerWaitOneSecond:
+  cli ;enable interrupts
   ;clear bits 7 and 6 timer 1 in one shot mode
   lda LCD_ACR
   and #%00111111      
@@ -3713,6 +3714,8 @@ irq:
   lda LCD_IFR
   and #LCD_T1_FLAG
   beq irqNextInterruptSource
+  lda #$61 ;a 
+  jsr send_rs232_char
   jsr timerCheckSecondElapsed
 irqNextInterruptSource:
   jsr test_buttons ;test_buttons loads the message
