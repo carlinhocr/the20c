@@ -247,7 +247,10 @@ TIMER_TICKS_LO  = $4E               ; low  byte of 49 998
 TIMER_TICKS_HI  = $C3               ; high byte of 49 998
 
 TIMER_LOOPS_1S  = 20                ; 20 × 50 ms = 1 second
-TIMER_LOOPS_1M  = 60                ; 60 × 1 second = 1 minute
+TIMER_LOOPS_5S  = 100               ;5 seconds
+TIMER_LOOPS_10S  = 200               ;10 seconds
+
+TIMER_LOOPS_1M  = 6                ; 6 × 10 seconds = 1 minute
 
 ;Memory Mappings
 ;these are constants where we reflect the number of the memory position
@@ -313,7 +316,7 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
-  jsr timerWaitOneSecond
+  jsr timerWaitOneMinute
 loop:
   jmp loop  
   ;jsr mainProgram
@@ -902,16 +905,30 @@ initiatilizeActionsIDs_loop:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+timerWaitOneMinute:
+  cli ;enable interrupts 
+  lda #TIMER_LOOPS_1M
+  sta TIMER_ZP_MIN  
+  jsr timerWaitTenSeconds
+  rts
+
+timerWaitTenSeconds:
+  cli ;enable interrupts   
+  lda #TIMER_LOOPS_10S ;constant with the number 20 the number 50ms loops to reach a second
+  sta TIMER_ZP_SEC ; memory position to degrade the loop
+  jsr timerLoadTick
+  rts
+
+timerWaitFiveSeconds:
+  cli ;enable interrupts   
+  lda #TIMER_LOOPS_5S ;constant with the number 20 the number 50ms loops to reach a second
+  sta TIMER_ZP_SEC ; memory position to degrade the loop
+  jsr timerLoadTick
+  rts
+
 timerWaitOneSecond:
-  cli ;enable interrupts
-  lda #$63 ;c 
-  jsr send_rs232_char    
-;   ;clear bits 7 and 6 timer 1 in one shot mode
-;   lda LCD_ACR
-;   and #%00111111      
-;   sta LCD_ACR
-  ;lda #TIMER_LOOPS_1S ;constant with the number 20 the number 50ms loops to reach a second
-  lda #100 ;to count 5 seconds before starting
+  cli ;enable interrupts   
+  lda #TIMER_LOOPS_1S ;constant with the number 20 the number 50ms loops to reach a second
   sta TIMER_ZP_SEC ; memory position to degrade the loop
   jsr timerLoadTick
   rts
@@ -937,7 +954,21 @@ timerCheckSecondElapsedTrue:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   jsr timerWaitOneSecond ;set the timer again
+  dec TIMER_ZP_MIN
   rts  
+
+timerCheckMinuteElapsed:
+  lda TIMER_ZP_MIN
+  beq timerCheckMinuteElapsedTrue  
+  rts
+timerCheckMinuteElapsedTrue:  
+  lda #< msj_minuteElapsed
+  sta serialDataVectorLow
+  lda #> msj_minuteElapsed
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  jsr timerWaitOneMinute  
+  rts
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -1682,9 +1713,12 @@ msj_waterOn:
   .ascii "e"    
 
 msj_secondElapsed:
-  .ascii "Paso un segundo"
+  .ascii "Paso el tiempo"
   .ascii "e"    
 
+msj_minuteElapsed:
+  .ascii "Paso un minuto"
+  .ascii "e"    
 actions_unknown:
   .ascii "Mmmm no puedes hacer eso"
   .ascii "e"     
@@ -3722,6 +3756,7 @@ irq:
   and #%01000000;#LCD_T1_FLAG
   beq irqNextInterruptSource
   jsr timerCheckSecondElapsed
+  jsr timerCheckMinuteElapsed
 irqNextInterruptSource:
   jsr test_buttons ;test_buttons loads the message
 exit_irq:  
