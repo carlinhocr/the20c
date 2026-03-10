@@ -409,7 +409,7 @@ viaLcdInit:
   ;enable CA1 for interrupts
   ;bits set/clear,timer1,timer2,CB1,CB2,ShiftReg,CA1,CA2
   ;sets interrupts for timer 1 and CA1 #%11000010
-  lda #%10000010
+  lda #%11000010
   sta LCD_IER 
   ;enable negative edge transition ca1 LCD_PCR register
   ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
@@ -421,8 +421,9 @@ viaLcdInit:
   ;bit 1 in zero portB latch disable
   ;bit 0 in 0 portA larch disable
   ;lda #%00000000      ; clear bits 7 and 6
-  lda #%01000000      ; clear bits 7 and 6 (free running)
+  lda #%00000000      ; clear bits 7 and 6 (free running)
   sta LCD_ACR
+  ;counter in zero bit 6 of IFR is set
 
   ;END enable interrupts
 
@@ -917,7 +918,7 @@ timerLoadTick:
   lda #TIMER_TICKS_LO
   sta LCD_T1LL ;set latch low
   lda #TIMER_TICKS_HI
-  sta LCD_T1LH ;set latch high and start timer and clears IFR T1
+  sta LCD_T1CH ;set latch high and start timer and clears IFR T1
   rts  
 
 timerCheckSecondElapsed:
