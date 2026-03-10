@@ -313,7 +313,9 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
+waitAgain:  
   jsr timerWaitOneSecond
+  jmp waitAgain
   ;jsr mainProgram
   ;jmp listeningMode
 
@@ -900,10 +902,12 @@ initiatilizeActionsIDs_loop:
 
 timerWaitOneSecond:
   cli ;enable interrupts
-  ;clear bits 7 and 6 timer 1 in one shot mode
-  lda LCD_ACR
-  and #%00111111      
-  sta LCD_ACR
+  lda #$63 ;c 
+  jsr send_rs232_char    
+;   ;clear bits 7 and 6 timer 1 in one shot mode
+;   lda LCD_ACR
+;   and #%00111111      
+;   sta LCD_ACR
   lda #TIMER_LOOPS_1S ;constant with the number 20 the number 50ms loops to reach a second
   sta TIMER_ZP_SEC ; memory position to degrade the loop
   jsr timerLoadTick
