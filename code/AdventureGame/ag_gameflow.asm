@@ -906,7 +906,8 @@ timerWaitOneSecond:
 ;   lda LCD_ACR
 ;   and #%00111111      
 ;   sta LCD_ACR
-  lda #TIMER_LOOPS_1S ;constant with the number 20 the number 50ms loops to reach a second
+  ;lda #TIMER_LOOPS_1S ;constant with the number 20 the number 50ms loops to reach a second
+  lda #100 ;to count 5 seconds before starting
   sta TIMER_ZP_SEC ; memory position to degrade the loop
   jsr timerLoadTick
   rts
@@ -931,10 +932,6 @@ timerCheckSecondElapsedTrue:
   lda #> msj_secondElapsed
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  ;reload to wait another second  
-  lda #TIMER_LOOPS_1S
-  sta TIMER_ZP_SEC ; memory position to degrade the loop
-  jsr timerLoadTick  
   rts  
 
 ;END--------------------------------------------------------------------------------
