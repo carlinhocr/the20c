@@ -421,7 +421,7 @@ viaLcdInit:
   ;bit 1 in zero portB latch disable
   ;bit 0 in 0 portA larch disable
   ;lda #%00000000      ; clear bits 7 and 6
-  lda #%00000000      ; clear bits 7 and 6
+  lda #%01000000      ; clear bits 7 and 6 (free running)
   sta LCD_ACR
 
   ;END enable interrupts
@@ -925,7 +925,7 @@ timerCheckSecondElapsed:
   dec TIMER_ZP_SEC
   lda TIMER_ZP_SEC
   beq timerCheckSecondElapsedTrue
-  jsr timerLoadTick  
+  ;jsr timerLoadTick  
   rts
 timerCheckSecondElapsedTrue:
   lda #< msj_secondElapsed
