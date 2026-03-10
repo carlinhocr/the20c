@@ -415,7 +415,6 @@ viaLcdInit:
   ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
   lda #%00000000
   sta LCD_PCR 
-  lda LCD_ACR
   ;bit 7,6 00 timer 1 one shot mode without pb7
   ;bit 5 in 0 timer 2 one shot mode
   ;bit 4,3,2 in 0 disable shift register
@@ -3711,10 +3710,10 @@ irq:
   
   ;check that the input is enabled first (so the program is waiting for user input)
   ;or we can disable interruptions and only enable them before accepting input from the user;
-  lda LCD_IFR
-  and #%01000000;#LCD_T1_FLAG
   lda #$61 ;b 
   jsr send_rs232_char  
+  lda LCD_IFR
+  and #%01000000;#LCD_T1_FLAG
   beq irqNextInterruptSource
   lda #$61 ;a 
   jsr send_rs232_char
