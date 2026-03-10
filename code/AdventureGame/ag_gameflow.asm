@@ -926,7 +926,7 @@ timerCheckSecondElapsed:
   dec TIMER_ZP_SEC
   lda TIMER_ZP_SEC
   beq timerCheckSecondElapsedTrue
-  ;jsr timerLoadTick  
+  jsr timerLoadTick  
   rts
 timerCheckSecondElapsedTrue:
   lda #< msj_secondElapsed
