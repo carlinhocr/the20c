@@ -313,9 +313,7 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
-waitAgain:  
   jsr timerWaitOneSecond
-  jmp waitAgain
   ;jsr mainProgram
   ;jmp listeningMode
 
@@ -932,7 +930,11 @@ timerCheckSecondElapsedTrue:
   sta serialDataVectorLow
   lda #> msj_secondElapsed
   sta serialDataVectorHigh
-  jsr printAsciiDrawing  
+  jsr printAsciiDrawing
+  ;reload to wait another second  
+  lda #TIMER_LOOPS_1S
+  sta TIMER_ZP_SEC ; memory position to degrade the loop
+  jsr timerLoadTick  
   rts  
 
 ;END--------------------------------------------------------------------------------
