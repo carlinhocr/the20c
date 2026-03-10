@@ -954,8 +954,24 @@ timerCheckSecondElapsedTrue:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   jsr timerWaitOneSecond ;set the timer again
-  dec TIMER_ZP_MIN
   rts  
+
+timerCheck10SecondElapsed:
+  lda LCD_T1CL             ; reading T1CL clears IFR bit 6
+  dec TIMER_ZP_SEC
+  lda TIMER_ZP_SEC
+  beq timerCheckSecondElapsedTrue
+  jsr timerLoadTick  
+  rts
+timerCheck10SecondElapsedTrue:
+  lda #< msj_secondElapsed
+  sta serialDataVectorLow
+  lda #> msj_secondElapsed
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  jsr timerWaitTenSeconds ;set the timer again
+  dec TIMER_ZP_MIN
+  rts    
 
 timerCheckMinuteElapsed:
   lda TIMER_ZP_MIN
@@ -3755,7 +3771,8 @@ irq:
   lda LCD_IFR
   and #%01000000;#LCD_T1_FLAG
   beq irqNextInterruptSource
-  jsr timerCheckSecondElapsed
+  ;jsr timerCheckSecondElapsed
+  jsr timerCheck10SecondElapsed
   jsr timerCheckMinuteElapsed
 irqNextInterruptSource:
   jsr test_buttons ;test_buttons loads the message
