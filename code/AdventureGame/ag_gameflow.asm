@@ -28,6 +28,10 @@ LCD_VIA_BASE  = $6000
 ; IFR       = VIA_BASE + $0D   ; Interrupt Flag Register
 ; IER       = VIA_BASE + $0E   ; Interrupt Enable Register
 
+; ── Timer 1 IFR bit mask ──────────────────────────────────
+
+LCD_T1_FLAG   = %01000000         ; bit 6
+
 LCD_PORTB = $6000
 LCD_PORTA = $6001
 LCD_DDRB = $6002 
@@ -76,6 +80,8 @@ serialDataVectorHigh = $3e
 serialCharperLines = $3f
 serialTotalLinesAscii =$40
 serialDrawindEndChar=$41
+TIMER_ZP_SEC    = $42               ; loop counter for WAIT_ONE_SECOND  (1 byte)
+TIMER_ZP_MIN    = $43               ; seconds counter for WAIT_ONE_MINUTE (1 byte)
 
 soundLowByte=$50
 soundHighByte=$51
@@ -219,6 +225,30 @@ pos_lcd_initial_line1=$C0
 pos_lcd_initial_line2=$94
 pos_lcd_initial_line3=$D4
 
+;Timer Constants
+; ── Timer load values for 1 MHz clock ────────────────────
+;
+;  Timer counts DOWN from the loaded value to 0, then sets
+;  IFR bit 6.  At 1 MHz each tick = 1 µs.
+;
+;  Maximum single load = 65535 µs ≈ 65.535 ms
+;  So to reach 1 second we need ~15.259 overflows of 65535,
+;  but it's cleaner to use exactly 50 000 µs (50 ms) and
+;  count 20 overflows  →  20 × 50 000 µs = 1 000 000 µs = 1 s
+;
+;  TICKS_50MS = 50 000 - 2 = 49 998
+;    (subtract 2 because the VIA takes 2 extra cycles to
+;     reload and set the flag — datasheet §4.2.1)
+;  49 998 = $C34E
+;  Low  byte: $4E
+;  High byte: $C3
+
+TIMER_TICKS_LO  = $4E               ; low  byte of 49 998
+TIMER_TICKS_HI  = $C3               ; high byte of 49 998
+
+TIMER_LOOPS_1S  = 20                ; 20 × 50 ms = 1 second
+TIMER_LOOPS_1M  = 60                ; 60 × 1 second = 1 minute
+
 ;Memory Mappings
 ;these are constants where we reflect the number of the memory position
 
@@ -283,8 +313,9 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
-  jsr mainProgram
-  jmp listeningMode
+  jsr timerWaitOneSecond
+  ;jsr mainProgram
+  ;jmp listeningMode
 
 lcdDemoMessage:
 
@@ -377,12 +408,22 @@ viaLcdInit:
   ;BEGIN enable interrupts LCD VIA
   ;enable CA1 for interrupts
   ;bits set/clear,timer1,timer2,CB1,CB2,ShiftReg,CA1,CA2
-  lda #%10000010
+  ;sets interrupts for timer 1 and CA1 #%11000010
+  lda #%11000010
   sta LCD_IER 
   ;enable negative edge transition ca1 LCD_PCR register
   ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
   lda #%00000000
   sta LCD_PCR 
+  lda LCD_ACR
+  ;bit 7,6 00 timer 1 one shot mode without pb7
+  ;bit 5 in 0 timer 2 one shot mode
+  ;bit 4,3,2 in 0 disable shift register
+  ;bit 1 in zero portB latch disable
+  ;bit 0 in 0 portA larch disable
+  lda #%00000000      ; clear bits 7 and 6
+  sta LCD_ACR
+
   ;END enable interrupts
 
   ;BEGIN Configure Ports A & B
@@ -702,12 +743,7 @@ mainProgramLoop:
   sta moveNextScreen ;reset the move next screen flag
   jsr select_screen
   jsr draw_current_screen_table
-  jmp mainProgramLoop 
-;   lda #$2
-;   sta selectedAction  
-;   jsr action_selector  
-;   jsr check_puzzle
-;   jsr select_screen_noascii    
+  jmp mainProgramLoop   
   rts
 
 delayClear:
@@ -863,7 +899,36 @@ initiatilizeActionsIDs_loop:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+timerWaitOneSecond:
+  ;clear bits 7 and 6 timer 1 in one shot mode
+  lda LCD_ACR
+  and #%00111111      
+  sta LCD_ACR
+  lda #TIMER_LOOPS_1S ;constant with the number 20 the number 50ms loops to reach a second
+  sta TIMER_ZP_SEC ; memory position to degrade the loop
+  jsr timerLoadTick
+  rts
 
+timerLoadTick:  
+  lda #TIMER_TICKS_LO
+  sta LCD_T1LL ;set latch low
+  lda #TIMER_TICKS_HI
+  sta LCD_T1LH ;set latch high and start timer and clears IFR T1
+  rts  
+
+timerCheckSecondElapsed:
+  lda LCD_T1CL             ; reading T1CL clears IFR bit 6
+  dec TIMER_ZP_SEC
+  beq timerCheckSecondElapsedTrue
+  jsr timerLoadTick  
+  rts
+timerCheckSecondElapsedTrue:
+  lda #< msj_secondElapsed
+  sta serialDataVectorLow
+  lda #> msj_secondElapsed
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing  
+  rts  
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -1605,6 +1670,10 @@ msj_heartOff:
 
 msj_waterOn:
   .ascii "El Agua Sube"
+  .ascii "e"    
+
+msj_secondElapsed:
+  .ascii "Paso un segundo"
   .ascii "e"    
 
 actions_unknown:
@@ -3640,6 +3709,11 @@ irq:
   
   ;check that the input is enabled first (so the program is waiting for user input)
   ;or we can disable interruptions and only enable them before accepting input from the user;
+  lda LCD_IFR
+  and #LCD_T1_FLAG
+  beq irqNextInterruptSource
+  jsr timerCheckSecondElapsed
+irqNextInterruptSource:
   jsr test_buttons ;test_buttons loads the message
 exit_irq:  
   ;reserve order of stacking to restore values
