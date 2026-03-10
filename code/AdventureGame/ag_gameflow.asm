@@ -960,7 +960,7 @@ timerCheck10SecondElapsed:
   lda LCD_T1CL             ; reading T1CL clears IFR bit 6
   dec TIMER_ZP_SEC
   lda TIMER_ZP_SEC
-  beq timerCheckSecondElapsedTrue
+  beq timerCheck10SecondElapsedTrue
   jsr timerLoadTick  
   rts
 timerCheck10SecondElapsedTrue:
