@@ -147,25 +147,25 @@ screen_0_action6:
   .byte 255  ; none
 
 screen_0_description:
-  .ascii ""
+  .ascii "Despiertas sobre piedra húmeda."
+  .ascii "La caverna se cerro detrás de ti. "
+  .ascii "Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera si"
+  .ascii "do final, no accidental."
+  .ascii "El frío no duele todavía. "
+  .ascii "Sientes un constante goteo de agua, cada vez mas cerca de ti."
   .ascii "e"
 
 screen_0_ascii:
-  .ascii "opsi"
+  .ascii ""
   .ascii "e"
 
 screen_0_flashlight_on:
-  .ascii "onDespiertas sobre piedra húmeda. La caverna se cerro detrás de ti." 
-  .ascii "Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final,"
-  .ascii "no accidental. El frío no duele todavía." 
-  .ascii" Sientes un constante goteo de agua, cada vez mas cerca de ti."
+  .ascii ""
+  .ascii ""
   .ascii "e"
 
 screen_0_flashlight_off:
-  .ascii "offDespiertas sobre piedra húmeda. La caverna se cerro detrás de ti." 
-  .ascii "Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final,"
-  .ascii "no accidental. El frío no duele todavía." 
-  .ascii" Sientes un constante goteo de agua, cada vez mas cerca de ti."
+  .ascii ""
   .ascii "e"
 
 ; ── Screen 1: s1s2 ──────────────────────────
@@ -221,11 +221,13 @@ screen_1_ascii:
   .ascii "e"
 
 screen_1_flashlight_on:
-  .ascii "Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constantemente, inundando la caverna. Como si midiera el tiempo."
+  .ascii "Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constante"
+  .ascii "mente, inundando la caverna. Como si midiera el tiempo."
   .ascii "e"
 
 screen_1_flashlight_off:
-  .ascii "Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constantemente, inundando la caverna. Como si midiera el tiempo."
+  .ascii "Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constante"
+  .ascii "mente, inundando la caverna. Como si midiera el tiempo."
   .ascii "e"
 
 ; ── Screen 2: s1s3 ──────────────────────────
@@ -281,11 +283,21 @@ screen_2_ascii:
   .ascii "e"
 
 screen_2_flashlight_on:
-  .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso, estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad."
+  .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte co"
+  .ascii "n su peso, estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes s"
+  .ascii "on rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente cla"
+  .ascii "ra. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi or"
+  .ascii "gánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino"
+  .ascii " que se pierde en la oscuridad."
   .ascii "e"
 
 screen_2_flashlight_off:
-  .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso, estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad."
+  .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte co"
+  .ascii "n su peso, estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes s"
+  .ascii "on rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente cla"
+  .ascii "ra. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi or"
+  .ascii "gánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino"
+  .ascii " que se pierde en la oscuridad."
   .ascii "e"
 
 ; ── Screen 3: startScreen ──────────────────────────
