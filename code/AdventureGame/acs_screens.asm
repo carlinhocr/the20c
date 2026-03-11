@@ -155,11 +155,11 @@ screen_0_ascii:
   .ascii "e"
 
 screen_0_flashlight_on:
-  .ascii "Despiertas sobre piedra húmeda. La caverna se cerro detrás de ti. Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental. El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti."
+  .ascii "onDespiertas sobre piedra húmeda. La caverna se cerro detrás de ti. Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental. El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti."
   .ascii "e"
 
 screen_0_flashlight_off:
-  .ascii "Despiertas sobre piedra húmeda. La caverna se cerro detrás de ti. Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental. El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti."
+  .ascii "offDespiertas sobre piedra húmeda. La caverna se cerro detrás de ti. Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental. El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti."
   .ascii "e"
 
 ; ── Screen 1: s1s2 ──────────────────────────
