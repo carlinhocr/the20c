@@ -213,7 +213,9 @@ screen_1_action6:
   .byte 255  ; none
 
 screen_1_description:
-  .ascii ""
+  .ascii "Al levantarte, miras a tu alrededor."
+  .ascii "Ves que el agua gotea lenta, pero constantemente, inundando la caverna."
+  .ascii "Como si midiera el tiempo."
   .ascii "e"
 
 screen_1_ascii:
@@ -221,13 +223,11 @@ screen_1_ascii:
   .ascii "e"
 
 screen_1_flashlight_on:
-  .ascii "Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constante"
-  .ascii "mente, inundando la caverna. Como si midiera el tiempo."
+  .ascii ""
   .ascii "e"
 
 screen_1_flashlight_off:
-  .ascii "Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constante"
-  .ascii "mente, inundando la caverna. Como si midiera el tiempo."
+  .ascii ""
   .ascii "e"
 
 ; ── Screen 2: s1s3 ──────────────────────────
