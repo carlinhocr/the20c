@@ -1,7 +1,9 @@
 import json
 import os
+import subprocess
+import sys
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import messagebox, scrolledtext, ttk
 
 JSON_SCREENS_FILE  = "acs_screens.json"
 JSON_ACTIONS_FILE  = "acs_actions.json"
@@ -508,9 +510,9 @@ def open_puzzles_window():
 def open_screens_window():
     win = tk.Toplevel()
     win.title("Screens")
-    win.geometry("500x700")
+    win.geometry("740x700")
     win.configure(bg="#2b1a0e")
-    win.resizable(False, True)
+    win.resizable(True, True)
     apply_combo_style()
 
     tk.Label(win, text="🖥️  Screens Editor", font=("Georgia", 18, "bold"),
@@ -570,24 +572,24 @@ def open_screens_window():
     section_lbl(form, "— Description —")
     tk.Label(form, text="Description", **LABEL_STYLE).pack(fill="x", pady=(0, 2))
     desc_text = tk.Text(form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
-                        relief="sunken", bd=2, font=("Courier", 11), height=4, wrap="word")
+                        relief="sunken", bd=2, font=("Courier", 11), height=4, wrap="none", width=80)
     desc_text.pack(fill="x")
 
     tk.Label(form, text="FlashlightOn", **LABEL_STYLE).pack(fill="x", pady=(8, 2))
     flashlight_on_text = tk.Text(form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
-                                 relief="sunken", bd=2, font=("Courier", 11), height=4, wrap="word")
+                                 relief="sunken", bd=2, font=("Courier", 11), height=4, wrap="none", width=80)
     flashlight_on_text.pack(fill="x")
 
     tk.Label(form, text="FlashlightOff", **LABEL_STYLE).pack(fill="x", pady=(8, 2))
     flashlight_off_text = tk.Text(form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
-                                  relief="sunken", bd=2, font=("Courier", 11), height=4, wrap="word")
+                                  relief="sunken", bd=2, font=("Courier", 11), height=4, wrap="none", width=80)
     flashlight_off_text.pack(fill="x")
 
     # ── ASCII Drawing ─────────────────────────────────────────
     section_lbl(form, "— ASCII Drawing —")
     tk.Label(form, text="AsciiDrawing", **LABEL_STYLE).pack(fill="x", pady=(0, 2))
     ascii_text = tk.Text(form, bg="#1e0f05", fg="#50e878", insertbackground="#50e878",
-                         relief="sunken", bd=2, font=("Courier New", 11), height=7, wrap="none")
+                         relief="sunken", bd=2, font=("Courier New", 11), height=7, wrap="none", width=80)
     ascii_text.pack(fill="x")
 
     # ── Save ──────────────────────────────────────────────────
@@ -1112,6 +1114,97 @@ def open_sensors_window():
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  Run Parsers
+# ══════════════════════════════════════════════════════════════════════════════
+
+PARSER_SCRIPTS = [
+    ("acs_parser_sensors.py",  "📡  Sensors"),
+    ("acs_parser_actions.py",  "⚡  Actions"),
+    ("acs_parser_puzzles.py",  "🧩  Puzzles"),
+    ("acs_parser_screens.py",  "🖥️  Screens"),
+]
+
+
+def run_parsers():
+    """Run all 4 parser scripts and show a results window."""
+    win = tk.Toplevel()
+    win.title("Run Parsers")
+    win.geometry("640x480")
+    win.configure(bg="#1a0f06")
+    win.resizable(True, True)
+
+    tk.Label(win, text="⚙  Parser Output", font=("Georgia", 14, "bold"),
+             bg="#1a0f06", fg="#f0c040", pady=10).pack()
+    tk.Frame(win, bg="#7a5520", height=2).pack(fill="x", padx=20)
+
+    log = scrolledtext.ScrolledText(
+        win, bg="#0d0603", fg="#50e878", font=("Courier", 10),
+        relief="sunken", bd=2, state="disabled", wrap="word"
+    )
+    log.pack(fill="both", expand=True, padx=16, pady=12)
+
+    status_lbl = tk.Label(win, text="", font=("Courier", 10, "bold"),
+                          bg="#1a0f06", fg="#f0c040", pady=6)
+    status_lbl.pack()
+
+    def append(text, tag=None):
+        log.configure(state="normal")
+        log.insert("end", text)
+        log.see("end")
+        log.configure(state="disabled")
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    errors   = []
+
+    for script_name, label in PARSER_SCRIPTS:
+        script_path = os.path.join(base_dir, script_name)
+        append(f"\n{'─'*50}\n▶  Running {label} parser…\n{'─'*50}\n")
+        win.update()
+
+        if not os.path.exists(script_path):
+            msg = f"[ERROR] '{script_name}' not found next to acs_main.py\n"
+            append(msg)
+            errors.append(label)
+            continue
+
+        try:
+            result = subprocess.run(
+                [sys.executable, script_path],
+                capture_output=True, text=True,
+                cwd=base_dir, timeout=30
+            )
+            if result.stdout:
+                append(result.stdout)
+            if result.stderr:
+                append(f"[STDERR]\n{result.stderr}")
+            if result.returncode != 0:
+                errors.append(label)
+        except subprocess.TimeoutExpired:
+            append(f"[ERROR] {label} parser timed out.\n")
+            errors.append(label)
+        except Exception as exc:
+            append(f"[ERROR] {exc}\n")
+            errors.append(label)
+
+    append(f"\n{'═'*50}\n")
+    if errors:
+        status_lbl.config(
+            text=f"⚠  Finished with errors in: {', '.join(errors)}",
+            fg="#ff6060"
+        )
+        append(f"⚠  Completed — errors in: {', '.join(errors)}\n")
+    else:
+        status_lbl.config(text="✔  All parsers completed successfully!", fg="#50e878")
+        append("✔  All parsers completed successfully!\n")
+
+    tk.Button(win, text="Close", font=("Georgia", 10, "bold"),
+              bg="#3d2005", fg="#f0c040", activebackground="#5c3310",
+              activeforeground="#ffffff", relief="raised", bd=3,
+              cursor="hand2", padx=12, pady=4,
+              command=win.destroy).pack(pady=(0, 12))
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  Dispatch
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -1145,7 +1238,7 @@ def open_window(title):
 def main():
     root = tk.Tk()
     root.title("Adventure Construction Set")
-    root.geometry("610x200")
+    root.geometry("610x260")
     root.configure(bg="#1a0f06")
     root.resizable(False, False)
 
@@ -1162,6 +1255,14 @@ def main():
                   activebackground="#5c3310", activeforeground="#ffffff",
                   relief="raised", bd=3, cursor="hand2",
                   command=lambda s=section: open_window(s)).pack(side="left", padx=8)
+
+    # ── Run Parsers button ────────────────────────────────────
+    tk.Frame(root, bg="#7a5520", height=1).pack(fill="x", padx=20)
+    tk.Button(root, text="⚙  Run Parsers", font=("Georgia", 11, "bold"),
+              bg="#0d2b0d", fg="#50e878",
+              activebackground="#1a4d1a", activeforeground="#ffffff",
+              relief="raised", bd=3, cursor="hand2",
+              padx=20, pady=6, command=run_parsers).pack(pady=10)
 
     root.mainloop()
 

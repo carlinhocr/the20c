@@ -13,5 +13,10 @@
         "ID": "2",
         "Name": "flashlight",
         "Active": false
+    },
+    "3": {
+        "ID": "3",
+        "Name": "timer1minuto",
+        "Active": false
     }
 }

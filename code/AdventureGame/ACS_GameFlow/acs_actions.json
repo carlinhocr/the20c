@@ -63,5 +63,14 @@
         "ScreenID": 2,
         "Cost": 0,
         "Description": "Si es verdad, ves como se empieza a llenar la caverna."
+    },
+    "8": {
+        "ID": "8",
+        "Name": "COMENZAR EL JUEGO",
+        "SensorID": 3,
+        "SensorActive": true,
+        "ScreenID": 0,
+        "Cost": 0,
+        "Description": "Y entras en la caverna misteriosa, el tiempo esta en tu contra"
     }
 }

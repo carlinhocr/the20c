@@ -14,9 +14,9 @@
         "Action4": "",
         "Action5": "",
         "Action6": "",
-        "Description": "",
-        "FlashlightOn": "Despiertas sobre piedra húmeda. La caverna se cerro detrás de ti. Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental. El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti.",
-        "FlashlightOff": "Despiertas sobre piedra húmeda. La caverna se cerro detrás de ti. Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental. El frío no duele todavía. Sientes un constante goteo de agua, cada vez mas cerca de ti.",
+        "Description": "Despiertas sobre piedra húmeda.\nLa caverna se cerro detrás de ti. \nUn derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental.\nEl frío no duele todavía. \nSientes un constante goteo de agua, cada vez mas cerca de ti.",
+        "FlashlightOn": "\n",
+        "FlashlightOff": "",
         "AsciiDrawing": ""
     },
     "1": {
@@ -34,9 +34,9 @@
         "Action4": "",
         "Action5": "",
         "Action6": "",
-        "Description": "",
-        "FlashlightOn": "Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constantemente, inundando la caverna. Como si midiera el tiempo.",
-        "FlashlightOff": "Al levantarte, miras a tu alrededor. Ves que el agua gotea lenta, pero constantemente, inundando la caverna. Como si midiera el tiempo.",
+        "Description": "Al levantarte, miras a tu alrededor.\nVes que el agua gotea lenta, pero constantemente, inundando la caverna.\nComo si midiera el tiempo.",
+        "FlashlightOn": "",
+        "FlashlightOff": "",
         "AsciiDrawing": ""
     },
     "2": {
@@ -57,6 +57,26 @@
         "Description": "",
         "FlashlightOn": "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso, estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad.",
         "FlashlightOff": "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso, estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad.",
+        "AsciiDrawing": ""
+    },
+    "3": {
+        "ID": "3",
+        "Name": "startScreen",
+        "North": "",
+        "South": "",
+        "East": "s1s1",
+        "West": "",
+        "Puzzle1": "",
+        "Puzzle2": "",
+        "Action1": "COMENZAR EL JUEGO",
+        "Action2": "",
+        "Action3": "",
+        "Action4": "",
+        "Action5": "",
+        "Action6": "",
+        "Description": "Bienvenido a la aventura gráfica más Espectacular del mundo",
+        "FlashlightOn": "",
+        "FlashlightOff": "",
         "AsciiDrawing": ""
     }
 }

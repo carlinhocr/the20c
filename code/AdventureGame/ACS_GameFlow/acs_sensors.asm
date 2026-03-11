@@ -6,6 +6,7 @@ sensors_index:
   .word sensor_pointer_0  ; water
   .word sensor_pointer_1  ; heart
   .word sensor_pointer_2  ; flashlight
+  .word sensor_pointer_3  ; timer1minuto
 sensors_index_record_length:
   .byte 2  ; each sensors_index entry is 1 .word (2 bytes)
 
@@ -22,6 +23,10 @@ sensor_pointer_2:
   .word sensor_2_id     ; flashlight id     [12,13]
   .word sensor_2_name   ; flashlight name   [14,15]
   .word sensor_2_active ; flashlight active [16,17]
+sensor_pointer_3:
+  .word sensor_3_id     ; timer1minuto id     [18,19]
+  .word sensor_3_name   ; timer1minuto name   [20,21]
+  .word sensor_3_active ; timer1minuto active [22,23]
 sensor_name_offset:
   .byte 2  ; (byte of sensor_0_name in sensors_pointers)
 sensor_record_length:
@@ -60,6 +65,17 @@ sensor_2_name:
 sensor_2_active:
   .byte 0  ; off
 
+; ── Sensor 3: timer1minuto ──────────────────────────
+sensor_3_id:
+  .byte 3
+
+sensor_3_name:
+  .ascii "timer1minuto"
+  .ascii "e"
+
+sensor_3_active:
+  .byte 0  ; off
+
 ; ── Total sensor count ──────────────────────────────────────
 sensor_count:
-  .byte 3
+  .byte 4

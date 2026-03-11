@@ -37,6 +37,22 @@ def resolve(name, mapping, label, optional=False):
     return mapping[name]
 
 
+def ascii_lines(text):
+    """
+    Split text on real newline characters and return a list of .ascii directive strings.
+    Each segment becomes its own .ascii line; a .ascii "\\n" line is inserted between
+    segments so the newline character is preserved in the assembled output.
+    """
+    segments = text.split("\n")
+    out = []
+    for seg in segments:
+        while len(seg) > 80:
+            out.append(f'  .ascii "{seg[:80]}"')
+            seg = seg[80:]
+        out.append(f'  .ascii "{seg}"')
+    return out
+
+
 def to_asm(screens, puzzle_ids, action_ids, screen_ids):
     lines = []
     lines.append("; ============================================================")
@@ -124,7 +140,7 @@ def to_asm(screens, puzzle_ids, action_ids, screen_ids):
         label     = f"screen_{scr_id}"
         name_str  = scr.get("Name",        "").replace('"', '\\"')
         desc_str  = scr.get("Description", "").replace('"', '\\"')
-        ascii_str = scr.get("AsciiDrawing","").replace('"', '\\"').replace("\n", "\\n")
+        ascii_str = scr.get("AsciiDrawing","").replace('"', '\\"')
 
         # exits → numeric screen IDs (255 = no exit)
         north_id = resolve(scr.get("North", ""), screen_ids, JSON_FILE,    optional=True)
@@ -151,7 +167,7 @@ def to_asm(screens, puzzle_ids, action_ids, screen_ids):
 
         # Name
         lines.append(f"{label}_name:")
-        lines.append(f'  .ascii "{name_str}"')
+        lines.extend(ascii_lines(name_str))
         lines.append('  .ascii "e"')
         lines.append("")
 
@@ -185,27 +201,27 @@ def to_asm(screens, puzzle_ids, action_ids, screen_ids):
 
         # Description
         lines.append(f"{label}_description:")
-        lines.append(f'  .ascii "{desc_str}"')
+        lines.extend(ascii_lines(desc_str))
         lines.append('  .ascii "e"')
         lines.append("")
 
         # AsciiDrawing
         lines.append(f"{label}_ascii:")
-        lines.append(f'  .ascii "{ascii_str}"')
+        lines.extend(ascii_lines(ascii_str))
         lines.append('  .ascii "e"')
         lines.append("")
 
         # FlashlightOn
         flashlight_on_str  = scr.get("FlashlightOn",  "").replace('"', '\\"')
         lines.append(f"{label}_flashlight_on:")
-        lines.append(f'  .ascii "{flashlight_on_str}"')
+        lines.extend(ascii_lines(flashlight_on_str))
         lines.append('  .ascii "e"')
         lines.append("")
 
         # FlashlightOff
         flashlight_off_str = scr.get("FlashlightOff", "").replace('"', '\\"')
         lines.append(f"{label}_flashlight_off:")
-        lines.append(f'  .ascii "{flashlight_off_str}"')
+        lines.extend(ascii_lines(flashlight_off_str))
         lines.append('  .ascii "e"')
         lines.append("")
 
