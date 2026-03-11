@@ -6,7 +6,7 @@ screens_index:
   .word screen_pointers_0  ; s1s1
   .word screen_pointers_1  ; s1s2
   .word screen_pointers_2  ; s1s3
-  .word screen_pointers_254  ; startScreen
+  .word screen_pointers_3  ; startScreen
 screens_index_record_length:
   .byte 2  ; each screens_index entry is 1 .word (2 bytes)
 
@@ -68,25 +68,25 @@ screen_pointers_2:
   .word screen_2_ascii             ; s1s3 ascii             [102,103]
   .word screen_2_flashlight_on     ; s1s3 flashlight_on     [104,105]
   .word screen_2_flashlight_off    ; s1s3 flashlight_off    [106,107]
-screen_pointers_254:
-  .word screen_254_id                ; startScreen id                [108,109]
-  .word screen_254_name              ; startScreen name              [110,111]
-  .word screen_254_north             ; startScreen north             [112,113]
-  .word screen_254_south             ; startScreen south             [114,115]
-  .word screen_254_east              ; startScreen east              [116,117]
-  .word screen_254_west              ; startScreen west              [118,119]
-  .word screen_254_puzzle1           ; startScreen puzzle1           [120,121]
-  .word screen_254_puzzle2           ; startScreen puzzle2           [122,123]
-  .word screen_254_action1           ; startScreen action1           [124,125]
-  .word screen_254_action2           ; startScreen action2           [126,127]
-  .word screen_254_action3           ; startScreen action3           [128,129]
-  .word screen_254_action4           ; startScreen action4           [130,131]
-  .word screen_254_action5           ; startScreen action5           [132,133]
-  .word screen_254_action6           ; startScreen action6           [134,135]
-  .word screen_254_description       ; startScreen description       [136,137]
-  .word screen_254_ascii             ; startScreen ascii             [138,139]
-  .word screen_254_flashlight_on     ; startScreen flashlight_on     [140,141]
-  .word screen_254_flashlight_off    ; startScreen flashlight_off    [142,143]
+screen_pointers_3:
+  .word screen_3_id                ; startScreen id                [108,109]
+  .word screen_3_name              ; startScreen name              [110,111]
+  .word screen_3_north             ; startScreen north             [112,113]
+  .word screen_3_south             ; startScreen south             [114,115]
+  .word screen_3_east              ; startScreen east              [116,117]
+  .word screen_3_west              ; startScreen west              [118,119]
+  .word screen_3_puzzle1           ; startScreen puzzle1           [120,121]
+  .word screen_3_puzzle2           ; startScreen puzzle2           [122,123]
+  .word screen_3_action1           ; startScreen action1           [124,125]
+  .word screen_3_action2           ; startScreen action2           [126,127]
+  .word screen_3_action3           ; startScreen action3           [128,129]
+  .word screen_3_action4           ; startScreen action4           [130,131]
+  .word screen_3_action5           ; startScreen action5           [132,133]
+  .word screen_3_action6           ; startScreen action6           [134,135]
+  .word screen_3_description       ; startScreen description       [136,137]
+  .word screen_3_ascii             ; startScreen ascii             [138,139]
+  .word screen_3_flashlight_on     ; startScreen flashlight_on     [140,141]
+  .word screen_3_flashlight_off    ; startScreen flashlight_off    [142,143]
 screen_puzzle_offset:
   .byte 12  ; (byte of screen_0_puzzle1 in screens_pointers)
 screen_action_offset:
@@ -282,63 +282,63 @@ screen_2_flashlight_off:
   .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso, estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad."
   .ascii "e"
 
-; ── Screen 254: startScreen ──────────────────────────
-screen_254_id:
-  .byte 254
+; ── Screen 3: startScreen ──────────────────────────
+screen_3_id:
+  .byte 3
 
-screen_254_name:
+screen_3_name:
   .ascii "startScreen"
   .ascii "e"
 
-screen_254_north:
+screen_3_north:
   .byte 255  ; none
 
-screen_254_south:
+screen_3_south:
   .byte 255  ; none
 
-screen_254_east:
+screen_3_east:
   .byte 0  ; s1s1
 
-screen_254_west:
+screen_3_west:
   .byte 255  ; none
 
-screen_254_puzzle1:
+screen_3_puzzle1:
   .byte 255  ; none
 
-screen_254_puzzle2:
+screen_3_puzzle2:
   .byte 255  ; none
 
-screen_254_action1:
-  .byte 254  ; COMENZAR EL JUEGO
+screen_3_action1:
+  .byte 8  ; COMENZAR EL JUEGO
 
-screen_254_action2:
+screen_3_action2:
   .byte 255  ; none
 
-screen_254_action3:
+screen_3_action3:
   .byte 255  ; none
 
-screen_254_action4:
+screen_3_action4:
   .byte 255  ; none
 
-screen_254_action5:
+screen_3_action5:
   .byte 255  ; none
 
-screen_254_action6:
+screen_3_action6:
   .byte 255  ; none
 
-screen_254_description:
+screen_3_description:
   .ascii "Bienvenido a la aventura gráfica más Espectacular del mundo"
   .ascii "e"
 
-screen_254_ascii:
+screen_3_ascii:
   .ascii ""
   .ascii "e"
 
-screen_254_flashlight_on:
+screen_3_flashlight_on:
   .ascii ""
   .ascii "e"
 
-screen_254_flashlight_off:
+screen_3_flashlight_off:
   .ascii ""
   .ascii "e"
 
