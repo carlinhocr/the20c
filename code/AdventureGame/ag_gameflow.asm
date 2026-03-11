@@ -316,10 +316,7 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
-  jsr timerWaitOneMinute
-loop:
-  jmp loop  
-  ;jsr mainProgram
+  jsr mainProgram
   ;jmp listeningMode
 
 lcdDemoMessage:
@@ -825,11 +822,10 @@ printAsciiDrawing_end:
 ;-----------------------------------------------------------------------------------
 
 initilizationRoutines:
-  sei ;disable interrupts only to be enabled prior to user input
+  sei ;disable interrupts only to be enabled prior to user input or timer
   ;jsr loadObjectsRAM
   ;jsr loadPuzzlesRAM
   jsr loadConstants
-  ;jsr initiatilizeObjectsIDs
   jsr initiatilizeActionsIDs
   rts
 
