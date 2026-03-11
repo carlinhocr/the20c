@@ -151,7 +151,7 @@ screen_0_description:
   .ascii "e"
 
 screen_0_ascii:
-  .ascii ""
+  .ascii "opsi"
   .ascii "e"
 
 screen_0_flashlight_on:

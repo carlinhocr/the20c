@@ -1006,13 +1006,6 @@ select_screen:
   jsr load_screen_ram
   rts
 
-select_screen_noascii:
-  ;lda #$0
-  ;sta screenCurrentID
-  ;jsr load_screen_ram
-  jsr draw_current_screen_table_noascii
-  rts  
-
 load_screen_ram:
   lda screenCurrentID
   ;multiply by 2 the id
@@ -1044,22 +1037,9 @@ load_screen_ram_end:
 
 draw_current_screen_table:
   jsr draw_screen_ascii
-  ;jsr draw_screen_by_hand
-  jsr draw_screen_description_flashlight
-  ;jsr draw_screen_by_ram_ascii  
-;  jsr draw_screen_description
-;  jsr selectPuzzle
-;  jsr selectObject
-  ;jsr selectAction
-  rts
-
-draw_current_screen_table_noascii:
-  jsr send_rs232_CRLF ;add a blank line
   jsr draw_screen_description
-  jsr selectPuzzle
-  ;jsr selectObject
-  ;jsr selectAction
-  rts  
+  jsr draw_screen_description_flashlight
+  rts
 
 draw_screen_ascii:
   lda screen_ascii_offset
