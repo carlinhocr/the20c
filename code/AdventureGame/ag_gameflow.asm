@@ -740,13 +740,13 @@ mainProgram:
   jsr draw_current_screen_table
 mainProgramLoop:
   jsr action_selector
-  lda moveNextScreen
-  beq mainProgramLoop;if zero do not move to next screen and ask for actions
-  lda #$0
-  sta moveNextScreen ;reset the move next screen flag
-  jsr select_screen
-  jsr draw_current_screen_table
-  jmp mainProgramLoop   
+;   lda moveNextScreen
+;   beq mainProgramLoop;if zero do not move to next screen and ask for actions
+;   lda #$0
+;   sta moveNextScreen ;reset the move next screen flag
+;   jsr select_screen
+;   jsr draw_current_screen_table
+;   jmp mainProgramLoop   
   rts
 
 delayClear:
@@ -823,8 +823,6 @@ printAsciiDrawing_end:
 
 initilizationRoutines:
   sei ;disable interrupts only to be enabled prior to user input or timer
-  ;jsr loadObjectsRAM
-  ;jsr loadPuzzlesRAM
   jsr loadConstants
   jsr initiatilizeActionsIDs
   rts
