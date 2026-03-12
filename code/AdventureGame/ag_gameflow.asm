@@ -193,6 +193,9 @@ actionCostTotal=$240
 actionCostS1S1=$241
 actionCostS1S2=$242
 moveNextScreen=$0243
+idleTimerStartMinute=$0244
+sensorCurrentID=$0245
+sensorCurrentStatus=$0244
 
 
 objectsRAM=$0300 ;32 bytes but i only use 6
@@ -251,6 +254,7 @@ TIMER_LOOPS_5S  = 100               ;5 seconds
 TIMER_LOOPS_10S  = 200               ;10 seconds
 
 TIMER_LOOPS_1M  = 6                ; 6 × 10 seconds = 1 minute
+TIMER_LOOPS_10M  = 60                ; 60 × 10 seconds = 10 minute
 
 ;Memory Mappings
 ;these are constants where we reflect the number of the memory position
@@ -737,10 +741,11 @@ mainProgram:
   ;jsr testPrinter
   jsr initilizationRoutines
   ;initialize screen as screen zero
-  jsr initialize_screen
+  jsr select_screen
   jsr draw_current_screen_table
 mainProgramLoop:
   jsr action_selector
+  jsr sensor_selector
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
@@ -876,6 +881,8 @@ loadConstants:
   sta actionCostTotal
   lda #$0
   sta moveNextScreen
+  lda #$3; start with screen id 3 the start screen
+  sta screenCurrentID  
   rts 
 
 initiatilizeActionsIDs:  
@@ -899,6 +906,13 @@ initiatilizeActionsIDs_loop:
 ;-----------------------------------TIMER------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+
+timerWaitTenMinutes:
+  cli ;enable interrupts 
+  lda #TIMER_LOOPS_10M
+  sta TIMER_ZP_MIN  
+  jsr timerWaitTenSeconds
+  rts
 
 timerWaitOneMinute:
   cli ;enable interrupts 
@@ -981,6 +995,8 @@ timerCheckMinuteElapsedTrue:
   jsr timerWaitOneMinute  
   rts
 
+
+
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------TIMER------------------------------------------
@@ -993,12 +1009,6 @@ timerCheckMinuteElapsedTrue:
 ;-----------------------------------SCREEN------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-
-initialize_screen:
-  lda #$0
-  sta screenCurrentID
-  jsr load_screen_ram
-  rts
 
 select_screen:
   lda screenCurrentID
@@ -1250,6 +1260,20 @@ runAction:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   ;turns on/off a sensor
+  lda action_sensor_id_offset
+  tay
+  lda (pivotZpLow),Y
+  sta actionDataVectorLow
+  iny 
+  lda (pivotZpLow),Y
+  sta actionDataVectorHigh  
+  ldy #$0
+  lda (actionDataVectorLow),Y
+  ;always store the sensor ID for the Action specially if it is $FF
+  sta sensorCurrentID
+  ldy #$2
+  lda (actionDataVectorLow),Y  
+  sta sensorCurrentStatus ;on off
   ;moves you to next screen
   lda action_screen_offset
   tay
@@ -1311,6 +1335,63 @@ printing_NOCRLF:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+sensor_selector:
+  lda sensorCurrentID
+  cmp #$ff
+  beq sensor_selector_end
+;   cmp #$0
+;   beq sensor_selector_0
+;   cmp #$1
+;   beq sensor_selector_1
+;   cmp #$2
+;   beq sensor_selector_2
+  cmp #$3
+  beq sensor_selector_3
+sensor_selector_3:
+  jsr sensor_3_run
+  rts
+sensor_selector_end:
+  rts
+
+sensor_3_run:
+  lda sensorCurrentStatus
+  beq sensor_3_run_off
+  jsr timerAllGame
+  jsr startTimerIdle
+  rts
+sensor_3_run_off:
+  ;stop the idlle timer check by puttin zero on the idleTimerStarMinute
+  lda #$0
+  sta idleTimerStartMinute
+  rts
+
+timerAllGame:
+  jsr timerWaitTenMinutes
+  lda #<msj_timerAllGame
+  sta serialDataVectorLow  
+  inx 
+  lda #>msj_timerAllGame
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts  
+
+startTimerIdle:
+  lda TIMER_ZP_MIN
+  sta idleTimerStartMinute
+  rts
+
+timerCheckTimeIdleElapsed: ;called from interruptions
+  lda idleTimerStartMinute
+  sec
+  sbc TIMER_ZP_MIN
+  cmp #12;60 - 12 = 48 so it is 12  
+  ;branch on carry clear is less than 2 minutes 
+  bcc timerCheckTimeIdleElapsedEnd
+  ;if we are here we ended the game
+  
+
+timerCheckTimeIdleElapsedEnd
+  rts
 check_sensor:
   jsr turnOnHearRate
   jsr delay_3_sec
@@ -1708,8 +1789,18 @@ msj_secondElapsed:
   .ascii "e"    
 
 msj_minuteElapsed:
-  .ascii "Paso un minuto"
+  .ascii "Paso un minuto y te quedan "
   .ascii "e"    
+
+msj_timerAllGame:
+  .ascii "Comienza la Aventura tiene 10 minutos"
+  .ascii "e"    
+
+msj_iddleTimer1:
+  .ascii "El constante goteo era hipnotico. Gota, pausa, gota. "
+  .ascii "El agua comenzo a entumecer tus extremidades hasta que dejaste de sentirlas. "
+  .ascii "Un eterno sueño te dio la bienvenida. "    
+  .ascii "e"     
 actions_unknown:
   .ascii "Mmmm no puedes hacer eso"
   .ascii "e"     
@@ -3042,6 +3133,7 @@ irq:
   ;jsr timerCheckSecondElapsed
   jsr timerCheck10SecondElapsed
   jsr timerCheckMinuteElapsed
+  jsr timerCheckTimeIdleElapsed
 irqNextInterruptSource:
   jsr test_buttons ;test_buttons loads the message
 exit_irq:  
