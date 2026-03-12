@@ -745,7 +745,7 @@ mainProgram:
   jsr draw_current_screen_table
 mainProgramLoop:
   jsr action_selector
-  jsr sensor_selector
+  ;jsr sensor_selector
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
@@ -1259,21 +1259,21 @@ runAction:
   lda (pivotZpLow),Y
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-;   ;turns on/off a sensor
-;   lda action_sensor_id_offset
-;   tay
-;   lda (pivotZpLow),Y
-;   sta actionDataVectorLow
-;   iny 
-;   lda (pivotZpLow),Y
-;   sta actionDataVectorHigh  
-;   ldy #$0
-;   lda (actionDataVectorLow),Y
-;   ;always store the sensor ID for the Action specially if it is $FF
-;   sta sensorCurrentID
-;   ldy #$2
-;   lda (actionDataVectorLow),Y  
-;   sta sensorCurrentStatus ;on off
+  ;turns on/off a sensor
+  lda action_sensor_id_offset
+  tay
+  lda (pivotZpLow),Y
+  sta actionDataVectorLow
+  iny 
+  lda (pivotZpLow),Y
+  sta actionDataVectorHigh  
+  ldy #$0
+  lda (actionDataVectorLow),Y
+  ;always store the sensor ID for the Action specially if it is $FF
+  sta sensorCurrentID
+  ldy #$2
+  lda (actionDataVectorLow),Y  
+  sta sensorCurrentStatus ;on off
   ;moves you to next screen
   lda action_screen_offset
   tay
