@@ -1216,7 +1216,7 @@ receiveUserOptionSelection_loop:
   cmp #$ff   
   beq receiveUserOptionSelection_loop
   ;we have a valid user input 
-  sei ;disable user action until we know if valid action if not ask again
+  ;sei ;disable user action until we know if valid action if not ask again
   rts  
 
 action_selector:;
