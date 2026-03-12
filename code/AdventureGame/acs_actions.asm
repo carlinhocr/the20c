@@ -92,6 +92,8 @@ action_name_offset:
   .byte 2  ; (byte of action_0_name in actions_pointers)
 action_sensor_id_offset:
   .byte 4  ; (byte of action_0_sensor_id in actions_pointers)
+action_sensor_active_offset:
+  .byte 6  
 action_screen_offset:
   .byte 8  ; (byte of action_0_screen in actions_pointers)
 action_description_offset:
