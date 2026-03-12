@@ -3144,9 +3144,9 @@ irq:
   and #%01000000;#LCD_T1_FLAG
   beq irqNextInterruptSource
   ;jsr timerCheckSecondElapsed
-  jsr timerCheck10SecondElapsed
-  jsr timerCheckMinuteElapsed
-  jsr timerCheckTimeIdleElapsed
+  ;jsr timerCheck10SecondElapsed
+  ;jsr timerCheckMinuteElapsed
+  ;jsr timerCheckTimeIdleElapsed
 irqNextInterruptSource:
   jsr test_buttons ;test_buttons loads the message
 exit_irq:  
