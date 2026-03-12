@@ -828,7 +828,7 @@ printAsciiDrawing_end:
 ;-----------------------------------------------------------------------------------
 
 initilizationRoutines:
-  sei ;disable interrupts only to be enabled prior to user input or timer
+  ;sei ;disable interrupts only to be enabled prior to user input or timer
   jsr loadConstants
   jsr initiatilizeActionsIDs
   rts
