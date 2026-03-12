@@ -745,7 +745,7 @@ mainProgram:
   jsr draw_current_screen_table
 mainProgramLoop:
   jsr action_selector
-  jsr sensor_selector
+  ;jsr sensor_selector
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
@@ -883,6 +883,8 @@ loadConstants:
   sta moveNextScreen
   lda #$3; start with screen id 3 the start screen
   sta screenCurrentID  
+  lda #$ff
+  sta idleTimerStartMinute
   rts 
 
 initiatilizeActionsIDs:  
