@@ -1272,16 +1272,16 @@ runAction:
   ;always store the sensor ID for the Action specially if it is $FF
   sta sensorCurrentID
   ;load if the sensor is or not active
-  lda action_sensor_active_offset
-  tay
-  lda (pivotZpLow),Y
-  sta actionDataVectorLow
-  iny 
-  lda (pivotZpLow),Y
-  sta actionDataVectorHigh  
-  ldy #$0
-  lda (actionDataVectorLow),Y
-  sta sensorCurrentStatus ;on off
+;   lda action_sensor_active_offset
+;   tay
+;   lda (pivotZpLow),Y
+;   sta actionDataVectorLow
+;   iny 
+;   lda (pivotZpLow),Y
+;   sta actionDataVectorHigh  
+;   ldy #$0
+;   lda (actionDataVectorLow),Y
+;   sta sensorCurrentStatus ;on off
   ;moves you to next screen
   lda action_screen_offset
   tay
