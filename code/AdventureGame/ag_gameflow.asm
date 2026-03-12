@@ -195,7 +195,7 @@ actionCostS1S2=$242
 moveNextScreen=$0243
 idleTimerStartMinute=$0244
 sensorCurrentID=$0245
-sensorCurrentStatus=$0244
+sensorCurrentStatus=$0246
 
 
 objectsRAM=$0300 ;32 bytes but i only use 6
@@ -745,7 +745,7 @@ mainProgram:
   jsr draw_current_screen_table
 mainProgramLoop:
   jsr action_selector
-  ;jsr sensor_selector
+  jsr sensor_selector
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
@@ -1272,16 +1272,16 @@ runAction:
   ;always store the sensor ID for the Action specially if it is $FF
   sta sensorCurrentID
   ;load if the sensor is or not active
-;   lda action_sensor_active_offset
-;   tay
-;   lda (pivotZpLow),Y
-;   sta actionDataVectorLow
-;   iny 
-;   lda (pivotZpLow),Y
-;   sta actionDataVectorHigh  
-;   ldy #$0
-;   lda (actionDataVectorLow),Y
-;   sta sensorCurrentStatus ;on off
+  lda action_sensor_active_offset
+  tay
+  lda (pivotZpLow),Y
+  sta actionDataVectorLow
+  iny 
+  lda (pivotZpLow),Y
+  sta actionDataVectorHigh  
+  ldy #$0
+  lda (actionDataVectorLow),Y
+  sta sensorCurrentStatus ;on off
   ;moves you to next screen
   lda action_screen_offset
   tay
