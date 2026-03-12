@@ -14,6 +14,18 @@ def bool_to_byte(value):
     return 1 if value else 0
 
 
+def ascii_lines(text):
+    """Split text on real newlines and chunk at 80 chars; return list of .ascii lines."""
+    segments = text.split("\n")
+    out = []
+    for seg in segments:
+        while len(seg) > 80:
+            out.append(f'  .ascii "{seg[:80]}"')
+            seg = seg[80:]
+        out.append(f'  .ascii "{seg}"')
+    return out
+
+
 def to_asm(sensors):
     lines = []
     lines.append("; ============================================================")
@@ -36,8 +48,10 @@ def to_asm(sensors):
     offset = 0
 
     # Captured from sensor 0 for offset labels emitted after all entries
-    sen0_name_offset   = None
-    sen0_record_length = None
+    sen0_name_offset       = None
+    sen0_dialog_on_offset  = None
+    sen0_dialog_off_offset = None
+    sen0_record_length     = None
 
     for index, (key, sen) in enumerate(sensors.items()):
         sen_id = sen.get("ID", str(index)).strip()
@@ -47,27 +61,37 @@ def to_asm(sensors):
         start_offset = offset
 
         lines.append(f"sensor_pointer_{sen_id}:")
-        lines.append(f"  .word {label}_id     ; {name} id     [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_name   ; {name} name   [{offset},{offset+1}]") ; _nam = offset ; offset += 2
-        lines.append(f"  .word {label}_active ; {name} active [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_id        ; {name} id        [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_name      ; {name} name      [{offset},{offset+1}]") ; _nam = offset ; offset += 2
+        lines.append(f"  .word {label}_active    ; {name} active    [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_dialog_on ; {name} dialog_on [{offset},{offset+1}]") ; _don = offset ; offset += 2
+        lines.append(f"  .word {label}_dialog_off; {name} dialog_off[{offset},{offset+1}]") ; _doff = offset ; offset += 2
 
         if index == 0:
-            sen0_name_offset   = _nam
-            sen0_record_length = offset - start_offset  # 6 bytes (3 × .word)
+            sen0_name_offset       = _nam
+            sen0_dialog_on_offset  = _don
+            sen0_dialog_off_offset = _doff
+            sen0_record_length     = offset - start_offset  # 10 bytes (5 × .word)
 
     # ── Offset labels, placed after all sensor entries ────────────────────────
     lines.append(f"sensor_name_offset:")
-    lines.append(f"  .byte {sen0_name_offset}  ; (byte of sensor_0_name in sensors_pointers)")
+    lines.append(f"  .byte {sen0_name_offset}       ; (byte of sensor_0_name in sensors_pointers)")
+    lines.append(f"sensor_dialog_on_offset:")
+    lines.append(f"  .byte {sen0_dialog_on_offset}  ; (byte of sensor_0_dialog_on in sensors_pointers)")
+    lines.append(f"sensor_dialog_off_offset:")
+    lines.append(f"  .byte {sen0_dialog_off_offset} ; (byte of sensor_0_dialog_off in sensors_pointers)")
     lines.append(f"sensor_record_length:")
-    lines.append(f"  .byte {sen0_record_length}  ; (total .word bytes per sensor record)")
+    lines.append(f"  .byte {sen0_record_length}     ; (total .word bytes per sensor record)")
     lines.append("")
 
     # ── Per-sensor data blocks ────────────────────────────────────────────────
     for index, (key, sen) in enumerate(sensors.items()):
         sen_id   = sen.get("ID",     str(index)).strip()
         label    = f"sensor_{sen_id}"
-        name_str = sen.get("Name",   "").replace('"', '\\"')
+        name_str = sen.get("Name",      "").replace('"', '\\"')
         active   = bool_to_byte(sen.get("Active", False))
+        dialog_on_str  = sen.get("DialogOn",  "").replace('"', '\\"')
+        dialog_off_str = sen.get("DialogOff", "").replace('"', '\\"')
 
         lines.append(f"; ── Sensor {sen_id}: {sen.get('Name', key)} ──────────────────────────")
 
@@ -78,13 +102,25 @@ def to_asm(sensors):
 
         # Name
         lines.append(f"{label}_name:")
-        lines.append(f'  .ascii "{name_str}"')
+        lines.extend(ascii_lines(name_str))
         lines.append('  .ascii "e"')
         lines.append("")
 
         # Active
         lines.append(f"{label}_active:")
         lines.append(f"  .byte {active}  ; {'on' if active else 'off'}")
+        lines.append("")
+
+        # DialogOn
+        lines.append(f"{label}_dialog_on:")
+        lines.extend(ascii_lines(dialog_on_str))
+        lines.append('  .ascii "e"')
+        lines.append("")
+
+        # DialogOff
+        lines.append(f"{label}_dialog_off:")
+        lines.extend(ascii_lines(dialog_off_str))
+        lines.append('  .ascii "e"')
         lines.append("")
 
     # ── Sensor count constant ─────────────────────────────────────────────────

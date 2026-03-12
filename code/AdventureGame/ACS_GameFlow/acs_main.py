@@ -1050,9 +1050,9 @@ def open_map_window():
 def open_sensors_window():
     win = tk.Toplevel()
     win.title("Sensors")
-    win.geometry("420x560")
+    win.geometry("740x660")
     win.configure(bg="#2b1a0e")
-    win.resizable(False, True)
+    win.resizable(True, True)
     apply_combo_style()
 
     tk.Label(win, text="📡  Sensors Editor", font=("Georgia", 18, "bold"),
@@ -1086,6 +1086,20 @@ def open_sensors_window():
     active_var = tk.BooleanVar(value=False)
     checkbox_widget(form, "Active (On)", active_var)
 
+    # ── Dialogs ───────────────────────────────────────────────
+    section_lbl(form, "— Dialogs —")
+    tk.Label(form, text="DialogOn  (sensor is active)", **LABEL_STYLE).pack(fill="x", pady=(0, 2))
+    dialog_on_text = tk.Text(form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
+                             relief="sunken", bd=2, font=("Courier", 11), height=4,
+                             wrap="none", width=80)
+    dialog_on_text.pack(fill="x")
+
+    tk.Label(form, text="DialogOff  (sensor is inactive)", **LABEL_STYLE).pack(fill="x", pady=(8, 2))
+    dialog_off_text = tk.Text(form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
+                              relief="sunken", bd=2, font=("Courier", 11), height=4,
+                              wrap="none", width=80)
+    dialog_off_text.pack(fill="x")
+
     # ── Save ──────────────────────────────────────────────────
     tk.Frame(form, bg="#7a5520", height=2).pack(fill="x", pady=(14, 8))
     slbl = status_lbl(form)
@@ -1100,13 +1114,19 @@ def open_sensors_window():
             entries[f].delete(0, tk.END)
             entries[f].insert(0, rec.get(f, ""))
         active_var.set(rec.get("Active", False))
+        dialog_on_text.delete("1.0", tk.END)
+        dialog_on_text.insert("1.0", rec.get("DialogOn", ""))
+        dialog_off_text.delete("1.0", tk.END)
+        dialog_off_text.insert("1.0", rec.get("DialogOff", ""))
         slbl.config(text=f"✔  Loaded '{name}'", fg="#c8a060")
 
     load_dd.bind("<<ComboboxSelected>>", on_load)
 
     def on_save():
         data = {f: entries[f].get() for f in ["ID", "Name"]}
-        data["Active"] = active_var.get()
+        data["Active"]    = active_var.get()
+        data["DialogOn"]  = dialog_on_text.get("1.0", "end-1c")
+        data["DialogOff"] = dialog_off_text.get("1.0", "end-1c")
         save_to_json(JSON_SENSORS_FILE, "ID", data, slbl)
         load_dd["values"] = sensor_names_by_id()
 

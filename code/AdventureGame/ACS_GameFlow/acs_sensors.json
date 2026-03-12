@@ -17,6 +17,8 @@
     "3": {
         "ID": "3",
         "Name": "timer1minuto",
-        "Active": false
+        "Active": false,
+        "DialogOn": "El tiempo empieza a correr no debes quedarte aqui mucho tiempo",
+        "DialogOff": "Aqui puedes tomartelo con calma, perono mucha"
     }
 }
