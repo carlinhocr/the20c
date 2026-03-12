@@ -1274,7 +1274,7 @@ runAction:
   ;always store the sensor ID for the Action specially if it is $FF
   sta sensorCurrentID
   clc
-  adc #60
+  adc #$30
   jsr send_rs232_char 
 ;   ;load if the sensor is or not active
 ;   lda action_sensor_active_offset
@@ -1883,40 +1883,40 @@ pa4_button_action:
   ;fire button on LCD PCB
   lda #$4 ;option 4 es e option
   sta userOptionSelection
-  lda #$34 ;number 4 in ascii
-  jsr send_rs232_char
+;   lda #$34 ;number 4 in ascii
+;   jsr send_rs232_char
   rts
 
 pa3_button_action:
   ;up button on LCD PCB
   lda #$1 ;option 1 es B option
   sta userOptionSelection  
-  lda #$31 ;number 1 in ascii
-  jsr send_rs232_char
+;   lda #$31 ;number 1 in ascii
+;   jsr send_rs232_char
   rts
 
 pa2_button_action:
   ;right button on LCD PCB
   lda #$2 ;option 2 es C option
   sta userOptionSelection  
-  lda #$32 ;number 2 in ascii
-  jsr send_rs232_char
+;   lda #$32 ;number 2 in ascii
+;   jsr send_rs232_char
   rts
 
 pa1_button_action:
   ;down button on LCD PCB
   lda #$3 ;option 1 es D option
   sta userOptionSelection
-  lda #$33 ;number 1 in ascii
-  jsr send_rs232_char
+;   lda #$33 ;number 1 in ascii
+;   jsr send_rs232_char
   rts
 
 pa0_button_action:
   ;left button on LCD PCB
   lda #$0 ;option 0 es A option
   sta userOptionSelection
-  lda #$30 ;number 0 in ascii
-  jsr send_rs232_char
+;   lda #$30 ;number 0 in ascii
+;   jsr send_rs232_char
   rts
 
 ;END--------------------------------------------------------------------------------
