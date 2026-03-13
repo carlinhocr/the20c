@@ -741,7 +741,7 @@ mainProgram:
   ;jsr testPrinter
   jsr initilizationRoutines
   ;initialize screen as screen zero
-  jsr timerWaitOneMinute
+ ; jsr timerWaitOneMinute
   jsr select_screen
   jsr draw_current_screen_table
 mainProgramLoop:
@@ -1344,37 +1344,69 @@ sensor_selector:
   lda sensorCurrentID
   cmp #$ff
   beq sensor_selector_end
-;   cmp #$0
-;   beq sensor_selector_0
+  cmp #$0
+  beq sensor_selector_0
 ;   cmp #$1
 ;   beq sensor_selector_1
 ;   cmp #$2
 ;   beq sensor_selector_2
   cmp #$3
   beq sensor_selector_3
+sensor_selector_0:
+  jsr sensor_0_run
+  rts  
 sensor_selector_3:
   jsr sensor_3_run
   rts
 sensor_selector_end:
   rts
 
-sensor_3_run:
-  lda #$61
-  jsr send_rs232_char 
+sensor_0_run:
   lda sensorCurrentStatus
-  clc
-  adc #$30
-  jsr send_rs232_char  
+  beq sensor_0_run_off
+  lda sensorCurrentID
+  asl
+  tax
+  lda sensors_index,X
+  sta pivotZpLow
+  inx
+  lda sensors_index,X
+  sta pivotZpHigh
+  lda sensor_dialog_on_offset
+  tay
+  lda (pivotZpLow),Y
+  sta serialDataVectorLow  
+  iny 
+  lda (pivotZpLow),Y
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts
+sensor_0_run_off:  
+  rts
+
+sensor_3_run:
   lda sensorCurrentStatus
   beq sensor_3_run_off
-  jsr timerAllGame
-  ;jsr startTimerIdle
+  lda sensorCurrentID
+  asl
+  tax
+  lda sensors_index,X
+  sta pivotZpLow
+  inx
+  lda sensors_index,X
+  sta pivotZpHigh
+  lda sensor_dialog_on_offset
+  tay
+  lda (pivotZpLow),Y
+  sta serialDataVectorLow  
+  iny 
+  lda (pivotZpLow),Y
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  ;jsr timerAllGame
   rts
-sensor_3_run_off:
-  ;stop the idlle timer check by puttin zero on the idleTimerStarMinute
-  lda #$0
-  sta idleTimerStartMinute
-  rts
+sensor_3_run_off:  
+  rts  
 
 timerAllGame:
   lda #<msj_timerAllGame
@@ -1383,7 +1415,7 @@ timerAllGame:
   lda #>msj_timerAllGame
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  jsr timerWaitOneMinute 
+  ;jsr timerWaitOneMinute 
   rts  
 
 startTimerIdle:
