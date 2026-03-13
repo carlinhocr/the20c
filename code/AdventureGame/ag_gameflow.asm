@@ -745,7 +745,7 @@ mainProgram:
   jsr draw_current_screen_table
 mainProgramLoop:
   jsr action_selector
-  ;jsr sensor_selector
+  jsr sensor_selector
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
@@ -1115,27 +1115,10 @@ loadScreenActionOptions_loop:
   tya ;save Y because i am going to another process
   pha ;save Y because i am going to another process
   sty actionPosition
-;   lda actionPosition
-;   tax 
   ldx actionPosition
   lda actionCurrentID
   sta actionIDOptionsRAM,x ;save the action on the position to show for options
-;   lda #$61
-;   jsr send_rs232_char  
-;   lda actionCurrentID
-;   cmp #$ff
-;   beq noactionID
-;   clc
-;   adc #$30
-;   jsr send_rs232_char  
-;   jmp continueActionID
-; noactionID:
-;   lda #$7a ;letter z
-;   jsr send_rs232_char  
-; continueActionID:
   jsr processAction
-;   lda #$62
-;   jsr send_rs232_char  
   pla ;retrieve Y after processAction
   tay ;retrieve Y after processAction
   iny ;go to next action of the screen
@@ -1209,11 +1192,7 @@ action_selector:;
   jsr initiatilizeActionsIDs
   jsr loadScreenActionOptions
 action_selection_ask_again:  
-;   lda #$63
-;   jsr send_rs232_char  
   jsr receiveUserOptionSelection  
-;   lda #$64
-;   jsr send_rs232_char
   ldx userOptionSelection
   lda actionIDOptionsRAM,x ;here we have the action ID
   sta selectedAction
@@ -1265,17 +1244,17 @@ runAction:
   sta sensorCurrentID
 ;   adc #$30
 ;   jsr send_rs232_char 
-;   ;load if the sensor is or not active
-;   lda action_sensor_active_offset
-;   tay
-;   lda (pivotZpLow),Y
-;   sta actionDataVectorLow
-;   iny 
-;   lda (pivotZpLow),Y
-;   sta actionDataVectorHigh  
-;   ldy #$0
-;   lda (actionDataVectorLow),Y
-;   sta sensorCurrentStatus ;on off
+  ;load if the sensor is or not active
+  lda action_sensor_active_offset
+  tay
+  lda (pivotZpLow),Y
+  sta actionDataVectorLow
+  iny 
+  lda (pivotZpLow),Y
+  sta actionDataVectorHigh  
+  ldy #$0
+  lda (actionDataVectorLow),Y
+  sta sensorCurrentStatus ;on off
   ;moves you to next screen
   lda action_screen_offset
   tay
@@ -2721,9 +2700,9 @@ irq:
   and #%01000000;#LCD_T1_FLAG
   beq irqNextInterruptSource
   ;jsr timerCheckSecondElapsed
-  ;jsr timerCheck10SecondElapsed
-  ;jsr timerCheckMinuteElapsed
-  ;jsr timerCheckTimeIdleElapsed
+  jsr timerCheck10SecondElapsed
+  jsr timerCheckMinuteElapsed
+  jsr timerCheckTimeIdleElapsed
 irqNextInterruptSource:
   jsr test_buttons ;test_buttons loads the message
 exit_irq:  
