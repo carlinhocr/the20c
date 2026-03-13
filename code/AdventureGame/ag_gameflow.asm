@@ -776,7 +776,7 @@ printClearRS232Screen:
   rts 
 
 printAsciiDrawing:
-  sei
+  ;sei
   ;save accumulator x and y registers
   pha
   txa
@@ -964,8 +964,8 @@ timerCheck10SecondElapsed:
   jsr timerLoadTick        ;keep counting until we reach from 200 to aero on timer_zp_sec
   rts
 timerCheck10SecondElapsedTrue:
-;   lda #$1 
-;   sta timerExpired
+  lda #$1 
+  sta timerExpired
   dec TIMER_ZP_MIN
   jsr timerWaitTenSeconds ;set the timer again
   rts     
@@ -976,8 +976,6 @@ timerCheckMinuteElapsed:
   jsr timerWaitTenSeconds  
   rts
 timerCheckMinuteElapsedTrue:  
-  lda #$1
-  sta timerExpired
   jsr timerWaitOneMinute  
   rts
 
