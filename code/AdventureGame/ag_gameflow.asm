@@ -794,7 +794,6 @@ printAsciiDrawing:
   jsr send_rs232_line
   ldx #$0 ;the first line 0 we aleready printed
 printAsciiDrawing_lenghts_loop:
-  sei
   inx ;now going to line 1
   ;here increment on additional lines
   clc
@@ -918,8 +917,11 @@ timerWaitTenSeconds:
   ;cli ;enable interrupts   
   lda #TIMER_LOOPS_10S ;constant with the number 200 the number 50ms loops to reach a second
   sta TIMER_ZP_SEC ; memory position to degrade the loop
-  jsr timerLoadTick
-  rts
+  lda #TIMER_TICKS_LO
+  sta LCD_T1LL ;set latch low
+  lda #TIMER_TICKS_HI
+  sta LCD_T1CH ;set latch high and start timer and clears IFR T1
+  rts  
 
 timerWaitFiveSeconds:
   ;cli ;enable interrupts   
@@ -973,8 +975,8 @@ timerCheck10SecondElapsedTrue:
 ;   jsr printAsciiDrawing
   lda #$1 
   sta timerExpired
-  jsr timerWaitTenSeconds ;set the timer again
   dec TIMER_ZP_MIN
+  jsr timerWaitTenSeconds ;set the timer again
   rts    
 
 timerCheckMinuteElapsed:
@@ -982,11 +984,11 @@ timerCheckMinuteElapsed:
   beq timerCheckMinuteElapsedTrue  
   rts
 timerCheckMinuteElapsedTrue:  
-  lda #< msj_minuteElapsed
-  sta serialDataVectorLow
-  lda #> msj_minuteElapsed
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
+;   lda #< msj_minuteElapsed
+;   sta serialDataVectorLow
+;   lda #> msj_minuteElapsed
+;   sta serialDataVectorHigh
+;   jsr printAsciiDrawing
   jsr timerWaitOneMinute  
   rts
 
@@ -2740,7 +2742,7 @@ irq:
   ;jsr timerCheckSecondElapsed
   lda #$61
   jsr send_rs232_char
-  jsr timerCheck10SecondElapsed
+  ;jsr timerCheck10SecondElapsed
   jsr timerCheckMinuteElapsed
   ;jsr timerCheckTimeIdleElapsed
 irqNextInterruptSource:
