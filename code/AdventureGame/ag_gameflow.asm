@@ -780,6 +780,7 @@ printClearRS232Screen:
   rts 
 
 printAsciiDrawing:
+  sei
   ;save accumulator x and y registers
   pha
   txa
@@ -793,6 +794,7 @@ printAsciiDrawing:
   jsr send_rs232_line
   ldx #$0 ;the first line 0 we aleready printed
 printAsciiDrawing_lenghts_loop:
+  sei
   inx ;now going to line 1
   ;here increment on additional lines
   clc
@@ -806,6 +808,7 @@ printAsciiDrawing_lenghts_loop:
   inc serialDataVectorHigh
 printAsciiDrawing_lenghts_no_carry  
   ;here printing the new mario line
+  cli
   ldy #0
   lda (serialDataVectorLow),y 
   cmp #$65;"e"
