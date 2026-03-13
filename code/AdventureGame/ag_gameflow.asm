@@ -741,18 +741,19 @@ mainProgram:
   ;jsr testPrinter
   jsr initilizationRoutines
   ;initialize screen as screen zero
-  jsr select_screen
-  jsr draw_current_screen_table
-mainProgramLoop:
-  jsr action_selector
-  jsr sensor_selector
-  lda moveNextScreen
-  beq mainProgramLoop;if zero do not move to next screen and ask for actions
-  lda #$0
-  sta moveNextScreen ;reset the move next screen flag
-  jsr select_screen
-  jsr draw_current_screen_table
-  jmp mainProgramLoop   
+  jsr timerWaitOneMinute
+;   jsr select_screen
+;   jsr draw_current_screen_table
+; mainProgramLoop:
+;   jsr action_selector
+;   jsr sensor_selector
+;   lda moveNextScreen
+;   beq mainProgramLoop;if zero do not move to next screen and ask for actions
+;   lda #$0
+;   sta moveNextScreen ;reset the move next screen flag
+;   jsr select_screen
+;   jsr draw_current_screen_table
+;   jmp mainProgramLoop   
   rts
 
 delayClear:
