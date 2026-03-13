@@ -742,10 +742,12 @@ mainProgram:
   jsr draw_current_screen_table
 mainProgramLoop:
   lda timerExpired
-  beq continueMainProgramLoop
-  lda #< msj_timerExpired
+  cmp #$3
+  ;go if it is less than or equal to
+  bcc continueMainProgramLoop
+  lda #< msj_iddleTimer1
   sta serialDataVectorLow
-  lda #> msj_timerExpired
+  lda #> msj_iddleTimer1
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   lda #$0
@@ -972,8 +974,7 @@ timerCheck10SecondElapsed:
   sta LCD_T1CH ;set latch high and start timer and clears IFR T1  
   rts
 timerCheck10SecondElapsedTrue:
-  lda #$1 
-  sta timerExpired
+  inc timerExpired
   dec TIMER_ZP_MIN
   jsr timerWaitTenSeconds ;set the timer again
   rts     
