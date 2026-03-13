@@ -1245,8 +1245,8 @@ action_selection_ask_again:
 ;   lda #$63
 ;   jsr send_rs232_char  
   jsr receiveUserOptionSelection  
-;   lda #$64
-;   jsr send_rs232_char
+  lda #$64
+  jsr send_rs232_char
   ldx userOptionSelection
   lda actionIDOptionsRAM,x ;here we have the action ID
   sta selectedAction
