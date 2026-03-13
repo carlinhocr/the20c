@@ -1273,7 +1273,6 @@ runAction:
   lda (actionDataVectorLow),Y
   ;always store the sensor ID for the Action specially if it is $FF
   sta sensorCurrentID
-  clc
 ;   adc #$30
 ;   jsr send_rs232_char 
 ;   ;load if the sensor is or not active
