@@ -752,6 +752,10 @@ mainProgramLoop:
   sta timerExpired
 continueMainProgramLoop:  
   jsr action_selector
+  lda timerExpired
+  clc
+  adc #$30
+  jsr send_rs232_char
   jsr sensor_selector
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
@@ -2762,7 +2766,7 @@ irq:
 ;   lda #$61
 ;   jsr send_rs232_char
   jsr timerCheck10SecondElapsed
-  jsr timerCheckMinuteElapsed
+  ;jsr timerCheckMinuteElapsed
   ;jsr timerCheckTimeIdleElapsed
 irqNextInterruptSource:
 ;   lda #$62
