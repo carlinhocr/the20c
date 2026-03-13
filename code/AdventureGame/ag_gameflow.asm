@@ -1628,7 +1628,7 @@ option_unknown:
 ;-----------------------------------------------------------------------------------
 
 test_buttons:
-  sei ;disable interrupts to process user buton selection
+  ;sei ;disable interrupts to process user buton selection
   lda LCD_PORTA
   sta LCD_PORTSTATUS
   ;move PA4 to PA7 and PA3 to PA6
