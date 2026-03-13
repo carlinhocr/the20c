@@ -808,7 +808,6 @@ printAsciiDrawing_lenghts_loop:
   inc serialDataVectorHigh
 printAsciiDrawing_lenghts_no_carry  
   ;here printing the new mario line
-  cli
   ldy #0
   lda (serialDataVectorLow),y 
   cmp #$65;"e"
@@ -826,6 +825,7 @@ printAsciiDrawing_end:
   pla
   tax
   pla
+  cli
   rts
 
 ;END--------------------------------------------------------------------------------
