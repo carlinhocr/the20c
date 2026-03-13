@@ -1335,12 +1335,12 @@ printing_NOCRLF:
 ;-----------------------------------------------------------------------------------
 
 sensor_selector:
-  lda #$73
-  jsr send_rs232_char 
-  lda sensorCurrentID
-  clc
-  adc #$30
-  jsr send_rs232_char  
+;   lda #$73
+;   jsr send_rs232_char 
+;   lda sensorCurrentID
+;   clc
+;   adc #$30
+;   jsr send_rs232_char  
   lda sensorCurrentID
   cmp #$ff
   beq sensor_selector_end
