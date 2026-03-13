@@ -1358,7 +1358,7 @@ timerAllGame:
   lda #>msj_timerAllGame
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  jsr timerWaitTenMinutes  
+  jsr timerWaitOneMinute 
   rts  
 
 startTimerIdle:
@@ -2717,6 +2717,8 @@ irq:
   jsr timerCheckMinuteElapsed
   ;jsr timerCheckTimeIdleElapsed
 irqNextInterruptSource:
+  lda #$62
+  jsr send_rs232_char
   jsr test_buttons ;test_buttons loads the message
 exit_irq:  
   ;reserve order of stacking to restore values
