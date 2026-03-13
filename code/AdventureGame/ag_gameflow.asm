@@ -745,7 +745,7 @@ mainProgram:
   jsr draw_current_screen_table
 mainProgramLoop:
   jsr action_selector
-  jsr sensor_selector
+  ;jsr sensor_selector
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
