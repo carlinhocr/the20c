@@ -1242,8 +1242,8 @@ action_selector:;
   jsr initiatilizeActionsIDs
   jsr loadScreenActionOptions
 action_selection_ask_again:  
-;   lda #$63
-;   jsr send_rs232_char  
+  lda #$63
+  jsr send_rs232_char  
   jsr receiveUserOptionSelection  
   lda #$64
   jsr send_rs232_char
