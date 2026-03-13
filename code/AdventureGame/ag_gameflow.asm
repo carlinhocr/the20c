@@ -1242,8 +1242,12 @@ runAction:
   lda (actionDataVectorLow),Y
   ;always store the sensor ID for the Action specially if it is $FF
   sta sensorCurrentID
-;   adc #$30
-;   jsr send_rs232_char 
+  lda #$73
+  jsr send_rs232_char 
+  lda sensorCurrentID
+  clc
+  adc #$30
+  jsr send_rs232_char   
   ;load if the sensor is or not active
   lda action_sensor_active_offset
   tay
@@ -1255,6 +1259,12 @@ runAction:
   ldy #$0
   lda (actionDataVectorLow),Y
   sta sensorCurrentStatus ;on off
+  lda #$61
+  jsr send_rs232_char 
+  lda sensorCurrentStatus
+  clc
+  adc #$30
+  jsr send_rs232_char    
   ;moves you to next screen
   lda action_screen_offset
   tay
