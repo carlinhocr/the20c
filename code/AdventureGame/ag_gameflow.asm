@@ -1153,22 +1153,22 @@ loadScreenActionOptions_loop:
   ldx actionPosition
   lda actionCurrentID
   sta actionIDOptionsRAM,x ;save the action on the position to show for options
-;   lda #$61
-;   jsr send_rs232_char  
-;   lda actionCurrentID
-;   cmp #$ff
-;   beq noactionID
-;   clc
-;   adc #$30
-;   jsr send_rs232_char  
-;   jmp continueActionID
-; noactionID:
-;   lda #$7a ;letter z
-;   jsr send_rs232_char  
-; continueActionID:
+  lda #$61
+  jsr send_rs232_char  
+  lda actionCurrentID
+  cmp #$ff
+  beq noactionID
+  clc
+  adc #$30
+  jsr send_rs232_char  
+  jmp continueActionID
+noactionID:
+  lda #$7a ;letter z
+  jsr send_rs232_char  
+continueActionID:
   jsr processAction
-;   lda #$62
-;   jsr send_rs232_char  
+  lda #$62
+  jsr send_rs232_char  
   pla ;retrieve Y after processAction
   tay ;retrieve Y after processAction
   iny ;go to next action of the screen
