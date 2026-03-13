@@ -1273,7 +1273,7 @@ runAction:
   lda (actionDataVectorLow),Y
   ;always store the sensor ID for the Action specially if it is $FF
   sta sensorCurrentID
-;   clc
+  clc
 ;   adc #$30
 ;   jsr send_rs232_char 
 ;   ;load if the sensor is or not active
@@ -1320,12 +1320,6 @@ print_option_unknown
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts 
-  
-
-receiveUserInputAction:
-  lda #$2 ; 2 usar
-  sta selectedAction
-  rts  
 
 print_with_or_without_CRLF  
   lda print_no_CRLF
