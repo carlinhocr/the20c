@@ -324,19 +324,6 @@ programStart:
   jmp listeningMode
 
 
-lcdDemoMessage:
-
-  ;Draw Screen 1 Final Demo
-  lda #<screen1_demo
-  sta charDataVectorLow
-  lda #>screen1_demo
-  sta charDataVectorHigh
-  jsr print_ascii_screen
-  jsr delay_3_sec
-
-  rts 
-
-
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------MAIN-----------------------------------------------
@@ -346,7 +333,8 @@ lcdDemoMessage:
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------ASCII----------------------------------------------
+;--------------------------------LED_ASCII------------------------------------------
+;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
 set_position_lcd_line0:
@@ -397,12 +385,20 @@ print_ascii_screen_end:
   rts 
   ;END print_ascii_screen
 
-
-;END---------------------------------------------------------------------------------
+lcdDemoMessage:
+  ;Draw Screen 1 Final Demo
+  lda #<screen1_demo
+  sta charDataVectorLow
+  lda #>screen1_demo
+  sta charDataVectorHigh
+  jsr print_ascii_screen
+  jsr delay_3_sec
+  rts 
+;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------ASCII----------------------------------------------
+;--------------------------------LED_ASCII------------------------------------------
 ;-----------------------------------------------------------------------------------
-
+;-----------------------------------------------------------------------------------
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -741,7 +737,7 @@ mainProgram:
   ;jsr testPrinter
   jsr initilizationRoutines
   ;initialize screen as screen zero
- ; jsr timerWaitOneMinute
+  jsr timerWaitOneMinute
   jsr select_screen
   jsr draw_current_screen_table
 mainProgramLoop:
@@ -901,28 +897,6 @@ timerWaitTenMinutes:
   jsr timerWaitTenSeconds
   rts
 
-timerWaitOneMinute:
-  cli ;enable interrupts 
-  lda #TIMER_LOOPS_1M
-  sta TIMER_ZP_MIN  
-  lda #TIMER_LOOPS_10S ;constant with the number 200 the number 50ms loops to reach a second
-  sta TIMER_ZP_SEC ; memory position to degrade the loop
-  lda #TIMER_TICKS_LO
-  sta LCD_T1LL ;set latch low
-  lda #TIMER_TICKS_HI
-  sta LCD_T1CH ;set latch high and start timer and clears IFR T1  
-  rts
-
-timerWaitTenSeconds:
-  ;cli ;enable interrupts   
-  lda #TIMER_LOOPS_10S ;constant with the number 200 the number 50ms loops to reach a second
-  sta TIMER_ZP_SEC ; memory position to degrade the loop
-  lda #TIMER_TICKS_LO
-  sta LCD_T1LL ;set latch low
-  lda #TIMER_TICKS_HI
-  sta LCD_T1CH ;set latch high and start timer and clears IFR T1
-  rts  
-
 timerWaitFiveSeconds:
   ;cli ;enable interrupts   
   lda #TIMER_LOOPS_5S ;constant with the number 20 the number 50ms loops to reach a second
@@ -960,35 +934,50 @@ timerCheckSecondElapsedTrue:
   jsr timerWaitOneSecond ;set the timer again
   rts  
 
+timerWaitOneMinute:
+  cli ;enable interrupts 
+  lda #TIMER_LOOPS_1M
+  sta TIMER_ZP_MIN  
+  lda #TIMER_LOOPS_10S ;constant with the number 200 the number 50ms loops to reach a second
+  sta TIMER_ZP_SEC ; memory position to degrade the loop
+  lda #TIMER_TICKS_LO
+  sta LCD_T1LL ;set latch low
+  lda #TIMER_TICKS_HI
+  sta LCD_T1CH ;set latch high and start timer and clears IFR T1  
+  rts
+
+timerWaitTenSeconds:
+  ;cli ;enable interrupts   
+  lda #TIMER_LOOPS_10S ;constant with the number 200 the number 50ms loops to reach a second
+  sta TIMER_ZP_SEC ; memory position to degrade the loop
+  lda #TIMER_TICKS_LO
+  sta LCD_T1LL ;set latch low
+  lda #TIMER_TICKS_HI
+  sta LCD_T1CH ;set latch high and start timer and clears IFR T1
+  rts  
+
 timerCheck10SecondElapsed:
   lda LCD_T1CL             ; reading T1CL clears IFR bit 6
   dec TIMER_ZP_SEC
   lda TIMER_ZP_SEC
   beq timerCheck10SecondElapsedTrue
-  jsr timerLoadTick  
+  jsr timerLoadTick        ;keep counting until we reach from 200 to aero on timer_zp_sec
   rts
 timerCheck10SecondElapsedTrue:
-;   lda #< msj_secondElapsed
-;   sta serialDataVectorLow
-;   lda #> msj_secondElapsed
-;   sta serialDataVectorHigh
-;   jsr printAsciiDrawing
-  lda #$1 
-  sta timerExpired
+;   lda #$1 
+;   sta timerExpired
   dec TIMER_ZP_MIN
   jsr timerWaitTenSeconds ;set the timer again
-  rts    
+  rts     
 
 timerCheckMinuteElapsed:
   lda TIMER_ZP_MIN
-  beq timerCheckMinuteElapsedTrue  
+  beq timerCheckMinuteElapsedTrue
+  jsr timerWaitTenSeconds  
   rts
 timerCheckMinuteElapsedTrue:  
-;   lda #< msj_minuteElapsed
-;   sta serialDataVectorLow
-;   lda #> msj_minuteElapsed
-;   sta serialDataVectorHigh
-;   jsr printAsciiDrawing
+  lda #$1
+  sta timerExpired
   jsr timerWaitOneMinute  
   rts
 
@@ -2772,14 +2761,14 @@ irq:
   and #%01000000;#LCD_T1_FLAG
   beq irqNextInterruptSource
   ;jsr timerCheckSecondElapsed
-  lda #$61
-  jsr send_rs232_char
-  ;jsr timerCheck10SecondElapsed
+;   lda #$61
+;   jsr send_rs232_char
+  jsr timerCheck10SecondElapsed
   jsr timerCheckMinuteElapsed
   ;jsr timerCheckTimeIdleElapsed
 irqNextInterruptSource:
-  lda #$62
-  jsr send_rs232_char
+;   lda #$62
+;   jsr send_rs232_char
   jsr test_buttons ;test_buttons loads the message
 exit_irq:  
   ;reserve order of stacking to restore values
