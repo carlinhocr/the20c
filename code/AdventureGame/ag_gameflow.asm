@@ -1167,13 +1167,13 @@ noactionID:
   jsr send_rs232_char  
 continueActionID:
   jsr processAction
+  lda #$62
+  jsr send_rs232_char  
   pla ;retrieve Y after processAction
   tay ;retrieve Y after processAction
   iny ;go to next action of the screen
-  cpy max_actions_per_screen ;max objects per screen 0-6 for now 
-  ;check if the actions menu goes 6 times
-  lda #$62
-  jsr send_rs232_char
+  cpy max_actions_per_screen ;max objects per screen 0-5 for now 
+  ;check if the actions menu goes 6 time
   bne loadScreenActionOptions_loop
   rts
 
