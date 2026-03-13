@@ -743,9 +743,9 @@ mainProgram:
 mainProgramLoop:
   lda timerExpired
   beq continueMainProgramLoop
-  lda #< msj_iddleTimer1
+  lda #< msj_timerExpired
   sta serialDataVectorLow
-  lda #> msj_iddleTimer1
+  lda #> msj_timerExpired
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   lda #$0
@@ -964,8 +964,12 @@ timerCheck10SecondElapsed:
   lda LCD_T1CL             ; reading T1CL clears IFR bit 6
   dec TIMER_ZP_SEC
   lda TIMER_ZP_SEC
-  beq timerCheck10SecondElapsedTrue
-  jsr timerLoadTick        ;keep counting until we reach from 200 to aero on timer_zp_sec
+  beq timerCheck10SecondElapsedTrue    
+  ;keep counting until we reach from 200 to aero on timer_zp_sec
+  lda #TIMER_TICKS_LO
+  sta LCD_T1LL ;set latch low
+  lda #TIMER_TICKS_HI
+  sta LCD_T1CH ;set latch high and start timer and clears IFR T1  
   rts
 timerCheck10SecondElapsedTrue:
   lda #$1 
@@ -2763,8 +2767,8 @@ irq:
   and #%01000000;#LCD_T1_FLAG
   beq irqNextInterruptSource
   ;jsr timerCheckSecondElapsed
-;   lda #$61
-;   jsr send_rs232_char
+  lda #$61
+  jsr send_rs232_char
   jsr timerCheck10SecondElapsed
   ;jsr timerCheckMinuteElapsed
   ;jsr timerCheckTimeIdleElapsed
