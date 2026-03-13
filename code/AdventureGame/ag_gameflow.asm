@@ -900,10 +900,15 @@ timerWaitTenMinutes:
   rts
 
 timerWaitOneMinute:
-  ;cli ;enable interrupts 
+  cli ;enable interrupts 
   lda #TIMER_LOOPS_1M
   sta TIMER_ZP_MIN  
-  jsr timerWaitTenSeconds
+  lda #TIMER_LOOPS_10S ;constant with the number 200 the number 50ms loops to reach a second
+  sta TIMER_ZP_SEC ; memory position to degrade the loop
+  lda #TIMER_TICKS_LO
+  sta LCD_T1LL ;set latch low
+  lda #TIMER_TICKS_HI
+  sta LCD_T1CH ;set latch high and start timer and clears IFR T1  
   rts
 
 timerWaitTenSeconds:
