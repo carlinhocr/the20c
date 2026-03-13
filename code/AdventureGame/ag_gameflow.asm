@@ -1133,7 +1133,7 @@ loadScreenActionOptions_loop:
 ;   lda #$7a ;letter z
 ;   jsr send_rs232_char  
 ; continueActionID:
-;   jsr processAction
+  jsr processAction
 ;   lda #$62
 ;   jsr send_rs232_char  
   pla ;retrieve Y after processAction
