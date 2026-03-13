@@ -745,7 +745,7 @@ mainProgram:
   jsr draw_current_screen_table
 mainProgramLoop:
   jsr action_selector
-  ;jsr sensor_selector
+  jsr sensor_selector
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
@@ -1241,13 +1241,7 @@ runAction:
   ldy #$0
   lda (actionDataVectorLow),Y
   ;always store the sensor ID for the Action specially if it is $FF
-  sta sensorCurrentID
-  lda #$73
-  jsr send_rs232_char 
-  lda sensorCurrentID
-  clc
-  adc #$30
-  jsr send_rs232_char   
+  sta sensorCurrentID 
   ;load if the sensor is or not active
   lda action_sensor_active_offset
   tay
@@ -1258,13 +1252,7 @@ runAction:
   sta actionDataVectorHigh  
   ldy #$0
   lda (actionDataVectorLow),Y
-  sta sensorCurrentStatus ;on off
-  lda #$61
-  jsr send_rs232_char 
-  lda sensorCurrentStatus
-  clc
-  adc #$30
-  jsr send_rs232_char    
+  sta sensorCurrentStatus ;on off  
   ;moves you to next screen
   lda action_screen_offset
   tay
@@ -1321,6 +1309,12 @@ printing_NOCRLF:
 ;-----------------------------------------------------------------------------------
 
 sensor_selector:
+  lda #$73
+  jsr send_rs232_char 
+  lda sensorCurrentID
+  clc
+  adc #$30
+  jsr send_rs232_char  
   lda sensorCurrentID
   cmp #$ff
   beq sensor_selector_end
@@ -1339,10 +1333,16 @@ sensor_selector_end:
   rts
 
 sensor_3_run:
+  lda #$61
+  jsr send_rs232_char 
+  lda sensorCurrentStatus
+  clc
+  adc #$30
+  jsr send_rs232_char  
   lda sensorCurrentStatus
   beq sensor_3_run_off
   jsr timerAllGame
-  jsr startTimerIdle
+  ;jsr startTimerIdle
   rts
 sensor_3_run_off:
   ;stop the idlle timer check by puttin zero on the idleTimerStarMinute
