@@ -2,17 +2,23 @@
     "0": {
         "ID": "0",
         "Name": "water",
-        "Active": false
+        "Active": false,
+        "DialogOn": "El agua cae siempre cae, nunca para.",
+        "DialogOff": ""
     },
     "1": {
         "ID": "1",
         "Name": "heart",
-        "Active": false
+        "Active": false,
+        "DialogOn": "Tu corazón late cada vez más rápido",
+        "DialogOff": "Estás mas calmado"
     },
     "2": {
         "ID": "2",
         "Name": "flashlight",
-        "Active": false
+        "Active": false,
+        "DialogOn": "Prendes la linterna",
+        "DialogOff": "Apagas la linterna"
     },
     "3": {
         "ID": "3",
