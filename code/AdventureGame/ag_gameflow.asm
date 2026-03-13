@@ -833,38 +833,38 @@ initilizationRoutines:
   jsr initiatilizeActionsIDs
   rts
 
-loadPuzzlesRAM:
-  lda puzzle_record_length ;16 bytes
-  sta puzzleRecordSize
-  ldx puzzle_solved_offset ;here starts the solved property of puzzles
-  stx puzzle_pointers_index
-  ldx #$0
-  stx puzzle_RAM_index
-  ldy #$0 
-loadPuzzlesRAM_loop:
-  ldx puzzle_pointers_index
-  lda puzzles_pointers,x ;load low byte address for solved #$a
-  sta pivotZpLow
-  inx  
-  lda puzzles_pointers,x ;load high byte address for solved #$b
-  sta pivotZpHigh
-  ;update next puzzle_pointers_index
-  lda puzzle_pointers_index
-  clc
-  adc puzzleRecordSize
-  sta puzzle_pointers_index
-  ;load ram index and store visibility attribute 
-  ldx puzzle_RAM_index
-  lda (pivotZpLow),y
-  sta puzzlesRAM,x
-  ;update puzzle_RAM_index for next spot available
-  inx 
-  stx puzzle_RAM_index
-  ;check if the last puzzle was reached if it is break
-  cpx puzzle_count
-  bne loadPuzzlesRAM_loop
-  ;end loop and return 
-  rts
+; loadPuzzlesRAM:
+;   lda puzzle_record_length ;16 bytes
+;   sta puzzleRecordSize
+;   ldx puzzle_solved_offset ;here starts the solved property of puzzles
+;   stx puzzle_pointers_index
+;   ldx #$0
+;   stx puzzle_RAM_index
+;   ldy #$0 
+; loadPuzzlesRAM_loop:
+;   ldx puzzle_pointers_index
+;   lda puzzles_pointers,x ;load low byte address for solved #$a
+;   sta pivotZpLow
+;   inx  
+;   lda puzzles_pointers,x ;load high byte address for solved #$b
+;   sta pivotZpHigh
+;   ;update next puzzle_pointers_index
+;   lda puzzle_pointers_index
+;   clc
+;   adc puzzleRecordSize
+;   sta puzzle_pointers_index
+;   ;load ram index and store visibility attribute 
+;   ldx puzzle_RAM_index
+;   lda (pivotZpLow),y
+;   sta puzzlesRAM,x
+;   ;update puzzle_RAM_index for next spot available
+;   inx 
+;   stx puzzle_RAM_index
+;   ;check if the last puzzle was reached if it is break
+;   cpx puzzle_count
+;   bne loadPuzzlesRAM_loop
+;   ;end loop and return 
+;   rts
 
 loadConstants:
   lda #$6
@@ -1143,18 +1143,24 @@ loadScreenActionOptions:
 loadScreenActionOptions_loop:
   lda (actionDataVectorLow),y
   sta actionCurrentID
-  tya
-  pha
+  tya ;save Y because i am going to another process
+  pha ;save Y because i am going to another process
   sty actionPosition
-  lda actionPosition
-  tax 
+;   lda actionPosition
+;   tax 
+  ldx actionPosition
   lda actionCurrentID
-  sta actionIDOptionsRAM,x
+  sta actionIDOptionsRAM,x ;save the action on the position to show for options
+  lda #$62
+  jsr send_rs232_char  
   jsr processAction
-  pla
-  tay
-  iny
+  pla ;retrieve Y after processAction
+  tay ;retrieve Y after processAction
+  iny ;go to next action of the screen
   cpy max_actions_per_screen ;max objects per screen 0-6 for now 
+  ;check if the actions menu goes 6 times
+  lda #$61
+  jsr send_rs232_char
   bne loadScreenActionOptions_loop
   rts
 
