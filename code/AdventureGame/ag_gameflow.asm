@@ -828,7 +828,8 @@ printAsciiDrawing_end:
 ;-----------------------------------------------------------------------------------
 
 initilizationRoutines:
-  ;sei ;disable interrupts only to be enabled prior to user input or timer
+  sei ;disable interrupts only to be enabled prior to user input or timer
+  ;the only time interrupts will work is while waiting for user input
   jsr loadConstants
   jsr initiatilizeActionsIDs
   rts
@@ -879,35 +880,35 @@ initiatilizeActionsIDs_loop:
 ;-----------------------------------------------------------------------------------
 
 timerWaitTenMinutes:
-  cli ;enable interrupts 
-  lda #TIMER_LOOPS_10M
+  ;cli ;enable interrupts 
+  lda #TIMER_LOOPS_10M ;60 rounds of 20 seconds each
   sta TIMER_ZP_MIN  
   jsr timerWaitTenSeconds
   rts
 
 timerWaitOneMinute:
-  cli ;enable interrupts 
+  ;cli ;enable interrupts 
   lda #TIMER_LOOPS_1M
   sta TIMER_ZP_MIN  
   jsr timerWaitTenSeconds
   rts
 
 timerWaitTenSeconds:
-  cli ;enable interrupts   
-  lda #TIMER_LOOPS_10S ;constant with the number 20 the number 50ms loops to reach a second
+  ;cli ;enable interrupts   
+  lda #TIMER_LOOPS_10S ;constant with the number 200 the number 50ms loops to reach a second
   sta TIMER_ZP_SEC ; memory position to degrade the loop
   jsr timerLoadTick
   rts
 
 timerWaitFiveSeconds:
-  cli ;enable interrupts   
+  ;cli ;enable interrupts   
   lda #TIMER_LOOPS_5S ;constant with the number 20 the number 50ms loops to reach a second
   sta TIMER_ZP_SEC ; memory position to degrade the loop
   jsr timerLoadTick
   rts
 
 timerWaitOneSecond:
-  cli ;enable interrupts   
+  ;cli ;enable interrupts   
   lda #TIMER_LOOPS_1S ;constant with the number 20 the number 50ms loops to reach a second
   sta TIMER_ZP_SEC ; memory position to degrade the loop
   jsr timerLoadTick
@@ -1179,7 +1180,7 @@ receiveUserOptionSelection:
   ;wait infinity loop only interrupted by user input
   lda #$ff
   sta userOptionSelection
-  cli ;enable interrupts to accept user action
+  cli ;enable interrupts to accept user action also the timer can interrupt here
 receiveUserOptionSelection_loop:  
   lda userOptionSelection
   cmp #$ff   
@@ -1351,13 +1352,13 @@ sensor_3_run_off:
   rts
 
 timerAllGame:
-  jsr timerWaitTenMinutes
   lda #<msj_timerAllGame
   sta serialDataVectorLow  
   inx 
   lda #>msj_timerAllGame
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  jsr timerWaitTenMinutes  
   rts  
 
 startTimerIdle:
@@ -2712,7 +2713,7 @@ irq:
   ;jsr timerCheckSecondElapsed
   jsr timerCheck10SecondElapsed
   jsr timerCheckMinuteElapsed
-  jsr timerCheckTimeIdleElapsed
+  ;jsr timerCheckTimeIdleElapsed
 irqNextInterruptSource:
   jsr test_buttons ;test_buttons loads the message
 exit_irq:  
