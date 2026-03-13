@@ -56,7 +56,7 @@ sensor_0_active:
   .byte 0  ; off
 
 sensor_0_dialog_on:
-  .ascii ""
+  .ascii "El agua cae siempre cae, nunca para."
   .ascii "e"
 
 sensor_0_dialog_off:
