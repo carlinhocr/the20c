@@ -2767,8 +2767,8 @@ irq:
   and #%01000000;#LCD_T1_FLAG
   beq irqNextInterruptSource
   ;jsr timerCheckSecondElapsed
-  lda #$61
-  jsr send_rs232_char
+;   lda #$61
+;   jsr send_rs232_char
   jsr timerCheck10SecondElapsed
   ;jsr timerCheckMinuteElapsed
   ;jsr timerCheckTimeIdleElapsed
