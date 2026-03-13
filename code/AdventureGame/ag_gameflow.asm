@@ -885,6 +885,8 @@ loadConstants:
   sta screenCurrentID  
   lda #$ff
   sta idleTimerStartMinute
+  lda #$ff
+  sta userOptionSelection  
   rts 
 
 initiatilizeActionsIDs:  
@@ -1151,7 +1153,7 @@ loadScreenActionOptions_loop:
   ldx actionPosition
   lda actionCurrentID
   sta actionIDOptionsRAM,x ;save the action on the position to show for options
-  lda #$62
+  lda #$61
   jsr send_rs232_char  
   jsr processAction
   pla ;retrieve Y after processAction
@@ -1159,7 +1161,7 @@ loadScreenActionOptions_loop:
   iny ;go to next action of the screen
   cpy max_actions_per_screen ;max objects per screen 0-6 for now 
   ;check if the actions menu goes 6 times
-  lda #$61
+  lda #$62
   jsr send_rs232_char
   bne loadScreenActionOptions_loop
   rts
@@ -1229,7 +1231,11 @@ action_selector:;
   jsr initiatilizeActionsIDs
   jsr loadScreenActionOptions
 action_selection_ask_again:  
+  lda #$63
+  jsr send_rs232_char  
   jsr receiveUserOptionSelection  
+  lda #$64
+  jsr send_rs232_char
   ldx userOptionSelection
   lda actionIDOptionsRAM,x ;here we have the action ID
   sta selectedAction
@@ -1839,6 +1845,7 @@ option_unknown:
 ;-----------------------------------------------------------------------------------
 
 test_buttons:
+  sei ;disable interrupts to process user buton selection
   lda LCD_PORTA
   sta LCD_PORTSTATUS
   ;move PA4 to PA7 and PA3 to PA6
