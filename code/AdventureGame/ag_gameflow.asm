@@ -196,7 +196,7 @@ moveNextScreen=$0243
 idleTimerStartMinute=$0244
 sensorCurrentID=$0245
 sensorCurrentStatus=$0246
-
+timerExpired=$0247
 
 objectsRAM=$0300 ;32 bytes but i only use 6
 objectIDOptionsRAM=$0320;32 bytes but i only use 6
@@ -742,18 +742,28 @@ mainProgram:
   jsr initilizationRoutines
   ;initialize screen as screen zero
   jsr timerWaitOneMinute
-;   jsr select_screen
-;   jsr draw_current_screen_table
-; mainProgramLoop:
-;   jsr action_selector
-;   jsr sensor_selector
-;   lda moveNextScreen
-;   beq mainProgramLoop;if zero do not move to next screen and ask for actions
-;   lda #$0
-;   sta moveNextScreen ;reset the move next screen flag
-;   jsr select_screen
-;   jsr draw_current_screen_table
-;   jmp mainProgramLoop   
+  jsr select_screen
+  jsr draw_current_screen_table
+mainProgramLoop:
+  lda timerExpired
+  beq continueMainProgramLoop
+  lda #< msj_iddleTimer1
+  sta serialDataVectorLow
+  lda #> msj_iddleTimer1
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  lda #$0
+  sta timerExpired
+continueMainProgramLoop:  
+  jsr action_selector
+  jsr sensor_selector
+  lda moveNextScreen
+  beq mainProgramLoop;if zero do not move to next screen and ask for actions
+  lda #$0
+  sta moveNextScreen ;reset the move next screen flag
+  jsr select_screen
+  jsr draw_current_screen_table
+  jmp mainProgramLoop   
   rts
 
 delayClear:
@@ -856,6 +866,8 @@ loadConstants:
   sta idleTimerStartMinute
   lda #$ff
   sta userOptionSelection  
+  lda #$00
+  sta timerExpired
   rts 
 
 initiatilizeActionsIDs:  
@@ -951,6 +963,8 @@ timerCheck10SecondElapsedTrue:
 ;   lda #> msj_secondElapsed
 ;   sta serialDataVectorHigh
 ;   jsr printAsciiDrawing
+  lda #$1 
+  sta timerExpired
   jsr timerWaitTenSeconds ;set the timer again
   dec TIMER_ZP_MIN
   rts    
@@ -1601,6 +1615,10 @@ msj_minuteElapsed:
 
 msj_timerAllGame:
   .ascii "Comienza la Aventura tiene 10 minutos"
+  .ascii "e"    
+
+msj_timerExpired:
+  .ascii "El tiempo pasa..."
   .ascii "e"    
 
 msj_iddleTimer1:
