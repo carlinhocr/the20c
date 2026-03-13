@@ -828,7 +828,7 @@ printAsciiDrawing_end:
 ;-----------------------------------------------------------------------------------
 
 initilizationRoutines:
-  sei ;disable interrupts only to be enabled prior to user input or timer
+  ;sei ;disable interrupts only to be enabled prior to user input or timer
   ;the only time interrupts will work is while waiting for user input
   jsr loadConstants
   jsr initiatilizeActionsIDs
@@ -945,11 +945,11 @@ timerCheck10SecondElapsed:
   jsr timerLoadTick  
   rts
 timerCheck10SecondElapsedTrue:
-  lda #< msj_secondElapsed
-  sta serialDataVectorLow
-  lda #> msj_secondElapsed
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
+;   lda #< msj_secondElapsed
+;   sta serialDataVectorLow
+;   lda #> msj_secondElapsed
+;   sta serialDataVectorHigh
+;   jsr printAsciiDrawing
   jsr timerWaitTenSeconds ;set the timer again
   dec TIMER_ZP_MIN
   rts    
@@ -1186,7 +1186,7 @@ receiveUserOptionSelection_loop:
   cmp #$ff   
   beq receiveUserOptionSelection_loop
   ;we have a valid user input 
-  sei ;disable user action until we know if valid action if not ask again
+  ;sei ;disable user action until we know if valid action if not ask again
   rts  
 
 action_selector:;
