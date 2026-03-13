@@ -75,11 +75,11 @@ sensor_1_active:
   .byte 0  ; off
 
 sensor_1_dialog_on:
-  .ascii ""
+  .ascii "Tu corazón late cada vez más rápido"
   .ascii "e"
 
 sensor_1_dialog_off:
-  .ascii ""
+  .ascii "Estás mas calmado"
   .ascii "e"
 
 ; ── Sensor 2: flashlight ──────────────────────────
@@ -94,11 +94,11 @@ sensor_2_active:
   .byte 0  ; off
 
 sensor_2_dialog_on:
-  .ascii ""
+  .ascii "Prendes la linterna"
   .ascii "e"
 
 sensor_2_dialog_off:
-  .ascii ""
+  .ascii "Apagas la linterna"
   .ascii "e"
 
 ; ── Sensor 3: timer1minuto ──────────────────────────
