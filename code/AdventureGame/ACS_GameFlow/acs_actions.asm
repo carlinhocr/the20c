@@ -224,7 +224,7 @@ action_3_sensor_active:
   .byte 0  ; off
 
 action_3_screen:
-  .byte 255  ; screen id
+  .byte 6  ; screen id
 
 action_3_cost:
   .byte 15
