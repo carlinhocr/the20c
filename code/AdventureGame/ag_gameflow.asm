@@ -764,8 +764,12 @@ mainProgramLoop:
   sta moveNextScreen ;reset the move next screen flag
   jsr select_screen
   jsr draw_current_screen_table
+  lda gameEnded
+  bne mainProgram ;if gameEnded is not zero then the game ended
+  ;here the games continue so we jump to the loop and continue
   jmp mainProgramLoop   
   rts
+
 checkGameEnd:
   ;check end in screen s1s1
   lda timerExpired
@@ -781,6 +785,8 @@ checkGameEnd:
   sta screenCurrentID
   lda #$1
   sta moveNextScreen
+  lda #$1
+  sta gameEnded
 checkGameEnd2:  
 checkGameEnd_end:
   rts
