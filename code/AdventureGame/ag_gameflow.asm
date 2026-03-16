@@ -738,7 +738,7 @@ mainProgram:
   ;jsr testPrinter
   jsr initilizationRoutines
   ;initialize screen as screen zero
-  jsr timerWaitOneMinute
+  ;jsr timerWaitOneMinute
   jsr select_screen
   jsr draw_current_screen_table
 mainProgramLoop:
@@ -751,14 +751,14 @@ mainProgramLoop:
 ;   sta serialDataVectorLow
 ;   lda #> msj_iddleTimer1
 ;   sta serialDataVectorHigh
-; ;   jsr printAsciiDrawing
+;   jsr printAsciiDrawing
 ;   lda #$0
 ;   sta timerExpired
 ; continueMainProgramLoop:  
   jsr action_selector
+  jsr sensor_selector  
   lda gameEnded
   bne mainProgram ;if gameEnded is not zero then the game ended  
-  jsr sensor_selector
   jsr checkGameEnd  
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
@@ -1427,6 +1427,7 @@ sensor_3_run:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   ;jsr timerAllGame
+  jsr timerWaitOneMinute
   rts
 sensor_3_run_off:  
   rts  
