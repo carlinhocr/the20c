@@ -224,13 +224,13 @@ action_3_sensor_active:
   .byte 0  ; off
 
 action_3_screen:
-  .byte 255  ; screen id
+  .byte 6  ; screen id
 
 action_3_cost:
   .byte 15
 
 action_3_description:
-  .ascii "Entre las rocas hay rendijas por donde entra aire viciado, pero ninguna lo bastante grande para pasar. Hay marcas irregulares, como si alguien hubiera intentado moverlas y se hubiera detenido a mitad de camino. Tal vez no sea una opcion volver por ahí, pero la idea de explorar una caverna a oscuras no parece tentadora."
+  .ascii "Miras la Entrada"
   .ascii "e"
 
 ; ── Action 4: GRITAR ──────────────────────────

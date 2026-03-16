@@ -420,7 +420,7 @@ screen_2_action6:
 
 screen_2_description:
   .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte co"
-  .ascii "n su peso estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes s"
+  .ascii "n su peso, estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes s"
   .ascii "on rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente cla"
   .ascii "ra. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi or"
   .ascii "gánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino"
@@ -666,12 +666,10 @@ screen_6_action6:
   .byte 255  ; none
 
 screen_6_description:
-  .ascii "Entre las rocas hay rendijas por donde entra aire viciado,"
-  .ascii "pero ninguna lo bastante grande para pasar. "
-  .ascii "Hay marcas irregulares, como si alguien hubiera intentado"
-  .ascii "moverlas y se hubiera detenido a mitad de camino."
-  .ascii "Tal vez no sea una opcion volver por ahí,"
-  .ascii "pero la idea de explorar una caverna a oscuras no parece tentadora."
+  .ascii "Entre las rocas hay rendijas por donde entra aire viciado, pero ninguna lo basta"
+  .ascii "nte grande para pasar. Hay marcas irregulares, como si alguien hubiera intentado"
+  .ascii " moverlas y se hubiera detenido a mitad de camino. Tal vez no sea una opcion vol"
+  .ascii "ver por ahí, pero la idea de explorar una caverna a oscuras no parece tentadora."
   .ascii "e"
 
 screen_6_ascii:
