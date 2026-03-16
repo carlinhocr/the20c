@@ -666,7 +666,12 @@ screen_6_action6:
   .byte 255  ; none
 
 screen_6_description:
-  .ascii "Entre las rocas hay rendijas por donde entra aire viciado"
+  .ascii "Entre las rocas hay rendijas por donde entra aire viciado,"
+  .ascii "pero ninguna lo bastante grande para pasar. "
+  .ascii "Hay marcas irregulares, como si alguien hubiera intentado"
+  .ascii "moverlas y se hubiera detenido a mitad de camino."
+  .ascii "Tal vez no sea una opcion volver por ahí,"
+  .ascii "pero la idea de explorar una caverna a oscuras no parece tentadora."
   .ascii "e"
 
 screen_6_ascii:
