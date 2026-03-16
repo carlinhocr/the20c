@@ -9,6 +9,10 @@ screens_index:
   .word screen_pointers_3  ; startScreen
   .word screen_pointers_4  ; endScreens1s1
   .word screen_pointers_5  ; endScreenDefault
+  .word screen_pointers_6  ; s1s4
+  .word screen_pointers_7  ; s1s5
+  .word screen_pointers_8  ; endScreens1s4
+  .word screen_pointers_9  ; s2s1
 screens_index_record_length:
   .byte 2  ; each screens_index entry is 1 .word (2 bytes)
 
@@ -127,6 +131,82 @@ screen_pointers_5:
   .word screen_5_ascii             ; endScreenDefault ascii             [210,211]
   .word screen_5_flashlight_on     ; endScreenDefault flashlight_on     [212,213]
   .word screen_5_flashlight_off    ; endScreenDefault flashlight_off    [214,215]
+screen_pointers_6:
+  .word screen_6_id                ; s1s4 id                [216,217]
+  .word screen_6_name              ; s1s4 name              [218,219]
+  .word screen_6_north             ; s1s4 north             [220,221]
+  .word screen_6_south             ; s1s4 south             [222,223]
+  .word screen_6_east              ; s1s4 east              [224,225]
+  .word screen_6_west              ; s1s4 west              [226,227]
+  .word screen_6_puzzle1           ; s1s4 puzzle1           [228,229]
+  .word screen_6_puzzle2           ; s1s4 puzzle2           [230,231]
+  .word screen_6_action1           ; s1s4 action1           [232,233]
+  .word screen_6_action2           ; s1s4 action2           [234,235]
+  .word screen_6_action3           ; s1s4 action3           [236,237]
+  .word screen_6_action4           ; s1s4 action4           [238,239]
+  .word screen_6_action5           ; s1s4 action5           [240,241]
+  .word screen_6_action6           ; s1s4 action6           [242,243]
+  .word screen_6_description       ; s1s4 description       [244,245]
+  .word screen_6_ascii             ; s1s4 ascii             [246,247]
+  .word screen_6_flashlight_on     ; s1s4 flashlight_on     [248,249]
+  .word screen_6_flashlight_off    ; s1s4 flashlight_off    [250,251]
+screen_pointers_7:
+  .word screen_7_id                ; s1s5 id                [252,253]
+  .word screen_7_name              ; s1s5 name              [254,255]
+  .word screen_7_north             ; s1s5 north             [256,257]
+  .word screen_7_south             ; s1s5 south             [258,259]
+  .word screen_7_east              ; s1s5 east              [260,261]
+  .word screen_7_west              ; s1s5 west              [262,263]
+  .word screen_7_puzzle1           ; s1s5 puzzle1           [264,265]
+  .word screen_7_puzzle2           ; s1s5 puzzle2           [266,267]
+  .word screen_7_action1           ; s1s5 action1           [268,269]
+  .word screen_7_action2           ; s1s5 action2           [270,271]
+  .word screen_7_action3           ; s1s5 action3           [272,273]
+  .word screen_7_action4           ; s1s5 action4           [274,275]
+  .word screen_7_action5           ; s1s5 action5           [276,277]
+  .word screen_7_action6           ; s1s5 action6           [278,279]
+  .word screen_7_description       ; s1s5 description       [280,281]
+  .word screen_7_ascii             ; s1s5 ascii             [282,283]
+  .word screen_7_flashlight_on     ; s1s5 flashlight_on     [284,285]
+  .word screen_7_flashlight_off    ; s1s5 flashlight_off    [286,287]
+screen_pointers_8:
+  .word screen_8_id                ; endScreens1s4 id                [288,289]
+  .word screen_8_name              ; endScreens1s4 name              [290,291]
+  .word screen_8_north             ; endScreens1s4 north             [292,293]
+  .word screen_8_south             ; endScreens1s4 south             [294,295]
+  .word screen_8_east              ; endScreens1s4 east              [296,297]
+  .word screen_8_west              ; endScreens1s4 west              [298,299]
+  .word screen_8_puzzle1           ; endScreens1s4 puzzle1           [300,301]
+  .word screen_8_puzzle2           ; endScreens1s4 puzzle2           [302,303]
+  .word screen_8_action1           ; endScreens1s4 action1           [304,305]
+  .word screen_8_action2           ; endScreens1s4 action2           [306,307]
+  .word screen_8_action3           ; endScreens1s4 action3           [308,309]
+  .word screen_8_action4           ; endScreens1s4 action4           [310,311]
+  .word screen_8_action5           ; endScreens1s4 action5           [312,313]
+  .word screen_8_action6           ; endScreens1s4 action6           [314,315]
+  .word screen_8_description       ; endScreens1s4 description       [316,317]
+  .word screen_8_ascii             ; endScreens1s4 ascii             [318,319]
+  .word screen_8_flashlight_on     ; endScreens1s4 flashlight_on     [320,321]
+  .word screen_8_flashlight_off    ; endScreens1s4 flashlight_off    [322,323]
+screen_pointers_9:
+  .word screen_9_id                ; s2s1 id                [324,325]
+  .word screen_9_name              ; s2s1 name              [326,327]
+  .word screen_9_north             ; s2s1 north             [328,329]
+  .word screen_9_south             ; s2s1 south             [330,331]
+  .word screen_9_east              ; s2s1 east              [332,333]
+  .word screen_9_west              ; s2s1 west              [334,335]
+  .word screen_9_puzzle1           ; s2s1 puzzle1           [336,337]
+  .word screen_9_puzzle2           ; s2s1 puzzle2           [338,339]
+  .word screen_9_action1           ; s2s1 action1           [340,341]
+  .word screen_9_action2           ; s2s1 action2           [342,343]
+  .word screen_9_action3           ; s2s1 action3           [344,345]
+  .word screen_9_action4           ; s2s1 action4           [346,347]
+  .word screen_9_action5           ; s2s1 action5           [348,349]
+  .word screen_9_action6           ; s2s1 action6           [350,351]
+  .word screen_9_description       ; s2s1 description       [352,353]
+  .word screen_9_ascii             ; s2s1 ascii             [354,355]
+  .word screen_9_flashlight_on     ; s2s1 flashlight_on     [356,357]
+  .word screen_9_flashlight_off    ; s2s1 flashlight_off    [358,359]
 screen_puzzle_offset:
   .byte 12  ; (byte of screen_0_puzzle1 in screens_pointers)
 screen_action_offset:
@@ -321,13 +401,13 @@ screen_2_puzzle2:
   .byte 255  ; none
 
 screen_2_action1:
-  .byte 255  ; none
+  .byte 3  ; MIRAR ENTRADA
 
 screen_2_action2:
-  .byte 255  ; none
+  .byte 5  ; LINTERNA
 
 screen_2_action3:
-  .byte 255  ; none
+  .byte 6  ; EXPLORAR CAMINO
 
 screen_2_action4:
   .byte 255  ; none
@@ -339,7 +419,12 @@ screen_2_action6:
   .byte 255  ; none
 
 screen_2_description:
-  .ascii ""
+  .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte co"
+  .ascii "n su peso; estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes s"
+  .ascii "on rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente cla"
+  .ascii "ra. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi or"
+  .ascii "gánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino"
+  .ascii " que se pierde en la oscuridad"
   .ascii "e"
 
 screen_2_ascii:
@@ -347,21 +432,11 @@ screen_2_ascii:
   .ascii "e"
 
 screen_2_flashlight_on:
-  .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte co"
-  .ascii "n su peso, estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes s"
-  .ascii "on rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente cla"
-  .ascii "ra. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi or"
-  .ascii "gánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino"
-  .ascii " que se pierde en la oscuridad."
+  .ascii ""
   .ascii "e"
 
 screen_2_flashlight_off:
-  .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte co"
-  .ascii "n su peso, estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes s"
-  .ascii "on rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente cla"
-  .ascii "ra. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi or"
-  .ascii "gánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino"
-  .ascii " que se pierde en la oscuridad."
+  .ascii ""
   .ascii "e"
 
 ; ── Screen 3: startScreen ──────────────────────────
@@ -546,6 +621,256 @@ screen_5_flashlight_off:
   .ascii ""
   .ascii "e"
 
+; ── Screen 6: s1s4 ──────────────────────────
+screen_6_id:
+  .byte 6
+
+screen_6_name:
+  .ascii "s1s4"
+  .ascii "e"
+
+screen_6_north:
+  .byte 255  ; none
+
+screen_6_south:
+  .byte 255  ; none
+
+screen_6_east:
+  .byte 255  ; none
+
+screen_6_west:
+  .byte 255  ; none
+
+screen_6_puzzle1:
+  .byte 255  ; none
+
+screen_6_puzzle2:
+  .byte 255  ; none
+
+screen_6_action1:
+  .byte 10  ; EXPLORAR MARCAS
+
+screen_6_action2:
+  .byte 11  ; FORZAR ENTRADA
+
+screen_6_action3:
+  .byte 12  ; VOLVER A MIRAR ADELANTE
+
+screen_6_action4:
+  .byte 255  ; none
+
+screen_6_action5:
+  .byte 255  ; none
+
+screen_6_action6:
+  .byte 255  ; none
+
+screen_6_description:
+  .ascii "Entre las rocas hay rendijas por donde entra aire viciado, pero ninguna lo basta"
+  .ascii "nte grande para pasar. Hay marcas irregulares, como si alguien hubiera intentado"
+  .ascii " moverlas y se hubiera detenido a mitad de camino. Tal vez no sea una opcion vol"
+  .ascii "ver por ahí, pero la idea de explorar una caverna a oscuras no parece tentadora."
+  .ascii "e"
+
+screen_6_ascii:
+  .ascii ""
+  .ascii "e"
+
+screen_6_flashlight_on:
+  .ascii ""
+  .ascii "e"
+
+screen_6_flashlight_off:
+  .ascii ""
+  .ascii "e"
+
+; ── Screen 7: s1s5 ──────────────────────────
+screen_7_id:
+  .byte 7
+
+screen_7_name:
+  .ascii "s1s5"
+  .ascii "e"
+
+screen_7_north:
+  .byte 255  ; none
+
+screen_7_south:
+  .byte 255  ; none
+
+screen_7_east:
+  .byte 255  ; none
+
+screen_7_west:
+  .byte 255  ; none
+
+screen_7_puzzle1:
+  .byte 255  ; none
+
+screen_7_puzzle2:
+  .byte 255  ; none
+
+screen_7_action1:
+  .byte 12  ; VOLVER A MIRAR ADELANTE
+
+screen_7_action2:
+  .byte 255  ; none
+
+screen_7_action3:
+  .byte 255  ; none
+
+screen_7_action4:
+  .byte 255  ; none
+
+screen_7_action5:
+  .byte 255  ; none
+
+screen_7_action6:
+  .byte 255  ; none
+
+screen_7_description:
+  .ascii "Este es el PITFALL"
+  .ascii "e"
+
+screen_7_ascii:
+  .ascii ""
+  .ascii "e"
+
+screen_7_flashlight_on:
+  .ascii ""
+  .ascii "e"
+
+screen_7_flashlight_off:
+  .ascii ""
+  .ascii "e"
+
+; ── Screen 8: endScreens1s4 ──────────────────────────
+screen_8_id:
+  .byte 8
+
+screen_8_name:
+  .ascii "endScreens1s4"
+  .ascii "e"
+
+screen_8_north:
+  .byte 255  ; none
+
+screen_8_south:
+  .byte 255  ; none
+
+screen_8_east:
+  .byte 255  ; none
+
+screen_8_west:
+  .byte 255  ; none
+
+screen_8_puzzle1:
+  .byte 255  ; none
+
+screen_8_puzzle2:
+  .byte 255  ; none
+
+screen_8_action1:
+  .byte 9  ; TERMINAR EL JUEGO
+
+screen_8_action2:
+  .byte 255  ; none
+
+screen_8_action3:
+  .byte 255  ; none
+
+screen_8_action4:
+  .byte 255  ; none
+
+screen_8_action5:
+  .byte 255  ; none
+
+screen_8_action6:
+  .byte 255  ; none
+
+screen_8_description:
+  .ascii "El suelo comienza a temblar y entrada empieza a desmoronarse sobre ti. Lo ultimo"
+  .ascii " que piensas es que no estaban sellando la salida. Estaban sosteniendo el resto"
+  .ascii "Haz muerto"
+  .ascii "e"
+
+screen_8_ascii:
+  .ascii ""
+  .ascii "e"
+
+screen_8_flashlight_on:
+  .ascii ""
+  .ascii "e"
+
+screen_8_flashlight_off:
+  .ascii ""
+  .ascii "e"
+
+; ── Screen 9: s2s1 ──────────────────────────
+screen_9_id:
+  .byte 9
+
+screen_9_name:
+  .ascii "s2s1"
+  .ascii "e"
+
+screen_9_north:
+  .byte 255  ; none
+
+screen_9_south:
+  .byte 255  ; none
+
+screen_9_east:
+  .byte 255  ; none
+
+screen_9_west:
+  .byte 255  ; none
+
+screen_9_puzzle1:
+  .byte 255  ; none
+
+screen_9_puzzle2:
+  .byte 255  ; none
+
+screen_9_action1:
+  .byte 255  ; none
+
+screen_9_action2:
+  .byte 255  ; none
+
+screen_9_action3:
+  .byte 255  ; none
+
+screen_9_action4:
+  .byte 255  ; none
+
+screen_9_action5:
+  .byte 255  ; none
+
+screen_9_action6:
+  .byte 255  ; none
+
+screen_9_description:
+  .ascii ""
+  .ascii "e"
+
+screen_9_ascii:
+  .ascii ""
+  .ascii "e"
+
+screen_9_flashlight_on:
+  .ascii "Luego de explorar el pasillo, te encuentras con una sala grande. Dos tuneles se "
+  .ascii "abren frente a ti. Decidir en estas condiciones es dificil, pero necesario. El a"
+  .ascii "gua sigue subiendo lentamente."
+  .ascii "e"
+
+screen_9_flashlight_off:
+  .ascii "A ciegas tanteas la pared del pasillo, hasta que se acaba. Tienes la sensacion d"
+  .ascii "e que llegaste a un lugar mas espacioso. Recorres la pared a tientas y encuentra"
+  .ascii "s dos grandes huecos. ¿Tal vez sean tuneles?. No te detienes demasiado a pensarl"
+  .ascii "o, sientes mas agua en contacto con tu cuerpo."
+  .ascii "e"
+
 ; ── Total screen count ──────────────────────────────────────
 screen_count:
-  .byte 6
+  .byte 10

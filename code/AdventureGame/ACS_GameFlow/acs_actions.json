@@ -43,7 +43,9 @@
     "5": {
         "ID": "5",
         "Name": "LINTERNA",
-        "Sensor": "",
+        "SensorID": 2,
+        "SensorActive": true,
+        "ScreenID": 255,
         "Cost": 5,
         "Description": "La linterna se "
     },
@@ -52,6 +54,7 @@
         "Name": "EXPLORAR CAMINO",
         "SensorID": 255,
         "SensorActive": false,
+        "ScreenID": 9,
         "Cost": 20,
         "Description": "Te dispones a explorar el camino que se abre en la oscuridad."
     },

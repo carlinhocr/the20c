@@ -13,6 +13,9 @@ actions_index:
   .word action_pointer_7  ; VEO QUE CAE AGUA
   .word action_pointer_8  ; COMENZAR EL JUEGO
   .word action_pointer_9  ; TERMINAR EL JUEGO
+  .word action_pointer_10  ; EXPLORAR MARCAS
+  .word action_pointer_11  ; FORZAR ENTRADA
+  .word action_pointer_12  ; VOLVER A MIRAR ADELANTE
 actions_index_record_length:
   .byte 2  ; each actions_index entry is 1 .word (2 bytes)
 
@@ -97,6 +100,30 @@ action_pointer_9:
   .word action_9_screen        ; TERMINAR EL JUEGO screen        [134,135]
   .word action_9_cost          ; TERMINAR EL JUEGO cost          [136,137]
   .word action_9_description   ; TERMINAR EL JUEGO description   [138,139]
+action_pointer_10:
+  .word action_10_id            ; EXPLORAR MARCAS id            [140,141]
+  .word action_10_name          ; EXPLORAR MARCAS name          [142,143]
+  .word action_10_sensor_id     ; EXPLORAR MARCAS sensor_id     [144,145]
+  .word action_10_sensor_active ; EXPLORAR MARCAS sensor_active [146,147]
+  .word action_10_screen        ; EXPLORAR MARCAS screen        [148,149]
+  .word action_10_cost          ; EXPLORAR MARCAS cost          [150,151]
+  .word action_10_description   ; EXPLORAR MARCAS description   [152,153]
+action_pointer_11:
+  .word action_11_id            ; FORZAR ENTRADA id            [154,155]
+  .word action_11_name          ; FORZAR ENTRADA name          [156,157]
+  .word action_11_sensor_id     ; FORZAR ENTRADA sensor_id     [158,159]
+  .word action_11_sensor_active ; FORZAR ENTRADA sensor_active [160,161]
+  .word action_11_screen        ; FORZAR ENTRADA screen        [162,163]
+  .word action_11_cost          ; FORZAR ENTRADA cost          [164,165]
+  .word action_11_description   ; FORZAR ENTRADA description   [166,167]
+action_pointer_12:
+  .word action_12_id            ; VOLVER A MIRAR ADELANTE id            [168,169]
+  .word action_12_name          ; VOLVER A MIRAR ADELANTE name          [170,171]
+  .word action_12_sensor_id     ; VOLVER A MIRAR ADELANTE sensor_id     [172,173]
+  .word action_12_sensor_active ; VOLVER A MIRAR ADELANTE sensor_active [174,175]
+  .word action_12_screen        ; VOLVER A MIRAR ADELANTE screen        [176,177]
+  .word action_12_cost          ; VOLVER A MIRAR ADELANTE cost          [178,179]
+  .word action_12_description   ; VOLVER A MIRAR ADELANTE description   [180,181]
 action_name_offset:
   .byte 2  ; (byte of action_0_name in actions_pointers)
 action_sensor_id_offset:
@@ -239,10 +266,10 @@ action_5_name:
   .ascii "e"
 
 action_5_sensor_id:
-  .byte 255  ; none
+  .byte 2  ; none
 
 action_5_sensor_active:
-  .byte 0  ; off
+  .byte 1  ; on
 
 action_5_screen:
   .byte 255  ; screen id
@@ -269,7 +296,7 @@ action_6_sensor_active:
   .byte 0  ; off
 
 action_6_screen:
-  .byte 255  ; screen id
+  .byte 9  ; screen id
 
 action_6_cost:
   .byte 20
@@ -350,6 +377,78 @@ action_9_description:
   .ascii ""
   .ascii "e"
 
+; ── Action 10: EXPLORAR MARCAS ──────────────────────────
+action_10_id:
+  .byte 10
+
+action_10_name:
+  .ascii "EXPLORAR MARCAS"
+  .ascii "e"
+
+action_10_sensor_id:
+  .byte 255  ; none
+
+action_10_sensor_active:
+  .byte 0  ; off
+
+action_10_screen:
+  .byte 7  ; screen id
+
+action_10_cost:
+  .byte 20
+
+action_10_description:
+  .ascii "Entre las marcas notas un extraño dibujo"
+  .ascii "e"
+
+; ── Action 11: FORZAR ENTRADA ──────────────────────────
+action_11_id:
+  .byte 11
+
+action_11_name:
+  .ascii "FORZAR ENTRADA"
+  .ascii "e"
+
+action_11_sensor_id:
+  .byte 255  ; none
+
+action_11_sensor_active:
+  .byte 0  ; off
+
+action_11_screen:
+  .byte 8  ; screen id
+
+action_11_cost:
+  .byte 20
+
+action_11_description:
+  .ascii "Intentas mover las rocas de la entrada."
+  .ascii "e"
+
+; ── Action 12: VOLVER A MIRAR ADELANTE ──────────────────────────
+action_12_id:
+  .byte 12
+
+action_12_name:
+  .ascii "VOLVER A MIRAR ADELANTE"
+  .ascii "e"
+
+action_12_sensor_id:
+  .byte 255  ; none
+
+action_12_sensor_active:
+  .byte 0  ; off
+
+action_12_screen:
+  .byte 2  ; screen id
+
+action_12_cost:
+  .byte 20
+
+action_12_description:
+  .ascii "Por un momento consideras que mover toneladas de rocas sin equipamiento indicado tal vez sea inutil. Explorar la caverna, aun sin conocerla, puede tener mejores resultados."
+  .ascii "e"
+
 ; ── Total action count ──────────────────────────────────────
 action_count:
-  .byte 10
+  .byte 13
