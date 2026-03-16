@@ -1230,63 +1230,87 @@ def run_parsers():
 # ══════════════════════════════════════════════════════════════════════════════
 
 def open_map_actions_window():
+    from collections import defaultdict
+
     screens = load_json(JSON_SCREENS_FILE)
     actions = load_json(JSON_ACTIONS_FILE)
+    sensors = load_json(JSON_SENSORS_FILE)
 
     if not screens:
         messagebox.showinfo("Map Actions", "No screens found. Create some screens first.")
         return
 
-    # ── Build id→name and name→id lookups ────────────────────
+    # ── Lookup tables ─────────────────────────────────────────
     id_to_screen_name = { str(rec.get("ID","")): rec.get("Name", f"Screen{rid}")
                           for rid, rec in screens.items() }
     screen_name_to_id = { v: k for k, v in id_to_screen_name.items() }
 
-    # ── Build action lookup: action name → action record ─────
+    # sensor id → sensor record
+    sensor_by_id = { str(rec.get("ID","")): rec for rec in sensors.values() }
+
+    # action name → action record
     action_by_name = { rec.get("Name","").strip(): rec
                        for rec in actions.values() if rec.get("Name","").strip() }
 
-    # ── Collect edges: (src_name, dst_name, action_name) ─────
-    #   For each screen, look at Action1..Action6.
-    #   Each action may have a ScreenID → that is the destination.
-    edges = []   # list of (src_screen_name, dst_screen_name, action_name)
     all_screen_names = list(id_to_screen_name.values())
+
+    # ── Per-screen action info ────────────────────────────────
+    # screen_name → [ {name, dst_name, sensor_name, sensor_active, has_link} ]
+    screen_action_rows = {}
+    edges = []   # (src_name, dst_name, action_name)
 
     for rid, srec in screens.items():
         src_name = srec.get("Name", f"Screen{rid}")
+        rows = []
         for slot in ["Action1","Action2","Action3","Action4","Action5","Action6"]:
             aname = srec.get(slot, "").strip()
             if not aname:
                 continue
-            arec = action_by_name.get(aname)
-            if not arec:
-                continue
+            arec = action_by_name.get(aname, {})
+
+            # Destination screen
             dst_id = arec.get("ScreenID", 255)
             try:
                 dst_id = int(dst_id)
             except (ValueError, TypeError):
-                continue
-            if dst_id == 255:
-                continue   # 255 = no destination
-            dst_name = id_to_screen_name.get(str(dst_id))
+                dst_id = 255
+            dst_name = id_to_screen_name.get(str(dst_id)) if dst_id != 255 else None
             if dst_name and dst_name != src_name:
                 edges.append((src_name, dst_name, aname))
+
+            # Sensor info
+            sid = arec.get("SensorID", 255)
+            try:
+                sid = int(sid)
+            except (ValueError, TypeError):
+                sid = 255
+            srec2 = sensor_by_id.get(str(sid)) if sid != 255 else None
+            sensor_name   = srec2.get("Name", f"S{sid}") if srec2 else None
+            sensor_active = arec.get("SensorActive", False)
+
+            rows.append({
+                "name":          aname,
+                "dst_name":      dst_name,
+                "sensor_name":   sensor_name,
+                "sensor_active": sensor_active,
+            })
+        screen_action_rows[src_name] = rows
 
     # ── Window ────────────────────────────────────────────────
     win = tk.Toplevel()
     win.title("🔀  Map Actions")
-    win.geometry("960x720")
+    win.geometry("1100x780")
     win.configure(bg="#1a0f06")
     win.resizable(True, True)
 
-    tk.Label(win, text="🔀  Map Actions  —  Screen Connections via Actions",
+    tk.Label(win, text="🔀  Map Actions  —  Screens · Actions · Sensors",
              font=("Georgia", 15, "bold"), bg="#1a0f06", fg="#f0c040", pady=10).pack()
     tk.Frame(win, bg="#7a5520", height=2).pack(fill="x", padx=20, pady=(0, 4))
 
     # ── Toolbar ───────────────────────────────────────────────
     toolbar = tk.Frame(win, bg="#1a0f06")
-    toolbar.pack(fill="x", padx=20, pady=(0, 4))
-    tk.Label(toolbar, text="Drag nodes  •  Scroll to zoom  •  Arrows = action transitions",
+    toolbar.pack(fill="x", padx=20, pady=(0, 2))
+    tk.Label(toolbar, text="Drag nodes  •  Scroll to zoom  •  Arrows = transitions",
              font=("Courier", 9), bg="#1a0f06", fg="#7a5520").pack(side="left")
     tk.Button(toolbar, text="⟳ Reset Layout", font=("Georgia", 9, "bold"),
               bg="#3d2005", fg="#f0c040", activebackground="#5c3310",
@@ -1295,11 +1319,17 @@ def open_map_actions_window():
 
     # ── Legend ────────────────────────────────────────────────
     legend = tk.Frame(win, bg="#1a0f06")
-    legend.pack(fill="x", padx=24, pady=(0, 2))
-    for color, label in [("#f0c040","Screen node"), ("#50b8e0","Action arrow"),
-                         ("#e08040","Action label"), ("#50e878","Dest. screen")]:
-        tk.Label(legend, text=f"●  {label}", font=("Courier", 9),
-                 bg="#1a0f06", fg=color).pack(side="left", padx=10)
+    legend.pack(fill="x", padx=24, pady=(0, 3))
+    for color, label in [
+        ("#f0c040", "Screen header"),
+        ("#50b8e0", "→ transition arrow"),
+        ("#c8f050", "Sensor ON"),
+        ("#e05050", "Sensor OFF"),
+        ("#7a9070", "No sensor"),
+        ("#e08040", "→ Dest. screen"),
+    ]:
+        tk.Label(legend, text=f"■  {label}", font=("Courier", 8),
+                 bg="#1a0f06", fg=color).pack(side="left", padx=8)
 
     # ── Canvas ────────────────────────────────────────────────
     canvas = tk.Canvas(win, bg="#0d0804", highlightthickness=0)
@@ -1310,49 +1340,65 @@ def open_map_actions_window():
     vbar.pack(side="right",  fill="y")
     canvas.pack(side="left", fill="both", expand=True)
 
-    # ── Layout constants ──────────────────────────────────────
-    BOX_W    = 150
-    BOX_H    = 44
-    GAP_X    = 120
-    GAP_Y    = 100
-    STEP_X   = BOX_W + GAP_X
-    STEP_Y   = BOX_H + GAP_Y
-    ORIGIN   = (80, 80)
+    # ── Layout / size constants ───────────────────────────────
+    BOX_W      = 200   # node width
+    HDR_H      = 32    # header (screen name) height
+    ROW_H      = 16    # height per action row
+    ROW_PAD    = 4     # padding below last row
+    GAP_X      = 160
+    GAP_Y      = 60
+    ORIGIN     = (60, 60)
 
     # Colours
-    C_BOX     = "#2a1a06"
-    C_OUTLINE = "#f0c040"
-    C_TEXT    = "#f0c040"
-    C_ARROW   = "#50b8e0"
-    C_LABEL   = "#e08040"
-    C_DST_BOX = "#062a10"
-    C_DST_OUT = "#50e878"
-    C_DST_TXT = "#50e878"
+    C_HDR_BG   = "#2a1a06"
+    C_HDR_OUT  = "#f0c040"
+    C_HDR_TXT  = "#f0c040"
+    C_BODY_BG  = "#130b02"
+    C_DIV      = "#3d2005"
+    C_ACT_TXT  = "#c8a060"        # action name
+    C_DST_TXT  = "#e08040"        # → destination
+    C_SEN_ON   = "#c8f050"        # sensor active
+    C_SEN_OFF  = "#e05050"        # sensor inactive
+    C_SEN_NONE = "#7a9070"        # no sensor
+    C_ARROW    = "#50b8e0"
+    C_ARR_LBL  = "#e08040"
 
-    # ── Auto-layout: place screens in a grid ──────────────────
-    positions = {}   # screen_name → [cx, cy]
+    # ── Compute total height of a node ────────────────────────
+    def node_height(nm):
+        rows = screen_action_rows.get(nm, [])
+        return HDR_H + len(rows) * ROW_H + ROW_PAD
+
+    # ── positions: screen_name → [left_x, top_y]  (top-left corner) ──
+    positions = {}
 
     def auto_layout():
         positions.clear()
-        # BFS from first screen using edges to try to keep connected
-        # nodes near each other; fall back to grid for orphans.
-        ordered = list(all_screen_names)
-        cols = max(1, int(len(ordered) ** 0.5 + 0.5))
-        for i, nm in enumerate(ordered):
+        cols = max(1, int(len(all_screen_names) ** 0.5 + 0.99))
+        # compute row heights to space vertically
+        row_heights = {}
+        for i, nm in enumerate(all_screen_names):
+            row = i // cols
+            row_heights[row] = max(row_heights.get(row, 0), node_height(nm))
+
+        col_x = [ORIGIN[0] + c * (BOX_W + GAP_X) for c in range(cols)]
+        row_y = []
+        y = ORIGIN[1]
+        for r in sorted(row_heights):
+            row_y.append(y)
+            y += row_heights[r] + GAP_Y
+
+        for i, nm in enumerate(all_screen_names):
             col = i % cols
             row = i // cols
-            cx  = ORIGIN[0] + col * STEP_X + BOX_W // 2
-            cy  = ORIGIN[1] + row * STEP_Y + BOX_H // 2
-            positions[nm] = [cx, cy]
+            positions[nm] = [col_x[col], row_y[row] if row < len(row_y) else ORIGIN[1]]
 
     auto_layout()
 
-    # item_map: screen_name → {rect, text}
+    # item_map: screen_name → {rect_hdr, rect_body, all_ids:[...]}
     item_map = {}
 
-    # ── Tooltip (shows action list on hover) ──────────────────
-    tip_win  = [None]
-    tip_item = [None]
+    # ── Tooltip ───────────────────────────────────────────────
+    tip_win = [None]
 
     def show_tip(event, text):
         hide_tip()
@@ -1377,152 +1423,185 @@ def open_map_actions_window():
         canvas.delete("all")
         item_map.clear()
 
-        # Collect per-screen outgoing actions for tooltip text
-        screen_actions_out = { nm: [] for nm in all_screen_names }
-        for src, dst, aname in edges:
-            screen_actions_out[src].append(f"→ {dst}  [{aname}]")
-
-        # ── Draw edges first (behind nodes) ──────────────────
-        # Group edges by (src, dst) to stack labels if multiple actions
-        from collections import defaultdict
+        # ── Edges (drawn first, behind nodes) ────────────────
         edge_groups = defaultdict(list)
         for src, dst, aname in edges:
             edge_groups[(src, dst)].append(aname)
-
-        drawn_pairs = set()
 
         for (src, dst), anames in edge_groups.items():
             if src not in positions or dst not in positions:
                 continue
 
-            sx, sy = positions[src]
-            dx, dy = positions[dst]
+            # Attach from right-mid of src, to left-mid of dst
+            sx0, sy0 = positions[src]
+            dx0, dy0 = positions[dst]
+            sh = node_height(src)
+            dh = node_height(dst)
 
-            # Check if reverse edge also exists (bidirectional)
+            ax1 = sx0 + BOX_W
+            ay1 = sy0 + sh / 2
+            ax2 = dx0
+            ay2 = dy0 + dh / 2
+
             is_bidir = (dst, src) in edge_groups
-            pair_key = tuple(sorted([src, dst]))
-
-            # Offset parallel bidirectional arrows slightly
-            offset = 0
+            offset   = 0
             if is_bidir:
-                is_first = src < dst
-                offset = 10 if is_first else -10
+                offset = 8 if src < dst else -8
+                ay1 += offset
+                ay2 += offset
 
-            # Perpendicular offset vector
-            length = max(1, ((dx-sx)**2 + (dy-sy)**2) ** 0.5)
-            px = -(dy - sy) / length * offset
-            py =  (dx - sx) / length * offset
+            # Curved bezier-like via control points
+            cx1 = ax1 + GAP_X * 0.45
+            cy1 = ay1
+            cx2 = ax2 - GAP_X * 0.45
+            cy2 = ay2
 
-            # Shorten arrow so it doesn't overlap the box centre
-            shrink = BOX_W // 2 + 6
-            ratio  = shrink / max(1, length)
-            ax1 = sx + (dx - sx) * ratio  + px
-            ay1 = sy + (dy - sy) * ratio  + py
-            ax2 = dx - (dx - sx) * ratio  + px
-            ay2 = dy - (dy - sy) * ratio  + py
+            # Approximate with a polyline (tk canvas has no bezier natively)
+            pts = []
+            steps = 12
+            for t_i in range(steps + 1):
+                t = t_i / steps
+                mt = 1 - t
+                bx = mt**3*ax1 + 3*mt**2*t*cx1 + 3*mt*t**2*cx2 + t**3*ax2
+                by = mt**3*ay1 + 3*mt**2*t*cy1 + 3*mt*t**2*cy2 + t**3*ay2
+                pts.extend([bx, by])
 
-            canvas.create_line(
-                ax1, ay1, ax2, ay2,
-                fill=C_ARROW, width=2,
-                arrow=tk.LAST, arrowshape=(12, 14, 5),
-                tags="edge"
-            )
+            canvas.create_line(*pts, fill=C_ARROW, width=2,
+                               smooth=True,
+                               arrow=tk.LAST, arrowshape=(11, 13, 4),
+                               tags="edge")
 
-            # Action label at mid-point
-            mx = (ax1 + ax2) / 2 + px * 0.5
-            my = (ay1 + ay2) / 2 + py * 0.5
-            label_text = "\n".join(anames)
-            canvas.create_text(
-                mx, my,
-                text=label_text,
-                fill=C_LABEL,
-                font=("Courier", 8, "italic"),
-                tags="edge"
-            )
+            # Label at midpoint
+            mx = (ax1 + ax2) / 2
+            my = (ay1 + ay2) / 2 - 8
+            canvas.create_text(mx, my, text=" / ".join(anames),
+                               fill=C_ARR_LBL, font=("Courier", 7, "italic"),
+                               tags="edge")
 
-        # ── Draw nodes ────────────────────────────────────────
+        # ── Nodes ─────────────────────────────────────────────
         for nm in all_screen_names:
             if nm not in positions:
                 continue
-            cx, cy = positions[nm]
-            x0 = cx - BOX_W // 2
-            y0 = cy - BOX_H // 2
-            x1 = cx + BOX_W // 2
-            y1 = cy + BOX_H // 2
+            x0, y0 = positions[nm]
+            nh = node_height(nm)
+            x1 = x0 + BOX_W
+            y1 = y0 + nh
 
-            # Is this screen a destination of any edge?
-            is_dst = any(dst == nm for _, dst, _ in edges)
-            fill    = C_DST_BOX    if is_dst else C_BOX
-            outline = C_DST_OUT    if is_dst else C_OUTLINE
-            txtclr  = C_DST_TXT    if is_dst else C_TEXT
+            all_ids = []
 
-            rect = canvas.create_rectangle(
-                x0, y0, x1, y1,
-                fill=fill, outline=outline, width=2,
+            # Header background
+            hdr_rect = canvas.create_rectangle(
+                x0, y0, x1, y0 + HDR_H,
+                fill=C_HDR_BG, outline=C_HDR_OUT, width=2,
                 tags=("node", nm)
             )
-            disp = nm if len(nm) <= 18 else nm[:17] + "…"
-            txt  = canvas.create_text(
-                cx, cy - 6,
-                text=disp,
-                fill=txtclr,
-                font=("Georgia", 9, "bold"),
-                width=BOX_W - 8,
-                tags=("node", nm)
-            )
+            all_ids.append(hdr_rect)
 
-            # Show screen ID in small text below name
+            # Screen name
             sid = screen_name_to_id.get(nm, "?")
-            canvas.create_text(
-                cx, cy + 10,
-                text=f"id:{sid}",
-                fill="#7a5520",
-                font=("Courier", 8),
+            disp = nm if len(nm) <= 22 else nm[:21] + "…"
+            hdr_txt = canvas.create_text(
+                x0 + 6, y0 + HDR_H // 2,
+                text=f"[{sid}] {disp}",
+                fill=C_HDR_TXT,
+                font=("Georgia", 9, "bold"),
+                anchor="w", width=BOX_W - 10,
                 tags=("node", nm)
             )
+            all_ids.append(hdr_txt)
 
-            # Count outgoing actions as badge
-            n_out = len(screen_actions_out.get(nm, []))
-            if n_out:
-                canvas.create_oval(
-                    x1 - 16, y0 - 8, x1 + 2, y0 + 8,
-                    fill="#3d2005", outline=C_ARROW, width=1,
-                    tags=("node", nm)
-                )
-                canvas.create_text(
-                    x1 - 7, y0,
-                    text=str(n_out),
-                    fill=C_ARROW,
-                    font=("Courier", 8, "bold"),
-                    tags=("node", nm)
-                )
+            # Body background
+            body_rect = canvas.create_rectangle(
+                x0, y0 + HDR_H, x1, y1,
+                fill=C_BODY_BG, outline=C_HDR_OUT, width=1,
+                tags=("node", nm)
+            )
+            all_ids.append(body_rect)
 
-            item_map[nm] = {"rect": rect, "text": txt}
+            # Divider under header
+            canvas.create_line(x0, y0 + HDR_H, x1, y0 + HDR_H,
+                               fill=C_DIV, width=1, tags=("node", nm))
 
-            # Bind tooltip
-            tip_lines = screen_actions_out.get(nm, [])
-            tip_text  = (f"Screen: {nm}\n" +
-                         (("\n".join(tip_lines)) if tip_lines else "  (no action links)"))
+            # Action rows
+            rows = screen_action_rows.get(nm, [])
+            for i, row in enumerate(rows):
+                ry = y0 + HDR_H + i * ROW_H + ROW_H // 2
 
-            for tag_item in [rect, txt]:
-                canvas.tag_bind(tag_item, "<Enter>",
-                                lambda e, t=tip_text: show_tip(e, t))
-                canvas.tag_bind(tag_item, "<Leave>", hide_tip)
+                aname      = row["name"]
+                dst_name   = row["dst_name"]
+                sen_name   = row["sensor_name"]
+                sen_active = row["sensor_active"]
 
-        canvas.configure(scrollregion=canvas.bbox("all") or (0, 0, 960, 720))
+                # Bullet dot colour: green if has transition, dim otherwise
+                dot_color = C_ARROW if dst_name else C_DIV
+                canvas.create_oval(x0+5, ry-3, x0+11, ry+3,
+                                   fill=dot_color, outline="", tags=("node",nm))
+
+                # Action name
+                act_disp = aname if len(aname) <= 14 else aname[:13]+"…"
+                canvas.create_text(x0 + 16, ry,
+                                   text=act_disp,
+                                   fill=C_ACT_TXT,
+                                   font=("Courier", 8, "bold"),
+                                   anchor="w", tags=("node", nm))
+
+                # Destination screen tag
+                if dst_name:
+                    dst_disp = dst_name if len(dst_name) <= 10 else dst_name[:9]+"…"
+                    canvas.create_text(x0 + 98, ry,
+                                       text=f"→{dst_disp}",
+                                       fill=C_DST_TXT,
+                                       font=("Courier", 7),
+                                       anchor="w", tags=("node", nm))
+
+                # Sensor badge (right side)
+                if sen_name:
+                    s_color = C_SEN_ON if sen_active else C_SEN_OFF
+                    s_state = "ON" if sen_active else "OFF"
+                    sen_disp = sen_name if len(sen_name) <= 7 else sen_name[:6]+"…"
+                    canvas.create_rectangle(x1-56, ry-6, x1-2, ry+6,
+                                            fill="#1a0f06", outline=s_color,
+                                            width=1, tags=("node",nm))
+                    canvas.create_text(x1-30, ry,
+                                       text=f"📡{sen_disp}:{s_state}",
+                                       fill=s_color,
+                                       font=("Courier", 7),
+                                       tags=("node", nm))
+                else:
+                    canvas.create_text(x1-28, ry,
+                                       text="no sensor",
+                                       fill=C_SEN_NONE,
+                                       font=("Courier", 7, "italic"),
+                                       tags=("node", nm))
+
+                # Row separator
+                if i < len(rows) - 1:
+                    canvas.create_line(x0+2, ry + ROW_H//2,
+                                       x1-2, ry + ROW_H//2,
+                                       fill=C_DIV, width=1,
+                                       tags=("node", nm))
+
+            item_map[nm] = {
+                "rect_hdr":  hdr_rect,
+                "rect_body": body_rect,
+                "all_ids":   all_ids,
+                "x0": x0, "y0": y0, "h": nh,
+            }
+
+        canvas.configure(scrollregion=canvas.bbox("all") or (0, 0, 1100, 780))
 
     redraw()
 
-    # ── Drag ──────────────────────────────────────────────────
+    # ── Drag (click anywhere on node) ────────────────────────
     drag = {"name": None, "ox": 0, "oy": 0}
 
     def on_press(event):
         hide_tip()
         cx = canvas.canvasx(event.x)
         cy = canvas.canvasy(event.y)
-        for nm, ids in item_map.items():
-            hits = canvas.find_overlapping(cx-1, cy-1, cx+1, cy+1)
-            if ids["rect"] in hits or ids["text"] in hits:
+        for nm, info in item_map.items():
+            x0, y0, h = info["x0"], info["y0"], info["h"]
+            if x0 <= cx <= x0 + BOX_W and y0 <= cy <= y0 + h:
                 drag.update({"name": nm, "ox": cx, "oy": cy})
                 break
 
