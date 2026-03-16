@@ -831,7 +831,7 @@ printAsciiDrawing_lenghts_loop:
   ;if there is a carry it is in the carry flag
   ; clear the carry and add one to the high order byte
   clc
-  ;inc serialDataVectorHigh
+  inc serialDataVectorHigh
 printAsciiDrawing_lenghts_no_carry  
   ldy #0
   lda (serialDataVectorLow),y 
