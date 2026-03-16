@@ -420,7 +420,7 @@ screen_2_action6:
 
 screen_2_description:
   .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte co"
-  .ascii "n su peso; estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes s"
+  .ascii "n su peso estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes s"
   .ascii "on rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente cla"
   .ascii "ra. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi or"
   .ascii "gánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino"
