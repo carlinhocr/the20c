@@ -362,7 +362,7 @@ action_9_name:
   .ascii "e"
 
 action_9_sensor_id:
-  .byte 255  ; none
+  .byte 4  ; none
 
 action_9_sensor_active:
   .byte 0  ; off

@@ -7,6 +7,7 @@ sensors_index:
   .word sensor_pointer_1  ; heart
   .word sensor_pointer_2  ; flashlight
   .word sensor_pointer_3  ; timer1minuto
+  .word sensor_pointer_4  ; gamePlaying
 sensors_index_record_length:
   .byte 2  ; each sensors_index entry is 1 .word (2 bytes)
 
@@ -35,6 +36,12 @@ sensor_pointer_3:
   .word sensor_3_active    ; timer1minuto active    [34,35]
   .word sensor_3_dialog_on ; timer1minuto dialog_on [36,37]
   .word sensor_3_dialog_off; timer1minuto dialog_off[38,39]
+sensor_pointer_4:
+  .word sensor_4_id        ; gamePlaying id        [40,41]
+  .word sensor_4_name      ; gamePlaying name      [42,43]
+  .word sensor_4_active    ; gamePlaying active    [44,45]
+  .word sensor_4_dialog_on ; gamePlaying dialog_on [46,47]
+  .word sensor_4_dialog_off; gamePlaying dialog_off[48,49]
 sensor_name_offset:
   .byte 2       ; (byte of sensor_0_name in sensors_pointers)
 sensor_dialog_on_offset:
@@ -120,6 +127,25 @@ sensor_3_dialog_off:
   .ascii "Aqui puedes tomartelo con calma, perono mucha"
   .ascii "e"
 
+; ── Sensor 4: gamePlaying ──────────────────────────
+sensor_4_id:
+  .byte 4
+
+sensor_4_name:
+  .ascii "gamePlaying"
+  .ascii "e"
+
+sensor_4_active:
+  .byte 0  ; off
+
+sensor_4_dialog_on:
+  .ascii "Comienza el Juego"
+  .ascii "e"
+
+sensor_4_dialog_off:
+  .ascii "Terminó el Juego"
+  .ascii "e"
+
 ; ── Total sensor count ──────────────────────────────────────
 sensor_count:
-  .byte 4
+  .byte 5
