@@ -72,5 +72,14 @@
         "ScreenID": 0,
         "Cost": 0,
         "Description": "Y entras en la caverna misteriosa, el tiempo esta en tu contra"
+    },
+    "9": {
+        "ID": "9",
+        "Name": "TERMINAR EL JUEGO",
+        "SensorID": 255,
+        "SensorActive": false,
+        "ScreenID": 3,
+        "Cost": 0,
+        "Description": ""
     }
 }
