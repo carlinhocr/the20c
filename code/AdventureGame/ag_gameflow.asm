@@ -197,6 +197,7 @@ idleTimerStartMinute=$0244
 sensorCurrentID=$0245
 sensorCurrentStatus=$0246
 timerExpired=$0247
+gameEnded=$0248
 
 objectsRAM=$0300 ;32 bytes but i only use 6
 objectIDOptionsRAM=$0320;32 bytes but i only use 6
@@ -768,6 +769,8 @@ continueMainProgramLoop:
   jmp mainProgramLoop   
   rts
 
+
+
 delayClear:
   jsr delay_3_sec  
   jsr printClearRS232Screen
@@ -872,6 +875,8 @@ loadConstants:
   sta userOptionSelection  
   lda #$00
   sta timerExpired
+  lda #$00
+  sta gameEnded
   rts 
 
 initiatilizeActionsIDs:  

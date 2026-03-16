@@ -12,6 +12,7 @@ actions_index:
   .word action_pointer_6  ; EXPLORAR CAMINO
   .word action_pointer_7  ; VEO QUE CAE AGUA
   .word action_pointer_8  ; COMENZAR EL JUEGO
+  .word action_pointer_9  ; TERMINAR EL JUEGO
 actions_index_record_length:
   .byte 2  ; each actions_index entry is 1 .word (2 bytes)
 
@@ -88,6 +89,14 @@ action_pointer_8:
   .word action_8_screen        ; COMENZAR EL JUEGO screen        [120,121]
   .word action_8_cost          ; COMENZAR EL JUEGO cost          [122,123]
   .word action_8_description   ; COMENZAR EL JUEGO description   [124,125]
+action_pointer_9:
+  .word action_9_id            ; TERMINAR EL JUEGO id            [126,127]
+  .word action_9_name          ; TERMINAR EL JUEGO name          [128,129]
+  .word action_9_sensor_id     ; TERMINAR EL JUEGO sensor_id     [130,131]
+  .word action_9_sensor_active ; TERMINAR EL JUEGO sensor_active [132,133]
+  .word action_9_screen        ; TERMINAR EL JUEGO screen        [134,135]
+  .word action_9_cost          ; TERMINAR EL JUEGO cost          [136,137]
+  .word action_9_description   ; TERMINAR EL JUEGO description   [138,139]
 action_name_offset:
   .byte 2  ; (byte of action_0_name in actions_pointers)
 action_sensor_id_offset:
@@ -317,6 +326,30 @@ action_8_description:
   .ascii "Y entras en la caverna misteriosa, el tiempo esta en tu contra"
   .ascii "e"
 
+; ── Action 9: TERMINAR EL JUEGO ──────────────────────────
+action_9_id:
+  .byte 9
+
+action_9_name:
+  .ascii "TERMINAR EL JUEGO"
+  .ascii "e"
+
+action_9_sensor_id:
+  .byte 255  ; none
+
+action_9_sensor_active:
+  .byte 0  ; off
+
+action_9_screen:
+  .byte 3  ; screen id
+
+action_9_cost:
+  .byte 0
+
+action_9_description:
+  .ascii ""
+  .ascii "e"
+
 ; ── Total action count ──────────────────────────────────────
 action_count:
-  .byte 9
+  .byte 10

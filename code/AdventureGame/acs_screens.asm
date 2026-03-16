@@ -7,6 +7,8 @@ screens_index:
   .word screen_pointers_1  ; s1s2
   .word screen_pointers_2  ; s1s3
   .word screen_pointers_3  ; startScreen
+  .word screen_pointers_4  ; endScreens1s1
+  .word screen_pointers_5  ; endScreenDefault
 screens_index_record_length:
   .byte 2  ; each screens_index entry is 1 .word (2 bytes)
 
@@ -87,6 +89,44 @@ screen_pointers_3:
   .word screen_3_ascii             ; startScreen ascii             [138,139]
   .word screen_3_flashlight_on     ; startScreen flashlight_on     [140,141]
   .word screen_3_flashlight_off    ; startScreen flashlight_off    [142,143]
+screen_pointers_4:
+  .word screen_4_id                ; endScreens1s1 id                [144,145]
+  .word screen_4_name              ; endScreens1s1 name              [146,147]
+  .word screen_4_north             ; endScreens1s1 north             [148,149]
+  .word screen_4_south             ; endScreens1s1 south             [150,151]
+  .word screen_4_east              ; endScreens1s1 east              [152,153]
+  .word screen_4_west              ; endScreens1s1 west              [154,155]
+  .word screen_4_puzzle1           ; endScreens1s1 puzzle1           [156,157]
+  .word screen_4_puzzle2           ; endScreens1s1 puzzle2           [158,159]
+  .word screen_4_action1           ; endScreens1s1 action1           [160,161]
+  .word screen_4_action2           ; endScreens1s1 action2           [162,163]
+  .word screen_4_action3           ; endScreens1s1 action3           [164,165]
+  .word screen_4_action4           ; endScreens1s1 action4           [166,167]
+  .word screen_4_action5           ; endScreens1s1 action5           [168,169]
+  .word screen_4_action6           ; endScreens1s1 action6           [170,171]
+  .word screen_4_description       ; endScreens1s1 description       [172,173]
+  .word screen_4_ascii             ; endScreens1s1 ascii             [174,175]
+  .word screen_4_flashlight_on     ; endScreens1s1 flashlight_on     [176,177]
+  .word screen_4_flashlight_off    ; endScreens1s1 flashlight_off    [178,179]
+screen_pointers_5:
+  .word screen_5_id                ; endScreenDefault id                [180,181]
+  .word screen_5_name              ; endScreenDefault name              [182,183]
+  .word screen_5_north             ; endScreenDefault north             [184,185]
+  .word screen_5_south             ; endScreenDefault south             [186,187]
+  .word screen_5_east              ; endScreenDefault east              [188,189]
+  .word screen_5_west              ; endScreenDefault west              [190,191]
+  .word screen_5_puzzle1           ; endScreenDefault puzzle1           [192,193]
+  .word screen_5_puzzle2           ; endScreenDefault puzzle2           [194,195]
+  .word screen_5_action1           ; endScreenDefault action1           [196,197]
+  .word screen_5_action2           ; endScreenDefault action2           [198,199]
+  .word screen_5_action3           ; endScreenDefault action3           [200,201]
+  .word screen_5_action4           ; endScreenDefault action4           [202,203]
+  .word screen_5_action5           ; endScreenDefault action5           [204,205]
+  .word screen_5_action6           ; endScreenDefault action6           [206,207]
+  .word screen_5_description       ; endScreenDefault description       [208,209]
+  .word screen_5_ascii             ; endScreenDefault ascii             [210,211]
+  .word screen_5_flashlight_on     ; endScreenDefault flashlight_on     [212,213]
+  .word screen_5_flashlight_off    ; endScreenDefault flashlight_off    [214,215]
 screen_puzzle_offset:
   .byte 12  ; (byte of screen_0_puzzle1 in screens_pointers)
 screen_action_offset:
@@ -384,6 +424,128 @@ screen_3_flashlight_off:
   .ascii ""
   .ascii "e"
 
+; ── Screen 4: endScreens1s1 ──────────────────────────
+screen_4_id:
+  .byte 4
+
+screen_4_name:
+  .ascii "endScreens1s1"
+  .ascii "e"
+
+screen_4_north:
+  .byte 255  ; none
+
+screen_4_south:
+  .byte 255  ; none
+
+screen_4_east:
+  .byte 0  ; s1s1
+
+screen_4_west:
+  .byte 255  ; none
+
+screen_4_puzzle1:
+  .byte 255  ; none
+
+screen_4_puzzle2:
+  .byte 255  ; none
+
+screen_4_action1:
+  .byte 9  ; TERMINAR EL JUEGO
+
+screen_4_action2:
+  .byte 255  ; none
+
+screen_4_action3:
+  .byte 255  ; none
+
+screen_4_action4:
+  .byte 255  ; none
+
+screen_4_action5:
+  .byte 255  ; none
+
+screen_4_action6:
+  .byte 255  ; none
+
+screen_4_description:
+  .ascii "El constante goteo era hipnotico. Gota, pausa, gota. El agua comenzo a entumecer"
+  .ascii " tus extremidades hasta que dejaste de sentirlas. Un eterno sueño te dio la bien"
+  .ascii "venida."
+  .ascii "e"
+
+screen_4_ascii:
+  .ascii ""
+  .ascii "e"
+
+screen_4_flashlight_on:
+  .ascii ""
+  .ascii "e"
+
+screen_4_flashlight_off:
+  .ascii ""
+  .ascii "e"
+
+; ── Screen 5: endScreenDefault ──────────────────────────
+screen_5_id:
+  .byte 5
+
+screen_5_name:
+  .ascii "endScreenDefault"
+  .ascii "e"
+
+screen_5_north:
+  .byte 255  ; none
+
+screen_5_south:
+  .byte 255  ; none
+
+screen_5_east:
+  .byte 255  ; none
+
+screen_5_west:
+  .byte 255  ; none
+
+screen_5_puzzle1:
+  .byte 255  ; none
+
+screen_5_puzzle2:
+  .byte 255  ; none
+
+screen_5_action1:
+  .byte 9  ; TERMINAR EL JUEGO
+
+screen_5_action2:
+  .byte 255  ; none
+
+screen_5_action3:
+  .byte 255  ; none
+
+screen_5_action4:
+  .byte 255  ; none
+
+screen_5_action5:
+  .byte 255  ; none
+
+screen_5_action6:
+  .byte 255  ; none
+
+screen_5_description:
+  .ascii "Asi terminas tus dias atrapado en la Caverna"
+  .ascii "e"
+
+screen_5_ascii:
+  .ascii ""
+  .ascii "e"
+
+screen_5_flashlight_on:
+  .ascii ""
+  .ascii "e"
+
+screen_5_flashlight_off:
+  .ascii ""
+  .ascii "e"
+
 ; ── Total screen count ──────────────────────────────────────
 screen_count:
-  .byte 4
+  .byte 6
