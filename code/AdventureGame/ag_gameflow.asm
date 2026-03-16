@@ -807,7 +807,7 @@ printClearRS232Screen:
   rts 
 
 printAsciiDrawing:
-  ;sei
+  sei ;disable interrupts to run
   ;save accumulator x and y registers
   pha
   txa
