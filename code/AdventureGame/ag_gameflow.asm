@@ -756,6 +756,8 @@ mainProgramLoop:
 ;   sta timerExpired
 ; continueMainProgramLoop:  
   jsr action_selector
+  lda gameEnded
+  bne mainProgram ;if gameEnded is not zero then the game ended  
   jsr sensor_selector
   jsr checkGameEnd  
   lda moveNextScreen
@@ -764,8 +766,6 @@ mainProgramLoop:
   sta moveNextScreen ;reset the move next screen flag
   jsr select_screen
   jsr draw_current_screen_table
-  lda gameEnded
-  bne mainProgram ;if gameEnded is not zero then the game ended
   ;here the games continue so we jump to the loop and continue
   jmp mainProgramLoop   
   rts
@@ -773,7 +773,7 @@ mainProgramLoop:
 checkGameEnd:
   ;check end in screen s1s1
   lda timerExpired
-  cmp #$3
+  cmp #$3 ;checking 30 seconds three timers
   ;if less or equal continue
   bcc checkGameEnd2
   lda screenCurrentID
@@ -787,6 +787,8 @@ checkGameEnd:
   sta moveNextScreen
   lda #$1
   sta gameEnded
+  lda #$0
+  sta timerExpired ;stop the first screen timer expired
 checkGameEnd2:  
 checkGameEnd_end:
   rts
