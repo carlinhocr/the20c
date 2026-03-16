@@ -742,24 +742,22 @@ mainProgram:
   jsr select_screen
   jsr draw_current_screen_table
 mainProgramLoop:
-  lda timerExpired
-  cmp #$3
-  ;go if it is less than or equal to
-  bcc continueMainProgramLoop
-  lda #< msj_iddleTimer1
-  sta serialDataVectorLow
-  lda #> msj_iddleTimer1
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  lda #$0
-  sta timerExpired
-continueMainProgramLoop:  
+;   lda timerExpired
+;   cmp #$3
+;   ;go if it is less than or equal to
+;   bcc continueMainProgramLoop
+;   jsr checkGameEnd
+;   lda #< msj_iddleTimer1
+;   sta serialDataVectorLow
+;   lda #> msj_iddleTimer1
+;   sta serialDataVectorHigh
+; ;   jsr printAsciiDrawing
+;   lda #$0
+;   sta timerExpired
+; continueMainProgramLoop:  
   jsr action_selector
-  lda timerExpired
-  clc
-  adc #$30
-  jsr send_rs232_char
   jsr sensor_selector
+  jsr checkGameEnd  
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
@@ -768,8 +766,24 @@ continueMainProgramLoop:
   jsr draw_current_screen_table
   jmp mainProgramLoop   
   rts
-
-
+checkGameEnd:
+  ;check end in screen s1s1
+  lda timerExpired
+  cmp #$3
+  ;if less or equal continue
+  bcc checkGameEnd2
+  lda screenCurrentID
+  cmp #$0 ;screen s1s1
+  bne checkGameEnd2
+  ;now we are on screen s1s1 and the timer expired lets end the game
+  ;by changing the final screen
+  lda #$4 ;endScreens1s1 id
+  sta screenCurrentID
+  lda #$1
+  sta moveNextScreen
+checkGameEnd2:  
+checkGameEnd_end:
+  rts
 
 delayClear:
   jsr delay_3_sec  
