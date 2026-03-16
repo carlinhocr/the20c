@@ -831,9 +831,8 @@ printAsciiDrawing_lenghts_loop:
   ;if there is a carry it is in the carry flag
   ; clear the carry and add one to the high order byte
   clc
-  inc serialDataVectorHigh
+  ;inc serialDataVectorHigh
 printAsciiDrawing_lenghts_no_carry  
-  ;here printing the new mario line
   ldy #0
   lda (serialDataVectorLow),y 
   cmp #$65;"e"
@@ -2037,9 +2036,9 @@ send_rs232_line_loop:
   tya 
   clc
   adc serialDataVectorLow
-  bcc send_rs232_line_loop_same_page
-  inc serialDataVectorHigh
-send_rs232_line_loop_same_page:  
+  ;bcc send_rs232_line_loop_same_page
+  ;inc serialDataVectorHigh
+;send_rs232_line_loop_same_page:  
   lda (serialDataVectorLow),y 
   ;test for the NULL char that ends all ASCII strings
   beq send_rs232_line_end
