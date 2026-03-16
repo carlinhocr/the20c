@@ -2769,9 +2769,9 @@ initialScreen:
   
   .org $c000
   .include "acs_screens.asm"  
-  .org $d800  
+  .org $e000  
   .include "acs_actions.asm"
-  .org $e000
+  .org $e800
   .include "acs_sensors.asm"
 
 
