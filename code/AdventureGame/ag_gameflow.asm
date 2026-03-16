@@ -851,7 +851,7 @@ printAsciiDrawing_end:
   pla
   tax
   pla
-  cli
+  ;cli let them be on when it is ok for them to be on
   rts
 
 ;END--------------------------------------------------------------------------------
@@ -1238,10 +1238,13 @@ receiveUserOptionSelection_loop:
   rts  
 
 action_selector:;
+  sei ;do not inrerrupt while running actions
   jsr initiatilizeActionsIDs
   jsr loadScreenActionOptions
+  cli
 action_selection_ask_again:  
   jsr receiveUserOptionSelection  
+  sei
   ldx userOptionSelection
   lda actionIDOptionsRAM,x ;here we have the action ID
   sta selectedAction
@@ -1252,6 +1255,7 @@ action_selection_ask_again:
   jmp action_selection_ask_again
 action_selection_option_ok:  
   jsr runAction
+  cli
   rts
 
 runAction:
