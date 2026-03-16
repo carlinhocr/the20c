@@ -53,11 +53,8 @@ def save_to_json(json_file, key_field, data, status_label):
 
 def get_screen_names():
     screens = load_json(JSON_SCREENS_FILE)
-    names = sorted(
-        rec.get("Name", rid)
-        for rid, rec in screens.items()
-        if rec.get("Name", "").strip() or rid
-    )
+    ordered = sorted(screens.values(), key=lambda r: int(r.get("ID", 0)))
+    names = [r.get("Name", r.get("ID", "")) for r in ordered if r.get("Name","").strip() or r.get("ID","")]
     return [""] + names
 
 def get_puzzle_names():
@@ -530,10 +527,15 @@ def open_screens_window():
     action_combos = {}
 
     # ── Load existing screen ──────────────────────────────────
+    def screen_names_by_id():
+        scr = load_json(JSON_SCREENS_FILE)
+        ordered = sorted(scr.values(), key=lambda r: int(r.get("ID", 0)))
+        return [r.get("Name", r.get("ID", "")) for r in ordered if r.get("Name","").strip() or r.get("ID","")]
+
     section_lbl(form, "— Load Existing Screen —")
     load_var = tk.StringVar(value="— select to load —")
     load_dd  = ttk.Combobox(form, textvariable=load_var,
-                            values=get_screen_names()[1:],
+                            values=screen_names_by_id(),
                             state="readonly", font=("Courier", 11))
     load_dd.pack(fill="x", ipady=3)
     tk.Frame(form, bg="#7a5520", height=2).pack(fill="x", pady=(10, 0))
@@ -637,7 +639,7 @@ def open_screens_window():
         data["FlashlightOff"] = flashlight_off_text.get("1.0", "end-1c")
         data["AsciiDrawing"]  = ascii_text.get("1.0", "end-1c")
         save_to_json(JSON_SCREENS_FILE, "ID", data, slbl)
-        updated = get_screen_names()[1:]
+        updated = screen_names_by_id()
         for cb in exit_combos.values():
             cb["values"] = [""] + updated
         load_dd["values"] = updated
@@ -1341,12 +1343,12 @@ def open_map_actions_window():
     canvas.pack(side="left", fill="both", expand=True)
 
     # ── Layout / size constants ───────────────────────────────
-    BOX_W      = 200   # node width
-    HDR_H      = 32    # header (screen name) height
-    ROW_H      = 16    # height per action row
-    ROW_PAD    = 4     # padding below last row
-    GAP_X      = 160
-    GAP_Y      = 60
+    BOX_W      = 280   # node width
+    HDR_H      = 36    # header (screen name) height
+    ROW_H      = 20    # height per action row
+    ROW_PAD    = 6     # padding below last row
+    GAP_X      = 200
+    GAP_Y      = 70
     ORIGIN     = (60, 60)
 
     # Colours
@@ -1501,11 +1503,11 @@ def open_map_actions_window():
             sid = screen_name_to_id.get(nm, "?")
             disp = nm if len(nm) <= 22 else nm[:21] + "…"
             hdr_txt = canvas.create_text(
-                x0 + 6, y0 + HDR_H // 2,
+                x0 + 8, y0 + HDR_H // 2,
                 text=f"[{sid}] {disp}",
                 fill=C_HDR_TXT,
-                font=("Georgia", 9, "bold"),
-                anchor="w", width=BOX_W - 10,
+                font=("Georgia", 10, "bold"),
+                anchor="w", width=BOX_W - 12,
                 tags=("node", nm)
             )
             all_ids.append(hdr_txt)
@@ -1534,44 +1536,44 @@ def open_map_actions_window():
 
                 # Bullet dot colour: green if has transition, dim otherwise
                 dot_color = C_ARROW if dst_name else C_DIV
-                canvas.create_oval(x0+5, ry-3, x0+11, ry+3,
+                canvas.create_oval(x0+6, ry-4, x0+14, ry+4,
                                    fill=dot_color, outline="", tags=("node",nm))
 
                 # Action name
-                act_disp = aname if len(aname) <= 14 else aname[:13]+"…"
-                canvas.create_text(x0 + 16, ry,
+                act_disp = aname if len(aname) <= 16 else aname[:15]+"…"
+                canvas.create_text(x0 + 20, ry,
                                    text=act_disp,
                                    fill=C_ACT_TXT,
-                                   font=("Courier", 8, "bold"),
+                                   font=("Courier", 9, "bold"),
                                    anchor="w", tags=("node", nm))
 
                 # Destination screen tag
                 if dst_name:
-                    dst_disp = dst_name if len(dst_name) <= 10 else dst_name[:9]+"…"
-                    canvas.create_text(x0 + 98, ry,
+                    dst_disp = dst_name if len(dst_name) <= 12 else dst_name[:11]+"…"
+                    canvas.create_text(x0 + 128, ry,
                                        text=f"→{dst_disp}",
                                        fill=C_DST_TXT,
-                                       font=("Courier", 7),
+                                       font=("Courier", 8),
                                        anchor="w", tags=("node", nm))
 
                 # Sensor badge (right side)
                 if sen_name:
                     s_color = C_SEN_ON if sen_active else C_SEN_OFF
                     s_state = "ON" if sen_active else "OFF"
-                    sen_disp = sen_name if len(sen_name) <= 7 else sen_name[:6]+"…"
-                    canvas.create_rectangle(x1-56, ry-6, x1-2, ry+6,
+                    sen_disp = sen_name if len(sen_name) <= 9 else sen_name[:8]+"…"
+                    canvas.create_rectangle(x1-76, ry-7, x1-2, ry+7,
                                             fill="#1a0f06", outline=s_color,
                                             width=1, tags=("node",nm))
-                    canvas.create_text(x1-30, ry,
+                    canvas.create_text(x1-40, ry,
                                        text=f"📡{sen_disp}:{s_state}",
                                        fill=s_color,
-                                       font=("Courier", 7),
+                                       font=("Courier", 8),
                                        tags=("node", nm))
                 else:
-                    canvas.create_text(x1-28, ry,
+                    canvas.create_text(x1-38, ry,
                                        text="no sensor",
                                        fill=C_SEN_NONE,
-                                       font=("Courier", 7, "italic"),
+                                       font=("Courier", 8, "italic"),
                                        tags=("node", nm))
 
                 # Row separator
