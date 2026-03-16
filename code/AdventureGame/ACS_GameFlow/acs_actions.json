@@ -80,7 +80,7 @@
     "9": {
         "ID": "9",
         "Name": "TERMINAR EL JUEGO",
-        "SensorID": 255,
+        "SensorID": 4,
         "SensorActive": false,
         "ScreenID": 3,
         "Cost": 0,
