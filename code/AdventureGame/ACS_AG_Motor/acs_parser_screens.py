@@ -233,6 +233,19 @@ def to_asm(screens, action_ids):
     lines.append(f"  .byte {len(screens)}")
     lines.append("")
 
+    # ── Secret screens count ──────────────────────────────────
+    secret_count = 0
+    for scr in screens.values():
+        try:
+            if int(scr.get("IsSecretScreen", 0)):
+                secret_count += 1
+        except (ValueError, TypeError):
+            pass
+    lines.append("; ── Total secret screens count ──────────────────────────────")
+    lines.append("screens_with_secrets:")
+    lines.append(f"  .byte {secret_count}")
+    lines.append("")
+
     return "\n".join(lines)
 
 

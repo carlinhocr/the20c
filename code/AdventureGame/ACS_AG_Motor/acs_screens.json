@@ -94,7 +94,10 @@
         "Description": "Este es el PITFALL",
         "FlashlightOn": "",
         "FlashlightOff": "",
-        "AsciiDrawing": ""
+        "AsciiDrawing": "",
+        "EnemyProbability": 0,
+        "IsSecretScreen": 1,
+        "IsEndScreen": 0
     },
     "8": {
         "ID": "8",

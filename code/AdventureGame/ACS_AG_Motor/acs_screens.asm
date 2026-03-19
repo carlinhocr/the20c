@@ -29,114 +29,134 @@ screen_pointers_0:
   .word screen_0_flashlight_on     ; s1s1 flashlight_on     [16,17]
   .word screen_0_flashlight_off    ; s1s1 flashlight_off    [18,19]
   .word screen_0_enemy_probability ; s1s1 enemy_probability [20,21]
+  .word screen_0_is_secret_screen  ; s1s1 is_secret_screen  [22,23]
+  .word screen_0_is_end_screen     ; s1s1 is_end_screen     [24,25]
 screen_pointers_1:
-  .word screen_1_id                ; s1s2 id                [22,23]
-  .word screen_1_name              ; s1s2 name              [24,25]
-  .word screen_1_action1           ; s1s2 action1           [26,27]
-  .word screen_1_action2           ; s1s2 action2           [28,29]
-  .word screen_1_action3           ; s1s2 action3           [30,31]
-  .word screen_1_action4           ; s1s2 action4           [32,33]
-  .word screen_1_description       ; s1s2 description       [34,35]
-  .word screen_1_ascii             ; s1s2 ascii             [36,37]
-  .word screen_1_flashlight_on     ; s1s2 flashlight_on     [38,39]
-  .word screen_1_flashlight_off    ; s1s2 flashlight_off    [40,41]
-  .word screen_1_enemy_probability ; s1s2 enemy_probability [42,43]
+  .word screen_1_id                ; s1s2 id                [26,27]
+  .word screen_1_name              ; s1s2 name              [28,29]
+  .word screen_1_action1           ; s1s2 action1           [30,31]
+  .word screen_1_action2           ; s1s2 action2           [32,33]
+  .word screen_1_action3           ; s1s2 action3           [34,35]
+  .word screen_1_action4           ; s1s2 action4           [36,37]
+  .word screen_1_description       ; s1s2 description       [38,39]
+  .word screen_1_ascii             ; s1s2 ascii             [40,41]
+  .word screen_1_flashlight_on     ; s1s2 flashlight_on     [42,43]
+  .word screen_1_flashlight_off    ; s1s2 flashlight_off    [44,45]
+  .word screen_1_enemy_probability ; s1s2 enemy_probability [46,47]
+  .word screen_1_is_secret_screen  ; s1s2 is_secret_screen  [48,49]
+  .word screen_1_is_end_screen     ; s1s2 is_end_screen     [50,51]
 screen_pointers_2:
-  .word screen_2_id                ; s1s3 id                [44,45]
-  .word screen_2_name              ; s1s3 name              [46,47]
-  .word screen_2_action1           ; s1s3 action1           [48,49]
-  .word screen_2_action2           ; s1s3 action2           [50,51]
-  .word screen_2_action3           ; s1s3 action3           [52,53]
-  .word screen_2_action4           ; s1s3 action4           [54,55]
-  .word screen_2_description       ; s1s3 description       [56,57]
-  .word screen_2_ascii             ; s1s3 ascii             [58,59]
-  .word screen_2_flashlight_on     ; s1s3 flashlight_on     [60,61]
-  .word screen_2_flashlight_off    ; s1s3 flashlight_off    [62,63]
-  .word screen_2_enemy_probability ; s1s3 enemy_probability [64,65]
+  .word screen_2_id                ; s1s3 id                [52,53]
+  .word screen_2_name              ; s1s3 name              [54,55]
+  .word screen_2_action1           ; s1s3 action1           [56,57]
+  .word screen_2_action2           ; s1s3 action2           [58,59]
+  .word screen_2_action3           ; s1s3 action3           [60,61]
+  .word screen_2_action4           ; s1s3 action4           [62,63]
+  .word screen_2_description       ; s1s3 description       [64,65]
+  .word screen_2_ascii             ; s1s3 ascii             [66,67]
+  .word screen_2_flashlight_on     ; s1s3 flashlight_on     [68,69]
+  .word screen_2_flashlight_off    ; s1s3 flashlight_off    [70,71]
+  .word screen_2_enemy_probability ; s1s3 enemy_probability [72,73]
+  .word screen_2_is_secret_screen  ; s1s3 is_secret_screen  [74,75]
+  .word screen_2_is_end_screen     ; s1s3 is_end_screen     [76,77]
 screen_pointers_3:
-  .word screen_3_id                ; startScreen id                [66,67]
-  .word screen_3_name              ; startScreen name              [68,69]
-  .word screen_3_action1           ; startScreen action1           [70,71]
-  .word screen_3_action2           ; startScreen action2           [72,73]
-  .word screen_3_action3           ; startScreen action3           [74,75]
-  .word screen_3_action4           ; startScreen action4           [76,77]
-  .word screen_3_description       ; startScreen description       [78,79]
-  .word screen_3_ascii             ; startScreen ascii             [80,81]
-  .word screen_3_flashlight_on     ; startScreen flashlight_on     [82,83]
-  .word screen_3_flashlight_off    ; startScreen flashlight_off    [84,85]
-  .word screen_3_enemy_probability ; startScreen enemy_probability [86,87]
+  .word screen_3_id                ; startScreen id                [78,79]
+  .word screen_3_name              ; startScreen name              [80,81]
+  .word screen_3_action1           ; startScreen action1           [82,83]
+  .word screen_3_action2           ; startScreen action2           [84,85]
+  .word screen_3_action3           ; startScreen action3           [86,87]
+  .word screen_3_action4           ; startScreen action4           [88,89]
+  .word screen_3_description       ; startScreen description       [90,91]
+  .word screen_3_ascii             ; startScreen ascii             [92,93]
+  .word screen_3_flashlight_on     ; startScreen flashlight_on     [94,95]
+  .word screen_3_flashlight_off    ; startScreen flashlight_off    [96,97]
+  .word screen_3_enemy_probability ; startScreen enemy_probability [98,99]
+  .word screen_3_is_secret_screen  ; startScreen is_secret_screen  [100,101]
+  .word screen_3_is_end_screen     ; startScreen is_end_screen     [102,103]
 screen_pointers_4:
-  .word screen_4_id                ; endScreens1s1 id                [88,89]
-  .word screen_4_name              ; endScreens1s1 name              [90,91]
-  .word screen_4_action1           ; endScreens1s1 action1           [92,93]
-  .word screen_4_action2           ; endScreens1s1 action2           [94,95]
-  .word screen_4_action3           ; endScreens1s1 action3           [96,97]
-  .word screen_4_action4           ; endScreens1s1 action4           [98,99]
-  .word screen_4_description       ; endScreens1s1 description       [100,101]
-  .word screen_4_ascii             ; endScreens1s1 ascii             [102,103]
-  .word screen_4_flashlight_on     ; endScreens1s1 flashlight_on     [104,105]
-  .word screen_4_flashlight_off    ; endScreens1s1 flashlight_off    [106,107]
-  .word screen_4_enemy_probability ; endScreens1s1 enemy_probability [108,109]
+  .word screen_4_id                ; endScreens1s1 id                [104,105]
+  .word screen_4_name              ; endScreens1s1 name              [106,107]
+  .word screen_4_action1           ; endScreens1s1 action1           [108,109]
+  .word screen_4_action2           ; endScreens1s1 action2           [110,111]
+  .word screen_4_action3           ; endScreens1s1 action3           [112,113]
+  .word screen_4_action4           ; endScreens1s1 action4           [114,115]
+  .word screen_4_description       ; endScreens1s1 description       [116,117]
+  .word screen_4_ascii             ; endScreens1s1 ascii             [118,119]
+  .word screen_4_flashlight_on     ; endScreens1s1 flashlight_on     [120,121]
+  .word screen_4_flashlight_off    ; endScreens1s1 flashlight_off    [122,123]
+  .word screen_4_enemy_probability ; endScreens1s1 enemy_probability [124,125]
+  .word screen_4_is_secret_screen  ; endScreens1s1 is_secret_screen  [126,127]
+  .word screen_4_is_end_screen     ; endScreens1s1 is_end_screen     [128,129]
 screen_pointers_5:
-  .word screen_5_id                ; endScreenDefault id                [110,111]
-  .word screen_5_name              ; endScreenDefault name              [112,113]
-  .word screen_5_action1           ; endScreenDefault action1           [114,115]
-  .word screen_5_action2           ; endScreenDefault action2           [116,117]
-  .word screen_5_action3           ; endScreenDefault action3           [118,119]
-  .word screen_5_action4           ; endScreenDefault action4           [120,121]
-  .word screen_5_description       ; endScreenDefault description       [122,123]
-  .word screen_5_ascii             ; endScreenDefault ascii             [124,125]
-  .word screen_5_flashlight_on     ; endScreenDefault flashlight_on     [126,127]
-  .word screen_5_flashlight_off    ; endScreenDefault flashlight_off    [128,129]
-  .word screen_5_enemy_probability ; endScreenDefault enemy_probability [130,131]
+  .word screen_5_id                ; endScreenDefault id                [130,131]
+  .word screen_5_name              ; endScreenDefault name              [132,133]
+  .word screen_5_action1           ; endScreenDefault action1           [134,135]
+  .word screen_5_action2           ; endScreenDefault action2           [136,137]
+  .word screen_5_action3           ; endScreenDefault action3           [138,139]
+  .word screen_5_action4           ; endScreenDefault action4           [140,141]
+  .word screen_5_description       ; endScreenDefault description       [142,143]
+  .word screen_5_ascii             ; endScreenDefault ascii             [144,145]
+  .word screen_5_flashlight_on     ; endScreenDefault flashlight_on     [146,147]
+  .word screen_5_flashlight_off    ; endScreenDefault flashlight_off    [148,149]
+  .word screen_5_enemy_probability ; endScreenDefault enemy_probability [150,151]
+  .word screen_5_is_secret_screen  ; endScreenDefault is_secret_screen  [152,153]
+  .word screen_5_is_end_screen     ; endScreenDefault is_end_screen     [154,155]
 screen_pointers_6:
-  .word screen_6_id                ; s1s4 id                [132,133]
-  .word screen_6_name              ; s1s4 name              [134,135]
-  .word screen_6_action1           ; s1s4 action1           [136,137]
-  .word screen_6_action2           ; s1s4 action2           [138,139]
-  .word screen_6_action3           ; s1s4 action3           [140,141]
-  .word screen_6_action4           ; s1s4 action4           [142,143]
-  .word screen_6_description       ; s1s4 description       [144,145]
-  .word screen_6_ascii             ; s1s4 ascii             [146,147]
-  .word screen_6_flashlight_on     ; s1s4 flashlight_on     [148,149]
-  .word screen_6_flashlight_off    ; s1s4 flashlight_off    [150,151]
-  .word screen_6_enemy_probability ; s1s4 enemy_probability [152,153]
+  .word screen_6_id                ; s1s4 id                [156,157]
+  .word screen_6_name              ; s1s4 name              [158,159]
+  .word screen_6_action1           ; s1s4 action1           [160,161]
+  .word screen_6_action2           ; s1s4 action2           [162,163]
+  .word screen_6_action3           ; s1s4 action3           [164,165]
+  .word screen_6_action4           ; s1s4 action4           [166,167]
+  .word screen_6_description       ; s1s4 description       [168,169]
+  .word screen_6_ascii             ; s1s4 ascii             [170,171]
+  .word screen_6_flashlight_on     ; s1s4 flashlight_on     [172,173]
+  .word screen_6_flashlight_off    ; s1s4 flashlight_off    [174,175]
+  .word screen_6_enemy_probability ; s1s4 enemy_probability [176,177]
+  .word screen_6_is_secret_screen  ; s1s4 is_secret_screen  [178,179]
+  .word screen_6_is_end_screen     ; s1s4 is_end_screen     [180,181]
 screen_pointers_7:
-  .word screen_7_id                ; s1s5 id                [154,155]
-  .word screen_7_name              ; s1s5 name              [156,157]
-  .word screen_7_action1           ; s1s5 action1           [158,159]
-  .word screen_7_action2           ; s1s5 action2           [160,161]
-  .word screen_7_action3           ; s1s5 action3           [162,163]
-  .word screen_7_action4           ; s1s5 action4           [164,165]
-  .word screen_7_description       ; s1s5 description       [166,167]
-  .word screen_7_ascii             ; s1s5 ascii             [168,169]
-  .word screen_7_flashlight_on     ; s1s5 flashlight_on     [170,171]
-  .word screen_7_flashlight_off    ; s1s5 flashlight_off    [172,173]
-  .word screen_7_enemy_probability ; s1s5 enemy_probability [174,175]
+  .word screen_7_id                ; s1s5 id                [182,183]
+  .word screen_7_name              ; s1s5 name              [184,185]
+  .word screen_7_action1           ; s1s5 action1           [186,187]
+  .word screen_7_action2           ; s1s5 action2           [188,189]
+  .word screen_7_action3           ; s1s5 action3           [190,191]
+  .word screen_7_action4           ; s1s5 action4           [192,193]
+  .word screen_7_description       ; s1s5 description       [194,195]
+  .word screen_7_ascii             ; s1s5 ascii             [196,197]
+  .word screen_7_flashlight_on     ; s1s5 flashlight_on     [198,199]
+  .word screen_7_flashlight_off    ; s1s5 flashlight_off    [200,201]
+  .word screen_7_enemy_probability ; s1s5 enemy_probability [202,203]
+  .word screen_7_is_secret_screen  ; s1s5 is_secret_screen  [204,205]
+  .word screen_7_is_end_screen     ; s1s5 is_end_screen     [206,207]
 screen_pointers_8:
-  .word screen_8_id                ; endScreens1s4 id                [176,177]
-  .word screen_8_name              ; endScreens1s4 name              [178,179]
-  .word screen_8_action1           ; endScreens1s4 action1           [180,181]
-  .word screen_8_action2           ; endScreens1s4 action2           [182,183]
-  .word screen_8_action3           ; endScreens1s4 action3           [184,185]
-  .word screen_8_action4           ; endScreens1s4 action4           [186,187]
-  .word screen_8_description       ; endScreens1s4 description       [188,189]
-  .word screen_8_ascii             ; endScreens1s4 ascii             [190,191]
-  .word screen_8_flashlight_on     ; endScreens1s4 flashlight_on     [192,193]
-  .word screen_8_flashlight_off    ; endScreens1s4 flashlight_off    [194,195]
-  .word screen_8_enemy_probability ; endScreens1s4 enemy_probability [196,197]
+  .word screen_8_id                ; endScreens1s4 id                [208,209]
+  .word screen_8_name              ; endScreens1s4 name              [210,211]
+  .word screen_8_action1           ; endScreens1s4 action1           [212,213]
+  .word screen_8_action2           ; endScreens1s4 action2           [214,215]
+  .word screen_8_action3           ; endScreens1s4 action3           [216,217]
+  .word screen_8_action4           ; endScreens1s4 action4           [218,219]
+  .word screen_8_description       ; endScreens1s4 description       [220,221]
+  .word screen_8_ascii             ; endScreens1s4 ascii             [222,223]
+  .word screen_8_flashlight_on     ; endScreens1s4 flashlight_on     [224,225]
+  .word screen_8_flashlight_off    ; endScreens1s4 flashlight_off    [226,227]
+  .word screen_8_enemy_probability ; endScreens1s4 enemy_probability [228,229]
+  .word screen_8_is_secret_screen  ; endScreens1s4 is_secret_screen  [230,231]
+  .word screen_8_is_end_screen     ; endScreens1s4 is_end_screen     [232,233]
 screen_pointers_9:
-  .word screen_9_id                ; s2s1 id                [198,199]
-  .word screen_9_name              ; s2s1 name              [200,201]
-  .word screen_9_action1           ; s2s1 action1           [202,203]
-  .word screen_9_action2           ; s2s1 action2           [204,205]
-  .word screen_9_action3           ; s2s1 action3           [206,207]
-  .word screen_9_action4           ; s2s1 action4           [208,209]
-  .word screen_9_description       ; s2s1 description       [210,211]
-  .word screen_9_ascii             ; s2s1 ascii             [212,213]
-  .word screen_9_flashlight_on     ; s2s1 flashlight_on     [214,215]
-  .word screen_9_flashlight_off    ; s2s1 flashlight_off    [216,217]
-  .word screen_9_enemy_probability ; s2s1 enemy_probability [218,219]
+  .word screen_9_id                ; s2s1 id                [234,235]
+  .word screen_9_name              ; s2s1 name              [236,237]
+  .word screen_9_action1           ; s2s1 action1           [238,239]
+  .word screen_9_action2           ; s2s1 action2           [240,241]
+  .word screen_9_action3           ; s2s1 action3           [242,243]
+  .word screen_9_action4           ; s2s1 action4           [244,245]
+  .word screen_9_description       ; s2s1 description       [246,247]
+  .word screen_9_ascii             ; s2s1 ascii             [248,249]
+  .word screen_9_flashlight_on     ; s2s1 flashlight_on     [250,251]
+  .word screen_9_flashlight_off    ; s2s1 flashlight_off    [252,253]
+  .word screen_9_enemy_probability ; s2s1 enemy_probability [254,255]
+  .word screen_9_is_secret_screen  ; s2s1 is_secret_screen  [256,257]
+  .word screen_9_is_end_screen     ; s2s1 is_end_screen     [258,259]
 screen_action_offset:
   .byte 4  ; (byte of screen_0_action1 in screens_pointers)
 screen_description_offset:
@@ -149,8 +169,12 @@ screen_flashlight_off_offset:
   .byte 18  ; (byte of screen_0_flashlight_off in screens_pointers)
 screen_enemy_probability_offset:
   .byte 20  ; (byte of screen_0_enemy_probability in screens_pointers)
+screen_is_secret_screen_offset:
+  .byte 22  ; (byte of screen_0_is_secret_screen in screens_pointers)
+screen_is_end_screen_offset:
+  .byte 24  ; (byte of screen_0_is_end_screen in screens_pointers)
 screen_record_length:
-  .byte 22  ; (total .word bytes per screen record)
+  .byte 26  ; (total .word bytes per screen record)
 
 ; ── Screen 0: s1s1 ──────────────────────────
 screen_0_id:
@@ -221,6 +245,12 @@ screen_0_flashlight_off:
 screen_0_enemy_probability:
   .byte 33
 
+screen_0_is_secret_screen:
+  .byte 0  ; no
+
+screen_0_is_end_screen:
+  .byte 0  ; no
+
 ; ── Screen 1: s1s2 ──────────────────────────
 screen_1_id:
   .byte 1
@@ -261,6 +291,12 @@ screen_1_flashlight_off:
 
 screen_1_enemy_probability:
   .byte 0
+
+screen_1_is_secret_screen:
+  .byte 0  ; no
+
+screen_1_is_end_screen:
+  .byte 0  ; no
 
 ; ── Screen 2: s1s3 ──────────────────────────
 screen_2_id:
@@ -306,6 +342,12 @@ screen_2_flashlight_off:
 screen_2_enemy_probability:
   .byte 0
 
+screen_2_is_secret_screen:
+  .byte 0  ; no
+
+screen_2_is_end_screen:
+  .byte 0  ; no
+
 ; ── Screen 3: startScreen ──────────────────────────
 screen_3_id:
   .byte 3
@@ -344,6 +386,12 @@ screen_3_flashlight_off:
 
 screen_3_enemy_probability:
   .byte 0
+
+screen_3_is_secret_screen:
+  .byte 0  ; no
+
+screen_3_is_end_screen:
+  .byte 0  ; no
 
 ; ── Screen 4: endScreens1s1 ──────────────────────────
 screen_4_id:
@@ -386,6 +434,12 @@ screen_4_flashlight_off:
 screen_4_enemy_probability:
   .byte 0
 
+screen_4_is_secret_screen:
+  .byte 0  ; no
+
+screen_4_is_end_screen:
+  .byte 0  ; no
+
 ; ── Screen 5: endScreenDefault ──────────────────────────
 screen_5_id:
   .byte 5
@@ -424,6 +478,12 @@ screen_5_flashlight_off:
 
 screen_5_enemy_probability:
   .byte 0
+
+screen_5_is_secret_screen:
+  .byte 0  ; no
+
+screen_5_is_end_screen:
+  .byte 0  ; no
 
 ; ── Screen 6: s1s4 ──────────────────────────
 screen_6_id:
@@ -467,6 +527,12 @@ screen_6_flashlight_off:
 screen_6_enemy_probability:
   .byte 0
 
+screen_6_is_secret_screen:
+  .byte 0  ; no
+
+screen_6_is_end_screen:
+  .byte 0  ; no
+
 ; ── Screen 7: s1s5 ──────────────────────────
 screen_7_id:
   .byte 7
@@ -505,6 +571,12 @@ screen_7_flashlight_off:
 
 screen_7_enemy_probability:
   .byte 0
+
+screen_7_is_secret_screen:
+  .byte 1  ; yes
+
+screen_7_is_end_screen:
+  .byte 0  ; no
 
 ; ── Screen 8: endScreens1s4 ──────────────────────────
 screen_8_id:
@@ -546,6 +618,12 @@ screen_8_flashlight_off:
 
 screen_8_enemy_probability:
   .byte 0
+
+screen_8_is_secret_screen:
+  .byte 0  ; no
+
+screen_8_is_end_screen:
+  .byte 0  ; no
 
 ; ── Screen 9: s2s1 ──────────────────────────
 screen_9_id:
@@ -591,6 +669,16 @@ screen_9_flashlight_off:
 screen_9_enemy_probability:
   .byte 0
 
+screen_9_is_secret_screen:
+  .byte 0  ; no
+
+screen_9_is_end_screen:
+  .byte 0  ; no
+
 ; ── Total screen count ──────────────────────────────────────
 screen_count:
   .byte 10
+
+; ── Total secret screens count ──────────────────────────────
+screens_with_secrets:
+  .byte 1
