@@ -1,0 +1,116 @@
+{
+    "0": {
+        "ID": "0",
+        "Name": "LEVANTARSE",
+        "SensorID": 0,
+        "SensorActive": true,
+        "ScreenID": 1,
+        "Cost": 15,
+        "Description": "Con esfuerzo, te incorporas sin saber como. Semejante derrumbe deberia haber sido mortal. El frio no duele, todavia."
+    },
+    "1": {
+        "ID": "1",
+        "Name": "MIRAR ALREDEDOR",
+        "SensorID": 255,
+        "SensorActive": false,
+        "Cost": 15,
+        "Description": "Desde el suelo solo se ve oscuridad"
+    },
+    "2": {
+        "ID": "2",
+        "Name": "GRITAR POR AYUDA",
+        "SensorID": 255,
+        "SensorActive": false,
+        "Cost": 15,
+        "Description": "Intentas gritar, pero tu boca esta llena de agua"
+    },
+    "3": {
+        "ID": "3",
+        "Name": "MIRAR ENTRADA",
+        "SensorID": 255,
+        "SensorActive": false,
+        "ScreenID": 6,
+        "Cost": 15,
+        "Description": "Miras la Entrada"
+    },
+    "4": {
+        "ID": "4",
+        "Name": "GRITAR",
+        "SensorID": 255,
+        "SensorActive": false,
+        "Cost": 10,
+        "Description": "El eco tarda demasiado en volver. Sientes que algo se mueve encima de ti. Debe ser tu imaginacion, te repites."
+    },
+    "5": {
+        "ID": "5",
+        "Name": "LINTERNA",
+        "SensorID": 2,
+        "SensorActive": true,
+        "ScreenID": 255,
+        "Cost": 5,
+        "Description": "La linterna se "
+    },
+    "6": {
+        "ID": "6",
+        "Name": "EXPLORAR CAMINO",
+        "SensorID": 255,
+        "SensorActive": false,
+        "ScreenID": 9,
+        "Cost": 20,
+        "Description": "Te dispones a explorar el camino que se abre en la oscuridad."
+    },
+    "7": {
+        "ID": "7",
+        "Name": "VEO QUE CAE AGUA",
+        "SensorID": 0,
+        "SensorActive": true,
+        "ScreenID": 2,
+        "Cost": 0,
+        "Description": "Si es verdad, ves como se empieza a llenar la caverna."
+    },
+    "8": {
+        "ID": "8",
+        "Name": "COMENZAR EL JUEGO",
+        "SensorID": 3,
+        "SensorActive": true,
+        "ScreenID": 0,
+        "Cost": 0,
+        "Description": "Y entras en la caverna misteriosa, el tiempo esta en tu contra"
+    },
+    "9": {
+        "ID": "9",
+        "Name": "TERMINAR EL JUEGO",
+        "SensorID": 4,
+        "SensorActive": false,
+        "ScreenID": 3,
+        "Cost": 0,
+        "Description": ""
+    },
+    "10": {
+        "ID": "10",
+        "Name": "EXPLORAR MARCAS",
+        "SensorID": 255,
+        "SensorActive": false,
+        "ScreenID": 7,
+        "Cost": 20,
+        "Description": "Entre las marcas notas un extraño dibujo"
+    },
+    "11": {
+        "ID": "11",
+        "Name": "FORZAR ENTRADA",
+        "SensorID": 255,
+        "SensorActive": false,
+        "ScreenID": 8,
+        "Cost": 20,
+        "Description": "Intentas mover las rocas de la entrada."
+    },
+    "12": {
+        "ID": "12",
+        "Name": "VOLVER A MIRAR ADELANTE",
+        "SensorID": 255,
+        "SensorActive": false,
+        "ScreenID": 2,
+        "Cost": 20,
+        "Description": "Por un momento consideras que mover toneladas de rocas sin equipamiento indicado tal vez sea inutil. Explorar la caverna, aun sin conocerla, puede tener mejores resultados."
+    }
+}
