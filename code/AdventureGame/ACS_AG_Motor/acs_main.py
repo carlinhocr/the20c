@@ -143,8 +143,8 @@ def add_grid_combos(parent, field_list, values_fn, store_vars, store_combos):
 
 def save_btn(parent, text, cmd):
     tk.Button(parent, text=text, font=("Courier New", 11, "bold"),
-              bg="#2E2270", fg="#FFFFFF", activebackground="#7869C4",
-              activeforeground="#ffffff", relief="raised", bd=3,
+              bg="#7869C4", fg="#000000", activebackground="#A09BE0",
+              activeforeground="#000000", relief="raised", bd=3,
               cursor="hand2", padx=16, pady=6, command=cmd).pack(pady=(0, 20))
 
 
@@ -216,6 +216,34 @@ def open_actions_window():
                             values=action_names_by_id(),
                             state="readonly", font=("Courier New", 11))
     load_dd.pack(fill="x", ipady=3)
+
+    # ── New Action button ─────────────────────────────────────
+    def on_new_action():
+        acts = load_json(JSON_ACTIONS_FILE)
+        if acts:
+            max_id = max(int(rec.get("ID", 0)) for rec in acts.values())
+        else:
+            max_id = -1
+        new_id = str(max_id + 1)
+        for f in fields:
+            entries[f].delete(0, tk.END)
+        entries["ID"].insert(0, new_id)
+        combo_vars["Sensor"].set("")
+        sensor_active_var.set(False)
+        combo_vars["Screen"].set("")
+        cost_var.set(0)
+        enemy_prob_var.set(0)
+        death_prob_var.set(0)
+        desc_text.delete("1.0", tk.END)
+        hide_water_var.set(0)
+        hide_fear_var.set(0)
+        hide_flashlight_var.set(0)
+        slbl.config(text=f"✔  New action (ID {new_id}) — fill in details and save", fg="#50e878")
+
+    tk.Button(form, text="✚  New Action", font=("Courier New", 11, "bold"),
+              bg="#7869C4", fg="#000000", activebackground="#A09BE0",
+              activeforeground="#000000", relief="raised", bd=3,
+              cursor="hand2", padx=16, pady=4, command=on_new_action).pack(fill="x", pady=(6, 0))
 
     # ── Identity ──────────────────────────────────────────────
     section_lbl(form, "— Identity —")
@@ -317,6 +345,15 @@ def open_actions_window():
     tk.Label(death_prob_row, textvariable=death_prob_var, width=4,
              bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
 
+    # ── Visibility conditions ────────────────────────────────
+    section_lbl(form, "— Visibility Conditions —")
+    hide_water_var      = tk.IntVar(value=0)
+    hide_fear_var       = tk.IntVar(value=0)
+    hide_flashlight_var = tk.IntVar(value=0)
+    checkbox_widget(form, "Hide on Water Level High",   hide_water_var)
+    checkbox_widget(form, "Hide on Fear Level High",    hide_fear_var)
+    checkbox_widget(form, "Hide with Flashlight Off",   hide_flashlight_var)
+
     # ── Description text area ─────────────────────────────────
     section_lbl(form, "— Description —")
     desc_text = tk.Text(
@@ -383,6 +420,9 @@ def open_actions_window():
             death_prob_var.set(0)
         desc_text.delete("1.0", tk.END)
         desc_text.insert("1.0", rec.get("Description", ""))
+        hide_water_var.set(int(rec.get("HideOnWaterLevelHigh", 0)))
+        hide_fear_var.set(int(rec.get("HideOnFearLevelHigh", 0)))
+        hide_flashlight_var.set(int(rec.get("HideWithFlashlightOff", 0)))
         slbl.config(text=f"✔  Loaded '{name}'", fg="#A09BE0")
 
     load_dd.bind("<<ComboboxSelected>>", on_load)
@@ -415,6 +455,9 @@ def open_actions_window():
         data["EnemyProbability"]  = max(0, min(255, enemy_prob_var.get()))
         data["DeathProbability"]  = max(0, min(255, death_prob_var.get()))
         data["Description"] = desc_text.get("1.0", "end-1c")
+        data["HideOnWaterLevelHigh"]  = hide_water_var.get()
+        data["HideOnFearLevelHigh"]   = hide_fear_var.get()
+        data["HideWithFlashlightOff"] = hide_flashlight_var.get()
         save_to_json(JSON_ACTIONS_FILE, "ID", data, slbl)
         load_dd["values"] = action_names_by_id()
         combo_widgets["Sensor"]["values"] = get_sensor_names()
@@ -603,11 +646,14 @@ def open_screens_window():
         flashlight_on_text.delete("1.0", tk.END)
         flashlight_off_text.delete("1.0", tk.END)
         ascii_text.delete("1.0", tk.END)
+        screen_enemy_prob_var.set(0)
+        is_secret_var.set(0)
+        is_end_var.set(0)
         slbl.config(text=f"✔  New screen (ID {new_id}) — fill in details and save", fg="#50e878")
 
     tk.Button(form, text="✚  New Screen", font=("Courier New", 11, "bold"),
-              bg="#2E2270", fg="#FFFFFF", activebackground="#7869C4",
-              activeforeground="#FFFFFF", relief="raised", bd=3,
+              bg="#7869C4", fg="#000000", activebackground="#A09BE0",
+              activeforeground="#000000", relief="raised", bd=3,
               cursor="hand2", padx=16, pady=4, command=on_new_screen).pack(fill="x", pady=(6, 0))
 
     tk.Frame(form, bg="#7869C4", height=2).pack(fill="x", pady=(10, 0))
@@ -641,6 +687,29 @@ def open_screens_window():
                                   relief="sunken", bd=2, font=("Courier New", 11), height=4, wrap="none", width=80)
     flashlight_off_text.pack(fill="x")
 
+    # ── Enemy Probability slider (0–255) ──────────────────────
+    section_lbl(form, "— Enemy Probability —")
+    screen_enemy_prob_var = tk.IntVar(value=0)
+    screen_enemy_prob_row = tk.Frame(form, bg="#40318D")
+    screen_enemy_prob_row.pack(fill="x")
+    screen_enemy_prob_slider = tk.Scale(
+        screen_enemy_prob_row, from_=0, to=255, orient="horizontal",
+        variable=screen_enemy_prob_var, bg="#40318D", fg="#FFFFFF",
+        troughcolor="#2E2270", highlightthickness=0,
+        activebackground="#7869C4", font=("Courier New", 9),
+        length=300, sliderlength=16,
+    )
+    screen_enemy_prob_slider.pack(side="left", fill="x", expand=True)
+    tk.Label(screen_enemy_prob_row, textvariable=screen_enemy_prob_var, width=4,
+             bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
+
+    # ── Screen Flags ──────────────────────────────────────────
+    section_lbl(form, "— Screen Flags —")
+    is_secret_var = tk.IntVar(value=0)
+    is_end_var    = tk.IntVar(value=0)
+    checkbox_widget(form, "IsSecretScreen", is_secret_var)
+    checkbox_widget(form, "IsEndScreen",    is_end_var)
+
     # ── ASCII Drawing ─────────────────────────────────────────
     section_lbl(form, "— ASCII Drawing —")
     tk.Label(form, text="AsciiDrawing", **LABEL_STYLE).pack(fill="x", pady=(0, 2))
@@ -672,6 +741,12 @@ def open_screens_window():
         flashlight_off_text.insert("1.0", rec.get("FlashlightOff", ""))
         ascii_text.delete("1.0", tk.END)
         ascii_text.insert("1.0", rec.get("AsciiDrawing", ""))
+        try:
+            screen_enemy_prob_var.set(int(rec.get("EnemyProbability", 0)))
+        except (ValueError, TypeError):
+            screen_enemy_prob_var.set(0)
+        is_secret_var.set(int(rec.get("IsSecretScreen", 0)))
+        is_end_var.set(int(rec.get("IsEndScreen", 0)))
         slbl.config(text=f"✔  Loaded '{nm}'", fg="#A09BE0")
 
     load_dd.bind("<<ComboboxSelected>>", on_load_screen)
@@ -684,6 +759,9 @@ def open_screens_window():
         data["FlashlightOn"]  = flashlight_on_text.get("1.0", "end-1c")
         data["FlashlightOff"] = flashlight_off_text.get("1.0", "end-1c")
         data["AsciiDrawing"]  = ascii_text.get("1.0", "end-1c")
+        data["EnemyProbability"] = max(0, min(255, screen_enemy_prob_var.get()))
+        data["IsSecretScreen"]   = is_secret_var.get()
+        data["IsEndScreen"]      = is_end_var.get()
         save_to_json(JSON_SCREENS_FILE, "ID", data, slbl)
         updated = screen_names_by_id()
         load_dd["values"] = updated
@@ -720,8 +798,8 @@ def open_map_window():
     tk.Label(toolbar, text="Drag rooms to rearrange  •  Scroll to zoom",
              font=("Courier New", 9), bg="#352880", fg="#7869C4").pack(side="left")
     tk.Button(toolbar, text="⟳ Reset Layout", font=("Courier New", 9, "bold"),
-              bg="#2E2270", fg="#FFFFFF", activebackground="#7869C4",
-              activeforeground="#fff", relief="raised", bd=2, cursor="hand2",
+              bg="#7869C4", fg="#000000", activebackground="#A09BE0",
+              activeforeground="#000000", relief="raised", bd=2, cursor="hand2",
               command=lambda: redraw(reset=True)).pack(side="right")
 
     # ── Canvas ────────────────────────────────────────────────
@@ -1120,6 +1198,27 @@ def open_sensors_window():
                             state="readonly", font=("Courier New", 11))
     load_dd.pack(fill="x", ipady=3)
 
+    # ── New Sensor button ─────────────────────────────────────
+    def on_new_sensor():
+        sens = load_json(JSON_SENSORS_FILE)
+        if sens:
+            max_id = max(int(rec.get("ID", 0)) for rec in sens.values())
+        else:
+            max_id = -1
+        new_id = str(max_id + 1)
+        for f in ["ID", "Name"]:
+            entries[f].delete(0, tk.END)
+        entries["ID"].insert(0, new_id)
+        active_var.set(False)
+        dialog_on_text.delete("1.0", tk.END)
+        dialog_off_text.delete("1.0", tk.END)
+        slbl.config(text=f"✔  New sensor (ID {new_id}) — fill in details and save", fg="#50e878")
+
+    tk.Button(form, text="✚  New Sensor", font=("Courier New", 11, "bold"),
+              bg="#7869C4", fg="#000000", activebackground="#A09BE0",
+              activeforeground="#000000", relief="raised", bd=3,
+              cursor="hand2", padx=16, pady=4, command=on_new_sensor).pack(fill="x", pady=(6, 0))
+
     # ── Identity ──────────────────────────────────────────────
     section_lbl(form, "— Identity —")
     for f in ["ID", "Name"]:
@@ -1261,8 +1360,8 @@ def run_parsers():
         append("✔  All parsers completed successfully!\n")
 
     tk.Button(win, text="Close", font=("Courier New", 10, "bold"),
-              bg="#2E2270", fg="#FFFFFF", activebackground="#7869C4",
-              activeforeground="#ffffff", relief="raised", bd=3,
+              bg="#7869C4", fg="#000000", activebackground="#A09BE0",
+              activeforeground="#000000", relief="raised", bd=3,
               cursor="hand2", padx=12, pady=4,
               command=win.destroy).pack(pady=(0, 12))
 
@@ -1356,8 +1455,8 @@ def open_map_actions_window():
     tk.Label(toolbar, text="Drag nodes  •  Scroll to zoom  •  Arrows = transitions",
              font=("Courier New", 9), bg="#352880", fg="#7869C4").pack(side="left")
     tk.Button(toolbar, text="⟳ Reset Layout", font=("Courier New", 9, "bold"),
-              bg="#2E2270", fg="#FFFFFF", activebackground="#7869C4",
-              activeforeground="#fff", relief="raised", bd=2, cursor="hand2",
+              bg="#7869C4", fg="#000000", activebackground="#A09BE0",
+              activeforeground="#000000", relief="raised", bd=2, cursor="hand2",
               command=lambda: redraw(reset=True)).pack(side="right")
 
     # ── Legend ────────────────────────────────────────────────
@@ -1732,8 +1831,8 @@ def main():
     # ── Run Parsers button ────────────────────────────────────
     tk.Frame(root, bg="#7869C4", height=1).pack(fill="x", padx=20)
     tk.Button(root, text="⚙  Run Parsers", font=("Courier New", 11, "bold"),
-              bg="#1A4D1A", fg="#50e878",
-              activebackground="#1a4d1a", activeforeground="#ffffff",
+              bg="#7869C4", fg="#000000",
+              activebackground="#A09BE0", activeforeground="#000000",
               relief="raised", bd=3, cursor="hand2",
               padx=20, pady=6, command=run_parsers).pack(pady=10)
 

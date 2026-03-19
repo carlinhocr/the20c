@@ -78,6 +78,9 @@ def to_asm(screens, action_ids):
     screen_0_ascii_byte          = None
     screen_0_flashlight_on_byte  = None
     screen_0_flashlight_off_byte = None
+    screen_0_enemy_prob_byte     = None
+    screen_0_is_secret_byte      = None
+    screen_0_is_end_byte         = None
     screen_0_record_length       = None
     screen_0_name                = None
     for index, (key, scr) in enumerate(screens.items()):
@@ -98,6 +101,9 @@ def to_asm(screens, action_ids):
         lines.append(f"  .word {label}_ascii             ; {name} ascii             [{offset},{offset+1}]") ; _asc  = offset ; offset += 2
         lines.append(f"  .word {label}_flashlight_on     ; {name} flashlight_on     [{offset},{offset+1}]") ; _flon = offset ; offset += 2
         lines.append(f"  .word {label}_flashlight_off    ; {name} flashlight_off    [{offset},{offset+1}]") ; _floff = offset ; offset += 2
+        lines.append(f"  .word {label}_enemy_probability ; {name} enemy_probability [{offset},{offset+1}]") ; _enm = offset ; offset += 2
+        lines.append(f"  .word {label}_is_secret_screen  ; {name} is_secret_screen  [{offset},{offset+1}]") ; _sec = offset ; offset += 2
+        lines.append(f"  .word {label}_is_end_screen     ; {name} is_end_screen     [{offset},{offset+1}]") ; _end = offset ; offset += 2
 
         if index == 0:
             screen_0_action1_byte        = _act1
@@ -105,6 +111,9 @@ def to_asm(screens, action_ids):
             screen_0_ascii_byte          = _asc
             screen_0_flashlight_on_byte  = _flon
             screen_0_flashlight_off_byte = _floff
+            screen_0_enemy_prob_byte     = _enm
+            screen_0_is_secret_byte      = _sec
+            screen_0_is_end_byte         = _end
             screen_0_record_length       = offset - start_offset
             screen_0_name                = name
 
@@ -119,6 +128,12 @@ def to_asm(screens, action_ids):
     lines.append(f"  .byte {screen_0_flashlight_on_byte}  ; (byte of screen_0_flashlight_on in screens_pointers)")
     lines.append(f"screen_flashlight_off_offset:")
     lines.append(f"  .byte {screen_0_flashlight_off_byte}  ; (byte of screen_0_flashlight_off in screens_pointers)")
+    lines.append(f"screen_enemy_probability_offset:")
+    lines.append(f"  .byte {screen_0_enemy_prob_byte}  ; (byte of screen_0_enemy_probability in screens_pointers)")
+    lines.append(f"screen_is_secret_screen_offset:")
+    lines.append(f"  .byte {screen_0_is_secret_byte}  ; (byte of screen_0_is_secret_screen in screens_pointers)")
+    lines.append(f"screen_is_end_screen_offset:")
+    lines.append(f"  .byte {screen_0_is_end_byte}  ; (byte of screen_0_is_end_screen in screens_pointers)")
     lines.append(f"screen_record_length:")
     lines.append(f"  .byte {screen_0_record_length}  ; (total .word bytes per screen record)")
     lines.append("")
@@ -180,6 +195,36 @@ def to_asm(screens, action_ids):
         lines.append(f"{label}_flashlight_off:")
         lines.extend(ascii_lines(flashlight_off_str))
         lines.append('  .ascii "e"')
+        lines.append("")
+
+        # Enemy Probability
+        try:
+            enemy_prob_val = int(scr.get("EnemyProbability", 0))
+            enemy_prob_val = max(0, min(255, enemy_prob_val))
+        except (ValueError, TypeError):
+            enemy_prob_val = 0
+        lines.append(f"{label}_enemy_probability:")
+        lines.append(f"  .byte {enemy_prob_val}")
+        lines.append("")
+
+        # IsSecretScreen
+        try:
+            is_secret_val = int(scr.get("IsSecretScreen", 0))
+            is_secret_val = 1 if is_secret_val else 0
+        except (ValueError, TypeError):
+            is_secret_val = 0
+        lines.append(f"{label}_is_secret_screen:")
+        lines.append(f"  .byte {is_secret_val}  ; {'yes' if is_secret_val else 'no'}")
+        lines.append("")
+
+        # IsEndScreen
+        try:
+            is_end_val = int(scr.get("IsEndScreen", 0))
+            is_end_val = 1 if is_end_val else 0
+        except (ValueError, TypeError):
+            is_end_val = 0
+        lines.append(f"{label}_is_end_screen:")
+        lines.append(f"  .byte {is_end_val}  ; {'yes' if is_end_val else 'no'}")
         lines.append("")
 
     # ── Screen count constant ─────────────────────────────────

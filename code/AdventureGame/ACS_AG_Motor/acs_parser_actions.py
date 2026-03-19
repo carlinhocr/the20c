@@ -39,6 +39,9 @@ def to_asm(actions):
     act0_screen_offset            = None
     act0_enemy_probability_offset = None
     act0_death_probability_offset = None
+    act0_hide_water_offset        = None
+    act0_hide_fear_offset         = None
+    act0_hide_flashlight_offset   = None
     act0_record_length            = None
 
     for index, (key, act) in enumerate(actions.items()):
@@ -58,6 +61,9 @@ def to_asm(actions):
         lines.append(f"  .word {label}_enemy_probability ; {name} enemy_probability [{offset},{offset+1}]") ; _enm = offset ; offset += 2
         lines.append(f"  .word {label}_death_probability ; {name} death_probability [{offset},{offset+1}]") ; _dth = offset ; offset += 2
         lines.append(f"  .word {label}_description       ; {name} description       [{offset},{offset+1}]") ; _dsc = offset ; offset += 2
+        lines.append(f"  .word {label}_hide_water         ; {name} hide_water         [{offset},{offset+1}]") ; _swt = offset ; offset += 2
+        lines.append(f"  .word {label}_hide_fear          ; {name} hide_fear          [{offset},{offset+1}]") ; _sfr = offset ; offset += 2
+        lines.append(f"  .word {label}_hide_flashlight    ; {name} hide_flashlight    [{offset},{offset+1}]") ; _sfl = offset ; offset += 2
 
         if index == 0:
             act0_name_offset              = _nam
@@ -67,7 +73,10 @@ def to_asm(actions):
             act0_enemy_probability_offset = _enm
             act0_death_probability_offset = _dth
             act0_description_offset       = _dsc
-            act0_record_length            = offset - start_offset  # 18 bytes (9 x .word)
+            act0_hide_water_offset        = _swt
+            act0_hide_fear_offset         = _sfr
+            act0_hide_flashlight_offset   = _sfl
+            act0_record_length            = offset - start_offset
 
     # -- Offset labels, placed after all action entries
     lines.append(f"action_name_offset:")
@@ -84,6 +93,12 @@ def to_asm(actions):
     lines.append(f"  .byte {act0_death_probability_offset}  ; (byte of action_0_death_probability in actions_pointers)")
     lines.append(f"action_description_offset:")
     lines.append(f"  .byte {act0_description_offset}  ; (byte of action_0_description in actions_pointers)")
+    lines.append(f"action_hide_water_offset:")
+    lines.append(f"  .byte {act0_hide_water_offset}  ; (byte of action_0_hide_water in actions_pointers)")
+    lines.append(f"action_hide_fear_offset:")
+    lines.append(f"  .byte {act0_hide_fear_offset}  ; (byte of action_0_hide_fear in actions_pointers)")
+    lines.append(f"action_hide_flashlight_offset:")
+    lines.append(f"  .byte {act0_hide_flashlight_offset}  ; (byte of action_0_hide_flashlight in actions_pointers)")
     lines.append(f"action_record_length:")
     lines.append(f"  .byte {act0_record_length}  ; (total .word bytes per action record)")
     lines.append("")
@@ -182,6 +197,36 @@ def to_asm(actions):
         lines.append(f"{label}_description:")
         lines.append(f'  .ascii "{desc_str}"')
         lines.append('  .ascii "e"')
+        lines.append("")
+
+        # Hide on Water Level High
+        try:
+            hide_water_val = int(act.get("HideOnWaterLevelHigh", 0))
+            hide_water_val = 1 if hide_water_val else 0
+        except (ValueError, TypeError):
+            hide_water_val = 0
+        lines.append(f"{label}_hide_water:")
+        lines.append(f"  .byte {hide_water_val}  ; {'on' if hide_water_val else 'off'}")
+        lines.append("")
+
+        # Hide on Fear Level High
+        try:
+            hide_fear_val = int(act.get("HideOnFearLevelHigh", 0))
+            hide_fear_val = 1 if hide_fear_val else 0
+        except (ValueError, TypeError):
+            hide_fear_val = 0
+        lines.append(f"{label}_hide_fear:")
+        lines.append(f"  .byte {hide_fear_val}  ; {'on' if hide_fear_val else 'off'}")
+        lines.append("")
+
+        # Hide with Flashlight Off
+        try:
+            hide_flashlight_val = int(act.get("HideWithFlashlightOff", 0))
+            hide_flashlight_val = 1 if hide_flashlight_val else 0
+        except (ValueError, TypeError):
+            hide_flashlight_val = 0
+        lines.append(f"{label}_hide_flashlight:")
+        lines.append(f"  .byte {hide_flashlight_val}  ; {'on' if hide_flashlight_val else 'off'}")
         lines.append("")
 
     # ── Action count constant ─────────────────────────────────
