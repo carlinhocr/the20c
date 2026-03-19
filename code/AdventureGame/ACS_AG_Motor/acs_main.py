@@ -14,12 +14,12 @@ SECTIONS = ["Screens", "Actions", "Sensors", "Map Actions"]
 ICONS    = ["🖥️",      "⚡",       "📡",       "🔀"]
 
 FIELD_STYLE = {
-    "bg": "#1e0f05", "fg": "#f0c040", "insertbackground": "#f0c040",
-    "relief": "sunken", "bd": 2, "font": ("Courier", 11),
+    "bg": "#2E2270", "fg": "#FFFFFF", "insertbackground": "#FFFFFF",
+    "relief": "sunken", "bd": 2, "font": ("Courier New", 11),
 }
 LABEL_STYLE = {
-    "bg": "#2b1a0e", "fg": "#c8a060",
-    "font": ("Georgia", 10, "bold"), "anchor": "w",
+    "bg": "#40318D", "fg": "#FFFFFF",
+    "font": ("Courier New", 10, "bold"), "anchor": "w",
 }
 
 
@@ -87,13 +87,13 @@ def get_sensor_names():
 
 def make_scrollable_form(win):
     """Return a scrollable Frame inside win for use as a form."""
-    canvas    = tk.Canvas(win, bg="#2b1a0e", highlightthickness=0)
+    canvas    = tk.Canvas(win, bg="#40318D", highlightthickness=0)
     scrollbar = ttk.Scrollbar(win, orient="vertical", command=canvas.yview)
     canvas.configure(yscrollcommand=scrollbar.set)
     scrollbar.pack(side="right", fill="y")
     canvas.pack(side="left", fill="both", expand=True)
 
-    form        = tk.Frame(canvas, bg="#2b1a0e", padx=28)
+    form        = tk.Frame(canvas, bg="#40318D", padx=28)
     form_window = canvas.create_window((0, 0), window=form, anchor="nw")
 
     form.bind("<Configure>",   lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
@@ -104,8 +104,8 @@ def make_scrollable_form(win):
 
 
 def section_lbl(parent, text):
-    tk.Label(parent, text=text, font=("Georgia", 11, "bold italic"),
-             bg="#2b1a0e", fg="#f0c040").pack(fill="x", pady=(14, 4))
+    tk.Label(parent, text=text, font=("Courier New", 11, "bold italic"),
+             bg="#40318D", fg="#FFFFFF").pack(fill="x", pady=(14, 4))
 
 
 def add_field(parent, label, entries):
@@ -119,7 +119,7 @@ def add_combo(parent, label, values, store_vars, store_combos):
     tk.Label(parent, text=label, **LABEL_STYLE).pack(fill="x", pady=(4, 1))
     var = tk.StringVar(value="")
     cb  = ttk.Combobox(parent, textvariable=var, values=values,
-                       font=("Courier", 11))
+                       font=("Courier New", 11))
     cb.pack(fill="x", ipady=3)
     store_vars[label]   = var
     store_combos[label] = cb
@@ -129,50 +129,57 @@ def add_grid_combos(parent, field_list, values_fn, store_vars, store_combos):
     """Add a row of comboboxes in a grid, values populated from values_fn()."""
     values = values_fn()
     for i, field in enumerate(field_list):
-        col_frame = tk.Frame(parent, bg="#2b1a0e")
+        col_frame = tk.Frame(parent, bg="#40318D")
         col_frame.grid(row=0, column=i, padx=4, sticky="ew")
         parent.columnconfigure(i, weight=1)
         tk.Label(col_frame, text=field, **LABEL_STYLE).pack(fill="x", pady=(0, 2))
         var = tk.StringVar(value="")
         cb  = ttk.Combobox(col_frame, textvariable=var, values=values,
-                           font=("Courier", 10), width=9)
+                           font=("Courier New", 10), width=9)
         cb.pack(fill="x", ipady=3)
         store_vars[field]   = var
         store_combos[field] = cb
 
 
 def save_btn(parent, text, cmd):
-    tk.Button(parent, text=text, font=("Georgia", 11, "bold"),
-              bg="#3d2005", fg="#f0c040", activebackground="#5c3310",
+    tk.Button(parent, text=text, font=("Courier New", 11, "bold"),
+              bg="#2E2270", fg="#FFFFFF", activebackground="#7869C4",
               activeforeground="#ffffff", relief="raised", bd=3,
               cursor="hand2", padx=16, pady=6, command=cmd).pack(pady=(0, 20))
 
 
 def status_lbl(parent):
-    lbl = tk.Label(parent, text="", font=("Courier", 9), bg="#2b1a0e", fg="#50e878")
+    lbl = tk.Label(parent, text="", font=("Courier New", 9), bg="#40318D", fg="#50e878")
     lbl.pack(pady=(0, 4))
     return lbl
 
 
 def checkbox_widget(parent, text, var):
     tk.Checkbutton(parent, text=f"  {text}", variable=var,
-                   font=("Georgia", 10, "bold"), bg="#2b1a0e", fg="#c8a060",
-                   selectcolor="#1e0f05", activebackground="#2b1a0e",
-                   activeforeground="#f0c040", cursor="hand2").pack(anchor="w", padx=28, pady=(4, 2))
+                   font=("Courier New", 10, "bold"), bg="#40318D", fg="#A09BE0",
+                   selectcolor="#2E2270", activebackground="#40318D",
+                   activeforeground="#FFFFFF", cursor="hand2").pack(anchor="w", padx=28, pady=(4, 2))
 
 
 def apply_combo_style():
     s = ttk.Style()
     s.theme_use("default")
-    s.configure("TCombobox", fieldbackground="#000000", background="#000000",
-                foreground="#f0c040", selectbackground="#5c3310",
-                selectforeground="#ffffff", arrowcolor="#f0c040")
+    s.configure("TCombobox", fieldbackground="#2E2270", background="#2E2270",
+                foreground="#FFFFFF", selectbackground="#7869C4",
+                selectforeground="#FFFFFF", arrowcolor="#FFFFFF")
     s.map("TCombobox",
-          fieldbackground=[("readonly", "#000000"), ("disabled", "#000000")],
-          background=[("readonly", "#000000"), ("disabled", "#000000")],
-          foreground=[("readonly", "#f0c040"), ("disabled", "#7a5520")],
-          selectbackground=[("readonly", "#5c3310")],
-          selectforeground=[("readonly", "#ffffff")])
+          fieldbackground=[("readonly", "#2E2270"), ("disabled", "#2E2270")],
+          background=[("readonly", "#2E2270"), ("disabled", "#2E2270")],
+          foreground=[("readonly", "#FFFFFF"), ("disabled", "#7869C4")],
+          selectbackground=[("readonly", "#7869C4")],
+          selectforeground=[("readonly", "#FFFFFF")])
+    # Style the dropdown popup listbox
+    root = s.master
+    root.option_add("*TCombobox*Listbox.background", "#2E2270")
+    root.option_add("*TCombobox*Listbox.foreground", "#FFFFFF")
+    root.option_add("*TCombobox*Listbox.selectBackground", "#7869C4")
+    root.option_add("*TCombobox*Listbox.selectForeground", "#FFFFFF")
+    root.option_add("*TCombobox*Listbox.font", "{{Courier New}} 11")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -183,13 +190,13 @@ def open_actions_window():
     win = tk.Toplevel()
     win.title("Actions")
     win.geometry("420x740")
-    win.configure(bg="#2b1a0e")
+    win.configure(bg="#40318D")
     win.resizable(False, True)
     apply_combo_style()
 
-    tk.Label(win, text="⚡  Actions Editor", font=("Georgia", 18, "bold"),
-             bg="#2b1a0e", fg="#f0c040", pady=16).pack()
-    tk.Frame(win, bg="#7a5520", height=2).pack(fill="x", padx=20, pady=(0, 0))
+    tk.Label(win, text="⚡  Actions Editor", font=("Courier New", 18, "bold"),
+             bg="#40318D", fg="#FFFFFF", pady=16).pack()
+    tk.Frame(win, bg="#7869C4", height=2).pack(fill="x", padx=20, pady=(0, 0))
 
     form = make_scrollable_form(win)
 
@@ -207,7 +214,7 @@ def open_actions_window():
     load_var = tk.StringVar(value="— select to load —")
     load_dd  = ttk.Combobox(form, textvariable=load_var,
                             values=action_names_by_id(),
-                            state="readonly", font=("Courier", 11))
+                            state="readonly", font=("Courier New", 11))
     load_dd.pack(fill="x", ipady=3)
 
     # ── Identity ──────────────────────────────────────────────
@@ -220,11 +227,11 @@ def open_actions_window():
     section_lbl(form, "— Sensor —")
     add_combo(form, "Sensor", get_sensor_names(), combo_vars, combo_widgets)
     sensor_id_var = tk.StringVar(value="")
-    sensor_id_row = tk.Frame(form, bg="#2b1a0e")
+    sensor_id_row = tk.Frame(form, bg="#40318D")
     sensor_id_row.pack(fill="x", pady=(2, 0))
     tk.Label(sensor_id_row, text="Sensor ID:", **LABEL_STYLE).pack(side="left")
     tk.Label(sensor_id_row, textvariable=sensor_id_var,
-             bg="#2b1a0e", fg="#50e878", font=("Courier", 11)).pack(side="left", padx=(6, 0))
+             bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
 
     def refresh_sensor_id(*_):
         name = combo_vars["Sensor"].get().strip()
@@ -247,11 +254,11 @@ def open_actions_window():
     section_lbl(form, "— Screen —")
     add_combo(form, "Screen", get_screen_names(), combo_vars, combo_widgets)
     action_screen_id_var = tk.StringVar(value="")
-    screen_id_row = tk.Frame(form, bg="#2b1a0e")
+    screen_id_row = tk.Frame(form, bg="#40318D")
     screen_id_row.pack(fill="x", pady=(2, 0))
     tk.Label(screen_id_row, text="Screen ID:", **LABEL_STYLE).pack(side="left")
     tk.Label(screen_id_row, textvariable=action_screen_id_var,
-             bg="#2b1a0e", fg="#50e878", font=("Courier", 11)).pack(side="left", padx=(6, 0))
+             bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
 
     def refresh_action_screen_id(*_):
         name = combo_vars["Screen"].get().strip()
@@ -272,22 +279,54 @@ def open_actions_window():
     cost_var = tk.IntVar(value=0)
     cost_spin = tk.Spinbox(
         form, from_=0, to=256, textvariable=cost_var, width=6,
-        bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
-        buttonbackground="#3d2005", relief="sunken", bd=2,
-        font=("Courier", 11), justify="left",
+        bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+        buttonbackground="#7869C4", relief="sunken", bd=2,
+        font=("Courier New", 11), justify="left",
     )
     cost_spin.pack(anchor="w", ipady=4)
+
+    # ── Enemy Probability slider (0–255) ──────────────────────
+    section_lbl(form, "— Enemy Probability —")
+    enemy_prob_var = tk.IntVar(value=0)
+    enemy_prob_row = tk.Frame(form, bg="#40318D")
+    enemy_prob_row.pack(fill="x")
+    enemy_prob_slider = tk.Scale(
+        enemy_prob_row, from_=0, to=255, orient="horizontal",
+        variable=enemy_prob_var, bg="#40318D", fg="#FFFFFF",
+        troughcolor="#2E2270", highlightthickness=0,
+        activebackground="#7869C4", font=("Courier New", 9),
+        length=300, sliderlength=16,
+    )
+    enemy_prob_slider.pack(side="left", fill="x", expand=True)
+    tk.Label(enemy_prob_row, textvariable=enemy_prob_var, width=4,
+             bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
+
+    # ── Death Probability slider (0–255) ──────────────────────
+    section_lbl(form, "— Death Probability —")
+    death_prob_var = tk.IntVar(value=0)
+    death_prob_row = tk.Frame(form, bg="#40318D")
+    death_prob_row.pack(fill="x")
+    death_prob_slider = tk.Scale(
+        death_prob_row, from_=0, to=255, orient="horizontal",
+        variable=death_prob_var, bg="#40318D", fg="#FFFFFF",
+        troughcolor="#2E2270", highlightthickness=0,
+        activebackground="#7869C4", font=("Courier New", 9),
+        length=300, sliderlength=16,
+    )
+    death_prob_slider.pack(side="left", fill="x", expand=True)
+    tk.Label(death_prob_row, textvariable=death_prob_var, width=4,
+             bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
 
     # ── Description text area ─────────────────────────────────
     section_lbl(form, "— Description —")
     desc_text = tk.Text(
-        form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
-        relief="sunken", bd=2, font=("Courier", 11), height=5, wrap="word",
+        form, bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+        relief="sunken", bd=2, font=("Courier New", 11), height=5, wrap="word",
     )
     desc_text.pack(fill="x")
 
     # ── Save ──────────────────────────────────────────────────
-    tk.Frame(form, bg="#7a5520", height=2).pack(fill="x", pady=(14, 8))
+    tk.Frame(form, bg="#7869C4", height=2).pack(fill="x", pady=(14, 8))
     slbl = status_lbl(form)
 
     def on_load(e=None):
@@ -334,9 +373,17 @@ def open_actions_window():
             cost_var.set(int(rec.get("Cost", 0)))
         except (ValueError, TypeError):
             cost_var.set(0)
+        try:
+            enemy_prob_var.set(int(rec.get("EnemyProbability", 0)))
+        except (ValueError, TypeError):
+            enemy_prob_var.set(0)
+        try:
+            death_prob_var.set(int(rec.get("DeathProbability", 0)))
+        except (ValueError, TypeError):
+            death_prob_var.set(0)
         desc_text.delete("1.0", tk.END)
         desc_text.insert("1.0", rec.get("Description", ""))
-        slbl.config(text=f"✔  Loaded '{name}'", fg="#c8a060")
+        slbl.config(text=f"✔  Loaded '{name}'", fg="#A09BE0")
 
     load_dd.bind("<<ComboboxSelected>>", on_load)
 
@@ -364,7 +411,9 @@ def open_actions_window():
             cost_val = max(0, min(256, cost_val))
         except (ValueError, TypeError):
             cost_val = 0
-        data["Cost"]        = cost_val
+        data["Cost"]              = cost_val
+        data["EnemyProbability"]  = max(0, min(255, enemy_prob_var.get()))
+        data["DeathProbability"]  = max(0, min(255, death_prob_var.get()))
         data["Description"] = desc_text.get("1.0", "end-1c")
         save_to_json(JSON_ACTIONS_FILE, "ID", data, slbl)
         load_dd["values"] = action_names_by_id()
@@ -382,13 +431,13 @@ def open_puzzles_window():
     win = tk.Toplevel()
     win.title("Puzzles")
     win.geometry("460x660")
-    win.configure(bg="#2b1a0e")
+    win.configure(bg="#40318D")
     win.resizable(False, True)
     apply_combo_style()
 
-    tk.Label(win, text="🧩  Puzzles Editor", font=("Georgia", 18, "bold"),
-             bg="#2b1a0e", fg="#f0c040", pady=16).pack()
-    tk.Frame(win, bg="#7a5520", height=2).pack(fill="x", padx=20, pady=(0, 0))
+    tk.Label(win, text="🧩  Puzzles Editor", font=("Courier New", 18, "bold"),
+             bg="#40318D", fg="#FFFFFF", pady=16).pack()
+    tk.Frame(win, bg="#7869C4", height=2).pack(fill="x", padx=20, pady=(0, 0))
 
     form = make_scrollable_form(win)
 
@@ -406,7 +455,7 @@ def open_puzzles_window():
     load_var = tk.StringVar(value="— select to load —")
     load_dd  = ttk.Combobox(form, textvariable=load_var,
                             values=puzzle_names_by_id(),
-                            state="readonly", font=("Courier", 11))
+                            state="readonly", font=("Courier New", 11))
     load_dd.pack(fill="x", ipady=3)
 
     # ── Identity ──────────────────────────────────────────────
@@ -422,11 +471,11 @@ def open_puzzles_window():
     section_lbl(form, "— Screen —")
     add_combo(form, "Screen", get_screen_names(), combo_vars, combo_widgets)
     screen_id_var = tk.StringVar(value="")
-    screen_id_row = tk.Frame(form, bg="#2b1a0e")
+    screen_id_row = tk.Frame(form, bg="#40318D")
     screen_id_row.pack(fill="x", pady=(2, 0))
     tk.Label(screen_id_row, text="Screen ID:", **LABEL_STYLE).pack(side="left")
     tk.Label(screen_id_row, textvariable=screen_id_var,
-             bg="#2b1a0e", fg="#50e878", font=("Courier", 11)).pack(side="left", padx=(6, 0))
+             bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
 
     def refresh_screen_id(*_):
         name = combo_vars["Screen"].get().strip()
@@ -445,13 +494,13 @@ def open_puzzles_window():
     # ── Descriptions ──────────────────────────────────────────
     section_lbl(form, "— Descriptions —")
     tk.Label(form, text="DescriptionSolved", **LABEL_STYLE).pack(fill="x", pady=(0, 2))
-    desc_solved = tk.Text(form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
-                          relief="sunken", bd=2, font=("Courier", 11), height=3, wrap="word")
+    desc_solved = tk.Text(form, bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+                          relief="sunken", bd=2, font=("Courier New", 11), height=3, wrap="word")
     desc_solved.pack(fill="x")
 
     tk.Label(form, text="DescriptionNotSolved", **LABEL_STYLE).pack(fill="x", pady=(8, 2))
-    desc_not_solved = tk.Text(form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
-                              relief="sunken", bd=2, font=("Courier", 11), height=3, wrap="word")
+    desc_not_solved = tk.Text(form, bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+                              relief="sunken", bd=2, font=("Courier New", 11), height=3, wrap="word")
     desc_not_solved.pack(fill="x")
 
     # ── Solved checkbox ───────────────────────────────────────
@@ -460,7 +509,7 @@ def open_puzzles_window():
     checkbox_widget(form, "Solved", solved_var)
 
     # ── Save ──────────────────────────────────────────────────
-    tk.Frame(form, bg="#7a5520", height=2).pack(fill="x", pady=(14, 8))
+    tk.Frame(form, bg="#7869C4", height=2).pack(fill="x", pady=(14, 8))
     slbl = status_lbl(form)
 
     def on_load(e=None):
@@ -479,7 +528,7 @@ def open_puzzles_window():
         desc_not_solved.delete("1.0", tk.END)
         desc_not_solved.insert("1.0", rec.get("DescriptionNotSolved", ""))
         solved_var.set(rec.get("Solved", False))
-        slbl.config(text=f"✔  Loaded '{name}'", fg="#c8a060")
+        slbl.config(text=f"✔  Loaded '{name}'", fg="#A09BE0")
 
     load_dd.bind("<<ComboboxSelected>>", on_load)
 
@@ -508,13 +557,13 @@ def open_screens_window():
     win = tk.Toplevel()
     win.title("Screens")
     win.geometry("740x700")
-    win.configure(bg="#2b1a0e")
+    win.configure(bg="#40318D")
     win.resizable(True, True)
     apply_combo_style()
 
-    tk.Label(win, text="🖥️  Screens Editor", font=("Georgia", 18, "bold"),
-             bg="#2b1a0e", fg="#f0c040", pady=16).pack()
-    tk.Frame(win, bg="#7a5520", height=2).pack(fill="x", padx=20, pady=(0, 0))
+    tk.Label(win, text="🖥️  Screens Editor", font=("Courier New", 18, "bold"),
+             bg="#40318D", fg="#FFFFFF", pady=16).pack()
+    tk.Frame(win, bg="#7869C4", height=2).pack(fill="x", padx=20, pady=(0, 0))
 
     form = make_scrollable_form(win)
 
@@ -532,9 +581,36 @@ def open_screens_window():
     load_var = tk.StringVar(value="— select to load —")
     load_dd  = ttk.Combobox(form, textvariable=load_var,
                             values=screen_names_by_id(),
-                            state="readonly", font=("Courier", 11))
+                            state="readonly", font=("Courier New", 11))
     load_dd.pack(fill="x", ipady=3)
-    tk.Frame(form, bg="#7a5520", height=2).pack(fill="x", pady=(10, 0))
+
+    # ── New Screen button ─────────────────────────────────────
+    def on_new_screen():
+        scr = load_json(JSON_SCREENS_FILE)
+        if scr:
+            max_id = max(int(rec.get("ID", 0)) for rec in scr.values())
+        else:
+            max_id = -1
+        new_id = str(max_id + 1)
+        # Clear all fields
+        for f in list(entries.keys()):
+            entries[f].delete(0, tk.END)
+        entries["ID"].insert(0, new_id)
+        entries["Name"].insert(0, "")
+        for a, v in action_vars.items():
+            v.set("")
+        desc_text.delete("1.0", tk.END)
+        flashlight_on_text.delete("1.0", tk.END)
+        flashlight_off_text.delete("1.0", tk.END)
+        ascii_text.delete("1.0", tk.END)
+        slbl.config(text=f"✔  New screen (ID {new_id}) — fill in details and save", fg="#50e878")
+
+    tk.Button(form, text="✚  New Screen", font=("Courier New", 11, "bold"),
+              bg="#2E2270", fg="#FFFFFF", activebackground="#7869C4",
+              activeforeground="#FFFFFF", relief="raised", bd=3,
+              cursor="hand2", padx=16, pady=4, command=on_new_screen).pack(fill="x", pady=(6, 0))
+
+    tk.Frame(form, bg="#7869C4", height=2).pack(fill="x", pady=(10, 0))
 
     # ── Identity ─────────────────────────────────────────────
     section_lbl(form, "— Identity —")
@@ -543,7 +619,7 @@ def open_screens_window():
 
     # ── Actions (4 total) ─────────────────────────────────────
     section_lbl(form, "— Actions in Screen —")
-    act_frame1 = tk.Frame(form, bg="#2b1a0e")
+    act_frame1 = tk.Frame(form, bg="#40318D")
     act_frame1.pack(fill="x")
     add_grid_combos(act_frame1, ["Action1", "Action2", "Action3", "Action4"],
                     get_action_names, action_vars, action_combos)
@@ -551,29 +627,29 @@ def open_screens_window():
     # ── Description ──────────────────────────────────────────
     section_lbl(form, "— Description —")
     tk.Label(form, text="Description", **LABEL_STYLE).pack(fill="x", pady=(0, 2))
-    desc_text = tk.Text(form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
-                        relief="sunken", bd=2, font=("Courier", 11), height=4, wrap="none", width=80)
+    desc_text = tk.Text(form, bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+                        relief="sunken", bd=2, font=("Courier New", 11), height=4, wrap="none", width=80)
     desc_text.pack(fill="x")
 
     tk.Label(form, text="FlashlightOn", **LABEL_STYLE).pack(fill="x", pady=(8, 2))
-    flashlight_on_text = tk.Text(form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
-                                 relief="sunken", bd=2, font=("Courier", 11), height=4, wrap="none", width=80)
+    flashlight_on_text = tk.Text(form, bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+                                 relief="sunken", bd=2, font=("Courier New", 11), height=4, wrap="none", width=80)
     flashlight_on_text.pack(fill="x")
 
     tk.Label(form, text="FlashlightOff", **LABEL_STYLE).pack(fill="x", pady=(8, 2))
-    flashlight_off_text = tk.Text(form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
-                                  relief="sunken", bd=2, font=("Courier", 11), height=4, wrap="none", width=80)
+    flashlight_off_text = tk.Text(form, bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+                                  relief="sunken", bd=2, font=("Courier New", 11), height=4, wrap="none", width=80)
     flashlight_off_text.pack(fill="x")
 
     # ── ASCII Drawing ─────────────────────────────────────────
     section_lbl(form, "— ASCII Drawing —")
     tk.Label(form, text="AsciiDrawing", **LABEL_STYLE).pack(fill="x", pady=(0, 2))
-    ascii_text = tk.Text(form, bg="#1e0f05", fg="#50e878", insertbackground="#50e878",
+    ascii_text = tk.Text(form, bg="#2E2270", fg="#50e878", insertbackground="#50e878",
                          relief="sunken", bd=2, font=("Courier New", 11), height=7, wrap="none", width=80)
     ascii_text.pack(fill="x")
 
     # ── Save ──────────────────────────────────────────────────
-    tk.Frame(form, bg="#7a5520", height=2).pack(fill="x", pady=(18, 8))
+    tk.Frame(form, bg="#7869C4", height=2).pack(fill="x", pady=(18, 8))
     slbl = status_lbl(form)
 
     def on_load_screen(e=None):
@@ -596,7 +672,7 @@ def open_screens_window():
         flashlight_off_text.insert("1.0", rec.get("FlashlightOff", ""))
         ascii_text.delete("1.0", tk.END)
         ascii_text.insert("1.0", rec.get("AsciiDrawing", ""))
-        slbl.config(text=f"✔  Loaded '{nm}'", fg="#c8a060")
+        slbl.config(text=f"✔  Loaded '{nm}'", fg="#A09BE0")
 
     load_dd.bind("<<ComboboxSelected>>", on_load_screen)
 
@@ -631,25 +707,25 @@ def open_map_window():
     win = tk.Toplevel()
     win.title("🗺️  Adventure Map")
     win.geometry("900x700")
-    win.configure(bg="#1a0f06")
+    win.configure(bg="#352880")
     win.resizable(True, True)
 
-    tk.Label(win, text="🗺️  Adventure Map", font=("Georgia", 16, "bold"),
-             bg="#1a0f06", fg="#f0c040", pady=10).pack()
-    tk.Frame(win, bg="#7a5520", height=2).pack(fill="x", padx=20, pady=(0, 6))
+    tk.Label(win, text="🗺️  Adventure Map", font=("Courier New", 16, "bold"),
+             bg="#352880", fg="#FFFFFF", pady=10).pack()
+    tk.Frame(win, bg="#7869C4", height=2).pack(fill="x", padx=20, pady=(0, 6))
 
     # ── Toolbar ───────────────────────────────────────────────
-    toolbar = tk.Frame(win, bg="#1a0f06")
+    toolbar = tk.Frame(win, bg="#352880")
     toolbar.pack(fill="x", padx=20, pady=(0, 6))
     tk.Label(toolbar, text="Drag rooms to rearrange  •  Scroll to zoom",
-             font=("Courier", 9), bg="#1a0f06", fg="#7a5520").pack(side="left")
-    tk.Button(toolbar, text="⟳ Reset Layout", font=("Georgia", 9, "bold"),
-              bg="#3d2005", fg="#f0c040", activebackground="#5c3310",
+             font=("Courier New", 9), bg="#352880", fg="#7869C4").pack(side="left")
+    tk.Button(toolbar, text="⟳ Reset Layout", font=("Courier New", 9, "bold"),
+              bg="#2E2270", fg="#FFFFFF", activebackground="#7869C4",
               activeforeground="#fff", relief="raised", bd=2, cursor="hand2",
               command=lambda: redraw(reset=True)).pack(side="right")
 
     # ── Canvas ────────────────────────────────────────────────
-    canvas = tk.Canvas(win, bg="#0d0804", highlightthickness=0)
+    canvas = tk.Canvas(win, bg="#1A1452", highlightthickness=0)
     hbar = ttk.Scrollbar(win, orient="horizontal", command=canvas.xview)
     vbar = ttk.Scrollbar(win, orient="vertical",   command=canvas.yview)
     canvas.configure(xscrollcommand=hbar.set, yscrollcommand=vbar.set)
@@ -746,14 +822,14 @@ def open_map_window():
     auto_layout()
 
     # ── Drawing ───────────────────────────────────────────────
-    BOX_COLOR        = "#3d2005"
-    BOX_OUTLINE      = "#f0c040"
-    TEXT_COLOR       = "#f0c040"
+    BOX_COLOR        = "#2E2270"
+    BOX_OUTLINE      = "#7869C4"
+    TEXT_COLOR       = "#FFFFFF"
     PUZ_COLOR        = "#a0c8f0"
     PUZ_SOLVED_COLOR = "#7a9070"
     ACT_COLOR        = "#e8b0e0"
-    DIVIDER_COLOR    = "#7a5520"
-    ARROW_COLOR      = "#c8a060"
+    DIVIDER_COLOR    = "#7869C4"
+    ARROW_COLOR      = "#A09BE0"
     DIR_LABELS       = {"North": "N", "South": "S", "East": "E", "West": "W"}
 
     ATTACH = {
@@ -863,7 +939,7 @@ def open_map_window():
             else:
                 ly -= 10
             canvas.create_text(lx, ly, text=DIR_LABELS[direction],
-                               fill="#f0c040", font=("Courier", 8, "bold"),
+                               fill="#FFFFFF", font=("Courier New", 8, "bold"),
                                tags="arrow")
 
         # Draw boxes on top
@@ -899,7 +975,7 @@ def open_map_window():
                 cx, cy,
                 text=display,
                 fill=TEXT_COLOR,
-                font=("Georgia", 9, "bold"),
+                font=("Courier New", 9, "bold"),
                 width=BOX_W - 8,
                 tags=("box", nm)
             )
@@ -933,7 +1009,7 @@ def open_map_window():
                         cx, oy,
                         text=display_lbl,
                         fill=color,
-                        font=("Courier", 8, "italic"),
+                        font=("Courier New", 8, "italic"),
                         width=BOX_W - 6,
                         tags=("box", nm)
                     )
@@ -956,7 +1032,7 @@ def open_map_window():
                         cx, oy,
                         text=display_lbl,
                         fill=ACT_COLOR,
-                        font=("Courier", 8),
+                        font=("Courier New", 8),
                         width=BOX_W - 6,
                         tags=("box", nm)
                     )
@@ -1019,13 +1095,13 @@ def open_sensors_window():
     win = tk.Toplevel()
     win.title("Sensors")
     win.geometry("740x660")
-    win.configure(bg="#2b1a0e")
+    win.configure(bg="#40318D")
     win.resizable(True, True)
     apply_combo_style()
 
-    tk.Label(win, text="📡  Sensors Editor", font=("Georgia", 18, "bold"),
-             bg="#2b1a0e", fg="#f0c040", pady=16).pack()
-    tk.Frame(win, bg="#7a5520", height=2).pack(fill="x", padx=20, pady=(0, 0))
+    tk.Label(win, text="📡  Sensors Editor", font=("Courier New", 18, "bold"),
+             bg="#40318D", fg="#FFFFFF", pady=16).pack()
+    tk.Frame(win, bg="#7869C4", height=2).pack(fill="x", padx=20, pady=(0, 0))
 
     form = make_scrollable_form(win)
 
@@ -1041,7 +1117,7 @@ def open_sensors_window():
     load_var = tk.StringVar(value="— select to load —")
     load_dd  = ttk.Combobox(form, textvariable=load_var,
                             values=sensor_names_by_id(),
-                            state="readonly", font=("Courier", 11))
+                            state="readonly", font=("Courier New", 11))
     load_dd.pack(fill="x", ipady=3)
 
     # ── Identity ──────────────────────────────────────────────
@@ -1057,19 +1133,19 @@ def open_sensors_window():
     # ── Dialogs ───────────────────────────────────────────────
     section_lbl(form, "— Dialogs —")
     tk.Label(form, text="DialogOn  (sensor is active)", **LABEL_STYLE).pack(fill="x", pady=(0, 2))
-    dialog_on_text = tk.Text(form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
-                             relief="sunken", bd=2, font=("Courier", 11), height=4,
+    dialog_on_text = tk.Text(form, bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+                             relief="sunken", bd=2, font=("Courier New", 11), height=4,
                              wrap="none", width=80)
     dialog_on_text.pack(fill="x")
 
     tk.Label(form, text="DialogOff  (sensor is inactive)", **LABEL_STYLE).pack(fill="x", pady=(8, 2))
-    dialog_off_text = tk.Text(form, bg="#1e0f05", fg="#f0c040", insertbackground="#f0c040",
-                              relief="sunken", bd=2, font=("Courier", 11), height=4,
+    dialog_off_text = tk.Text(form, bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+                              relief="sunken", bd=2, font=("Courier New", 11), height=4,
                               wrap="none", width=80)
     dialog_off_text.pack(fill="x")
 
     # ── Save ──────────────────────────────────────────────────
-    tk.Frame(form, bg="#7a5520", height=2).pack(fill="x", pady=(14, 8))
+    tk.Frame(form, bg="#7869C4", height=2).pack(fill="x", pady=(14, 8))
     slbl = status_lbl(form)
 
     def on_load(e=None):
@@ -1086,7 +1162,7 @@ def open_sensors_window():
         dialog_on_text.insert("1.0", rec.get("DialogOn", ""))
         dialog_off_text.delete("1.0", tk.END)
         dialog_off_text.insert("1.0", rec.get("DialogOff", ""))
-        slbl.config(text=f"✔  Loaded '{name}'", fg="#c8a060")
+        slbl.config(text=f"✔  Loaded '{name}'", fg="#A09BE0")
 
     load_dd.bind("<<ComboboxSelected>>", on_load)
 
@@ -1108,7 +1184,6 @@ def open_sensors_window():
 PARSER_SCRIPTS = [
     ("acs_parser_sensors.py",  "📡  Sensors"),
     ("acs_parser_actions.py",  "⚡  Actions"),
-    ("acs_parser_puzzles.py",  "🧩  Puzzles"),
     ("acs_parser_screens.py",  "🖥️  Screens"),
 ]
 
@@ -1118,21 +1193,21 @@ def run_parsers():
     win = tk.Toplevel()
     win.title("Run Parsers")
     win.geometry("640x480")
-    win.configure(bg="#1a0f06")
+    win.configure(bg="#352880")
     win.resizable(True, True)
 
-    tk.Label(win, text="⚙  Parser Output", font=("Georgia", 14, "bold"),
-             bg="#1a0f06", fg="#f0c040", pady=10).pack()
-    tk.Frame(win, bg="#7a5520", height=2).pack(fill="x", padx=20)
+    tk.Label(win, text="⚙  Parser Output", font=("Courier New", 14, "bold"),
+             bg="#352880", fg="#FFFFFF", pady=10).pack()
+    tk.Frame(win, bg="#7869C4", height=2).pack(fill="x", padx=20)
 
     log = scrolledtext.ScrolledText(
-        win, bg="#0d0603", fg="#50e878", font=("Courier", 10),
+        win, bg="#1A1452", fg="#50e878", font=("Courier New", 10),
         relief="sunken", bd=2, state="disabled", wrap="word"
     )
     log.pack(fill="both", expand=True, padx=16, pady=12)
 
-    status_lbl = tk.Label(win, text="", font=("Courier", 10, "bold"),
-                          bg="#1a0f06", fg="#f0c040", pady=6)
+    status_lbl = tk.Label(win, text="", font=("Courier New", 10, "bold"),
+                          bg="#352880", fg="#FFFFFF", pady=6)
     status_lbl.pack()
 
     def append(text, tag=None):
@@ -1185,8 +1260,8 @@ def run_parsers():
         status_lbl.config(text="✔  All parsers completed successfully!", fg="#50e878")
         append("✔  All parsers completed successfully!\n")
 
-    tk.Button(win, text="Close", font=("Georgia", 10, "bold"),
-              bg="#3d2005", fg="#f0c040", activebackground="#5c3310",
+    tk.Button(win, text="Close", font=("Courier New", 10, "bold"),
+              bg="#2E2270", fg="#FFFFFF", activebackground="#7869C4",
               activeforeground="#ffffff", relief="raised", bd=3,
               cursor="hand2", padx=12, pady=4,
               command=win.destroy).pack(pady=(0, 12))
@@ -1268,39 +1343,39 @@ def open_map_actions_window():
     win = tk.Toplevel()
     win.title("🔀  Map Actions")
     win.geometry("1100x780")
-    win.configure(bg="#1a0f06")
+    win.configure(bg="#352880")
     win.resizable(True, True)
 
     tk.Label(win, text="🔀  Map Actions  —  Screens · Actions · Sensors",
-             font=("Georgia", 15, "bold"), bg="#1a0f06", fg="#f0c040", pady=10).pack()
-    tk.Frame(win, bg="#7a5520", height=2).pack(fill="x", padx=20, pady=(0, 4))
+             font=("Courier New", 15, "bold"), bg="#352880", fg="#FFFFFF", pady=10).pack()
+    tk.Frame(win, bg="#7869C4", height=2).pack(fill="x", padx=20, pady=(0, 4))
 
     # ── Toolbar ───────────────────────────────────────────────
-    toolbar = tk.Frame(win, bg="#1a0f06")
+    toolbar = tk.Frame(win, bg="#352880")
     toolbar.pack(fill="x", padx=20, pady=(0, 2))
     tk.Label(toolbar, text="Drag nodes  •  Scroll to zoom  •  Arrows = transitions",
-             font=("Courier", 9), bg="#1a0f06", fg="#7a5520").pack(side="left")
-    tk.Button(toolbar, text="⟳ Reset Layout", font=("Georgia", 9, "bold"),
-              bg="#3d2005", fg="#f0c040", activebackground="#5c3310",
+             font=("Courier New", 9), bg="#352880", fg="#7869C4").pack(side="left")
+    tk.Button(toolbar, text="⟳ Reset Layout", font=("Courier New", 9, "bold"),
+              bg="#2E2270", fg="#FFFFFF", activebackground="#7869C4",
               activeforeground="#fff", relief="raised", bd=2, cursor="hand2",
               command=lambda: redraw(reset=True)).pack(side="right")
 
     # ── Legend ────────────────────────────────────────────────
-    legend = tk.Frame(win, bg="#1a0f06")
+    legend = tk.Frame(win, bg="#352880")
     legend.pack(fill="x", padx=24, pady=(0, 3))
     for color, label in [
-        ("#f0c040", "Screen header"),
+        ("#FFFFFF", "Screen header"),
         ("#50b8e0", "→ transition arrow"),
         ("#c8f050", "Sensor ON"),
         ("#e05050", "Sensor OFF"),
         ("#7a9070", "No sensor"),
         ("#e08040", "→ Dest. screen"),
     ]:
-        tk.Label(legend, text=f"■  {label}", font=("Courier", 8),
-                 bg="#1a0f06", fg=color).pack(side="left", padx=8)
+        tk.Label(legend, text=f"■  {label}", font=("Courier New", 8),
+                 bg="#352880", fg=color).pack(side="left", padx=8)
 
     # ── Canvas ────────────────────────────────────────────────
-    canvas = tk.Canvas(win, bg="#0d0804", highlightthickness=0)
+    canvas = tk.Canvas(win, bg="#1A1452", highlightthickness=0)
     hbar = ttk.Scrollbar(win, orient="horizontal", command=canvas.xview)
     vbar = ttk.Scrollbar(win, orient="vertical",   command=canvas.yview)
     canvas.configure(xscrollcommand=hbar.set, yscrollcommand=vbar.set)
@@ -1318,17 +1393,17 @@ def open_map_actions_window():
     ORIGIN     = (60, 60)
 
     # Colours
-    C_HDR_BG   = "#2a1a06"
-    C_HDR_OUT  = "#f0c040"
-    C_HDR_TXT  = "#f0c040"
-    C_BODY_BG  = "#130b02"
-    C_DIV      = "#3d2005"
-    C_ACT_TXT  = "#c8a060"        # action name
+    C_HDR_BG   = "#2E2270"
+    C_HDR_OUT  = "#7869C4"
+    C_HDR_TXT  = "#FFFFFF"
+    C_BODY_BG  = "#1A1452"
+    C_DIV      = "#7869C4"
+    C_ACT_TXT  = "#A09BE0"        # action name
     C_DST_TXT  = "#e08040"        # → destination
     C_SEN_ON   = "#c8f050"        # sensor active
     C_SEN_OFF  = "#e05050"        # sensor inactive
     C_SEN_NONE = "#7a9070"        # no sensor
-    C_ARROW    = "#50b8e0"
+    C_ARROW    = "#A09BE0"
     C_ARR_LBL  = "#e08040"
 
     # ── Compute total height of a node ────────────────────────
@@ -1374,8 +1449,8 @@ def open_map_actions_window():
         tw.wm_overrideredirect(True)
         tw.wm_geometry(f"+{event.x_root+14}+{event.y_root+10}")
         tk.Label(tw, text=text, justify="left",
-                 bg="#2b1a0e", fg="#f0c040",
-                 font=("Courier", 9), relief="solid", bd=1,
+                 bg="#40318D", fg="#FFFFFF",
+                 font=("Courier New", 9), relief="solid", bd=1,
                  padx=6, pady=4).pack()
         tip_win[0] = tw
 
@@ -1443,7 +1518,7 @@ def open_map_actions_window():
             mx = (ax1 + ax2) / 2
             my = (ay1 + ay2) / 2 - 8
             canvas.create_text(mx, my, text=" / ".join(anames),
-                               fill=C_ARR_LBL, font=("Courier", 7, "italic"),
+                               fill=C_ARR_LBL, font=("Courier New", 7, "italic"),
                                tags="edge")
 
         # ── Nodes ─────────────────────────────────────────────
@@ -1472,7 +1547,7 @@ def open_map_actions_window():
                 x0 + 8, y0 + HDR_H // 2,
                 text=f"[{sid}] {disp}",
                 fill=C_HDR_TXT,
-                font=("Georgia", 10, "bold"),
+                font=("Courier New", 10, "bold"),
                 anchor="w", width=BOX_W - 12,
                 tags=("node", nm)
             )
@@ -1510,7 +1585,7 @@ def open_map_actions_window():
                 canvas.create_text(x0 + 20, ry,
                                    text=act_disp,
                                    fill=C_ACT_TXT,
-                                   font=("Courier", 9, "bold"),
+                                   font=("Courier New", 9, "bold"),
                                    anchor="w", tags=("node", nm))
 
                 # Destination screen tag
@@ -1519,7 +1594,7 @@ def open_map_actions_window():
                     canvas.create_text(x0 + 128, ry,
                                        text=f"→{dst_disp}",
                                        fill=C_DST_TXT,
-                                       font=("Courier", 8),
+                                       font=("Courier New", 8),
                                        anchor="w", tags=("node", nm))
 
                 # Sensor badge (right side)
@@ -1528,18 +1603,18 @@ def open_map_actions_window():
                     s_state = "ON" if sen_active else "OFF"
                     sen_disp = sen_name if len(sen_name) <= 9 else sen_name[:8]+"…"
                     canvas.create_rectangle(x1-76, ry-7, x1-2, ry+7,
-                                            fill="#1a0f06", outline=s_color,
+                                            fill="#352880", outline=s_color,
                                             width=1, tags=("node",nm))
                     canvas.create_text(x1-40, ry,
                                        text=f"📡{sen_disp}:{s_state}",
                                        fill=s_color,
-                                       font=("Courier", 8),
+                                       font=("Courier New", 8),
                                        tags=("node", nm))
                 else:
                     canvas.create_text(x1-38, ry,
                                        text="no sensor",
                                        fill=C_SEN_NONE,
-                                       font=("Courier", 8, "italic"),
+                                       font=("Courier New", 8, "italic"),
                                        tags=("node", nm))
 
                 # Row separator
@@ -1621,11 +1696,11 @@ def open_window(title):
     win = tk.Toplevel()
     win.title(title)
     win.geometry("400x300")
-    win.configure(bg="#2b1a0e")
-    tk.Label(win, text=title, font=("Georgia", 18, "bold"),
-             bg="#2b1a0e", fg="#f0c040", pady=20).pack()
+    win.configure(bg="#40318D")
+    tk.Label(win, text=title, font=("Courier New", 18, "bold"),
+             bg="#40318D", fg="#FFFFFF", pady=20).pack()
     tk.Label(win, text=f"Adventure Construction Set\n— {title} Editor —",
-             font=("Courier", 11), bg="#2b1a0e", fg="#c8a060",
+             font=("Courier New", 11), bg="#40318D", fg="#A09BE0",
              justify="center").pack(expand=True)
 
 
@@ -1637,27 +1712,27 @@ def main():
     root = tk.Tk()
     root.title("Adventure Construction Set")
     root.geometry("760x260")
-    root.configure(bg="#1a0f06")
+    root.configure(bg="#352880")
     root.resizable(False, False)
 
     tk.Label(root, text="⚔  Adventure Construction Set  ⚔",
-             font=("Georgia", 14, "bold"), bg="#1a0f06", fg="#f0c040", pady=12).pack()
-    tk.Frame(root, bg="#7a5520", height=2).pack(fill="x", padx=20)
+             font=("Courier New", 14, "bold"), bg="#352880", fg="#FFFFFF", pady=12).pack()
+    tk.Frame(root, bg="#7869C4", height=2).pack(fill="x", padx=20)
 
-    btn_frame = tk.Frame(root, bg="#1a0f06", pady=15)
+    btn_frame = tk.Frame(root, bg="#352880", pady=15)
     btn_frame.pack()
 
     for icon, section in zip(ICONS, SECTIONS):
-        tk.Button(btn_frame, text=f"{icon}\n{section}", font=("Georgia", 10, "bold"),
-                  width=8, height=3, bg="#3d2005", fg="#f0c040",
-                  activebackground="#5c3310", activeforeground="#ffffff",
+        tk.Button(btn_frame, text=f"{icon}\n{section}", font=("Courier New", 10, "bold"),
+                  width=8, height=3, bg="#7869C4", fg="#000000",
+                  activebackground="#7869C4", activeforeground="#ffffff",
                   relief="raised", bd=3, cursor="hand2",
                   command=lambda s=section: open_window(s)).pack(side="left", padx=8)
 
     # ── Run Parsers button ────────────────────────────────────
-    tk.Frame(root, bg="#7a5520", height=1).pack(fill="x", padx=20)
-    tk.Button(root, text="⚙  Run Parsers", font=("Georgia", 11, "bold"),
-              bg="#0d2b0d", fg="#50e878",
+    tk.Frame(root, bg="#7869C4", height=1).pack(fill="x", padx=20)
+    tk.Button(root, text="⚙  Run Parsers", font=("Courier New", 11, "bold"),
+              bg="#1A4D1A", fg="#50e878",
               activebackground="#1a4d1a", activeforeground="#ffffff",
               relief="raised", bd=3, cursor="hand2",
               padx=20, pady=6, command=run_parsers).pack(pady=10)

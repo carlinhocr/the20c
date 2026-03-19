@@ -26,116 +26,146 @@ action_pointer_0:
   .word action_0_sensor_id     ; LEVANTARSE sensor_id     [4,5]
   .word action_0_sensor_active ; LEVANTARSE sensor_active [6,7]
   .word action_0_screen        ; LEVANTARSE screen        [8,9]
-  .word action_0_cost          ; LEVANTARSE cost          [10,11]
-  .word action_0_description   ; LEVANTARSE description   [12,13]
+  .word action_0_cost              ; LEVANTARSE cost              [10,11]
+  .word action_0_enemy_probability ; LEVANTARSE enemy_probability [12,13]
+  .word action_0_death_probability ; LEVANTARSE death_probability [14,15]
+  .word action_0_description       ; LEVANTARSE description       [16,17]
 action_pointer_1:
-  .word action_1_id            ; MIRAR ALREDEDOR id            [14,15]
-  .word action_1_name          ; MIRAR ALREDEDOR name          [16,17]
-  .word action_1_sensor_id     ; MIRAR ALREDEDOR sensor_id     [18,19]
-  .word action_1_sensor_active ; MIRAR ALREDEDOR sensor_active [20,21]
-  .word action_1_screen        ; MIRAR ALREDEDOR screen        [22,23]
-  .word action_1_cost          ; MIRAR ALREDEDOR cost          [24,25]
-  .word action_1_description   ; MIRAR ALREDEDOR description   [26,27]
+  .word action_1_id            ; MIRAR ALREDEDOR id            [18,19]
+  .word action_1_name          ; MIRAR ALREDEDOR name          [20,21]
+  .word action_1_sensor_id     ; MIRAR ALREDEDOR sensor_id     [22,23]
+  .word action_1_sensor_active ; MIRAR ALREDEDOR sensor_active [24,25]
+  .word action_1_screen        ; MIRAR ALREDEDOR screen        [26,27]
+  .word action_1_cost              ; MIRAR ALREDEDOR cost              [28,29]
+  .word action_1_enemy_probability ; MIRAR ALREDEDOR enemy_probability [30,31]
+  .word action_1_death_probability ; MIRAR ALREDEDOR death_probability [32,33]
+  .word action_1_description       ; MIRAR ALREDEDOR description       [34,35]
 action_pointer_2:
-  .word action_2_id            ; GRITAR POR AYUDA id            [28,29]
-  .word action_2_name          ; GRITAR POR AYUDA name          [30,31]
-  .word action_2_sensor_id     ; GRITAR POR AYUDA sensor_id     [32,33]
-  .word action_2_sensor_active ; GRITAR POR AYUDA sensor_active [34,35]
-  .word action_2_screen        ; GRITAR POR AYUDA screen        [36,37]
-  .word action_2_cost          ; GRITAR POR AYUDA cost          [38,39]
-  .word action_2_description   ; GRITAR POR AYUDA description   [40,41]
+  .word action_2_id            ; GRITAR POR AYUDA id            [36,37]
+  .word action_2_name          ; GRITAR POR AYUDA name          [38,39]
+  .word action_2_sensor_id     ; GRITAR POR AYUDA sensor_id     [40,41]
+  .word action_2_sensor_active ; GRITAR POR AYUDA sensor_active [42,43]
+  .word action_2_screen        ; GRITAR POR AYUDA screen        [44,45]
+  .word action_2_cost              ; GRITAR POR AYUDA cost              [46,47]
+  .word action_2_enemy_probability ; GRITAR POR AYUDA enemy_probability [48,49]
+  .word action_2_death_probability ; GRITAR POR AYUDA death_probability [50,51]
+  .word action_2_description       ; GRITAR POR AYUDA description       [52,53]
 action_pointer_3:
-  .word action_3_id            ; MIRAR ENTRADA id            [42,43]
-  .word action_3_name          ; MIRAR ENTRADA name          [44,45]
-  .word action_3_sensor_id     ; MIRAR ENTRADA sensor_id     [46,47]
-  .word action_3_sensor_active ; MIRAR ENTRADA sensor_active [48,49]
-  .word action_3_screen        ; MIRAR ENTRADA screen        [50,51]
-  .word action_3_cost          ; MIRAR ENTRADA cost          [52,53]
-  .word action_3_description   ; MIRAR ENTRADA description   [54,55]
+  .word action_3_id            ; MIRAR ENTRADA id            [54,55]
+  .word action_3_name          ; MIRAR ENTRADA name          [56,57]
+  .word action_3_sensor_id     ; MIRAR ENTRADA sensor_id     [58,59]
+  .word action_3_sensor_active ; MIRAR ENTRADA sensor_active [60,61]
+  .word action_3_screen        ; MIRAR ENTRADA screen        [62,63]
+  .word action_3_cost              ; MIRAR ENTRADA cost              [64,65]
+  .word action_3_enemy_probability ; MIRAR ENTRADA enemy_probability [66,67]
+  .word action_3_death_probability ; MIRAR ENTRADA death_probability [68,69]
+  .word action_3_description       ; MIRAR ENTRADA description       [70,71]
 action_pointer_4:
-  .word action_4_id            ; GRITAR id            [56,57]
-  .word action_4_name          ; GRITAR name          [58,59]
-  .word action_4_sensor_id     ; GRITAR sensor_id     [60,61]
-  .word action_4_sensor_active ; GRITAR sensor_active [62,63]
-  .word action_4_screen        ; GRITAR screen        [64,65]
-  .word action_4_cost          ; GRITAR cost          [66,67]
-  .word action_4_description   ; GRITAR description   [68,69]
+  .word action_4_id            ; GRITAR id            [72,73]
+  .word action_4_name          ; GRITAR name          [74,75]
+  .word action_4_sensor_id     ; GRITAR sensor_id     [76,77]
+  .word action_4_sensor_active ; GRITAR sensor_active [78,79]
+  .word action_4_screen        ; GRITAR screen        [80,81]
+  .word action_4_cost              ; GRITAR cost              [82,83]
+  .word action_4_enemy_probability ; GRITAR enemy_probability [84,85]
+  .word action_4_death_probability ; GRITAR death_probability [86,87]
+  .word action_4_description       ; GRITAR description       [88,89]
 action_pointer_5:
-  .word action_5_id            ; LINTERNA id            [70,71]
-  .word action_5_name          ; LINTERNA name          [72,73]
-  .word action_5_sensor_id     ; LINTERNA sensor_id     [74,75]
-  .word action_5_sensor_active ; LINTERNA sensor_active [76,77]
-  .word action_5_screen        ; LINTERNA screen        [78,79]
-  .word action_5_cost          ; LINTERNA cost          [80,81]
-  .word action_5_description   ; LINTERNA description   [82,83]
+  .word action_5_id            ; LINTERNA id            [90,91]
+  .word action_5_name          ; LINTERNA name          [92,93]
+  .word action_5_sensor_id     ; LINTERNA sensor_id     [94,95]
+  .word action_5_sensor_active ; LINTERNA sensor_active [96,97]
+  .word action_5_screen        ; LINTERNA screen        [98,99]
+  .word action_5_cost              ; LINTERNA cost              [100,101]
+  .word action_5_enemy_probability ; LINTERNA enemy_probability [102,103]
+  .word action_5_death_probability ; LINTERNA death_probability [104,105]
+  .word action_5_description       ; LINTERNA description       [106,107]
 action_pointer_6:
-  .word action_6_id            ; EXPLORAR CAMINO id            [84,85]
-  .word action_6_name          ; EXPLORAR CAMINO name          [86,87]
-  .word action_6_sensor_id     ; EXPLORAR CAMINO sensor_id     [88,89]
-  .word action_6_sensor_active ; EXPLORAR CAMINO sensor_active [90,91]
-  .word action_6_screen        ; EXPLORAR CAMINO screen        [92,93]
-  .word action_6_cost          ; EXPLORAR CAMINO cost          [94,95]
-  .word action_6_description   ; EXPLORAR CAMINO description   [96,97]
+  .word action_6_id            ; EXPLORAR CAMINO id            [108,109]
+  .word action_6_name          ; EXPLORAR CAMINO name          [110,111]
+  .word action_6_sensor_id     ; EXPLORAR CAMINO sensor_id     [112,113]
+  .word action_6_sensor_active ; EXPLORAR CAMINO sensor_active [114,115]
+  .word action_6_screen        ; EXPLORAR CAMINO screen        [116,117]
+  .word action_6_cost              ; EXPLORAR CAMINO cost              [118,119]
+  .word action_6_enemy_probability ; EXPLORAR CAMINO enemy_probability [120,121]
+  .word action_6_death_probability ; EXPLORAR CAMINO death_probability [122,123]
+  .word action_6_description       ; EXPLORAR CAMINO description       [124,125]
 action_pointer_7:
-  .word action_7_id            ; VEO QUE CAE AGUA id            [98,99]
-  .word action_7_name          ; VEO QUE CAE AGUA name          [100,101]
-  .word action_7_sensor_id     ; VEO QUE CAE AGUA sensor_id     [102,103]
-  .word action_7_sensor_active ; VEO QUE CAE AGUA sensor_active [104,105]
-  .word action_7_screen        ; VEO QUE CAE AGUA screen        [106,107]
-  .word action_7_cost          ; VEO QUE CAE AGUA cost          [108,109]
-  .word action_7_description   ; VEO QUE CAE AGUA description   [110,111]
+  .word action_7_id            ; VEO QUE CAE AGUA id            [126,127]
+  .word action_7_name          ; VEO QUE CAE AGUA name          [128,129]
+  .word action_7_sensor_id     ; VEO QUE CAE AGUA sensor_id     [130,131]
+  .word action_7_sensor_active ; VEO QUE CAE AGUA sensor_active [132,133]
+  .word action_7_screen        ; VEO QUE CAE AGUA screen        [134,135]
+  .word action_7_cost              ; VEO QUE CAE AGUA cost              [136,137]
+  .word action_7_enemy_probability ; VEO QUE CAE AGUA enemy_probability [138,139]
+  .word action_7_death_probability ; VEO QUE CAE AGUA death_probability [140,141]
+  .word action_7_description       ; VEO QUE CAE AGUA description       [142,143]
 action_pointer_8:
-  .word action_8_id            ; COMENZAR EL JUEGO id            [112,113]
-  .word action_8_name          ; COMENZAR EL JUEGO name          [114,115]
-  .word action_8_sensor_id     ; COMENZAR EL JUEGO sensor_id     [116,117]
-  .word action_8_sensor_active ; COMENZAR EL JUEGO sensor_active [118,119]
-  .word action_8_screen        ; COMENZAR EL JUEGO screen        [120,121]
-  .word action_8_cost          ; COMENZAR EL JUEGO cost          [122,123]
-  .word action_8_description   ; COMENZAR EL JUEGO description   [124,125]
+  .word action_8_id            ; COMENZAR EL JUEGO id            [144,145]
+  .word action_8_name          ; COMENZAR EL JUEGO name          [146,147]
+  .word action_8_sensor_id     ; COMENZAR EL JUEGO sensor_id     [148,149]
+  .word action_8_sensor_active ; COMENZAR EL JUEGO sensor_active [150,151]
+  .word action_8_screen        ; COMENZAR EL JUEGO screen        [152,153]
+  .word action_8_cost              ; COMENZAR EL JUEGO cost              [154,155]
+  .word action_8_enemy_probability ; COMENZAR EL JUEGO enemy_probability [156,157]
+  .word action_8_death_probability ; COMENZAR EL JUEGO death_probability [158,159]
+  .word action_8_description       ; COMENZAR EL JUEGO description       [160,161]
 action_pointer_9:
-  .word action_9_id            ; TERMINAR EL JUEGO id            [126,127]
-  .word action_9_name          ; TERMINAR EL JUEGO name          [128,129]
-  .word action_9_sensor_id     ; TERMINAR EL JUEGO sensor_id     [130,131]
-  .word action_9_sensor_active ; TERMINAR EL JUEGO sensor_active [132,133]
-  .word action_9_screen        ; TERMINAR EL JUEGO screen        [134,135]
-  .word action_9_cost          ; TERMINAR EL JUEGO cost          [136,137]
-  .word action_9_description   ; TERMINAR EL JUEGO description   [138,139]
+  .word action_9_id            ; TERMINAR EL JUEGO id            [162,163]
+  .word action_9_name          ; TERMINAR EL JUEGO name          [164,165]
+  .word action_9_sensor_id     ; TERMINAR EL JUEGO sensor_id     [166,167]
+  .word action_9_sensor_active ; TERMINAR EL JUEGO sensor_active [168,169]
+  .word action_9_screen        ; TERMINAR EL JUEGO screen        [170,171]
+  .word action_9_cost              ; TERMINAR EL JUEGO cost              [172,173]
+  .word action_9_enemy_probability ; TERMINAR EL JUEGO enemy_probability [174,175]
+  .word action_9_death_probability ; TERMINAR EL JUEGO death_probability [176,177]
+  .word action_9_description       ; TERMINAR EL JUEGO description       [178,179]
 action_pointer_10:
-  .word action_10_id            ; EXPLORAR MARCAS id            [140,141]
-  .word action_10_name          ; EXPLORAR MARCAS name          [142,143]
-  .word action_10_sensor_id     ; EXPLORAR MARCAS sensor_id     [144,145]
-  .word action_10_sensor_active ; EXPLORAR MARCAS sensor_active [146,147]
-  .word action_10_screen        ; EXPLORAR MARCAS screen        [148,149]
-  .word action_10_cost          ; EXPLORAR MARCAS cost          [150,151]
-  .word action_10_description   ; EXPLORAR MARCAS description   [152,153]
+  .word action_10_id            ; EXPLORAR MARCAS id            [180,181]
+  .word action_10_name          ; EXPLORAR MARCAS name          [182,183]
+  .word action_10_sensor_id     ; EXPLORAR MARCAS sensor_id     [184,185]
+  .word action_10_sensor_active ; EXPLORAR MARCAS sensor_active [186,187]
+  .word action_10_screen        ; EXPLORAR MARCAS screen        [188,189]
+  .word action_10_cost              ; EXPLORAR MARCAS cost              [190,191]
+  .word action_10_enemy_probability ; EXPLORAR MARCAS enemy_probability [192,193]
+  .word action_10_death_probability ; EXPLORAR MARCAS death_probability [194,195]
+  .word action_10_description       ; EXPLORAR MARCAS description       [196,197]
 action_pointer_11:
-  .word action_11_id            ; FORZAR ENTRADA id            [154,155]
-  .word action_11_name          ; FORZAR ENTRADA name          [156,157]
-  .word action_11_sensor_id     ; FORZAR ENTRADA sensor_id     [158,159]
-  .word action_11_sensor_active ; FORZAR ENTRADA sensor_active [160,161]
-  .word action_11_screen        ; FORZAR ENTRADA screen        [162,163]
-  .word action_11_cost          ; FORZAR ENTRADA cost          [164,165]
-  .word action_11_description   ; FORZAR ENTRADA description   [166,167]
+  .word action_11_id            ; FORZAR ENTRADA id            [198,199]
+  .word action_11_name          ; FORZAR ENTRADA name          [200,201]
+  .word action_11_sensor_id     ; FORZAR ENTRADA sensor_id     [202,203]
+  .word action_11_sensor_active ; FORZAR ENTRADA sensor_active [204,205]
+  .word action_11_screen        ; FORZAR ENTRADA screen        [206,207]
+  .word action_11_cost              ; FORZAR ENTRADA cost              [208,209]
+  .word action_11_enemy_probability ; FORZAR ENTRADA enemy_probability [210,211]
+  .word action_11_death_probability ; FORZAR ENTRADA death_probability [212,213]
+  .word action_11_description       ; FORZAR ENTRADA description       [214,215]
 action_pointer_12:
-  .word action_12_id            ; VOLVER A MIRAR ADELANTE id            [168,169]
-  .word action_12_name          ; VOLVER A MIRAR ADELANTE name          [170,171]
-  .word action_12_sensor_id     ; VOLVER A MIRAR ADELANTE sensor_id     [172,173]
-  .word action_12_sensor_active ; VOLVER A MIRAR ADELANTE sensor_active [174,175]
-  .word action_12_screen        ; VOLVER A MIRAR ADELANTE screen        [176,177]
-  .word action_12_cost          ; VOLVER A MIRAR ADELANTE cost          [178,179]
-  .word action_12_description   ; VOLVER A MIRAR ADELANTE description   [180,181]
+  .word action_12_id            ; VOLVER A MIRAR ADELANTE id            [216,217]
+  .word action_12_name          ; VOLVER A MIRAR ADELANTE name          [218,219]
+  .word action_12_sensor_id     ; VOLVER A MIRAR ADELANTE sensor_id     [220,221]
+  .word action_12_sensor_active ; VOLVER A MIRAR ADELANTE sensor_active [222,223]
+  .word action_12_screen        ; VOLVER A MIRAR ADELANTE screen        [224,225]
+  .word action_12_cost              ; VOLVER A MIRAR ADELANTE cost              [226,227]
+  .word action_12_enemy_probability ; VOLVER A MIRAR ADELANTE enemy_probability [228,229]
+  .word action_12_death_probability ; VOLVER A MIRAR ADELANTE death_probability [230,231]
+  .word action_12_description       ; VOLVER A MIRAR ADELANTE description       [232,233]
 action_name_offset:
   .byte 2  ; (byte of action_0_name in actions_pointers)
 action_sensor_id_offset:
   .byte 4  ; (byte of action_0_sensor_id in actions_pointers)
 action_sensor_active_offset:
-  .byte 6  ; (byte of action_0_sensor_id in actions_pointers)
+  .byte 6  ; (byte of action_0_sensor_active in actions_pointers)
 action_screen_offset:
   .byte 8  ; (byte of action_0_screen in actions_pointers)
+action_enemy_probability_offset:
+  .byte 12  ; (byte of action_0_enemy_probability in actions_pointers)
+action_death_probability_offset:
+  .byte 14  ; (byte of action_0_death_probability in actions_pointers)
 action_description_offset:
-  .byte 12  ; (byte of action_0_description in actions_pointers)
+  .byte 16  ; (byte of action_0_description in actions_pointers)
 action_record_length:
-  .byte 14  ; (total .word bytes per action record)
+  .byte 18  ; (total .word bytes per action record)
 
 ; ── Action 0: LEVANTARSE ──────────────────────────
 action_0_id:
@@ -156,6 +186,12 @@ action_0_screen:
 
 action_0_cost:
   .byte 15
+
+action_0_enemy_probability:
+  .byte 0
+
+action_0_death_probability:
+  .byte 0
 
 action_0_description:
   .ascii "Con esfuerzo, te incorporas sin saber como. Semejante derrumbe deberia haber sido mortal. El frio no duele, todavia."
@@ -181,6 +217,12 @@ action_1_screen:
 action_1_cost:
   .byte 15
 
+action_1_enemy_probability:
+  .byte 0
+
+action_1_death_probability:
+  .byte 0
+
 action_1_description:
   .ascii "Desde el suelo solo se ve oscuridad"
   .ascii "e"
@@ -204,6 +246,12 @@ action_2_screen:
 
 action_2_cost:
   .byte 15
+
+action_2_enemy_probability:
+  .byte 0
+
+action_2_death_probability:
+  .byte 0
 
 action_2_description:
   .ascii "Intentas gritar, pero tu boca esta llena de agua"
@@ -229,6 +277,12 @@ action_3_screen:
 action_3_cost:
   .byte 15
 
+action_3_enemy_probability:
+  .byte 0
+
+action_3_death_probability:
+  .byte 0
+
 action_3_description:
   .ascii "Miras la Entrada"
   .ascii "e"
@@ -252,6 +306,12 @@ action_4_screen:
 
 action_4_cost:
   .byte 10
+
+action_4_enemy_probability:
+  .byte 0
+
+action_4_death_probability:
+  .byte 0
 
 action_4_description:
   .ascii "El eco tarda demasiado en volver. Sientes que algo se mueve encima de ti. Debe ser tu imaginacion, te repites."
@@ -277,6 +337,12 @@ action_5_screen:
 action_5_cost:
   .byte 5
 
+action_5_enemy_probability:
+  .byte 0
+
+action_5_death_probability:
+  .byte 0
+
 action_5_description:
   .ascii "La linterna se "
   .ascii "e"
@@ -301,6 +367,12 @@ action_6_screen:
 action_6_cost:
   .byte 20
 
+action_6_enemy_probability:
+  .byte 0
+
+action_6_death_probability:
+  .byte 0
+
 action_6_description:
   .ascii "Te dispones a explorar el camino que se abre en la oscuridad."
   .ascii "e"
@@ -323,6 +395,12 @@ action_7_screen:
   .byte 2  ; screen id
 
 action_7_cost:
+  .byte 0
+
+action_7_enemy_probability:
+  .byte 0
+
+action_7_death_probability:
   .byte 0
 
 action_7_description:
@@ -349,6 +427,12 @@ action_8_screen:
 action_8_cost:
   .byte 0
 
+action_8_enemy_probability:
+  .byte 0
+
+action_8_death_probability:
+  .byte 0
+
 action_8_description:
   .ascii "Y entras en la caverna misteriosa, el tiempo esta en tu contra"
   .ascii "e"
@@ -371,6 +455,12 @@ action_9_screen:
   .byte 3  ; screen id
 
 action_9_cost:
+  .byte 0
+
+action_9_enemy_probability:
+  .byte 0
+
+action_9_death_probability:
   .byte 0
 
 action_9_description:
@@ -397,6 +487,12 @@ action_10_screen:
 action_10_cost:
   .byte 20
 
+action_10_enemy_probability:
+  .byte 0
+
+action_10_death_probability:
+  .byte 0
+
 action_10_description:
   .ascii "Entre las marcas notas un extraño dibujo"
   .ascii "e"
@@ -421,6 +517,12 @@ action_11_screen:
 action_11_cost:
   .byte 20
 
+action_11_enemy_probability:
+  .byte 0
+
+action_11_death_probability:
+  .byte 0
+
 action_11_description:
   .ascii "Intentas mover las rocas de la entrada."
   .ascii "e"
@@ -444,6 +546,12 @@ action_12_screen:
 
 action_12_cost:
   .byte 20
+
+action_12_enemy_probability:
+  .byte 0
+
+action_12_death_probability:
+  .byte 0
 
 action_12_description:
   .ascii "Por un momento consideras que mover toneladas de rocas sin equipamiento indicado tal vez sea inutil. Explorar la caverna, aun sin conocerla, puede tener mejores resultados."

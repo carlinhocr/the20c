@@ -32,12 +32,14 @@ def to_asm(actions):
     offset = 0
 
     # Captured from action 0 for offset labels emitted after all entries
-    act0_name_offset        = None
-    act0_sensor_id_offset   = None
-    act0_sensor_active_offset   = None    
-    act0_description_offset = None
-    act0_screen_offset      = None
-    act0_record_length      = None
+    act0_name_offset              = None
+    act0_sensor_id_offset         = None
+    act0_sensor_active_offset     = None
+    act0_description_offset       = None
+    act0_screen_offset            = None
+    act0_enemy_probability_offset = None
+    act0_death_probability_offset = None
+    act0_record_length            = None
 
     for index, (key, act) in enumerate(actions.items()):
         act_id = act.get("ID", str(index)).strip()
@@ -52,16 +54,20 @@ def to_asm(actions):
         lines.append(f"  .word {label}_sensor_id     ; {name} sensor_id     [{offset},{offset+1}]") ; _sid = offset ; offset += 2
         lines.append(f"  .word {label}_sensor_active ; {name} sensor_active [{offset},{offset+1}]") ; _act = offset ;offset += 2
         lines.append(f"  .word {label}_screen        ; {name} screen        [{offset},{offset+1}]") ; _scr = offset ; offset += 2
-        lines.append(f"  .word {label}_cost          ; {name} cost          [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_description   ; {name} description   [{offset},{offset+1}]") ; _dsc = offset ; offset += 2
+        lines.append(f"  .word {label}_cost              ; {name} cost              [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_enemy_probability ; {name} enemy_probability [{offset},{offset+1}]") ; _enm = offset ; offset += 2
+        lines.append(f"  .word {label}_death_probability ; {name} death_probability [{offset},{offset+1}]") ; _dth = offset ; offset += 2
+        lines.append(f"  .word {label}_description       ; {name} description       [{offset},{offset+1}]") ; _dsc = offset ; offset += 2
 
         if index == 0:
-            act0_name_offset        = _nam
-            act0_sensor_id_offset   = _sid
-            act0_sensor_active_offset = _act    
-            act0_screen_offset      = _scr
-            act0_description_offset = _dsc
-            act0_record_length      = offset - start_offset  # 14 bytes (7 x .word)
+            act0_name_offset              = _nam
+            act0_sensor_id_offset         = _sid
+            act0_sensor_active_offset     = _act
+            act0_screen_offset            = _scr
+            act0_enemy_probability_offset = _enm
+            act0_death_probability_offset = _dth
+            act0_description_offset       = _dsc
+            act0_record_length            = offset - start_offset  # 18 bytes (9 x .word)
 
     # -- Offset labels, placed after all action entries
     lines.append(f"action_name_offset:")
@@ -69,9 +75,13 @@ def to_asm(actions):
     lines.append(f"action_sensor_id_offset:")
     lines.append(f"  .byte {act0_sensor_id_offset}  ; (byte of action_0_sensor_id in actions_pointers)")
     lines.append(f"action_sensor_active_offset:")
-    lines.append(f"  .byte {act0_sensor_active_offset}  ; (byte of action_0_sensor_id in actions_pointers)")    
+    lines.append(f"  .byte {act0_sensor_active_offset}  ; (byte of action_0_sensor_active in actions_pointers)")
     lines.append(f"action_screen_offset:")
     lines.append(f"  .byte {act0_screen_offset}  ; (byte of action_0_screen in actions_pointers)")
+    lines.append(f"action_enemy_probability_offset:")
+    lines.append(f"  .byte {act0_enemy_probability_offset}  ; (byte of action_0_enemy_probability in actions_pointers)")
+    lines.append(f"action_death_probability_offset:")
+    lines.append(f"  .byte {act0_death_probability_offset}  ; (byte of action_0_death_probability in actions_pointers)")
     lines.append(f"action_description_offset:")
     lines.append(f"  .byte {act0_description_offset}  ; (byte of action_0_description in actions_pointers)")
     lines.append(f"action_record_length:")
@@ -146,6 +156,26 @@ def to_asm(actions):
             cost_val = 0
         lines.append(f"{label}_cost:")
         lines.append(f"  .byte {cost_val}")
+        lines.append("")
+
+        # Enemy Probability
+        try:
+            enemy_prob_val = int(act.get("EnemyProbability", 0))
+            enemy_prob_val = max(0, min(255, enemy_prob_val))
+        except (ValueError, TypeError):
+            enemy_prob_val = 0
+        lines.append(f"{label}_enemy_probability:")
+        lines.append(f"  .byte {enemy_prob_val}")
+        lines.append("")
+
+        # Death Probability
+        try:
+            death_prob_val = int(act.get("DeathProbability", 0))
+            death_prob_val = max(0, min(255, death_prob_val))
+        except (ValueError, TypeError):
+            death_prob_val = 0
+        lines.append(f"{label}_death_probability:")
+        lines.append(f"  .byte {death_prob_val}")
         lines.append("")
 
         # Description
