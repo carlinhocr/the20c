@@ -10,8 +10,8 @@ JSON_ACTIONS_FILE  = "acs_actions.json"
 JSON_PUZZLES_FILE  = "acs_puzzles.json"
 JSON_SENSORS_FILE  = "acs_sensors.json"
 
-SECTIONS = ["Puzzles", "Screens", "Actions", "Sensors", "Map", "Map Actions"]
-ICONS    = ["🧩",      "🖥️",      "⚡",       "📡",       "🗺️",  "🔀"]
+SECTIONS = ["Screens", "Actions", "Sensors", "Map Actions"]
+ICONS    = ["🖥️",      "⚡",       "📡",       "🔀"]
 
 FIELD_STYLE = {
     "bg": "#1e0f05", "fg": "#f0c040", "insertbackground": "#f0c040",
@@ -519,10 +519,6 @@ def open_screens_window():
     form = make_scrollable_form(win)
 
     entries       = {}
-    exit_vars     = {}
-    exit_combos   = {}
-    puzzle_vars   = {}
-    puzzle_combos = {}
     action_vars   = {}
     action_combos = {}
 
@@ -545,29 +541,11 @@ def open_screens_window():
     add_field(form, "ID",   entries)
     add_field(form, "Name", entries)
 
-    # ── Exits ────────────────────────────────────────────────
-    section_lbl(form, "— Exits (Screen Names) —")
-    exits_frame = tk.Frame(form, bg="#2b1a0e")
-    exits_frame.pack(fill="x")
-    add_grid_combos(exits_frame, ["North", "South", "East", "West"],
-                    get_screen_names, exit_vars, exit_combos)
-
-    # ── Puzzles ──────────────────────────────────────────────
-    section_lbl(form, "— Puzzles —")
-    puz_frame = tk.Frame(form, bg="#2b1a0e")
-    puz_frame.pack(fill="x")
-    add_grid_combos(puz_frame, ["Puzzle1", "Puzzle2"],
-                    get_puzzle_names, puzzle_vars, puzzle_combos)
-
-    # ── Actions (2 rows of 3 = 6 total) ──────────────────────
+    # ── Actions (4 total) ─────────────────────────────────────
     section_lbl(form, "— Actions in Screen —")
     act_frame1 = tk.Frame(form, bg="#2b1a0e")
     act_frame1.pack(fill="x")
-    add_grid_combos(act_frame1, ["Action1", "Action2", "Action3"],
-                    get_action_names, action_vars, action_combos)
-    act_frame2 = tk.Frame(form, bg="#2b1a0e")
-    act_frame2.pack(fill="x", pady=(6, 0))
-    add_grid_combos(act_frame2, ["Action4", "Action5", "Action6"],
+    add_grid_combos(act_frame1, ["Action1", "Action2", "Action3", "Action4"],
                     get_action_names, action_vars, action_combos)
 
     # ── Description ──────────────────────────────────────────
@@ -608,10 +586,6 @@ def open_screens_window():
         for f in list(entries.keys()):
             entries[f].delete(0, tk.END)
             entries[f].insert(0, rec.get(f, ""))
-        for d, v in exit_vars.items():
-            v.set(rec.get(d, ""))
-        for p, v in puzzle_vars.items():
-            v.set(rec.get(p, ""))
         for a, v in action_vars.items():
             v.set(rec.get(a, ""))
         desc_text.delete("1.0", tk.END)
@@ -628,10 +602,6 @@ def open_screens_window():
 
     def on_save():
         data = {f: entries[f].get() for f in entries}
-        for d, v in exit_vars.items():
-            data[d] = v.get()
-        for p, v in puzzle_vars.items():
-            data[p] = v.get()
         for a, v in action_vars.items():
             data[a] = v.get()
         data["Description"]   = desc_text.get("1.0", "end-1c")
@@ -640,11 +610,7 @@ def open_screens_window():
         data["AsciiDrawing"]  = ascii_text.get("1.0", "end-1c")
         save_to_json(JSON_SCREENS_FILE, "ID", data, slbl)
         updated = screen_names_by_id()
-        for cb in exit_combos.values():
-            cb["values"] = [""] + updated
         load_dd["values"] = updated
-        for cb in puzzle_combos.values():
-            cb["values"] = get_puzzle_names()
         for cb in action_combos.values():
             cb["values"] = get_action_names()
 
