@@ -1208,7 +1208,7 @@ checkActionVisibility:
   sta actionCheckVectorLow
   iny 
   lda (pivotZpLow),Y
-  sta actionCheckVectorLow  
+  sta actionCheckVectorHigh  
   lda (actionDataVectorLow),Y
   sta currentActionHideWater
   lda action_hide_fear_offset
