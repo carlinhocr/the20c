@@ -1209,16 +1209,16 @@ checkActionVisibility:
   iny 
   lda (pivotZpLow),Y
   sta actionCheckVectorHigh  
-  lda (actionDataVectorLow),Y
+  lda (actionCheckVectorLow),Y
   sta currentActionHideWater
-  lda action_hide_fear_offset
-  tay
-  lda (pivotZpLow),Y
-  sta currentActionHideFear
-  lda action_hide_flashlight_offset
-  tay
-  lda (pivotZpLow),Y
-  sta currentActionHideFlashlightOff
+  ; lda action_hide_fear_offset
+  ; tay
+  ; lda (pivotZpLow),Y
+  ; sta currentActionHideFear
+  ; lda action_hide_flashlight_offset
+  ; tay
+  ; lda (pivotZpLow),Y
+  ; sta currentActionHideFlashlightOff
   lda currentActionHideWater
   clc 
   adc #$30
