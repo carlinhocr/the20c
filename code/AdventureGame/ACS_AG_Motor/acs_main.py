@@ -5,13 +5,14 @@ import sys
 import tkinter as tk
 from tkinter import messagebox, scrolledtext, ttk
 
-JSON_SCREENS_FILE  = "acs_screens.json"
-JSON_ACTIONS_FILE  = "acs_actions.json"
-JSON_PUZZLES_FILE  = "acs_puzzles.json"
-JSON_SENSORS_FILE  = "acs_sensors.json"
+JSON_SCREENS_FILE    = "acs_screens.json"
+JSON_ACTIONS_FILE    = "acs_actions.json"
+JSON_PUZZLES_FILE    = "acs_puzzles.json"
+JSON_SENSORS_FILE    = "acs_sensors.json"
+JSON_DASHBOARD_FILE  = "acs_dashboard.json"
 
-SECTIONS = ["Screens", "Actions", "Sensors", "Map Actions"]
-ICONS    = ["🖥️",      "⚡",       "📡",       "🔀"]
+SECTIONS = ["Screens", "Actions", "Sensors", "Map Actions", "Dashboard"]
+ICONS    = ["🖥️",      "⚡",       "📡",       "🔀",          "📊"]
 
 FIELD_STYLE = {
     "bg": "#2E2270", "fg": "#FFFFFF", "insertbackground": "#FFFFFF",
@@ -1298,9 +1299,10 @@ def open_sensors_window():
 # ══════════════════════════════════════════════════════════════════════════════
 
 PARSER_SCRIPTS = [
-    ("acs_parser_sensors.py",  "📡  Sensors"),
-    ("acs_parser_actions.py",  "⚡  Actions"),
-    ("acs_parser_screens.py",  "🖥️  Screens"),
+    ("acs_parser_sensors.py",          "📡  Sensors"),
+    ("acs_parser_actions.py",          "⚡  Actions"),
+    ("acs_parser_screens.py",          "🖥️  Screens"),
+    ("acs_parser_dashboard.py", "📊  Dashboard"),
 ]
 
 
@@ -1793,17 +1795,137 @@ def open_map_actions_window():
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  Dashboard window
+# ══════════════════════════════════════════════════════════════════════════════
+
+def open_dashboard_window():
+    win = tk.Toplevel()
+    win.title("Dashboard")
+    win.geometry("500x700")
+    win.configure(bg="#40318D")
+    win.resizable(False, True)
+    apply_combo_style()
+
+    tk.Label(win, text="📊  Dashboard Editor", font=("Courier New", 18, "bold"),
+             bg="#40318D", fg="#FFFFFF", pady=16).pack()
+    tk.Frame(win, bg="#7869C4", height=2).pack(fill="x", padx=20, pady=(0, 0))
+
+    form = make_scrollable_form(win)
+
+    entries = {}
+    water_spins = {}
+
+    # ── Load existing ─────────────────────────────────────────
+    def dashboard_names_by_id():
+        data = load_json(JSON_DASHBOARD_FILE)
+        ordered = sorted(data.values(), key=lambda r: int(r.get("ID", 0)))
+        return [r.get("Name", r.get("ID", "")) for r in ordered]
+
+    section_lbl(form, "— Load Existing Dashboard —")
+    load_var = tk.StringVar(value="— select to load —")
+    load_dd  = ttk.Combobox(form, textvariable=load_var,
+                            values=dashboard_names_by_id(),
+                            state="readonly", font=("Courier New", 11))
+    load_dd.pack(fill="x", ipady=3)
+
+    # ── New Dashboard button ──────────────────────────────────
+    def on_new_dashboard():
+        data = load_json(JSON_DASHBOARD_FILE)
+        if data:
+            max_id = max(int(rec.get("ID", 0)) for rec in data.values())
+        else:
+            max_id = -1
+        new_id = str(max_id + 1)
+        for f in list(entries.keys()):
+            entries[f].delete(0, tk.END)
+        entries["ID"].insert(0, new_id)
+        for wvar in water_spins.values():
+            wvar.set(0)
+        slbl.config(text=f"✔  New dashboard (ID {new_id}) — fill in details and save", fg="#50e878")
+
+    tk.Button(form, text="✚  New Dashboard", font=("Courier New", 11, "bold"),
+              bg="#7869C4", fg="#000000", activebackground="#A09BE0",
+              activeforeground="#000000", relief="raised", bd=3,
+              cursor="hand2", padx=16, pady=4, command=on_new_dashboard).pack(fill="x", pady=(6, 0))
+
+    tk.Frame(form, bg="#7869C4", height=2).pack(fill="x", pady=(10, 0))
+
+    # ── Identity ──────────────────────────────────────────────
+    section_lbl(form, "— Identity —")
+    add_field(form, "ID",   entries)
+    add_field(form, "Name", entries)
+
+    # ── Water Levels (0–600 seconds) ──────────────────────────
+    section_lbl(form, "— Water Levels (0–600 seconds) —")
+    for i in range(4):
+        label = f"WaterLevel{i}"
+        row = tk.Frame(form, bg="#40318D")
+        row.pack(fill="x", pady=(4, 0))
+        tk.Label(row, text=f"Water Level {i}:", **LABEL_STYLE).pack(side="left")
+        var = tk.IntVar(value=0)
+        spin = tk.Spinbox(
+            row, from_=0, to=600, textvariable=var, width=6,
+            bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+            buttonbackground="#7869C4", relief="sunken", bd=2,
+            font=("Courier New", 11), justify="left",
+        )
+        spin.pack(side="left", padx=(8, 0), ipady=4)
+        tk.Label(row, text="seconds", bg="#40318D", fg="#A09BE0",
+                 font=("Courier New", 10)).pack(side="left", padx=(6, 0))
+        water_spins[label] = var
+
+    # ── Save ──────────────────────────────────────────────────
+    tk.Frame(form, bg="#7869C4", height=2).pack(fill="x", pady=(14, 8))
+    slbl = status_lbl(form)
+
+    def on_load(e=None):
+        name = load_var.get()
+        data = load_json(JSON_DASHBOARD_FILE)
+        rec = next((r for r in data.values() if r.get("Name", "") == name), None)
+        if not rec:
+            return
+        for f in list(entries.keys()):
+            entries[f].delete(0, tk.END)
+            entries[f].insert(0, rec.get(f, ""))
+        for i in range(4):
+            label = f"WaterLevel{i}"
+            try:
+                water_spins[label].set(int(rec.get(label, 0)))
+            except (ValueError, TypeError):
+                water_spins[label].set(0)
+        slbl.config(text=f"✔  Loaded '{name}'", fg="#A09BE0")
+
+    load_dd.bind("<<ComboboxSelected>>", on_load)
+
+    def on_save():
+        data = {f: entries[f].get() for f in entries}
+        for i in range(4):
+            label = f"WaterLevel{i}"
+            try:
+                val = int(water_spins[label].get())
+                val = max(0, min(600, val))
+            except (ValueError, TypeError):
+                val = 0
+            data[label] = val
+        save_to_json(JSON_DASHBOARD_FILE, "ID", data, slbl)
+        load_dd["values"] = dashboard_names_by_id()
+
+    save_btn(form, "💾  Save Dashboard", on_save)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  Dispatch
 # ══════════════════════════════════════════════════════════════════════════════
 
 def open_window(title):
     dispatch = {
-        "Screens":     open_screens_window,
-        "Actions":     open_actions_window,
-        "Puzzles":     open_puzzles_window,
-        "Sensors":     open_sensors_window,
-        "Map":         open_map_window,
-        "Map Actions": open_map_actions_window,
+        "Screens":           open_screens_window,
+        "Actions":           open_actions_window,
+        "Puzzles":           open_puzzles_window,
+        "Sensors":           open_sensors_window,
+        "Map":               open_map_window,
+        "Map Actions":       open_map_actions_window,
+        "Dashboard":  open_dashboard_window,
     }
     if title in dispatch:
         dispatch[title]()
@@ -1827,7 +1949,7 @@ def open_window(title):
 def main():
     root = tk.Tk()
     root.title("Adventure Construction Set")
-    root.geometry("760x260")
+    root.geometry("920x260")
     root.configure(bg="#352880")
     root.resizable(False, False)
 
