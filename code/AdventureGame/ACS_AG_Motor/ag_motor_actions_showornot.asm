@@ -1205,6 +1205,11 @@ checkActionVisibility:
   lda action_hide_water_offset
   tay
   lda (pivotZpLow),Y
+  sta actionDataVectorLow
+  iny 
+  lda (pivotZpLow),Y
+  sta actionDataVectorHigh  
+  lda (actionDataVectorLow),Y
   sta currentActionHideWater
   lda action_hide_fear_offset
   tay
