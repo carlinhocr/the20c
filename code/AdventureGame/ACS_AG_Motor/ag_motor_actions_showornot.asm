@@ -204,7 +204,7 @@ watertLevel=$024a
 actionHidden=$024b
 highWaterLevel=$024c
 currentActionHideWater=$024d
-currentActionFearWater=$024e
+currentActionHideFear=$024e
 currentActionHideFlashlightOff=$024f
 highFearLevel=$0250
 
@@ -1209,12 +1209,16 @@ checkActionVisibility:
   lda action_hide_fear_offset
   tay
   lda (pivotZpLow),Y
-  sta currentActionFearWater
+  sta currentActionHideFear
   lda action_hide_flashlight_offset
   tay
   lda (pivotZpLow),Y
   sta currentActionHideFlashlightOff
   lda currentActionHideWater
+  clc 
+  adc #$30
+  jsr send_rs232_char
+  lda currentActionHideWater  
   beq checkActionVisibility_notHide ;not hide on water level
   ;here we check the water level
   lda waterLevel ;current water level
