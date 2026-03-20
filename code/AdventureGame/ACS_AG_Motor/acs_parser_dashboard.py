@@ -26,12 +26,14 @@ def to_asm(dashboards):
     lines.append("dashboard_pointers:")
     offset = 0
 
-    rec0_name_offset   = None
-    rec0_water0_offset = None
-    rec0_water1_offset = None
-    rec0_water2_offset = None
-    rec0_water3_offset = None
-    rec0_record_length = None
+    rec0_name_offset       = None
+    rec0_total_sim_offset  = None
+    rec0_total_flash_offset = None
+    rec0_water0_offset     = None
+    rec0_water1_offset     = None
+    rec0_water2_offset     = None
+    rec0_water3_offset     = None
+    rec0_record_length     = None
 
     for index, (key, rec) in enumerate(dashboards.items()):
         rec_id = rec.get("ID", str(index)).strip()
@@ -41,24 +43,32 @@ def to_asm(dashboards):
         start_offset = offset
 
         lines.append(f"dashboard_pointer_{rec_id}:")
-        lines.append(f"  .word {label}_id           ; {name} id           [{offset},{offset+1}]") ; offset += 2
-        lines.append(f"  .word {label}_name         ; {name} name         [{offset},{offset+1}]") ; _nam = offset ; offset += 2
-        lines.append(f"  .word {label}_water_level0 ; {name} water_level0 [{offset},{offset+1}]") ; _w0 = offset ; offset += 2
-        lines.append(f"  .word {label}_water_level1 ; {name} water_level1 [{offset},{offset+1}]") ; _w1 = offset ; offset += 2
-        lines.append(f"  .word {label}_water_level2 ; {name} water_level2 [{offset},{offset+1}]") ; _w2 = offset ; offset += 2
-        lines.append(f"  .word {label}_water_level3 ; {name} water_level3 [{offset},{offset+1}]") ; _w3 = offset ; offset += 2
+        lines.append(f"  .word {label}_id               ; {name} id               [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_name             ; {name} name             [{offset},{offset+1}]") ; _nam = offset ; offset += 2
+        lines.append(f"  .word {label}_total_sim_time   ; {name} total_sim_time   [{offset},{offset+1}]") ; _tst = offset ; offset += 2
+        lines.append(f"  .word {label}_total_flash_time ; {name} total_flash_time [{offset},{offset+1}]") ; _tft = offset ; offset += 2
+        lines.append(f"  .word {label}_water_level0     ; {name} water_level0     [{offset},{offset+1}]") ; _w0 = offset ; offset += 2
+        lines.append(f"  .word {label}_water_level1     ; {name} water_level1     [{offset},{offset+1}]") ; _w1 = offset ; offset += 2
+        lines.append(f"  .word {label}_water_level2     ; {name} water_level2     [{offset},{offset+1}]") ; _w2 = offset ; offset += 2
+        lines.append(f"  .word {label}_water_level3     ; {name} water_level3     [{offset},{offset+1}]") ; _w3 = offset ; offset += 2
 
         if index == 0:
-            rec0_name_offset   = _nam
-            rec0_water0_offset = _w0
-            rec0_water1_offset = _w1
-            rec0_water2_offset = _w2
-            rec0_water3_offset = _w3
-            rec0_record_length = offset - start_offset
+            rec0_name_offset        = _nam
+            rec0_total_sim_offset   = _tst
+            rec0_total_flash_offset = _tft
+            rec0_water0_offset      = _w0
+            rec0_water1_offset      = _w1
+            rec0_water2_offset      = _w2
+            rec0_water3_offset      = _w3
+            rec0_record_length      = offset - start_offset
 
     # ── Offset labels ─────────────────────────────────────────────────────
     lines.append(f"dashboard_name_offset:")
     lines.append(f"  .byte {rec0_name_offset}  ; (byte of dashboard_0_name in pointers)")
+    lines.append(f"dashboard_total_sim_time_offset:")
+    lines.append(f"  .byte {rec0_total_sim_offset}  ; (byte of dashboard_0_total_sim_time in pointers)")
+    lines.append(f"dashboard_total_flash_time_offset:")
+    lines.append(f"  .byte {rec0_total_flash_offset}  ; (byte of dashboard_0_total_flash_time in pointers)")
     lines.append(f"dashboard_water_level0_offset:")
     lines.append(f"  .byte {rec0_water0_offset}  ; (byte of dashboard_0_water_level0 in pointers)")
     lines.append(f"dashboard_water_level1_offset:")
@@ -90,12 +100,38 @@ def to_asm(dashboards):
         lines.append('  .ascii "e"')
         lines.append("")
 
+        # Total Simulation Time (stored as 2-byte hex, high byte first)
+        try:
+            tsim_val = int(rec.get("TotalSimulationTime", 0))
+            tsim_val = max(0, min(1023, tsim_val))
+        except (ValueError, TypeError):
+            tsim_val = 0
+        hi = (tsim_val >> 8) & 0xFF
+        lo = tsim_val & 0xFF
+        lines.append(f"{label}_total_sim_time:")
+        lines.append(f"  .byte ${hi:02X}  ; high byte  (decimal {tsim_val})")
+        lines.append(f"  .byte ${lo:02X}  ; low byte")
+        lines.append("")
+
+        # Total Flashlight Time (stored as 2-byte hex, high byte first)
+        try:
+            tflash_val = int(rec.get("TotalFlashlightTime", 0))
+            tflash_val = max(0, min(1023, tflash_val))
+        except (ValueError, TypeError):
+            tflash_val = 0
+        hi = (tflash_val >> 8) & 0xFF
+        lo = tflash_val & 0xFF
+        lines.append(f"{label}_total_flash_time:")
+        lines.append(f"  .byte ${hi:02X}  ; high byte  (decimal {tflash_val})")
+        lines.append(f"  .byte ${lo:02X}  ; low byte")
+        lines.append("")
+
         # Water Levels 0–3 (stored as 2-byte hex, high byte first)
         for i in range(4):
             wl_key = f"WaterLevel{i}"
             try:
                 wl_val = int(rec.get(wl_key, 0))
-                wl_val = max(0, min(600, wl_val))
+                wl_val = max(0, min(1023, wl_val))
             except (ValueError, TypeError):
                 wl_val = 0
             hi = (wl_val >> 8) & 0xFF

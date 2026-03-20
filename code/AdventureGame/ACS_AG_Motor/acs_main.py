@@ -1841,6 +1841,8 @@ def open_dashboard_window():
         entries["ID"].insert(0, new_id)
         for wvar in water_spins.values():
             wvar.set(0)
+        total_sim_var.set(0)
+        total_flash_var.set(0)
         slbl.config(text=f"✔  New dashboard (ID {new_id}) — fill in details and save", fg="#50e878")
 
     tk.Button(form, text="✚  New Dashboard", font=("Courier New", 11, "bold"),
@@ -1855,8 +1857,46 @@ def open_dashboard_window():
     add_field(form, "ID",   entries)
     add_field(form, "Name", entries)
 
-    # ── Water Levels (0–600 seconds) ──────────────────────────
-    section_lbl(form, "— Water Levels (0–600 seconds) —")
+    # ── Total Simulation Time ─────────────────────────────────
+    section_lbl(form, "— Total Simulation Time —")
+    total_sim_var = tk.IntVar(value=0)
+    total_sim_row = tk.Frame(form, bg="#40318D")
+    total_sim_row.pack(fill="x", pady=(4, 0))
+    tk.Label(total_sim_row, text="Total Simulation Time:", **LABEL_STYLE).pack(side="left")
+    total_sim_spin = tk.Spinbox(
+        total_sim_row, from_=0, to=1023, textvariable=total_sim_var, width=6,
+        bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+        buttonbackground="#7869C4", relief="sunken", bd=2,
+        font=("Courier New", 11), justify="left",
+    )
+    total_sim_spin.pack(side="left", padx=(8, 0), ipady=4)
+    tk.Label(total_sim_row, text="seconds (max 1023)", bg="#40318D", fg="#A09BE0",
+             font=("Courier New", 10)).pack(side="left", padx=(6, 0))
+
+    # ── Total Flashlight Time ─────────────────────────────────
+    section_lbl(form, "— Total Flashlight Time —")
+    total_flash_var = tk.IntVar(value=0)
+    total_flash_row = tk.Frame(form, bg="#40318D")
+    total_flash_row.pack(fill="x", pady=(4, 0))
+    tk.Label(total_flash_row, text="Total Flashlight Time:", **LABEL_STYLE).pack(side="left")
+    total_flash_spin = tk.Spinbox(
+        total_flash_row, from_=0, to=0, textvariable=total_flash_var, width=6,
+        bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+        buttonbackground="#7869C4", relief="sunken", bd=2,
+        font=("Courier New", 11), justify="left",
+    )
+    total_flash_spin.pack(side="left", padx=(8, 0), ipady=4)
+    total_flash_max_lbl = tk.Label(total_flash_row, text="seconds (max 0)", bg="#40318D", fg="#A09BE0",
+                                    font=("Courier New", 10))
+    total_flash_max_lbl.pack(side="left", padx=(6, 0))
+
+    # ── Water Levels ──────────────────────────────────────────
+    water_section_lbl = tk.Label(form, text="— Water Levels (0 seconds) —",
+                                 font=("Courier New", 11, "bold italic"),
+                                 bg="#40318D", fg="#FFFFFF")
+    water_section_lbl.pack(fill="x", pady=(14, 4))
+
+    water_spin_widgets = []
     for i in range(4):
         label = f"WaterLevel{i}"
         row = tk.Frame(form, bg="#40318D")
@@ -1864,7 +1904,7 @@ def open_dashboard_window():
         tk.Label(row, text=f"Water Level {i}:", **LABEL_STYLE).pack(side="left")
         var = tk.IntVar(value=0)
         spin = tk.Spinbox(
-            row, from_=0, to=600, textvariable=var, width=6,
+            row, from_=0, to=0, textvariable=var, width=6,
             bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
             buttonbackground="#7869C4", relief="sunken", bd=2,
             font=("Courier New", 11), justify="left",
@@ -1873,6 +1913,21 @@ def open_dashboard_window():
         tk.Label(row, text="seconds", bg="#40318D", fg="#A09BE0",
                  font=("Courier New", 10)).pack(side="left", padx=(6, 0))
         water_spins[label] = var
+        water_spin_widgets.append(spin)
+
+    def on_total_sim_changed(*_):
+        try:
+            max_val = int(total_sim_var.get())
+            max_val = max(0, min(1023, max_val))
+        except (ValueError, TypeError):
+            max_val = 0
+        water_section_lbl.config(text=f"— Water Levels (0–{max_val} seconds) —")
+        for spin in water_spin_widgets:
+            spin.config(to=max_val)
+        total_flash_spin.config(to=max_val)
+        total_flash_max_lbl.config(text=f"seconds (max {max_val})")
+
+    total_sim_var.trace_add("write", on_total_sim_changed)
 
     # ── Save ──────────────────────────────────────────────────
     tk.Frame(form, bg="#7869C4", height=2).pack(fill="x", pady=(14, 8))
@@ -1887,6 +1942,14 @@ def open_dashboard_window():
         for f in list(entries.keys()):
             entries[f].delete(0, tk.END)
             entries[f].insert(0, rec.get(f, ""))
+        try:
+            total_sim_var.set(int(rec.get("TotalSimulationTime", 0)))
+        except (ValueError, TypeError):
+            total_sim_var.set(0)
+        try:
+            total_flash_var.set(int(rec.get("TotalFlashlightTime", 0)))
+        except (ValueError, TypeError):
+            total_flash_var.set(0)
         for i in range(4):
             label = f"WaterLevel{i}"
             try:
@@ -1899,11 +1962,23 @@ def open_dashboard_window():
 
     def on_save():
         data = {f: entries[f].get() for f in entries}
+        try:
+            tsim = int(total_sim_var.get())
+            tsim = max(0, min(1023, tsim))
+        except (ValueError, TypeError):
+            tsim = 0
+        data["TotalSimulationTime"] = tsim
+        try:
+            tflash = int(total_flash_var.get())
+            tflash = max(0, min(tsim, tflash))
+        except (ValueError, TypeError):
+            tflash = 0
+        data["TotalFlashlightTime"] = tflash
         for i in range(4):
             label = f"WaterLevel{i}"
             try:
                 val = int(water_spins[label].get())
-                val = max(0, min(600, val))
+                val = max(0, min(tsim, val))
             except (ValueError, TypeError):
                 val = 0
             data[label] = val

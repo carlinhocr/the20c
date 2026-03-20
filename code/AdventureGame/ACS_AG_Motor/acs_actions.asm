@@ -28,167 +28,193 @@ action_pointer_0:
   .word action_0_screen        ; LEVANTARSE screen        [8,9]
   .word action_0_cost              ; LEVANTARSE cost              [10,11]
   .word action_0_enemy_probability ; LEVANTARSE enemy_probability [12,13]
-  .word action_0_death_probability ; LEVANTARSE death_probability [14,15]
-  .word action_0_description       ; LEVANTARSE description       [16,17]
-  .word action_0_hide_water         ; LEVANTARSE hide_water         [18,19]
-  .word action_0_hide_fear          ; LEVANTARSE hide_fear          [20,21]
-  .word action_0_hide_flashlight    ; LEVANTARSE hide_flashlight    [22,23]
+  .word action_0_reset_enemy_prob  ; LEVANTARSE reset_enemy_prob  [14,15]
+  .word action_0_death_probability ; LEVANTARSE death_probability [16,17]
+  .word action_0_description       ; LEVANTARSE description       [18,19]
+  .word action_0_desc_action_failed ; LEVANTARSE desc_action_failed [20,21]
+  .word action_0_hide_water         ; LEVANTARSE hide_water         [22,23]
+  .word action_0_hide_fear          ; LEVANTARSE hide_fear          [24,25]
+  .word action_0_hide_flashlight    ; LEVANTARSE hide_flashlight    [26,27]
 action_pointer_1:
-  .word action_1_id            ; MIRAR ALREDEDOR id            [24,25]
-  .word action_1_name          ; MIRAR ALREDEDOR name          [26,27]
-  .word action_1_sensor_id     ; MIRAR ALREDEDOR sensor_id     [28,29]
-  .word action_1_sensor_active ; MIRAR ALREDEDOR sensor_active [30,31]
-  .word action_1_screen        ; MIRAR ALREDEDOR screen        [32,33]
-  .word action_1_cost              ; MIRAR ALREDEDOR cost              [34,35]
-  .word action_1_enemy_probability ; MIRAR ALREDEDOR enemy_probability [36,37]
-  .word action_1_death_probability ; MIRAR ALREDEDOR death_probability [38,39]
-  .word action_1_description       ; MIRAR ALREDEDOR description       [40,41]
-  .word action_1_hide_water         ; MIRAR ALREDEDOR hide_water         [42,43]
-  .word action_1_hide_fear          ; MIRAR ALREDEDOR hide_fear          [44,45]
-  .word action_1_hide_flashlight    ; MIRAR ALREDEDOR hide_flashlight    [46,47]
+  .word action_1_id            ; MIRAR ALREDEDOR id            [28,29]
+  .word action_1_name          ; MIRAR ALREDEDOR name          [30,31]
+  .word action_1_sensor_id     ; MIRAR ALREDEDOR sensor_id     [32,33]
+  .word action_1_sensor_active ; MIRAR ALREDEDOR sensor_active [34,35]
+  .word action_1_screen        ; MIRAR ALREDEDOR screen        [36,37]
+  .word action_1_cost              ; MIRAR ALREDEDOR cost              [38,39]
+  .word action_1_enemy_probability ; MIRAR ALREDEDOR enemy_probability [40,41]
+  .word action_1_reset_enemy_prob  ; MIRAR ALREDEDOR reset_enemy_prob  [42,43]
+  .word action_1_death_probability ; MIRAR ALREDEDOR death_probability [44,45]
+  .word action_1_description       ; MIRAR ALREDEDOR description       [46,47]
+  .word action_1_desc_action_failed ; MIRAR ALREDEDOR desc_action_failed [48,49]
+  .word action_1_hide_water         ; MIRAR ALREDEDOR hide_water         [50,51]
+  .word action_1_hide_fear          ; MIRAR ALREDEDOR hide_fear          [52,53]
+  .word action_1_hide_flashlight    ; MIRAR ALREDEDOR hide_flashlight    [54,55]
 action_pointer_2:
-  .word action_2_id            ; GRITAR POR AYUDA id            [48,49]
-  .word action_2_name          ; GRITAR POR AYUDA name          [50,51]
-  .word action_2_sensor_id     ; GRITAR POR AYUDA sensor_id     [52,53]
-  .word action_2_sensor_active ; GRITAR POR AYUDA sensor_active [54,55]
-  .word action_2_screen        ; GRITAR POR AYUDA screen        [56,57]
-  .word action_2_cost              ; GRITAR POR AYUDA cost              [58,59]
-  .word action_2_enemy_probability ; GRITAR POR AYUDA enemy_probability [60,61]
-  .word action_2_death_probability ; GRITAR POR AYUDA death_probability [62,63]
-  .word action_2_description       ; GRITAR POR AYUDA description       [64,65]
-  .word action_2_hide_water         ; GRITAR POR AYUDA hide_water         [66,67]
-  .word action_2_hide_fear          ; GRITAR POR AYUDA hide_fear          [68,69]
-  .word action_2_hide_flashlight    ; GRITAR POR AYUDA hide_flashlight    [70,71]
+  .word action_2_id            ; GRITAR POR AYUDA id            [56,57]
+  .word action_2_name          ; GRITAR POR AYUDA name          [58,59]
+  .word action_2_sensor_id     ; GRITAR POR AYUDA sensor_id     [60,61]
+  .word action_2_sensor_active ; GRITAR POR AYUDA sensor_active [62,63]
+  .word action_2_screen        ; GRITAR POR AYUDA screen        [64,65]
+  .word action_2_cost              ; GRITAR POR AYUDA cost              [66,67]
+  .word action_2_enemy_probability ; GRITAR POR AYUDA enemy_probability [68,69]
+  .word action_2_reset_enemy_prob  ; GRITAR POR AYUDA reset_enemy_prob  [70,71]
+  .word action_2_death_probability ; GRITAR POR AYUDA death_probability [72,73]
+  .word action_2_description       ; GRITAR POR AYUDA description       [74,75]
+  .word action_2_desc_action_failed ; GRITAR POR AYUDA desc_action_failed [76,77]
+  .word action_2_hide_water         ; GRITAR POR AYUDA hide_water         [78,79]
+  .word action_2_hide_fear          ; GRITAR POR AYUDA hide_fear          [80,81]
+  .word action_2_hide_flashlight    ; GRITAR POR AYUDA hide_flashlight    [82,83]
 action_pointer_3:
-  .word action_3_id            ; MIRAR ENTRADA id            [72,73]
-  .word action_3_name          ; MIRAR ENTRADA name          [74,75]
-  .word action_3_sensor_id     ; MIRAR ENTRADA sensor_id     [76,77]
-  .word action_3_sensor_active ; MIRAR ENTRADA sensor_active [78,79]
-  .word action_3_screen        ; MIRAR ENTRADA screen        [80,81]
-  .word action_3_cost              ; MIRAR ENTRADA cost              [82,83]
-  .word action_3_enemy_probability ; MIRAR ENTRADA enemy_probability [84,85]
-  .word action_3_death_probability ; MIRAR ENTRADA death_probability [86,87]
-  .word action_3_description       ; MIRAR ENTRADA description       [88,89]
-  .word action_3_hide_water         ; MIRAR ENTRADA hide_water         [90,91]
-  .word action_3_hide_fear          ; MIRAR ENTRADA hide_fear          [92,93]
-  .word action_3_hide_flashlight    ; MIRAR ENTRADA hide_flashlight    [94,95]
+  .word action_3_id            ; MIRAR ENTRADA id            [84,85]
+  .word action_3_name          ; MIRAR ENTRADA name          [86,87]
+  .word action_3_sensor_id     ; MIRAR ENTRADA sensor_id     [88,89]
+  .word action_3_sensor_active ; MIRAR ENTRADA sensor_active [90,91]
+  .word action_3_screen        ; MIRAR ENTRADA screen        [92,93]
+  .word action_3_cost              ; MIRAR ENTRADA cost              [94,95]
+  .word action_3_enemy_probability ; MIRAR ENTRADA enemy_probability [96,97]
+  .word action_3_reset_enemy_prob  ; MIRAR ENTRADA reset_enemy_prob  [98,99]
+  .word action_3_death_probability ; MIRAR ENTRADA death_probability [100,101]
+  .word action_3_description       ; MIRAR ENTRADA description       [102,103]
+  .word action_3_desc_action_failed ; MIRAR ENTRADA desc_action_failed [104,105]
+  .word action_3_hide_water         ; MIRAR ENTRADA hide_water         [106,107]
+  .word action_3_hide_fear          ; MIRAR ENTRADA hide_fear          [108,109]
+  .word action_3_hide_flashlight    ; MIRAR ENTRADA hide_flashlight    [110,111]
 action_pointer_4:
-  .word action_4_id            ; GRITAR id            [96,97]
-  .word action_4_name          ; GRITAR name          [98,99]
-  .word action_4_sensor_id     ; GRITAR sensor_id     [100,101]
-  .word action_4_sensor_active ; GRITAR sensor_active [102,103]
-  .word action_4_screen        ; GRITAR screen        [104,105]
-  .word action_4_cost              ; GRITAR cost              [106,107]
-  .word action_4_enemy_probability ; GRITAR enemy_probability [108,109]
-  .word action_4_death_probability ; GRITAR death_probability [110,111]
-  .word action_4_description       ; GRITAR description       [112,113]
-  .word action_4_hide_water         ; GRITAR hide_water         [114,115]
-  .word action_4_hide_fear          ; GRITAR hide_fear          [116,117]
-  .word action_4_hide_flashlight    ; GRITAR hide_flashlight    [118,119]
+  .word action_4_id            ; GRITAR id            [112,113]
+  .word action_4_name          ; GRITAR name          [114,115]
+  .word action_4_sensor_id     ; GRITAR sensor_id     [116,117]
+  .word action_4_sensor_active ; GRITAR sensor_active [118,119]
+  .word action_4_screen        ; GRITAR screen        [120,121]
+  .word action_4_cost              ; GRITAR cost              [122,123]
+  .word action_4_enemy_probability ; GRITAR enemy_probability [124,125]
+  .word action_4_reset_enemy_prob  ; GRITAR reset_enemy_prob  [126,127]
+  .word action_4_death_probability ; GRITAR death_probability [128,129]
+  .word action_4_description       ; GRITAR description       [130,131]
+  .word action_4_desc_action_failed ; GRITAR desc_action_failed [132,133]
+  .word action_4_hide_water         ; GRITAR hide_water         [134,135]
+  .word action_4_hide_fear          ; GRITAR hide_fear          [136,137]
+  .word action_4_hide_flashlight    ; GRITAR hide_flashlight    [138,139]
 action_pointer_5:
-  .word action_5_id            ; LINTERNA id            [120,121]
-  .word action_5_name          ; LINTERNA name          [122,123]
-  .word action_5_sensor_id     ; LINTERNA sensor_id     [124,125]
-  .word action_5_sensor_active ; LINTERNA sensor_active [126,127]
-  .word action_5_screen        ; LINTERNA screen        [128,129]
-  .word action_5_cost              ; LINTERNA cost              [130,131]
-  .word action_5_enemy_probability ; LINTERNA enemy_probability [132,133]
-  .word action_5_death_probability ; LINTERNA death_probability [134,135]
-  .word action_5_description       ; LINTERNA description       [136,137]
-  .word action_5_hide_water         ; LINTERNA hide_water         [138,139]
-  .word action_5_hide_fear          ; LINTERNA hide_fear          [140,141]
-  .word action_5_hide_flashlight    ; LINTERNA hide_flashlight    [142,143]
+  .word action_5_id            ; LINTERNA id            [140,141]
+  .word action_5_name          ; LINTERNA name          [142,143]
+  .word action_5_sensor_id     ; LINTERNA sensor_id     [144,145]
+  .word action_5_sensor_active ; LINTERNA sensor_active [146,147]
+  .word action_5_screen        ; LINTERNA screen        [148,149]
+  .word action_5_cost              ; LINTERNA cost              [150,151]
+  .word action_5_enemy_probability ; LINTERNA enemy_probability [152,153]
+  .word action_5_reset_enemy_prob  ; LINTERNA reset_enemy_prob  [154,155]
+  .word action_5_death_probability ; LINTERNA death_probability [156,157]
+  .word action_5_description       ; LINTERNA description       [158,159]
+  .word action_5_desc_action_failed ; LINTERNA desc_action_failed [160,161]
+  .word action_5_hide_water         ; LINTERNA hide_water         [162,163]
+  .word action_5_hide_fear          ; LINTERNA hide_fear          [164,165]
+  .word action_5_hide_flashlight    ; LINTERNA hide_flashlight    [166,167]
 action_pointer_6:
-  .word action_6_id            ; EXPLORAR CAMINO id            [144,145]
-  .word action_6_name          ; EXPLORAR CAMINO name          [146,147]
-  .word action_6_sensor_id     ; EXPLORAR CAMINO sensor_id     [148,149]
-  .word action_6_sensor_active ; EXPLORAR CAMINO sensor_active [150,151]
-  .word action_6_screen        ; EXPLORAR CAMINO screen        [152,153]
-  .word action_6_cost              ; EXPLORAR CAMINO cost              [154,155]
-  .word action_6_enemy_probability ; EXPLORAR CAMINO enemy_probability [156,157]
-  .word action_6_death_probability ; EXPLORAR CAMINO death_probability [158,159]
-  .word action_6_description       ; EXPLORAR CAMINO description       [160,161]
-  .word action_6_hide_water         ; EXPLORAR CAMINO hide_water         [162,163]
-  .word action_6_hide_fear          ; EXPLORAR CAMINO hide_fear          [164,165]
-  .word action_6_hide_flashlight    ; EXPLORAR CAMINO hide_flashlight    [166,167]
+  .word action_6_id            ; EXPLORAR CAMINO id            [168,169]
+  .word action_6_name          ; EXPLORAR CAMINO name          [170,171]
+  .word action_6_sensor_id     ; EXPLORAR CAMINO sensor_id     [172,173]
+  .word action_6_sensor_active ; EXPLORAR CAMINO sensor_active [174,175]
+  .word action_6_screen        ; EXPLORAR CAMINO screen        [176,177]
+  .word action_6_cost              ; EXPLORAR CAMINO cost              [178,179]
+  .word action_6_enemy_probability ; EXPLORAR CAMINO enemy_probability [180,181]
+  .word action_6_reset_enemy_prob  ; EXPLORAR CAMINO reset_enemy_prob  [182,183]
+  .word action_6_death_probability ; EXPLORAR CAMINO death_probability [184,185]
+  .word action_6_description       ; EXPLORAR CAMINO description       [186,187]
+  .word action_6_desc_action_failed ; EXPLORAR CAMINO desc_action_failed [188,189]
+  .word action_6_hide_water         ; EXPLORAR CAMINO hide_water         [190,191]
+  .word action_6_hide_fear          ; EXPLORAR CAMINO hide_fear          [192,193]
+  .word action_6_hide_flashlight    ; EXPLORAR CAMINO hide_flashlight    [194,195]
 action_pointer_7:
-  .word action_7_id            ; VEO QUE CAE AGUA id            [168,169]
-  .word action_7_name          ; VEO QUE CAE AGUA name          [170,171]
-  .word action_7_sensor_id     ; VEO QUE CAE AGUA sensor_id     [172,173]
-  .word action_7_sensor_active ; VEO QUE CAE AGUA sensor_active [174,175]
-  .word action_7_screen        ; VEO QUE CAE AGUA screen        [176,177]
-  .word action_7_cost              ; VEO QUE CAE AGUA cost              [178,179]
-  .word action_7_enemy_probability ; VEO QUE CAE AGUA enemy_probability [180,181]
-  .word action_7_death_probability ; VEO QUE CAE AGUA death_probability [182,183]
-  .word action_7_description       ; VEO QUE CAE AGUA description       [184,185]
-  .word action_7_hide_water         ; VEO QUE CAE AGUA hide_water         [186,187]
-  .word action_7_hide_fear          ; VEO QUE CAE AGUA hide_fear          [188,189]
-  .word action_7_hide_flashlight    ; VEO QUE CAE AGUA hide_flashlight    [190,191]
+  .word action_7_id            ; VEO QUE CAE AGUA id            [196,197]
+  .word action_7_name          ; VEO QUE CAE AGUA name          [198,199]
+  .word action_7_sensor_id     ; VEO QUE CAE AGUA sensor_id     [200,201]
+  .word action_7_sensor_active ; VEO QUE CAE AGUA sensor_active [202,203]
+  .word action_7_screen        ; VEO QUE CAE AGUA screen        [204,205]
+  .word action_7_cost              ; VEO QUE CAE AGUA cost              [206,207]
+  .word action_7_enemy_probability ; VEO QUE CAE AGUA enemy_probability [208,209]
+  .word action_7_reset_enemy_prob  ; VEO QUE CAE AGUA reset_enemy_prob  [210,211]
+  .word action_7_death_probability ; VEO QUE CAE AGUA death_probability [212,213]
+  .word action_7_description       ; VEO QUE CAE AGUA description       [214,215]
+  .word action_7_desc_action_failed ; VEO QUE CAE AGUA desc_action_failed [216,217]
+  .word action_7_hide_water         ; VEO QUE CAE AGUA hide_water         [218,219]
+  .word action_7_hide_fear          ; VEO QUE CAE AGUA hide_fear          [220,221]
+  .word action_7_hide_flashlight    ; VEO QUE CAE AGUA hide_flashlight    [222,223]
 action_pointer_8:
-  .word action_8_id            ; COMENZAR EL JUEGO id            [192,193]
-  .word action_8_name          ; COMENZAR EL JUEGO name          [194,195]
-  .word action_8_sensor_id     ; COMENZAR EL JUEGO sensor_id     [196,197]
-  .word action_8_sensor_active ; COMENZAR EL JUEGO sensor_active [198,199]
-  .word action_8_screen        ; COMENZAR EL JUEGO screen        [200,201]
-  .word action_8_cost              ; COMENZAR EL JUEGO cost              [202,203]
-  .word action_8_enemy_probability ; COMENZAR EL JUEGO enemy_probability [204,205]
-  .word action_8_death_probability ; COMENZAR EL JUEGO death_probability [206,207]
-  .word action_8_description       ; COMENZAR EL JUEGO description       [208,209]
-  .word action_8_hide_water         ; COMENZAR EL JUEGO hide_water         [210,211]
-  .word action_8_hide_fear          ; COMENZAR EL JUEGO hide_fear          [212,213]
-  .word action_8_hide_flashlight    ; COMENZAR EL JUEGO hide_flashlight    [214,215]
+  .word action_8_id            ; COMENZAR EL JUEGO id            [224,225]
+  .word action_8_name          ; COMENZAR EL JUEGO name          [226,227]
+  .word action_8_sensor_id     ; COMENZAR EL JUEGO sensor_id     [228,229]
+  .word action_8_sensor_active ; COMENZAR EL JUEGO sensor_active [230,231]
+  .word action_8_screen        ; COMENZAR EL JUEGO screen        [232,233]
+  .word action_8_cost              ; COMENZAR EL JUEGO cost              [234,235]
+  .word action_8_enemy_probability ; COMENZAR EL JUEGO enemy_probability [236,237]
+  .word action_8_reset_enemy_prob  ; COMENZAR EL JUEGO reset_enemy_prob  [238,239]
+  .word action_8_death_probability ; COMENZAR EL JUEGO death_probability [240,241]
+  .word action_8_description       ; COMENZAR EL JUEGO description       [242,243]
+  .word action_8_desc_action_failed ; COMENZAR EL JUEGO desc_action_failed [244,245]
+  .word action_8_hide_water         ; COMENZAR EL JUEGO hide_water         [246,247]
+  .word action_8_hide_fear          ; COMENZAR EL JUEGO hide_fear          [248,249]
+  .word action_8_hide_flashlight    ; COMENZAR EL JUEGO hide_flashlight    [250,251]
 action_pointer_9:
-  .word action_9_id            ; TERMINAR EL JUEGO id            [216,217]
-  .word action_9_name          ; TERMINAR EL JUEGO name          [218,219]
-  .word action_9_sensor_id     ; TERMINAR EL JUEGO sensor_id     [220,221]
-  .word action_9_sensor_active ; TERMINAR EL JUEGO sensor_active [222,223]
-  .word action_9_screen        ; TERMINAR EL JUEGO screen        [224,225]
-  .word action_9_cost              ; TERMINAR EL JUEGO cost              [226,227]
-  .word action_9_enemy_probability ; TERMINAR EL JUEGO enemy_probability [228,229]
-  .word action_9_death_probability ; TERMINAR EL JUEGO death_probability [230,231]
-  .word action_9_description       ; TERMINAR EL JUEGO description       [232,233]
-  .word action_9_hide_water         ; TERMINAR EL JUEGO hide_water         [234,235]
-  .word action_9_hide_fear          ; TERMINAR EL JUEGO hide_fear          [236,237]
-  .word action_9_hide_flashlight    ; TERMINAR EL JUEGO hide_flashlight    [238,239]
+  .word action_9_id            ; TERMINAR EL JUEGO id            [252,253]
+  .word action_9_name          ; TERMINAR EL JUEGO name          [254,255]
+  .word action_9_sensor_id     ; TERMINAR EL JUEGO sensor_id     [256,257]
+  .word action_9_sensor_active ; TERMINAR EL JUEGO sensor_active [258,259]
+  .word action_9_screen        ; TERMINAR EL JUEGO screen        [260,261]
+  .word action_9_cost              ; TERMINAR EL JUEGO cost              [262,263]
+  .word action_9_enemy_probability ; TERMINAR EL JUEGO enemy_probability [264,265]
+  .word action_9_reset_enemy_prob  ; TERMINAR EL JUEGO reset_enemy_prob  [266,267]
+  .word action_9_death_probability ; TERMINAR EL JUEGO death_probability [268,269]
+  .word action_9_description       ; TERMINAR EL JUEGO description       [270,271]
+  .word action_9_desc_action_failed ; TERMINAR EL JUEGO desc_action_failed [272,273]
+  .word action_9_hide_water         ; TERMINAR EL JUEGO hide_water         [274,275]
+  .word action_9_hide_fear          ; TERMINAR EL JUEGO hide_fear          [276,277]
+  .word action_9_hide_flashlight    ; TERMINAR EL JUEGO hide_flashlight    [278,279]
 action_pointer_10:
-  .word action_10_id            ; EXPLORAR MARCAS id            [240,241]
-  .word action_10_name          ; EXPLORAR MARCAS name          [242,243]
-  .word action_10_sensor_id     ; EXPLORAR MARCAS sensor_id     [244,245]
-  .word action_10_sensor_active ; EXPLORAR MARCAS sensor_active [246,247]
-  .word action_10_screen        ; EXPLORAR MARCAS screen        [248,249]
-  .word action_10_cost              ; EXPLORAR MARCAS cost              [250,251]
-  .word action_10_enemy_probability ; EXPLORAR MARCAS enemy_probability [252,253]
-  .word action_10_death_probability ; EXPLORAR MARCAS death_probability [254,255]
-  .word action_10_description       ; EXPLORAR MARCAS description       [256,257]
-  .word action_10_hide_water         ; EXPLORAR MARCAS hide_water         [258,259]
-  .word action_10_hide_fear          ; EXPLORAR MARCAS hide_fear          [260,261]
-  .word action_10_hide_flashlight    ; EXPLORAR MARCAS hide_flashlight    [262,263]
+  .word action_10_id            ; EXPLORAR MARCAS id            [280,281]
+  .word action_10_name          ; EXPLORAR MARCAS name          [282,283]
+  .word action_10_sensor_id     ; EXPLORAR MARCAS sensor_id     [284,285]
+  .word action_10_sensor_active ; EXPLORAR MARCAS sensor_active [286,287]
+  .word action_10_screen        ; EXPLORAR MARCAS screen        [288,289]
+  .word action_10_cost              ; EXPLORAR MARCAS cost              [290,291]
+  .word action_10_enemy_probability ; EXPLORAR MARCAS enemy_probability [292,293]
+  .word action_10_reset_enemy_prob  ; EXPLORAR MARCAS reset_enemy_prob  [294,295]
+  .word action_10_death_probability ; EXPLORAR MARCAS death_probability [296,297]
+  .word action_10_description       ; EXPLORAR MARCAS description       [298,299]
+  .word action_10_desc_action_failed ; EXPLORAR MARCAS desc_action_failed [300,301]
+  .word action_10_hide_water         ; EXPLORAR MARCAS hide_water         [302,303]
+  .word action_10_hide_fear          ; EXPLORAR MARCAS hide_fear          [304,305]
+  .word action_10_hide_flashlight    ; EXPLORAR MARCAS hide_flashlight    [306,307]
 action_pointer_11:
-  .word action_11_id            ; FORZAR ENTRADA id            [264,265]
-  .word action_11_name          ; FORZAR ENTRADA name          [266,267]
-  .word action_11_sensor_id     ; FORZAR ENTRADA sensor_id     [268,269]
-  .word action_11_sensor_active ; FORZAR ENTRADA sensor_active [270,271]
-  .word action_11_screen        ; FORZAR ENTRADA screen        [272,273]
-  .word action_11_cost              ; FORZAR ENTRADA cost              [274,275]
-  .word action_11_enemy_probability ; FORZAR ENTRADA enemy_probability [276,277]
-  .word action_11_death_probability ; FORZAR ENTRADA death_probability [278,279]
-  .word action_11_description       ; FORZAR ENTRADA description       [280,281]
-  .word action_11_hide_water         ; FORZAR ENTRADA hide_water         [282,283]
-  .word action_11_hide_fear          ; FORZAR ENTRADA hide_fear          [284,285]
-  .word action_11_hide_flashlight    ; FORZAR ENTRADA hide_flashlight    [286,287]
+  .word action_11_id            ; FORZAR ENTRADA id            [308,309]
+  .word action_11_name          ; FORZAR ENTRADA name          [310,311]
+  .word action_11_sensor_id     ; FORZAR ENTRADA sensor_id     [312,313]
+  .word action_11_sensor_active ; FORZAR ENTRADA sensor_active [314,315]
+  .word action_11_screen        ; FORZAR ENTRADA screen        [316,317]
+  .word action_11_cost              ; FORZAR ENTRADA cost              [318,319]
+  .word action_11_enemy_probability ; FORZAR ENTRADA enemy_probability [320,321]
+  .word action_11_reset_enemy_prob  ; FORZAR ENTRADA reset_enemy_prob  [322,323]
+  .word action_11_death_probability ; FORZAR ENTRADA death_probability [324,325]
+  .word action_11_description       ; FORZAR ENTRADA description       [326,327]
+  .word action_11_desc_action_failed ; FORZAR ENTRADA desc_action_failed [328,329]
+  .word action_11_hide_water         ; FORZAR ENTRADA hide_water         [330,331]
+  .word action_11_hide_fear          ; FORZAR ENTRADA hide_fear          [332,333]
+  .word action_11_hide_flashlight    ; FORZAR ENTRADA hide_flashlight    [334,335]
 action_pointer_12:
-  .word action_12_id            ; VOLVER A MIRAR ADELANTE id            [288,289]
-  .word action_12_name          ; VOLVER A MIRAR ADELANTE name          [290,291]
-  .word action_12_sensor_id     ; VOLVER A MIRAR ADELANTE sensor_id     [292,293]
-  .word action_12_sensor_active ; VOLVER A MIRAR ADELANTE sensor_active [294,295]
-  .word action_12_screen        ; VOLVER A MIRAR ADELANTE screen        [296,297]
-  .word action_12_cost              ; VOLVER A MIRAR ADELANTE cost              [298,299]
-  .word action_12_enemy_probability ; VOLVER A MIRAR ADELANTE enemy_probability [300,301]
-  .word action_12_death_probability ; VOLVER A MIRAR ADELANTE death_probability [302,303]
-  .word action_12_description       ; VOLVER A MIRAR ADELANTE description       [304,305]
-  .word action_12_hide_water         ; VOLVER A MIRAR ADELANTE hide_water         [306,307]
-  .word action_12_hide_fear          ; VOLVER A MIRAR ADELANTE hide_fear          [308,309]
-  .word action_12_hide_flashlight    ; VOLVER A MIRAR ADELANTE hide_flashlight    [310,311]
+  .word action_12_id            ; VOLVER A MIRAR ADELANTE id            [336,337]
+  .word action_12_name          ; VOLVER A MIRAR ADELANTE name          [338,339]
+  .word action_12_sensor_id     ; VOLVER A MIRAR ADELANTE sensor_id     [340,341]
+  .word action_12_sensor_active ; VOLVER A MIRAR ADELANTE sensor_active [342,343]
+  .word action_12_screen        ; VOLVER A MIRAR ADELANTE screen        [344,345]
+  .word action_12_cost              ; VOLVER A MIRAR ADELANTE cost              [346,347]
+  .word action_12_enemy_probability ; VOLVER A MIRAR ADELANTE enemy_probability [348,349]
+  .word action_12_reset_enemy_prob  ; VOLVER A MIRAR ADELANTE reset_enemy_prob  [350,351]
+  .word action_12_death_probability ; VOLVER A MIRAR ADELANTE death_probability [352,353]
+  .word action_12_description       ; VOLVER A MIRAR ADELANTE description       [354,355]
+  .word action_12_desc_action_failed ; VOLVER A MIRAR ADELANTE desc_action_failed [356,357]
+  .word action_12_hide_water         ; VOLVER A MIRAR ADELANTE hide_water         [358,359]
+  .word action_12_hide_fear          ; VOLVER A MIRAR ADELANTE hide_fear          [360,361]
+  .word action_12_hide_flashlight    ; VOLVER A MIRAR ADELANTE hide_flashlight    [362,363]
 action_name_offset:
   .byte 2  ; (byte of action_0_name in actions_pointers)
 action_sensor_id_offset:
@@ -199,18 +225,22 @@ action_screen_offset:
   .byte 8  ; (byte of action_0_screen in actions_pointers)
 action_enemy_probability_offset:
   .byte 12  ; (byte of action_0_enemy_probability in actions_pointers)
+action_reset_enemy_prob_offset:
+  .byte 14  ; (byte of action_0_reset_enemy_prob in actions_pointers)
 action_death_probability_offset:
-  .byte 14  ; (byte of action_0_death_probability in actions_pointers)
+  .byte 16  ; (byte of action_0_death_probability in actions_pointers)
 action_description_offset:
-  .byte 16  ; (byte of action_0_description in actions_pointers)
+  .byte 18  ; (byte of action_0_description in actions_pointers)
+action_desc_action_failed_offset:
+  .byte 20  ; (byte of action_0_desc_action_failed in actions_pointers)
 action_hide_water_offset:
-  .byte 18  ; (byte of action_0_hide_water in actions_pointers)
+  .byte 22  ; (byte of action_0_hide_water in actions_pointers)
 action_hide_fear_offset:
-  .byte 20  ; (byte of action_0_hide_fear in actions_pointers)
+  .byte 24  ; (byte of action_0_hide_fear in actions_pointers)
 action_hide_flashlight_offset:
-  .byte 22  ; (byte of action_0_hide_flashlight in actions_pointers)
+  .byte 26  ; (byte of action_0_hide_flashlight in actions_pointers)
 action_record_length:
-  .byte 24  ; (total .word bytes per action record)
+  .byte 28  ; (total .word bytes per action record)
 
 ; ── Action 0: LEVANTARSE ──────────────────────────
 action_0_id:
@@ -235,11 +265,18 @@ action_0_cost:
 action_0_enemy_probability:
   .byte 0
 
+action_0_reset_enemy_prob:
+  .byte 0  ; off
+
 action_0_death_probability:
   .byte 0
 
 action_0_description:
   .ascii "Con esfuerzo, te incorporas sin saber como. Semejante derrumbe deberia haber sido mortal. El frio no duele, todavia."
+  .ascii "e"
+
+action_0_desc_action_failed:
+  .ascii ""
   .ascii "e"
 
 action_0_hide_water:
@@ -274,11 +311,18 @@ action_1_cost:
 action_1_enemy_probability:
   .byte 0
 
+action_1_reset_enemy_prob:
+  .byte 0  ; off
+
 action_1_death_probability:
   .byte 0
 
 action_1_description:
   .ascii "Desde el suelo solo se ve oscuridad"
+  .ascii "e"
+
+action_1_desc_action_failed:
+  .ascii ""
   .ascii "e"
 
 action_1_hide_water:
@@ -313,11 +357,18 @@ action_2_cost:
 action_2_enemy_probability:
   .byte 0
 
+action_2_reset_enemy_prob:
+  .byte 0  ; off
+
 action_2_death_probability:
   .byte 0
 
 action_2_description:
   .ascii "Intentas gritar, pero tu boca esta llena de agua"
+  .ascii "e"
+
+action_2_desc_action_failed:
+  .ascii ""
   .ascii "e"
 
 action_2_hide_water:
@@ -352,11 +403,18 @@ action_3_cost:
 action_3_enemy_probability:
   .byte 0
 
+action_3_reset_enemy_prob:
+  .byte 0  ; off
+
 action_3_death_probability:
   .byte 0
 
 action_3_description:
   .ascii "Miras la Entrada"
+  .ascii "e"
+
+action_3_desc_action_failed:
+  .ascii ""
   .ascii "e"
 
 action_3_hide_water:
@@ -391,11 +449,18 @@ action_4_cost:
 action_4_enemy_probability:
   .byte 0
 
+action_4_reset_enemy_prob:
+  .byte 0  ; off
+
 action_4_death_probability:
   .byte 0
 
 action_4_description:
   .ascii "El eco tarda demasiado en volver. Sientes que algo se mueve encima de ti. Debe ser tu imaginacion, te repites."
+  .ascii "e"
+
+action_4_desc_action_failed:
+  .ascii ""
   .ascii "e"
 
 action_4_hide_water:
@@ -430,11 +495,18 @@ action_5_cost:
 action_5_enemy_probability:
   .byte 0
 
+action_5_reset_enemy_prob:
+  .byte 0  ; off
+
 action_5_death_probability:
   .byte 0
 
 action_5_description:
   .ascii "La linterna se "
+  .ascii "e"
+
+action_5_desc_action_failed:
+  .ascii ""
   .ascii "e"
 
 action_5_hide_water:
@@ -469,11 +541,18 @@ action_6_cost:
 action_6_enemy_probability:
   .byte 0
 
+action_6_reset_enemy_prob:
+  .byte 0  ; off
+
 action_6_death_probability:
   .byte 0
 
 action_6_description:
   .ascii "Te dispones a explorar el camino que se abre en la oscuridad."
+  .ascii "e"
+
+action_6_desc_action_failed:
+  .ascii ""
   .ascii "e"
 
 action_6_hide_water:
@@ -508,11 +587,18 @@ action_7_cost:
 action_7_enemy_probability:
   .byte 0
 
+action_7_reset_enemy_prob:
+  .byte 0  ; off
+
 action_7_death_probability:
   .byte 0
 
 action_7_description:
   .ascii "Si es verdad, ves como se empieza a llenar la caverna."
+  .ascii "e"
+
+action_7_desc_action_failed:
+  .ascii ""
   .ascii "e"
 
 action_7_hide_water:
@@ -547,11 +633,18 @@ action_8_cost:
 action_8_enemy_probability:
   .byte 0
 
+action_8_reset_enemy_prob:
+  .byte 0  ; off
+
 action_8_death_probability:
   .byte 0
 
 action_8_description:
   .ascii "Y entras en la caverna misteriosa, el tiempo esta en tu contra"
+  .ascii "e"
+
+action_8_desc_action_failed:
+  .ascii ""
   .ascii "e"
 
 action_8_hide_water:
@@ -586,10 +679,17 @@ action_9_cost:
 action_9_enemy_probability:
   .byte 0
 
+action_9_reset_enemy_prob:
+  .byte 0  ; off
+
 action_9_death_probability:
   .byte 0
 
 action_9_description:
+  .ascii ""
+  .ascii "e"
+
+action_9_desc_action_failed:
   .ascii ""
   .ascii "e"
 
@@ -625,11 +725,18 @@ action_10_cost:
 action_10_enemy_probability:
   .byte 0
 
+action_10_reset_enemy_prob:
+  .byte 0  ; off
+
 action_10_death_probability:
   .byte 0
 
 action_10_description:
   .ascii "Entre las marcas notas un extraño dibujo"
+  .ascii "e"
+
+action_10_desc_action_failed:
+  .ascii ""
   .ascii "e"
 
 action_10_hide_water:
@@ -664,11 +771,18 @@ action_11_cost:
 action_11_enemy_probability:
   .byte 0
 
+action_11_reset_enemy_prob:
+  .byte 0  ; off
+
 action_11_death_probability:
   .byte 0
 
 action_11_description:
   .ascii "Intentas mover las rocas de la entrada."
+  .ascii "e"
+
+action_11_desc_action_failed:
+  .ascii ""
   .ascii "e"
 
 action_11_hide_water:
@@ -703,11 +817,18 @@ action_12_cost:
 action_12_enemy_probability:
   .byte 0
 
+action_12_reset_enemy_prob:
+  .byte 0  ; off
+
 action_12_death_probability:
   .byte 0
 
 action_12_description:
   .ascii "Por un momento consideras que mover toneladas de rocas sin equipamiento indicado tal vez sea inutil. Explorar la caverna, aun sin conocerla, puede tener mejores resultados."
+  .ascii "e"
+
+action_12_desc_action_failed:
+  .ascii ""
   .ascii "e"
 
 action_12_hide_water:
