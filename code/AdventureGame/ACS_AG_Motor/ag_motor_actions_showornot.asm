@@ -198,17 +198,17 @@ sensorCurrentID=$0245
 sensorCurrentStatus=$0246
 timerExpired=$0247
 gameEnded=$0248
+
 fearLevel=$0249
 watertLevel=$024a
 actionHidden=$024b
 highWaterLevel=$024c
+currentActionHideWater=$024d
+currentActionFearWater=$024e
+currentActionHideFlashlightOff=$024f
+highFearLevel=$0250
 
-
-
-objectsRAM=$0300 ;32 bytes but i only use 6
-objectIDOptionsRAM=$0320;32 bytes but i only use 6
 actionIDOptionsRAM=$0340 ;32 bytes but i only use 6
-puzzlesRAM=$0400
 screenPointersRAM=$0500
 
 
