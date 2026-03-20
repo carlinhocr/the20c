@@ -101,14 +101,14 @@ screenCurrentASCII_High=$b1
 screenCurrentDescription_Low=$b2
 screenCurrentDescription_High=$b3
 
-screenCurrentObjects_Low=$b4
-screenCurrentObjects_High=$b5
+;screenCurrentObjects_Low=$b4
+;screenCurrentObjects_High=$b5
 
-objectDataVectorLow=$b6
-objectDataVectorHigh=$b7
+actionCheckVectorLow=$b6
+actionCheckVectorHigh=$b7
 
-puzzleDataVectorLow=$b8
-puzzleDataVectorHigh=$b9
+;puzzleDataVectorLow=$b8
+;puzzleDataVectorHigh=$b9
 
 actionDataVectorLow=$ba
 actionDataVectorHigh=$bb
@@ -1205,10 +1205,10 @@ checkActionVisibility:
   lda action_hide_water_offset
   tay
   lda (pivotZpLow),Y
-  sta actionDataVectorLow
+  sta actionCheckVectorLow
   iny 
   lda (pivotZpLow),Y
-  sta actionDataVectorHigh  
+  sta actionCheckVectorLow  
   lda (actionDataVectorLow),Y
   sta currentActionHideWater
   lda action_hide_fear_offset
