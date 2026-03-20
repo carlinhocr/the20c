@@ -21,8 +21,16 @@
         "Name": "GRITAR POR AYUDA",
         "SensorID": 255,
         "SensorActive": false,
+        "ScreenID": 255,
         "Cost": 15,
-        "Description": "Intentas gritar, pero tu boca esta llena de agua"
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 0,
+        "Description": "Intentas gritar, pero tu boca esta llena de agua",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 1,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     },
     "3": {
         "ID": "3",

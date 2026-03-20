@@ -372,7 +372,7 @@ action_2_desc_action_failed:
   .ascii "e"
 
 action_2_hide_water:
-  .byte 0  ; off
+  .byte 1  ; on
 
 action_2_hide_fear:
   .byte 0  ; off
