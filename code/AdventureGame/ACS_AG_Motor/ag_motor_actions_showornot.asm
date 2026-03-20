@@ -198,6 +198,12 @@ sensorCurrentID=$0245
 sensorCurrentStatus=$0246
 timerExpired=$0247
 gameEnded=$0248
+fearLevel=$0249
+watertLevel=$024a
+actionHidden=$024b
+highWaterLevel=$024c
+
+
 
 objectsRAM=$0300 ;32 bytes but i only use 6
 objectIDOptionsRAM=$0320;32 bytes but i only use 6
@@ -321,10 +327,31 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
-  jsr mainProgram
-  jmp listeningMode
-
-
+  ;jmp listeningMode
+  ;start MainProgran and I save stack space by not jumping to it
+mainProgram:
+  ;initialize 
+  ;jsr testPrinter
+  jsr initilizationRoutines
+  ;initialize screen as screen zero
+  ;jsr timerWaitOneMinute
+  jsr select_screen
+  jsr draw_current_screen_table
+mainProgramLoop:
+  jsr action_selector
+  jsr sensor_selector  
+  lda gameEnded
+  bne mainProgram ;if gameEnded is not zero then the game ended  
+  jsr checkGameEnd  
+  lda moveNextScreen
+  beq mainProgramLoop;if zero do not move to next screen and ask for actions
+  lda #$0
+  sta moveNextScreen ;reset the move next screen flag
+  jsr select_screen
+  jsr draw_current_screen_table
+  ;here the games continue so we jump to the loop and continue
+  jmp mainProgramLoop   
+  rts
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------MAIN-----------------------------------------------
@@ -733,42 +760,7 @@ msj_printer:
 ;--------------------------------MAIN PROGRAM---------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-mainProgram:
-  ;initialize 
-  ;jsr testPrinter
-  jsr initilizationRoutines
-  ;initialize screen as screen zero
-  ;jsr timerWaitOneMinute
-  jsr select_screen
-  jsr draw_current_screen_table
-mainProgramLoop:
-;   lda timerExpired
-;   cmp #$3
-;   ;go if it is less than or equal to
-;   bcc continueMainProgramLoop
-;   jsr checkGameEnd
-;   lda #< msj_iddleTimer1
-;   sta serialDataVectorLow
-;   lda #> msj_iddleTimer1
-;   sta serialDataVectorHigh
-;   jsr printAsciiDrawing
-;   lda #$0
-;   sta timerExpired
-; continueMainProgramLoop:  
-  jsr action_selector
-  jsr sensor_selector  
-  lda gameEnded
-  bne mainProgram ;if gameEnded is not zero then the game ended  
-  jsr checkGameEnd  
-  lda moveNextScreen
-  beq mainProgramLoop;if zero do not move to next screen and ask for actions
-  lda #$0
-  sta moveNextScreen ;reset the move next screen flag
-  jsr select_screen
-  jsr draw_current_screen_table
-  ;here the games continue so we jump to the loop and continue
-  jmp mainProgramLoop   
-  rts
+
 
 checkGameEnd:
   ;check end in screen s1s1
@@ -874,20 +866,22 @@ initilizationRoutines:
   rts
 
 loadConstants:
-  lda #$6
-  sta max_objects_per_screen
-  lda #$2
-  sta max_puzzles_per_screen 
-  lda #$6
+  ;add it to the SCREEN FILE the max number of actions calculated from the amount of actions in the screen
+  lda #$4 
   sta max_actions_per_screen
+  lda #$3
+  sta highWaterLevel
+  lda #$1
+  sta highFearLevel
+
+;VARIABLE  
   lda #$0
   sta print_no_CRLF  
-  lda #$0 ;flashlight off
-  sta flashlightStatus ;flashlight off
   lda #$0
   sta actionCostTotal
   lda #$0
   sta moveNextScreen
+  ;add it to the SCREEN FILE to choose in the dashboard in which screen to start
   lda #$3; start with screen id 3 the start screen
   sta screenCurrentID  
   lda #$ff
@@ -898,6 +892,14 @@ loadConstants:
   sta timerExpired
   lda #$00
   sta gameEnded
+  ;new added
+  lda #$0
+  sta fearLevel
+  lda #$0
+  sta waterLevel
+  lda #$0 ;flashlight off
+  sta flashlightStatus ;flashlight off
+  
   rts 
 
 initiatilizeActionsIDs:  
@@ -1160,6 +1162,21 @@ loadScreenActionOptions:
 loadScreenActionOptions_loop:
   lda (actionDataVectorLow),y
   sta actionCurrentID
+  ;check to see if action is hidden
+  ;according to 
+  ;fearLevel
+  ;waterLevel
+  ;Flashlight Off
+  lda #$0
+  sta actionHidden ;the action is not hidden on 0 and hidden on 1
+  tya ;save Y because i am going to another process
+  pha ;save Y because i am going to another process
+  jsr checkActionVisibility
+  pla ;retrieve Y after processAction
+  tay ;retrieve Y after processAction
+  lda actionHidden
+  bne nextAction;action  hidden is not zero hide the action
+  ;if we are here the action is visible
   tya ;save Y because i am going to another process
   pha ;save Y because i am going to another process
   sty actionPosition
@@ -1169,11 +1186,50 @@ loadScreenActionOptions_loop:
   jsr processAction
   pla ;retrieve Y after processAction
   tay ;retrieve Y after processAction
+nextAction:  
   iny ;go to next action of the screen
   cpy max_actions_per_screen ;max objects per screen 0-5 for now 
   ;check if the actions menu goes 6 time
   bne loadScreenActionOptions_loop
   rts
+
+checkActionVisibility:
+  lda actionCurrentID
+  asl ;multiply by two 
+  tax
+  lda actions_index,x
+  sta pivotZpLow
+  inx
+  lda actions_index,x
+  sta pivotZpHigh
+  lda action_hide_water_offset
+  tay
+  lda (pivotZpLow),Y
+  sta currentActionHideWater
+  lda action_hide_fear_offset
+  tay
+  lda (pivotZpLow),Y
+  sta currentActionFearWater
+  lda action_hide_flashlight_offset
+  tay
+  lda (pivotZpLow),Y
+  sta currentActionHideFlashlightOff
+  lda currentActionHideWater
+  beq checkActionVisibility_notHide ;not hide on water level
+  ;here we check the water level
+  lda waterLevel ;current water level
+  cmp highWaterLevel
+  bne checkActionVisibility_notHide
+  jmp checkActionVisibility_hide
+  ;For now only checking on water Level
+checkActionVisibility_notHide:  
+  lda #$0
+  sta actionHidden
+  rts  
+checkActionVisibility_hide:
+  lda #$1
+  sta actionHidden
+  rts  
 
 printLettersAction:
   ldx actionPosition
@@ -2772,6 +2828,8 @@ initialScreen:
   .include "acs_actions.asm"
   .org $f000
   .include "acs_sensors.asm"
+  .org $f800
+  .include "acs_dashboard.asm"
 
 
 ;BEGIN------------------------------------------------------------------------------
