@@ -869,7 +869,7 @@ loadConstants:
   ;add it to the SCREEN FILE the max number of actions calculated from the amount of actions in the screen
   lda #$4 
   sta max_actions_per_screen
-  lda #$3
+  lda #$3 ; user zero to check and hide options
   sta highWaterLevel
   lda #$1
   sta highFearLevel
@@ -1218,6 +1218,7 @@ checkActionVisibility:
   beq checkActionVisibility_notHide ;not hide on water level
   ;here we check the water level
   lda waterLevel ;current water level
+  lda #$3 ;force hight water level
   cmp highWaterLevel
   bne checkActionVisibility_notHide
   jmp checkActionVisibility_hide
