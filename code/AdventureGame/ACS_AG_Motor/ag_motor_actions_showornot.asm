@@ -1220,10 +1220,10 @@ checkActionVisibility:
   ; tay
   ; lda (pivotZpLow),Y
   ; sta currentActionHideFlashlightOff
-  lda currentActionHideWater
-  clc 
-  adc #$30
-  jsr send_rs232_char
+  ; lda currentActionHideWater
+  ; clc 
+  ; adc #$30
+  ; jsr send_rs232_char
   lda currentActionHideWater  
   beq checkActionVisibility_notHide ;not hide on water level
   ;here we check the water level
