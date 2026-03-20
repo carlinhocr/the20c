@@ -36,8 +36,10 @@ def to_asm(actions):
     act0_sensor_id_offset         = None
     act0_sensor_active_offset     = None
     act0_description_offset       = None
+    act0_desc_failed_offset       = None
     act0_screen_offset            = None
     act0_enemy_probability_offset = None
+    act0_reset_enemy_prob_offset  = None
     act0_death_probability_offset = None
     act0_hide_water_offset        = None
     act0_hide_fear_offset         = None
@@ -59,8 +61,10 @@ def to_asm(actions):
         lines.append(f"  .word {label}_screen        ; {name} screen        [{offset},{offset+1}]") ; _scr = offset ; offset += 2
         lines.append(f"  .word {label}_cost              ; {name} cost              [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_enemy_probability ; {name} enemy_probability [{offset},{offset+1}]") ; _enm = offset ; offset += 2
+        lines.append(f"  .word {label}_reset_enemy_prob  ; {name} reset_enemy_prob  [{offset},{offset+1}]") ; _rep = offset ; offset += 2
         lines.append(f"  .word {label}_death_probability ; {name} death_probability [{offset},{offset+1}]") ; _dth = offset ; offset += 2
         lines.append(f"  .word {label}_description       ; {name} description       [{offset},{offset+1}]") ; _dsc = offset ; offset += 2
+        lines.append(f"  .word {label}_desc_action_failed ; {name} desc_action_failed [{offset},{offset+1}]") ; _daf = offset ; offset += 2
         lines.append(f"  .word {label}_hide_water         ; {name} hide_water         [{offset},{offset+1}]") ; _swt = offset ; offset += 2
         lines.append(f"  .word {label}_hide_fear          ; {name} hide_fear          [{offset},{offset+1}]") ; _sfr = offset ; offset += 2
         lines.append(f"  .word {label}_hide_flashlight    ; {name} hide_flashlight    [{offset},{offset+1}]") ; _sfl = offset ; offset += 2
@@ -71,8 +75,10 @@ def to_asm(actions):
             act0_sensor_active_offset     = _act
             act0_screen_offset            = _scr
             act0_enemy_probability_offset = _enm
+            act0_reset_enemy_prob_offset  = _rep
             act0_death_probability_offset = _dth
             act0_description_offset       = _dsc
+            act0_desc_failed_offset       = _daf
             act0_hide_water_offset        = _swt
             act0_hide_fear_offset         = _sfr
             act0_hide_flashlight_offset   = _sfl
@@ -89,10 +95,14 @@ def to_asm(actions):
     lines.append(f"  .byte {act0_screen_offset}  ; (byte of action_0_screen in actions_pointers)")
     lines.append(f"action_enemy_probability_offset:")
     lines.append(f"  .byte {act0_enemy_probability_offset}  ; (byte of action_0_enemy_probability in actions_pointers)")
+    lines.append(f"action_reset_enemy_prob_offset:")
+    lines.append(f"  .byte {act0_reset_enemy_prob_offset}  ; (byte of action_0_reset_enemy_prob in actions_pointers)")
     lines.append(f"action_death_probability_offset:")
     lines.append(f"  .byte {act0_death_probability_offset}  ; (byte of action_0_death_probability in actions_pointers)")
     lines.append(f"action_description_offset:")
     lines.append(f"  .byte {act0_description_offset}  ; (byte of action_0_description in actions_pointers)")
+    lines.append(f"action_desc_action_failed_offset:")
+    lines.append(f"  .byte {act0_desc_failed_offset}  ; (byte of action_0_desc_action_failed in actions_pointers)")
     lines.append(f"action_hide_water_offset:")
     lines.append(f"  .byte {act0_hide_water_offset}  ; (byte of action_0_hide_water in actions_pointers)")
     lines.append(f"action_hide_fear_offset:")
@@ -183,6 +193,16 @@ def to_asm(actions):
         lines.append(f"  .byte {enemy_prob_val}")
         lines.append("")
 
+        # Reset Enemy Probability
+        try:
+            reset_enemy_val = int(act.get("ResetEnemyProbability", 0))
+            reset_enemy_val = 1 if reset_enemy_val else 0
+        except (ValueError, TypeError):
+            reset_enemy_val = 0
+        lines.append(f"{label}_reset_enemy_prob:")
+        lines.append(f"  .byte {reset_enemy_val}  ; {'on' if reset_enemy_val else 'off'}")
+        lines.append("")
+
         # Death Probability
         try:
             death_prob_val = int(act.get("DeathProbability", 0))
@@ -196,6 +216,13 @@ def to_asm(actions):
         # Description
         lines.append(f"{label}_description:")
         lines.append(f'  .ascii "{desc_str}"')
+        lines.append('  .ascii "e"')
+        lines.append("")
+
+        # Description Action Failed
+        desc_failed_str = act.get("DescriptionActionFailed", "").replace('"', '\\"')
+        lines.append(f"{label}_desc_action_failed:")
+        lines.append(f'  .ascii "{desc_failed_str}"')
         lines.append('  .ascii "e"')
         lines.append("")
 

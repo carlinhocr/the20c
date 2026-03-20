@@ -233,8 +233,10 @@ def open_actions_window():
         combo_vars["Screen"].set("")
         cost_var.set(0)
         enemy_prob_var.set(0)
+        reset_enemy_prob_var.set(0)
         death_prob_var.set(0)
         desc_text.delete("1.0", tk.END)
+        desc_failed_text.delete("1.0", tk.END)
         hide_water_var.set(0)
         hide_fear_var.set(0)
         hide_flashlight_var.set(0)
@@ -328,6 +330,8 @@ def open_actions_window():
     enemy_prob_slider.pack(side="left", fill="x", expand=True)
     tk.Label(enemy_prob_row, textvariable=enemy_prob_var, width=4,
              bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
+    reset_enemy_prob_var = tk.IntVar(value=0)
+    checkbox_widget(form, "Reset Enemy Probability", reset_enemy_prob_var)
 
     # ── Death Probability slider (0–255) ──────────────────────
     section_lbl(form, "— Death Probability —")
@@ -361,6 +365,14 @@ def open_actions_window():
         relief="sunken", bd=2, font=("Courier New", 11), height=5, wrap="word",
     )
     desc_text.pack(fill="x")
+
+    # ── Description Action Failed text area ───────────────────
+    section_lbl(form, "— Description Action Failed —")
+    desc_failed_text = tk.Text(
+        form, bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+        relief="sunken", bd=2, font=("Courier New", 11), height=5, wrap="word",
+    )
+    desc_failed_text.pack(fill="x")
 
     # ── Save ──────────────────────────────────────────────────
     tk.Frame(form, bg="#7869C4", height=2).pack(fill="x", pady=(14, 8))
@@ -414,12 +426,15 @@ def open_actions_window():
             enemy_prob_var.set(int(rec.get("EnemyProbability", 0)))
         except (ValueError, TypeError):
             enemy_prob_var.set(0)
+        reset_enemy_prob_var.set(int(rec.get("ResetEnemyProbability", 0)))
         try:
             death_prob_var.set(int(rec.get("DeathProbability", 0)))
         except (ValueError, TypeError):
             death_prob_var.set(0)
         desc_text.delete("1.0", tk.END)
         desc_text.insert("1.0", rec.get("Description", ""))
+        desc_failed_text.delete("1.0", tk.END)
+        desc_failed_text.insert("1.0", rec.get("DescriptionActionFailed", ""))
         hide_water_var.set(int(rec.get("HideOnWaterLevelHigh", 0)))
         hide_fear_var.set(int(rec.get("HideOnFearLevelHigh", 0)))
         hide_flashlight_var.set(int(rec.get("HideWithFlashlightOff", 0)))
@@ -452,9 +467,11 @@ def open_actions_window():
         except (ValueError, TypeError):
             cost_val = 0
         data["Cost"]              = cost_val
-        data["EnemyProbability"]  = max(0, min(255, enemy_prob_var.get()))
-        data["DeathProbability"]  = max(0, min(255, death_prob_var.get()))
+        data["EnemyProbability"]       = max(0, min(255, enemy_prob_var.get()))
+        data["ResetEnemyProbability"]  = reset_enemy_prob_var.get()
+        data["DeathProbability"]       = max(0, min(255, death_prob_var.get()))
         data["Description"] = desc_text.get("1.0", "end-1c")
+        data["DescriptionActionFailed"] = desc_failed_text.get("1.0", "end-1c")
         data["HideOnWaterLevelHigh"]  = hide_water_var.get()
         data["HideOnFearLevelHigh"]   = hide_fear_var.get()
         data["HideWithFlashlightOff"] = hide_flashlight_var.get()
