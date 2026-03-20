@@ -26,14 +26,21 @@ def to_asm(dashboards):
     lines.append("dashboard_pointers:")
     offset = 0
 
-    rec0_name_offset       = None
-    rec0_total_sim_offset  = None
+    rec0_name_offset        = None
+    rec0_total_sim_offset   = None
     rec0_total_flash_offset = None
-    rec0_water0_offset     = None
-    rec0_water1_offset     = None
-    rec0_water2_offset     = None
-    rec0_water3_offset     = None
-    rec0_record_length     = None
+    rec0_water0_offset      = None
+    rec0_water1_offset      = None
+    rec0_water2_offset      = None
+    rec0_water3_offset      = None
+    rec0_extra_water_offset = None
+    rec0_extra_heart_offset = None
+    rec0_extra_flash_offset = None
+    rec0_death_water_offset = None
+    rec0_death_heart_offset = None
+    rec0_death_flash_offset = None
+    rec0_enemy_flash_on_offset = None
+    rec0_record_length      = None
 
     for index, (key, rec) in enumerate(dashboards.items()):
         rec_id = rec.get("ID", str(index)).strip()
@@ -51,6 +58,13 @@ def to_asm(dashboards):
         lines.append(f"  .word {label}_water_level1     ; {name} water_level1     [{offset},{offset+1}]") ; _w1 = offset ; offset += 2
         lines.append(f"  .word {label}_water_level2     ; {name} water_level2     [{offset},{offset+1}]") ; _w2 = offset ; offset += 2
         lines.append(f"  .word {label}_water_level3     ; {name} water_level3     [{offset},{offset+1}]") ; _w3 = offset ; offset += 2
+        lines.append(f"  .word {label}_extra_water      ; {name} extra_water      [{offset},{offset+1}]") ; _ew = offset ; offset += 2
+        lines.append(f"  .word {label}_extra_heartrate  ; {name} extra_heartrate  [{offset},{offset+1}]") ; _eh = offset ; offset += 2
+        lines.append(f"  .word {label}_extra_flashlight ; {name} extra_flashlight [{offset},{offset+1}]") ; _ef = offset ; offset += 2
+        lines.append(f"  .word {label}_death_water      ; {name} death_water      [{offset},{offset+1}]") ; _dw = offset ; offset += 2
+        lines.append(f"  .word {label}_death_heartrate  ; {name} death_heartrate  [{offset},{offset+1}]") ; _dh = offset ; offset += 2
+        lines.append(f"  .word {label}_death_flashlight ; {name} death_flashlight [{offset},{offset+1}]") ; _df = offset ; offset += 2
+        lines.append(f"  .word {label}_enemy_flash_on   ; {name} enemy_flash_on   [{offset},{offset+1}]") ; _efo = offset ; offset += 2
 
         if index == 0:
             rec0_name_offset        = _nam
@@ -60,6 +74,13 @@ def to_asm(dashboards):
             rec0_water1_offset      = _w1
             rec0_water2_offset      = _w2
             rec0_water3_offset      = _w3
+            rec0_extra_water_offset = _ew
+            rec0_extra_heart_offset = _eh
+            rec0_extra_flash_offset = _ef
+            rec0_death_water_offset = _dw
+            rec0_death_heart_offset = _dh
+            rec0_death_flash_offset = _df
+            rec0_enemy_flash_on_offset = _efo
             rec0_record_length      = offset - start_offset
 
     # ── Offset labels ─────────────────────────────────────────────────────
@@ -77,6 +98,20 @@ def to_asm(dashboards):
     lines.append(f"  .byte {rec0_water2_offset}  ; (byte of dashboard_0_water_level2 in pointers)")
     lines.append(f"dashboard_water_level3_offset:")
     lines.append(f"  .byte {rec0_water3_offset}  ; (byte of dashboard_0_water_level3 in pointers)")
+    lines.append(f"dashboard_extra_water_offset:")
+    lines.append(f"  .byte {rec0_extra_water_offset}  ; (byte of dashboard_0_extra_water in pointers)")
+    lines.append(f"dashboard_extra_heartrate_offset:")
+    lines.append(f"  .byte {rec0_extra_heart_offset}  ; (byte of dashboard_0_extra_heartrate in pointers)")
+    lines.append(f"dashboard_extra_flashlight_offset:")
+    lines.append(f"  .byte {rec0_extra_flash_offset}  ; (byte of dashboard_0_extra_flashlight in pointers)")
+    lines.append(f"dashboard_death_water_offset:")
+    lines.append(f"  .byte {rec0_death_water_offset}  ; (byte of dashboard_0_death_water in pointers)")
+    lines.append(f"dashboard_death_heartrate_offset:")
+    lines.append(f"  .byte {rec0_death_heart_offset}  ; (byte of dashboard_0_death_heartrate in pointers)")
+    lines.append(f"dashboard_death_flashlight_offset:")
+    lines.append(f"  .byte {rec0_death_flash_offset}  ; (byte of dashboard_0_death_flashlight in pointers)")
+    lines.append(f"dashboard_enemy_flash_on_offset:")
+    lines.append(f"  .byte {rec0_enemy_flash_on_offset}  ; (byte of dashboard_0_enemy_flash_on in pointers)")
     lines.append(f"dashboard_record_length:")
     lines.append(f"  .byte {rec0_record_length}  ; (total .word bytes per record)")
     lines.append("")
@@ -139,6 +174,52 @@ def to_asm(dashboards):
             lines.append(f"{label}_water_level{i}:")
             lines.append(f"  .byte ${hi:02X}  ; high byte  (decimal {wl_val})")
             lines.append(f"  .byte ${lo:02X}  ; low byte")
+            lines.append("")
+
+        # Extra Seconds fields (stored as 2-byte hex, high byte first)
+        for field_key, asm_label in [
+            ("ExtraSecondsWaterLevel",   "extra_water"),
+            ("ExtraSecondsHighHeartRate", "extra_heartrate"),
+            ("ExtraSecondsFlashlightOff", "extra_flashlight"),
+        ]:
+            try:
+                ex_val = int(rec.get(field_key, 0))
+                ex_val = max(0, min(1023, ex_val))
+            except (ValueError, TypeError):
+                ex_val = 0
+            hi = (ex_val >> 8) & 0xFF
+            lo = ex_val & 0xFF
+            lines.append(f"{label}_{asm_label}:")
+            lines.append(f"  .byte ${hi:02X}  ; high byte  (decimal {ex_val})")
+            lines.append(f"  .byte ${lo:02X}  ; low byte")
+            lines.append("")
+
+        # Death Probability fields (0–255, stored as single byte)
+        for field_key, asm_label in [
+            ("DeathProbWaterLevel",    "death_water"),
+            ("DeathProbHighHeartRate", "death_heartrate"),
+            ("DeathProbFlashlightOff", "death_flashlight"),
+        ]:
+            try:
+                dp_val = int(rec.get(field_key, 0))
+                dp_val = max(0, min(255, dp_val))
+            except (ValueError, TypeError):
+                dp_val = 0
+            lines.append(f"{label}_{asm_label}:")
+            lines.append(f"  .byte {dp_val}")
+            lines.append("")
+
+        # Enemy Probability fields (0–255, stored as single byte)
+        for field_key, asm_label in [
+            ("EnemyProbFlashlightOn", "enemy_flash_on"),
+        ]:
+            try:
+                ep_val = int(rec.get(field_key, 0))
+                ep_val = max(0, min(255, ep_val))
+            except (ValueError, TypeError):
+                ep_val = 0
+            lines.append(f"{label}_{asm_label}:")
+            lines.append(f"  .byte {ep_val}")
             lines.append("")
 
     # ── Record count constant ─────────────────────────────────────────────

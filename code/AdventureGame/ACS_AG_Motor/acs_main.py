@@ -1843,6 +1843,12 @@ def open_dashboard_window():
             wvar.set(0)
         total_sim_var.set(0)
         total_flash_var.set(0)
+        for evar in extra_spins.values():
+            evar.set(0)
+        for dvar in death_prob_sliders.values():
+            dvar.set(0)
+        for evar in enemy_prob_sliders.values():
+            evar.set(0)
         slbl.config(text=f"✔  New dashboard (ID {new_id}) — fill in details and save", fg="#50e878")
 
     tk.Button(form, text="✚  New Dashboard", font=("Courier New", 11, "bold"),
@@ -1915,6 +1921,34 @@ def open_dashboard_window():
         water_spins[label] = var
         water_spin_widgets.append(spin)
 
+    # ── Extra Seconds ─────────────────────────────────────────
+    section_lbl(form, "— Extra Seconds —")
+    extra_spins = {}
+    extra_spin_widgets = []
+    extra_max_lbls = []
+    for field_label, field_key in [
+        ("Seconds Extra for each Water Level", "ExtraSecondsWaterLevel"),
+        ("Seconds Extra for High HeartRate",   "ExtraSecondsHighHeartRate"),
+        ("Seconds Extra for Flashlight Off",   "ExtraSecondsFlashlightOff"),
+    ]:
+        row = tk.Frame(form, bg="#40318D")
+        row.pack(fill="x", pady=(4, 0))
+        tk.Label(row, text=f"{field_label}:", **LABEL_STYLE).pack(side="left")
+        var = tk.IntVar(value=0)
+        spin = tk.Spinbox(
+            row, from_=0, to=0, textvariable=var, width=6,
+            bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+            buttonbackground="#7869C4", relief="sunken", bd=2,
+            font=("Courier New", 11), justify="left",
+        )
+        spin.pack(side="left", padx=(8, 0), ipady=4)
+        max_lbl = tk.Label(row, text="seconds (max 0)", bg="#40318D", fg="#A09BE0",
+                           font=("Courier New", 10))
+        max_lbl.pack(side="left", padx=(6, 0))
+        extra_spins[field_key] = var
+        extra_spin_widgets.append(spin)
+        extra_max_lbls.append(max_lbl)
+
     def on_total_sim_changed(*_):
         try:
             max_val = int(total_sim_var.get())
@@ -1926,8 +1960,58 @@ def open_dashboard_window():
             spin.config(to=max_val)
         total_flash_spin.config(to=max_val)
         total_flash_max_lbl.config(text=f"seconds (max {max_val})")
+        for spin in extra_spin_widgets:
+            spin.config(to=max_val)
+        for lbl in extra_max_lbls:
+            lbl.config(text=f"seconds (max {max_val})")
 
     total_sim_var.trace_add("write", on_total_sim_changed)
+
+    # ── Death Probability on Action sliders (0–255) ─────────────────
+    section_lbl(form, "— Death Probability on Action —")
+    death_prob_sliders = {}
+    for field_label, field_key in [
+        ("For each Water Level",  "DeathProbWaterLevel"),
+        ("For High HeartRate",    "DeathProbHighHeartRate"),
+        ("For Flashlight Off",    "DeathProbFlashlightOff"),
+    ]:
+        row = tk.Frame(form, bg="#40318D")
+        row.pack(fill="x", pady=(4, 0))
+        tk.Label(row, text=f"{field_label}:", **LABEL_STYLE).pack(side="left")
+        var = tk.IntVar(value=0)
+        slider = tk.Scale(
+            row, from_=0, to=255, orient="horizontal",
+            variable=var, bg="#40318D", fg="#FFFFFF",
+            troughcolor="#2E2270", highlightthickness=0,
+            activebackground="#7869C4", font=("Courier New", 9),
+            length=200, sliderlength=16,
+        )
+        slider.pack(side="left", fill="x", expand=True)
+        tk.Label(row, textvariable=var, width=4,
+                 bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
+        death_prob_sliders[field_key] = var
+
+    # ── Enemy Probability sliders (0–255) ─────────────────────
+    section_lbl(form, "— Enemy Probability —")
+    enemy_prob_sliders = {}
+    for field_label, field_key in [
+        ("For Flashlight On", "EnemyProbFlashlightOn"),
+    ]:
+        row = tk.Frame(form, bg="#40318D")
+        row.pack(fill="x", pady=(4, 0))
+        tk.Label(row, text=f"{field_label}:", **LABEL_STYLE).pack(side="left")
+        var = tk.IntVar(value=0)
+        slider = tk.Scale(
+            row, from_=0, to=255, orient="horizontal",
+            variable=var, bg="#40318D", fg="#FFFFFF",
+            troughcolor="#2E2270", highlightthickness=0,
+            activebackground="#7869C4", font=("Courier New", 9),
+            length=200, sliderlength=16,
+        )
+        slider.pack(side="left", fill="x", expand=True)
+        tk.Label(row, textvariable=var, width=4,
+                 bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
+        enemy_prob_sliders[field_key] = var
 
     # ── Save ──────────────────────────────────────────────────
     tk.Frame(form, bg="#7869C4", height=2).pack(fill="x", pady=(14, 8))
@@ -1956,6 +2040,21 @@ def open_dashboard_window():
                 water_spins[label].set(int(rec.get(label, 0)))
             except (ValueError, TypeError):
                 water_spins[label].set(0)
+        for field_key in extra_spins:
+            try:
+                extra_spins[field_key].set(int(rec.get(field_key, 0)))
+            except (ValueError, TypeError):
+                extra_spins[field_key].set(0)
+        for field_key in death_prob_sliders:
+            try:
+                death_prob_sliders[field_key].set(int(rec.get(field_key, 0)))
+            except (ValueError, TypeError):
+                death_prob_sliders[field_key].set(0)
+        for field_key in enemy_prob_sliders:
+            try:
+                enemy_prob_sliders[field_key].set(int(rec.get(field_key, 0)))
+            except (ValueError, TypeError):
+                enemy_prob_sliders[field_key].set(0)
         slbl.config(text=f"✔  Loaded '{name}'", fg="#A09BE0")
 
     load_dd.bind("<<ComboboxSelected>>", on_load)
@@ -1982,6 +2081,17 @@ def open_dashboard_window():
             except (ValueError, TypeError):
                 val = 0
             data[label] = val
+        for field_key, var in extra_spins.items():
+            try:
+                val = int(var.get())
+                val = max(0, min(tsim, val))
+            except (ValueError, TypeError):
+                val = 0
+            data[field_key] = val
+        for field_key, var in death_prob_sliders.items():
+            data[field_key] = max(0, min(255, var.get()))
+        for field_key, var in enemy_prob_sliders.items():
+            data[field_key] = max(0, min(255, var.get()))
         save_to_json(JSON_DASHBOARD_FILE, "ID", data, slbl)
         load_dd["values"] = dashboard_names_by_id()
 

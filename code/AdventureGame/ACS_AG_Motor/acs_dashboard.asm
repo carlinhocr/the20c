@@ -3,45 +3,73 @@
 ; ============================================================
 
 dashboard_index:
-  .word dashboard_pointer_0  ; 
+  .word dashboard_pointer_0  ; dashBoardTest
 dashboard_index_record_length:
   .byte 2  ; each dashboard_index entry is 1 .word (2 bytes)
 
 dashboard_pointers:
 dashboard_pointer_0:
-  .word dashboard_0_id              ;  id              [0,1]
-  .word dashboard_0_name            ;  name            [2,3]
-  .word dashboard_0_total_sim_time  ;  total_sim_time  [4,5]
-  .word dashboard_0_water_level0    ;  water_level0    [6,7]
-  .word dashboard_0_water_level1    ;  water_level1    [8,9]
-  .word dashboard_0_water_level2    ;  water_level2    [10,11]
-  .word dashboard_0_water_level3    ;  water_level3    [12,13]
+  .word dashboard_0_id               ; dashBoardTest id               [0,1]
+  .word dashboard_0_name             ; dashBoardTest name             [2,3]
+  .word dashboard_0_total_sim_time   ; dashBoardTest total_sim_time   [4,5]
+  .word dashboard_0_total_flash_time ; dashBoardTest total_flash_time [6,7]
+  .word dashboard_0_water_level0     ; dashBoardTest water_level0     [8,9]
+  .word dashboard_0_water_level1     ; dashBoardTest water_level1     [10,11]
+  .word dashboard_0_water_level2     ; dashBoardTest water_level2     [12,13]
+  .word dashboard_0_water_level3     ; dashBoardTest water_level3     [14,15]
+  .word dashboard_0_extra_water      ; dashBoardTest extra_water      [16,17]
+  .word dashboard_0_extra_heartrate  ; dashBoardTest extra_heartrate  [18,19]
+  .word dashboard_0_extra_flashlight ; dashBoardTest extra_flashlight [20,21]
+  .word dashboard_0_death_water      ; dashBoardTest death_water      [22,23]
+  .word dashboard_0_death_heartrate  ; dashBoardTest death_heartrate  [24,25]
+  .word dashboard_0_death_flashlight ; dashBoardTest death_flashlight [26,27]
+  .word dashboard_0_enemy_flash_on   ; dashBoardTest enemy_flash_on   [28,29]
 dashboard_name_offset:
   .byte 2  ; (byte of dashboard_0_name in pointers)
 dashboard_total_sim_time_offset:
   .byte 4  ; (byte of dashboard_0_total_sim_time in pointers)
+dashboard_total_flash_time_offset:
+  .byte 6  ; (byte of dashboard_0_total_flash_time in pointers)
 dashboard_water_level0_offset:
-  .byte 6  ; (byte of dashboard_0_water_level0 in pointers)
+  .byte 8  ; (byte of dashboard_0_water_level0 in pointers)
 dashboard_water_level1_offset:
-  .byte 8  ; (byte of dashboard_0_water_level1 in pointers)
+  .byte 10  ; (byte of dashboard_0_water_level1 in pointers)
 dashboard_water_level2_offset:
-  .byte 10  ; (byte of dashboard_0_water_level2 in pointers)
+  .byte 12  ; (byte of dashboard_0_water_level2 in pointers)
 dashboard_water_level3_offset:
-  .byte 12  ; (byte of dashboard_0_water_level3 in pointers)
+  .byte 14  ; (byte of dashboard_0_water_level3 in pointers)
+dashboard_extra_water_offset:
+  .byte 16  ; (byte of dashboard_0_extra_water in pointers)
+dashboard_extra_heartrate_offset:
+  .byte 18  ; (byte of dashboard_0_extra_heartrate in pointers)
+dashboard_extra_flashlight_offset:
+  .byte 20  ; (byte of dashboard_0_extra_flashlight in pointers)
+dashboard_death_water_offset:
+  .byte 22  ; (byte of dashboard_0_death_water in pointers)
+dashboard_death_heartrate_offset:
+  .byte 24  ; (byte of dashboard_0_death_heartrate in pointers)
+dashboard_death_flashlight_offset:
+  .byte 26  ; (byte of dashboard_0_death_flashlight in pointers)
+dashboard_enemy_flash_on_offset:
+  .byte 28  ; (byte of dashboard_0_enemy_flash_on in pointers)
 dashboard_record_length:
-  .byte 14  ; (total .word bytes per record)
+  .byte 30  ; (total .word bytes per record)
 
-; ── Dashboard 0:  ──────────────────────────
+; ── Dashboard 0: dashBoardTest ──────────────────────────
 dashboard_0_id:
   .byte 0
 
 dashboard_0_name:
-  .ascii ""
+  .ascii "dashBoardTest"
   .ascii "e"
 
 dashboard_0_total_sim_time:
   .byte $02  ; high byte  (decimal 600)
   .byte $58  ; low byte
+
+dashboard_0_total_flash_time:
+  .byte $00  ; high byte  (decimal 200)
+  .byte $C8  ; low byte
 
 dashboard_0_water_level0:
   .byte $00  ; high byte  (decimal 100)
@@ -56,8 +84,32 @@ dashboard_0_water_level2:
   .byte $90  ; low byte
 
 dashboard_0_water_level3:
-  .byte $02  ; high byte  (decimal 600)
-  .byte $58  ; low byte
+  .byte $02  ; high byte  (decimal 599)
+  .byte $57  ; low byte
+
+dashboard_0_extra_water:
+  .byte $00  ; high byte  (decimal 10)
+  .byte $0A  ; low byte
+
+dashboard_0_extra_heartrate:
+  .byte $00  ; high byte  (decimal 10)
+  .byte $0A  ; low byte
+
+dashboard_0_extra_flashlight:
+  .byte $00  ; high byte  (decimal 10)
+  .byte $0A  ; low byte
+
+dashboard_0_death_water:
+  .byte 20
+
+dashboard_0_death_heartrate:
+  .byte 50
+
+dashboard_0_death_flashlight:
+  .byte 20
+
+dashboard_0_enemy_flash_on:
+  .byte 51
 
 ; ── Total dashboard count ──────────────────────────────────────
 dashboard_count:
