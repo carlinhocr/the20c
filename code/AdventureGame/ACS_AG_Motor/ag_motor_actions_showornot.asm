@@ -146,24 +146,24 @@ actionRecordSize=$0228
 action1Offset=$0229
 actionObjectOffset=$022a
 
-objectPosition=$022b
+;FREE =$022b
 actionPosition=$022c
 
 current_screen_offset=$022d
-puzzlePrintOffset=$022e
-objectPrintOffset=$022f
+;FREE =$022e
+;FREE =$022f
 actionPrintOffset=$0230
 screenPrintOffset=$0231
 
 selectedAction=$0232
-selectedObject=$0233
-selectedObject1=$0234
-selectedObject2=$0235
+;FREE =$0233
+;FREE =$0234
+;FREE =$0235
 print_no_CRLF=$0236
 
-currentPuzzleAction=$0237
-currentPuzzleObject1=$0238
-currentPuzzleObject2=$0239
+;FREE =$0237
+;FREE =$0238
+;FREE =$0239
 
 userOptionSelection=$023a
 
