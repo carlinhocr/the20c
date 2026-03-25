@@ -284,8 +284,8 @@ mainProgramLoop:
   ;CHECK MEDIO RARO
   lda gameEnded
   bne mainProgram ;if gameEnded is not zero then the game ended  
-  ;CHECK MEDIO RARO  
-  jsr checkGameEnd  
+  ;jsr checkGameEnd  
+  ;CHECK MEDIO RARO   
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
@@ -806,7 +806,7 @@ checkActionVisibility_checkFlashlight:
   lda #$1 ;force flashlight on to check on visilibity of action
   cmp flashlightOff ;it is zero the flash is off
   ;if flash ligth is on return
-  bne checkActionVisibility_End:
+  bne checkActionVisibility_End
   ;here the flashlight is off
   jmp checkActionVisibility_hide
 checkActionVisibility_hide:
