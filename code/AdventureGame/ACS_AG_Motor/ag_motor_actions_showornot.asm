@@ -277,6 +277,7 @@ mainProgram:
   jsr select_screen
   jsr draw_current_screen_table
 mainProgramLoop:
+  ;jsr simulationTimeCheck
   jsr action_selector
   jsr sensor_selector  
   lda gameEnded
@@ -426,14 +427,8 @@ loadConstants:
   ;add it to the SCREEN FILE to choose in the dashboard in which screen to start
   lda #$3; start with screen id 3 the start screen
   sta screenCurrentID  
-  ; lda #$ff
-  ; sta idleTimerStartMinute
   lda #$ff
   sta userOptionSelection  
-  ; lda #$00
-  ; sta timerExpired
-  ; lda #$00
-  ; sta gameEnded
   ;new added
   lda #$0
   sta fearLevel
@@ -441,7 +436,6 @@ loadConstants:
   sta waterLevel
   lda #$0 ;flashlight off
   sta flashlightStatus ;flashlight off
-  
   rts 
 
 initiatilizeActionsIDs:  
@@ -932,14 +926,6 @@ runAction:
 runActionEnd:
   rts
 
-printActionUnknown:  
-  lda #< actions_unknown
-  sta serialDataVectorLow  
-  lda #> actions_unknown
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts 
-
 print_option_unknown
   lda #< option_unknown
   sta serialDataVectorLow  
@@ -1229,10 +1215,6 @@ increaseWaterLevel:
 ;=============================================================
 ;Phrases
 ;=============================================================
-objects_header:
-  .ascii "Puedes ver los siguientes objetos:"
-  .ascii "e"
-
 actions_header:
   .ascii "Puedes realizar las siguientes acciones:"
   .ascii "e"  
@@ -1240,36 +1222,9 @@ actions_header:
 letterActions:
   .ascii "ABCDE"  
 
-numbersObjects:
-  .ascii "123456"  
-
 pasamos:
   .ascii "Por aca pasamos"
   .ascii "e"
-
-msj_mirar:
-  .ascii "Mirar "
-  .ascii "e"
-  
-msj_usar:
-  .ascii "Usar "
-  .ascii "e"
-
-msj_con:  
-  .ascii " con "
-  .ascii "e"
-
-msj_accok:
-  .ascii "Epa... esa es la acción"
-  .ascii "e"  
-
-msj_objok:
-  .ascii "Epa... ese es un objeto"
-  .ascii "e"   
-
-msj_objok2:
-  .ascii "Epa... y ese es el otro!"
-  .ascii "e"    
 
 msj_heartOn:
   .ascii "Tu corazón se acelera y no puedes pensar"
@@ -1287,10 +1242,6 @@ msj_secondElapsed:
   .ascii "Paso el tiempo"
   .ascii "e"    
 
-msj_minuteElapsed:
-  .ascii "Paso un minuto y te quedan "
-  .ascii "e"    
-
 msj_timerAllGame:
   .ascii "Comienza la Aventura tiene 10 minutos"
   .ascii "e"    
@@ -1304,10 +1255,7 @@ msj_iddleTimer1:
   .ascii "El agua comenzo a entumecer tus extremidades hasta que dejaste de sentirlas. "
   .ascii "Un eterno sueño te dio la bienvenida. "    
   .ascii "e"     
-actions_unknown:
-  .ascii "Mmmm no puedes hacer eso"
-  .ascii "e"     
-
+  
 option_unknown:
   .ascii "Mmmm esa opción no es válida"
   .ascii "e"    
