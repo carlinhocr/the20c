@@ -803,6 +803,7 @@ checkActionVisibility_checkFlashlight:
   lda currentActionHideFlashlightOff
   beq checkActionVisibility_End
   lda flashlightStatus ;if it is zero the flash light is off
+  lda #$1 ;force flashlight on to check on visilibity of action
   cmp flashlightOff ;it is zero the flash is off
   ;if flash ligth is on return
   bne checkActionVisibility_End:
