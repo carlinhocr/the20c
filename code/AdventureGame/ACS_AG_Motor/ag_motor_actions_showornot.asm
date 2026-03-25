@@ -309,8 +309,6 @@ RESET:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-
-
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------MAIN-----------------------------------------------
@@ -319,8 +317,9 @@ RESET:
 
 
 programStart:
-  ;initialize variables, vectors, memory mappings and constans
-  ;configure stack and enable interrupts
+  ;initialize variables, vectors, memory mappings and constans DONE
+  ;configure stack and enable interrupts DONE
+  ;Initialize HARDWARE
   jsr viaLcdInit
   jsr viaRsInit
   ;jsr viaSoundInit
@@ -330,10 +329,9 @@ programStart:
   ;jmp listeningMode
   ;start MainProgran and I save stack space by not jumping to it
 mainProgram:
-  ;initialize 
-  ;jsr testPrinter
-  jsr initilizationRoutines
+  ;initialize Variables 
   ;initialize screen as screen zero
+  jsr initilizationRoutines
   ;jsr timerWaitOneMinute
   jsr select_screen
   jsr draw_current_screen_table
@@ -357,402 +355,6 @@ mainProgramLoop:
 ;--------------------------------MAIN-----------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------  
-
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------LED_ASCII------------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-set_position_lcd_line0:
-  lda #pos_lcd_initial_line0
-  jsr lcd_send_instruction 
-  jmp print_ascii_screen_eeprom
-set_position_lcd_line1:
-  lda #pos_lcd_initial_line1
-  jsr lcd_send_instruction 
-  jmp print_ascii_screen_eeprom
-set_position_lcd_line2:
-  lda #pos_lcd_initial_line2
-  jsr lcd_send_instruction 
-  jmp print_ascii_screen_eeprom
-set_position_lcd_line3:
-  lda #pos_lcd_initial_line3
-  jsr lcd_send_instruction 
-  jmp print_ascii_screen_eeprom
-reset_screen_position:
-  lda #pos_lcd_initial_line0
-  jsr lcd_send_instruction 
-  jmp print_ascii_screen_end
-
-print_ascii_screen:  
-  ;BEGIN print_ascii_screen
-  jsr clear_display
-  ldx #$ff ; start as ff so when i add 1 it goes to zero
-  ldy #$ff ; jsut at the begginning so it would got all the 80 characters of the screen
-print_ascii_screen_line:  
-  inx
-  cpx #$00
-  beq set_position_lcd_line0
-  cpx #$01
-  beq set_position_lcd_line1
-  cpx #$02
-  beq set_position_lcd_line2
-  cpx #$03
-  beq set_position_lcd_line3
-  cpx #$04
-  beq reset_screen_position ; to reset the screen to initial position
-print_ascii_screen_eeprom:
-  iny ;so it would go out of a last byte equal 0 loop
-  lda (charDataVectorLow),y ;load letter from eeprom position indirect in the memory position charDataVector and indexed by Y
-  beq print_ascii_screen_line ; jump to loop if I load a 0 on lda a zero means the end  of a n .asciiz string
-  jsr print_char 
-  jmp print_ascii_screen_eeprom
-print_ascii_screen_end:
-  rts 
-  ;END print_ascii_screen
-
-lcdDemoMessage:
-  ;Draw Screen 1 Final Demo
-  lda #<screen1_demo
-  sta charDataVectorLow
-  lda #>screen1_demo
-  sta charDataVectorHigh
-  jsr print_ascii_screen
-  jsr delay_3_sec
-  rts 
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------LED_ASCII------------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------VIALCDINIT-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-viaLcdInit:
-
-  ;BEGIN enable interrupts LCD VIA
-  ;enable CA1 for interrupts
-  ;bits set/clear,timer1,timer2,CB1,CB2,ShiftReg,CA1,CA2
-  ;sets interrupts for timer 1 and CA1 #%11000010
-  lda #%11000010
-  sta LCD_IER 
-  ;enable negative edge transition ca1 LCD_PCR register
-  ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
-  lda #%00000000
-  sta LCD_PCR 
-  ;bit 7,6 00 timer 1 one shot mode without pb7
-  ;bit 5 in 0 timer 2 one shot mode
-  ;bit 4,3,2 in 0 disable shift register
-  ;bit 1 in zero portB latch disable
-  ;bit 0 in 0 portA larch disable
-  ;lda #%00000000      ; clear bits 7 and 6
-  lda #%00000000      ; clear bits 7 and 6 (free running)
-  sta LCD_ACR
-  ;counter in zero bit 6 of IFR is set
-
-  ;END enable interrupts
-
-  ;BEGIN Configure Ports A & B
-  ;set all port B pins as output
-  lda #%11111111  ;load all ones equivalent to $FF
-  sta LCD_DDRB ;store the accumulator in the data direction register for Port B
-
-  lda #%11100000  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
-  sta LCD_DDRA ;store the accumulator in the data direction register for Port A
-  ;END Configure Ports A & B
-  rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------VIALCDINIT-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------VIARSINIT------------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-viaRsInit:
-
-  ;BEGIN enable interrupts RS VIA
-  ;enable CA1 for interrupts
-  ;bits set/clear,timer1,timer2,CB1,CB2,ShiftReg,CA1,CA2
-  lda #%10000010
-  sta RS_IER 
-  ;enable negative edge transition ca1 RS_PCR register
-  ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
-  lda #%00000000
-  sta RS_PCR 
-  ;END enable interrupts
-
-  ;BEGIN Configure Ports A & B
-  ;set all port B pins as output
-  lda #%11111111  ;load all ones equivalent to $FF
-  sta RS_DDRB ;store the accumulator in the data direction register for Port B
-  
-  ;set all port A pins as Inputs
-  lda #%00000000  ;set as input PA7, PA6, PA5, PA4,PA3,PA2,PA1,PA0
-  sta RS_DDRA ;store the accumulator in the data direction register for Port A
-  ;END Configure Ports A & B
-  rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------VIALCDINIT-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------VIASOUNDINIT---------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-viaSoundInit:
-
-  ;Enable timer 1 to square wave output on pin PB7
-  ;lda #%11000000 ;$c0
-  ;sta SOUND_ACR 
-  ;BEGIN Configure Ports A & B
-  ;set all port B pins as output
-  lda #%11111111  ;load all ones equivalent to $FF
-  sta SOUND_DDRB ;store the accumulator in the data direction register for Port B
-
-  lda #%11111111  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
-  sta SOUND_DDRA ;store the accumulator in the data direction register for Port A
-  ;END Configure Ports A & B
-
-  rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------VIASOUNDINIT---------------------------------------
-;-----------------------------------------------------------------------------------
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------UARTSERIALINIT-------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-uartSerialInit:
-
-  ;reset UART 6551 by writting to thestatus register
-  lda #$00
-  sta ACIA_STATUS
-
-  ;configure the control register
-  ;bit 7 = 0 -> 1 Stop Bit
-  ;bit 6 =0 and bit 5=0 -> 8 bits word lenght
-  ;bit 4 = 1 -> receiver clock source is baud rate
-  ;bit 3 =1 bit 2=1 bit 1=1 bit 0=0 -> 9600 baudios as a baud rate
-  ;bit 3 =1 bit 2=1 bit 1=1 bit 0=1 -> 19200 baudios as a baud rate
-  lda #%00011110 ;N-8-1 = No parity, 8 bits, 1 Stop Bit, 9600 baudios
-  ;lda #%00011111 ;N-8-1 = No parity, 8 bits, 1 Stop Bit, 19200 baudios
-  sta ACIA_CTRL
-
-  ;configure the command register
-  ;bit 7 = 0 and bit 6 =0 -> odd parity but we will not be using parity
-  ;bit 5=0 -> disable parity
-  ;bit 4 = 0 -> disable ECHO
-  ;bit 3 =1 bit 2=0 -> RTSB Active Low and Interrupts Disable
-  ;bit 1 =1 -> Receiver interrupt request disable
-  ;bit 0 =1 -> Data terminal Ready (DTRB Low)
-  lda #%00001011 ;N-8-1 = No parity, 8 bits, 1 Stop Bit, 9600 baudios
-  sta ACIA_CMD
-
-  rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------UARTSERIALINIT-------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------PRINTER-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-initializePrinter:
-  jsr printerReset
-  rts
-
-testPrinter:  
-  jsr printerReset
-  jsr probandoPrinter
-  jsr printerBoldOn
-  jsr probandoPrinter
-  jsr printerBoldOff
-  jsr printerJustificationRight
-  jsr probandoPrinter
-  jsr printerJustificationCenter
-  jsr probandoPrinter
-  jsr printerJustificationLeft
-  jsr probandoPrinter
-;   jsr printerUnderlineOn
-;   jsr probandoPrinter
-;   jsr printerUnderlineOff
-  jsr printerLetterSizeBig
-  jsr probandoPrinter
-  jsr printerLetterSizeMedium
-  jsr probandoPrinter
-  jsr printerLetterSizeNormal
-  jsr probandoPrinter
-  jsr printerFeedManyLines
-  jsr printerCut
-  rts
-
-printerReset:
-  ;Initialization sequence ESC @
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$40 ;@
-  jsr send_rs232_char
-  rts
-
-printerCut:
-  ;Initialization sequence ESC @
-  lda #$1d 
-  jsr send_rs232_char
-  lda #$56
-  jsr send_rs232_char
-  lda #$00
-  jsr send_rs232_char  
-  rts
-
-printerBoldOn:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$45 ;E
-  jsr send_rs232_char
-  lda #$1 ;bold on
-  jsr send_rs232_char  
-  rts
-
-printerBoldOff:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$45 ;E
-  jsr send_rs232_char
-  lda #$0 ;bold off
-  jsr send_rs232_char  
-  rts  
-
-probandoPrinter:
-  lda #<msj_printer
-  sta serialDataVectorLow  
-  inx 
-  lda #>msj_printer
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts
-
-printerJustificationLeft:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$61 ;a
-  jsr send_rs232_char
-  lda #$0 ;left
-  jsr send_rs232_char  
-  rts      
-
-printerJustificationCenter:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$61 ;a
-  jsr send_rs232_char
-  lda #$1 ;Center
-  jsr send_rs232_char  
-  rts       
-
-printerJustificationRight:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$61 ;a
-  jsr send_rs232_char
-  lda #$2 ;right
-  jsr send_rs232_char  
-  rts       
-
-printerFeedOneLine:
-  lda #$0a ;LF
-  jsr send_rs232_char
-  rts
-
-printerFeedManyLines:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$64 ;a
-  jsr send_rs232_char
-  lda #$5 ;5 lines
-  jsr send_rs232_char  
-  rts    
-
-printerUnderlineOn:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$2d ;n
-  jsr send_rs232_char
-  lda #$1
-  jsr send_rs232_char  
-  rts    
-
-printerUnderlineOff:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$2d ;n
-  jsr send_rs232_char
-  lda #$0 
-  jsr send_rs232_char  
-  rts    
-  
-printerLetterSizeMedium:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$21 ;n
-  jsr send_rs232_char
-  ;bits 7 to 4 widht, bits 3 to 0 height 
-  ;00 normal size
-  lda #$11 ;medium size 
-  jsr send_rs232_char  
-  rts     
-
-printerLetterSizeBig:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$21 ;n
-  jsr send_rs232_char
-  ;bits 7 to 4 widht, bits 3 to 0 height 
-  ;00 normal size
-  lda #$33 ;big size 
-  jsr send_rs232_char  
-  rts   
-
-printerLetterSizeNormal:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$21 ;n
-  jsr send_rs232_char
-  ;bits 7 to 4 widht, bits 3 to 0 height 
-  ;00 normal size
-  lda #$00 ;medium size 
-  jsr send_rs232_char  
-  rts     
-msj_printer:
-  .ascii "Probando Printer"
-  .ascii "e"   
 
 
 ;BEGIN------------------------------------------------------------------------------
@@ -873,7 +475,6 @@ loadConstants:
   sta highWaterLevel
   lda #$1
   sta highFearLevel
-
 ;VARIABLE  
   lda #$0
   sta print_no_CRLF  
@@ -1085,9 +686,9 @@ draw_screen_description:
 
 draw_screen_description_flashlight:
   lda flashlightStatus
-  cmp #$1
-  beq draw_screen_description_flashlight_on
-  ;flashlight off
+  ;if it is not zero then it is on
+  bne draw_screen_description_flashlight_on
+  ;flashlight off, the flashlightStatus was zero
   lda screen_flashlight_off_offset
   sta screenPrintOffset  
   jsr draw_screen
@@ -2785,6 +2386,413 @@ screen_20c_compressed:
   .byte 32,32,34,34,255
   .byte 32,32,34,101,34,32,255
 
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------PRINTER-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+initializePrinter:
+  jsr printerReset
+  rts
+
+testPrinter:  
+  jsr printerReset
+  jsr probandoPrinter
+  jsr printerBoldOn
+  jsr probandoPrinter
+  jsr printerBoldOff
+  jsr printerJustificationRight
+  jsr probandoPrinter
+  jsr printerJustificationCenter
+  jsr probandoPrinter
+  jsr printerJustificationLeft
+  jsr probandoPrinter
+;   jsr printerUnderlineOn
+;   jsr probandoPrinter
+;   jsr printerUnderlineOff
+  jsr printerLetterSizeBig
+  jsr probandoPrinter
+  jsr printerLetterSizeMedium
+  jsr probandoPrinter
+  jsr printerLetterSizeNormal
+  jsr probandoPrinter
+  jsr printerFeedManyLines
+  jsr printerCut
+  rts
+
+printerReset:
+  ;Initialization sequence ESC @
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$40 ;@
+  jsr send_rs232_char
+  rts
+
+printerCut:
+  ;Initialization sequence ESC @
+  lda #$1d 
+  jsr send_rs232_char
+  lda #$56
+  jsr send_rs232_char
+  lda #$00
+  jsr send_rs232_char  
+  rts
+
+printerBoldOn:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$45 ;E
+  jsr send_rs232_char
+  lda #$1 ;bold on
+  jsr send_rs232_char  
+  rts
+
+printerBoldOff:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$45 ;E
+  jsr send_rs232_char
+  lda #$0 ;bold off
+  jsr send_rs232_char  
+  rts  
+
+probandoPrinter:
+  lda #<msj_printer
+  sta serialDataVectorLow  
+  inx 
+  lda #>msj_printer
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts
+
+printerJustificationLeft:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$61 ;a
+  jsr send_rs232_char
+  lda #$0 ;left
+  jsr send_rs232_char  
+  rts      
+
+printerJustificationCenter:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$61 ;a
+  jsr send_rs232_char
+  lda #$1 ;Center
+  jsr send_rs232_char  
+  rts       
+
+printerJustificationRight:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$61 ;a
+  jsr send_rs232_char
+  lda #$2 ;right
+  jsr send_rs232_char  
+  rts       
+
+printerFeedOneLine:
+  lda #$0a ;LF
+  jsr send_rs232_char
+  rts
+
+printerFeedManyLines:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$64 ;a
+  jsr send_rs232_char
+  lda #$5 ;5 lines
+  jsr send_rs232_char  
+  rts    
+
+printerUnderlineOn:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$2d ;n
+  jsr send_rs232_char
+  lda #$1
+  jsr send_rs232_char  
+  rts    
+
+printerUnderlineOff:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$2d ;n
+  jsr send_rs232_char
+  lda #$0 
+  jsr send_rs232_char  
+  rts    
+  
+printerLetterSizeMedium:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$21 ;n
+  jsr send_rs232_char
+  ;bits 7 to 4 widht, bits 3 to 0 height 
+  ;00 normal size
+  lda #$11 ;medium size 
+  jsr send_rs232_char  
+  rts     
+
+printerLetterSizeBig:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$21 ;n
+  jsr send_rs232_char
+  ;bits 7 to 4 widht, bits 3 to 0 height 
+  ;00 normal size
+  lda #$33 ;big size 
+  jsr send_rs232_char  
+  rts   
+
+printerLetterSizeNormal:
+  lda #$1b ;ESC 
+  jsr send_rs232_char
+  lda #$21 ;n
+  jsr send_rs232_char
+  ;bits 7 to 4 widht, bits 3 to 0 height 
+  ;00 normal size
+  lda #$00 ;medium size 
+  jsr send_rs232_char  
+  rts     
+msj_printer:
+  .ascii "Probando Printer"
+  .ascii "e"   
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------PRINTER-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------LED_ASCII------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+set_position_lcd_line0:
+  lda #pos_lcd_initial_line0
+  jsr lcd_send_instruction 
+  jmp print_ascii_screen_eeprom
+set_position_lcd_line1:
+  lda #pos_lcd_initial_line1
+  jsr lcd_send_instruction 
+  jmp print_ascii_screen_eeprom
+set_position_lcd_line2:
+  lda #pos_lcd_initial_line2
+  jsr lcd_send_instruction 
+  jmp print_ascii_screen_eeprom
+set_position_lcd_line3:
+  lda #pos_lcd_initial_line3
+  jsr lcd_send_instruction 
+  jmp print_ascii_screen_eeprom
+reset_screen_position:
+  lda #pos_lcd_initial_line0
+  jsr lcd_send_instruction 
+  jmp print_ascii_screen_end
+
+print_ascii_screen:  
+  ;BEGIN print_ascii_screen
+  jsr clear_display
+  ldx #$ff ; start as ff so when i add 1 it goes to zero
+  ldy #$ff ; jsut at the begginning so it would got all the 80 characters of the screen
+print_ascii_screen_line:  
+  inx
+  cpx #$00
+  beq set_position_lcd_line0
+  cpx #$01
+  beq set_position_lcd_line1
+  cpx #$02
+  beq set_position_lcd_line2
+  cpx #$03
+  beq set_position_lcd_line3
+  cpx #$04
+  beq reset_screen_position ; to reset the screen to initial position
+print_ascii_screen_eeprom:
+  iny ;so it would go out of a last byte equal 0 loop
+  lda (charDataVectorLow),y ;load letter from eeprom position indirect in the memory position charDataVector and indexed by Y
+  beq print_ascii_screen_line ; jump to loop if I load a 0 on lda a zero means the end  of a n .asciiz string
+  jsr print_char 
+  jmp print_ascii_screen_eeprom
+print_ascii_screen_end:
+  rts 
+  ;END print_ascii_screen
+
+lcdDemoMessage:
+  ;Draw Screen 1 Final Demo
+  lda #<screen1_demo
+  sta charDataVectorLow
+  lda #>screen1_demo
+  sta charDataVectorHigh
+  jsr print_ascii_screen
+  jsr delay_3_sec
+  rts 
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------LED_ASCII------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------VIALCDINIT-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+viaLcdInit:
+
+  ;BEGIN enable interrupts LCD VIA
+  ;enable CA1 for interrupts
+  ;bits set/clear,timer1,timer2,CB1,CB2,ShiftReg,CA1,CA2
+  ;sets interrupts for timer 1 and CA1 #%11000010
+  lda #%11000010
+  sta LCD_IER 
+  ;enable negative edge transition ca1 LCD_PCR register
+  ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
+  lda #%00000000
+  sta LCD_PCR 
+  ;bit 7,6 00 timer 1 one shot mode without pb7
+  ;bit 5 in 0 timer 2 one shot mode
+  ;bit 4,3,2 in 0 disable shift register
+  ;bit 1 in zero portB latch disable
+  ;bit 0 in 0 portA larch disable
+  ;lda #%00000000      ; clear bits 7 and 6
+  lda #%00000000      ; clear bits 7 and 6 (free running)
+  sta LCD_ACR
+  ;counter in zero bit 6 of IFR is set
+
+  ;END enable interrupts
+
+  ;BEGIN Configure Ports A & B
+  ;set all port B pins as output
+  lda #%11111111  ;load all ones equivalent to $FF
+  sta LCD_DDRB ;store the accumulator in the data direction register for Port B
+
+  lda #%11100000  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
+  sta LCD_DDRA ;store the accumulator in the data direction register for Port A
+  ;END Configure Ports A & B
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------VIALCDINIT-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------VIARSINIT------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+viaRsInit:
+
+  ;BEGIN enable interrupts RS VIA
+  ;enable CA1 for interrupts
+  ;bits set/clear,timer1,timer2,CB1,CB2,ShiftReg,CA1,CA2
+  lda #%10000010
+  sta RS_IER 
+  ;enable negative edge transition ca1 RS_PCR register
+  ;bits 7,6,5(cb2 control),4 cb1 control,3,2,1(ca2 control),0 ca1 control
+  lda #%00000000
+  sta RS_PCR 
+  ;END enable interrupts
+
+  ;BEGIN Configure Ports A & B
+  ;set all port B pins as output
+  lda #%11111111  ;load all ones equivalent to $FF
+  sta RS_DDRB ;store the accumulator in the data direction register for Port B
+  
+  ;set all port A pins as Inputs
+  lda #%00000000  ;set as input PA7, PA6, PA5, PA4,PA3,PA2,PA1,PA0
+  sta RS_DDRA ;store the accumulator in the data direction register for Port A
+  ;END Configure Ports A & B
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------VIALCDINIT-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------VIASOUNDINIT---------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+viaSoundInit:
+
+  ;Enable timer 1 to square wave output on pin PB7
+  ;lda #%11000000 ;$c0
+  ;sta SOUND_ACR 
+  ;BEGIN Configure Ports A & B
+  ;set all port B pins as output
+  lda #%11111111  ;load all ones equivalent to $FF
+  sta SOUND_DDRB ;store the accumulator in the data direction register for Port B
+
+  lda #%11111111  ;set the last 3 pins as output PA7, PA6, PA5 and as input PA4,PA3,PA2,PA1,PA0
+  sta SOUND_DDRA ;store the accumulator in the data direction register for Port A
+  ;END Configure Ports A & B
+
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------VIASOUNDINIT---------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------UARTSERIALINIT-------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+uartSerialInit:
+
+  ;reset UART 6551 by writting to thestatus register
+  lda #$00
+  sta ACIA_STATUS
+
+  ;configure the control register
+  ;bit 7 = 0 -> 1 Stop Bit
+  ;bit 6 =0 and bit 5=0 -> 8 bits word lenght
+  ;bit 4 = 1 -> receiver clock source is baud rate
+  ;bit 3 =1 bit 2=1 bit 1=1 bit 0=0 -> 9600 baudios as a baud rate
+  ;bit 3 =1 bit 2=1 bit 1=1 bit 0=1 -> 19200 baudios as a baud rate
+  lda #%00011110 ;N-8-1 = No parity, 8 bits, 1 Stop Bit, 9600 baudios
+  ;lda #%00011111 ;N-8-1 = No parity, 8 bits, 1 Stop Bit, 19200 baudios
+  sta ACIA_CTRL
+
+  ;configure the command register
+  ;bit 7 = 0 and bit 6 =0 -> odd parity but we will not be using parity
+  ;bit 5=0 -> disable parity
+  ;bit 4 = 0 -> disable ECHO
+  ;bit 3 =1 bit 2=0 -> RTSB Active Low and Interrupts Disable
+  ;bit 1 =1 -> Receiver interrupt request disable
+  ;bit 0 =1 -> Data terminal Ready (DTRB Low)
+  lda #%00001011 ;N-8-1 = No parity, 8 bits, 1 Stop Bit, 9600 baudios
+  sta ACIA_CMD
+
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------UARTSERIALINIT-------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;---------------------------------------DATA----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
 lcd_positions:
 lcd_positions_line0:
