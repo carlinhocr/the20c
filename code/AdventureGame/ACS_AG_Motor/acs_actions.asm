@@ -266,7 +266,7 @@ action_0_name:
   .ascii "e"
 
 action_0_alias:
-  .ascii ""
+  .ascii "Pirulo"
   .ascii "e"
 
 action_0_sensor_id:

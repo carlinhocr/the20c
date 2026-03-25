@@ -14,6 +14,9 @@
         "DeathProbWaterLevel": 20,
         "DeathProbHighHeartRate": 50,
         "DeathProbFlashlightOff": 20,
-        "EnemyProbFlashlightOn": 51
+        "EnemyProbFlashlightOn": 51,
+        "StartScreenID": 3,
+        "HighWaterLevel": 3,
+        "HighHeartRateLevel": 1
     }
 }

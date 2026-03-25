@@ -1855,6 +1855,9 @@ def open_dashboard_window():
             dvar.set(0)
         for evar in enemy_prob_sliders.values():
             evar.set(0)
+        dash_combo_vars["StartScreen"].set("")
+        high_water_var.set(2)
+        high_heart_var.set(1)
         slbl.config(text=f"✔  New dashboard (ID {new_id}) — fill in details and save", fg="#50e878")
 
     tk.Button(form, text="✚  New Dashboard", font=("Courier New", 11, "bold"),
@@ -1868,6 +1871,65 @@ def open_dashboard_window():
     section_lbl(form, "— Identity —")
     add_field(form, "ID",   entries)
     add_field(form, "Name", entries)
+
+    # ── Start Screen ──────────────────────────────────────────
+    section_lbl(form, "— Start Screen —")
+    dash_combo_vars    = {}
+    dash_combo_widgets = {}
+    add_combo(form, "StartScreen", get_screen_names(), dash_combo_vars, dash_combo_widgets)
+    dash_start_id_var = tk.StringVar(value="")
+    start_id_row = tk.Frame(form, bg="#40318D")
+    start_id_row.pack(fill="x", pady=(2, 0))
+    tk.Label(start_id_row, text="Screen ID:", **LABEL_STYLE).pack(side="left")
+    tk.Label(start_id_row, textvariable=dash_start_id_var,
+             bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
+
+    def refresh_start_screen_id(*_):
+        name = dash_combo_vars["StartScreen"].get().strip()
+        if not name:
+            dash_start_id_var.set("")
+            return
+        scrs = load_json(JSON_SCREENS_FILE)
+        for rec in scrs.values():
+            if rec.get("Name", "").strip() == name:
+                dash_start_id_var.set(rec.get("ID", "?"))
+                return
+        dash_start_id_var.set("?")
+
+    dash_combo_vars["StartScreen"].trace_add("write", refresh_start_screen_id)
+
+    # ── Thresholds ────────────────────────────────────────────
+    section_lbl(form, "— Thresholds —")
+
+    # High Water Level (0-3)
+    high_water_row = tk.Frame(form, bg="#40318D")
+    high_water_row.pack(fill="x", pady=(4, 0))
+    tk.Label(high_water_row, text="High Water Level:", **LABEL_STYLE).pack(side="left")
+    high_water_var = tk.IntVar(value=2)
+    high_water_spin = tk.Spinbox(
+        high_water_row, from_=0, to=3, textvariable=high_water_var, width=4,
+        bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+        buttonbackground="#7869C4", relief="sunken", bd=2,
+        font=("Courier New", 11), justify="left",
+    )
+    high_water_spin.pack(side="left", padx=(8, 0), ipady=4)
+    tk.Label(high_water_row, text="(0–3)", bg="#40318D", fg="#A09BE0",
+             font=("Courier New", 10)).pack(side="left", padx=(6, 0))
+
+    # High HeartRate Level (0-1)
+    high_heart_row = tk.Frame(form, bg="#40318D")
+    high_heart_row.pack(fill="x", pady=(4, 0))
+    tk.Label(high_heart_row, text="High HeartRate Level:", **LABEL_STYLE).pack(side="left")
+    high_heart_var = tk.IntVar(value=1)
+    high_heart_spin = tk.Spinbox(
+        high_heart_row, from_=0, to=1, textvariable=high_heart_var, width=4,
+        bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
+        buttonbackground="#7869C4", relief="sunken", bd=2,
+        font=("Courier New", 11), justify="left",
+    )
+    high_heart_spin.pack(side="left", padx=(8, 0), ipady=4)
+    tk.Label(high_heart_row, text="(0–1)", bg="#40318D", fg="#A09BE0",
+             font=("Courier New", 10)).pack(side="left", padx=(6, 0))
 
     # ── Total Simulation Time ─────────────────────────────────
     section_lbl(form, "— Total Simulation Time —")
@@ -2061,6 +2123,31 @@ def open_dashboard_window():
                 enemy_prob_sliders[field_key].set(int(rec.get(field_key, 0)))
             except (ValueError, TypeError):
                 enemy_prob_sliders[field_key].set(0)
+        # Start Screen
+        dash_combo_vars["StartScreen"].set("")
+        stored_start_id = rec.get("StartScreenID", 255)
+        try:
+            stored_start_id = int(stored_start_id)
+        except (ValueError, TypeError):
+            stored_start_id = 255
+        if stored_start_id != 255:
+            scrs = load_json(JSON_SCREENS_FILE)
+            for srec in scrs.values():
+                try:
+                    if int(srec.get("ID", -1)) == stored_start_id:
+                        dash_combo_vars["StartScreen"].set(srec.get("Name", ""))
+                        break
+                except (ValueError, TypeError):
+                    pass
+        # Thresholds
+        try:
+            high_water_var.set(int(rec.get("HighWaterLevel", 2)))
+        except (ValueError, TypeError):
+            high_water_var.set(2)
+        try:
+            high_heart_var.set(int(rec.get("HighHeartRateLevel", 1)))
+        except (ValueError, TypeError):
+            high_heart_var.set(1)
         slbl.config(text=f"✔  Loaded '{name}'", fg="#A09BE0")
 
     load_dd.bind("<<ComboboxSelected>>", on_load)
@@ -2098,8 +2185,21 @@ def open_dashboard_window():
             data[field_key] = max(0, min(255, var.get()))
         for field_key, var in enemy_prob_sliders.items():
             data[field_key] = max(0, min(255, var.get()))
+        # Start Screen ID
+        start_name = dash_combo_vars["StartScreen"].get().strip()
+        start_id_num = 255
+        if start_name:
+            try:
+                start_id_num = int(dash_start_id_var.get())
+            except (ValueError, TypeError):
+                start_id_num = 255
+        data["StartScreenID"] = start_id_num
+        # Thresholds
+        data["HighWaterLevel"]    = max(0, min(3, high_water_var.get()))
+        data["HighHeartRateLevel"] = max(0, min(1, high_heart_var.get()))
         save_to_json(JSON_DASHBOARD_FILE, "ID", data, slbl)
         load_dd["values"] = dashboard_names_by_id()
+        dash_combo_widgets["StartScreen"]["values"] = get_screen_names()
 
     save_btn(form, "💾  Save Dashboard", on_save)
 
@@ -2143,6 +2243,8 @@ def open_play_window():
     death_prob_heart    = D("DeathProbHighHeartRate",    10)
     death_prob_flash    = D("DeathProbFlashlightOff",    50)
     enemy_prob_flash_on = D("EnemyProbFlashlightOn",     10)
+    high_water_mark     = D("HighWaterLevel",             2)
+    high_heart_mark     = D("HighHeartRateLevel",         1)
 
     # ── Game state ────────────────────────────────────────────
     state = {
@@ -2168,12 +2270,16 @@ def open_play_window():
     for sid, srec in sensor_by_id.items():
         state["sensor_states"][sid] = bool(srec.get("Active", False))
 
-    # Find startScreen
+    # Find startScreen (from dashboard or fallback)
     start_screen = None
-    for s in screens.values():
-        if s.get("Name","").strip().lower() == "startscreen":
-            start_screen = s
-            break
+    dash_start_id = D("StartScreenID", 255)
+    if dash_start_id != 255:
+        start_screen = screen_by_id.get(str(dash_start_id))
+    if not start_screen:
+        for s in screens.values():
+            if s.get("Name","").strip().lower() == "startscreen":
+                start_screen = s
+                break
     if not start_screen:
         start_screen = screen_by_id.get("3") or list(screens.values())[0]
 
@@ -2196,6 +2302,13 @@ def open_play_window():
         tk.Label(status_frame, textvariable=sv, font=("Courier New", 9, "bold"),
                  bg="#1A1452", fg="#50e878", padx=8).pack(side="left")
         status_vars[label_text] = sv
+
+    # ── God mode checkbox (forces random to 255 = never fail) ─
+    god_mode_var = tk.IntVar(value=0)
+    tk.Checkbutton(status_frame, text="🛡 God Mode", variable=god_mode_var,
+                   font=("Courier New", 9, "bold"), bg="#1A1452", fg="#FF6060",
+                   selectcolor="#2E2270", activebackground="#1A1452",
+                   activeforeground="#FF6060", cursor="hand2").pack(side="right", padx=8)
 
     tk.Frame(win, bg="#7869C4", height=2).pack(fill="x")
 
@@ -2277,13 +2390,15 @@ def open_play_window():
             write(f"⚠ El nivel de agua subió a {new_level}!", "warning")
 
     def get_random():
+        if god_mode_var.get():
+            return 255
         return random.randint(0, 255)
 
     def is_high_water():
-        return state["water_level"] >= 2
+        return state["water_level"] >= high_water_mark
 
     def is_high_fear():
-        return state["heart_rate"] >= 1
+        return state["heart_rate"] >= high_heart_mark
 
     def clear_actions():
         for w in action_frame.winfo_children():
@@ -2365,8 +2480,9 @@ def open_play_window():
             return
 
         for aname, arec in available:
+            display_name = arec.get("Alias", "").strip() or aname
             btn = tk.Button(
-                action_frame, text=f"▶ {aname}",
+                action_frame, text=f"▶ {display_name}",
                 font=("Courier New", 10, "bold"),
                 bg="#7869C4", fg="#000000",
                 activebackground="#A09BE0", activeforeground="#000000",
@@ -2454,7 +2570,8 @@ def open_play_window():
             return
 
         write(f"\n{'─' * 40}", "info")
-        write(f"▶ {aname}", "title")
+        display_name = arec.get("Alias", "").strip() or aname
+        write(f"▶ {display_name}", "title")
 
         # Print action description
         desc = arec.get("Description", "").strip()

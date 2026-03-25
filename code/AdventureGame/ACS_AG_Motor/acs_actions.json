@@ -2,11 +2,19 @@
     "0": {
         "ID": "0",
         "Name": "LEVANTARSE",
+        "Alias": "Pirulo",
         "SensorID": 0,
         "SensorActive": true,
         "ScreenID": 1,
         "Cost": 15,
-        "Description": "Con esfuerzo, te incorporas sin saber como. Semejante derrumbe deberia haber sido mortal. El frio no duele, todavia."
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 0,
+        "Description": "Con esfuerzo, te incorporas sin saber como. Semejante derrumbe deberia haber sido mortal. El frio no duele, todavia.",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     },
     "1": {
         "ID": "1",

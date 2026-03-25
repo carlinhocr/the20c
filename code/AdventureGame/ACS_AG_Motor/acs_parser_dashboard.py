@@ -27,6 +27,9 @@ def to_asm(dashboards):
     offset = 0
 
     rec0_name_offset        = None
+    rec0_start_screen_offset = None
+    rec0_high_water_offset  = None
+    rec0_high_heart_offset  = None
     rec0_total_sim_offset   = None
     rec0_total_flash_offset = None
     rec0_water0_offset      = None
@@ -52,6 +55,9 @@ def to_asm(dashboards):
         lines.append(f"dashboard_pointer_{rec_id}:")
         lines.append(f"  .word {label}_id               ; {name} id               [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_name             ; {name} name             [{offset},{offset+1}]") ; _nam = offset ; offset += 2
+        lines.append(f"  .word {label}_start_screen     ; {name} start_screen     [{offset},{offset+1}]") ; _ss = offset ; offset += 2
+        lines.append(f"  .word {label}_high_water_level ; {name} high_water_level [{offset},{offset+1}]") ; _hw = offset ; offset += 2
+        lines.append(f"  .word {label}_high_heart_level ; {name} high_heart_level [{offset},{offset+1}]") ; _hh = offset ; offset += 2
         lines.append(f"  .word {label}_total_sim_time   ; {name} total_sim_time   [{offset},{offset+1}]") ; _tst = offset ; offset += 2
         lines.append(f"  .word {label}_total_flash_time ; {name} total_flash_time [{offset},{offset+1}]") ; _tft = offset ; offset += 2
         lines.append(f"  .word {label}_water_level0     ; {name} water_level0     [{offset},{offset+1}]") ; _w0 = offset ; offset += 2
@@ -68,6 +74,9 @@ def to_asm(dashboards):
 
         if index == 0:
             rec0_name_offset        = _nam
+            rec0_start_screen_offset = _ss
+            rec0_high_water_offset  = _hw
+            rec0_high_heart_offset  = _hh
             rec0_total_sim_offset   = _tst
             rec0_total_flash_offset = _tft
             rec0_water0_offset      = _w0
@@ -86,6 +95,12 @@ def to_asm(dashboards):
     # ── Offset labels ─────────────────────────────────────────────────────
     lines.append(f"dashboard_name_offset:")
     lines.append(f"  .byte {rec0_name_offset}  ; (byte of dashboard_0_name in pointers)")
+    lines.append(f"dashboard_start_screen_offset:")
+    lines.append(f"  .byte {rec0_start_screen_offset}  ; (byte of dashboard_0_start_screen in pointers)")
+    lines.append(f"dashboard_high_water_level_offset:")
+    lines.append(f"  .byte {rec0_high_water_offset}  ; (byte of dashboard_0_high_water_level in pointers)")
+    lines.append(f"dashboard_high_heart_level_offset:")
+    lines.append(f"  .byte {rec0_high_heart_offset}  ; (byte of dashboard_0_high_heart_level in pointers)")
     lines.append(f"dashboard_total_sim_time_offset:")
     lines.append(f"  .byte {rec0_total_sim_offset}  ; (byte of dashboard_0_total_sim_time in pointers)")
     lines.append(f"dashboard_total_flash_time_offset:")
@@ -133,6 +148,37 @@ def to_asm(dashboards):
         lines.append(f"{label}_name:")
         lines.append(f'  .ascii "{name_str}"')
         lines.append('  .ascii "e"')
+        lines.append("")
+
+        # Start Screen ID
+        try:
+            start_scr_val = int(rec.get("StartScreenID", 255))
+        except (ValueError, TypeError):
+            start_scr_val = 255
+        if start_scr_val < 0 or start_scr_val > 254:
+            start_scr_val = 255
+        lines.append(f"{label}_start_screen:")
+        lines.append(f"  .byte {start_scr_val}  ; start screen id")
+        lines.append("")
+
+        # High Water Level (0-3)
+        try:
+            hw_val = int(rec.get("HighWaterLevel", 2))
+            hw_val = max(0, min(3, hw_val))
+        except (ValueError, TypeError):
+            hw_val = 2
+        lines.append(f"{label}_high_water_level:")
+        lines.append(f"  .byte {hw_val}")
+        lines.append("")
+
+        # High HeartRate Level (0-1)
+        try:
+            hh_val = int(rec.get("HighHeartRateLevel", 1))
+            hh_val = max(0, min(1, hh_val))
+        except (ValueError, TypeError):
+            hh_val = 1
+        lines.append(f"{label}_high_heart_level:")
+        lines.append(f"  .byte {hh_val}")
         lines.append("")
 
         # Total Simulation Time (stored as 2-byte hex, high byte first)
