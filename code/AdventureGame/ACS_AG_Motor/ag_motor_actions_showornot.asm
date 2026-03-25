@@ -796,6 +796,7 @@ checkActionVisibility_checkFear:
   lda currentActionHideFear
   beq checkActionVisibility_checkFlashlight ;not hide on water levelif it is zero 
   lda fearLevel
+  lda highFearLevel ;force high fear level to hide action
   cmp highFearLevel
   bne checkActionVisibility_checkFlashlight
   jmp checkActionVisibility_hide
