@@ -95,32 +95,16 @@ rleVectorHigh=$a1
 LCD_PORTSTATUS=$a2
 
 ;Zero Page Vectors Screen
-screenCurrentASCII_Low=$b0
-screenCurrentASCII_High=$b1
-
+ramScreenVectorLow=$b0
+ramScreenVectorHigh=$b1
 screenCurrentDescription_Low=$b2
 screenCurrentDescription_High=$b3
-
-;screenCurrentObjects_Low=$b4
-;screenCurrentObjects_High=$b5
-
-actionCheckVectorLow=$b6
-actionCheckVectorHigh=$b7
-
-;puzzleDataVectorLow=$b8
-;puzzleDataVectorHigh=$b9
-
-actionDataVectorLow=$ba
-actionDataVectorHigh=$bb
-
-sourceScreenVectorLow=$bc
-sourceScreenVectorHigh=$bd
-
-ramScreenVectorLow=$be
-ramScreenVectorHigh=$bf
-
-puzzlePivotLow=$c0
-puzzlePivotHigh=$c1
+actionCheckVectorLow=$b4
+actionCheckVectorHigh=$b5
+actionDataVectorLow=$b6
+actionDataVectorHigh=$b7
+sourceScreenVectorLow=$b8
+sourceScreenVectorHigh=$b9
 
 pivotZpLow=$fe
 pivotZpHigh=$ff
@@ -130,43 +114,16 @@ rleChar=$0200
 rleTimes=$0201
 rleScreenLines=$0202
 
-screenCurrentID=$0210
-screenMultiple=$0211
-screenRecordSize=$0212
-screenCurrentBaseAddressLow=$0213
-screenCurrentBaseAddressHigh=$0214
+screenCurrentID=        $0210
+max_actions_per_screen= $0211
+actionCurrentID=        $0212
+actionPosition=         $0213
+current_screen_offset=  $0214
+screenPrintOffset=      $0215
+selectedAction=         $0216
+print_no_CRLF=          $0217
 
-;FREE =$0215 to $0224
-
-max_actions_per_screen=$0225
-
-actionCurrentID=$0226
-actionMultiple=$0227
-actionRecordSize=$0228
-action1Offset=$0229
-actionObjectOffset=$022a
-
-;FREE =$022b
-actionPosition=$022c
-
-current_screen_offset=$022d
-;FREE =$022e
-;FREE =$022f
-actionPrintOffset=$0230
-screenPrintOffset=$0231
-
-selectedAction=$0232
-;FREE =$0233
-;FREE =$0234
-;FREE =$0235
-print_no_CRLF=$0236
-
-;FREE =$0237
-;FREE =$0238
-;FREE =$0239
-
-userOptionSelection=$023a
-
+userOptionSelection=    $023a
 heartRate=$023b
 waterLevel=$023c
 heartRateSensor=$023d
