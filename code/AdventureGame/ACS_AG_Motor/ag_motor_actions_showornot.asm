@@ -122,6 +122,7 @@ current_screen_offset=  $0214
 screenPrintOffset=      $0215
 selectedAction=         $0216
 print_no_CRLF=          $0217
+flashlightOff=          $0218
 
 userOptionSelection=    $023a
 heartRate=$023b
@@ -435,6 +436,8 @@ loadConstants:
   lda #$0
   sta waterLevel
   lda #$0 ;flashlight off
+  sta flashlightOff ;flashlight off  
+  lda #$0 ;flashlight off
   sta flashlightStatus ;flashlight off
   rts 
 
@@ -703,15 +706,13 @@ loadScreenActionOptions_loop:
   ;fearLevel
   ;waterLevel
   ;Flashlight Off
-  lda #$0
-  sta actionHidden ;the action is not hidden on 0 and hidden on 1
   tya ;save Y because i am going to another process
   pha ;save Y because i am going to another process
   jsr checkActionVisibility
   pla ;retrieve Y after processAction
   tay ;retrieve Y after processAction
   lda actionHidden
-  bne nextAction;action  hidden is not zero hide the action
+  bne nextAction ;action  hidden is not zero hide the action
   ;if we are here the action is visible
   tya ;save Y because i am going to another process
   pha ;save Y because i am going to another process
@@ -724,12 +725,14 @@ loadScreenActionOptions_loop:
   tay ;retrieve Y after processAction
 nextAction:  
   iny ;go to next action of the screen
-  cpy max_actions_per_screen ;max objects per screen 0-5 for now 
-  ;check if the actions menu goes 6 time
+  cpy max_actions_per_screen ;max objects per screen 0-3 for now 
+  ;check if the actions menu goes 4 time
   bne loadScreenActionOptions_loop
   rts
 
 checkActionVisibility:
+  lda #$0 ;by default the actions are not hidden
+  sta actionHidden ;the action is not hidden on 0 and hidden on 1
   lda actionCurrentID
   asl ;multiply by two 
   tax
@@ -738,45 +741,75 @@ checkActionVisibility:
   inx
   lda actions_index,x
   sta pivotZpHigh
-  lda action_hide_water_offset
-  tay
+  ldy action_hide_water_offset
+  ;on pivotZpLow and High I have the address of the action pointer
+  ;for example action pointer 3, this is another address table
+  ;by adding the offset to Y, we will now retrieve another address
+  ;that final address will have the the data we seek
+  lda (pivotZpLow),Y
+  sta actionCheckVectorLow
+  iny 
+  lda (pivotZpLow),Y
+  sta actionCheckVectorHigh  
+  ;now on actionCheckVector Low and High I have the address
+  ;where the action_3_hide_water is, we do not need and offset but we need indirect access
+  ;so we use 0 as offset
+  ldy #$0
+  lda (actionCheckVectorLow),Y
+  sta currentActionHideWater
+  ;now we load fear
+  ldy action_hide_fear_offset
   lda (pivotZpLow),Y
   sta actionCheckVectorLow
   iny 
   lda (pivotZpLow),Y
   sta actionCheckVectorHigh  
   ldy #$0
-  lda (actionCheckVectorLow),Y
-  sta currentActionHideWater
-  ; lda action_hide_fear_offset
-  ; tay
-  ; lda (pivotZpLow),Y
-  ; sta currentActionHideFear
-  ; lda action_hide_flashlight_offset
-  ; tay
-  ; lda (pivotZpLow),Y
-  ; sta currentActionHideFlashlightOff
-  ; lda currentActionHideWater
-  ; clc 
-  ; adc #$30
-  ; jsr send_rs232_char
+  lda (actionCheckVectorLow),Y  
+  sta currentActionHideFear
+  ;now we load flashlight  
+  ldy action_hide_flashlight_offset
+  lda (pivotZpLow),Y
+  sta actionCheckVectorLow
+  iny 
+  lda (pivotZpLow),Y
+  sta actionCheckVectorHigh  
+  ldy #$0
+  lda (actionCheckVectorLow),Y  
+  sta currentActionHideFlashlightOff
+checkActionVisibility_checkWater:  
+  ;Now we start checking
   lda currentActionHideWater  
-  beq checkActionVisibility_notHide ;not hide on water level
-  ;here we check the water level
+  beq checkActionVisibility_checkFear ;not hide on water levelif it is zero 
+  ;here we check the water level we are on high for water
   lda waterLevel ;current water level
-  lda #$3 ;force hight water level
+  ;lda #$3 ;force hight water level
   cmp highWaterLevel
-  bne checkActionVisibility_notHide
+  bne checkActionVisibility_checkFear
   jmp checkActionVisibility_hide
   ;For now only checking on water Level
-checkActionVisibility_notHide:  
-  lda #$0
-  sta actionHidden
-  rts  
+checkActionVisibility_checkFear:  
+  lda currentActionHideFear
+  beq checkActionVisibility_checkFlashlight ;not hide on water levelif it is zero 
+  lda fearLevel
+  cmp highFearLevel
+  bne checkActionVisibility_checkFlashlight
+  jmp checkActionVisibility_hide
+checkActionVisibility_checkFlashlight:  
+  lda currentActionHideFlashlightOff
+  beq checkActionVisibility_End
+  lda flashlightStatus ;if it is zero the flash light is off
+  cmp flashlightOff ;it is zero the flash is off
+  ;if flash ligth is on return
+  bne checkActionVisibility_End:
+  ;here the flashlight is off
+  jmp checkActionVisibility_hide
 checkActionVisibility_hide:
   lda #$1
   sta actionHidden
   rts  
+checkActionVisibility_End:  
+  rts
 
 printLettersAction:
   ldx actionPosition
@@ -1255,7 +1288,7 @@ msj_iddleTimer1:
   .ascii "El agua comenzo a entumecer tus extremidades hasta que dejaste de sentirlas. "
   .ascii "Un eterno sueño te dio la bienvenida. "    
   .ascii "e"     
-  
+
 option_unknown:
   .ascii "Mmmm esa opción no es válida"
   .ascii "e"    
