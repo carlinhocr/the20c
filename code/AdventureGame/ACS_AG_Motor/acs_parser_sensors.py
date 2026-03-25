@@ -51,6 +51,7 @@ def to_asm(sensors):
     sen0_name_offset       = None
     sen0_dialog_on_offset  = None
     sen0_dialog_off_offset = None
+    sen0_toggle_offset     = None
     sen0_record_length     = None
 
     for index, (key, sen) in enumerate(sensors.items()):
@@ -66,12 +67,14 @@ def to_asm(sensors):
         lines.append(f"  .word {label}_active    ; {name} active    [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_dialog_on ; {name} dialog_on [{offset},{offset+1}]") ; _don = offset ; offset += 2
         lines.append(f"  .word {label}_dialog_off; {name} dialog_off[{offset},{offset+1}]") ; _doff = offset ; offset += 2
+        lines.append(f"  .word {label}_toggle   ; {name} toggle   [{offset},{offset+1}]") ; _tog = offset ; offset += 2
 
         if index == 0:
             sen0_name_offset       = _nam
             sen0_dialog_on_offset  = _don
             sen0_dialog_off_offset = _doff
-            sen0_record_length     = offset - start_offset  # 10 bytes (5 × .word)
+            sen0_toggle_offset     = _tog
+            sen0_record_length     = offset - start_offset
 
     # ── Offset labels, placed after all sensor entries ────────────────────────
     lines.append(f"sensor_name_offset:")
@@ -80,6 +83,8 @@ def to_asm(sensors):
     lines.append(f"  .byte {sen0_dialog_on_offset}  ; (byte of sensor_0_dialog_on in sensors_pointers)")
     lines.append(f"sensor_dialog_off_offset:")
     lines.append(f"  .byte {sen0_dialog_off_offset} ; (byte of sensor_0_dialog_off in sensors_pointers)")
+    lines.append(f"sensor_toggle_offset:")
+    lines.append(f"  .byte {sen0_toggle_offset}     ; (byte of sensor_0_toggle in sensors_pointers)")
     lines.append(f"sensor_record_length:")
     lines.append(f"  .byte {sen0_record_length}     ; (total .word bytes per sensor record)")
     lines.append("")
@@ -121,6 +126,16 @@ def to_asm(sensors):
         lines.append(f"{label}_dialog_off:")
         lines.extend(ascii_lines(dialog_off_str))
         lines.append('  .ascii "e"')
+        lines.append("")
+
+        # Toggle
+        try:
+            toggle_val = int(sen.get("Toggle", 0))
+            toggle_val = 1 if toggle_val else 0
+        except (ValueError, TypeError):
+            toggle_val = 0
+        lines.append(f"{label}_toggle:")
+        lines.append(f"  .byte {toggle_val}  ; {'toggle' if toggle_val else 'normal'}")
         lines.append("")
 
     # ── Sensor count constant ─────────────────────────────────────────────────

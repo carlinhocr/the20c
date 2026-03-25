@@ -1229,6 +1229,7 @@ def open_sensors_window():
             entries[f].delete(0, tk.END)
         entries["ID"].insert(0, new_id)
         active_var.set(False)
+        toggle_var.set(0)
         dialog_on_text.delete("1.0", tk.END)
         dialog_off_text.delete("1.0", tk.END)
         slbl.config(text=f"✔  New sensor (ID {new_id}) — fill in details and save", fg="#50e878")
@@ -1247,6 +1248,8 @@ def open_sensors_window():
     section_lbl(form, "— State —")
     active_var = tk.BooleanVar(value=False)
     checkbox_widget(form, "Active (On)", active_var)
+    toggle_var = tk.IntVar(value=0)
+    checkbox_widget(form, "Toggle", toggle_var)
 
     # ── Dialogs ───────────────────────────────────────────────
     section_lbl(form, "— Dialogs —")
@@ -1276,6 +1279,7 @@ def open_sensors_window():
             entries[f].delete(0, tk.END)
             entries[f].insert(0, rec.get(f, ""))
         active_var.set(rec.get("Active", False))
+        toggle_var.set(int(rec.get("Toggle", 0)))
         dialog_on_text.delete("1.0", tk.END)
         dialog_on_text.insert("1.0", rec.get("DialogOn", ""))
         dialog_off_text.delete("1.0", tk.END)
@@ -1287,6 +1291,7 @@ def open_sensors_window():
     def on_save():
         data = {f: entries[f].get() for f in ["ID", "Name"]}
         data["Active"]    = active_var.get()
+        data["Toggle"]    = toggle_var.get()
         data["DialogOn"]  = dialog_on_text.get("1.0", "end-1c")
         data["DialogOff"] = dialog_off_text.get("1.0", "end-1c")
         save_to_json(JSON_SENSORS_FILE, "ID", data, slbl)
@@ -2153,10 +2158,15 @@ def open_play_window():
         "game_over":          False,
         "game_over_reason":   "",
         "current_screen_id":  None,
+        "sensor_states":      {},  # sensor_id -> True/False
     }
 
     # Count total secrets
     total_secrets = sum(1 for s in screens.values() if int(s.get("IsSecretScreen", 0)))
+
+    # Initialize sensor states from JSON
+    for sid, srec in sensor_by_id.items():
+        state["sensor_states"][sid] = bool(srec.get("Active", False))
 
     # Find startScreen
     start_screen = None
@@ -2601,9 +2611,20 @@ def open_play_window():
             sensor_rec = sensor_by_id.get(str(sensor_id))
             if sensor_rec:
                 sensor_name = sensor_rec.get("Name", "")
-                sensor_active = arec.get("SensorActive", False)
-                if isinstance(sensor_active, str):
-                    sensor_active = sensor_active.lower() in ("true", "1", "yes")
+                sid_str = str(sensor_id)
+                is_toggle = int(sensor_rec.get("Toggle", 0))
+
+                if is_toggle:
+                    # Toggle: flip current state
+                    current = state["sensor_states"].get(sid_str, False)
+                    sensor_active = not current
+                    state["sensor_states"][sid_str] = sensor_active
+                else:
+                    # Normal: use SensorActive from the action
+                    sensor_active = arec.get("SensorActive", False)
+                    if isinstance(sensor_active, str):
+                        sensor_active = sensor_active.lower() in ("true", "1", "yes")
+                    state["sensor_states"][sid_str] = sensor_active
 
                 if sensor_active:
                     msg = sensor_rec.get("DialogOn", "").strip()
