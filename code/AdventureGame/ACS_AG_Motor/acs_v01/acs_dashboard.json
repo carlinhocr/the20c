@@ -1,0 +1,19 @@
+{
+    "0": {
+        "ID": "0",
+        "Name": "dashBoardTest",
+        "TotalSimulationTime": 600,
+        "TotalFlashlightTime": 200,
+        "WaterLevel0": 100,
+        "WaterLevel1": 200,
+        "WaterLevel2": 400,
+        "WaterLevel3": 599,
+        "ExtraSecondsWaterLevel": 10,
+        "ExtraSecondsHighHeartRate": 10,
+        "ExtraSecondsFlashlightOff": 10,
+        "DeathProbWaterLevel": 20,
+        "DeathProbHighHeartRate": 50,
+        "DeathProbFlashlightOff": 20,
+        "EnemyProbFlashlightOn": 51
+    }
+}
