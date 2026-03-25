@@ -1,5 +1,6 @@
 import json
 import os
+import random
 import subprocess
 import sys
 import tkinter as tk
@@ -250,7 +251,7 @@ def open_actions_window():
 
     # ── Identity ──────────────────────────────────────────────
     section_lbl(form, "— Identity —")
-    fields = ["ID", "Name"]
+    fields = ["ID", "Name", "Alias"]
     for f in fields:
         add_field(form, f, entries)
 
@@ -2099,6 +2100,558 @@ def open_dashboard_window():
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  Play Game — full simulation engine
+# ══════════════════════════════════════════════════════════════════════════════
+
+def open_play_window():
+    screens = load_json(JSON_SCREENS_FILE)
+    actions = load_json(JSON_ACTIONS_FILE)
+    sensors = load_json(JSON_SENSORS_FILE)
+    dashboard = load_json(JSON_DASHBOARD_FILE)
+
+    if not screens or not actions:
+        messagebox.showinfo("Play", "Need at least screens and actions to play.")
+        return
+
+    # ── Lookup tables ─────────────────────────────────────────
+    screen_by_id   = {str(r.get("ID","")): r for r in screens.values()}
+    screen_by_name = {r.get("Name",""): r for r in screens.values()}
+    action_by_name = {r.get("Name","").strip(): r for r in actions.values() if r.get("Name","").strip()}
+    sensor_by_id   = {str(r.get("ID","")): r for r in sensors.values()}
+
+    # ── Dashboard defaults ────────────────────────────────────
+    dash = {}
+    if dashboard:
+        # Use first dashboard record
+        first = list(dashboard.values())[0] if dashboard else {}
+        dash = first
+    D = lambda key, default: int(dash.get(key, default))
+
+    total_sim_time      = D("TotalSimulationTime",      600)
+    total_flash_time    = D("TotalFlashlightTime",       300)
+    water_thresholds    = [D("WaterLevel0", 100), D("WaterLevel1", 200),
+                           D("WaterLevel2", 400), D("WaterLevel3", 600)]
+    extra_sec_water     = D("ExtraSecondsWaterLevel",    5)
+    extra_sec_heart     = D("ExtraSecondsHighHeartRate", 5)
+    extra_sec_flash_off = D("ExtraSecondsFlashlightOff", 5)
+    death_prob_water    = D("DeathProbWaterLevel",       10)
+    death_prob_heart    = D("DeathProbHighHeartRate",    10)
+    death_prob_flash    = D("DeathProbFlashlightOff",    50)
+    enemy_prob_flash_on = D("EnemyProbFlashlightOn",     10)
+
+    # ── Game state ────────────────────────────────────────────
+    state = {
+        "time_elapsed":       0,
+        "flash_time_used":    0,
+        "flashlight_on":      False,
+        "flash_can_relight":  True,
+        "water_level":        0,
+        "heart_rate":         0,
+        "enemy_prob_accum":   0,
+        "secrets_found":      set(),
+        "screens_visited":    set(),
+        "game_over":          False,
+        "game_over_reason":   "",
+        "current_screen_id":  None,
+    }
+
+    # Count total secrets
+    total_secrets = sum(1 for s in screens.values() if int(s.get("IsSecretScreen", 0)))
+
+    # Find startScreen
+    start_screen = None
+    for s in screens.values():
+        if s.get("Name","").strip().lower() == "startscreen":
+            start_screen = s
+            break
+    if not start_screen:
+        start_screen = screen_by_id.get("3") or list(screens.values())[0]
+
+    state["current_screen_id"] = str(start_screen.get("ID","0"))
+
+    # ── Window ────────────────────────────────────────────────
+    win = tk.Toplevel()
+    win.title("▶  Adventure — Playing")
+    win.geometry("820x700")
+    win.configure(bg="#000000")
+    win.resizable(True, True)
+
+    # ── Status bar ────────────────────────────────────────────
+    status_frame = tk.Frame(win, bg="#1A1452", pady=4)
+    status_frame.pack(fill="x")
+
+    status_vars = {}
+    for label_text in ["Time", "Water", "Heart", "Flashlight", "Secrets"]:
+        sv = tk.StringVar(value="")
+        tk.Label(status_frame, textvariable=sv, font=("Courier New", 9, "bold"),
+                 bg="#1A1452", fg="#50e878", padx=8).pack(side="left")
+        status_vars[label_text] = sv
+
+    tk.Frame(win, bg="#7869C4", height=2).pack(fill="x")
+
+    # ── Main text area ────────────────────────────────────────
+    text_area = scrolledtext.ScrolledText(
+        win, bg="#000000", fg="#FFFFFF", font=("Courier New", 11),
+        relief="flat", bd=0, wrap="word", state="disabled",
+        insertbackground="#FFFFFF", padx=12, pady=8,
+    )
+    text_area.pack(fill="both", expand=True)
+
+    # Configure text tags for colors
+    text_area.tag_configure("title",       foreground="#FFFFFF", font=("Courier New", 13, "bold"))
+    text_area.tag_configure("description", foreground="#A09BE0")
+    text_area.tag_configure("ascii_art",   foreground="#7869C4", font=("Courier New", 8))
+    text_area.tag_configure("sensor",      foreground="#50e878")
+    text_area.tag_configure("action_msg",  foreground="#FFFFFF")
+    text_area.tag_configure("warning",     foreground="#FF6060")
+    text_area.tag_configure("success",     foreground="#50e878")
+    text_area.tag_configure("enemy",       foreground="#FF4040", font=("Courier New", 12, "bold"))
+    text_area.tag_configure("death",       foreground="#FF4040", font=("Courier New", 12, "bold"))
+    text_area.tag_configure("info",        foreground="#7869C4")
+    text_area.tag_configure("progress_hdr",foreground="#FFFFFF", font=("Courier New", 12, "bold"))
+    text_area.tag_configure("progress",    foreground="#50e878", font=("Courier New", 11))
+
+    tk.Frame(win, bg="#7869C4", height=2).pack(fill="x")
+
+    # ── Action buttons frame ──────────────────────────────────
+    action_frame = tk.Frame(win, bg="#1A1452", pady=8)
+    action_frame.pack(fill="x")
+
+    # ── Helper functions ──────────────────────────────────────
+    def write(text, tag="description"):
+        text_area.configure(state="normal")
+        text_area.insert("end", text + "\n", tag)
+        text_area.see("end")
+        text_area.configure(state="disabled")
+
+    def clear_text():
+        text_area.configure(state="normal")
+        text_area.delete("1.0", "end")
+        text_area.configure(state="disabled")
+
+    def update_status():
+        t = state["time_elapsed"]
+        tmax = total_sim_time
+        ft = state["flash_time_used"]
+        ftmax = total_flash_time
+        wl = state["water_level"]
+        hr = state["heart_rate"]
+        fl = "ON" if state["flashlight_on"] else "OFF"
+        if not state["flash_can_relight"] and not state["flashlight_on"]:
+            fl = "DEAD"
+        sf = len(state["secrets_found"])
+        sv = len(state["screens_visited"])
+
+        status_vars["Time"].set(f"⏱ {t}/{tmax}s")
+        water_bars = "█" * wl + "░" * (3 - wl)
+        status_vars["Water"].set(f"💧 {water_bars} ({wl})")
+        status_vars["Heart"].set(f"❤ {'HIGH' if hr else 'calm'}")
+        status_vars["Flashlight"].set(f"🔦 {fl} ({ft}/{ftmax}s)")
+        status_vars["Secrets"].set(f"🔑 {sf}/{total_secrets}")
+
+    def update_water_level():
+        t = state["time_elapsed"]
+        new_level = 0
+        for i, threshold in enumerate(water_thresholds):
+            if t >= threshold:
+                new_level = i
+        old_level = state["water_level"]
+        if new_level > old_level:
+            state["water_level"] = new_level
+            # Trigger water sensor
+            water_sensor = sensor_by_id.get("0")
+            if water_sensor:
+                msg = water_sensor.get("DialogOn", "")
+                if msg:
+                    write(f"📡 [{water_sensor.get('Name','')}]: {msg}", "sensor")
+            write(f"⚠ El nivel de agua subió a {new_level}!", "warning")
+
+    def get_random():
+        return random.randint(0, 255)
+
+    def is_high_water():
+        return state["water_level"] >= 2
+
+    def is_high_fear():
+        return state["heart_rate"] >= 1
+
+    def clear_actions():
+        for w in action_frame.winfo_children():
+            w.destroy()
+
+    # ── Draw screen ───────────────────────────────────────────
+    def draw_screen(screen_rec):
+        scr_id = str(screen_rec.get("ID", ""))
+        scr_name = screen_rec.get("Name", "")
+        state["current_screen_id"] = scr_id
+        state["screens_visited"].add(scr_id)
+
+        # Check secret
+        if int(screen_rec.get("IsSecretScreen", 0)):
+            if scr_id not in state["secrets_found"]:
+                state["secrets_found"].add(scr_id)
+                write("🔑 ¡Descubriste un secreto!", "success")
+
+        clear_text()
+
+        # ASCII art
+        ascii_art = screen_rec.get("AsciiDrawing", "").strip()
+        if ascii_art:
+            write(ascii_art, "ascii_art")
+            write("", "description")
+
+        # Description
+        desc = screen_rec.get("Description", "").strip()
+        if desc:
+            write(desc, "description")
+
+        # Flashlight-specific description
+        if state["flashlight_on"]:
+            fl_desc = screen_rec.get("FlashlightOn", "").strip()
+            if fl_desc:
+                write("", "description")
+                write(fl_desc, "description")
+        else:
+            fl_desc = screen_rec.get("FlashlightOff", "").strip()
+            if fl_desc:
+                write("", "description")
+                write(fl_desc, "description")
+
+        write("", "description")
+        update_status()
+
+    # ── Show available actions ────────────────────────────────
+    def show_actions():
+        clear_actions()
+        scr = screen_by_id.get(state["current_screen_id"])
+        if not scr or state["game_over"]:
+            return
+
+        available = []
+        for slot in ["Action1", "Action2", "Action3", "Action4"]:
+            aname = scr.get(slot, "").strip()
+            if not aname:
+                continue
+            arec = action_by_name.get(aname)
+            if not arec:
+                continue
+
+            # Check visibility
+            hide_water = int(arec.get("HideOnWaterLevelHigh", 0))
+            hide_fear  = int(arec.get("HideOnFearLevelHigh", 0))
+            hide_flash = int(arec.get("HideWithFlashlightOff", 0))
+
+            if hide_water and is_high_water():
+                continue
+            if hide_fear and is_high_fear():
+                continue
+            if hide_flash and not state["flashlight_on"]:
+                continue
+
+            available.append((aname, arec))
+
+        if not available:
+            write("No hay acciones disponibles...", "warning")
+            return
+
+        for aname, arec in available:
+            btn = tk.Button(
+                action_frame, text=f"▶ {aname}",
+                font=("Courier New", 10, "bold"),
+                bg="#7869C4", fg="#000000",
+                activebackground="#A09BE0", activeforeground="#000000",
+                relief="raised", bd=2, cursor="hand2", padx=10, pady=4,
+                command=lambda a=aname, r=arec: execute_action(a, r)
+            )
+            btn.pack(side="left", padx=4, pady=2)
+
+    # ── End game sequence ─────────────────────────────────────
+    def end_game(reason, end_screen_rec=None):
+        state["game_over"] = True
+        state["game_over_reason"] = reason
+        clear_actions()
+
+        write("", "description")
+        write("═" * 50, "death")
+
+        if end_screen_rec:
+            desc = end_screen_rec.get("Description", "").strip()
+            if desc:
+                write(desc, "death")
+        else:
+            write(reason, "death")
+
+        write("═" * 50, "death")
+        write("", "description")
+
+        # Show progress button
+        def show_progress():
+            clear_actions()
+            write("", "description")
+            write("═══ PROGRESO DEL JUEGO ═══", "progress_hdr")
+            write(f"  Tiempo Total Usado:        {state['time_elapsed']}/{total_sim_time} segundos", "progress")
+            write(f"  Tiempo Linterna Usado:     {state['flash_time_used']}/{total_flash_time} segundos", "progress")
+            write(f"  Secretos Encontrados:      {len(state['secrets_found'])}/{total_secrets}", "progress")
+            write(f"  Nivel Final de Agua:       {state['water_level']}", "progress")
+            write(f"  Nivel de HeartRate Final:  {'HIGH' if state['heart_rate'] else 'calm'}", "progress")
+            write(f"  Pantallas Recorridas:      {len(state['screens_visited'])}", "progress")
+            write(f"  Razón de Fin:              {reason}", "progress")
+            write("═" * 40, "progress_hdr")
+
+            btn_menu = tk.Button(
+                action_frame, text="🏠 Volver al Menú",
+                font=("Courier New", 10, "bold"),
+                bg="#7869C4", fg="#000000",
+                activebackground="#A09BE0", activeforeground="#000000",
+                relief="raised", bd=2, cursor="hand2", padx=10, pady=4,
+                command=win.destroy
+            )
+            btn_menu.pack(side="left", padx=4, pady=2)
+
+        btn_progress = tk.Button(
+            action_frame, text="📊 Ver Progreso del Juego",
+            font=("Courier New", 10, "bold"),
+            bg="#7869C4", fg="#000000",
+            activebackground="#A09BE0", activeforeground="#000000",
+            relief="raised", bd=2, cursor="hand2", padx=10, pady=4,
+            command=show_progress
+        )
+        btn_progress.pack(side="left", padx=4, pady=2)
+
+        btn_close = tk.Button(
+            action_frame, text="🏠 Volver al Menú",
+            font=("Courier New", 10, "bold"),
+            bg="#7869C4", fg="#000000",
+            activebackground="#A09BE0", activeforeground="#000000",
+            relief="raised", bd=2, cursor="hand2", padx=10, pady=4,
+            command=win.destroy
+        )
+        btn_close.pack(side="left", padx=4, pady=2)
+
+        update_status()
+
+    # ── Execute action ────────────────────────────────────────
+    def execute_action(aname, arec):
+        if state["game_over"]:
+            return
+
+        # ── Special: TERMINAR EL JUEGO ends the game ─────────
+        if aname.upper() == "TERMINAR EL JUEGO":
+            desc = arec.get("Description", "").strip()
+            if desc:
+                write(desc, "action_msg")
+            end_game("Fin del juego")
+            return
+
+        write(f"\n{'─' * 40}", "info")
+        write(f"▶ {aname}", "title")
+
+        # Print action description
+        desc = arec.get("Description", "").strip()
+        if desc:
+            write(desc, "action_msg")
+
+        # ── Check if destination screen is end screen ─────────
+        dst_screen_id = arec.get("ScreenID", 255)
+        try:
+            dst_screen_id = int(dst_screen_id)
+        except (ValueError, TypeError):
+            dst_screen_id = 255
+
+        dst_screen = screen_by_id.get(str(dst_screen_id)) if dst_screen_id != 255 else None
+
+        def is_end_screen(scr):
+            if not scr:
+                return False
+            if int(scr.get("IsEndScreen", 0)):
+                return True
+            name = scr.get("Name", "").lower()
+            if name.startswith("endscreen") or name.startswith("end_screen"):
+                return True
+            return False
+
+        if is_end_screen(dst_screen):
+            draw_screen(dst_screen)
+            end_game("Muerte por acción directa")
+            return
+
+        # ── Check if action has reset enemy probability ───────
+        if int(arec.get("ResetEnemyProbability", 0)):
+            state["enemy_prob_accum"] = 0
+            write("(Probabilidad de enemigo reseteada)", "info")
+
+        # ── Calculate death probability ───────────────────────
+        death_prob = 0
+        try:
+            death_prob += int(arec.get("DeathProbability", 0))
+        except (ValueError, TypeError):
+            pass
+
+        # Add water level modifier
+        death_prob += state["water_level"] * death_prob_water
+
+        # Add heart rate modifier
+        if state["heart_rate"]:
+            death_prob += death_prob_heart
+
+        # Add flashlight off modifier
+        if not state["flashlight_on"]:
+            death_prob += death_prob_flash
+
+        death_prob = min(255, max(0, death_prob))
+
+        if death_prob > 0:
+            roll = get_random()
+            write(f"  [Muerte: prob={death_prob}/255, dado={roll}]", "info")
+            if roll < death_prob:
+                failed_desc = arec.get("DescriptionActionFailed", "").strip()
+                if failed_desc:
+                    write(failed_desc, "warning")
+                write("Con una acción tan temeraria es lógico que murieras.", "death")
+                end_game("Muerte por acción fallida")
+                return
+
+        # ── Calculate enemy probability ───────────────────────
+        action_enemy_prob = 0
+        try:
+            action_enemy_prob = int(arec.get("EnemyProbability", 0))
+        except (ValueError, TypeError):
+            pass
+
+        state["enemy_prob_accum"] += action_enemy_prob
+
+        cur_screen = screen_by_id.get(state["current_screen_id"], {})
+        screen_enemy_prob = 0
+        try:
+            screen_enemy_prob = int(cur_screen.get("EnemyProbability", 0))
+        except (ValueError, TypeError):
+            pass
+
+        total_enemy_prob = state["enemy_prob_accum"] + screen_enemy_prob
+        if state["flashlight_on"]:
+            total_enemy_prob += enemy_prob_flash_on
+
+        total_enemy_prob = min(255, max(0, total_enemy_prob))
+
+        if total_enemy_prob > 0:
+            roll = get_random()
+            write(f"  [Enemigo: prob={total_enemy_prob}/255, dado={roll}]", "info")
+            if roll < total_enemy_prob:
+                write("¡Algo se mueve en la oscuridad... El enemigo te encontró!", "enemy")
+                end_game("Te atrapó el enemigo")
+                return
+
+        # ── Calculate time cost ───────────────────────────────
+        base_cost = 0
+        try:
+            base_cost = int(arec.get("Cost", 0))
+        except (ValueError, TypeError):
+            pass
+
+        time_cost = base_cost
+        time_cost += state["water_level"] * extra_sec_water
+        if state["heart_rate"]:
+            time_cost += extra_sec_heart
+        if not state["flashlight_on"]:
+            time_cost += extra_sec_flash_off
+
+        state["time_elapsed"] += time_cost
+
+        if time_cost > 0:
+            write(f"  [Costo: {time_cost}s (base {base_cost}s + modificadores)]", "info")
+
+        # Check if time ran out
+        if state["time_elapsed"] >= total_sim_time:
+            write("⚠ ¡Se acabó el tiempo!", "warning")
+            # Trigger water sensor full
+            state["water_level"] = 3
+            water_sensor = sensor_by_id.get("0")
+            if water_sensor:
+                msg = water_sensor.get("DialogOn", "")
+                if msg:
+                    write(f"📡 [{water_sensor.get('Name','')}]: {msg}", "sensor")
+            end_game("Se terminó el tiempo de simulación")
+            return
+
+        # ── Update water level based on elapsed time ──────────
+        update_water_level()
+
+        # Check if water level reached max (level 3) and time >= threshold
+        if state["water_level"] >= 3 and state["time_elapsed"] >= water_thresholds[3]:
+            write("⚠ ¡La caverna se llenó de agua!", "warning")
+            end_game("Se llenó la caverna de agua")
+            return
+
+        # ── Calculate flashlight usage ────────────────────────
+        if state["flashlight_on"]:
+            state["flash_time_used"] += time_cost
+            if state["flash_time_used"] >= total_flash_time:
+                state["flashlight_on"] = False
+                state["flash_can_relight"] = False
+                write("🔦 ¡La linterna se apagó por falta de batería!", "warning")
+
+        # ── Process sensor activation ─────────────────────────
+        sensor_id = arec.get("SensorID", 255)
+        try:
+            sensor_id = int(sensor_id)
+        except (ValueError, TypeError):
+            sensor_id = 255
+
+        if sensor_id != 255:
+            sensor_rec = sensor_by_id.get(str(sensor_id))
+            if sensor_rec:
+                sensor_name = sensor_rec.get("Name", "")
+                sensor_active = arec.get("SensorActive", False)
+                if isinstance(sensor_active, str):
+                    sensor_active = sensor_active.lower() in ("true", "1", "yes")
+
+                if sensor_active:
+                    msg = sensor_rec.get("DialogOn", "").strip()
+                    if msg:
+                        write(f"📡 [{sensor_name}]: {msg}", "sensor")
+                else:
+                    msg = sensor_rec.get("DialogOff", "").strip()
+                    if msg:
+                        write(f"📡 [{sensor_name}]: {msg}", "sensor")
+
+                # Handle specific sensors
+                if sensor_name == "flashlight":
+                    if sensor_active and state["flash_can_relight"]:
+                        state["flashlight_on"] = True
+                    elif sensor_active and not state["flash_can_relight"]:
+                        write("🔦 La linterna no tiene batería, no se puede prender.", "warning")
+                    else:
+                        state["flashlight_on"] = False
+
+                elif sensor_name == "heart":
+                    state["heart_rate"] = 1 if sensor_active else 0
+
+                elif sensor_name == "water":
+                    if sensor_active and state["water_level"] < 3:
+                        state["water_level"] += 1
+                        write(f"💧 Nivel de agua: {state['water_level']}", "warning")
+
+                elif sensor_name == "gamePlaying":
+                    if not sensor_active:
+                        # Game ended by sensor
+                        pass
+
+        # ── Move to new screen or stay ────────────────────────
+        if dst_screen and dst_screen_id != 255:
+            write("", "description")
+            draw_screen(dst_screen)
+        else:
+            update_status()
+
+        # ── Show next actions ─────────────────────────────────
+        show_actions()
+
+    # ── Start the game ────────────────────────────────────────
+    draw_screen(start_screen)
+    show_actions()
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  Dispatch
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -2134,7 +2687,7 @@ def open_window(title):
 def main():
     root = tk.Tk()
     root.title("Adventure Construction Set")
-    root.geometry("920x260")
+    root.geometry("920x300")
     root.configure(bg="#352880")
     root.resizable(False, False)
 
@@ -2152,13 +2705,22 @@ def main():
                   relief="raised", bd=3, cursor="hand2",
                   command=lambda s=section: open_window(s)).pack(side="left", padx=8)
 
-    # ── Run Parsers button ────────────────────────────────────
+    # ── Bottom buttons row ────────────────────────────────────
     tk.Frame(root, bg="#7869C4", height=1).pack(fill="x", padx=20)
-    tk.Button(root, text="⚙  Run Parsers", font=("Courier New", 11, "bold"),
+    bottom_frame = tk.Frame(root, bg="#352880")
+    bottom_frame.pack(pady=10)
+
+    tk.Button(bottom_frame, text="⚙  Run Parsers", font=("Courier New", 11, "bold"),
               bg="#7869C4", fg="#000000",
               activebackground="#A09BE0", activeforeground="#000000",
               relief="raised", bd=3, cursor="hand2",
-              padx=20, pady=6, command=run_parsers).pack(pady=10)
+              padx=20, pady=6, command=run_parsers).pack(side="left", padx=8)
+
+    tk.Button(bottom_frame, text="▶  PLAY GAME", font=("Courier New", 11, "bold"),
+              bg="#50e878", fg="#000000",
+              activebackground="#80FFA0", activeforeground="#000000",
+              relief="raised", bd=3, cursor="hand2",
+              padx=20, pady=6, command=open_play_window).pack(side="left", padx=8)
 
     root.mainloop()
 

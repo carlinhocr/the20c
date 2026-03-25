@@ -33,6 +33,7 @@ def to_asm(actions):
 
     # Captured from action 0 for offset labels emitted after all entries
     act0_name_offset              = None
+    act0_alias_offset             = None
     act0_sensor_id_offset         = None
     act0_sensor_active_offset     = None
     act0_description_offset       = None
@@ -56,6 +57,7 @@ def to_asm(actions):
         lines.append(f"action_pointer_{act_id}:")
         lines.append(f"  .word {label}_id            ; {name} id            [{offset},{offset+1}]") ; offset += 2
         lines.append(f"  .word {label}_name          ; {name} name          [{offset},{offset+1}]") ; _nam = offset ; offset += 2
+        lines.append(f"  .word {label}_alias         ; {name} alias         [{offset},{offset+1}]") ; _ali = offset ; offset += 2
         lines.append(f"  .word {label}_sensor_id     ; {name} sensor_id     [{offset},{offset+1}]") ; _sid = offset ; offset += 2
         lines.append(f"  .word {label}_sensor_active ; {name} sensor_active [{offset},{offset+1}]") ; _act = offset ;offset += 2
         lines.append(f"  .word {label}_screen        ; {name} screen        [{offset},{offset+1}]") ; _scr = offset ; offset += 2
@@ -71,6 +73,7 @@ def to_asm(actions):
 
         if index == 0:
             act0_name_offset              = _nam
+            act0_alias_offset             = _ali
             act0_sensor_id_offset         = _sid
             act0_sensor_active_offset     = _act
             act0_screen_offset            = _scr
@@ -87,6 +90,8 @@ def to_asm(actions):
     # -- Offset labels, placed after all action entries
     lines.append(f"action_name_offset:")
     lines.append(f"  .byte {act0_name_offset}  ; (byte of action_0_name in actions_pointers)")
+    lines.append(f"action_alias_offset:")
+    lines.append(f"  .byte {act0_alias_offset}  ; (byte of action_0_alias in actions_pointers)")
     lines.append(f"action_sensor_id_offset:")
     lines.append(f"  .byte {act0_sensor_id_offset}  ; (byte of action_0_sensor_id in actions_pointers)")
     lines.append(f"action_sensor_active_offset:")
@@ -148,6 +153,13 @@ def to_asm(actions):
         # Name
         lines.append(f"{label}_name:")
         lines.append(f'  .ascii "{name_str}"')
+        lines.append('  .ascii "e"')
+        lines.append("")
+
+        # Alias
+        alias_str = act.get("Alias", "").replace('"', '\\"')
+        lines.append(f"{label}_alias:")
+        lines.append(f'  .ascii "{alias_str}"')
         lines.append('  .ascii "e"')
         lines.append("")
 

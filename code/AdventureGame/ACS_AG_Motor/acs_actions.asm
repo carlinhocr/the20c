@@ -375,10 +375,10 @@ action_2_hide_water:
   .byte 1  ; on
 
 action_2_hide_fear:
-  .byte 0  ; off
+  .byte 1  ; on
 
 action_2_hide_flashlight:
-  .byte 0  ; off
+  .byte 1  ; on
 
 ; ── Action 3: MIRAR ENTRADA ──────────────────────────
 action_3_id:
