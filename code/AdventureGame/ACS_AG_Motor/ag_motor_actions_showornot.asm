@@ -136,24 +136,8 @@ screenRecordSize=$0212
 screenCurrentBaseAddressLow=$0213
 screenCurrentBaseAddressHigh=$0214
 
-objectCurrentID=$0215
-objectMultiple=$0216
-objectRecordSize=$0217
-object1Offset=$0218
-currentObjectOffset=$0219
+;FREE =$0215 to $0224
 
-puzzleCurrentID=$021a
-puzzleMultiple=$021b
-puzzleRecordSize=$021c
-puzzle1Offset=$021d
-puzzleObjectOffset=$021e
-
-object_pointers_index=$021f
-object_RAM_index=$0220
-puzzle_pointers_index=$0221
-puzzle_RAM_index=$0222
-max_objects_per_screen=$0223
-max_puzzles_per_screen=$0224
 max_actions_per_screen=$0225
 
 actionCurrentID=$0226
@@ -485,14 +469,14 @@ loadConstants:
   ;add it to the SCREEN FILE to choose in the dashboard in which screen to start
   lda #$3; start with screen id 3 the start screen
   sta screenCurrentID  
-  lda #$ff
-  sta idleTimerStartMinute
+  ; lda #$ff
+  ; sta idleTimerStartMinute
   lda #$ff
   sta userOptionSelection  
-  lda #$00
-  sta timerExpired
-  lda #$00
-  sta gameEnded
+  ; lda #$00
+  ; sta timerExpired
+  ; lda #$00
+  ; sta gameEnded
   ;new added
   lda #$0
   sta fearLevel
