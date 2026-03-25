@@ -281,8 +281,10 @@ mainProgramLoop:
   ;jsr simulationTimeCheck
   jsr action_selector
   jsr sensor_selector  
+  ;CHECK MEDIO RARO
   lda gameEnded
   bne mainProgram ;if gameEnded is not zero then the game ended  
+  ;CHECK MEDIO RARO  
   jsr checkGameEnd  
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
@@ -322,7 +324,7 @@ checkGameEnd:
   sta screenCurrentID
   lda #$1
   sta moveNextScreen
-  lda #$1
+  lda #$0
   sta gameEnded
   lda #$0
   sta timerExpired ;stop the first screen timer expired
