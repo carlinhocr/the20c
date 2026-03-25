@@ -324,7 +324,7 @@ checkGameEnd:
   sta screenCurrentID
   lda #$1
   sta moveNextScreen
-  lda #$0
+  lda #$1
   sta gameEnded
   lda #$0
   sta timerExpired ;stop the first screen timer expired
@@ -441,6 +441,8 @@ loadConstants:
   sta flashlightOff ;flashlight off  
   lda #$0 ;flashlight off
   sta flashlightStatus ;flashlight off
+  lda #$0
+  sta gameEnded
   rts 
 
 initiatilizeActionsIDs:  
