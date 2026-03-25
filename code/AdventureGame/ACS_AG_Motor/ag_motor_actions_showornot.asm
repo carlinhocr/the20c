@@ -787,7 +787,7 @@ checkActionVisibility_checkWater:
   beq checkActionVisibility_checkFear ;not hide on water levelif it is zero 
   ;here we check the water level we are on high for water
   lda waterLevel ;current water level
-  lda highWaterLevel ;force hight water level tohide action
+  ;lda highWaterLevel ;force hight water level tohide action
   cmp highWaterLevel
   bne checkActionVisibility_checkFear
   jmp checkActionVisibility_hide
@@ -804,7 +804,7 @@ checkActionVisibility_checkFlashlight:
   lda currentActionHideFlashlightOff
   beq checkActionVisibility_End
   lda flashlightStatus ;if it is zero the flash light is off
-  lda #$1 ;force flashlight on to check on visilibity of action
+  ;lda #$1 ;force flashlight on to check on visilibity of action
   cmp flashlightOff ;it is zero the flash is off
   ;if flash ligth is on return
   bne checkActionVisibility_End
