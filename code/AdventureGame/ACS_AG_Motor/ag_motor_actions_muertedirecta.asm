@@ -329,13 +329,6 @@ mainProgramLoop:
 checkEndScreen:
   ldy screen_is_end_screen_offset
   lda (ramScreenVectorLow),Y
-;   ldx screen_is_end_screen_offset
-;   lda screenPointersRAM,X
-;   sta sourceScreenVectorLow
-;   inx 
-;   lda screenPointersRAM,X
-;   sta sourceScreenVectorHigh
-;   lda (sourceScreenVectorLow),Y
   beq checkEndScreen_End
   lda #<msj_progressScreen1
   sta serialDataVectorLow  
