@@ -167,6 +167,12 @@ timeRemainingLowByte=             $0232
 timeRemainingHighByte=            $0233
 flashlightSensorID=               $0234  
 flashlightToggleFlag=             $0235
+flashlightSecondsUsedLowByte=     $0236
+flashlightSecondsUsedHighByte=    $0237
+maxFlashlightTimeLowByte=         $0238
+maxFlashlightTimeHighByte=        $0239
+timeRemainingFlashLightLowByte=   $023a
+timeRemainingFlashLightHighByte=  $023b
 
 
 moveNextScreen=$0243
@@ -524,7 +530,7 @@ loadConstants:
   lda #$0
   sta waterLevel
   lda #$0 ;flashlight off
-  lda #$1 ; you cannot turn on the flashlight
+  ;lda #$1 ; you cannot turn on the flashlight
   sta flashlightOff ;flashlight off  
   lda #$0 ;flashlight off
   ;lda #$1 ; flashlight on
@@ -534,6 +540,9 @@ loadConstants:
   lda #$0
   sta simulationTimePassedLowDigits
   sta simulationTimePassedHighDigits
+  lda #$0  
+  sta flashlightSecondsUsedLowByte
+  sta flashlightSecondsUsedHighByte
   lda #$0
   sta dashboardCurrentID
   lda #10
@@ -724,7 +733,19 @@ select_dashboard:
   iny 
   lda (sourceDashboardVectorLow),Y
   sta maxSimulationTimeLowByte   
-
+  ;load flashlight simulation Times
+  ldx dashboard_total_flash_time_offset
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorLow
+  inx
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorHigh
+  ldy #$0
+  lda (sourceDashboardVectorLow),Y
+  sta maxFlashlightTimeHighByte 
+  iny 
+  lda (sourceDashboardVectorLow),Y
+  sta maxFlashlightTimeLowByte  
 
   rts
 
@@ -1174,6 +1195,7 @@ action_selection_option_ok:
 runAction:
   ;an action does three things
   ;add the cost of executing the action
+  ;substract battery from the flashlight
   ;prints a description
   ;moves you to a screen
   ;turn off or off a sensor
@@ -1198,7 +1220,8 @@ runAction:
   ldy #$0
   lda (actionDataVectorLow),Y
   sta currentActionCost
-  jsr addActionCost    
+  jsr addActionCost
+  jsr consumeFlashlight    
   ;prints the description of the action
   lda action_description_offset
   tay
@@ -1438,6 +1461,45 @@ sensor_3_run:
 sensor_3_run_off:  
   rts  
 
+consumeFlashlight:
+  lda flashlightStatus
+  beq consumeFlashlight_End
+  ;if we are here the flashlight is on
+  lda currentActionCost
+  ;lda #1
+  clc
+  adc flashlightSecondsUsedLowByte
+  sta flashlightSecondsUsedLowByte
+  ;add the carry if there was one
+  lda #$0
+  adc flashlightSecondsUsedHighByte
+  sta flashlightSecondsUsedHighByte
+  ;substract current flashlightSecondsUsedHighByte from maxFlashlightTime
+  sec
+  lda maxFlashlightTimeLowByte
+  sbc flashlightSecondsUsedLowByte
+  sta timeRemainingFlashLightLowByte
+  lda maxFlashlightTimeHighByte
+  sbc flashlightSecondsUsedHighByte
+  sta timeRemainingFlashLightHighByte
+  ;if there is a carry the result was positive
+  bcs consumeFlashlight_KeepGoing
+  ;here there is a carry clear so the result is negative and time is up    
+  ;turn off the flashlight
+  lda #$0
+  sta flashlightStatus
+  ;disable the hability to turn on the flashlight
+  lda #$1
+  sta flashlightOff
+  jmp consumeFlashlight_End
+consumeFlashlight_KeepGoing:  
+  ;here we still have battery
+  lda #$0
+  sta flashlightOff
+consumeFlashlight_End:
+  rts  
+
+
 timerAllGame:
   lda #<msj_timerAllGame
   sta serialDataVectorLow  
@@ -1674,7 +1736,7 @@ msj_progressScreen1:
   .ascii "e"      
 
 msj_flashlightOff:
-  .ascii "No puedes prender la linterna no tienes más baterias"
+  .ascii "No puedes prender la linterna no tiene más bateria"
   .ascii "e"    
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
