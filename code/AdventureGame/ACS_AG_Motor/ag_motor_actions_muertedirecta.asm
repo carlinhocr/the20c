@@ -97,8 +97,8 @@ LCD_PORTSTATUS=$a2
 ;Zero Page Vectors Screen
 ramScreenVectorLow=$b0
 ramScreenVectorHigh=$b1
-screenCurrentDescription_Low=$b2
-screenCurrentDescription_High=$b3
+;FREE =$b2
+;FREE =$b3
 actionCheckVectorLow=$b4
 actionCheckVectorHigh=$b5
 actionDataVectorLow=$b6
@@ -327,8 +327,8 @@ mainProgramLoop:
 ;-----------------------------------------------------------------------------------
 
 checkEndScreen:
-  ldx screen_is_end_screen_offset
-  lda screenPointersRAM,X
+  ldy screen_is_end_screen_offset
+  lda (ramScreenVectorLow),Y
   bne checkEndScreen_End
   lda #<msj_progressScreen1
   sta serialDataVectorLow  
