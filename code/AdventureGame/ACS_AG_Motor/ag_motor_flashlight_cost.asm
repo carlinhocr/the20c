@@ -1362,6 +1362,7 @@ sensor_2_run:
   clc
   adc #$30
   jsr send_rs232_char  
+  lda flashlightStatus  
   beq sensor_2_toggle_one 
   lda #$0
   sta flashlightStatus
@@ -1369,9 +1370,6 @@ sensor_2_run:
   jmp sensor_2_run_not_toggle
 sensor_2_toggle_one:
   lda #$1
-  sta flashlightStatus
-  sta sensorCurrentStatus
-sensor_2_setStatus:  
   sta flashlightStatus
   sta sensorCurrentStatus
 sensor_2_run_not_toggle:  
