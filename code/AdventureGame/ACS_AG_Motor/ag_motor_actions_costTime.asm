@@ -487,7 +487,7 @@ loadConstants:
   ;new added
   lda #$0
   sta fearLevel
-  lda #$2
+  lda #$3
   sta waterLevel
   lda #$0 ;flashlight off
   sta flashlightOff ;flashlight off  
