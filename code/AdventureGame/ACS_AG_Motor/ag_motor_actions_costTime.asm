@@ -805,8 +805,14 @@ addActionCost:
   bne addActionCost_HearRate
   ;here the flashlight is Off
   ;read from the dashboard the cost of flashlight off in seconds
-  ldy dashboard_extra_flashlight_offset
-  lda (dashboardScreenVectorLow),Y
+  ldx dashboard_extra_flashlight_offset
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorLow
+  inx
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorHigh
+  ldy #$0
+  lda (sourceDashboardVectorLow),Y
   clc
   adc simulationTimePassedLowDigits
   sta simulationTimePassedLowDigits
