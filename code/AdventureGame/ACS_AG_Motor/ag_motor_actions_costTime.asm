@@ -150,7 +150,8 @@ simulationTimePassedLowDigits=  $0224
 simulationTimePassedHighDigits= $0225
 dashboardCurrentID=             $0226
 current_dashboard_offset=       $0227
-
+extraSecondsFlashlightOffLowByte=$0228
+extraSecondsFlashlightOffHighByte=$0229
 
 moveNextScreen=$0243
 idleTimerStartMinute=$0244
@@ -628,6 +629,19 @@ timerCheckMinuteElapsedTrue:
 select_dashboard:
   lda dashboardCurrentID
   jsr load_dashboard_ram
+    ;read from the dashboard the cost of flashlight off in seconds
+  ldx dashboard_extra_flashlight_offset
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorLow
+  inx
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorHigh
+  ldy #$0
+  lda (sourceDashboardVectorLow),Y
+  sta extraSecondsFlashlightOffHighByte 
+  iny 
+  lda (sourceDashboardVectorLow),Y
+  sta extraSecondsFlashlightOffLowByte   
   rts
 
 load_dashboard_ram:
@@ -799,42 +813,35 @@ addActionCost:
   lda #$0
   adc simulationTimePassedHighDigits
   sta simulationTimePassedHighDigits
-  lda simulationTimePassedHighDigits
-  clc
-  adc #$30
-  jsr send_rs232_char
-  lda simulationTimePassedLowDigits
-  clc
-  adc #$30
-  jsr send_rs232_char  
+  ; lda simulationTimePassedHighDigits
+  ; clc
+  ; adc #$30
+  ; jsr send_rs232_char
+  ; lda simulationTimePassedLowDigits
+  ; clc
+  ; adc #$30
+  ; jsr send_rs232_char  
   ;add cost for Flashlight Off
   lda flashlightStatus
   bne addActionCost_HearRate
   ;here the flashlight is Off
   ;read from the dashboard the cost of flashlight off in seconds
-  ldx dashboard_extra_flashlight_offset
-  lda dashboardPointersRAM,x
-  sta sourceDashboardVectorLow
-  inx
-  lda dashboardPointersRAM,x
-  sta sourceDashboardVectorHigh
-  ldy #$0
-  lda (sourceDashboardVectorLow),Y
+  lda extraSecondsFlashlightOffLowByte
   clc
   adc simulationTimePassedLowDigits
   sta simulationTimePassedLowDigits
     ;add the carry if there was one
-  lda #$0
+  lda extraSecondsFlashlightOffHighByte
   adc simulationTimePassedHighDigits
   sta simulationTimePassedHighDigits
-  lda simulationTimePassedHighDigits
-  clc
-  adc #$30
-  jsr send_rs232_char
-  lda simulationTimePassedLowDigits
-  clc
-  adc #$30
-  jsr send_rs232_char  
+  ; lda simulationTimePassedHighDigits
+  ; clc
+  ; adc #$30
+  ; jsr send_rs232_char
+  ; lda simulationTimePassedLowDigits
+  ; clc
+  ; adc #$30
+  ; jsr send_rs232_char  
 addActionCost_HearRate:  
   ; clc
   ; adc #$30
