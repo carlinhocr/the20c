@@ -800,6 +800,13 @@ addActionCost:
   adc simulationTimePassedHighDigits
   sta simulationTimePassedHighDigits
   lda simulationTimePassedHighDigits
+  clc
+  adc #$30
+  jsr send_rs232_char
+  lda simulationTimePassedLowDigits
+  clc
+  adc #$30
+  jsr send_rs232_char  
   ;add cost for Flashlight Off
   lda flashlightStatus
   bne addActionCost_HearRate
@@ -821,6 +828,13 @@ addActionCost:
   adc simulationTimePassedHighDigits
   sta simulationTimePassedHighDigits
   lda simulationTimePassedHighDigits
+  clc
+  adc #$30
+  jsr send_rs232_char
+  lda simulationTimePassedLowDigits
+  clc
+  adc #$30
+  jsr send_rs232_char  
 addActionCost_HearRate:  
   ; clc
   ; adc #$30
