@@ -166,6 +166,8 @@ endScreenSimulationTimeisUp=      $0231
 timeRemainingLowByte=             $0232
 timeRemainingHighByte=            $0233
 flashlightSensorID=               $0234  
+flashlightToggleFlag=             $0235
+
 
 moveNextScreen=$0243
 idleTimerStartMinute=$0244
@@ -1347,7 +1349,12 @@ sensor_2_run:
   sta sensorDataVectorHigh
   ldy #$0
   lda (sensorDataVectorLow),y
+  sta flashlightToggleFlag
+  clc
+  adc #$30
+  jsr send_rs232_char
   ;here we have in the acummulator the togle for the sensor
+  lda flashlightToggleFlag
   beq sensor_2_run_not_toggle
   ;here the sensor is a toggle one
   ;we know it is the one for the flashlight per design
