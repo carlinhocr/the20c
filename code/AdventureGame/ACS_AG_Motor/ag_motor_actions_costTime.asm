@@ -145,17 +145,23 @@ actionCostTotal=        $021f
 currentActionCost=      $0220
 currentActionHideWater= $0221
 currentActionHideFear=  $0222
-currentActionHideFlashlightOff= $0223
-simulationTimePassedLowDigits=  $0224
-simulationTimePassedHighDigits= $0225
-dashboardCurrentID=             $0226
-current_dashboard_offset=       $0227
-extraSecondsFlashlightOffLowByte=$0228
+currentActionHideFlashlightOff=   $0223
+simulationTimePassedLowDigits=    $0224
+simulationTimePassedHighDigits=   $0225
+dashboardCurrentID=               $0226
+current_dashboard_offset=         $0227
+extraSecondsFlashlightOffLowByte= $0228
 extraSecondsFlashlightOffHighByte=$0229
-extraSecondsHeartRateLowByte=$022a
-extraSecondsHeartRateHighByte=$022b
-extraSecondsWaterLevelLowByte=$22c
-extraSecondsWaterLevelHighByte=$22d
+extraSecondsHeartRateLowByte=     $022a
+extraSecondsHeartRateHighByte=    $022b
+extraSecondsWaterLevelLowByte=    $022c
+extraSecondsWaterLevelHighByte=   $022d
+maxSimulationTimeLowByte=         $022e
+maxSimulationTimeHighByte=        $022f
+simulationTimeExpired=            $0230
+endScreenSimulationTimeisUp=      $0231
+timeRemainingLowByte=             $0232
+timeRemainingHighByte=            $0233
 
 moveNextScreen=$0243
 idleTimerStartMinute=$0244
@@ -303,9 +309,7 @@ mainProgramLoop:
   jsr sensor_selector  
   lda gameEnded
   bne mainProgram
-  ;jsr addActionCost
-  ;jsr addWaterLevelCost
-  ;jsr checkSimulationTimeisUp
+  jsr checkSimulationTimeisUp
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
@@ -329,6 +333,30 @@ mainProgramLoop:
 ;--------------------------------ENDING---------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+
+checkSimulationTimeisUp:
+  ;substract current simulationTimePassed from maxSimulationTime
+  sec
+  lda maxSimulationTimeLowByte
+  sbc simulationTimePassedLowDigits
+  sta timeRemainingLowByte
+  lda maxSimulationTimeHighByte
+  sbc simulationTimePassedHighDigits
+  sta timeRemainingHighByte
+  ;if there is a carry the result was positive
+  bcs checkSimulationTimeisUp_End
+  ;here there is a carry clear so the result is negative and time is up
+  lda endScreenSimulationTimeisUp ;endScreens1s1 id
+  sta screenCurrentID
+  lda #$1
+  sta moveNextScreen  
+  lda #$1
+  sta gameEnded
+  lda #$1
+  sta simulationTimeExpired
+
+checkSimulationTimeisUp_End:  
+  rts
 
 checkEndScreen:
   ldx screen_is_end_screen_offset
@@ -501,6 +529,8 @@ loadConstants:
   sta simulationTimePassedHighDigits
   lda #$0
   sta dashboardCurrentID
+  lda #$10
+  sta endScreenSimulationTimeisUp
   rts 
 
 initiatilizeActionsIDs:  
@@ -672,6 +702,20 @@ select_dashboard:
   iny 
   lda (sourceDashboardVectorLow),Y
   sta extraSecondsWaterLevelLowByte    
+  ;load maxi simulation Times
+  ldx dashboard_total_sim_time_offset
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorLow
+  inx
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorHigh
+  ldy #$0
+  lda (sourceDashboardVectorLow),Y
+  sta maxSimulationTimeHighByte 
+  iny 
+  lda (sourceDashboardVectorLow),Y
+  sta maxSimulationTimeLowByte   
+
 
   rts
 
