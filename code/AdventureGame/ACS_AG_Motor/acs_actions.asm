@@ -255,6 +255,8 @@ action_sensor_active_offset:
   .byte 8  ; (byte of action_0_sensor_active in actions_pointers)
 action_screen_offset:
   .byte 10  ; (byte of action_0_screen in actions_pointers)
+action_cost_offset:
+  .byte 12  ; (byte of action_0_cost in actions_pointers)
 action_enemy_probability_offset:
   .byte 14  ; (byte of action_0_enemy_probability in actions_pointers)
 action_reset_enemy_prob_offset:

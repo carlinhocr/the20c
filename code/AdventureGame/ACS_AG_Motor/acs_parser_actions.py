@@ -39,6 +39,7 @@ def to_asm(actions):
     act0_description_offset       = None
     act0_desc_failed_offset       = None
     act0_screen_offset            = None
+    act0_cost_offset              = None
     act0_enemy_probability_offset = None
     act0_reset_enemy_prob_offset  = None
     act0_death_probability_offset = None
@@ -61,7 +62,7 @@ def to_asm(actions):
         lines.append(f"  .word {label}_sensor_id     ; {name} sensor_id     [{offset},{offset+1}]") ; _sid = offset ; offset += 2
         lines.append(f"  .word {label}_sensor_active ; {name} sensor_active [{offset},{offset+1}]") ; _act = offset ;offset += 2
         lines.append(f"  .word {label}_screen        ; {name} screen        [{offset},{offset+1}]") ; _scr = offset ; offset += 2
-        lines.append(f"  .word {label}_cost              ; {name} cost              [{offset},{offset+1}]") ; offset += 2
+        lines.append(f"  .word {label}_cost              ; {name} cost              [{offset},{offset+1}]") ; _cst = offset ; offset += 2
         lines.append(f"  .word {label}_enemy_probability ; {name} enemy_probability [{offset},{offset+1}]") ; _enm = offset ; offset += 2
         lines.append(f"  .word {label}_reset_enemy_prob  ; {name} reset_enemy_prob  [{offset},{offset+1}]") ; _rep = offset ; offset += 2
         lines.append(f"  .word {label}_death_probability ; {name} death_probability [{offset},{offset+1}]") ; _dth = offset ; offset += 2
@@ -77,6 +78,7 @@ def to_asm(actions):
             act0_sensor_id_offset         = _sid
             act0_sensor_active_offset     = _act
             act0_screen_offset            = _scr
+            act0_cost_offset              = _cst
             act0_enemy_probability_offset = _enm
             act0_reset_enemy_prob_offset  = _rep
             act0_death_probability_offset = _dth
@@ -98,6 +100,8 @@ def to_asm(actions):
     lines.append(f"  .byte {act0_sensor_active_offset}  ; (byte of action_0_sensor_active in actions_pointers)")
     lines.append(f"action_screen_offset:")
     lines.append(f"  .byte {act0_screen_offset}  ; (byte of action_0_screen in actions_pointers)")
+    lines.append(f"action_cost_offset:")
+    lines.append(f"  .byte {act0_cost_offset}  ; (byte of action_0_cost in actions_pointers)")
     lines.append(f"action_enemy_probability_offset:")
     lines.append(f"  .byte {act0_enemy_probability_offset}  ; (byte of action_0_enemy_probability in actions_pointers)")
     lines.append(f"action_reset_enemy_prob_offset:")

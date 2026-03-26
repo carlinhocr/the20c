@@ -77,6 +77,41 @@ def get_action_names():
     )
     return [""] + names
 
+
+def get_action_display_names():
+    """Return list of display names for screen combos: Alias if defined, else Name."""
+    actions = load_json(JSON_ACTIONS_FILE)
+    display = []
+    for rid, rec in actions.items():
+        name = rec.get("Name", rid).strip()
+        alias = rec.get("Alias", "").strip()
+        if name or rid:
+            display.append(alias if alias else name)
+    return [""] + sorted(display)
+
+
+def get_action_name_to_display():
+    """Return dict {Name: display} where display = Alias if defined, else Name."""
+    actions = load_json(JSON_ACTIONS_FILE)
+    mapping = {}
+    for rid, rec in actions.items():
+        name = rec.get("Name", rid).strip()
+        alias = rec.get("Alias", "").strip()
+        mapping[name] = alias if alias else name
+    return mapping
+
+
+def get_action_display_to_name():
+    """Return dict {display: Name} to reverse-map combo display back to action Name."""
+    actions = load_json(JSON_ACTIONS_FILE)
+    mapping = {"": ""}
+    for rid, rec in actions.items():
+        name = rec.get("Name", rid).strip()
+        alias = rec.get("Alias", "").strip()
+        display = alias if alias else name
+        mapping[display] = name
+    return mapping
+
 def get_sensor_names():
     sensors = load_json(JSON_SENSORS_FILE)
     ordered = sorted(sensors.values(), key=lambda r: int(r.get("ID", 0)))
@@ -687,7 +722,7 @@ def open_screens_window():
     act_frame1 = tk.Frame(form, bg="#40318D")
     act_frame1.pack(fill="x")
     add_grid_combos(act_frame1, ["Action1", "Action2", "Action3", "Action4"],
-                    get_action_names, action_vars, action_combos)
+                    get_action_display_names, action_vars, action_combos)
 
     # ── Description ──────────────────────────────────────────
     section_lbl(form, "— Description —")
@@ -751,7 +786,9 @@ def open_screens_window():
             entries[f].delete(0, tk.END)
             entries[f].insert(0, rec.get(f, ""))
         for a, v in action_vars.items():
-            v.set(rec.get(a, ""))
+            stored_name = rec.get(a, "")
+            name_to_disp = get_action_name_to_display()
+            v.set(name_to_disp.get(stored_name, stored_name))
         desc_text.delete("1.0", tk.END)
         desc_text.insert("1.0", rec.get("Description", ""))
         flashlight_on_text.delete("1.0", tk.END)
@@ -772,8 +809,10 @@ def open_screens_window():
 
     def on_save():
         data = {f: entries[f].get() for f in entries}
+        disp_to_name = get_action_display_to_name()
         for a, v in action_vars.items():
-            data[a] = v.get()
+            display_val = v.get()
+            data[a] = disp_to_name.get(display_val, display_val)
         data["Description"]   = desc_text.get("1.0", "end-1c")
         data["FlashlightOn"]  = flashlight_on_text.get("1.0", "end-1c")
         data["FlashlightOff"] = flashlight_off_text.get("1.0", "end-1c")
@@ -785,7 +824,7 @@ def open_screens_window():
         updated = screen_names_by_id()
         load_dd["values"] = updated
         for cb in action_combos.values():
-            cb["values"] = get_action_names()
+            cb["values"] = get_action_display_names()
 
     save_btn(form, "💾  Save Screen", on_save)
 
@@ -2480,7 +2519,7 @@ def open_play_window():
             return
 
         for aname, arec in available:
-            display_name = arec.get("Alias", "").strip() or aname
+            display_name = aname
             btn = tk.Button(
                 action_frame, text=f"▶ {display_name}",
                 font=("Courier New", 10, "bold"),
@@ -2570,7 +2609,7 @@ def open_play_window():
             return
 
         write(f"\n{'─' * 40}", "info")
-        display_name = arec.get("Alias", "").strip() or aname
+        display_name = aname
         write(f"▶ {display_name}", "title")
 
         # Print action description
