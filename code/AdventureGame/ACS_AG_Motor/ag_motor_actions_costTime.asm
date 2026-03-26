@@ -492,6 +492,7 @@ loadConstants:
   lda #$0 ;flashlight off
   sta flashlightOff ;flashlight off  
   lda #$0 ;flashlight off
+  lda #$1 ; flashlight on
   sta flashlightStatus ;flashlight off
   lda #$0
   sta gameEnded
