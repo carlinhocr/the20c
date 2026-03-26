@@ -13,6 +13,7 @@ screens_index:
   .word screen_pointers_7  ; s1s5
   .word screen_pointers_8  ; endScreens1s4
   .word screen_pointers_9  ; s2s1
+  .word screen_pointers_10  ; EndScreenSimulationTimeisUp
 screens_index_record_length:
   .byte 2  ; each screens_index entry is 1 .word (2 bytes)
 
@@ -157,6 +158,20 @@ screen_pointers_9:
   .word screen_9_enemy_probability ; s2s1 enemy_probability [254,255]
   .word screen_9_is_secret_screen  ; s2s1 is_secret_screen  [256,257]
   .word screen_9_is_end_screen     ; s2s1 is_end_screen     [258,259]
+screen_pointers_10:
+  .word screen_10_id                ; EndScreenSimulationTimeisUp id                [260,261]
+  .word screen_10_name              ; EndScreenSimulationTimeisUp name              [262,263]
+  .word screen_10_action1           ; EndScreenSimulationTimeisUp action1           [264,265]
+  .word screen_10_action2           ; EndScreenSimulationTimeisUp action2           [266,267]
+  .word screen_10_action3           ; EndScreenSimulationTimeisUp action3           [268,269]
+  .word screen_10_action4           ; EndScreenSimulationTimeisUp action4           [270,271]
+  .word screen_10_description       ; EndScreenSimulationTimeisUp description       [272,273]
+  .word screen_10_ascii             ; EndScreenSimulationTimeisUp ascii             [274,275]
+  .word screen_10_flashlight_on     ; EndScreenSimulationTimeisUp flashlight_on     [276,277]
+  .word screen_10_flashlight_off    ; EndScreenSimulationTimeisUp flashlight_off    [278,279]
+  .word screen_10_enemy_probability ; EndScreenSimulationTimeisUp enemy_probability [280,281]
+  .word screen_10_is_secret_screen  ; EndScreenSimulationTimeisUp is_secret_screen  [282,283]
+  .word screen_10_is_end_screen     ; EndScreenSimulationTimeisUp is_end_screen     [284,285]
 screen_action_offset:
   .byte 4  ; (byte of screen_0_action1 in screens_pointers)
 screen_description_offset:
@@ -675,9 +690,54 @@ screen_9_is_secret_screen:
 screen_9_is_end_screen:
   .byte 0  ; no
 
+; ── Screen 10: EndScreenSimulationTimeisUp ──────────────────────────
+screen_10_id:
+  .byte 10
+
+screen_10_name:
+  .ascii "EndScreenSimulationTimeisUp"
+  .ascii "e"
+
+screen_10_action1:
+  .byte 9  ; TERMINAR EL JUEGO
+
+screen_10_action2:
+  .byte 255  ; none
+
+screen_10_action3:
+  .byte 255  ; none
+
+screen_10_action4:
+  .byte 255  ; none
+
+screen_10_description:
+  .ascii "Tardaste Muuuucho y te quedaste sin tiempo....."
+  .ascii "e"
+
+screen_10_ascii:
+  .ascii ""
+  .ascii "e"
+
+screen_10_flashlight_on:
+  .ascii ""
+  .ascii "e"
+
+screen_10_flashlight_off:
+  .ascii ""
+  .ascii "e"
+
+screen_10_enemy_probability:
+  .byte 0
+
+screen_10_is_secret_screen:
+  .byte 0  ; no
+
+screen_10_is_end_screen:
+  .byte 1  ; yes
+
 ; ── Total screen count ──────────────────────────────────────
 screen_count:
-  .byte 10
+  .byte 11
 
 ; ── Total secret screens count ──────────────────────────────
 screens_with_secrets:

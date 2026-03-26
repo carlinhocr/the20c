@@ -130,5 +130,20 @@
         "FlashlightOn": "Luego de explorar el pasillo, te encuentras con una sala grande. Dos tuneles se abren frente a ti. Decidir en estas condiciones es dificil, pero necesario. El agua sigue subiendo lentamente.",
         "FlashlightOff": "A ciegas tanteas la pared del pasillo, hasta que se acaba. Tienes la sensacion de que llegaste a un lugar mas espacioso. Recorres la pared a tientas y encuentras dos grandes huecos. ¿Tal vez sean tuneles?. No te detienes demasiado a pensarlo, sientes mas agua en contacto con tu cuerpo.",
         "AsciiDrawing": ""
+    },
+    "10": {
+        "ID": "10",
+        "Name": "EndScreenSimulationTimeisUp",
+        "Action1": "TERMINAR EL JUEGO",
+        "Action2": "",
+        "Action3": "",
+        "Action4": "",
+        "Description": "Tardaste Muuuucho y te quedaste sin tiempo.....",
+        "FlashlightOn": "",
+        "FlashlightOff": "",
+        "AsciiDrawing": "",
+        "EnemyProbability": 0,
+        "IsSecretScreen": 0,
+        "IsEndScreen": 1
     }
 }
