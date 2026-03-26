@@ -292,7 +292,7 @@ mainProgramLoop:
   jsr action_selector
   jsr sensor_selector  
   lda gameEnded
-  beq mainProgram
+  bne mainProgram
   jsr addActionCost
   ;jsr addWaterLevelCost
   ;jsr checkSimulationTimeisUp
