@@ -77,41 +77,6 @@ def get_action_names():
     )
     return [""] + names
 
-
-def get_action_display_names():
-    """Return list of display names for screen combos: Alias if defined, else Name."""
-    actions = load_json(JSON_ACTIONS_FILE)
-    display = []
-    for rid, rec in actions.items():
-        name = rec.get("Name", rid).strip()
-        alias = rec.get("Alias", "").strip()
-        if name or rid:
-            display.append(alias if alias else name)
-    return [""] + sorted(display)
-
-
-def get_action_name_to_display():
-    """Return dict {Name: display} where display = Alias if defined, else Name."""
-    actions = load_json(JSON_ACTIONS_FILE)
-    mapping = {}
-    for rid, rec in actions.items():
-        name = rec.get("Name", rid).strip()
-        alias = rec.get("Alias", "").strip()
-        mapping[name] = alias if alias else name
-    return mapping
-
-
-def get_action_display_to_name():
-    """Return dict {display: Name} to reverse-map combo display back to action Name."""
-    actions = load_json(JSON_ACTIONS_FILE)
-    mapping = {"": ""}
-    for rid, rec in actions.items():
-        name = rec.get("Name", rid).strip()
-        alias = rec.get("Alias", "").strip()
-        display = alias if alias else name
-        mapping[display] = name
-    return mapping
-
 def get_sensor_names():
     sensors = load_json(JSON_SENSORS_FILE)
     ordered = sorted(sensors.values(), key=lambda r: int(r.get("ID", 0)))
@@ -722,7 +687,7 @@ def open_screens_window():
     act_frame1 = tk.Frame(form, bg="#40318D")
     act_frame1.pack(fill="x")
     add_grid_combos(act_frame1, ["Action1", "Action2", "Action3", "Action4"],
-                    get_action_display_names, action_vars, action_combos)
+                    get_action_names, action_vars, action_combos)
 
     # ── Description ──────────────────────────────────────────
     section_lbl(form, "— Description —")
@@ -786,9 +751,7 @@ def open_screens_window():
             entries[f].delete(0, tk.END)
             entries[f].insert(0, rec.get(f, ""))
         for a, v in action_vars.items():
-            stored_name = rec.get(a, "")
-            name_to_disp = get_action_name_to_display()
-            v.set(name_to_disp.get(stored_name, stored_name))
+            v.set(rec.get(a, ""))
         desc_text.delete("1.0", tk.END)
         desc_text.insert("1.0", rec.get("Description", ""))
         flashlight_on_text.delete("1.0", tk.END)
@@ -809,10 +772,8 @@ def open_screens_window():
 
     def on_save():
         data = {f: entries[f].get() for f in entries}
-        disp_to_name = get_action_display_to_name()
         for a, v in action_vars.items():
-            display_val = v.get()
-            data[a] = disp_to_name.get(display_val, display_val)
+            data[a] = v.get()
         data["Description"]   = desc_text.get("1.0", "end-1c")
         data["FlashlightOn"]  = flashlight_on_text.get("1.0", "end-1c")
         data["FlashlightOff"] = flashlight_off_text.get("1.0", "end-1c")
@@ -824,7 +785,7 @@ def open_screens_window():
         updated = screen_names_by_id()
         load_dd["values"] = updated
         for cb in action_combos.values():
-            cb["values"] = get_action_display_names()
+            cb["values"] = get_action_names()
 
     save_btn(form, "💾  Save Screen", on_save)
 
@@ -1895,7 +1856,7 @@ def open_dashboard_window():
         for evar in enemy_prob_sliders.values():
             evar.set(0)
         dash_combo_vars["StartScreen"].set("")
-        high_water_var.set(2)
+        high_water_var.set(5)
         high_heart_var.set(1)
         slbl.config(text=f"✔  New dashboard (ID {new_id}) — fill in details and save", fg="#50e878")
 
@@ -1944,15 +1905,15 @@ def open_dashboard_window():
     high_water_row = tk.Frame(form, bg="#40318D")
     high_water_row.pack(fill="x", pady=(4, 0))
     tk.Label(high_water_row, text="High Water Level:", **LABEL_STYLE).pack(side="left")
-    high_water_var = tk.IntVar(value=2)
+    high_water_var = tk.IntVar(value=5)
     high_water_spin = tk.Spinbox(
-        high_water_row, from_=0, to=3, textvariable=high_water_var, width=4,
+        high_water_row, from_=0, to=9, textvariable=high_water_var, width=4,
         bg="#2E2270", fg="#FFFFFF", insertbackground="#FFFFFF",
         buttonbackground="#7869C4", relief="sunken", bd=2,
         font=("Courier New", 11), justify="left",
     )
     high_water_spin.pack(side="left", padx=(8, 0), ipady=4)
-    tk.Label(high_water_row, text="(0–3)", bg="#40318D", fg="#A09BE0",
+    tk.Label(high_water_row, text="(0–9)", bg="#40318D", fg="#A09BE0",
              font=("Courier New", 10)).pack(side="left", padx=(6, 0))
 
     # High HeartRate Level (0-1)
@@ -2010,7 +1971,7 @@ def open_dashboard_window():
     water_section_lbl.pack(fill="x", pady=(14, 4))
 
     water_spin_widgets = []
-    for i in range(4):
+    for i in range(10):
         label = f"WaterLevel{i}"
         row = tk.Frame(form, bg="#40318D")
         row.pack(fill="x", pady=(4, 0))
@@ -2141,7 +2102,7 @@ def open_dashboard_window():
             total_flash_var.set(int(rec.get("TotalFlashlightTime", 0)))
         except (ValueError, TypeError):
             total_flash_var.set(0)
-        for i in range(4):
+        for i in range(10):
             label = f"WaterLevel{i}"
             try:
                 water_spins[label].set(int(rec.get(label, 0)))
@@ -2180,9 +2141,9 @@ def open_dashboard_window():
                     pass
         # Thresholds
         try:
-            high_water_var.set(int(rec.get("HighWaterLevel", 2)))
+            high_water_var.set(int(rec.get("HighWaterLevel", 5)))
         except (ValueError, TypeError):
-            high_water_var.set(2)
+            high_water_var.set(5)
         try:
             high_heart_var.set(int(rec.get("HighHeartRateLevel", 1)))
         except (ValueError, TypeError):
@@ -2205,7 +2166,7 @@ def open_dashboard_window():
         except (ValueError, TypeError):
             tflash = 0
         data["TotalFlashlightTime"] = tflash
-        for i in range(4):
+        for i in range(10):
             label = f"WaterLevel{i}"
             try:
                 val = int(water_spins[label].get())
@@ -2234,7 +2195,7 @@ def open_dashboard_window():
                 start_id_num = 255
         data["StartScreenID"] = start_id_num
         # Thresholds
-        data["HighWaterLevel"]    = max(0, min(3, high_water_var.get()))
+        data["HighWaterLevel"]    = max(0, min(9, high_water_var.get()))
         data["HighHeartRateLevel"] = max(0, min(1, high_heart_var.get()))
         save_to_json(JSON_DASHBOARD_FILE, "ID", data, slbl)
         load_dd["values"] = dashboard_names_by_id()
@@ -2273,8 +2234,7 @@ def open_play_window():
 
     total_sim_time      = D("TotalSimulationTime",      600)
     total_flash_time    = D("TotalFlashlightTime",       300)
-    water_thresholds    = [D("WaterLevel0", 100), D("WaterLevel1", 200),
-                           D("WaterLevel2", 400), D("WaterLevel3", 600)]
+    water_thresholds    = [D(f"WaterLevel{i}", 0) for i in range(10)]
     extra_sec_water     = D("ExtraSecondsWaterLevel",    5)
     extra_sec_heart     = D("ExtraSecondsHighHeartRate", 5)
     extra_sec_flash_off = D("ExtraSecondsFlashlightOff", 5)
@@ -2282,7 +2242,7 @@ def open_play_window():
     death_prob_heart    = D("DeathProbHighHeartRate",    10)
     death_prob_flash    = D("DeathProbFlashlightOff",    50)
     enemy_prob_flash_on = D("EnemyProbFlashlightOn",     10)
-    high_water_mark     = D("HighWaterLevel",             2)
+    high_water_mark     = D("HighWaterLevel",             5)
     high_heart_mark     = D("HighHeartRateLevel",         1)
 
     # ── Game state ────────────────────────────────────────────
@@ -2405,7 +2365,7 @@ def open_play_window():
         sv = len(state["screens_visited"])
 
         status_vars["Time"].set(f"⏱ {t}/{tmax}s")
-        water_bars = "█" * wl + "░" * (3 - wl)
+        water_bars = "█" * wl + "░" * (9 - wl)
         status_vars["Water"].set(f"💧 {water_bars} ({wl})")
         status_vars["Heart"].set(f"❤ {'HIGH' if hr else 'calm'}")
         status_vars["Flashlight"].set(f"🔦 {fl} ({ft}/{ftmax}s)")
@@ -2519,7 +2479,7 @@ def open_play_window():
             return
 
         for aname, arec in available:
-            display_name = aname
+            display_name = arec.get("Alias", "").strip() or aname
             btn = tk.Button(
                 action_frame, text=f"▶ {display_name}",
                 font=("Courier New", 10, "bold"),
@@ -2609,7 +2569,7 @@ def open_play_window():
             return
 
         write(f"\n{'─' * 40}", "info")
-        display_name = aname
+        display_name = arec.get("Alias", "").strip() or aname
         write(f"▶ {display_name}", "title")
 
         # Print action description
@@ -2730,7 +2690,7 @@ def open_play_window():
         if state["time_elapsed"] >= total_sim_time:
             write("⚠ ¡Se acabó el tiempo!", "warning")
             # Trigger water sensor full
-            state["water_level"] = 3
+            state["water_level"] = 9
             water_sensor = sensor_by_id.get("0")
             if water_sensor:
                 msg = water_sensor.get("DialogOn", "")
@@ -2742,8 +2702,8 @@ def open_play_window():
         # ── Update water level based on elapsed time ──────────
         update_water_level()
 
-        # Check if water level reached max (level 3) and time >= threshold
-        if state["water_level"] >= 3 and state["time_elapsed"] >= water_thresholds[3]:
+        # Check if water level reached max (level 9) and time >= threshold
+        if state["water_level"] >= 9 and state["time_elapsed"] >= water_thresholds[9]:
             write("⚠ ¡La caverna se llenó de agua!", "warning")
             end_game("Se llenó la caverna de agua")
             return
@@ -2804,7 +2764,7 @@ def open_play_window():
                     state["heart_rate"] = 1 if sensor_active else 0
 
                 elif sensor_name == "water":
-                    if sensor_active and state["water_level"] < 3:
+                    if sensor_active and state["water_level"] < 9:
                         state["water_level"] += 1
                         write(f"💧 Nivel de agua: {state['water_level']}", "warning")
 

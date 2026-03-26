@@ -32,10 +32,7 @@ def to_asm(dashboards):
     rec0_high_heart_offset  = None
     rec0_total_sim_offset   = None
     rec0_total_flash_offset = None
-    rec0_water0_offset      = None
-    rec0_water1_offset      = None
-    rec0_water2_offset      = None
-    rec0_water3_offset      = None
+    rec0_water_offsets       = {}
     rec0_extra_water_offset = None
     rec0_extra_heart_offset = None
     rec0_extra_flash_offset = None
@@ -60,10 +57,9 @@ def to_asm(dashboards):
         lines.append(f"  .word {label}_high_heart_level ; {name} high_heart_level [{offset},{offset+1}]") ; _hh = offset ; offset += 2
         lines.append(f"  .word {label}_total_sim_time   ; {name} total_sim_time   [{offset},{offset+1}]") ; _tst = offset ; offset += 2
         lines.append(f"  .word {label}_total_flash_time ; {name} total_flash_time [{offset},{offset+1}]") ; _tft = offset ; offset += 2
-        lines.append(f"  .word {label}_water_level0     ; {name} water_level0     [{offset},{offset+1}]") ; _w0 = offset ; offset += 2
-        lines.append(f"  .word {label}_water_level1     ; {name} water_level1     [{offset},{offset+1}]") ; _w1 = offset ; offset += 2
-        lines.append(f"  .word {label}_water_level2     ; {name} water_level2     [{offset},{offset+1}]") ; _w2 = offset ; offset += 2
-        lines.append(f"  .word {label}_water_level3     ; {name} water_level3     [{offset},{offset+1}]") ; _w3 = offset ; offset += 2
+        _water_offsets = {}
+        for _wi in range(10):
+            lines.append(f"  .word {label}_water_level{_wi}     ; {name} water_level{_wi}     [{offset},{offset+1}]") ; _water_offsets[_wi] = offset ; offset += 2
         lines.append(f"  .word {label}_extra_water      ; {name} extra_water      [{offset},{offset+1}]") ; _ew = offset ; offset += 2
         lines.append(f"  .word {label}_extra_heartrate  ; {name} extra_heartrate  [{offset},{offset+1}]") ; _eh = offset ; offset += 2
         lines.append(f"  .word {label}_extra_flashlight ; {name} extra_flashlight [{offset},{offset+1}]") ; _ef = offset ; offset += 2
@@ -79,10 +75,7 @@ def to_asm(dashboards):
             rec0_high_heart_offset  = _hh
             rec0_total_sim_offset   = _tst
             rec0_total_flash_offset = _tft
-            rec0_water0_offset      = _w0
-            rec0_water1_offset      = _w1
-            rec0_water2_offset      = _w2
-            rec0_water3_offset      = _w3
+            rec0_water_offsets      = dict(_water_offsets)
             rec0_extra_water_offset = _ew
             rec0_extra_heart_offset = _eh
             rec0_extra_flash_offset = _ef
@@ -105,14 +98,9 @@ def to_asm(dashboards):
     lines.append(f"  .byte {rec0_total_sim_offset}  ; (byte of dashboard_0_total_sim_time in pointers)")
     lines.append(f"dashboard_total_flash_time_offset:")
     lines.append(f"  .byte {rec0_total_flash_offset}  ; (byte of dashboard_0_total_flash_time in pointers)")
-    lines.append(f"dashboard_water_level0_offset:")
-    lines.append(f"  .byte {rec0_water0_offset}  ; (byte of dashboard_0_water_level0 in pointers)")
-    lines.append(f"dashboard_water_level1_offset:")
-    lines.append(f"  .byte {rec0_water1_offset}  ; (byte of dashboard_0_water_level1 in pointers)")
-    lines.append(f"dashboard_water_level2_offset:")
-    lines.append(f"  .byte {rec0_water2_offset}  ; (byte of dashboard_0_water_level2 in pointers)")
-    lines.append(f"dashboard_water_level3_offset:")
-    lines.append(f"  .byte {rec0_water3_offset}  ; (byte of dashboard_0_water_level3 in pointers)")
+    for _wi in range(10):
+        lines.append(f"dashboard_water_level{_wi}_offset:")
+        lines.append(f"  .byte {rec0_water_offsets[_wi]}  ; (byte of dashboard_0_water_level{_wi} in pointers)")
     lines.append(f"dashboard_extra_water_offset:")
     lines.append(f"  .byte {rec0_extra_water_offset}  ; (byte of dashboard_0_extra_water in pointers)")
     lines.append(f"dashboard_extra_heartrate_offset:")
@@ -163,8 +151,8 @@ def to_asm(dashboards):
 
         # High Water Level (0-3)
         try:
-            hw_val = int(rec.get("HighWaterLevel", 2))
-            hw_val = max(0, min(3, hw_val))
+            hw_val = int(rec.get("HighWaterLevel", 5))
+            hw_val = max(0, min(9, hw_val))
         except (ValueError, TypeError):
             hw_val = 2
         lines.append(f"{label}_high_water_level:")
@@ -207,8 +195,8 @@ def to_asm(dashboards):
         lines.append(f"  .byte ${lo:02X}  ; low byte")
         lines.append("")
 
-        # Water Levels 0–3 (stored as 2-byte hex, high byte first)
-        for i in range(4):
+        # Water Levels 0–9 (stored as 2-byte hex, high byte first)
+        for i in range(10):
             wl_key = f"WaterLevel{i}"
             try:
                 wl_val = int(rec.get(wl_key, 0))
