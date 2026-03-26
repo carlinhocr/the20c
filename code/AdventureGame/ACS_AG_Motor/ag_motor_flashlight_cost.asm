@@ -1491,6 +1491,11 @@ consumeFlashlight:
   ;disable the hability to turn on the flashlight
   lda #$1
   sta flashlightOff
+  lda #<msj_flashlightOff
+  sta serialDataVectorLow  
+  lda #>msj_flashlightOff
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
   jmp consumeFlashlight_End
 consumeFlashlight_KeepGoing:  
   ;here we still have battery
@@ -1736,8 +1741,11 @@ msj_progressScreen1:
   .ascii "e"      
 
 msj_flashlightOff:
-  .ascii "No puedes prender la linterna no tiene más bateria"
+  .ascii "Tu linterna no tiene más bateria"
   .ascii "e"    
+
+
+  
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------SCREEN------------------------------------------
