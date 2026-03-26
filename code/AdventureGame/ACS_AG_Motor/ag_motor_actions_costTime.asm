@@ -346,8 +346,8 @@ printMessageLoop:
   jsr send_rs232_char
   inx
   jmp printMessageLoop
-  jsr send_rs232_CRLF
 printMessageLoopEnd:  
+  jsr send_rs232_CRLF
 checkEndScreen_End:
   rts  
 
@@ -763,6 +763,8 @@ addActionCost:
   lda (actionCheckVectorLow),Y
   sta currentActionCost
   ;add 16 bits simulation time passed for action
+  lda currentActionCost
+  lda #15
   clc
   adc simulationTimePassedLowDigits
   sta simulationTimePassedLowDigits
