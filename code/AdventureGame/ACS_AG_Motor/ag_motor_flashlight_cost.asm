@@ -524,6 +524,7 @@ loadConstants:
   lda #$0
   sta waterLevel
   lda #$0 ;flashlight off
+  lda #$1 ; you cannot turn on the flashlight
   sta flashlightOff ;flashlight off  
   lda #$0 ;flashlight off
   ;lda #$1 ; flashlight on
@@ -1333,6 +1334,17 @@ sensor_0_run_off:
   rts
 
 sensor_2_run:
+  lda flashlightOff
+  beq sensor_2_run_flashlight_with_batteries
+  lda #<msj_flashlightOff
+  sta serialDataVectorLow  
+  lda #>msj_flashlightOff
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  lda #$0
+  sta flashlightStatus
+  jmp sensor_2_run_End
+sensor_2_run_flashlight_with_batteries:
   lda sensorCurrentID
   asl
   tax
@@ -1660,6 +1672,10 @@ msj_progressScreen1:
   .ascii "Tu recorrido en el juego"
   .ascii "Segundos Transcurridos: "
   .ascii "e"      
+
+msj_flashlightOff:
+  .ascii "No puedes prender la linterna no tienes más baterias"
+  .ascii "e"    
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------SCREEN------------------------------------------
