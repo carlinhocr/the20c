@@ -136,7 +136,7 @@ selectedAction=         $0216
 print_no_CRLF=          $0217
 flashlightOff=          $0218
 userOptionSelection=    $0219
-heartRate=              $021a
+heartRateLevel=         $021a
 waterLevel=             $021b
 heartRateSensor=        $021c
 waterLevelSensor=       $021d
@@ -152,7 +152,8 @@ dashboardCurrentID=             $0226
 current_dashboard_offset=       $0227
 extraSecondsFlashlightOffLowByte=$0228
 extraSecondsFlashlightOffHighByte=$0229
-
+extraSecondsHeartRateLowByte=$022a
+extraSecondsHeartRateHighByte=$022b
 moveNextScreen=$0243
 idleTimerStartMinute=$0244
 sensorCurrentID=$0245
@@ -642,6 +643,19 @@ select_dashboard:
   iny 
   lda (sourceDashboardVectorLow),Y
   sta extraSecondsFlashlightOffLowByte   
+  ldx dashboard_extra_heartrate_offset
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorLow
+  inx
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorHigh
+  ldy #$0
+  lda (sourceDashboardVectorLow),Y
+  sta extraSecondsHeartRateHighByte 
+  iny 
+  lda (sourceDashboardVectorLow),Y
+  sta extraSecondsHeartRateLowByte   
+
   rts
 
 load_dashboard_ram:
@@ -821,17 +835,17 @@ addActionCost:
   ; clc
   ; adc #$30
   ; jsr send_rs232_char  
-  
+
   ;add cost for Flashlight Off
   lda flashlightStatus
   bne addActionCost_HearRate
-  ;here the flashlight is Off
+  ;here the flashlight is Off as flashlight status is zero
   ;read from the dashboard the cost of flashlight off in seconds
   lda extraSecondsFlashlightOffLowByte
   clc
   adc simulationTimePassedLowDigits
   sta simulationTimePassedLowDigits
-    ;add the carry if there was one
+  ;add the carry if there was one
   lda extraSecondsFlashlightOffHighByte
   adc simulationTimePassedHighDigits
   sta simulationTimePassedHighDigits
@@ -844,6 +858,19 @@ addActionCost:
   ; adc #$30
   ; jsr send_rs232_char  
 addActionCost_HearRate:  
+  lda fearLevel
+  beq addActionCost_WaterLevel
+  ;here the fearLevel is on 1 or more 
+  lda extraSecondsHeartRateLowByte
+  clc
+  adc simulationTimePassedLowDigits
+  sta simulationTimePassedLowDigits
+  ;add the carry if there was one
+  lda extraSecondsHeartRateHighByte
+  adc simulationTimePassedHighDigits
+  sta simulationTimePassedHighDigits
+
+addActionCost_WaterLevel:  
   ; clc
   ; adc #$30
   ; jsr send_rs232_char
@@ -1350,15 +1377,15 @@ heartbeatSet:
 initializeHearRate:
   ;five heart rate levels 0 to 4
   lda #$0  
-  sta heartRate
+  sta heartRateLevel
   rts
 
 increaseHeartRate:
-  inc heartRate
+  inc heartRateLevel
   rts
 
 decreaseHeartRate:
-  dec heartRate
+  dec heartRateLevel
   rts  
 
 checkHearRateLevel:
