@@ -293,7 +293,7 @@ mainProgramLoop:
   jsr sensor_selector  
   lda gameEnded
   bne mainProgram
-  jsr addActionCost
+  ;jsr addActionCost
   ;jsr addWaterLevelCost
   ;jsr checkSimulationTimeisUp
   lda moveNextScreen
@@ -738,31 +738,31 @@ draw_screen_by_hand:
 ;-----------------------------------------------------------------------------------
 
 addActionCost:
-  lda selectedAction
-  asl ;multiply by two 
-  tax
-  lda actions_index,x
-  sta pivotZpLow
-  inx
-  lda actions_index,x
-  sta pivotZpHigh
-  ldy action_cost_offset
-  ;on pivotZpLow and High I have the address of the action pointer
-  ;for example action pointer 3, this is another address table
-  ;by adding the offset to Y, we will now retrieve another address
-  ;that final address will have the the data we seek
-  lda (pivotZpLow),Y
-  sta actionCheckVectorLow
-  iny 
-  lda (pivotZpLow),Y
-  sta actionCheckVectorHigh  
-  ;now on actionCheckVector Low and High I have the address
-  ;where the action_3_cost is, we do not need and offset but we need indirect access
-  ;so we use 0 as offset
-  ldy #$0
-  lda (actionCheckVectorLow),Y
-  sta currentActionCost
-  ;add 16 bits simulation time passed for action
+  ; lda selectedAction
+  ; asl ;multiply by two 
+  ; tax
+  ; lda actions_index,x
+  ; sta pivotZpLow
+  ; inx
+  ; lda actions_index,x
+  ; sta pivotZpHigh
+  ; ldy action_cost_offset
+  ; ;on pivotZpLow and High I have the address of the action pointer
+  ; ;for example action pointer 3, this is another address table
+  ; ;by adding the offset to Y, we will now retrieve another address
+  ; ;that final address will have the the data we seek
+  ; lda (pivotZpLow),Y
+  ; sta actionCheckVectorLow
+  ; iny 
+  ; lda (pivotZpLow),Y
+  ; sta actionCheckVectorHigh  
+  ; ;now on actionCheckVector Low and High I have the address
+  ; ;where the action_3_cost is, we do not need and offset but we need indirect access
+  ; ;so we use 0 as offset
+  ; ldy #$0
+  ; lda (actionCheckVectorLow),Y
+  ; sta currentActionCost
+  ; ;add 16 bits simulation time passed for action
   lda currentActionCost
   lda #15
   clc
@@ -1041,11 +1041,22 @@ runAction:
   sta actionDataVectorHigh  
   ldy #$0
   lda (actionDataVectorLow),Y
-  cmp #$ff ;invalid object so that slot is empty do not process
+  cmp #$ff ;invalid screen so that slot is empty do not process
   beq runActionEnd
   sta screenCurrentID
   lda #$1
   sta moveNextScreen
+  ;add the cost of the action
+  ldy action_cost_offset
+  lda (pivotZpLow),Y
+  sta actionDataVectorLow
+  iny 
+  lda (pivotZpLow),Y
+  sta actionDataVectorHigh  
+  ldy #$0
+  lda (actionDataVectorLow),Y
+  sta currentActionCost
+  jsr addActionCost  
 runActionEnd:
   rts
 
@@ -2600,7 +2611,7 @@ bin_2_ascii_simulationTime:
   sta value 
   lda simulationTimePassedHighDigits
   sta value + 1
-  cli ; reenable interrupts after updating
+  ;cli ; reenable interrupts after updating
   jsr bin_2_ascii
   rts
 
