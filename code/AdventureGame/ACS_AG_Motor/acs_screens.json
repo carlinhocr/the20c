@@ -5,12 +5,14 @@
         "Action1": "LEVANTARSE",
         "Action2": "MIRAR ALREDEDOR",
         "Action3": "GRITAR POR AYUDA",
-        "Action4": "",
+        "Action4": "MUERTE DIRECTA",
         "Description": "Despiertas sobre piedra húmeda.\nLa caverna se cerro detrás de ti. \nUn derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental.\nEl frío no duele todavía. \nSientes un constante goteo de agua, cada vez mas cerca de ti.",
         "FlashlightOn": "\n",
         "FlashlightOff": "",
         "AsciiDrawing": "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░#########░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░#         ##░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░#             #░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░#                ##░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░░░░░######                   #####░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░░░░#     #                   #    #░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░░##     #                     #  # ###░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░░#     #                      # #     #░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░#    #########                #####    #░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░#######         #       ########      #   #░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░#                 #######     ##        #   #░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░##                  ##           ##        #   #░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░#                     ###           #       ######░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░##                      ##             ##     ###   ##░░░░░░░░░░░░\n░░░░░░░░░░░░░#####                    #                #   ##       ##░░░░░░░░░░\n░░░░░░░░░░░#      #    ####         ###                ###            #░░░░░░░░░\n░░░░░░░░░░#        ## #    #       #########        ###  #            #░░░░░░░░░\n░░░░░░░░░#          ##      #   ###         ##     #   ########       #░░░░░░░░░\n░░░░░░░░░#         #         ###              ##  #####        ##      #░░░░░░░░\n░░░░░░░░░#        #            #                ##              ##    #░░░░░░░░░\n░░░░░░░░░#       #              #               #                ##   #░░░░░░░░░\n░░░░░░░░░░#     #                #             #                  #  #░░░░░░░░░░\n░░░░░░░░░##    #                 #            #                    # #░░░░░░░░░░\n░░░░░░░░##    ##                 ##            #                  #   #░░░░░░░░░",
-        "EnemyProbability": 33
+        "EnemyProbability": 33,
+        "IsSecretScreen": 0,
+        "IsEndScreen": 0
     },
     "1": {
         "ID": "1",
@@ -40,13 +42,16 @@
         "ID": "3",
         "Name": "startScreen",
         "Action1": "COMENZAR EL JUEGO",
-        "Action2": "",
+        "Action2": "MUERTE DIRECTA",
         "Action3": "",
         "Action4": "",
         "Description": "Bienvenido a la aventura gráfica más Espectacular del mundo",
         "FlashlightOn": "",
         "FlashlightOff": "",
-        "AsciiDrawing": ""
+        "AsciiDrawing": "",
+        "EnemyProbability": 0,
+        "IsSecretScreen": 0,
+        "IsEndScreen": 0
     },
     "4": {
         "ID": "4",
@@ -70,7 +75,10 @@
         "Description": "Asi terminas tus dias atrapado en la Caverna",
         "FlashlightOn": "",
         "FlashlightOff": "",
-        "AsciiDrawing": ""
+        "AsciiDrawing": "",
+        "EnemyProbability": 0,
+        "IsSecretScreen": 0,
+        "IsEndScreen": 1
     },
     "6": {
         "ID": "6",

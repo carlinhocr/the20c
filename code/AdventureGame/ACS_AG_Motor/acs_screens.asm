@@ -194,7 +194,7 @@ screen_0_action3:
   .byte 2  ; GRITAR POR AYUDA
 
 screen_0_action4:
-  .byte 255  ; none
+  .byte 13  ; MUERTE DIRECTA
 
 screen_0_description:
   .ascii "Despiertas sobre piedra húmeda."
@@ -360,7 +360,7 @@ screen_3_action1:
   .byte 8  ; COMENZAR EL JUEGO
 
 screen_3_action2:
-  .byte 255  ; none
+  .byte 13  ; MUERTE DIRECTA
 
 screen_3_action3:
   .byte 255  ; none
@@ -483,7 +483,7 @@ screen_5_is_secret_screen:
   .byte 0  ; no
 
 screen_5_is_end_screen:
-  .byte 0  ; no
+  .byte 1  ; yes
 
 ; ── Screen 6: s1s4 ──────────────────────────
 screen_6_id:

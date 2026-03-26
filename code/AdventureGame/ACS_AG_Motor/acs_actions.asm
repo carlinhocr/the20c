@@ -16,6 +16,7 @@ actions_index:
   .word action_pointer_10  ; EXPLORAR MARCAS
   .word action_pointer_11  ; FORZAR ENTRADA
   .word action_pointer_12  ; VOLVER A MIRAR ADELANTE
+  .word action_pointer_13  ; MUERTE DIRECTA
 actions_index_record_length:
   .byte 2  ; each actions_index entry is 1 .word (2 bytes)
 
@@ -228,6 +229,22 @@ action_pointer_12:
   .word action_12_hide_water         ; VOLVER A MIRAR ADELANTE hide_water         [384,385]
   .word action_12_hide_fear          ; VOLVER A MIRAR ADELANTE hide_fear          [386,387]
   .word action_12_hide_flashlight    ; VOLVER A MIRAR ADELANTE hide_flashlight    [388,389]
+action_pointer_13:
+  .word action_13_id            ; MUERTE DIRECTA id            [390,391]
+  .word action_13_name          ; MUERTE DIRECTA name          [392,393]
+  .word action_13_alias         ; MUERTE DIRECTA alias         [394,395]
+  .word action_13_sensor_id     ; MUERTE DIRECTA sensor_id     [396,397]
+  .word action_13_sensor_active ; MUERTE DIRECTA sensor_active [398,399]
+  .word action_13_screen        ; MUERTE DIRECTA screen        [400,401]
+  .word action_13_cost              ; MUERTE DIRECTA cost              [402,403]
+  .word action_13_enemy_probability ; MUERTE DIRECTA enemy_probability [404,405]
+  .word action_13_reset_enemy_prob  ; MUERTE DIRECTA reset_enemy_prob  [406,407]
+  .word action_13_death_probability ; MUERTE DIRECTA death_probability [408,409]
+  .word action_13_description       ; MUERTE DIRECTA description       [410,411]
+  .word action_13_desc_action_failed ; MUERTE DIRECTA desc_action_failed [412,413]
+  .word action_13_hide_water         ; MUERTE DIRECTA hide_water         [414,415]
+  .word action_13_hide_fear          ; MUERTE DIRECTA hide_fear          [416,417]
+  .word action_13_hide_flashlight    ; MUERTE DIRECTA hide_flashlight    [418,419]
 action_name_offset:
   .byte 2  ; (byte of action_0_name in actions_pointers)
 action_alias_offset:
@@ -907,6 +924,56 @@ action_12_hide_fear:
 action_12_hide_flashlight:
   .byte 0  ; off
 
+; ── Action 13: MUERTE DIRECTA ──────────────────────────
+action_13_id:
+  .byte 13
+
+action_13_name:
+  .ascii "MUERTE DIRECTA"
+  .ascii "e"
+
+action_13_alias:
+  .ascii ""
+  .ascii "e"
+
+action_13_sensor_id:
+  .byte 255  ; none
+
+action_13_sensor_active:
+  .byte 0  ; off
+
+action_13_screen:
+  .byte 5  ; screen id
+
+action_13_cost:
+  .byte 0
+
+action_13_enemy_probability:
+  .byte 0
+
+action_13_reset_enemy_prob:
+  .byte 0  ; off
+
+action_13_death_probability:
+  .byte 0
+
+action_13_description:
+  .ascii "Te mueres"
+  .ascii "e"
+
+action_13_desc_action_failed:
+  .ascii ""
+  .ascii "e"
+
+action_13_hide_water:
+  .byte 0  ; off
+
+action_13_hide_fear:
+  .byte 0  ; off
+
+action_13_hide_flashlight:
+  .byte 0  ; off
+
 ; ── Total action count ──────────────────────────────────────
 action_count:
-  .byte 13
+  .byte 14

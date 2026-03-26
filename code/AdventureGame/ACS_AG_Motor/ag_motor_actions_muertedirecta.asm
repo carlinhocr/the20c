@@ -833,7 +833,9 @@ checkActionVisibility_hide:
   sta actionHidden
   rts  
 checkActionVisibility_End:  
-  rts
+  lda #$0
+  sta actionHidden
+  rts  
 
 printLettersAction:
   ldx actionPosition

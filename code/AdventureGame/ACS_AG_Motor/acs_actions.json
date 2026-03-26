@@ -128,5 +128,22 @@
         "ScreenID": 2,
         "Cost": 20,
         "Description": "Por un momento consideras que mover toneladas de rocas sin equipamiento indicado tal vez sea inutil. Explorar la caverna, aun sin conocerla, puede tener mejores resultados."
+    },
+    "13": {
+        "ID": "13",
+        "Name": "MUERTE DIRECTA",
+        "Alias": "",
+        "SensorID": 255,
+        "SensorActive": false,
+        "ScreenID": 5,
+        "Cost": 0,
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 0,
+        "Description": "Te mueres",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     }
 }
