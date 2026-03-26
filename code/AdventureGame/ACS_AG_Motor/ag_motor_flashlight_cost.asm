@@ -1359,15 +1359,26 @@ sensor_2_run:
   ;here the sensor is a toggle one
   ;we know it is the one for the flashlight per design
   lda flashlightStatus
+  clc
+  adc #$30
+  jsr send_rs232_char  
   beq sensor_2_toggle_one 
   lda #$0
-  jmp sensor_2_setStatus
+  sta flashlightStatus
+  sta sensorCurrentStatus
+  jmp sensor_2_run_not_toggle
 sensor_2_toggle_one:
   lda #$1
+  sta flashlightStatus
+  sta sensorCurrentStatus
 sensor_2_setStatus:  
   sta flashlightStatus
   sta sensorCurrentStatus
 sensor_2_run_not_toggle:  
+  lda flashlightStatus
+  clc
+  adc #$30
+  jsr send_rs232_char    
   lda sensorCurrentStatus
   beq printOffStatus
   ;if here status is not zero so it is on 
