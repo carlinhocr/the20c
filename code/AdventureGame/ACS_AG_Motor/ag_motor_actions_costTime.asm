@@ -764,13 +764,21 @@ addActionCost:
   ; sta currentActionCost
   ; ;add 16 bits simulation time passed for action
   lda currentActionCost
-  lda #15
+  lda #1
   clc
   adc simulationTimePassedLowDigits
   sta simulationTimePassedLowDigits
   ;add the carry if there was one
   adc simulationTimePassedHighDigits
   sta simulationTimePassedHighDigits
+  lda simulationTimePassedLowDigits
+  clc
+  adc #$30
+  jsr send_rs232_char
+  lda simulationTimePassedHighDigits
+  clc
+  adc #$30
+  jsr send_rs232_char
   rts
 
 
