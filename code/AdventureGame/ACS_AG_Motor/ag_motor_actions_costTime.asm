@@ -821,6 +821,7 @@ addActionCost:
   ; clc
   ; adc #$30
   ; jsr send_rs232_char  
+  
   ;add cost for Flashlight Off
   lda flashlightStatus
   bne addActionCost_HearRate
