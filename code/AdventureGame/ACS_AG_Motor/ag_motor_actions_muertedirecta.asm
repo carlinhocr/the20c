@@ -308,7 +308,7 @@ mainProgramLoop:
   ;and just keep rolling the loop
   ;the last screen justo go to the initial screen
   jsr draw_current_screen_table
-
+  jsr checkEndScreen
   ;we 
   ;here the games continue so we jump to the loop and continue
   jmp mainProgramLoop   
@@ -322,10 +322,21 @@ mainProgramLoop:
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------MAIN PROGRAM---------------------------------------
+;--------------------------------ENDING---------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+checkEndScreen:
+  ldx screen_is_end_screen_offset
+  lda screenPointersRAM,X
+  bne checkEndScreen_End
+  lda #<msj_progressScreen1
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen1
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing  
+checkEndScreen_End:
+  rts  
 
 checkGameEnd:
   ;check end in screen s1s1
@@ -1318,7 +1329,11 @@ msj_iddleTimer1:
 option_unknown:
   .ascii "Mmmm esa opción no es válida"
   .ascii "e"    
-
+  
+msj_progressScreen1:
+  .ascii "Tu recorrido en el juego"
+  .ascii "Segundos Restantes: "
+  .ascii "e"      
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------SCREEN------------------------------------------
