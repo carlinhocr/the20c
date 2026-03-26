@@ -487,12 +487,12 @@ loadConstants:
   ;new added
   lda #$0
   sta fearLevel
-  lda #$3
+  lda #$0
   sta waterLevel
   lda #$0 ;flashlight off
   sta flashlightOff ;flashlight off  
   lda #$0 ;flashlight off
-  lda #$1 ; flashlight on
+  ;lda #$1 ; flashlight on
   sta flashlightStatus ;flashlight off
   lda #$0
   sta gameEnded
