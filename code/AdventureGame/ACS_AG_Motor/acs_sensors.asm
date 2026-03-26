@@ -122,11 +122,11 @@ sensor_2_active:
   .byte 0  ; off
 
 sensor_2_dialog_on:
-  .ascii "prende"
+  .ascii "La linterna se prende"
   .ascii "e"
 
 sensor_2_dialog_off:
-  .ascii "apaga"
+  .ascii "La linterna se apaga"
   .ascii "e"
 
 sensor_2_toggle:

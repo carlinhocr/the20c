@@ -18,8 +18,8 @@
         "Name": "flashlight",
         "Active": false,
         "Toggle": 1,
-        "DialogOn": "prende",
-        "DialogOff": "apaga"
+        "DialogOn": "La linterna se prende",
+        "DialogOff": "La linterna se apaga"
     },
     "3": {
         "ID": "3",

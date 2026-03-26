@@ -560,7 +560,7 @@ action_5_death_probability:
   .byte 0
 
 action_5_description:
-  .ascii "La linterna se "
+  .ascii "Presionas el botón de la linterna"
   .ascii "e"
 
 action_5_desc_action_failed:

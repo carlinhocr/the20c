@@ -60,11 +60,19 @@
     "5": {
         "ID": "5",
         "Name": "LINTERNA",
+        "Alias": "",
         "SensorID": 2,
         "SensorActive": true,
         "ScreenID": 255,
         "Cost": 5,
-        "Description": "La linterna se "
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 0,
+        "Description": "Presionas el botón de la linterna",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     },
     "6": {
         "ID": "6",
