@@ -1406,7 +1406,7 @@ option_unknown:
   
 msj_progressScreen1:
   .ascii "Tu recorrido en el juego"
-  .ascii "Segundos Restantes: "
+  .ascii "Segundos Transcurridos: "
   .ascii "e"      
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
