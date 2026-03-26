@@ -292,6 +292,7 @@ mainProgramLoop:
   jsr action_selector
   jsr sensor_selector  
   jsr addActionCost
+  ;jsr addWaterLevelCost
   ;jsr checkSimulationTimeisUp
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
@@ -326,6 +327,7 @@ checkEndScreen:
   lda #>msj_progressScreen1
   sta serialDataVectorHigh
   jsr printAsciiDrawing  
+  jsr bin_2_ascii_simulationTime
 checkEndScreen_End:
   rts  
 
