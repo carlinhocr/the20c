@@ -328,6 +328,15 @@ checkEndScreen:
   sta serialDataVectorHigh
   jsr printAsciiDrawing  
   jsr bin_2_ascii_simulationTime
+  ;print the simulation time number in the variable message
+  ldx #$0
+printMessageLoop:
+  lda message,x  
+  beq printMessageLoopEnd ;on null character stop printing
+  jsr send_rs232_char
+  inx
+  jmp printMessageLoop
+printMessageLoopEnd:  
 checkEndScreen_End:
   rts  
 
@@ -2638,25 +2647,24 @@ ignore_result:
   bne divide ; if a is not zero keep dividing
   rts
 
-print_message_ascii:  
-  ;BEGIN Write all the letters
-  ldx #0 ;start on FF so when i add one it will be 0
+; print_message_ascii:  
+;   ;BEGIN Write all the letters
+;   ldx #0 ;start on FF so when i add one it will be 0
 
-print_message_eeprom_ascii:  
-  lda message,x ;load letter from eeprom position message + the value of register X
-  beq print_message_ascii_end ; jump to end if I load a 0 on lda a zero means the end  of a n .asciiz string
-  jsr print_char 
-  inx
-  jmp print_message_eeprom_ascii
-  ;END Write all the letters  
-print_message_ascii_end:
-  rts   
+; print_message_eeprom_ascii:  
+;   lda message,x ;load letter from eeprom position message + the value of register X
+;   beq print_message_ascii_end ; jump to end if I load a 0 on lda a zero means the end  of a n .asciiz string
+;   jsr print_char 
+;   inx
+;   jmp print_message_eeprom_ascii
+;   ;END Write all the letters  
+; print_message_ascii_end:
+;   rts   
 
 ;add the content of the a register to a null terminated string message
 push_char:
   pha ;push new character into the stack first 
   ldy #0
-
 char_loop:
   lda message,y ;get char on string and put into x
   tax
