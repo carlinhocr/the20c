@@ -291,6 +291,8 @@ mainProgramLoop:
   ;jsr simulationTimeCheck
   jsr action_selector
   jsr sensor_selector  
+  lda gameEnded
+  beq mainProgram
   jsr addActionCost
   ;jsr addWaterLevelCost
   ;jsr checkSimulationTimeisUp
@@ -327,6 +329,8 @@ checkEndScreen:
   lda #>msj_progressScreen1
   sta serialDataVectorHigh
   jsr printAsciiDrawing  
+  lda #$1
+  sta gameEnded
   jsr bin_2_ascii_simulationTime
   ;print the simulation time number in the variable message
   ldx #$0
