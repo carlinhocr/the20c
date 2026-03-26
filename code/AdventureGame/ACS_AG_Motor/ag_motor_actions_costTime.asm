@@ -895,7 +895,6 @@ addActionCost_WaterLevel:
 addActionCost_WaterLevel_Loop:
   txa
   beq addActionCost_WaterLevel_End
-  inx
   lda extraSecondsWaterLevelLowByte
   clc
   adc simulationTimePassedLowDigits
