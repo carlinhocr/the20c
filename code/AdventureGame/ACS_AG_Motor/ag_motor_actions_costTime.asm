@@ -994,6 +994,7 @@ action_selection_option_ok:
 
 runAction:
   ;an action does three things
+  ;add the cost of executing the action
   ;prints a description
   ;moves you to a screen
   ;turn off or off a sensor
@@ -1008,6 +1009,17 @@ runAction:
   inx
   lda actions_index,x
   sta pivotZpHigh
+  ;add the cost of the action
+  ldy action_cost_offset
+  lda (pivotZpLow),Y
+  sta actionDataVectorLow
+  iny 
+  lda (pivotZpLow),Y
+  sta actionDataVectorHigh  
+  ldy #$0
+  lda (actionDataVectorLow),Y
+  sta currentActionCost
+  jsr addActionCost    
   ;prints the description of the action
   lda action_description_offset
   tay
@@ -1055,17 +1067,6 @@ runAction:
   sta screenCurrentID
   lda #$1
   sta moveNextScreen
-  ;add the cost of the action
-  ldy action_cost_offset
-  lda (pivotZpLow),Y
-  sta actionDataVectorLow
-  iny 
-  lda (pivotZpLow),Y
-  sta actionDataVectorHigh  
-  ldy #$0
-  lda (actionDataVectorLow),Y
-  sta currentActionCost
-  jsr addActionCost  
 runActionEnd:
   rts
 
