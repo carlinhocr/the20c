@@ -154,6 +154,9 @@ extraSecondsFlashlightOffLowByte=$0228
 extraSecondsFlashlightOffHighByte=$0229
 extraSecondsHeartRateLowByte=$022a
 extraSecondsHeartRateHighByte=$022b
+extraSecondsWaterLevelLowByte=$22c
+extraSecondsWaterLevelHighByte=$22d
+
 moveNextScreen=$0243
 idleTimerStartMinute=$0244
 sensorCurrentID=$0245
@@ -655,6 +658,19 @@ select_dashboard:
   iny 
   lda (sourceDashboardVectorLow),Y
   sta extraSecondsHeartRateLowByte   
+  ;load water level offsets
+  ldx dashboard_extra_water_offset
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorLow
+  inx
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorHigh
+  ldy #$0
+  lda (sourceDashboardVectorLow),Y
+  sta extraSecondsWaterLevelHighByte 
+  iny 
+  lda (sourceDashboardVectorLow),Y
+  sta extraSecondsWaterLevelLowByte    
 
   rts
 
@@ -871,13 +887,25 @@ addActionCost_HearRate:
   sta simulationTimePassedHighDigits
 
 addActionCost_WaterLevel:  
-  ; clc
-  ; adc #$30
-  ; jsr send_rs232_char
-  ; lda simulationTimePassedLowDigits
-  ; clc
-  ; adc #$30
-  ; jsr send_rs232_char
+  ;load the water level on the X register
+  ;add seconds per level until we reach level zero
+  ;if we start at level zero we add no seconds
+  ldx waterLevel
+addActionCost_WaterLevel_Loop:
+  txa
+  beq addActionCost_WaterLevel_End
+  inx
+  lda extraSecondsWaterLevelLowByte
+  clc
+  adc simulationTimePassedLowDigits
+  sta simulationTimePassedLowDigits
+  ;add the carry if there was one
+  lda extraSecondsWaterLevelHighByte
+  adc simulationTimePassedHighDigits
+  sta simulationTimePassedHighDigits
+  dex
+  jmp addActionCost_WaterLevel_Loop
+addActionCost_WaterLevel_End  
   rts
 
 
