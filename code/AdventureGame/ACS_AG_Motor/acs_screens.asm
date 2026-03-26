@@ -378,7 +378,7 @@ screen_3_action2:
   .byte 13  ; MUERTE DIRECTA
 
 screen_3_action3:
-  .byte 255  ; none
+  .byte 5  ; LINTERNA
 
 screen_3_action4:
   .byte 255  ; none

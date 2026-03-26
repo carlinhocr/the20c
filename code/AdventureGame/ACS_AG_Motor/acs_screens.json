@@ -43,7 +43,7 @@
         "Name": "startScreen",
         "Action1": "COMENZAR EL JUEGO",
         "Action2": "MUERTE DIRECTA",
-        "Action3": "",
+        "Action3": "LINTERNA",
         "Action4": "",
         "Description": "Bienvenido a la aventura gráfica más Espectacular del mundo",
         "FlashlightOn": "",
