@@ -482,7 +482,7 @@ loadConstants:
   lda #$ff
   sta userOptionSelection  
   ;new added
-  lda #$1
+  lda #$0
   sta fearLevel
   lda #$0
   sta waterLevel
