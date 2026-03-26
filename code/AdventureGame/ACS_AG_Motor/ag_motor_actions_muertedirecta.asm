@@ -334,7 +334,7 @@ checkEndScreen:
   lda screenPointersRAM,X
   sta sourceScreenVectorHigh
   lda (sourceScreenVectorLow),Y
-  bne checkEndScreen_End
+  beq checkEndScreen_End
   lda #<msj_progressScreen1
   sta serialDataVectorLow  
   lda #>msj_progressScreen1
