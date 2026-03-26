@@ -529,7 +529,7 @@ loadConstants:
   sta simulationTimePassedHighDigits
   lda #$0
   sta dashboardCurrentID
-  lda #$10
+  lda #10
   sta endScreenSimulationTimeisUp
   rts 
 
