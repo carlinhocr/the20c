@@ -336,6 +336,7 @@ printMessageLoop:
   jsr send_rs232_char
   inx
   jmp printMessageLoop
+  jsr send_rs232_CRLF
 printMessageLoopEnd:  
 checkEndScreen_End:
   rts  
@@ -727,7 +728,7 @@ draw_screen_by_hand:
 ;-----------------------------------------------------------------------------------
 
 addActionCost:
-  lda actionCurrentID
+  lda selectedAction
   asl ;multiply by two 
   tax
   lda actions_index,x
