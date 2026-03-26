@@ -1291,8 +1291,8 @@ sensor_selector:
   beq sensor_selector_0
 ;   cmp #$1
 ;   beq sensor_selector_1
-;   cmp #$2
-;   beq sensor_selector_2
+  cmp #$2
+  beq sensor_selector_2
   cmp #$3
   beq sensor_selector_3
 sensor_selector_0:
