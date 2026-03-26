@@ -97,15 +97,16 @@ LCD_PORTSTATUS=$a2
 ;Zero Page Vectors Screen
 ramScreenVectorLow=$b0
 ramScreenVectorHigh=$b1
-;FREE =$b2
-;FREE =$b3
+dashboardScreenVectorLow=$b2
+dashboardScreenVectorHigh=$b3
 actionCheckVectorLow=$b4
 actionCheckVectorHigh=$b5
 actionDataVectorLow=$b6
 actionDataVectorHigh=$b7
 sourceScreenVectorLow=$b8
 sourceScreenVectorHigh=$b9
-
+sourceDashboardVectorLow=$ba
+sourceDashboardVectorHigh=$bb
 pivotZpLow=$fe
 pivotZpHigh=$ff
 
@@ -141,13 +142,16 @@ heartRateSensor=        $021c
 waterLevelSensor=       $021d
 flashlightStatus=       $021e
 actionCostTotal=        $021f
-
 currentActionCost=      $0220
 currentActionHideWater= $0221
 currentActionHideFear=  $0222
 currentActionHideFlashlightOff= $0223
 simulationTimePassedLowDigits=  $0224
 simulationTimePassedHighDigits= $0225
+dashboardCurrentID=             $0226
+current_dashboard_offset=       $0227
+
+
 moveNextScreen=$0243
 idleTimerStartMinute=$0244
 sensorCurrentID=$0245
@@ -162,7 +166,7 @@ highFearLevel=$024d
 
 actionIDOptionsRAM=$0340 ;32 bytes but i only use 6
 screenPointersRAM=$0500
-
+dashboardPointersRAM=$0600
 
 ;constants
 fill=$43 ;letter C
@@ -285,6 +289,7 @@ mainProgram:
   ;initialize screen as screen zero
   jsr initilizationRoutines
   ;jsr timerWaitOneMinute
+  jsr select_dashboard
   jsr select_screen
   jsr draw_current_screen_table
 mainProgramLoop:
@@ -488,6 +493,8 @@ loadConstants:
   lda #$0
   sta simulationTimePassedLowDigits
   sta simulationTimePassedHighDigits
+  lda #$0
+  sta dashboardCurrentID
   rts 
 
 initiatilizeActionsIDs:  
@@ -612,7 +619,51 @@ timerCheckMinuteElapsedTrue:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;----------------------------------DASHBOARD----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
+select_dashboard:
+  lda dashboardCurrentID
+  jsr load_dashboard_ram
+  rts
+
+load_dashboard_ram:
+  lda dashboardCurrentID
+  ;multiply by 2 the id
+  asl ;if not screen zero multiple by 2
+  sta current_dashboard_offset
+  ldx current_dashboard_offset ;byte 6 if it is screen 3
+  ;store in sourceScreenVector the address of screen_x_id
+  ;use screen zero
+  lda dashboard_index,x
+  sta sourceDashboardVectorLow
+  inx
+  lda dashboard_index,x
+  sta sourceDashboardVectorHigh
+  ;store in ramScreenVectorLow the address of the RAM portin for the screen
+  lda #<dashboardPointersRAM
+  sta dashboardScreenVectorLow
+  lda #>dashboardPointersRAM
+  sta dashboardScreenVectorHigh
+  ldy #$ff
+load_dashboard_ram_loop:
+  iny
+  cpy dashboard_record_length
+  beq load_dashboard_ram_end
+  lda (sourceDashboardVectorLow),Y
+  sta (dashboardScreenVectorLow),Y
+  jmp load_dashboard_ram_loop
+load_dashboard_ram_end:
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;----------------------------------DASHBOARD----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------SCREEN------------------------------------------
@@ -738,31 +789,7 @@ draw_screen_by_hand:
 ;-----------------------------------------------------------------------------------
 
 addActionCost:
-  ; lda selectedAction
-  ; asl ;multiply by two 
-  ; tax
-  ; lda actions_index,x
-  ; sta pivotZpLow
-  ; inx
-  ; lda actions_index,x
-  ; sta pivotZpHigh
-  ; ldy action_cost_offset
-  ; ;on pivotZpLow and High I have the address of the action pointer
-  ; ;for example action pointer 3, this is another address table
-  ; ;by adding the offset to Y, we will now retrieve another address
-  ; ;that final address will have the the data we seek
-  ; lda (pivotZpLow),Y
-  ; sta actionCheckVectorLow
-  ; iny 
-  ; lda (pivotZpLow),Y
-  ; sta actionCheckVectorHigh  
-  ; ;now on actionCheckVector Low and High I have the address
-  ; ;where the action_3_cost is, we do not need and offset but we need indirect access
-  ; ;so we use 0 as offset
-  ; ldy #$0
-  ; lda (actionCheckVectorLow),Y
-  ; sta currentActionCost
-  ; ;add 16 bits simulation time passed for action
+  ;add direct action costs in simulation seconds
   lda currentActionCost
   ;lda #1
   clc
@@ -773,6 +800,22 @@ addActionCost:
   adc simulationTimePassedHighDigits
   sta simulationTimePassedHighDigits
   lda simulationTimePassedHighDigits
+  ;add cost for Flashlight Off
+  lda flashlightStatus
+  bne addActionCost_HearRate
+  ;here the flashlight is Off
+  ;read from the dashboard the cost of flashlight off in seconds
+  ldy dashboard_extra_flashlight_offset
+  lda (dashboardScreenVectorLow),Y
+  clc
+  adc simulationTimePassedLowDigits
+  sta simulationTimePassedLowDigits
+    ;add the carry if there was one
+  lda #$0
+  adc simulationTimePassedHighDigits
+  sta simulationTimePassedHighDigits
+  lda simulationTimePassedHighDigits
+addActionCost_HearRate:  
   ; clc
   ; adc #$30
   ; jsr send_rs232_char
