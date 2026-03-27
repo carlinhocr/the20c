@@ -385,7 +385,7 @@ screen_3_action3:
   .byte 5  ; LINTERNA
 
 screen_3_action4:
-  .byte 255  ; none
+  .byte 4  ; GRITAR
 
 screen_3_description:
   .ascii "Bienvenido a la aventura gráfica más Espectacular del mundo"
