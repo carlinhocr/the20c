@@ -40,6 +40,8 @@ LCD_T1CL = LCD_VIA_BASE + $04   ; Timer 1 counter low   (R: clears T1 IFR bit)
 LCD_T1CH = LCD_VIA_BASE + $05   ; Timer 1 counter high  (W: starts timer)
 LCD_T1LL = LCD_VIA_BASE + $06   ; Timer 1 latch low
 LCD_T1LH = LCD_VIA_BASE + $07   ; Timer 1 latch high
+LCD_T2CL = LCD_VIA_BASE + $08   ; Timer 1 counter low   (R: clears T1 IFR bit)
+LCD_T2CH = LCD_VIA_BASE + $09   ; Timer 1 counter high  (W: starts timer)
 LCD_ACR  = LCD_VIA_BASE + $0B   ; Auxiliary Control Register
 LCD_PCR = $600c
 LCD_IFR = $600d
@@ -556,6 +558,10 @@ startTimerForRandom:
   sta LCD_T1CL
   lda #$20
   sta LCD_T1CH ;here starts the timer
+  lda #$70
+  sta LCD_T2CL
+  lda #$60
+  sta LCD_T2CH
   ;to read a random value just read LCD_T1CL
   rts
 
@@ -1177,7 +1183,7 @@ receiveUserOptionSelection_loop:
   beq receiveUserOptionSelection_loop
   ;we have a valid user input 
   sei ;disable user action until we know if valid action if not ask again
-  lda LCD_T1LL
+  lda LCD_T2CL
   sta randomNumber
   jsr send_rs232_char
   jsr bin_2_ascii_random ;print the random number
