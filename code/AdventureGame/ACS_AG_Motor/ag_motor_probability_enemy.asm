@@ -373,7 +373,7 @@ checkEnemyAppeared:
   ;here you are free
   lda #<msj_enemyEscape
   sta serialDataVectorLow
-  lda #<msj_enemyEscape
+  lda #>msj_enemyEscape
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts
@@ -381,7 +381,7 @@ checkEnemyAppeared_caught:
   ;here you where caught
   lda #<msj_enemyCaught
   sta serialDataVectorLow
-  lda #<msj_enemyCaught
+  lda #>msj_enemyCaught
   sta serialDataVectorHigh
   jsr printAsciiDrawing  
   rts
