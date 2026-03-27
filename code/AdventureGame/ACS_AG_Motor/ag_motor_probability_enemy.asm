@@ -365,6 +365,25 @@ checkEnemyAppeared:
   jsr bin_2_ascii_Action_Plus_Flashlight
   jsr bin_2_ascii_currentScreen
   jsr bin_2_ascii_enemy
+  ;if random is bigger than probability enemy you are ok
+  sec
+  lda randomNumber
+  sbc enemyProbabilityTotal
+  bcs checkEnemyAppeared_caught
+  ;here you are free
+  lda #<msj_enemyEscape
+  sta serialDataVectorLow
+  lda #<msj_enemyEscape
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts
+checkEnemyAppeared_caught:  
+  ;here you where caught
+  lda #<msj_enemyCaught
+  sta serialDataVectorLow
+  lda #<msj_enemyCaught
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing  
   rts
 
 checkSimulationTimeisUp:
@@ -1341,7 +1360,6 @@ runAction:
   lda (actionDataVectorLow),Y
   sta enemyProbActionCost
   jsr enemyProbabilityCalculation
-  ;jsr checkEnemyAppeared
   ;moves you to next screen
   lda action_screen_offset
   tay
@@ -1907,8 +1925,13 @@ msj_flashlightOff:
   .ascii "Tu linterna no tiene más bateria"
   .ascii "e"    
 
+msj_enemyCaught:  
+  .ascii "Atrapado"
+  .ascii "e"    
 
-  
+msj_enemyEscape:  
+  .ascii "Zafaste"
+  .ascii "e"     
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------SCREEN------------------------------------------
