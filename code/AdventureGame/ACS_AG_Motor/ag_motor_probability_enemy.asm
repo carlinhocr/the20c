@@ -1739,7 +1739,7 @@ enemyProbabilityCalculation_MultiplyScreenProb:
   ldy #$0
   lda (sourceScreenVectorLow),Y
   sta enemyProbCurrentScreen
-  lda enemyProbActionCummPlusFlashlihgt
+  lda enemyProbActionCummPlusFlashlight
   sta multiFactor1
   lda enemyProbCurrentScreen
   sta multiFactor2
