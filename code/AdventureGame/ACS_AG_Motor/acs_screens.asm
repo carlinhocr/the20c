@@ -404,7 +404,7 @@ screen_3_flashlight_off:
   .ascii "e"
 
 screen_3_enemy_probability:
-  .byte 0
+  .byte 1
 
 screen_3_is_secret_screen:
   .byte 0  ; no
