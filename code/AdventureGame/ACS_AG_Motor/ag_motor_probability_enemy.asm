@@ -182,7 +182,7 @@ randomNumber=                     $023c
 enemyProbActionReset=             $023d
 enemyProbActionCost=              $023e
 enemyProbActionCostCummulative=   $023f
-enemyProbActionCummPlusFlashlihgt=$0240
+enemyProbActionCummPlusFlashlight=$0240
 enemyProbFlashlight=              $0241
 enemyProbCurrentScreen=           $0242
 enemyProbabilityTotal=            $0243
@@ -576,7 +576,7 @@ loadConstants:
   sta enemyProbActionReset
   sta enemyProbActionCost
   sta enemyProbActionCostCummulative
-  sta enemyProbActionCummPlusFlashlihgt
+  sta enemyProbActionCummPlusFlashlight
   sta enemyProbFlashlight
   sta enemyProbCurrentScreen
   sta enemyProbabilityTotal
@@ -1722,7 +1722,7 @@ enemyProbabilityCalculation_addFlashlight:
   bcc enemyProbabilityCalculation_MultiplyScreenProb
   ;if we are here the sum was greater than 255
   lda #255
-  sta enemyProbActionCummPlusFlashlihgt
+  sta enemyProbActionCummPlusFlashlight
   jmp enemyProbabilityCalculation_MultiplyScreenProb
 enemyProbabilityCalculation_FlashLightOff:
   lda enemyProbActionCostCummulative 
@@ -3181,7 +3181,7 @@ bin_2_ascii_Action_Plus_Flashlight:
   lda #$0
   sta message ;string with nul character
   sei
-  lda enemyProbActionCummPlusFlashlihgt
+  lda enemyProbActionCummPlusFlashlight
   sta value
   lda #$0
   sta value + 1
