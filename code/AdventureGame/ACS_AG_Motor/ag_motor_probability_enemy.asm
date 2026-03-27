@@ -362,7 +362,7 @@ checkEnemyAppeared:
   jsr bin_2_ascii_enemyActionProb
   jsr bin_2_ascii_enemyProbActionCostCummulative
   jsr bin_2_ascii_enemyProbFlashlight
-;   jsr bin_2_ascii_Action_Plus_Flashlight
+  jsr bin_2_ascii_Action_Plus_Flashlight
 ;   jsr bin_2_ascii_currentScreen
 ;   jsr bin_2_ascii_enemy
   rts
@@ -1340,8 +1340,6 @@ runAction:
   ldy #$0
   lda (actionDataVectorLow),Y
   sta enemyProbActionCost
-;   jsr bin_2_ascii_enemyActionProb 
-;   jsr bin_2_ascii_enemyProbActionCostCummulative 
   jsr enemyProbabilityCalculation
   jsr checkEnemyAppeared
   ;moves you to next screen
