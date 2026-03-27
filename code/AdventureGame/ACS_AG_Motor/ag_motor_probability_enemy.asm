@@ -363,8 +363,8 @@ checkEnemyAppeared:
   jsr bin_2_ascii_enemyProbActionCostCummulative
   jsr bin_2_ascii_enemyProbFlashlight
   jsr bin_2_ascii_Action_Plus_Flashlight
-;   jsr bin_2_ascii_currentScreen
-;   jsr bin_2_ascii_enemy
+  jsr bin_2_ascii_currentScreen
+  jsr bin_2_ascii_enemy
   rts
 
 checkSimulationTimeisUp:
@@ -1728,36 +1728,35 @@ enemyProbabilityCalculation_FlashLightOff:
   lda enemyProbActionCostCummulative 
   sta enemyProbActionCummPlusFlashlight  
 enemyProbabilityCalculation_MultiplyScreenProb:
+  ;multiply the enemy probability on the screen
+  ;against the action cumullative and flashlight On prob
+  ldx screen_enemy_probability_offset
+  lda screenPointersRAM,X
+  sta sourceScreenVectorLow
+  inx
+  lda screenPointersRAM,X
+  sta sourceScreenVectorHigh
+  ldy #$0
+  lda (sourceScreenVectorLow),Y
+  sta enemyProbCurrentScreen
+  lda enemyProbActionCummPlusFlashlihgt
+  sta multiFactor1
+  lda enemyProbCurrentScreen
+  sta multiFactor2
+  jsr multiplyTwoNumbers8bitnumbers
+  lda multiResultHigh
+  ;if it is zero is an 8 bit number
+  beq enemyProbabilityCalculation_less256
+  ;here the high byte is not zero so we put the enemyProbabilityTotal
+  ;at maximun of 255
+  lda #255
+  sta enemyProbabilityTotal
+  jmp enemyProbabilityCalculation_End
+enemyProbabilityCalculation_less256:
+  lda multiResultLow
+  sta enemyProbabilityTotal
+enemyProbabilityCalculation_End:
   rts
-;   ;multiply the enemy probability on the screen
-;   ;against the action cumullative and flashlight On prob
-;   ldx screen_enemy_probability_offset
-;   lda screenPointersRAM,X
-;   sta sourceScreenVectorLow
-;   inx
-;   lda screenPointersRAM,X
-;   sta sourceScreenVectorHigh
-;   ldy #$0
-;   lda (sourceScreenVectorLow),Y
-;   sta enemyProbCurrentScreen
-;   lda enemyProbActionCummPlusFlashlihgt
-;   sta multiFactor1
-;   lda enemyProbCurrentScreen
-;   sta multiFactor2
-;   jsr multiplyTwoNumbers8bitnumbers
-;   lda multiResultHigh
-;   ;if it is zero is an 8 bit number
-;   beq enemyProbabilityCalculation_less256
-;   ;here the high byte is not zero so we put the enemyProbabilityTotal
-;   ;at maximun of 255
-;   lda #255
-;   sta enemyProbabilityTotal
-;   jmp enemyProbabilityCalculation_End
-; enemyProbabilityCalculation_less256:
-;   lda multiResultLow
-;   sta enemyProbabilityTotal
-; enemyProbabilityCalculation_End:
-;   rts
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
