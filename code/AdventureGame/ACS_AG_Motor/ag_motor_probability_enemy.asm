@@ -3243,7 +3243,7 @@ char_loop:
 multiplyTest:
   lda #2
   sta multiFactor1
-  lda #5
+  lda #130
   sta multiFactor2
   jsr multiplyTwoNumbers8bitnumbers
   jsr bin_2_ascii_multiply
