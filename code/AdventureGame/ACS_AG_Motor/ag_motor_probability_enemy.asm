@@ -1713,16 +1713,20 @@ enemyProbabilityCalculation_addActionProb:
 enemyProbabilityCalculation_addFlashlight:
   lda flashlightStatus
   ;if zero the flashlight is off
-  beq enemyProbabilityCalculation_MultiplyScreenProb
+  beq enemyProbabilityCalculation_FlashLightOff
   ;here is one the flashlight is on we add the probabilty
   clc
   lda enemyProbActionCostCummulative
   adc enemyProbFlashlight
-  sta enemyProbActionCummPlusFlashlihgt
+  sta enemyProbActionCummPlusFlashlight
   bcc enemyProbabilityCalculation_MultiplyScreenProb
   ;if we are here the sum was greater than 255
   lda #255
   sta enemyProbActionCummPlusFlashlihgt
+  jmp enemyProbabilityCalculation_MultiplyScreenProb
+enemyProbabilityCalculation_FlashLightOff:
+  lda enemyProbActionCostCummulative 
+  sta enemyProbActionCummPlusFlashlight  
 enemyProbabilityCalculation_MultiplyScreenProb:
   rts
 ;   ;multiply the enemy probability on the screen
