@@ -33,10 +33,13 @@
         "Action2": "LINTERNA",
         "Action3": "EXPLORAR CAMINO",
         "Action4": "",
-        "Description": "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte con su peso, estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi orgánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad",
+        "Description": "La caverna se abre en una cámara amplia pero baja. \nEl techo parece aplastarte con su peso, estalactitas afiladas cuelgan peligrosamente del mismo. \nLas paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. \nEl aire es frío y estancado. \nHuele a roca mojada y a algo más viejo, casi orgánico. \nEl suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad\nSiente que algo o alguien puede estar acechando",
         "FlashlightOn": "",
         "FlashlightOff": "",
-        "AsciiDrawing": ""
+        "AsciiDrawing": "",
+        "EnemyProbability": 1,
+        "IsSecretScreen": 0,
+        "IsEndScreen": 0
     },
     "3": {
         "ID": "3",

@@ -334,12 +334,16 @@ screen_2_action4:
   .byte 255  ; none
 
 screen_2_description:
-  .ascii "La caverna se abre en una cámara amplia pero baja. El techo parece aplastarte co"
-  .ascii "n su peso, estalactitas afiladas cuelgan peligrosamente del mismo. Las paredes s"
-  .ascii "on rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente cla"
-  .ascii "ra. El aire es frío y estancado. Huele a roca mojada y a algo más viejo, casi or"
-  .ascii "gánico. El suelo tiene marcas irregulares, como pasos interrumpidos en un camino"
-  .ascii " que se pierde en la oscuridad"
+  .ascii "La caverna se abre en una cámara amplia pero baja. "
+  .ascii "El techo parece aplastarte con su peso, estalactitas afiladas cuelgan peligrosam"
+  .ascii "ente del mismo. "
+  .ascii "Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tie"
+  .ascii "ne fuente clara. "
+  .ascii "El aire es frío y estancado. "
+  .ascii "Huele a roca mojada y a algo más viejo, casi orgánico. "
+  .ascii "El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se "
+  .ascii "pierde en la oscuridad"
+  .ascii "Siente que algo o alguien puede estar acechando"
   .ascii "e"
 
 screen_2_ascii:
@@ -355,7 +359,7 @@ screen_2_flashlight_off:
   .ascii "e"
 
 screen_2_enemy_probability:
-  .byte 0
+  .byte 1
 
 screen_2_is_secret_screen:
   .byte 0  ; no
