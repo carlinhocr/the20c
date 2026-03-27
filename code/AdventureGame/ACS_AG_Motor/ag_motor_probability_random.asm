@@ -1177,7 +1177,7 @@ receiveUserOptionSelection_loop:
   beq receiveUserOptionSelection_loop
   ;we have a valid user input 
   sei ;disable user action until we know if valid action if not ask again
-  lda LCD_T1CH
+  lda LCD_T1CL
   sta randomNumber
   jsr send_rs232_char
   jsr bin_2_ascii_random ;print the random number
@@ -3228,7 +3228,7 @@ viaLcdInit:
   ;bit 1 in zero portB latch disable
   ;bit 0 in 0 portA larch disable
   ;lda #%00000000      ; clear bits 7 and 6
-  lda #%00000000      ; set bit 6 to make it freen running load and continue
+  lda #%01000000      ; set bit 6 to make it freen running load and continue
   sta LCD_ACR
   ;counter in zero bit 6 of IFR is set
 
