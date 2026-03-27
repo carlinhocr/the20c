@@ -1175,7 +1175,10 @@ receiveUserOptionSelection_loop:
   cmp #$ff   
   beq receiveUserOptionSelection_loop
   ;we have a valid user input 
-  ;sei ;disable user action until we know if valid action if not ask again
+  sei ;disable user action until we know if valid action if not ask again
+  lda LCD_T1CL
+  sta randomNumber
+  jsr bin_2_ascii_random ;print the random number
   rts  
 
 action_selector:;
@@ -1185,11 +1188,6 @@ action_selector:;
   cli
 action_selection_ask_again:  
   jsr receiveUserOptionSelection  
-  sei
-  ;each time a user makes a valid selection we have a new random number)
-  lda LCD_T1CL
-  sta randomNumber
-  jsr bin_2_ascii_random ;print the random number
   ldx userOptionSelection
   lda actionIDOptionsRAM,x ;here we have the action ID
   sta selectedAction
@@ -2972,7 +2970,7 @@ bin_2_ascii_simulationTime:
   sta value + 1
   ;cli ; reenable interrupts after updating
   jsr bin_2_ascii
-  jsr bine_2_ascii_print_message
+  jsr bin_2_ascii_print_message
   rts
 
 bin_2_ascii_random:
@@ -2984,18 +2982,18 @@ bin_2_ascii_random:
   lda #$0
   sta value + 1
   jsr bin_2_ascii
-  jsr bine_2_ascii_print_message  
+  jsr bin_2_ascii_print_message  
   rts
 
-bine_2_ascii_print_message
+bin_2_ascii_print_message
   ldx #$0
-printMessageLoop:
+bin_2_ascii_printMessageLoop:
   lda message,x  
-  beq printMessageLoopEnd ;on null character stop printing
+  beq bin_2_ascii_printMessageLoopEnd ;on null character stop printing
   jsr send_rs232_char
   inx
-  jmp printMessageLoop
-printMessageLoopEnd:  
+  jmp bin_2_ascii_printMessageLoop
+bin_2_ascii_printMessageLoopEnd:  
   jsr send_rs232_CRLF
   rts
 
