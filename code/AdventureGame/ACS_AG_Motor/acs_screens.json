@@ -52,7 +52,7 @@
         "FlashlightOn": "",
         "FlashlightOff": "",
         "AsciiDrawing": "",
-        "EnemyProbability": 1,
+        "EnemyProbability": 2,
         "IsSecretScreen": 0,
         "IsEndScreen": 0
     },
