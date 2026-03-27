@@ -331,7 +331,7 @@ mainProgramLoop:
   jsr sensor_selector  
   lda gameEnded
   bne mainProgram
-  jsr checkEnemyAppeared
+  ;jsr checkEnemyAppeared
   jsr checkSimulationTimeisUp
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
@@ -1339,7 +1339,8 @@ runAction:
   ldy #$0
   lda (actionDataVectorLow),Y
   sta enemyProbActionCost
-  jsr bin_2_ascii_enemyActionProb  
+  jsr bin_2_ascii_enemyActionProb 
+  jsr bin_2_ascii_enemyProbActionCostCummulative 
   jsr enemyProbabilityCalculation
   jsr checkEnemyAppeared
   ;moves you to next screen
@@ -1706,10 +1707,10 @@ enemyProbabilityCalculation_addActionProb:
   lda enemyProbActionCostCummulative  
   adc enemyProbActionCost
   sta enemyProbActionCostCummulative
-  bcc enemyProbabilityCalculation_addFlashlight
-  ;if we are here the sum was greater than 255
-  lda #255
-  sta enemyProbActionCostCummulative
+;   bcc enemyProbabilityCalculation_addFlashlight
+;   ;if we are here the sum was greater than 255
+;   lda #255
+;   sta enemyProbActionCostCummulative
 enemyProbabilityCalculation_addFlashlight:
   rts
 ;   lda flashlightStatus
