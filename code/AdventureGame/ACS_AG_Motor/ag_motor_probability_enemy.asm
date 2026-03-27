@@ -361,6 +361,7 @@ checkEnemyAppeared:
   jsr bin_2_ascii_random
   jsr bin_2_ascii_enemyActionProb
   jsr bin_2_ascii_enemyProbActionCostCummulative
+  jsr bin_2_ascii_enemyProbFlashlight
 ;   jsr bin_2_ascii_Action_Plus_Flashlight
 ;   jsr bin_2_ascii_currentScreen
 ;   jsr bin_2_ascii_enemy
@@ -1712,20 +1713,20 @@ enemyProbabilityCalculation_addActionProb:
   lda #255
   sta enemyProbActionCostCummulative
 enemyProbabilityCalculation_addFlashlight:
+  lda flashlightStatus
+  ;if zero the flashlight is off
+  beq enemyProbabilityCalculation_MultiplyScreenProb
+  ;here is one the flashlight is on we add the probabilty
+  clc
+  lda enemyProbActionCostCummulative
+  adc enemyProbFlashlight
+  sta enemyProbActionCummPlusFlashlihgt
+  bcc enemyProbabilityCalculation_MultiplyScreenProb
+  ;if we are here the sum was greater than 255
+  lda #255
+  sta enemyProbActionCummPlusFlashlihgt
+enemyProbabilityCalculation_MultiplyScreenProb:
   rts
-;   lda flashlightStatus
-;   ;if zero the flashlight is off
-;   beq enemyProbabilityCalculation_MultiplyScreenProb
-;   ;here is one the flashlight is on we add the probabilty
-;   clc
-;   lda enemyProbActionCostCummulative
-;   adc enemyProbFlashlight
-;   sta enemyProbActionCummPlusFlashlihgt
-;   bcc enemyProbabilityCalculation_MultiplyScreenProb
-;   ;if we are here the sum was greater than 255
-;   lda #255
-;   sta enemyProbActionCummPlusFlashlihgt
-; enemyProbabilityCalculation_MultiplyScreenProb:
 ;   ;multiply the enemy probability on the screen
 ;   ;against the action cumullative and flashlight On prob
 ;   ldx screen_enemy_probability_offset
@@ -3160,6 +3161,19 @@ bin_2_ascii_enemyActionProb:
   jsr bin_2_ascii
   jsr bin_2_ascii_print_message  
   rts 
+
+bin_2_ascii_enemyProbFlashlight:  
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda enemyProbFlashlight
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  jsr bin_2_ascii_print_message  
+  rts 
+
 
 bin_2_ascii_Action_Plus_Flashlight:
   lda #$0
