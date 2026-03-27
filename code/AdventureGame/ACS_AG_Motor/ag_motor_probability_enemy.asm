@@ -325,7 +325,6 @@ mainProgram:
   jsr select_dashboard
   jsr select_screen
   jsr draw_current_screen_table
-  jsr multiplyTest
 mainProgramLoop:
   ;jsr simulationTimeCheck
   jsr action_selector
@@ -359,6 +358,8 @@ mainProgramLoop:
 ;-----------------------------------------------------------------------------------
 
 checkEnemyAppeared:
+  jsr bin_2_ascii_random
+  jsr bin_2_ascii_enemy
   rts
 
 checkSimulationTimeisUp:
@@ -3128,6 +3129,18 @@ bin_2_ascii_random:
   jsr bin_2_ascii_print_message  
   rts
 
+bin_2_ascii_enemy:
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda enemyProbabilityTotal
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  jsr bin_2_ascii_print_message  
+  rts  
+
 bin_2_ascii_multiply:
   lda #$0
   sta message ;string with nul character
@@ -3225,25 +3238,10 @@ char_loop:
   sta message,y ; store the null terminator again
   rts
 
-; multiplyTwoNumbers8bitnumbers:
-;   lda #$0
-;   ldx #$8
-;   lsr multiFactor1
-; multiplyTwoNumbers8bitnumbers_loop:
-;   bcc multiplyTwoNumbers8bitnumbers_no_add
-;   clc
-;   adc multiFactor2
-; multiplyTwoNumbers8bitnumbers_no_add:
-;   ror 
-;   ror multiFactor1
-;   dex
-;   bne multiplyTwoNumbers8bitnumbers_loop
-;   sta multiFactor2  
-
 multiplyTest:
   lda #2
   sta multiFactor1
-  lda #130
+  lda #125
   sta multiFactor2
   jsr multiplyTwoNumbers8bitnumbers
   jsr bin_2_ascii_multiply
