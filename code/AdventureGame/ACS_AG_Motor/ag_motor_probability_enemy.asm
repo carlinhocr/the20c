@@ -3245,6 +3245,7 @@ multiplyTest:
   sta multiFactor1
   lda #5
   sta multiFactor2
+  jsr multiplyTwoNumbers8bitnumbers
   jsr bin_2_ascii_multiply
   rts 
 
