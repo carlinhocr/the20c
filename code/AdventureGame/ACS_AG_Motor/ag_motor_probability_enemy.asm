@@ -1339,6 +1339,7 @@ runAction:
   ldy #$0
   lda (actionDataVectorLow),Y
   sta enemyProbActionCost
+  jsr bin_2_ascii_enemyActionProb  
   jsr enemyProbabilityCalculation
   jsr checkEnemyAppeared
   ;moves you to next screen
@@ -1694,12 +1695,12 @@ heartbeatSet:
 ;-----------------------------------------------------------------------------------
 
 enemyProbabilityCalculation:
-  lda enemyProbActionReset
-  ;if zero no dot reset the Probability
-  beq enemyProbabilityCalculation_addActionProb
-  ;here the reset is one
-  lda #$0
-  sta enemyProbActionCostCummulative  
+;   lda enemyProbActionReset
+;   ;if zero no dot reset the Probability
+;   beq enemyProbabilityCalculation_addActionProb
+;   ;here the reset is one
+;   lda #$0
+;   sta enemyProbActionCostCummulative  
 enemyProbabilityCalculation_addActionProb:
   clc
   lda enemyProbActionCostCummulative  

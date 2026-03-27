@@ -47,7 +47,7 @@
         "Action1": "COMENZAR EL JUEGO",
         "Action2": "MUERTE DIRECTA",
         "Action3": "LINTERNA",
-        "Action4": "",
+        "Action4": "GRITAR",
         "Description": "Bienvenido a la aventura gráfica más Espectacular del mundo",
         "FlashlightOn": "",
         "FlashlightOff": "",
