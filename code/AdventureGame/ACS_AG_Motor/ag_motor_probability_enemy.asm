@@ -369,7 +369,9 @@ checkEnemyAppeared:
   sec
   lda randomNumber
   sbc enemyProbabilityTotal
-  bcs checkEnemyAppeared_caught
+  ; if the carry is clear random number is
+  ;less than enemyProbabilityTotal
+  bcc checkEnemyAppeared_caught
   ;here you are free
   lda #<msj_enemyEscape
   sta serialDataVectorLow
