@@ -388,15 +388,15 @@ checkEndScreen:
   sta gameEnded
   jsr bin_2_ascii_simulationTime
   ;print the simulation time number in the variable message
-  ldx #$0
-printMessageLoop:
-  lda message,x  
-  beq printMessageLoopEnd ;on null character stop printing
-  jsr send_rs232_char
-  inx
-  jmp printMessageLoop
-printMessageLoopEnd:  
-  jsr send_rs232_CRLF
+;   ldx #$0
+; printMessageLoop:
+;   lda message,x  
+;   beq printMessageLoopEnd ;on null character stop printing
+;   jsr send_rs232_char
+;   inx
+;   jmp printMessageLoop
+; printMessageLoopEnd:  
+;   jsr send_rs232_CRLF
 checkEndScreen_End:
   rts  
 
