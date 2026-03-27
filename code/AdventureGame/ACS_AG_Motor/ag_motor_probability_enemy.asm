@@ -331,7 +331,7 @@ mainProgramLoop:
   jsr sensor_selector  
   lda gameEnded
   bne mainProgram
-  ;jsr checkEnemyAppeared
+  jsr checkEnemyAppeared
   jsr checkSimulationTimeisUp
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
@@ -1341,7 +1341,7 @@ runAction:
   lda (actionDataVectorLow),Y
   sta enemyProbActionCost
   jsr enemyProbabilityCalculation
-  jsr checkEnemyAppeared
+  ;jsr checkEnemyAppeared
   ;moves you to next screen
   lda action_screen_offset
   tay
