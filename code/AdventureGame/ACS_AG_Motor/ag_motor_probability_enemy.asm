@@ -1340,6 +1340,7 @@ runAction:
   lda (actionDataVectorLow),Y
   sta enemyProbActionCost
   jsr enemyProbabilityCalculation
+  jsr checkEnemyAppeared
   ;moves you to next screen
   lda action_screen_offset
   tay
@@ -1709,48 +1710,49 @@ enemyProbabilityCalculation_addActionProb:
   lda #255
   sta enemyProbActionCostCummulative
 enemyProbabilityCalculation_addFlashlight:
-  lda flashlightStatus
-  ;if zero the flashlight is off
-  beq enemyProbabilityCalculation_MultiplyScreenProb
-  ;here is one the flashlight is on we add the probabilty
-  clc
-  lda enemyProbActionCostCummulative
-  adc enemyProbFlashlight
-  sta enemyProbActionCummPlusFlashlihgt
-  bcc enemyProbabilityCalculation_MultiplyScreenProb
-  ;if we are here the sum was greater than 255
-  lda #255
-  sta enemyProbActionCummPlusFlashlihgt
-enemyProbabilityCalculation_MultiplyScreenProb:
-  ;multiply the enemy probability on the screen
-  ;against the action cumullative and flashlight On prob
-  ldx screen_enemy_probability_offset
-  lda screenPointersRAM,X
-  sta sourceScreenVectorLow
-  inx
-  lda screenPointersRAM,X
-  sta sourceScreenVectorHigh
-  ldy #$0
-  lda (sourceScreenVectorLow),Y
-  sta enemyProbCurrentScreen
-  lda enemyProbActionCummPlusFlashlihgt
-  sta multiFactor1
-  lda enemyProbCurrentScreen
-  sta multiFactor2
-  jsr multiplyTwoNumbers8bitnumbers
-  lda multiResultHigh
-  ;if it is zero is an 8 bit number
-  beq enemyProbabilityCalculation_less256
-  ;here the high byte is not zero so we put the enemyProbabilityTotal
-  ;at maximun of 255
-  lda #255
-  sta enemyProbabilityTotal
-  jmp enemyProbabilityCalculation_End
-enemyProbabilityCalculation_less256:
-  lda multiResultLow
-  sta enemyProbabilityTotal
-enemyProbabilityCalculation_End:
   rts
+;   lda flashlightStatus
+;   ;if zero the flashlight is off
+;   beq enemyProbabilityCalculation_MultiplyScreenProb
+;   ;here is one the flashlight is on we add the probabilty
+;   clc
+;   lda enemyProbActionCostCummulative
+;   adc enemyProbFlashlight
+;   sta enemyProbActionCummPlusFlashlihgt
+;   bcc enemyProbabilityCalculation_MultiplyScreenProb
+;   ;if we are here the sum was greater than 255
+;   lda #255
+;   sta enemyProbActionCummPlusFlashlihgt
+; enemyProbabilityCalculation_MultiplyScreenProb:
+;   ;multiply the enemy probability on the screen
+;   ;against the action cumullative and flashlight On prob
+;   ldx screen_enemy_probability_offset
+;   lda screenPointersRAM,X
+;   sta sourceScreenVectorLow
+;   inx
+;   lda screenPointersRAM,X
+;   sta sourceScreenVectorHigh
+;   ldy #$0
+;   lda (sourceScreenVectorLow),Y
+;   sta enemyProbCurrentScreen
+;   lda enemyProbActionCummPlusFlashlihgt
+;   sta multiFactor1
+;   lda enemyProbCurrentScreen
+;   sta multiFactor2
+;   jsr multiplyTwoNumbers8bitnumbers
+;   lda multiResultHigh
+;   ;if it is zero is an 8 bit number
+;   beq enemyProbabilityCalculation_less256
+;   ;here the high byte is not zero so we put the enemyProbabilityTotal
+;   ;at maximun of 255
+;   lda #255
+;   sta enemyProbabilityTotal
+;   jmp enemyProbabilityCalculation_End
+; enemyProbabilityCalculation_less256:
+;   lda multiResultLow
+;   sta enemyProbabilityTotal
+; enemyProbabilityCalculation_End:
+;   rts
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
