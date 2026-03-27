@@ -129,25 +129,25 @@ message = $0207 ; the result up to 6 bytes to $020b
 ;$020a
 ;$020b
 
-screenCurrentID=        $0210
-max_actions_per_screen= $0211
-actionCurrentID=        $0212
-actionPosition=         $0213
-current_screen_offset=  $0214
-screenPrintOffset=      $0215
-selectedAction=         $0216
-print_no_CRLF=          $0217
-flashlightOff=          $0218
-userOptionSelection=    $0219
-heartRateLevel=         $021a
-waterLevel=             $021b
-heartRateSensor=        $021c
-waterLevelSensor=       $021d
-flashlightStatus=       $021e
-actionCostTotal=        $021f
-currentActionCost=      $0220
-currentActionHideWater= $0221
-currentActionHideFear=  $0222
+screenCurrentID=                  $0210
+max_actions_per_screen=           $0211
+actionCurrentID=                  $0212
+actionPosition=                   $0213
+current_screen_offset=            $0214
+screenPrintOffset=                $0215
+selectedAction=                   $0216
+print_no_CRLF=                    $0217
+flashlightOff=                    $0218
+userOptionSelection=              $0219
+heartRateLevel=                   $021a
+waterLevel=                       $021b
+heartRateSensor=                  $021c
+waterLevelSensor=                 $021d
+flashlightStatus=                 $021e
+actionCostTotal=                  $021f
+currentActionCost=                $0220
+currentActionHideWater=           $0221
+currentActionHideFear=            $0222
 currentActionHideFlashlightOff=   $0223
 simulationTimePassedLowDigits=    $0224
 simulationTimePassedHighDigits=   $0225
@@ -173,7 +173,7 @@ maxFlashlightTimeLowByte=         $0238
 maxFlashlightTimeHighByte=        $0239
 timeRemainingFlashLightLowByte=   $023a
 timeRemainingFlashLightHighByte=  $023b
-
+randomNumber=                     $023c
 
 moveNextScreen=$0243
 idleTimerStartMinute=$0244
@@ -311,7 +311,6 @@ mainProgram:
   ;initialize Variables 
   ;initialize screen as screen zero
   jsr initilizationRoutines
-  ;jsr timerWaitOneMinute
   jsr select_dashboard
   jsr select_screen
   jsr draw_current_screen_table
@@ -1187,7 +1186,10 @@ action_selector:;
 action_selection_ask_again:  
   jsr receiveUserOptionSelection  
   sei
-  
+  ;each time a user makes a valid selection we have a new random number)
+  lda LCD_T1CL
+  sta randomNumber
+  jsr bin_2_ascii_random ;print the random number
   ldx userOptionSelection
   lda actionIDOptionsRAM,x ;here we have the action ID
   sta selectedAction
@@ -2970,6 +2972,31 @@ bin_2_ascii_simulationTime:
   sta value + 1
   ;cli ; reenable interrupts after updating
   jsr bin_2_ascii
+  jsr bine_2_ascii_print_message
+  rts
+
+bin_2_ascii_random:
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda randomNumber
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  jsr bine_2_ascii_print_message  
+  rts
+
+bine_2_ascii_print_message
+  ldx #$0
+printMessageLoop:
+  lda message,x  
+  beq printMessageLoopEnd ;on null character stop printing
+  jsr send_rs232_char
+  inx
+  jmp printMessageLoop
+printMessageLoopEnd:  
+  jsr send_rs232_CRLF
   rts
 
 bin_2_ascii:
