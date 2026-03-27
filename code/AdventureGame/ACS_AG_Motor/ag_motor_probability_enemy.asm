@@ -133,7 +133,7 @@ message = $0207 ; the result up to 6 bytes to $020b
 multiFactor1=                     $020c
 multiFactor2=                     $020d
 multiResultLow=                   $020e
-multiResultHigh=                   $020f
+multiResultHigh=                  $020f
 screenCurrentID=                  $0210
 max_actions_per_screen=           $0211
 actionCurrentID=                  $0212
@@ -181,22 +181,22 @@ timeRemainingFlashLightHighByte=  $023b
 randomNumber=                     $023c
 enemyProbActionReset=             $023d
 enemyProbActionCost=              $023e
-enemyProbActionCostCummulative=   $023e
-enemyProbActionCummPlusFlashlihgt=$023f
-enemyProbFlashlight=              $0240
-enemyProbCurrentScreen=           $0241
-enemyProbabilityTotal=            $0242
-moveNextScreen=$0243
-idleTimerStartMinute=$0244
-sensorCurrentID=$0245
-sensorCurrentStatus=$0246
-timerExpired=$0247
-gameEnded=$0248
+enemyProbActionCostCummulative=   $023f
+enemyProbActionCummPlusFlashlihgt=$0240
+enemyProbFlashlight=              $0241
+enemyProbCurrentScreen=           $0242
+enemyProbabilityTotal=            $0243
+idleTimerStartMinute=             $0244
+sensorCurrentID=                  $0245
+sensorCurrentStatus=              $0246
+timerExpired=                     $0247
+gameEnded=                        $0248
 fearLevel=$0249
 watertLevel=$024a
 actionHidden=$024b
 highWaterLevel=$024c
 highFearLevel=$024d
+moveNextScreen=$024e
 
 actionIDOptionsRAM=$0340 ;32 bytes but i only use 6
 screenPointersRAM=$0500
@@ -1339,8 +1339,8 @@ runAction:
   ldy #$0
   lda (actionDataVectorLow),Y
   sta enemyProbActionCost
-  jsr bin_2_ascii_enemyActionProb 
-  jsr bin_2_ascii_enemyProbActionCostCummulative 
+;   jsr bin_2_ascii_enemyActionProb 
+;   jsr bin_2_ascii_enemyProbActionCostCummulative 
   jsr enemyProbabilityCalculation
   jsr checkEnemyAppeared
   ;moves you to next screen
@@ -1696,21 +1696,21 @@ heartbeatSet:
 ;-----------------------------------------------------------------------------------
 
 enemyProbabilityCalculation:
-;   lda enemyProbActionReset
-;   ;if zero no dot reset the Probability
-;   beq enemyProbabilityCalculation_addActionProb
-;   ;here the reset is one
-;   lda #$0
-;   sta enemyProbActionCostCummulative  
+  lda enemyProbActionReset
+  ;if zero no dot reset the Probability
+  beq enemyProbabilityCalculation_addActionProb
+  ;here the reset is one
+  lda #$0
+  sta enemyProbActionCostCummulative  
 enemyProbabilityCalculation_addActionProb:
   clc
   lda enemyProbActionCostCummulative  
   adc enemyProbActionCost
   sta enemyProbActionCostCummulative
-;   bcc enemyProbabilityCalculation_addFlashlight
-;   ;if we are here the sum was greater than 255
-;   lda #255
-;   sta enemyProbActionCostCummulative
+  bcc enemyProbabilityCalculation_addFlashlight
+  ;if we are here the sum was greater than 255
+  lda #255
+  sta enemyProbActionCostCummulative
 enemyProbabilityCalculation_addFlashlight:
   rts
 ;   lda flashlightStatus
