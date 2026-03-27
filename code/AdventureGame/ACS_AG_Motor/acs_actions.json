@@ -52,10 +52,19 @@
     "4": {
         "ID": "4",
         "Name": "GRITAR",
+        "Alias": "",
         "SensorID": 255,
         "SensorActive": false,
+        "ScreenID": 255,
         "Cost": 10,
-        "Description": "El eco tarda demasiado en volver. Sientes que algo se mueve encima de ti. Debe ser tu imaginacion, te repites."
+        "EnemyProbability": 5,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 0,
+        "Description": "El eco tarda demasiado en volver. Sientes que algo se mueve encima de ti. Debe ser tu imaginacion, te repites.",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     },
     "5": {
         "ID": "5",

@@ -331,7 +331,7 @@ screen_2_action3:
   .byte 6  ; EXPLORAR CAMINO
 
 screen_2_action4:
-  .byte 255  ; none
+  .byte 4  ; GRITAR
 
 screen_2_description:
   .ascii "La caverna se abre en una cámara amplia pero baja. "

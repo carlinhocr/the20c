@@ -32,7 +32,7 @@
         "Action1": "MIRAR ENTRADA",
         "Action2": "LINTERNA",
         "Action3": "EXPLORAR CAMINO",
-        "Action4": "",
+        "Action4": "GRITAR",
         "Description": "La caverna se abre en una cámara amplia pero baja. \nEl techo parece aplastarte con su peso, estalactitas afiladas cuelgan peligrosamente del mismo. \nLas paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tiene fuente clara. \nEl aire es frío y estancado. \nHuele a roca mojada y a algo más viejo, casi orgánico. \nEl suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se pierde en la oscuridad\nSiente que algo o alguien puede estar acechando",
         "FlashlightOn": "",
         "FlashlightOff": "",

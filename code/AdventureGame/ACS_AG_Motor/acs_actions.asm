@@ -501,7 +501,7 @@ action_4_cost:
   .byte 10
 
 action_4_enemy_probability:
-  .byte 0
+  .byte 5
 
 action_4_reset_enemy_prob:
   .byte 0  ; off

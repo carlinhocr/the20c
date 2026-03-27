@@ -359,6 +359,8 @@ mainProgramLoop:
 
 checkEnemyAppeared:
   jsr bin_2_ascii_random
+  jsr bin_2_ascii_Action_Plus_Flashlight
+  jsr bin_2_ascii_currentScreen
   jsr bin_2_ascii_enemy
   rts
 
@@ -3128,6 +3130,30 @@ bin_2_ascii_random:
   jsr bin_2_ascii
   jsr bin_2_ascii_print_message  
   rts
+
+bin_2_ascii_Action_Plus_Flashlight:
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda enemyProbActionCummPlusFlashlihgt
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  jsr bin_2_ascii_print_message  
+  rts  
+
+bin_2_ascii_currentScreen:
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda enemyProbCurrentScreen
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  jsr bin_2_ascii_print_message  
+  rts  
 
 bin_2_ascii_enemy:
   lda #$0
