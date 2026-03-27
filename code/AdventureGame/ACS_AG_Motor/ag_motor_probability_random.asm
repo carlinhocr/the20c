@@ -3228,7 +3228,7 @@ viaLcdInit:
   ;bit 1 in zero portB latch disable
   ;bit 0 in 0 portA larch disable
   ;lda #%00000000      ; clear bits 7 and 6
-  lda #%01000000      ; set bit 6 to make it freen running load and continue
+  lda #%00000000      ; set bit 6 to make it freen running load and continue
   sta LCD_ACR
   ;counter in zero bit 6 of IFR is set
 
