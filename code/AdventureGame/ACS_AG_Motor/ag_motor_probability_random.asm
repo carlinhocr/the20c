@@ -554,6 +554,7 @@ loadConstants:
 startTimerForRandom:
   lda #$ff
   sta LCD_T1CL
+  lda #$0
   sta LCD_T1CH ;here starts the timer
   ;to read a random value just read LCD_T1CL
   rts
