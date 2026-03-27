@@ -359,9 +359,11 @@ mainProgramLoop:
 
 checkEnemyAppeared:
   jsr bin_2_ascii_random
-  jsr bin_2_ascii_Action_Plus_Flashlight
-  jsr bin_2_ascii_currentScreen
-  jsr bin_2_ascii_enemy
+  jsr bin_2_ascii_enemyActionProb
+  jsr bin_2_ascii_enemyProbActionCostCummulative
+;   jsr bin_2_ascii_Action_Plus_Flashlight
+;   jsr bin_2_ascii_currentScreen
+;   jsr bin_2_ascii_enemy
   rts
 
 checkSimulationTimeisUp:
@@ -1224,7 +1226,7 @@ receiveUserOptionSelection_loop:
   sei ;disable user action until we know if valid action if not ask again
   lda LCD_T2CL
   sta randomNumber
-  jsr bin_2_ascii_random ;print the random number
+  ;jsr bin_2_ascii_random ;print the random number
   rts  
 
 action_selector:;
@@ -3130,6 +3132,30 @@ bin_2_ascii_random:
   jsr bin_2_ascii
   jsr bin_2_ascii_print_message  
   rts
+
+bin_2_ascii_enemyProbActionCostCummulative:
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda enemyProbActionCostCummulative
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  jsr bin_2_ascii_print_message  
+  rts 
+
+bin_2_ascii_enemyActionProb:
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda enemyProbActionCost
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  jsr bin_2_ascii_print_message  
+  rts 
 
 bin_2_ascii_Action_Plus_Flashlight:
   lda #$0
