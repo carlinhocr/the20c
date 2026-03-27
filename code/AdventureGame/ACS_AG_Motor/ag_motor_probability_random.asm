@@ -1179,6 +1179,7 @@ receiveUserOptionSelection_loop:
   sei ;disable user action until we know if valid action if not ask again
   lda LCD_T1CL
   sta randomNumber
+  jsr send_rs232_char
   jsr bin_2_ascii_random ;print the random number
   rts  
 
