@@ -70,7 +70,7 @@
         "ID": "5",
         "Name": "LINTERNA",
         "Alias": "",
-        "SensorID": 2,
+        "SensorID": 6,
         "SensorActive": true,
         "ScreenID": 255,
         "Cost": 5,
