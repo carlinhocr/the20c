@@ -41,5 +41,13 @@
         "Active": false,
         "DialogOn": "Tenes 10 minutos para terminar el juego",
         "DialogOff": "Se acabó tu tiempo"
+    },
+    "6": {
+        "ID": "6",
+        "Name": "flashlightheart",
+        "Active": false,
+        "Toggle": 1,
+        "DialogOn": "ACTIVAS LINTERNA, BAJAS CORAZON",
+        "DialogOff": "DESACTIVAS LINTERNA, AUMENTAS CORAZON"
     }
 }

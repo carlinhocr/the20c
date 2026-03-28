@@ -9,6 +9,7 @@ sensors_index:
   .word sensor_pointer_3  ; timer1minuto
   .word sensor_pointer_4  ; gamePlaying
   .word sensor_pointer_5  ; timer10minutos
+  .word sensor_pointer_6  ; flashlightheart
 sensors_index_record_length:
   .byte 2  ; each sensors_index entry is 1 .word (2 bytes)
 
@@ -55,6 +56,13 @@ sensor_pointer_5:
   .word sensor_5_dialog_on ; timer10minutos dialog_on [66,67]
   .word sensor_5_dialog_off; timer10minutos dialog_off[68,69]
   .word sensor_5_toggle   ; timer10minutos toggle   [70,71]
+sensor_pointer_6:
+  .word sensor_6_id        ; flashlightheart id        [72,73]
+  .word sensor_6_name      ; flashlightheart name      [74,75]
+  .word sensor_6_active    ; flashlightheart active    [76,77]
+  .word sensor_6_dialog_on ; flashlightheart dialog_on [78,79]
+  .word sensor_6_dialog_off; flashlightheart dialog_off[80,81]
+  .word sensor_6_toggle   ; flashlightheart toggle   [82,83]
 sensor_name_offset:
   .byte 2       ; (byte of sensor_0_name in sensors_pointers)
 sensor_dialog_on_offset:
@@ -198,6 +206,28 @@ sensor_5_dialog_off:
 sensor_5_toggle:
   .byte 0  ; normal
 
+; ── Sensor 6: flashlightheart ──────────────────────────
+sensor_6_id:
+  .byte 6
+
+sensor_6_name:
+  .ascii "flashlightheart"
+  .ascii "e"
+
+sensor_6_active:
+  .byte 0  ; off
+
+sensor_6_dialog_on:
+  .ascii "ACTIVAS LINTERNA, BAJAS CORAZON"
+  .ascii "e"
+
+sensor_6_dialog_off:
+  .ascii "DESACTIVAS LINTERNA, AUMENTAS CORAZON"
+  .ascii "e"
+
+sensor_6_toggle:
+  .byte 1  ; toggle
+
 ; ── Total sensor count ──────────────────────────────────────
 sensor_count:
-  .byte 6
+  .byte 7

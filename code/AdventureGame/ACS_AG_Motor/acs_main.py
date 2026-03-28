@@ -2606,38 +2606,41 @@ def open_play_window():
             state["enemy_prob_accum"] = 0
             write("(Probabilidad de enemigo reseteada)", "info")
 
-        # ── Calculate death probability ───────────────────────
-        death_prob = 0
+        # ── Calculate action failure probability ───────────────
+        # Formula: action_DeathProbability * (water_level * DeathProbWaterLevel + DeathProbFlashlightOff + DeathProbHighHeartRate)
+        action_death_val = 0
         try:
-            death_prob += int(arec.get("DeathProbability", 0))
+            action_death_val = int(arec.get("DeathProbability", 0))
         except (ValueError, TypeError):
             pass
 
-        # Add water level modifier
-        death_prob += state["water_level"] * death_prob_water
+        water_modifier = state["water_level"] * death_prob_water
+        flash_modifier = death_prob_flash if not state["flashlight_on"] else 0
+        heart_modifier = death_prob_heart if state["heart_rate"] else 0
+        fail_prob = action_death_val * (water_modifier + flash_modifier + heart_modifier)
 
-        # Add heart rate modifier
-        if state["heart_rate"]:
-            death_prob += death_prob_heart
-
-        # Add flashlight off modifier
-        if not state["flashlight_on"]:
-            death_prob += death_prob_flash
-
-        death_prob = min(255, max(0, death_prob))
-
-        if death_prob > 0:
+        if fail_prob > 0:
             roll = get_random()
-            write(f"  [Muerte: prob={death_prob}/255, dado={roll}]", "info")
-            if roll < death_prob:
+            write(f"  [Falla: {action_death_val} × (agua:{water_modifier} + linterna:{flash_modifier} + heart:{heart_modifier}) = {fail_prob}, dado={roll}]", "info")
+            if roll < fail_prob:
                 failed_desc = arec.get("DescriptionActionFailed", "").strip()
                 if failed_desc:
                     write(failed_desc, "warning")
-                write("Con una acción tan temeraria es lógico que murieras.", "death")
-                end_game("Muerte por acción fallida")
+                # Find action failure death screen
+                fail_end_screen = None
+                for scr_rec in screens.values():
+                    if scr_rec.get("Name", "").strip() == "endScreenDefault":
+                        fail_end_screen = scr_rec
+                        break
+                if fail_end_screen:
+                    draw_screen(fail_end_screen)
+                    end_game("Muerte por acción fallida", fail_end_screen)
+                else:
+                    end_game("Muerte por acción fallida")
                 return
 
         # ── Calculate enemy probability ───────────────────────
+        # Sum: action prob + accumulated prob + flashlight on prob (dashboard)
         action_enemy_prob = 0
         try:
             action_enemy_prob = int(arec.get("EnemyProbability", 0))
@@ -2646,6 +2649,10 @@ def open_play_window():
 
         state["enemy_prob_accum"] += action_enemy_prob
 
+        flashlight_enemy_bonus = enemy_prob_flash_on if state["flashlight_on"] else 0
+        enemy_sum = action_enemy_prob + state["enemy_prob_accum"] + flashlight_enemy_bonus
+
+        # Multiply by screen enemy probability
         cur_screen = screen_by_id.get(state["current_screen_id"], {})
         screen_enemy_prob = 0
         try:
@@ -2653,18 +2660,24 @@ def open_play_window():
         except (ValueError, TypeError):
             pass
 
-        total_enemy_prob = state["enemy_prob_accum"] + screen_enemy_prob
-        if state["flashlight_on"]:
-            total_enemy_prob += enemy_prob_flash_on
-
-        total_enemy_prob = min(255, max(0, total_enemy_prob))
+        total_enemy_prob = enemy_sum * screen_enemy_prob
 
         if total_enemy_prob > 0:
             roll = get_random()
-            write(f"  [Enemigo: prob={total_enemy_prob}/255, dado={roll}]", "info")
-            if roll < total_enemy_prob:
+            write(f"  [Enemigo: suma={enemy_sum} × screen={screen_enemy_prob} = {total_enemy_prob}, dado={roll}]", "info")
+            if total_enemy_prob >= roll:
                 write("¡Algo se mueve en la oscuridad... El enemigo te encontró!", "enemy")
-                end_game("Te atrapó el enemigo")
+                # Find enemy death end screen
+                enemy_end_screen = None
+                for scr_rec in screens.values():
+                    if scr_rec.get("Name", "").strip() == "endScreenDefault":
+                        enemy_end_screen = scr_rec
+                        break
+                if enemy_end_screen:
+                    draw_screen(enemy_end_screen)
+                    end_game("Te atrapó el enemigo", enemy_end_screen)
+                else:
+                    end_game("Te atrapó el enemigo")
                 return
 
         # ── Calculate time cost ───────────────────────────────
@@ -2675,7 +2688,10 @@ def open_play_window():
             pass
 
         time_cost = base_cost
-        time_cost += state["water_level"] * extra_sec_water
+        # Water level extra cost: level 0 = no extra, level N = N * extra_sec_water
+        wl = state["water_level"]
+        if wl > 0:
+            time_cost += wl * extra_sec_water
         if state["heart_rate"]:
             time_cost += extra_sec_heart
         if not state["flashlight_on"]:
@@ -2684,19 +2700,23 @@ def open_play_window():
         state["time_elapsed"] += time_cost
 
         if time_cost > 0:
-            write(f"  [Costo: {time_cost}s (base {base_cost}s + modificadores)]", "info")
+            water_extra = wl * extra_sec_water if wl > 0 else 0
+            write(f"  [Costo: {time_cost}s (base {base_cost}s + agua:{water_extra}s + modificadores)]", "info")
 
-        # Check if time ran out
+        # Check if time ran out → navigate to EndScreenSimulationTimeisUp
         if state["time_elapsed"] >= total_sim_time:
             write("⚠ ¡Se acabó el tiempo!", "warning")
-            # Trigger water sensor full
-            state["water_level"] = 9
-            water_sensor = sensor_by_id.get("0")
-            if water_sensor:
-                msg = water_sensor.get("DialogOn", "")
-                if msg:
-                    write(f"📡 [{water_sensor.get('Name','')}]: {msg}", "sensor")
-            end_game("Se terminó el tiempo de simulación")
+            # Find the EndScreenSimulationTimeisUp screen
+            time_up_screen = None
+            for scr_rec in screens.values():
+                if scr_rec.get("Name", "").strip() == "EndScreenSimulationTimeisUp":
+                    time_up_screen = scr_rec
+                    break
+            if time_up_screen:
+                draw_screen(time_up_screen)
+                end_game("Se terminó el tiempo de simulación", time_up_screen)
+            else:
+                end_game("Se terminó el tiempo de simulación")
             return
 
         # ── Update water level based on elapsed time ──────────
@@ -2752,7 +2772,23 @@ def open_play_window():
                         write(f"📡 [{sensor_name}]: {msg}", "sensor")
 
                 # Handle specific sensors
-                if sensor_name == "flashlight":
+                if sensor_name == "flashlightheart":
+                    # Toggle: flip flashlight and inversely flip heart
+                    # If flashlight was OFF → turn ON and set heart to 0 (calm)
+                    # If flashlight was ON  → turn OFF and set heart to 1 (high)
+                    if not state["flashlight_on"]:
+                        if state["flash_can_relight"]:
+                            state["flashlight_on"] = True
+                            state["heart_rate"] = 0
+                            write("🔦 La linterna se prende. Tu corazón se calma.", "sensor")
+                        else:
+                            write("🔦 La linterna no tiene batería, no se puede prender.", "warning")
+                    else:
+                        state["flashlight_on"] = False
+                        state["heart_rate"] = 1
+                        write("🔦 La linterna se apaga. Tu corazón se acelera.", "sensor")
+
+                elif sensor_name == "flashlight":
                     if sensor_active and state["flash_can_relight"]:
                         state["flashlight_on"] = True
                     elif sensor_active and not state["flash_can_relight"]:
