@@ -1674,6 +1674,7 @@ sensor_selector_end:
 
   
 sensor_0_run:
+  ;water sensor
   lda sensorCurrentStatus
   beq sensor_0_run_off
   lda sensorCurrentID
@@ -1692,6 +1693,8 @@ sensor_0_run:
   lda (pivotZpLow),Y
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  jsr increaseWaterLevel
+  jsr increaseWaterLevelSensor
   rts
 sensor_0_run_off:  
   rts
@@ -2012,7 +2015,7 @@ simulationTimeWaterLevelCheck:
 simulationTimeWaterLevelCheck_addLevels: 
   ldx additionalWaterLevel
   jsr increaseWaterLevel
-  jsr increaseWaterLevel
+  jsr increaseWaterLevelSensor
   dex
   cpx #$0
   bne simulationTimeWaterLevelCheck_addLevels
