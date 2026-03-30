@@ -514,9 +514,12 @@ checkEndScreen:
   sta serialDataVectorLow  
   lda #>msj_progressScreen1
   sta serialDataVectorHigh
-  jsr printAsciiDrawing  
+  ;jsr printAsciiDrawing 
+  jsr send_rs232_line_noCRLF 
   lda #$1
   sta gameEnded
+  jsr setSimulationTimerBars
+  jsr printSimulationTimerBars
   jsr bin_2_ascii_simulationTime
   ;print the simulation time number in the variable message
 ;   ldx #$0
