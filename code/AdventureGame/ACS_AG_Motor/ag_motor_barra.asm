@@ -339,6 +339,8 @@ mainProgram:
   jsr draw_current_screen_table
   jsr setSimulationTimerBars
   jsr printSimulationTimerBars
+  jsr setFlashlghtTimerBars
+  jsr printFlashlightTimerBars
 mainProgramLoop:
   ;jsr simulationTimeCheck
   jsr action_selector
@@ -3732,6 +3734,7 @@ printSegments_Print_Empty_Loop:
 printSegments_End:  
   lda #$5d;"]"
   jsr send_rs232_char  
+  jsr send_rs232_CRLF
   rts  
 
 setSimulationTimerBars:
@@ -3753,6 +3756,26 @@ printSimulationTimerBars:
   sta currentTimeBarHigh
   jsr printSegments
   rts
+
+setFlashlghtTimerBars:
+  lda #$4
+  sta barSegmentNumbers
+  lda #0
+  sta barMaximumTimerLow
+  lda #3
+  sta barMaximumTimerHigh
+  jsr setBarSegmentSize
+  rts
+
+printFlashlightTimerBars:
+  lda #$4
+  sta barSegmentNumbers
+  lda #32
+  sta currentTimeBarLow
+  lda #0
+  sta currentTimeBarHigh
+  jsr printSegments
+  rts  
 
 printFlashlight:
   rts
