@@ -409,7 +409,7 @@ screen_3_action1:
   .byte 8  ; COMENZAR EL JUEGO
 
 screen_3_action2:
-  .byte 13  ; MUERTE DIRECTA
+  .byte 7  ; VEO QUE CAE AGUA
 
 screen_3_action3:
   .byte 5  ; LINTERNA

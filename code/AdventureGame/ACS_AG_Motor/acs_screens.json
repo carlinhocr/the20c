@@ -45,7 +45,7 @@
         "ID": "3",
         "Name": "startScreen",
         "Action1": "COMENZAR EL JUEGO",
-        "Action2": "MUERTE DIRECTA",
+        "Action2": "VEO QUE CAE AGUA",
         "Action3": "LINTERNA",
         "Action4": "GRITAR",
         "Description": "Bienvenido a la aventura gráfica más Espectacular del mundo",
