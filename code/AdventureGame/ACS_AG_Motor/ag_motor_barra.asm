@@ -3715,22 +3715,22 @@ printSegments_Print:
   sec
   sbc currentNumberOfBars
   sta emptyBars
-  lda "["
+  lda #$5b;"["
   jsr send_rs232_char  
 printSegments_Print_Bars_Loop:  
-  lda "#"
+  lda #$24 ;"#"
   jsr send_rs232_char 
   dec currentNumberOfBars
   bne printSegments_Print_Bars_Loop  
   lda emptyBars
   beq printSegments_End
 printSegments_Print_Empty_Loop:  
-  lda "_"
+  lda #$5f ;"_"
   jsr send_rs232_char 
   dec emptyBars
   jmp printSegments_Print_Empty_Loop
 printSegments_End:  
-  lda "]"
+  lda #$5d;"]"
   jsr send_rs232_char  
   rts  
 
