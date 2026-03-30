@@ -205,6 +205,8 @@ actionFailedWaterFlashLightHeartRate=    $0253
 actionFailedProbabilityTotal=     $0254
 endScreenByEnemy=                 $0255
 endScreenByActionFailed=          $0256
+divisorBarSegment=                $0257
+
 
 barMaximumTimerLow=               $0260
 barMaximumTimerHigh=              $0261
@@ -3959,12 +3961,28 @@ uartSerialInit:
 
 setBarSegmentSize:
   ;lets asume we use 8 as the division
-  ldx barSegmentNumbers
   lda barMaximumTimerHigh
   sta segmentBarSizeHigh
   lda barMaximumTimerLow
   sta segmentBarSizeLow  
-setBarSegmentSize_Loop:
+  lda barSegmentNumbers
+  sta divisorBarSegment
+  beq setBarSegmentSizeLoop_End
+setBarSegmentSize_Loop:  
+  lda divisorBarSegment
+  clc ;clear the carry flag for ror so we can divide by two
+  ror ;with this i am diding by the sbarSEgmentSize
+  sta divisorBarSegment
+  beq setBarSegmentSizeLoop_End
+  ;example for 8 segments we do 3 shift example for 600 (600/8)
+  ;0000 1000
+  ;first ror
+  ;0000 0100 = 600/2 = 300
+  ;second ror
+  ;0000 0010 = 300/2 = 150
+  ;third ror
+  ;0000 0001 = 150/2 = 75 equal to 600/8  
+  ;the fourth ror is zero    
   lda segmentBarSizeHigh
   clc ;clear the carry flag for ror so we can divide by two
   ror
@@ -3973,9 +3991,7 @@ setBarSegmentSize_Loop:
   lda segmentBarSizeLow
   ror
   sta segmentBarSizeLow
-  dex 
-  cpx #$0
-  bne setBarSegmentSize_Loop
+  jmp setBarSegmentSize_Loop
 setBarSegmentSizeLoop_End:
   ;here we have the segment size on segmentBarSizeHigh and segmentBarSizeLow
   rts
