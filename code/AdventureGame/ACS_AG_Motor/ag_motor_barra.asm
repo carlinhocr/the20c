@@ -3718,13 +3718,13 @@ printSegments_Print:
   lda #$5b;"["
   jsr send_rs232_char  
 printSegments_Print_Bars_Loop:  
-  lda #$24 ;"#"
+  lda #$23 ;"#"
   jsr send_rs232_char 
   dec currentNumberOfBars
   bne printSegments_Print_Bars_Loop  
   lda emptyBars
+printSegments_Print_Empty_Loop:   
   beq printSegments_End
-printSegments_Print_Empty_Loop:  
   lda #$5f ;"_"
   jsr send_rs232_char 
   dec emptyBars
