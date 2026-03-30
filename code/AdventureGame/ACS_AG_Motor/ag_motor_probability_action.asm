@@ -1517,6 +1517,7 @@ actionFailedProbCalculation_Water_Loop:
   lda actionFailedProbWaterPerLevel
   clc
   adc actionFailedWaterFlashLightHeartRate
+  sta actionFailedWaterFlashLightHeartRate
   bcs actionFailedProbCalculation_MaximumLevel
   ;if the carry was set we reached 255
   ;if we are we have not and we keep accumulation water levels
@@ -1530,6 +1531,7 @@ actionFailedProbCalculation_FlashlightOff:
   lda actionFailedProbFlashlight
   clc
   adc actionFailedWaterFlashLightHeartRate
+  sta actionFailedWaterFlashLightHeartRate
   bcs actionFailedProbCalculation_MaximumLevel
 actionFailedProbCalculation_HeartRate:
   ;only do this is hearrate is on
@@ -1539,6 +1541,7 @@ actionFailedProbCalculation_HeartRate:
   lda actionFailedProbHeartRate
   clc
   adc actionFailedWaterFlashLightHeartRate
+  sta actionFailedWaterFlashLightHeartRate
   bcs actionFailedProbCalculation_MaximumLevel
   jmp actionFailedMultiply
 actionFailedProbCalculation_MaximumLevel:
