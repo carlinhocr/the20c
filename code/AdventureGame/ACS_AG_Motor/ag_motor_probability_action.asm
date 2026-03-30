@@ -4042,9 +4042,9 @@ printSegments_End:
 setSimulationTimerBars:
   lda #$8
   sta barSegmentNumbers
-  lda #0
+  lda maxSimulationTimeLowByte
   sta barMaximumTimerLow
-  lda #8
+  lda maxSimulationTimeHighByte
   sta barMaximumTimerHigh
   jsr setBarSegmentSize
   rts
@@ -4059,12 +4059,12 @@ printSimulationTimerBars:
   jsr printSegments
   rts
 
-setFlashlghtTimerBars:
+setFlashlightTimerBars:
   lda #$4
   sta barSegmentNumbers
-  lda maxSimulationTimeLowByte
+  lda maxFlashlightTimeLowByte
   sta barMaximumTimerLow
-  lda maxSimulationTimeHighByte
+  lda maxFlashlightTimeHighByte
   sta barMaximumTimerHigh
   jsr setBarSegmentSize
   rts
