@@ -336,8 +336,8 @@ mainProgram:
   jsr select_dashboard
   jsr select_screen
   jsr draw_current_screen_table
-  jsr setSimulationTimerBars:
-  jsr printSimulationTimerBars:
+  jsr setSimulationTimerBars
+  jsr printSimulationTimerBars
 mainProgramLoop:
   ;jsr simulationTimeCheck
   jsr action_selector
@@ -3709,7 +3709,7 @@ printSegments_Loop
   ;now we try again to find out if we have our correct segmente
   jmp printSegments_Loop
 printSegments_Print:
-  ldx
+  txa
   sta currentNumberOfBars
   lda barSegmentNumbers
   sec
