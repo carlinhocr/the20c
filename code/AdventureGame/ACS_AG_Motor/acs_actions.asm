@@ -1009,7 +1009,7 @@ action_14_sensor_id:
   .byte 0  ; none
 
 action_14_sensor_active:
-  .byte 0  ; off
+  .byte 1  ; on
 
 action_14_screen:
   .byte 255  ; screen id

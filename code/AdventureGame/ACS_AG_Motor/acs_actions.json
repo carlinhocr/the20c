@@ -168,7 +168,7 @@
         "Name": "TIRAR AGUAR, EMPEZAR TIME",
         "Alias": "",
         "SensorID": 0,
-        "SensorActive": false,
+        "SensorActive": true,
         "ScreenID": 255,
         "Cost": 0,
         "EnemyProbability": 0,
