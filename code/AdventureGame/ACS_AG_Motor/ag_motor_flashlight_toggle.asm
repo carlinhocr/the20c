@@ -351,21 +351,15 @@ mainProgram:
   jsr select_dashboard
   jsr select_screen
   jsr draw_current_screen_table
-  ; lda #$1  ;to test
-  ; sta heartRateLevel
-  ; jsr setSimulationTimerBars
-  ; jsr printSimulationTimerBars
-  ; jsr setFlashlghtTimerBars
-  ; jsr printFlashlightTimerBars
 mainProgramLoop:
   ;jsr simulationTimeCheck
   jsr action_selector
   jsr sensor_selector  
   lda gameEnded
   bne mainProgram
-  jsr checkActionFailed
-  jsr checkEnemyAppeared
-  jsr checkSimulationTimeisUp
+  ;jsr checkActionFailed
+  ;jsr checkEnemyAppeared
+  ;jsr checkSimulationTimeisUp
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
@@ -1803,6 +1797,17 @@ sensor_3_run_off:
   rts  
 
 sensor_6_run:
+  lda flashlightOff
+  ;print flashlight Off status
+  clc
+  adc #$30
+  jsr send_rs232_char
+  ;print flashlight status
+  lda flashlightStatus
+  clc
+  adc #$30
+  jsr send_rs232_char
+  ;start sensor program
   lda flashlightOff
   beq sensor_6_run_flashlight_with_batteries
   lda #<msj_flashlightOff
