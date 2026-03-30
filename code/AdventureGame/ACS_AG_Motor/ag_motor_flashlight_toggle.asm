@@ -1797,16 +1797,6 @@ sensor_3_run_off:
   rts  
 
 sensor_6_run:
-  lda flashlightOff
-  ;print flashlight Off status
-  clc
-  adc #$30
-  jsr send_rs232_char
-  ;print flashlight status
-  lda flashlightStatus
-  clc
-  adc #$30
-  jsr send_rs232_char
   ;start sensor program
   lda flashlightOff
   beq sensor_6_run_flashlight_with_batteries
@@ -1884,7 +1874,7 @@ sensor_6_run_not_toggle:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   jsr setFlashlightTimerBars
-  jsr printFlashlightTimerBars
+  jsr printFlashlightTimerBars_Reverse
   jmp sensor_6_run_End
 sensor_6_printOffStatus:  
   lda sensor_dialog_off_offset
@@ -4211,12 +4201,25 @@ setFlashlightTimerBars:
 printFlashlightTimerBars:
   lda #$4
   sta barSegmentNumbers
-  lda #32
+  lda flashlightSecondsUsedLowByte
   sta currentTimeBarLow
-  lda #0
+  lda flashlightSecondsUsedHighByte
   sta currentTimeBarHigh
   jsr printSegments
   rts  
+
+printFlashlightTimerBars_Reverse:
+  lda #$4
+  sta barSegmentNumbers
+  sec 
+  lda maxFlashlightTimeLowByte
+  sbc flashlightSecondsUsedLowByte
+  sta currentTimeBarLow
+  lda maxFlashlightTimeHighByte
+  sbc flashlightSecondsUsedHighByte
+  sta currentTimeBarHigh
+  jsr printSegments
+  rts   
 
 printFlashlight:
   rts
