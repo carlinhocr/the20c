@@ -1812,6 +1812,9 @@ sensor_6_run:
   jsr printAsciiDrawing
   lda #$0
   sta flashlightStatus
+  lda #$1
+  sta heartRateLevel
+  jsr heartbeatOnSensor
   jmp sensor_6_run_End
 sensor_6_run_flashlight_with_batteries:
   lda sensorCurrentID
@@ -1850,7 +1853,7 @@ sensor_6_run_flashlight_with_batteries:
   sta sensorCurrentStatus
   lda #$1
   sta heartRateLevel
-  sta heartbeatOnSensor
+  jsr heartbeatOnSensor
   jmp sensor_6_run_not_toggle
 sensor_6_toggle_one:
   lda #$1
@@ -1858,7 +1861,7 @@ sensor_6_toggle_one:
   sta sensorCurrentStatus  
   lda #$0
   sta heartRateLevel
-  sta heartbeatOnSensor  
+  jsr heartbeatOffSensor
 sensor_6_run_not_toggle:  
   lda flashlightStatus
   clc
