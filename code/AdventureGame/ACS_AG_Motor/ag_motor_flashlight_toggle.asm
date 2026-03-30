@@ -1975,7 +1975,7 @@ printFlashlightStatus:
   sta serialDataVectorLow
   lda #>msj_flashlighBateria
   sta serialDataVectorHigh
-  jsr send_rs232_line
+  jsr send_rs232_line_noCRLF
   jsr setFlashlightTimerBars
   jsr printFlashlightTimerBars_Reverse
 printFlashlightStatus_End:
