@@ -1855,10 +1855,10 @@ sensor_6_run_flashlight_with_batteries:
 sensor_6_toggle_one:
   lda #$1
   sta flashlightStatus
+  sta sensorCurrentStatus  
   lda #$0
   sta heartRateLevel
   sta heartbeatOnSensor  
-  sta sensorCurrentStatus
 sensor_6_run_not_toggle:  
   lda flashlightStatus
   clc
