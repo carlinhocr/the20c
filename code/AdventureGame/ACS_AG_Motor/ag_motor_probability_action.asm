@@ -527,17 +527,43 @@ checkEndScreen:
   jsr setSimulationTimerBars
   jsr printSimulationTimerBars
   jsr bin_2_ascii_simulationTime
-  ;print the simulation time number in the variable message
-;   ldx #$0
-; printMessageLoop:
-;   lda message,x  
-;   beq printMessageLoopEnd ;on null character stop printing
-;   jsr send_rs232_char
-;   inx
-;   jmp printMessageLoop
-; printMessageLoopEnd:  
-;   jsr send_rs232_CRLF
+  lda #<msj_progressScreen3
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen3
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing 
+  lda endByActionFailed
+  beq checkEndScreen_TimeUp
+  lda #<msj_progressScreen4
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen4
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing 
+checkEndScreen_TimeUp:
+  lda endByTimeUp
+  beq checkEndScreen_Enemy
+  lda #<msj_progressScreen5
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen5
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing   
+checkEndScreen_Enemy:  
+  lda endByEnemy
+  beq checkEndScreen_ActionDirect
+  lda #<msj_progressScreen6
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen6
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing 
+checkEndScreen_ActionDirect:
+  lda endByDirectAction
+  beq checkEndScreen_End
 checkEndScreen_End:
+  lda #<msj_progressScreen7
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen7
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing 
   rts  
 
 checkGameEnd:
@@ -2148,7 +2174,26 @@ msj_progressScreen1:
   .ascii "e"     
 msj_progressScreen2:  
   .ascii "Segundos Transcurridos: "
-  
+
+msj_progressScreen3:
+  .ascii "Moriste Por que "
+  .ascii "e" 
+
+msj_progressScreen4:
+  .ascii "Tu acción tuve probabilidad de fallar y falló"
+  .ascii "e"   
+
+msj_progressScreen5:
+  .ascii "Te quedaste sin tiempo"
+  .ascii "e"     
+
+msj_progressScreen6:
+  .ascii "Te atrapó el enemigo"
+  .ascii "e"   
+
+msj_progressScreen7:
+  .ascii "Tu acción fue super temeraria y nunca iba a funcionar"
+  .ascii "e"    
 
 msj_flashlightOff:
   .ascii "Tu linterna no tiene más bateria"
