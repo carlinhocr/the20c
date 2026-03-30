@@ -2212,6 +2212,10 @@ initializeWaterLevel:
 
 increaseWaterLevel:
   inc waterLevel
+  lda waterLevel
+  clc 
+  adc #$30
+  jsr send_rs232_char
   lda #< msj_waterOn
   sta serialDataVectorLow  
   lda #> msj_waterOn
