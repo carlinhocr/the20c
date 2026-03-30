@@ -558,12 +558,12 @@ checkEndScreen_Enemy:
 checkEndScreen_ActionDirect:
   lda endByDirectAction
   beq checkEndScreen_End
-checkEndScreen_End:
   lda #<msj_progressScreen7
   sta serialDataVectorLow  
   lda #>msj_progressScreen7
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
+checkEndScreen_End:
   rts  
 
 checkGameEnd:
@@ -2176,7 +2176,7 @@ msj_progressScreen2:
   .ascii "Segundos Transcurridos: "
 
 msj_progressScreen3:
-  .ascii "Moriste Por que "
+  .ascii "Moriste porque.... "
   .ascii "e" 
 
 msj_progressScreen4:
