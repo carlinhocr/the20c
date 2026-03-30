@@ -343,7 +343,8 @@ mainProgram:
   jsr select_dashboard
   jsr select_screen
   jsr draw_current_screen_table
-  lda #$1 hearrate ;to test
+  lda #$1  ;to test
+  sta heartRateLevel
   ; jsr setSimulationTimerBars
   ; jsr printSimulationTimerBars
   ; jsr setFlashlghtTimerBars
