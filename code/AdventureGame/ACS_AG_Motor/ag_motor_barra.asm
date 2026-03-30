@@ -208,6 +208,7 @@ currentSegmentBarSizeHigh=        $0266
 currentSegmentBarSizeLow=         $0267
 barSegmentNumbers=                $0268
 emptyBars=                        $0269
+currentNumberOfBars=              $026a
 
 actionIDOptionsRAM=$0440 ;32 bytes but i only use 6
 screenPointersRAM=$0500
