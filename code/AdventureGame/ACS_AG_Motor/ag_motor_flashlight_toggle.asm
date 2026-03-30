@@ -353,6 +353,7 @@ mainProgram:
   jsr draw_current_screen_table
 mainProgramLoop:
   ;jsr simulationTimeCheck
+  jsr printFlashlightStatus
   jsr action_selector
   jsr sensor_selector  
   lda gameEnded
@@ -1873,8 +1874,8 @@ sensor_6_run_not_toggle:
   lda (pivotZpLow),Y
   sta serialDataVectorHigh
   jsr printAsciiDrawing
-  jsr setFlashlightTimerBars
-  jsr printFlashlightTimerBars_Reverse
+;   jsr setFlashlightTimerBars
+;   jsr printFlashlightTimerBars_Reverse
   jmp sensor_6_run_End
 sensor_6_printOffStatus:  
   lda sensor_dialog_off_offset
@@ -1967,7 +1968,18 @@ check_sensor:
   jsr increaseWaterLevel
   jmp check_sensor
 
-
+printFlashlightStatus:
+  lda flashlightStatus
+  beq printFlashlightStatus_End
+  lda #<msj_flashlighBateria
+  sta serialDataVectorLow
+  lda #>msj_flashlighBateria
+  sta serialDataVectorHigh
+  jsr send_rs232_line
+  jsr setFlashlightTimerBars
+  jsr printFlashlightTimerBars_Reverse
+printFlashlightStatus_End:
+  rts
 heartbeatOnSensor:
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   lda #%01000001 ;bit 0 on 1 turn on heartrate 
@@ -2266,6 +2278,9 @@ msj_progressScreen7:
 msj_flashlightOff:
   .ascii "Tu linterna no tiene más bateria"
   .ascii "e"    
+
+msj_flashlighBateria:
+  .ascii "Bateria: "
 
 msj_enemyCaught:  
   .ascii "Atrapado"
