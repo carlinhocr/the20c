@@ -17,6 +17,7 @@ actions_index:
   .word action_pointer_11  ; FORZAR ENTRADA
   .word action_pointer_12  ; VOLVER A MIRAR ADELANTE
   .word action_pointer_13  ; MUERTE DIRECTA
+  .word action_pointer_14  ; TIRAR AGUAR, EMPEZAR TIME
 actions_index_record_length:
   .byte 2  ; each actions_index entry is 1 .word (2 bytes)
 
@@ -245,6 +246,22 @@ action_pointer_13:
   .word action_13_hide_water         ; MUERTE DIRECTA hide_water         [414,415]
   .word action_13_hide_fear          ; MUERTE DIRECTA hide_fear          [416,417]
   .word action_13_hide_flashlight    ; MUERTE DIRECTA hide_flashlight    [418,419]
+action_pointer_14:
+  .word action_14_id            ; TIRAR AGUAR, EMPEZAR TIME id            [420,421]
+  .word action_14_name          ; TIRAR AGUAR, EMPEZAR TIME name          [422,423]
+  .word action_14_alias         ; TIRAR AGUAR, EMPEZAR TIME alias         [424,425]
+  .word action_14_sensor_id     ; TIRAR AGUAR, EMPEZAR TIME sensor_id     [426,427]
+  .word action_14_sensor_active ; TIRAR AGUAR, EMPEZAR TIME sensor_active [428,429]
+  .word action_14_screen        ; TIRAR AGUAR, EMPEZAR TIME screen        [430,431]
+  .word action_14_cost              ; TIRAR AGUAR, EMPEZAR TIME cost              [432,433]
+  .word action_14_enemy_probability ; TIRAR AGUAR, EMPEZAR TIME enemy_probability [434,435]
+  .word action_14_reset_enemy_prob  ; TIRAR AGUAR, EMPEZAR TIME reset_enemy_prob  [436,437]
+  .word action_14_death_probability ; TIRAR AGUAR, EMPEZAR TIME death_probability [438,439]
+  .word action_14_description       ; TIRAR AGUAR, EMPEZAR TIME description       [440,441]
+  .word action_14_desc_action_failed ; TIRAR AGUAR, EMPEZAR TIME desc_action_failed [442,443]
+  .word action_14_hide_water         ; TIRAR AGUAR, EMPEZAR TIME hide_water         [444,445]
+  .word action_14_hide_fear          ; TIRAR AGUAR, EMPEZAR TIME hide_fear          [446,447]
+  .word action_14_hide_flashlight    ; TIRAR AGUAR, EMPEZAR TIME hide_flashlight    [448,449]
 action_name_offset:
   .byte 2  ; (byte of action_0_name in actions_pointers)
 action_alias_offset:
@@ -976,6 +993,56 @@ action_13_hide_fear:
 action_13_hide_flashlight:
   .byte 0  ; off
 
+; ── Action 14: TIRAR AGUAR, EMPEZAR TIME ──────────────────────────
+action_14_id:
+  .byte 14
+
+action_14_name:
+  .ascii "TIRAR AGUAR, EMPEZAR TIME"
+  .ascii "e"
+
+action_14_alias:
+  .ascii ""
+  .ascii "e"
+
+action_14_sensor_id:
+  .byte 0  ; none
+
+action_14_sensor_active:
+  .byte 0  ; off
+
+action_14_screen:
+  .byte 255  ; screen id
+
+action_14_cost:
+  .byte 0
+
+action_14_enemy_probability:
+  .byte 0
+
+action_14_reset_enemy_prob:
+  .byte 0  ; off
+
+action_14_death_probability:
+  .byte 0
+
+action_14_description:
+  .ascii "Empieza a caer agua en la caverna, apúrate no tienes mucho tiempo"
+  .ascii "e"
+
+action_14_desc_action_failed:
+  .ascii ""
+  .ascii "e"
+
+action_14_hide_water:
+  .byte 0  ; off
+
+action_14_hide_fear:
+  .byte 0  ; off
+
+action_14_hide_flashlight:
+  .byte 0  ; off
+
 ; ── Total action count ──────────────────────────────────────
 action_count:
-  .byte 14
+  .byte 15

@@ -162,5 +162,22 @@
         "HideOnWaterLevelHigh": 0,
         "HideOnFearLevelHigh": 0,
         "HideWithFlashlightOff": 0
+    },
+    "14": {
+        "ID": "14",
+        "Name": "TIRAR AGUAR, EMPEZAR TIME",
+        "Alias": "",
+        "SensorID": 0,
+        "SensorActive": false,
+        "ScreenID": 255,
+        "Cost": 0,
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 0,
+        "Description": "Empieza a caer agua en la caverna, apúrate no tienes mucho tiempo",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     }
 }
