@@ -1455,17 +1455,6 @@ runAction:
   lda (actionDataVectorLow),Y
   sta enemyProbActionCost
   jsr enemyProbabilityCalculation
-  ;load if the enemy accumulated probability should be reset
-  lda action_reset_enemy_prob_offset
-  tay
-  lda (pivotZpLow),Y
-  sta actionDataVectorLow
-  iny 
-  lda (pivotZpLow),Y
-  sta actionDataVectorHigh  
-  ldy #$0
-  lda (actionDataVectorLow),Y
-  sta enemyProbActionReset
   ;add the action probability to fail
   lda action_death_probability_offset
   tay
