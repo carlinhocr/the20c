@@ -148,5 +148,35 @@
         "EnemyProbability": 0,
         "IsSecretScreen": 0,
         "IsEndScreen": 1
+    },
+    "11": {
+        "ID": "11",
+        "Name": "endScreenByEnemy",
+        "Action1": "TERMINAR EL JUEGO",
+        "Action2": "",
+        "Action3": "",
+        "Action4": "",
+        "Description": "El enemigo que siempre acechaba te atrapó, este es tu fin",
+        "FlashlightOn": "",
+        "FlashlightOff": "",
+        "AsciiDrawing": "",
+        "EnemyProbability": 0,
+        "IsSecretScreen": 0,
+        "IsEndScreen": 1
+    },
+    "12": {
+        "ID": "12",
+        "Name": "endScreenByActionFailed",
+        "Action1": "TERMINAR EL JUEGO",
+        "Action2": "",
+        "Action3": "",
+        "Action4": "",
+        "Description": "Tu acción tenía una gran chance de fallar y falló. Este es tu fin",
+        "FlashlightOn": "",
+        "FlashlightOff": "",
+        "AsciiDrawing": "",
+        "EnemyProbability": 0,
+        "IsSecretScreen": 0,
+        "IsEndScreen": 1
     }
 }

@@ -14,6 +14,8 @@ screens_index:
   .word screen_pointers_8  ; endScreens1s4
   .word screen_pointers_9  ; s2s1
   .word screen_pointers_10  ; EndScreenSimulationTimeisUp
+  .word screen_pointers_11  ; endScreenByEnemy
+  .word screen_pointers_12  ; endScreenByActionFailed
 screens_index_record_length:
   .byte 2  ; each screens_index entry is 1 .word (2 bytes)
 
@@ -172,6 +174,34 @@ screen_pointers_10:
   .word screen_10_enemy_probability ; EndScreenSimulationTimeisUp enemy_probability [280,281]
   .word screen_10_is_secret_screen  ; EndScreenSimulationTimeisUp is_secret_screen  [282,283]
   .word screen_10_is_end_screen     ; EndScreenSimulationTimeisUp is_end_screen     [284,285]
+screen_pointers_11:
+  .word screen_11_id                ; endScreenByEnemy id                [286,287]
+  .word screen_11_name              ; endScreenByEnemy name              [288,289]
+  .word screen_11_action1           ; endScreenByEnemy action1           [290,291]
+  .word screen_11_action2           ; endScreenByEnemy action2           [292,293]
+  .word screen_11_action3           ; endScreenByEnemy action3           [294,295]
+  .word screen_11_action4           ; endScreenByEnemy action4           [296,297]
+  .word screen_11_description       ; endScreenByEnemy description       [298,299]
+  .word screen_11_ascii             ; endScreenByEnemy ascii             [300,301]
+  .word screen_11_flashlight_on     ; endScreenByEnemy flashlight_on     [302,303]
+  .word screen_11_flashlight_off    ; endScreenByEnemy flashlight_off    [304,305]
+  .word screen_11_enemy_probability ; endScreenByEnemy enemy_probability [306,307]
+  .word screen_11_is_secret_screen  ; endScreenByEnemy is_secret_screen  [308,309]
+  .word screen_11_is_end_screen     ; endScreenByEnemy is_end_screen     [310,311]
+screen_pointers_12:
+  .word screen_12_id                ; endScreenByActionFailed id                [312,313]
+  .word screen_12_name              ; endScreenByActionFailed name              [314,315]
+  .word screen_12_action1           ; endScreenByActionFailed action1           [316,317]
+  .word screen_12_action2           ; endScreenByActionFailed action2           [318,319]
+  .word screen_12_action3           ; endScreenByActionFailed action3           [320,321]
+  .word screen_12_action4           ; endScreenByActionFailed action4           [322,323]
+  .word screen_12_description       ; endScreenByActionFailed description       [324,325]
+  .word screen_12_ascii             ; endScreenByActionFailed ascii             [326,327]
+  .word screen_12_flashlight_on     ; endScreenByActionFailed flashlight_on     [328,329]
+  .word screen_12_flashlight_off    ; endScreenByActionFailed flashlight_off    [330,331]
+  .word screen_12_enemy_probability ; endScreenByActionFailed enemy_probability [332,333]
+  .word screen_12_is_secret_screen  ; endScreenByActionFailed is_secret_screen  [334,335]
+  .word screen_12_is_end_screen     ; endScreenByActionFailed is_end_screen     [336,337]
 screen_action_offset:
   .byte 4  ; (byte of screen_0_action1 in screens_pointers)
 screen_description_offset:
@@ -739,9 +769,99 @@ screen_10_is_secret_screen:
 screen_10_is_end_screen:
   .byte 1  ; yes
 
+; ── Screen 11: endScreenByEnemy ──────────────────────────
+screen_11_id:
+  .byte 11
+
+screen_11_name:
+  .ascii "endScreenByEnemy"
+  .ascii "e"
+
+screen_11_action1:
+  .byte 9  ; TERMINAR EL JUEGO
+
+screen_11_action2:
+  .byte 255  ; none
+
+screen_11_action3:
+  .byte 255  ; none
+
+screen_11_action4:
+  .byte 255  ; none
+
+screen_11_description:
+  .ascii "El enemigo que siempre acechaba te atrapó, este es tu fin"
+  .ascii "e"
+
+screen_11_ascii:
+  .ascii ""
+  .ascii "e"
+
+screen_11_flashlight_on:
+  .ascii ""
+  .ascii "e"
+
+screen_11_flashlight_off:
+  .ascii ""
+  .ascii "e"
+
+screen_11_enemy_probability:
+  .byte 0
+
+screen_11_is_secret_screen:
+  .byte 0  ; no
+
+screen_11_is_end_screen:
+  .byte 1  ; yes
+
+; ── Screen 12: endScreenByActionFailed ──────────────────────────
+screen_12_id:
+  .byte 12
+
+screen_12_name:
+  .ascii "endScreenByActionFailed"
+  .ascii "e"
+
+screen_12_action1:
+  .byte 9  ; TERMINAR EL JUEGO
+
+screen_12_action2:
+  .byte 255  ; none
+
+screen_12_action3:
+  .byte 255  ; none
+
+screen_12_action4:
+  .byte 255  ; none
+
+screen_12_description:
+  .ascii "Tu acción tenía una gran chance de fallar y falló. Este es tu fin"
+  .ascii "e"
+
+screen_12_ascii:
+  .ascii ""
+  .ascii "e"
+
+screen_12_flashlight_on:
+  .ascii ""
+  .ascii "e"
+
+screen_12_flashlight_off:
+  .ascii ""
+  .ascii "e"
+
+screen_12_enemy_probability:
+  .byte 0
+
+screen_12_is_secret_screen:
+  .byte 0  ; no
+
+screen_12_is_end_screen:
+  .byte 1  ; yes
+
 ; ── Total screen count ──────────────────────────────────────
 screen_count:
-  .byte 11
+  .byte 13
 
 ; ── Total secret screens count ──────────────────────────────
 screens_with_secrets:

@@ -203,6 +203,8 @@ actionFailedProbFlashlight=       $0251
 actionFailedProbHeartRate=        $0252
 actionFailedWaterFlashLightHeartRate=    $0253
 actionFailedProbabilityTotal=     $0254
+endScreenByEnemy=                 $0255
+endScreenByActionFailed=          $0256
 
 barMaximumTimerLow=               $0260
 barMaximumTimerHigh=              $0261
@@ -215,6 +217,10 @@ currentSegmentBarSizeLow=         $0267
 barSegmentNumbers=                $0268
 emptyBars=                        $0269
 currentNumberOfBars=              $026a
+endByTimeUp=                      $026b
+endByEnemy=                       $026c
+endByActionFailed=                $026d
+endByDirectAction=                $026e
 
 actionIDOptionsRAM=$0440 ;32 bytes but i only use 6
 screenPointersRAM=$0500
@@ -356,7 +362,7 @@ mainProgramLoop:
   lda gameEnded
   bne mainProgram
   jsr checkActionFailed
-  ;jsr checkEnemyAppeared
+  jsr checkEnemyAppeared
   jsr checkSimulationTimeisUp
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
@@ -420,6 +426,14 @@ checkActionFailed_failed:
   lda (pivotZpLow),Y
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  lda #$1
+  sta endByActionFailed
+  lda endScreenByActionFailed
+  sta screenCurrentID
+  lda #$1
+  sta moveNextScreen  
+  lda #$1
+  sta gameEnded  
   rts
 
 
@@ -452,6 +466,14 @@ checkEnemyAppeared_caught:
   lda #>msj_enemyCaught
   sta serialDataVectorHigh
   jsr printAsciiDrawing  
+  lda #$1
+  sta endByEnemy
+  lda endScreenByEnemy
+  sta screenCurrentID
+  lda #$1
+  sta moveNextScreen  
+  lda #$1
+  sta gameEnded
   rts
 
 checkSimulationTimeisUp:
@@ -474,7 +496,7 @@ checkSimulationTimeisUp:
   sta gameEnded
   lda #$1
   sta simulationTimeExpired
-
+  sta endByTimeUp
 checkSimulationTimeisUp_End:  
   rts
 
@@ -656,6 +678,10 @@ loadConstants:
   sta dashboardCurrentID
   lda #10
   sta endScreenSimulationTimeisUp
+  lda #11
+  sta endScreenByEnemy ;endScreens1s1 id
+  lda #12
+  sta endScreenByActionFailed
   lda #2
   sta flashlightSensorID
   lda #$0
@@ -667,6 +693,27 @@ loadConstants:
   sta enemyProbFlashlight
   sta enemyProbCurrentScreen
   sta enemyProbabilityTotal
+  sta actionFailedProb
+  sta actionFailedProbWaterPerLevel
+  sta actionFailedProbFlashlight
+  sta actionFailedProbHeartRate
+  sta actionFailedWaterFlashLightHeartRate
+  sta actionFailedProbabilityTotal
+  sta barMaximumTimerLow
+  sta barMaximumTimerHigh
+  sta segmentBarSizeHigh
+  sta segmentBarSizeLow
+  sta currentTimeBarHigh
+  sta currentTimeBarLow
+  sta currentSegmentBarSizeHigh
+  sta currentSegmentBarSizeLow
+  sta barSegmentNumbers
+  sta emptyBars
+  sta currentNumberOfBars 
+  sta endByTimeUp
+  sta endByEnemy
+  sta endByActionFailed
+  sta endByDirectAction
   rts 
 
 
