@@ -507,14 +507,14 @@ action_4_reset_enemy_prob:
   .byte 0  ; off
 
 action_4_death_probability:
-  .byte 0
+  .byte 1
 
 action_4_description:
   .ascii "El eco tarda demasiado en volver. Sientes que algo se mueve encima de ti. Debe ser tu imaginacion, te repites."
   .ascii "e"
 
 action_4_desc_action_failed:
-  .ascii ""
+  .ascii "No deberías haber gritado tanto, ahora estas muerto"
   .ascii "e"
 
 action_4_hide_water:
@@ -539,7 +539,7 @@ action_5_alias:
   .ascii "e"
 
 action_5_sensor_id:
-  .byte 2  ; none
+  .byte 6  ; none
 
 action_5_sensor_active:
   .byte 1  ; on

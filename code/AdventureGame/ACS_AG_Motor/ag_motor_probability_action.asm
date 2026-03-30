@@ -411,8 +411,15 @@ checkActionFailed_failed:
   lda #>msj_actionFailed
   sta serialDataVectorHigh
   jsr printAsciiDrawing  
-  rts
-
+  ;prints the description of the failed action
+  lda action_desc_action_failed_offset
+  tay
+  lda (pivotZpLow),Y
+  sta serialDataVectorLow  
+  iny 
+  lda (pivotZpLow),Y
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
   rts
 
 

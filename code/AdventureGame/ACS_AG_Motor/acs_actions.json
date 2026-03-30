@@ -59,9 +59,9 @@
         "Cost": 10,
         "EnemyProbability": 5,
         "ResetEnemyProbability": 0,
-        "DeathProbability": 0,
+        "DeathProbability": 1,
         "Description": "El eco tarda demasiado en volver. Sientes que algo se mueve encima de ti. Debe ser tu imaginacion, te repites.",
-        "DescriptionActionFailed": "",
+        "DescriptionActionFailed": "No deberías haber gritado tanto, ahora estas muerto",
         "HideOnWaterLevelHigh": 0,
         "HideOnFearLevelHigh": 0,
         "HideWithFlashlightOff": 0
