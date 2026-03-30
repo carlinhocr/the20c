@@ -514,7 +514,11 @@ checkEndScreen:
   sta serialDataVectorLow  
   lda #>msj_progressScreen1
   sta serialDataVectorHigh
-  ;jsr printAsciiDrawing 
+  jsr printAsciiDrawing 
+  lda #<msj_progressScreen2
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen2
+  sta serialDataVectorHigh  
   jsr send_rs232_line_noCRLF 
   lda #$1
   sta gameEnded
@@ -2138,9 +2142,11 @@ option_unknown:
   .ascii "e"    
   
 msj_progressScreen1:
-  .ascii "Tu recorrido en el juego"
+  .ascii "Tu recorrido en el juego "
+  .ascii "e"     
+msj_progressScreen2:  
   .ascii "Segundos Transcurridos: "
-  .ascii "e"      
+  
 
 msj_flashlightOff:
   .ascii "Tu linterna no tiene más bateria"
@@ -4046,9 +4052,9 @@ setSimulationTimerBars:
 printSimulationTimerBars:
   lda #$8
   sta barSegmentNumbers
-  lda #128
+  lda simulationTimePassedLowDigits
   sta currentTimeBarLow
-  lda #0
+  lda simulationTimePassedHighDigits
   sta currentTimeBarHigh
   jsr printSegments
   rts
