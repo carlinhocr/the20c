@@ -566,29 +566,6 @@ checkEndScreen_ActionDirect:
 checkEndScreen_End:
   rts  
 
-checkGameEnd:
-  ;check end in screen s1s1
-  lda timerExpired
-  cmp #$3 ;checking 30 seconds three timers
-  ;if less or equal continue
-  bcc checkGameEnd2
-  lda screenCurrentID
-  cmp #$0 ;screen s1s1
-  bne checkGameEnd2
-  ;now we are on screen s1s1 and the timer expired lets end the game
-  ;by changing the final screen
-  lda #$4 ;endScreens1s1 id
-  sta screenCurrentID
-  lda #$1
-  sta moveNextScreen
-  lda #$1
-  sta gameEnded
-  lda #$0
-  sta timerExpired ;stop the first screen timer expired
-checkGameEnd2:  
-checkGameEnd_end:
-  rts
-
 delayClear:
   jsr delay_3_sec  
   jsr printClearRS232Screen
