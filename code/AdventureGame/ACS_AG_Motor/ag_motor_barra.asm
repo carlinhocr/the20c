@@ -191,7 +191,7 @@ sensorCurrentID=                  $0245
 sensorCurrentStatus=              $0246
 timerExpired=                     $0247
 gameEnded=                        $0248
-fearLevel=$0249
+fearLevel=                        $0249
 watertLevel=$024a
 actionHidden=$024b
 highWaterLevel=$024c
@@ -206,6 +206,8 @@ currentTimeBarHigh=               $0264
 currentTimeBarLow=                $0265
 currentSegmentBarSizeHigh=        $0266
 currentSegmentBarSizeLow=         $0267
+barSegmentNumbers=                $0268
+emptyBars=                        $0269
 
 actionIDOptionsRAM=$0440 ;32 bytes but i only use 6
 screenPointersRAM=$0500
@@ -3652,7 +3654,7 @@ uartSerialInit:
 
 setBarSegmentSize:
   ;lets asume we use 8 as the division
-  ldx #$8
+  ldx barSegmentNumbers
   lda barMaximumTimerHigh
   sta segmentBarSizeHigh
   lda barMaximumTimerLow
@@ -3709,18 +3711,32 @@ printSegments_Loop
 printSegments_Print:
   ldx
   sta currentNumberOfBars
+  lda barSegmentNumbers
+  sec
+  sbc currentNumberOfBars
+  sta emptyBars
   lda "["
   jsr send_rs232_char  
-printSegments_Print_Loop:  
+printSegments_Print_Bars_Loop:  
   lda "#"
   jsr send_rs232_char 
   dec currentNumberOfBars
-  bne printSegments_Print_Loop
+  bne printSegments_Print_Bars_Loop  
+  lda emptyBars
+  beq printSegments_End
+printSegments_Print_Empty_Loop:  
+  lda "_"
+  jsr send_rs232_char 
+  dec emptyBars
+  jmp printSegments_Print_Empty_Loop
+printSegments_End:  
   lda "]"
   jsr send_rs232_char  
   rts  
 
 setSimulationTimerBars:
+  lda #$8
+  sta barSegmentNumbers
   lda #0
   sta barMaximumTimerLow
   lda #8
@@ -3729,6 +3745,8 @@ setSimulationTimerBars:
   rts
 
 printSimulationTimerBars:
+  lda #$8
+  sta barSegmentNumbers
   lda #128
   sta currentTimeBarLow
   lda #0
