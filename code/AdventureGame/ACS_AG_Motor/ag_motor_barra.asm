@@ -3661,7 +3661,6 @@ setBarSegmentSize:
   lda barMaximumTimerLow
   sta segmentBarSizeLow  
 setBarSegmentSize_Loop:
-  dex
   lda segmentBarSizeHigh
   clc ;clear the carry flag for ror so we can divide by two
   ror
