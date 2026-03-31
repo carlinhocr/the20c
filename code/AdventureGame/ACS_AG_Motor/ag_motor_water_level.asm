@@ -506,10 +506,10 @@ checkSimulationTimeisUp:
 checkSimulationTimeisUp_WaterLevel:  
   jsr setSimulationTimerBars
   jsr printSimulationTimerBars
-  lda currentNumberOfBars
-  clc 
-  adc #$30
-  jsr send_rs232_char  
+;   lda currentNumberOfBars
+;   clc 
+;   adc #$30
+;   jsr send_rs232_char  
   sec
   lda currentNumberOfBars
   sbc waterLevel
@@ -517,10 +517,10 @@ checkSimulationTimeisUp_WaterLevel:
   bcc checkSimulationTimeisUp_End
   beq checkSimulationTimeisUp_End
   ;here increase the water level
-  lda levelsToIncreaseWater
-  clc 
-  adc #$30
-  jsr send_rs232_char
+;   lda levelsToIncreaseWater
+;   clc 
+;   adc #$30
+;   jsr send_rs232_char
   ldx levelsToIncreaseWater
 checkSimulationTimeisUp_IncWaterLevel:  
   cpx #0
@@ -4229,7 +4229,7 @@ setSimulationTimerBars:
   lda maxSimulationTimeHighByte
   sta barMaximumTimerHigh
   jsr setBarSegmentSize
-  jsr bin_2_ascii_segmentBarSizeLow
+  ;jsr bin_2_ascii_segmentBarSizeLow
   rts
 
 printSimulationTimerBars:
