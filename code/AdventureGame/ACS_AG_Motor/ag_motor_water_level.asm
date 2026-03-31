@@ -208,7 +208,7 @@ endScreenByActionFailed=          $0256
 divisorBarSegment=                $0257
 printableNumberOfBars=            $0258
 levelsToIncreaseWater=            $0259
-
+timerOn=                          $025a
 
 barMaximumTimerLow=               $0260
 barMaximumTimerHigh=              $0261
@@ -478,7 +478,7 @@ checkEnemyAppeared_caught:
 
 checkSimulationTimeisUp:
   ;substract current simulationTimePassed from maxSimulationTime
-  lda waterLevel
+  lda timerOn
   beq checkSimulationTimeisUp_End
   sec
   lda maxSimulationTimeLowByte
@@ -518,7 +518,7 @@ checkSimulationTimeisUp_IncWaterLevel:
   jsr increaseWaterLevel
   pla
   tax
-  inx
+  dex
   jmp checkSimulationTimeisUp_IncWaterLevel
 checkSimulationTimeisUp_End:  
   jsr bin_2_ascii_simulationTime
@@ -750,6 +750,7 @@ loadConstants:
   sta endByEnemy
   sta endByActionFailed
   sta endByDirectAction
+  sta timerOn
   rts 
 
 
@@ -1163,6 +1164,9 @@ draw_screen_by_hand:
 ;-----------------------------------------------------------------------------------
 
 addActionCost:
+  ;do not add time on timerOn 0 (timer is off)
+  lda timerOn
+  beq addActionCost_WaterLevel_End
   ;add direct action costs in simulation seconds
   lda currentActionCost
   ;lda #1
@@ -1173,15 +1177,6 @@ addActionCost:
   lda #$0
   adc simulationTimePassedHighDigits
   sta simulationTimePassedHighDigits
-  ; lda simulationTimePassedHighDigits
-  ; clc
-  ; adc #$30
-  ; jsr send_rs232_char
-  ; lda simulationTimePassedLowDigits
-  ; clc
-  ; adc #$30
-  ; jsr send_rs232_char  
-
   ;add cost for Flashlight Off
   lda flashlightStatus
   bne addActionCost_HearRate
@@ -1194,15 +1189,7 @@ addActionCost:
   ;add the carry if there was one
   lda extraSecondsFlashlightOffHighByte
   adc simulationTimePassedHighDigits
-  sta simulationTimePassedHighDigits
-  ; lda simulationTimePassedHighDigits
-  ; clc
-  ; adc #$30
-  ; jsr send_rs232_char
-  ; lda simulationTimePassedLowDigits
-  ; clc
-  ; adc #$30
-  ; jsr send_rs232_char  
+  sta simulationTimePassedHighDigits 
 addActionCost_HearRate:  
   lda fearLevel
   beq addActionCost_WaterLevel
@@ -1215,7 +1202,6 @@ addActionCost_HearRate:
   lda extraSecondsHeartRateHighByte
   adc simulationTimePassedHighDigits
   sta simulationTimePassedHighDigits
-
 addActionCost_WaterLevel:  
   ;load the water level on the X register
   ;add seconds per level until we reach level zero
@@ -2247,6 +2233,8 @@ increaseWaterLevel:
   lda #> msj_waterOn
   sta serialDataVectorHigh
   jsr printAsciiDrawing  
+  lda #$1
+  sta timerOn
   ;jsr increaseWaterLevelSensor
   rts
 
