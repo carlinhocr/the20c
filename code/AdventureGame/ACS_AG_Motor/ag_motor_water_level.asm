@@ -4160,7 +4160,7 @@ printSegments:
   sta currentSegmentBarSizeHigh
   lda segmentBarSizeLow
   sta currentSegmentBarSizeLow
-  ldx #$ff
+  ldx #$00
 printSegments_Loop  
   inx
   ;we will get the segment size startign with the size in seconds
