@@ -502,6 +502,7 @@ checkSimulationTimeisUp:
   lda #$1
   sta simulationTimeExpired
   sta endByTimeUp
+  jmp checkSimulationTimeisUp_End
 checkSimulationTimeisUp_WaterLevel:  
   jsr setSimulationTimerBars
   jsr printSimulationTimerBars
@@ -4172,7 +4173,7 @@ printSegments:
   sta currentSegmentBarSizeHigh
   lda segmentBarSizeLow
   sta currentSegmentBarSizeLow
-  ldx #$00
+  ldx #$ff
 printSegments_Loop  
   inx
   ;we will get the segment size startign with the size in seconds
