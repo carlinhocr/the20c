@@ -562,7 +562,7 @@ checkEndScreen:
   sta gameEnded
   jsr setSimulationTimerBars
   jsr printSimulationTimerBars
-  jsr bin_2_ascii_simulationTime
+  ;jsr bin_2_ascii_simulationTime
   lda #<msj_progressScreen3
   sta serialDataVectorLow  
   lda #>msj_progressScreen3
