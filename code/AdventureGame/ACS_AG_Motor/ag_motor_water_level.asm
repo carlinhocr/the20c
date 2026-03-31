@@ -4173,10 +4173,10 @@ printSegments_Loop
   ;we do not care about the resulting number only about the carry
   ;to find who is less
   sec 
-  lda currentSegmentBarSizeLow
-  sbc currentTimeBarLow
-  lda currentSegmentBarSizeHigh
-  sbc currentTimeBarHigh
+  lda currentTimeBarLow
+  sbc currentSegmentBarSizeLow
+  lda currentTimeBarHigh
+  sbc currentSegmentBarSizeHigh
   ;if there is a carry the result was positive
   ;and the current segment bar is greater than the current time
   ;in the index register X we have our number of segments
