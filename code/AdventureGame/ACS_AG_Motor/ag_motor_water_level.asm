@@ -1694,7 +1694,6 @@ sensor_0_run:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   jsr increaseWaterLevel
-  jsr increaseWaterLevelSensor
   rts
 sensor_0_run_off:  
   rts
@@ -2015,7 +2014,7 @@ simulationTimeWaterLevelCheck:
 simulationTimeWaterLevelCheck_addLevels: 
   ldx additionalWaterLevel
   jsr increaseWaterLevel
-  jsr increaseWaterLevelSensor
+  ;jsr increaseWaterLevelSensor
   dex
   cpx #$0
   bne simulationTimeWaterLevelCheck_addLevels
@@ -2221,7 +2220,7 @@ increaseWaterLevel:
   lda #> msj_waterOn
   sta serialDataVectorHigh
   jsr printAsciiDrawing  
-  jsr increaseWaterLevelSensor
+  ;jsr increaseWaterLevelSensor
   rts
 
 ;END--------------------------------------------------------------------------------
