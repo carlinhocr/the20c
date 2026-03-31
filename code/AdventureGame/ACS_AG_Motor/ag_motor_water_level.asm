@@ -521,7 +521,6 @@ checkSimulationTimeisUp_WaterLevel:
   clc 
   adc #$30
   jsr send_rs232_char
-
   ldx levelsToIncreaseWater
 checkSimulationTimeisUp_IncWaterLevel:  
   cpx #0
@@ -4156,7 +4155,11 @@ printSegments:
   ;if there is no carry then result is negative
   ;we are past simulation time
   ;we should print only the maximum bar size and no more
-  bcc printSegments_BarsMaximum
+  bcs printSegments_CalculateBars 
+  ;if we are here it was negative
+  ldx barSegmentNumbers
+  jmp printSegments_Print
+printSegments_CalculateBars:  
   ;if not lets calculate the bars
   lda segmentBarSizeHigh
   sta currentSegmentBarSizeHigh
@@ -4189,8 +4192,6 @@ printSegments_Loop
   sta currentSegmentBarSizeHigh
   ;now we try again to find out if we have our correct segmente
   jmp printSegments_Loop
-printSegments_BarsMaximum:
-  ldx barSegmentNumbers
 printSegments_Print:
   txa
   sta currentNumberOfBars
