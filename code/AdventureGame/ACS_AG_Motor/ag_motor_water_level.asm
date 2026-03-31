@@ -496,6 +496,8 @@ checkSimulationTimeisUp:
   sta simulationTimeExpired
   sta endByTimeUp
 checkSimulationTimeisUp_End:  
+  jsr setSimulationTimerBars
+  jsr printSimulationTimerBars
   jsr bin_2_ascii_simulationTime
   rts
 
