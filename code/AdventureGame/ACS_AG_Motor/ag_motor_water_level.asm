@@ -521,8 +521,10 @@ checkSimulationTimeisUp_WaterLevel:
   clc 
   adc #$30
   jsr send_rs232_char
-  lda levelsToIncreaseWater
+
+  ldx levelsToIncreaseWater
 checkSimulationTimeisUp_IncWaterLevel:  
+  cpx #0
   beq checkSimulationTimeisUp_End
   ;here we increase the water level
   txa
