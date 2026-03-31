@@ -361,7 +361,7 @@ mainProgramLoop:
   bne mainProgram
   ;jsr checkActionFailed
   ;jsr checkEnemyAppeared
-  ;jsr checkSimulationTimeisUp
+  jsr checkSimulationTimeisUp
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
@@ -2011,10 +2011,10 @@ simulationTimeWaterLevelCheck:
   sbc waterLevel
   sta additionalWaterLevel
   beq simulationTimeWaterLevelCheck_End
+  bcc simulationTimeWaterLevelCheck_End
 simulationTimeWaterLevelCheck_addLevels: 
   ldx additionalWaterLevel
   jsr increaseWaterLevel
-  ;jsr increaseWaterLevelSensor
   dex
   cpx #$0
   bne simulationTimeWaterLevelCheck_addLevels
@@ -3741,6 +3741,18 @@ bin_2_ascii_printMessageLoopEnd:
   jsr send_rs232_CRLF
   rts
 
+bin_2_ascii_segmentBarSizeLow:
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda segmentBarSizeLow
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  jsr bin_2_ascii_print_message  
+  rts   
+
 bin_2_ascii:
 divide:
   ;initialize the remainder to be 0
@@ -4224,6 +4236,7 @@ setSimulationTimerBars:
   lda maxSimulationTimeHighByte
   sta barMaximumTimerHigh
   jsr setBarSegmentSize
+  jsr bin_2_ascii_segmentBarSizeLow
   rts
 
 printSimulationTimerBars:
