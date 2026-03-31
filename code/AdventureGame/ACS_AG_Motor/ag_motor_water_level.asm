@@ -506,11 +506,11 @@ checkSimulationTimeisUp:
 checkSimulationTimeisUp_WaterLevel:  
   jsr setSimulationTimerBars
   jsr printSimulationTimerBars
-  sec 
   lda currentNumberOfBars
   clc 
   adc #$30
   jsr send_rs232_char  
+  sec
   lda currentNumberOfBars
   sbc waterLevel
   sta levelsToIncreaseWater
