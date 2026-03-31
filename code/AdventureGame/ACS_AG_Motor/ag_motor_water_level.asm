@@ -496,6 +496,7 @@ checkSimulationTimeisUp:
   sta simulationTimeExpired
   sta endByTimeUp
 checkSimulationTimeisUp_End:  
+  jsr bin_2_ascii_simulationTime
   rts
 
 checkEndScreen:
@@ -3747,7 +3748,7 @@ bin_2_ascii_segmentBarSizeLow:
   sei
   lda segmentBarSizeLow
   sta value
-  lda #$0
+  lda segmentBarSizeHigh
   sta value + 1
   jsr bin_2_ascii
   jsr bin_2_ascii_print_message  
