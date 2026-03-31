@@ -4192,14 +4192,14 @@ printSegments_Loop
   ;and the current segment bar is greater than the current time
   ;in the index register X we have our number of segments
   bcs printSegments_Print
-  ;here it was negative we have to increase the segments so we multiply by two
-  clc ;clear the carry flag for rol so we can multily by two rol
+  ;here it was negative we have to increase the segments so we add one segment more
+  clc ;clear the carry flag for rol so we can add 
   lda currentSegmentBarSizeLow
-  rol
+  adc segmentBarSizeLow 
   sta currentSegmentBarSizeLow
+  ;we do not clear the carry so we can add a carry from Low to High
   lda currentSegmentBarSizeHigh
-  ;here we add the carry form the low bytes
-  rol  
+  adc segmentBarSizeHigh
   sta currentSegmentBarSizeHigh
   ;now we try again to find out if we have our correct segmente
   jmp printSegments_Loop
