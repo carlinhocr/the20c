@@ -209,6 +209,9 @@ divisorBarSegment=                $0257
 printableNumberOfBars=            $0258
 levelsToIncreaseWater=            $0259
 timerOn=                          $025a
+maximumWaterLevel=                $025b
+simulationSegments=               $025c
+flashlightSegments=               $025d
 
 barMaximumTimerLow=               $0260
 barMaximumTimerHigh=              $0261
@@ -695,6 +698,11 @@ loadConstants:
   sta fearLevel
   lda #$0
   sta waterLevel
+  lda #$8
+  sta maximumWaterLevel
+  sta simulationSegments
+  lda #$4
+  sta flashlightSegments
   lda #$0 ;flashlight off
   ;lda #$1 ; you cannot turn on the flashlight
   sta flashlightOff ;flashlight off  
@@ -2223,6 +2231,9 @@ initializeWaterLevel:
   rts  
 
 increaseWaterLevel:
+  lda waterLevel
+  cmp maximumWaterLevel
+  beq increaseWaterLevelEnd
   inc waterLevel
   lda waterLevel
   clc 
@@ -2236,6 +2247,7 @@ increaseWaterLevel:
   lda #$1
   sta timerOn
   ;jsr increaseWaterLevelSensor
+increaseWaterLevelEnd:  
   rts
 
 ;END--------------------------------------------------------------------------------
@@ -3873,45 +3885,6 @@ multiplyTwoNumbers8bitnumbers_no_add:
   dex 
   bne multiplyTwoNumbers8bitnumbers_loop
   rts
-; .zero
-; result_lo   .byte $00
-; result_hi   .byte $00
-; multiplicand .byte $00
-; multiplier  .byte $00
-
-;     .text
-; multiply:
-;     LDA #$00
-;     STA result_lo
-;     STA result_hi       ; Clear the 16-bit result (result_hi:result_lo)
-;     LDX #$08            ; Loop counter (8 bits to process)
-
-; mul_loop:
-;     LSR multiplier      ; Shift the multiplier right, putting LSB into Carry
-;     BCC skip_add        ; If Carry is clear (bit was 0), skip addition
-    
-;     ; Add multiplicand to the high/low result pair
-;     CLC                 ; Clear carry for addition
-;     LDA result_lo
-;     ADC multiplicand
-;     STA result_lo
-;     LDA result_hi
-;     ADC #$00            ; Add any carry from the low byte addition
-;     STA result_hi
-
-; skip_add:
-;     ; Shift the multiplicand left (effectively multiplying it by 2 for the next iteration)
-;     ASL multiplicand    ; Shift low byte left
-;     ROL #$00            ; Rotate a zero-page address (example placeholder, replace with ROL of a second byte if multiplicand were 16-bit)
-    
-;     ; The above line ASL multiplicand assumes a single-byte multiplicand.
-;     ; For a more standard implementation where the multiplicand can grow to 16 bits during the process:
-;     ; We would use a 16-bit multiplicand (e.g., in ZP addresses $00 and $01) and ROL the high byte:
-;     ; ASL $00 ; ROL $01
-    
-;     DEX                 ; Decrement loop counter
-;     BNE mul_loop        ; Repeat until all 8 bits are processed
-;     RTS                 ; Return from subroutine
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;----------------------------------UTILITY------------------------------------------
@@ -4184,6 +4157,17 @@ setBarSegmentSizeLoop_End:
   rts
 
 printSegments:
+  ;check for maximum size fo segments
+  sec 
+  lda currentTimeBarLow
+  sbc barMaximumTimerLow
+  lda currentTimeBarHigh
+  sbc barMaximumTimerHigh
+  ;if there is no carry then result is negative
+  ;we are past simulation time
+  ;we should print only the maximum bar size and no more
+  bcc printSegments_BarsMaximum
+  ;if not lets calculate the bars
   lda segmentBarSizeHigh
   sta currentSegmentBarSizeHigh
   lda segmentBarSizeLow
@@ -4215,6 +4199,8 @@ printSegments_Loop
   sta currentSegmentBarSizeHigh
   ;now we try again to find out if we have our correct segmente
   jmp printSegments_Loop
+printSegments_BarsMaximum:
+  lda barSegmentNumbers
 printSegments_Print:
   txa
   sta currentNumberOfBars
@@ -4244,7 +4230,7 @@ printSegments_End:
   rts  
 
 setSimulationTimerBars:
-  lda #$8
+  lda simulationSegments
   sta barSegmentNumbers
   lda maxSimulationTimeLowByte
   sta barMaximumTimerLow
@@ -4255,7 +4241,7 @@ setSimulationTimerBars:
   rts
 
 printSimulationTimerBars:
-  lda #$8
+  lda simulationSegments
   sta barSegmentNumbers
   lda simulationTimePassedLowDigits
   sta currentTimeBarLow
@@ -4265,7 +4251,7 @@ printSimulationTimerBars:
   rts
 
 setFlashlightTimerBars:
-  lda #$4
+  lda flashlightSegments
   sta barSegmentNumbers
   lda maxFlashlightTimeLowByte
   sta barMaximumTimerLow
@@ -4275,7 +4261,7 @@ setFlashlightTimerBars:
   rts
 
 printFlashlightTimerBars:
-  lda #$4
+  lda flashlightSegments
   sta barSegmentNumbers
   lda flashlightSecondsUsedLowByte
   sta currentTimeBarLow
