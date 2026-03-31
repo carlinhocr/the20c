@@ -4148,10 +4148,10 @@ setBarSegmentSizeLoop_End:
 printSegments:
   ;check for maximum size fo segments
   sec 
-  lda currentTimeBarLow
-  sbc barMaximumTimerLow
-  lda currentTimeBarHigh
-  sbc barMaximumTimerHigh
+  lda barMaximumTimerLow
+  sbc currentTimeBarLow
+  lda barMaximumTimerHigh
+  sbc currentTimeBarHigh
   ;if there is no carry then result is negative
   ;we are past simulation time
   ;we should print only the maximum bar size and no more
@@ -4173,10 +4173,10 @@ printSegments_Loop
   ;we do not care about the resulting number only about the carry
   ;to find who is less
   sec 
-  lda currentTimeBarLow
-  sbc currentSegmentBarSizeLow
-  lda currentTimeBarHigh
-  sbc currentSegmentBarSizeHigh
+  lda currentSegmentBarSizeLow
+  sbc currentTimeBarLow
+  lda currentSegmentBarSizeHigh
+  sbc currentTimeBarHigh
   ;if there is a carry the result was positive
   ;and the current segment bar is greater than the current time
   ;in the index register X we have our number of segments
@@ -4192,6 +4192,7 @@ printSegments_Loop
   sta currentSegmentBarSizeHigh
   ;now we try again to find out if we have our correct segmente
   jmp printSegments_Loop
+
 printSegments_Print:
   txa
   sta currentNumberOfBars
