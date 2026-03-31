@@ -4148,15 +4148,15 @@ setBarSegmentSizeLoop_End:
 
 printSegments:
   ;check for maximum size fo segments
-;   sec 
-;   lda currentTimeBarLow
-;   sbc barMaximumTimerLow
-;   lda currentTimeBarHigh
-;   sbc barMaximumTimerHigh
-;   ;if there is no carry then result is negative
-;   ;we are past simulation time
-;   ;we should print only the maximum bar size and no more
-;   bcc printSegments_BarsMaximum
+  sec 
+  lda currentTimeBarLow
+  sbc barMaximumTimerLow
+  lda currentTimeBarHigh
+  sbc barMaximumTimerHigh
+  ;if there is no carry then result is negative
+  ;we are past simulation time
+  ;we should print only the maximum bar size and no more
+  bcc printSegments_BarsMaximum
   ;if not lets calculate the bars
   lda segmentBarSizeHigh
   sta currentSegmentBarSizeHigh
@@ -4189,8 +4189,8 @@ printSegments_Loop
   sta currentSegmentBarSizeHigh
   ;now we try again to find out if we have our correct segmente
   jmp printSegments_Loop
-; printSegments_BarsMaximum:
-;   lda barSegmentNumbers
+printSegments_BarsMaximum:
+  ldx barSegmentNumbers
 printSegments_Print:
   txa
   sta currentNumberOfBars
