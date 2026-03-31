@@ -508,12 +508,20 @@ checkSimulationTimeisUp_WaterLevel:
   jsr printSimulationTimerBars
   sec 
   lda currentNumberOfBars
+  clc 
+  adc #$30
+  jsr send_rs232_char  
+  lda currentNumberOfBars
   sbc waterLevel
   sta levelsToIncreaseWater
   bcc checkSimulationTimeisUp_End
   beq checkSimulationTimeisUp_End
   ;here increase the water level
-  ldx levelsToIncreaseWater
+  lda levelsToIncreaseWater
+  clc 
+  adc #$30
+  jsr send_rs232_char
+  lda levelsToIncreaseWater
 checkSimulationTimeisUp_IncWaterLevel:  
   beq checkSimulationTimeisUp_End
   ;here we increase the water level
@@ -2020,27 +2028,6 @@ heartbeatOffSensor:
   lda #%01000000 ;bit 0 on 0 turn off heartrate
   sta heartRateSensor
   jsr heartbeatSet
-  rts
-
-
-simulationTimeWaterLevelCheck:
-  lda waterLevel
-  beq simulationTimeWaterLevelCheck_End  
-  jsr setSimulationTimerBars
-  jsr printSimulationTimerBars
-  sec
-  lda currentNumberOfBars
-  sbc waterLevel
-  sta additionalWaterLevel
-  beq simulationTimeWaterLevelCheck_End
-  bcc simulationTimeWaterLevelCheck_End
-simulationTimeWaterLevelCheck_addLevels: 
-  ldx additionalWaterLevel
-  jsr increaseWaterLevel
-  dex
-  cpx #$0
-  bne simulationTimeWaterLevelCheck_addLevels
-simulationTimeWaterLevelCheck_End:
   rts
 
 
