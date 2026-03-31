@@ -207,6 +207,8 @@ endScreenByEnemy=                 $0255
 endScreenByActionFailed=          $0256
 divisorBarSegment=                $0257
 printableNumberOfBars=            $0258
+levelsToIncreaseWater=            $0259
+
 
 barMaximumTimerLow=               $0260
 barMaximumTimerHigh=              $0261
@@ -353,7 +355,7 @@ mainProgram:
   jsr select_screen
   jsr draw_current_screen_table
 mainProgramLoop:
-  jsr simulationTimeWaterLevelCheck
+  ;jsr simulationTimeWaterLevelCheck
   jsr printFlashlightStatus
   jsr action_selector
   jsr sensor_selector  
@@ -476,6 +478,8 @@ checkEnemyAppeared_caught:
 
 checkSimulationTimeisUp:
   ;substract current simulationTimePassed from maxSimulationTime
+  lda waterLevel
+  beq checkSimulationTimeisUp_End
   sec
   lda maxSimulationTimeLowByte
   sbc simulationTimePassedLowDigits
@@ -484,7 +488,7 @@ checkSimulationTimeisUp:
   sbc simulationTimePassedHighDigits
   sta timeRemainingHighByte
   ;if there is a carry the result was positive
-  bcs checkSimulationTimeisUp_End
+  bcs checkSimulationTimeisUp_WaterLevel
   ;here there is a carry clear so the result is negative and time is up
   lda endScreenSimulationTimeisUp ;endScreens1s1 id
   sta screenCurrentID
@@ -495,10 +499,30 @@ checkSimulationTimeisUp:
   lda #$1
   sta simulationTimeExpired
   sta endByTimeUp
-checkSimulationTimeisUp_End:  
+checkSimulationTimeisUp_WaterLevel:  
   jsr setSimulationTimerBars
   jsr printSimulationTimerBars
+  sec 
+  lda currentNumberOfBars
+  sbc waterLevel
+  sta levelsToIncreaseWater
+  bcc checkSimulationTimeisUp_End
+  beq checkSimulationTimeisUp_End
+  ;here increase the water level
+  ldx levelsToIncreaseWater
+checkSimulationTimeisUp_IncWaterLevel:  
+  beq checkSimulationTimeisUp_End
+  ;here we increase the water level
+  txa
+  pha
+  jsr increaseWaterLevel
+  pla
+  tax
+  inx
+  jmp checkSimulationTimeisUp_IncWaterLevel
+checkSimulationTimeisUp_End:  
   jsr bin_2_ascii_simulationTime
+  jsr bin_2_ascii_waterLevel
   rts
 
 checkEndScreen:
