@@ -1651,10 +1651,16 @@ actionFailedProbCalculation_HeartRate:
   adc actionFailedWaterFlashLightHeartRate
   sta actionFailedWaterFlashLightHeartRate
   bcs actionFailedProbCalculation_MaximumLevel
+  beq actionFailedProbCalculation_one
   jmp actionFailedMultiply
+actionFailedProbCalculation_one:
+  lda #$1
+  sta actionFailedWaterFlashLightHeartRate
+  jmp actionFailedMultiply  
 actionFailedProbCalculation_MaximumLevel:
   lda #255
   sta actionFailedWaterFlashLightHeartRate
+  jmp actionFailedMultiply
 actionFailedMultiply:
   ;multiply the action probability of failling
   ;against the WaterLevel, FlashlightOff and Heartrate Cumullative failing
