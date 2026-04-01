@@ -925,7 +925,7 @@ screen_8_name:
   .ascii "e"
 
 screen_8_action1:
-  .byte 255  ; none
+  .byte 12  ; S02P01-CONTINUAR
 
 screen_8_action2:
   .byte 255  ; none
