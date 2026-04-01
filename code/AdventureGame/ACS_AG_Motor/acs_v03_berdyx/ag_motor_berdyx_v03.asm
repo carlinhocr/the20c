@@ -699,7 +699,7 @@ loadConstants:
   lda #$0
   sta moveNextScreen
   ;add it to the SCREEN FILE to choose in the dashboard in which screen to start
-  lda #$3; start with screen id 3 the start screen
+  lda #$0; start with screen id 0 the start screen
   sta screenCurrentID  
   lda #$ff
   sta userOptionSelection  
@@ -1393,8 +1393,28 @@ processAction:
   beq end_processAction
   ;jsr action_multiple_calculate
   jsr printLettersAction
-  jsr print_current_action_name
+  ;jsr print_current_action_name
+  jsr print_current_action_alias
 end_processAction:  
+  rts  
+
+print_current_action_alias
+  lda actionCurrentID
+  asl ;multiply by two 
+  tax
+  lda actions_index,x
+  sta pivotZpLow
+  inx
+  lda actions_index,x
+  sta pivotZpHigh
+  lda action_alias_offset
+  tay
+  lda (pivotZpLow),Y
+  sta serialDataVectorLow  
+  iny 
+  lda (pivotZpLow),Y
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
   rts  
 
 print_current_action_name:
