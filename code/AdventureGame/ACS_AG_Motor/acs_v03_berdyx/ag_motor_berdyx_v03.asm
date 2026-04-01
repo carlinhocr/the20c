@@ -1681,6 +1681,7 @@ actionFailedProbCalculation_less256:
   sta actionFailedProbabilityTotal
 actionFailedProbCalculation_End:
   jsr bin_2_ascii_random
+  jsr bin_2_ascii_actionFailedProbHeartRate
   jsr bin_2_ascii_actionFailedWaterFlashLightHeartRate
   jsr bin_2_ascii_actionFailedProb
   jsr bin_2_ascii_actionFailedProbabilityTotal
