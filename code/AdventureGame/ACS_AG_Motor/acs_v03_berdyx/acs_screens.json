@@ -479,8 +479,8 @@
         "IsSecretScreen": 0,
         "IsEndScreen": 1
     },
-    "55": {
-        "ID": "55",
+    "32": {
+        "ID": "32",
         "Name": "endScreenByActionFailed",
         "Action1": "TERMINAR EL JUEGO",
         "Action2": "",

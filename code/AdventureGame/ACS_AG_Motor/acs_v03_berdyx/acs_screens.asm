@@ -35,7 +35,7 @@ screens_index:
   .word screen_pointers_29  ; FINAL
   .word screen_pointers_30  ; EndScreenSimulationTimeisUp
   .word screen_pointers_31  ; endScreenByEnemy
-  .word screen_pointers_55  ; endScreenByActionFailed
+  .word screen_pointers_32  ; endScreenByActionFailed
 screens_index_record_length:
   .byte 2  ; each screens_index entry is 1 .word (2 bytes)
 
@@ -488,20 +488,20 @@ screen_pointers_31:
   .word screen_31_enemy_probability ; endScreenByEnemy enemy_probability [826,827]
   .word screen_31_is_secret_screen  ; endScreenByEnemy is_secret_screen  [828,829]
   .word screen_31_is_end_screen     ; endScreenByEnemy is_end_screen     [830,831]
-screen_pointers_55:
-  .word screen_55_id                ; endScreenByActionFailed id                [832,833]
-  .word screen_55_name              ; endScreenByActionFailed name              [834,835]
-  .word screen_55_action1           ; endScreenByActionFailed action1           [836,837]
-  .word screen_55_action2           ; endScreenByActionFailed action2           [838,839]
-  .word screen_55_action3           ; endScreenByActionFailed action3           [840,841]
-  .word screen_55_action4           ; endScreenByActionFailed action4           [842,843]
-  .word screen_55_description       ; endScreenByActionFailed description       [844,845]
-  .word screen_55_ascii             ; endScreenByActionFailed ascii             [846,847]
-  .word screen_55_flashlight_on     ; endScreenByActionFailed flashlight_on     [848,849]
-  .word screen_55_flashlight_off    ; endScreenByActionFailed flashlight_off    [850,851]
-  .word screen_55_enemy_probability ; endScreenByActionFailed enemy_probability [852,853]
-  .word screen_55_is_secret_screen  ; endScreenByActionFailed is_secret_screen  [854,855]
-  .word screen_55_is_end_screen     ; endScreenByActionFailed is_end_screen     [856,857]
+screen_pointers_32:
+  .word screen_32_id                ; endScreenByActionFailed id                [832,833]
+  .word screen_32_name              ; endScreenByActionFailed name              [834,835]
+  .word screen_32_action1           ; endScreenByActionFailed action1           [836,837]
+  .word screen_32_action2           ; endScreenByActionFailed action2           [838,839]
+  .word screen_32_action3           ; endScreenByActionFailed action3           [840,841]
+  .word screen_32_action4           ; endScreenByActionFailed action4           [842,843]
+  .word screen_32_description       ; endScreenByActionFailed description       [844,845]
+  .word screen_32_ascii             ; endScreenByActionFailed ascii             [846,847]
+  .word screen_32_flashlight_on     ; endScreenByActionFailed flashlight_on     [848,849]
+  .word screen_32_flashlight_off    ; endScreenByActionFailed flashlight_off    [850,851]
+  .word screen_32_enemy_probability ; endScreenByActionFailed enemy_probability [852,853]
+  .word screen_32_is_secret_screen  ; endScreenByActionFailed is_secret_screen  [854,855]
+  .word screen_32_is_end_screen     ; endScreenByActionFailed is_end_screen     [856,857]
 screen_action_offset:
   .byte 4  ; (byte of screen_0_action1 in screens_pointers)
 screen_description_offset:
@@ -2045,49 +2045,49 @@ screen_31_is_secret_screen:
 screen_31_is_end_screen:
   .byte 1  ; yes
 
-; ── Screen 55: endScreenByActionFailed ──────────────────────────
-screen_55_id:
-  .byte 55
+; ── Screen 32: endScreenByActionFailed ──────────────────────────
+screen_32_id:
+  .byte 32
 
-screen_55_name:
+screen_32_name:
   .ascii "endScreenByActionFailed"
   .ascii "e"
 
-screen_55_action1:
+screen_32_action1:
   .byte 52  ; TERMINAR EL JUEGO
 
-screen_55_action2:
+screen_32_action2:
   .byte 255  ; none
 
-screen_55_action3:
+screen_32_action3:
   .byte 255  ; none
 
-screen_55_action4:
+screen_32_action4:
   .byte 255  ; none
 
-screen_55_description:
+screen_32_description:
   .ascii "Tu acción tenía una gran chance de fallar y falló. Este es tu fin"
   .ascii "e"
 
-screen_55_ascii:
+screen_32_ascii:
   .ascii ""
   .ascii "e"
 
-screen_55_flashlight_on:
+screen_32_flashlight_on:
   .ascii ""
   .ascii "e"
 
-screen_55_flashlight_off:
+screen_32_flashlight_off:
   .ascii ""
   .ascii "e"
 
-screen_55_enemy_probability:
+screen_32_enemy_probability:
   .byte 0
 
-screen_55_is_secret_screen:
+screen_32_is_secret_screen:
   .byte 0  ; no
 
-screen_55_is_end_screen:
+screen_32_is_end_screen:
   .byte 1  ; yes
 
 ; ── Total screen count ──────────────────────────────────────
