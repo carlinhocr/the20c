@@ -2260,6 +2260,8 @@ turnOnHearRate:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   jsr heartbeatOnSensor
+  lda #$1
+  sta heartRateLevel
   ;add jump to a routine to show hate rate on the sensor
   rts   
 
@@ -2270,6 +2272,8 @@ turnOffHearRate:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   jsr heartbeatOffSensor
+  lda #$0
+  sta heartRateLevel  
   rts     
 
 ;END--------------------------------------------------------------------------------
