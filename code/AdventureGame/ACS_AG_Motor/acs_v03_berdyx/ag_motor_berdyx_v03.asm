@@ -1674,6 +1674,10 @@ actionFailedProbCalculation_less256:
   lda multiResultLow
   sta actionFailedProbabilityTotal
 actionFailedProbCalculation_End:
+  jsr bin_2_ascii_random
+  jsr bin_2_ascii_actionFailedWaterFlashLightHeartRate
+  jsr bin_2_ascii_actionFailedProb
+  jsr bin_2_ascii_actionFailedProbabilityTotal
   rts
 
 ;END--------------------------------------------------------------------------------
@@ -1700,17 +1704,22 @@ sensor_selector:
   beq sensor_selector_end
   cmp #$0
   beq sensor_selector_0
-;   cmp #$1
-;   beq sensor_selector_1
+  cmp #$1
+  beq sensor_selector_1
   cmp #$2
   beq sensor_selector_2
   cmp #$3
   beq sensor_selector_3
   cmp #$6
   beq sensor_selector_6  
+  ;if we run out of sensors lets end
+  jmp sensor_selector_end
 sensor_selector_0:
   jsr sensor_0_run
   rts  
+sensor_selector_1:
+  jsr sensor_1_run
+  rts    
 sensor_selector_2:
   ;flashlightSensor
   jsr sensor_2_run
@@ -1749,6 +1758,40 @@ sensor_0_run:
   rts
 sensor_0_run_off:  
   rts
+
+sensor_1_run:
+  ;water sensor
+  lda sensorCurrentID
+  asl
+  tax
+  lda sensors_index,X
+  sta pivotZpLow
+  inx
+  lda sensors_index,X
+  sta pivotZpHigh
+  lda sensorCurrentStatus
+  beq sensor_1_run_off
+  lda sensor_dialog_on_offset
+  tay
+  lda (pivotZpLow),Y
+  sta serialDataVectorLow  
+  iny 
+  lda (pivotZpLow),Y
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  jsr turnOnHearRate
+  rts
+sensor_1_run_off:  
+  lda sensor_dialog_off_offset
+  tay
+  lda (pivotZpLow),Y
+  sta serialDataVectorLow  
+  iny 
+  lda (pivotZpLow),Y
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  jsr turnOffHearRate
+  rts  
 
 sensor_2_run:
   lda flashlightOff
@@ -4358,13 +4401,13 @@ initialScreen:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
   
-  .org $9f00
+  .org $a000
   .include "acs_screens.asm"  
-  .org $c500  
+  .org $c600  
   .include "acs_actions.asm"
-  .org $e900
+  .org $ea00
   .include "acs_sensors.asm"
-  .org $ec00
+  .org $ed00
   .include "acs_dashboard.asm"
 
 
