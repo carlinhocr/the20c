@@ -364,8 +364,8 @@ mainProgramLoop:
   jsr sensor_selector  
   lda gameEnded
   bne mainProgram
-  ;jsr checkActionFailed
-  ;jsr checkEnemyAppeared
+  jsr checkActionFailed
+  jsr checkEnemyAppeared
   jsr checkSimulationTimeisUp
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
@@ -480,6 +480,7 @@ checkEnemyAppeared_caught:
   rts
 
 checkSimulationTimeisUp:
+  jsr bin_2_ascii_simulationTime
   ;substract current simulationTimePassed from maxSimulationTime
   lda timerOn
   beq checkSimulationTimeisUp_End
