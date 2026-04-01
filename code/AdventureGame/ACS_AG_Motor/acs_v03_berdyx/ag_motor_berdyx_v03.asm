@@ -392,14 +392,14 @@ mainProgramLoop:
 ;-----------------------------------------------------------------------------------
 
 checkActionFailed:
-  jsr bin_2_ascii_random
-  jsr bin_2_ascii_waterLevel
-  jsr bin_2_ascii_actionFailedProbWaterPerLevel
-  jsr bin_2_ascii_actionFailedProbFlashlight
-  jsr bin_2_ascii_actionFailedProbHeartRate
-  jsr bin_2_ascii_actionFailedWaterFlashLightHeartRate
-  jsr bin_2_ascii_actionFailedProb
-  jsr bin_2_ascii_actionFailedProbabilityTotal 
+  ; jsr bin_2_ascii_random
+  ; jsr bin_2_ascii_waterLevel
+  ; jsr bin_2_ascii_actionFailedProbWaterPerLevel
+  ; jsr bin_2_ascii_actionFailedProbFlashlight
+  ; jsr bin_2_ascii_actionFailedProbHeartRate
+  ; jsr bin_2_ascii_actionFailedWaterFlashLightHeartRate
+  ; jsr bin_2_ascii_actionFailedProb
+  ; jsr bin_2_ascii_actionFailedProbabilityTotal 
   sec
   lda randomNumber
   sbc actionFailedProbabilityTotal
@@ -441,13 +441,13 @@ checkActionFailed_failed:
 
 
 checkEnemyAppeared:
-  jsr bin_2_ascii_random
-  jsr bin_2_ascii_enemyActionProb
-  jsr bin_2_ascii_enemyProbActionCostCummulative
-  jsr bin_2_ascii_enemyProbFlashlight
-  jsr bin_2_ascii_Action_Plus_Flashlight
-  jsr bin_2_ascii_currentScreen
-  jsr bin_2_ascii_enemy
+  ; jsr bin_2_ascii_random
+  ; jsr bin_2_ascii_enemyActionProb
+  ; jsr bin_2_ascii_enemyProbActionCostCummulative
+  ; jsr bin_2_ascii_enemyProbFlashlight
+  ; jsr bin_2_ascii_Action_Plus_Flashlight
+  ; jsr bin_2_ascii_currentScreen
+  ; jsr bin_2_ascii_enemy
   ;if random is bigger than probability enemy you are ok
   sec
   lda randomNumber
