@@ -22,6 +22,10 @@
         "DeathProbFlashlightOff": 20,
         "EnemyProbFlashlightOn": 51,
         "StartScreenID": 3,
+        "EndScreenDefaultID": 5,
+        "EndScreenEnemyID": 11,
+        "EndScreenTimeUpID": 10,
+        "EndScreenEnemyActionFailedID": 12,
         "HighWaterLevel": 5,
         "HighHeartRateLevel": 1
     }

@@ -1856,8 +1856,10 @@ def open_dashboard_window():
         for evar in enemy_prob_sliders.values():
             evar.set(0)
         dash_combo_vars["StartScreen"].set("")
-        high_water_var.set(5)
-        high_heart_var.set(1)
+        dash_combo_vars["EndScreenDefault"].set("")
+        dash_combo_vars["EndScreenEnemy"].set("")
+        dash_combo_vars["EndScreenTimeUp"].set("")
+        dash_combo_vars["EndScreenEnemyActionFailed"].set("")
         slbl.config(text=f"✔  New dashboard (ID {new_id}) — fill in details and save", fg="#50e878")
 
     tk.Button(form, text="✚  New Dashboard", font=("Courier New", 11, "bold"),
@@ -1897,6 +1899,102 @@ def open_dashboard_window():
         dash_start_id_var.set("?")
 
     dash_combo_vars["StartScreen"].trace_add("write", refresh_start_screen_id)
+
+    # ── End Screen Default ─────────────────────────────────────
+    section_lbl(form, "— End Screen Default —")
+    add_combo(form, "EndScreenDefault", get_screen_names(), dash_combo_vars, dash_combo_widgets)
+    dash_end_default_id_var = tk.StringVar(value="")
+    end_default_id_row = tk.Frame(form, bg="#40318D")
+    end_default_id_row.pack(fill="x", pady=(2, 0))
+    tk.Label(end_default_id_row, text="Screen ID:", **LABEL_STYLE).pack(side="left")
+    tk.Label(end_default_id_row, textvariable=dash_end_default_id_var,
+             bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
+
+    def refresh_end_default_screen_id(*_):
+        name = dash_combo_vars["EndScreenDefault"].get().strip()
+        if not name:
+            dash_end_default_id_var.set("")
+            return
+        scrs = load_json(JSON_SCREENS_FILE)
+        for rec in scrs.values():
+            if rec.get("Name", "").strip() == name:
+                dash_end_default_id_var.set(rec.get("ID", "?"))
+                return
+        dash_end_default_id_var.set("?")
+
+    dash_combo_vars["EndScreenDefault"].trace_add("write", refresh_end_default_screen_id)
+
+    # ── End Screen Enemy ───────────────────────────────────────
+    section_lbl(form, "— End Screen Enemy —")
+    add_combo(form, "EndScreenEnemy", get_screen_names(), dash_combo_vars, dash_combo_widgets)
+    dash_end_enemy_id_var = tk.StringVar(value="")
+    end_enemy_id_row = tk.Frame(form, bg="#40318D")
+    end_enemy_id_row.pack(fill="x", pady=(2, 0))
+    tk.Label(end_enemy_id_row, text="Screen ID:", **LABEL_STYLE).pack(side="left")
+    tk.Label(end_enemy_id_row, textvariable=dash_end_enemy_id_var,
+             bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
+
+    def refresh_end_enemy_screen_id(*_):
+        name = dash_combo_vars["EndScreenEnemy"].get().strip()
+        if not name:
+            dash_end_enemy_id_var.set("")
+            return
+        scrs = load_json(JSON_SCREENS_FILE)
+        for rec in scrs.values():
+            if rec.get("Name", "").strip() == name:
+                dash_end_enemy_id_var.set(rec.get("ID", "?"))
+                return
+        dash_end_enemy_id_var.set("?")
+
+    dash_combo_vars["EndScreenEnemy"].trace_add("write", refresh_end_enemy_screen_id)
+
+    # ── End Screen Time Up ─────────────────────────────────────
+    section_lbl(form, "— End Screen Time Up —")
+    add_combo(form, "EndScreenTimeUp", get_screen_names(), dash_combo_vars, dash_combo_widgets)
+    dash_end_timeup_id_var = tk.StringVar(value="")
+    end_timeup_id_row = tk.Frame(form, bg="#40318D")
+    end_timeup_id_row.pack(fill="x", pady=(2, 0))
+    tk.Label(end_timeup_id_row, text="Screen ID:", **LABEL_STYLE).pack(side="left")
+    tk.Label(end_timeup_id_row, textvariable=dash_end_timeup_id_var,
+             bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
+
+    def refresh_end_timeup_screen_id(*_):
+        name = dash_combo_vars["EndScreenTimeUp"].get().strip()
+        if not name:
+            dash_end_timeup_id_var.set("")
+            return
+        scrs = load_json(JSON_SCREENS_FILE)
+        for rec in scrs.values():
+            if rec.get("Name", "").strip() == name:
+                dash_end_timeup_id_var.set(rec.get("ID", "?"))
+                return
+        dash_end_timeup_id_var.set("?")
+
+    dash_combo_vars["EndScreenTimeUp"].trace_add("write", refresh_end_timeup_screen_id)
+
+    # ── End Screen Enemy Action Failed ─────────────────────────
+    section_lbl(form, "— End Screen Enemy Action Failed —")
+    add_combo(form, "EndScreenEnemyActionFailed", get_screen_names(), dash_combo_vars, dash_combo_widgets)
+    dash_end_enemy_af_id_var = tk.StringVar(value="")
+    end_enemy_af_id_row = tk.Frame(form, bg="#40318D")
+    end_enemy_af_id_row.pack(fill="x", pady=(2, 0))
+    tk.Label(end_enemy_af_id_row, text="Screen ID:", **LABEL_STYLE).pack(side="left")
+    tk.Label(end_enemy_af_id_row, textvariable=dash_end_enemy_af_id_var,
+             bg="#40318D", fg="#50e878", font=("Courier New", 11)).pack(side="left", padx=(6, 0))
+
+    def refresh_end_enemy_af_screen_id(*_):
+        name = dash_combo_vars["EndScreenEnemyActionFailed"].get().strip()
+        if not name:
+            dash_end_enemy_af_id_var.set("")
+            return
+        scrs = load_json(JSON_SCREENS_FILE)
+        for rec in scrs.values():
+            if rec.get("Name", "").strip() == name:
+                dash_end_enemy_af_id_var.set(rec.get("ID", "?"))
+                return
+        dash_end_enemy_af_id_var.set("?")
+
+    dash_combo_vars["EndScreenEnemyActionFailed"].trace_add("write", refresh_end_enemy_af_screen_id)
 
     # ── Thresholds ────────────────────────────────────────────
     section_lbl(form, "— Thresholds —")
@@ -2139,6 +2237,70 @@ def open_dashboard_window():
                         break
                 except (ValueError, TypeError):
                     pass
+        # End Screen Default
+        dash_combo_vars["EndScreenDefault"].set("")
+        stored_end_default_id = rec.get("EndScreenDefaultID", 255)
+        try:
+            stored_end_default_id = int(stored_end_default_id)
+        except (ValueError, TypeError):
+            stored_end_default_id = 255
+        if stored_end_default_id != 255:
+            scrs = load_json(JSON_SCREENS_FILE)
+            for srec in scrs.values():
+                try:
+                    if int(srec.get("ID", -1)) == stored_end_default_id:
+                        dash_combo_vars["EndScreenDefault"].set(srec.get("Name", ""))
+                        break
+                except (ValueError, TypeError):
+                    pass
+        # End Screen Enemy
+        dash_combo_vars["EndScreenEnemy"].set("")
+        stored_end_enemy_id = rec.get("EndScreenEnemyID", 255)
+        try:
+            stored_end_enemy_id = int(stored_end_enemy_id)
+        except (ValueError, TypeError):
+            stored_end_enemy_id = 255
+        if stored_end_enemy_id != 255:
+            scrs = load_json(JSON_SCREENS_FILE)
+            for srec in scrs.values():
+                try:
+                    if int(srec.get("ID", -1)) == stored_end_enemy_id:
+                        dash_combo_vars["EndScreenEnemy"].set(srec.get("Name", ""))
+                        break
+                except (ValueError, TypeError):
+                    pass
+        # End Screen Time Up
+        dash_combo_vars["EndScreenTimeUp"].set("")
+        stored_end_timeup_id = rec.get("EndScreenTimeUpID", 255)
+        try:
+            stored_end_timeup_id = int(stored_end_timeup_id)
+        except (ValueError, TypeError):
+            stored_end_timeup_id = 255
+        if stored_end_timeup_id != 255:
+            scrs = load_json(JSON_SCREENS_FILE)
+            for srec in scrs.values():
+                try:
+                    if int(srec.get("ID", -1)) == stored_end_timeup_id:
+                        dash_combo_vars["EndScreenTimeUp"].set(srec.get("Name", ""))
+                        break
+                except (ValueError, TypeError):
+                    pass
+        # End Screen Enemy Action Failed
+        dash_combo_vars["EndScreenEnemyActionFailed"].set("")
+        stored_end_enemy_af_id = rec.get("EndScreenEnemyActionFailedID", 255)
+        try:
+            stored_end_enemy_af_id = int(stored_end_enemy_af_id)
+        except (ValueError, TypeError):
+            stored_end_enemy_af_id = 255
+        if stored_end_enemy_af_id != 255:
+            scrs = load_json(JSON_SCREENS_FILE)
+            for srec in scrs.values():
+                try:
+                    if int(srec.get("ID", -1)) == stored_end_enemy_af_id:
+                        dash_combo_vars["EndScreenEnemyActionFailed"].set(srec.get("Name", ""))
+                        break
+                except (ValueError, TypeError):
+                    pass
         # Thresholds
         try:
             high_water_var.set(int(rec.get("HighWaterLevel", 5)))
@@ -2194,12 +2356,52 @@ def open_dashboard_window():
             except (ValueError, TypeError):
                 start_id_num = 255
         data["StartScreenID"] = start_id_num
+        # End Screen Default ID
+        end_default_name = dash_combo_vars["EndScreenDefault"].get().strip()
+        end_default_id_num = 255
+        if end_default_name:
+            try:
+                end_default_id_num = int(dash_end_default_id_var.get())
+            except (ValueError, TypeError):
+                end_default_id_num = 255
+        data["EndScreenDefaultID"] = end_default_id_num
+        # End Screen Enemy ID
+        end_enemy_name = dash_combo_vars["EndScreenEnemy"].get().strip()
+        end_enemy_id_num = 255
+        if end_enemy_name:
+            try:
+                end_enemy_id_num = int(dash_end_enemy_id_var.get())
+            except (ValueError, TypeError):
+                end_enemy_id_num = 255
+        data["EndScreenEnemyID"] = end_enemy_id_num
+        # End Screen Time Up ID
+        end_timeup_name = dash_combo_vars["EndScreenTimeUp"].get().strip()
+        end_timeup_id_num = 255
+        if end_timeup_name:
+            try:
+                end_timeup_id_num = int(dash_end_timeup_id_var.get())
+            except (ValueError, TypeError):
+                end_timeup_id_num = 255
+        data["EndScreenTimeUpID"] = end_timeup_id_num
+        # End Screen Enemy Action Failed ID
+        end_enemy_af_name = dash_combo_vars["EndScreenEnemyActionFailed"].get().strip()
+        end_enemy_af_id_num = 255
+        if end_enemy_af_name:
+            try:
+                end_enemy_af_id_num = int(dash_end_enemy_af_id_var.get())
+            except (ValueError, TypeError):
+                end_enemy_af_id_num = 255
+        data["EndScreenEnemyActionFailedID"] = end_enemy_af_id_num
         # Thresholds
         data["HighWaterLevel"]    = max(0, min(9, high_water_var.get()))
         data["HighHeartRateLevel"] = max(0, min(1, high_heart_var.get()))
         save_to_json(JSON_DASHBOARD_FILE, "ID", data, slbl)
         load_dd["values"] = dashboard_names_by_id()
         dash_combo_widgets["StartScreen"]["values"] = get_screen_names()
+        dash_combo_widgets["EndScreenDefault"]["values"] = get_screen_names()
+        dash_combo_widgets["EndScreenEnemy"]["values"] = get_screen_names()
+        dash_combo_widgets["EndScreenTimeUp"]["values"] = get_screen_names()
+        dash_combo_widgets["EndScreenEnemyActionFailed"]["values"] = get_screen_names()
 
     save_btn(form, "💾  Save Dashboard", on_save)
 
@@ -2244,6 +2446,10 @@ def open_play_window():
     enemy_prob_flash_on = D("EnemyProbFlashlightOn",     10)
     high_water_mark     = D("HighWaterLevel",             5)
     high_heart_mark     = D("HighHeartRateLevel",         1)
+    end_screen_default_id = D("EndScreenDefaultID",       255)
+    end_screen_enemy_id   = D("EndScreenEnemyID",         255)
+    end_screen_timeup_id  = D("EndScreenTimeUpID",        255)
+    end_screen_enemy_af_id = D("EndScreenEnemyActionFailedID", 255)
 
     # ── Game state ────────────────────────────────────────────
     state = {
@@ -2628,10 +2834,15 @@ def open_play_window():
                     write(failed_desc, "warning")
                 # Find action failure death screen
                 fail_end_screen = None
-                for scr_rec in screens.values():
-                    if scr_rec.get("Name", "").strip() == "endScreenDefault":
-                        fail_end_screen = scr_rec
-                        break
+                if end_screen_enemy_af_id != 255:
+                    fail_end_screen = screen_by_id.get(str(end_screen_enemy_af_id))
+                if not fail_end_screen and end_screen_default_id != 255:
+                    fail_end_screen = screen_by_id.get(str(end_screen_default_id))
+                if not fail_end_screen:
+                    for scr_rec in screens.values():
+                        if scr_rec.get("Name", "").strip() == "endScreenDefault":
+                            fail_end_screen = scr_rec
+                            break
                 if fail_end_screen:
                     draw_screen(fail_end_screen)
                     end_game("Muerte por acción fallida", fail_end_screen)
@@ -2669,10 +2880,13 @@ def open_play_window():
                 write("¡Algo se mueve en la oscuridad... El enemigo te encontró!", "enemy")
                 # Find enemy death end screen
                 enemy_end_screen = None
-                for scr_rec in screens.values():
-                    if scr_rec.get("Name", "").strip() == "endScreenDefault":
-                        enemy_end_screen = scr_rec
-                        break
+                if end_screen_enemy_id != 255:
+                    enemy_end_screen = screen_by_id.get(str(end_screen_enemy_id))
+                if not enemy_end_screen:
+                    for scr_rec in screens.values():
+                        if scr_rec.get("Name", "").strip() == "endScreenDefault":
+                            enemy_end_screen = scr_rec
+                            break
                 if enemy_end_screen:
                     draw_screen(enemy_end_screen)
                     end_game("Te atrapó el enemigo", enemy_end_screen)
@@ -2708,10 +2922,13 @@ def open_play_window():
             write("⚠ ¡Se acabó el tiempo!", "warning")
             # Find the EndScreenSimulationTimeisUp screen
             time_up_screen = None
-            for scr_rec in screens.values():
-                if scr_rec.get("Name", "").strip() == "EndScreenSimulationTimeisUp":
-                    time_up_screen = scr_rec
-                    break
+            if end_screen_timeup_id != 255:
+                time_up_screen = screen_by_id.get(str(end_screen_timeup_id))
+            if not time_up_screen:
+                for scr_rec in screens.values():
+                    if scr_rec.get("Name", "").strip() == "EndScreenSimulationTimeisUp":
+                        time_up_screen = scr_rec
+                        break
             if time_up_screen:
                 draw_screen(time_up_screen)
                 end_game("Se terminó el tiempo de simulación", time_up_screen)

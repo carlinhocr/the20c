@@ -33,6 +33,10 @@ dashboard_pointer_0:
   .word dashboard_0_death_heartrate  ; dashBoardTest death_heartrate  [42,43]
   .word dashboard_0_death_flashlight ; dashBoardTest death_flashlight [44,45]
   .word dashboard_0_enemy_flash_on   ; dashBoardTest enemy_flash_on   [46,47]
+  .word dashboard_0_end_screen_default ; dashBoardTest end_screen_default [48,49]
+  .word dashboard_0_end_screen_enemy  ; dashBoardTest end_screen_enemy  [50,51]
+  .word dashboard_0_end_screen_timeup ; dashBoardTest end_screen_timeup [52,53]
+  .word dashboard_0_end_screen_enemy_af ; dashBoardTest end_screen_enemy_af [54,55]
 dashboard_name_offset:
   .byte 2  ; (byte of dashboard_0_name in pointers)
 dashboard_start_screen_offset:
@@ -79,8 +83,16 @@ dashboard_death_flashlight_offset:
   .byte 44  ; (byte of dashboard_0_death_flashlight in pointers)
 dashboard_enemy_flash_on_offset:
   .byte 46  ; (byte of dashboard_0_enemy_flash_on in pointers)
+dashboard_end_screen_default_offset:
+  .byte 48  ; (byte of dashboard_0_end_screen_default in pointers)
+dashboard_end_screen_enemy_offset:
+  .byte 50  ; (byte of dashboard_0_end_screen_enemy in pointers)
+dashboard_end_screen_timeup_offset:
+  .byte 52  ; (byte of dashboard_0_end_screen_timeup in pointers)
+dashboard_end_screen_enemy_af_offset:
+  .byte 54  ; (byte of dashboard_0_end_screen_enemy_af in pointers)
 dashboard_record_length:
-  .byte 48  ; (total .word bytes per record)
+  .byte 56  ; (total .word bytes per record)
 
 ; ── Dashboard 0: dashBoardTest ──────────────────────────
 dashboard_0_id:
@@ -170,6 +182,18 @@ dashboard_0_death_flashlight:
 
 dashboard_0_enemy_flash_on:
   .byte 51
+
+dashboard_0_end_screen_default:
+  .byte 5  ; screen id
+
+dashboard_0_end_screen_enemy:
+  .byte 11  ; screen id
+
+dashboard_0_end_screen_timeup:
+  .byte 10  ; screen id
+
+dashboard_0_end_screen_enemy_af:
+  .byte 12  ; screen id
 
 ; ── Total dashboard count ──────────────────────────────────────
 dashboard_count:

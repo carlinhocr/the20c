@@ -40,6 +40,10 @@ def to_asm(dashboards):
     rec0_death_heart_offset = None
     rec0_death_flash_offset = None
     rec0_enemy_flash_on_offset = None
+    rec0_end_screen_default_offset = None
+    rec0_end_screen_enemy_offset   = None
+    rec0_end_screen_timeup_offset  = None
+    rec0_end_screen_enemy_af_offset = None
     rec0_record_length      = None
 
     for index, (key, rec) in enumerate(dashboards.items()):
@@ -67,6 +71,10 @@ def to_asm(dashboards):
         lines.append(f"  .word {label}_death_heartrate  ; {name} death_heartrate  [{offset},{offset+1}]") ; _dh = offset ; offset += 2
         lines.append(f"  .word {label}_death_flashlight ; {name} death_flashlight [{offset},{offset+1}]") ; _df = offset ; offset += 2
         lines.append(f"  .word {label}_enemy_flash_on   ; {name} enemy_flash_on   [{offset},{offset+1}]") ; _efo = offset ; offset += 2
+        lines.append(f"  .word {label}_end_screen_default ; {name} end_screen_default [{offset},{offset+1}]") ; _esd = offset ; offset += 2
+        lines.append(f"  .word {label}_end_screen_enemy  ; {name} end_screen_enemy  [{offset},{offset+1}]") ; _ese = offset ; offset += 2
+        lines.append(f"  .word {label}_end_screen_timeup ; {name} end_screen_timeup [{offset},{offset+1}]") ; _est = offset ; offset += 2
+        lines.append(f"  .word {label}_end_screen_enemy_af ; {name} end_screen_enemy_af [{offset},{offset+1}]") ; _esaf = offset ; offset += 2
 
         if index == 0:
             rec0_name_offset        = _nam
@@ -83,6 +91,10 @@ def to_asm(dashboards):
             rec0_death_heart_offset = _dh
             rec0_death_flash_offset = _df
             rec0_enemy_flash_on_offset = _efo
+            rec0_end_screen_default_offset = _esd
+            rec0_end_screen_enemy_offset   = _ese
+            rec0_end_screen_timeup_offset  = _est
+            rec0_end_screen_enemy_af_offset = _esaf
             rec0_record_length      = offset - start_offset
 
     # ── Offset labels ─────────────────────────────────────────────────────
@@ -115,6 +127,14 @@ def to_asm(dashboards):
     lines.append(f"  .byte {rec0_death_flash_offset}  ; (byte of dashboard_0_death_flashlight in pointers)")
     lines.append(f"dashboard_enemy_flash_on_offset:")
     lines.append(f"  .byte {rec0_enemy_flash_on_offset}  ; (byte of dashboard_0_enemy_flash_on in pointers)")
+    lines.append(f"dashboard_end_screen_default_offset:")
+    lines.append(f"  .byte {rec0_end_screen_default_offset}  ; (byte of dashboard_0_end_screen_default in pointers)")
+    lines.append(f"dashboard_end_screen_enemy_offset:")
+    lines.append(f"  .byte {rec0_end_screen_enemy_offset}  ; (byte of dashboard_0_end_screen_enemy in pointers)")
+    lines.append(f"dashboard_end_screen_timeup_offset:")
+    lines.append(f"  .byte {rec0_end_screen_timeup_offset}  ; (byte of dashboard_0_end_screen_timeup in pointers)")
+    lines.append(f"dashboard_end_screen_enemy_af_offset:")
+    lines.append(f"  .byte {rec0_end_screen_enemy_af_offset}  ; (byte of dashboard_0_end_screen_enemy_af in pointers)")
     lines.append(f"dashboard_record_length:")
     lines.append(f"  .byte {rec0_record_length}  ; (total .word bytes per record)")
     lines.append("")
@@ -254,6 +274,23 @@ def to_asm(dashboards):
                 ep_val = 0
             lines.append(f"{label}_{asm_label}:")
             lines.append(f"  .byte {ep_val}")
+            lines.append("")
+
+        # End Screen fields (stored as single byte, screen ID 0–254, 255 = none)
+        for field_key, asm_label in [
+            ("EndScreenDefaultID", "end_screen_default"),
+            ("EndScreenEnemyID",   "end_screen_enemy"),
+            ("EndScreenTimeUpID",  "end_screen_timeup"),
+            ("EndScreenEnemyActionFailedID", "end_screen_enemy_af"),
+        ]:
+            try:
+                es_val = int(rec.get(field_key, 255))
+            except (ValueError, TypeError):
+                es_val = 255
+            if es_val < 0 or es_val > 254:
+                es_val = 255
+            lines.append(f"{label}_{asm_label}:")
+            lines.append(f"  .byte {es_val}  ; screen id")
             lines.append("")
 
     # ── Record count constant ─────────────────────────────────────────────
