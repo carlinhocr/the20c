@@ -233,7 +233,8 @@ additionalWaterLevel=             $026f
 dashboardEndScreenEnemy=          $0270
 dashboardEndScreenTimeUp=         $0271
 dashboardEndScreenActionFailed=   $0272
-
+dashboardHighFearLevel=           $0273
+dashboardHighWaterLevel=          $0274
 
 actionIDOptionsRAM=$0440 ;32 bytes but i only use 6
 screenPointersRAM=$0500
@@ -693,9 +694,9 @@ loadConstants:
   ;add it to the SCREEN FILE the max number of actions calculated from the amount of actions in the screen
   lda #$4 
   sta max_actions_per_screen
-  lda #$3 ; user zero to check and hide options
+  lda dashboardHighWaterLevel ; user zero to check and hide options
   sta highWaterLevel
-  lda #$1
+  lda dashboardHighFearLevel
   sta highFearLevel
 ;VARIABLE  
   lda #$0
@@ -1074,7 +1075,26 @@ select_dashboard:
   ldy #$0
   lda (sourceDashboardVectorLow),Y
   sta dashboardEndScreenActionFailed 
-
+  ;load high water level
+  ldx dashboard_high_water_level_offset
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorLow
+  inx
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorHigh
+  ldy #$0
+  lda (sourceDashboardVectorLow),Y
+  sta dashboardHighWaterLevel
+  ;load high fear
+  ldx dashboard_high_heart_level_offset
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorLow
+  inx
+  lda dashboardPointersRAM,x
+  sta sourceDashboardVectorHigh
+  ldy #$0
+  lda (sourceDashboardVectorLow),Y
+  sta dashboardHighFearLevel
   rts
 
 load_dashboard_ram:
