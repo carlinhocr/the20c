@@ -2545,6 +2545,65 @@ def open_play_window():
     action_frame = tk.Frame(win, bg="#1A1452", pady=8)
     action_frame.pack(fill="x")
 
+    # ── Stats window (separate Toplevel) ──────────────────────
+    stats_win = tk.Toplevel()
+    stats_win.title("📈  Action Statistics")
+    stats_win.geometry("520x700")
+    stats_win.configure(bg="#1A1452")
+    stats_win.resizable(True, True)
+
+    # Position stats window next to game window
+    win.update_idletasks()
+    gx = win.winfo_x()
+    gy = win.winfo_y()
+    gw = win.winfo_width()
+    stats_win.geometry(f"520x700+{gx + gw + 10}+{gy}")
+
+    tk.Label(stats_win, text="📈  Action Statistics",
+             font=("Courier New", 14, "bold"),
+             bg="#1A1452", fg="#FFFFFF", pady=8).pack(fill="x")
+    tk.Frame(stats_win, bg="#7869C4", height=2).pack(fill="x")
+
+    stats_text = scrolledtext.ScrolledText(
+        stats_win, bg="#0D0D2B", fg="#FFFFFF",
+        font=("Courier New", 10), wrap="word",
+        state="disabled", relief="flat", bd=0,
+        insertbackground="#FFFFFF",
+    )
+    stats_text.pack(fill="both", expand=True, padx=4, pady=4)
+
+    stats_text.tag_configure("header",   foreground="#FFD700", font=("Courier New", 11, "bold"))
+    stats_text.tag_configure("section",  foreground="#7869C4", font=("Courier New", 10, "bold"))
+    stats_text.tag_configure("label",    foreground="#A09BE0", font=("Courier New", 10))
+    stats_text.tag_configure("value",    foreground="#50e878", font=("Courier New", 10, "bold"))
+    stats_text.tag_configure("roll",     foreground="#FF6060", font=("Courier New", 11, "bold"))
+    stats_text.tag_configure("result_ok",   foreground="#50e878", font=("Courier New", 11, "bold"))
+    stats_text.tag_configure("result_fail", foreground="#FF6060", font=("Courier New", 11, "bold"))
+    stats_text.tag_configure("divider",  foreground="#7869C4", font=("Courier New", 10))
+    stats_text.tag_configure("dimmed",   foreground="#666688", font=("Courier New", 10))
+    stats_text.tag_configure("cost",     foreground="#FFD700", font=("Courier New", 10))
+
+    def stats_write(text, tag="label"):
+        stats_text.configure(state="normal")
+        stats_text.insert("end", text + "\n", tag)
+        stats_text.see("end")
+        stats_text.configure(state="disabled")
+
+    def stats_clear():
+        stats_text.configure(state="normal")
+        stats_text.delete("1.0", "end")
+        stats_text.configure(state="disabled")
+
+    # Close stats window when game window closes
+    def on_game_close():
+        try:
+            stats_win.destroy()
+        except tk.TclError:
+            pass
+        win.destroy()
+
+    win.protocol("WM_DELETE_WINDOW", on_game_close)
+
     # ── Helper functions ──────────────────────────────────────
     def write(text, tag="description"):
         text_area.configure(state="normal")
@@ -2812,6 +2871,20 @@ def open_play_window():
             state["enemy_prob_accum"] = 0
             write("(Probabilidad de enemigo reseteada)", "info")
 
+        # ── Populate stats window ──────────────────────────────
+        stats_clear()
+        stats_write(f"▶  {arec.get('Alias', '').strip() or aname}", "header")
+        stats_write(f"{'═' * 48}", "divider")
+
+        # -- Current game state --
+        stats_write("", "label")
+        stats_write("GAME STATE", "section")
+        stats_write(f"  Water Level:          {state['water_level']}", "label")
+        stats_write(f"  Heart Rate:           {'HIGH (1)' if state['heart_rate'] else 'calm (0)'}", "label")
+        stats_write(f"  Flashlight:           {'ON' if state['flashlight_on'] else 'OFF'}", "label")
+        stats_write(f"  Enemy Prob Accum:     {state['enemy_prob_accum']}  (before this action)", "label")
+        stats_write(f"  God Mode:             {'ON' if god_mode_var.get() else 'OFF'}", "label")
+
         # ── Calculate action failure probability ───────────────
         # Formula: action_DeathProbability * (water_level * DeathProbWaterLevel + DeathProbFlashlightOff + DeathProbHighHeartRate)
         action_death_val = 0
@@ -2823,32 +2896,57 @@ def open_play_window():
         water_modifier = state["water_level"] * death_prob_water
         flash_modifier = death_prob_flash if not state["flashlight_on"] else 0
         heart_modifier = death_prob_heart if state["heart_rate"] else 0
-        fail_prob = action_death_val * (water_modifier + flash_modifier + heart_modifier)
+        modifier_sum = water_modifier + flash_modifier + heart_modifier
+        fail_prob = action_death_val * modifier_sum
 
+        stats_write("", "label")
+        stats_write("ACTION FAILURE PROBABILITY", "section")
+        stats_write(f"  Action DeathProbability:       {action_death_val}", "label")
+        stats_write(f"  ─── Modifiers (from Dashboard) ───", "dimmed")
+        stats_write(f"  Water Level ({state['water_level']}) × DeathProbWater ({death_prob_water}):  {water_modifier}", "label")
+        stats_write(f"  Flashlight {'OFF' if not state['flashlight_on'] else 'ON '} → DeathProbFlash ({death_prob_flash}):      {flash_modifier}", "label")
+        stats_write(f"  HeartRate  {'HIGH' if state['heart_rate'] else 'calm'} → DeathProbHeart ({death_prob_heart}):     {heart_modifier}", "label")
+        stats_write(f"  ─── Calculation ───", "dimmed")
+        stats_write(f"  Modifier Sum:  {water_modifier} + {flash_modifier} + {heart_modifier} = {modifier_sum}", "label")
+        stats_write(f"  Fail Prob:     {action_death_val} × {modifier_sum} = {fail_prob}", "value")
+
+        fail_roll = None
+        fail_triggered = False
         if fail_prob > 0:
-            roll = get_random()
-            write(f"  [Falla: {action_death_val} × (agua:{water_modifier} + linterna:{flash_modifier} + heart:{heart_modifier}) = {fail_prob}, dado={roll}]", "info")
-            if roll < fail_prob:
-                failed_desc = arec.get("DescriptionActionFailed", "").strip()
-                if failed_desc:
-                    write(failed_desc, "warning")
-                # Find action failure death screen
-                fail_end_screen = None
-                if end_screen_enemy_af_id != 255:
-                    fail_end_screen = screen_by_id.get(str(end_screen_enemy_af_id))
-                if not fail_end_screen and end_screen_default_id != 255:
-                    fail_end_screen = screen_by_id.get(str(end_screen_default_id))
-                if not fail_end_screen:
-                    for scr_rec in screens.values():
-                        if scr_rec.get("Name", "").strip() == "endScreenDefault":
-                            fail_end_screen = scr_rec
-                            break
-                if fail_end_screen:
-                    draw_screen(fail_end_screen)
-                    end_game("Muerte por acción fallida", fail_end_screen)
-                else:
-                    end_game("Muerte por acción fallida")
-                return
+            fail_roll = get_random()
+            write(f"  [Falla: {action_death_val} × (agua:{water_modifier} + linterna:{flash_modifier} + heart:{heart_modifier}) = {fail_prob}, dado={fail_roll}]", "info")
+            stats_write(f"  Random Roll:   {fail_roll}  (range 0–255)", "roll")
+            stats_write(f"  Condition:     roll ({fail_roll}) < fail_prob ({fail_prob})?", "label")
+            if fail_roll < fail_prob:
+                fail_triggered = True
+                stats_write(f"  ★ RESULT: ACTION FAILED! ({fail_roll} < {fail_prob})", "result_fail")
+            else:
+                stats_write(f"  ★ RESULT: Action succeeded ({fail_roll} ≥ {fail_prob})", "result_ok")
+        else:
+            stats_write(f"  Fail Prob is 0 → no roll needed", "dimmed")
+            stats_write(f"  ★ RESULT: Action succeeded (no risk)", "result_ok")
+
+        if fail_triggered:
+            failed_desc = arec.get("DescriptionActionFailed", "").strip()
+            if failed_desc:
+                write(failed_desc, "warning")
+            # Find action failure death screen
+            fail_end_screen = None
+            if end_screen_enemy_af_id != 255:
+                fail_end_screen = screen_by_id.get(str(end_screen_enemy_af_id))
+            if not fail_end_screen and end_screen_default_id != 255:
+                fail_end_screen = screen_by_id.get(str(end_screen_default_id))
+            if not fail_end_screen:
+                for scr_rec in screens.values():
+                    if scr_rec.get("Name", "").strip() == "endScreenDefault":
+                        fail_end_screen = scr_rec
+                        break
+            if fail_end_screen:
+                draw_screen(fail_end_screen)
+                end_game("Muerte por acción fallida", fail_end_screen)
+            else:
+                end_game("Muerte por acción fallida")
+            return
 
         # ── Calculate enemy probability ───────────────────────
         # Sum: action prob + accumulated prob + flashlight on prob (dashboard)
@@ -2873,26 +2971,49 @@ def open_play_window():
 
         total_enemy_prob = enemy_sum * screen_enemy_prob
 
+        stats_write("", "label")
+        stats_write("ENEMY APPEARANCE PROBABILITY", "section")
+        stats_write(f"  Action EnemyProbability:       {action_enemy_prob}", "label")
+        stats_write(f"  Accumulated Enemy Prob:        {state['enemy_prob_accum']}  (after adding action)", "label")
+        stats_write(f"  Flashlight {'ON ' if state['flashlight_on'] else 'OFF'} → EnemyProbFlashOn ({enemy_prob_flash_on}):  {flashlight_enemy_bonus}", "label")
+        stats_write(f"  ─── Calculation ───", "dimmed")
+        stats_write(f"  Enemy Sum:     {action_enemy_prob} + {state['enemy_prob_accum']} + {flashlight_enemy_bonus} = {enemy_sum}", "label")
+        stats_write(f"  Screen EnemyProb:  {screen_enemy_prob}  (screen: {cur_screen.get('Name', '?')})", "label")
+        stats_write(f"  Total Enemy Prob:  {enemy_sum} × {screen_enemy_prob} = {total_enemy_prob}", "value")
+
+        enemy_roll = None
+        enemy_triggered = False
         if total_enemy_prob > 0:
-            roll = get_random()
-            write(f"  [Enemigo: suma={enemy_sum} × screen={screen_enemy_prob} = {total_enemy_prob}, dado={roll}]", "info")
-            if total_enemy_prob >= roll:
-                write("¡Algo se mueve en la oscuridad... El enemigo te encontró!", "enemy")
-                # Find enemy death end screen
-                enemy_end_screen = None
-                if end_screen_enemy_id != 255:
-                    enemy_end_screen = screen_by_id.get(str(end_screen_enemy_id))
-                if not enemy_end_screen:
-                    for scr_rec in screens.values():
-                        if scr_rec.get("Name", "").strip() == "endScreenDefault":
-                            enemy_end_screen = scr_rec
-                            break
-                if enemy_end_screen:
-                    draw_screen(enemy_end_screen)
-                    end_game("Te atrapó el enemigo", enemy_end_screen)
-                else:
-                    end_game("Te atrapó el enemigo")
-                return
+            enemy_roll = get_random()
+            write(f"  [Enemigo: suma={enemy_sum} × screen={screen_enemy_prob} = {total_enemy_prob}, dado={enemy_roll}]", "info")
+            stats_write(f"  Random Roll:   {enemy_roll}  (range 0–255)", "roll")
+            stats_write(f"  Condition:     total ({total_enemy_prob}) ≥ roll ({enemy_roll})?", "label")
+            if total_enemy_prob >= enemy_roll:
+                enemy_triggered = True
+                stats_write(f"  ★ RESULT: ENEMY APPEARED! ({total_enemy_prob} ≥ {enemy_roll})", "result_fail")
+            else:
+                stats_write(f"  ★ RESULT: Safe ({total_enemy_prob} < {enemy_roll})", "result_ok")
+        else:
+            stats_write(f"  Total Enemy Prob is 0 → no roll needed", "dimmed")
+            stats_write(f"  ★ RESULT: Safe (no risk)", "result_ok")
+
+        if enemy_triggered:
+            write("¡Algo se mueve en la oscuridad... El enemigo te encontró!", "enemy")
+            # Find enemy death end screen
+            enemy_end_screen = None
+            if end_screen_enemy_id != 255:
+                enemy_end_screen = screen_by_id.get(str(end_screen_enemy_id))
+            if not enemy_end_screen:
+                for scr_rec in screens.values():
+                    if scr_rec.get("Name", "").strip() == "endScreenDefault":
+                        enemy_end_screen = scr_rec
+                        break
+            if enemy_end_screen:
+                draw_screen(enemy_end_screen)
+                end_game("Te atrapó el enemigo", enemy_end_screen)
+            else:
+                end_game("Te atrapó el enemigo")
+            return
 
         # ── Calculate time cost ───────────────────────────────
         base_cost = 0
@@ -2904,12 +3025,24 @@ def open_play_window():
         time_cost = base_cost
         # Water level extra cost: level 0 = no extra, level N = N * extra_sec_water
         wl = state["water_level"]
+        water_time_extra = wl * extra_sec_water if wl > 0 else 0
+        heart_time_extra = extra_sec_heart if state["heart_rate"] else 0
+        flash_time_extra = extra_sec_flash_off if not state["flashlight_on"] else 0
         if wl > 0:
             time_cost += wl * extra_sec_water
         if state["heart_rate"]:
             time_cost += extra_sec_heart
         if not state["flashlight_on"]:
             time_cost += extra_sec_flash_off
+
+        stats_write("", "label")
+        stats_write("TIME COST", "section")
+        stats_write(f"  Base Cost (action):            {base_cost}s", "label")
+        stats_write(f"  Water ({wl}) × ExtraWater ({extra_sec_water}):     +{water_time_extra}s", "label")
+        stats_write(f"  HeartRate {'HIGH' if state['heart_rate'] else 'calm'} → ExtraHeart ({extra_sec_heart}):    +{heart_time_extra}s", "label")
+        stats_write(f"  Flashlight {'OFF' if not state['flashlight_on'] else 'ON '} → ExtraFlash ({extra_sec_flash_off}):   +{flash_time_extra}s", "label")
+        stats_write(f"  Total Time Cost:  {base_cost} + {water_time_extra} + {heart_time_extra} + {flash_time_extra} = {time_cost}s", "cost")
+        stats_write(f"  Time After Action: {state['time_elapsed']} + {time_cost} = {state['time_elapsed'] + time_cost}/{total_sim_time}s", "cost")
 
         state["time_elapsed"] += time_cost
 
