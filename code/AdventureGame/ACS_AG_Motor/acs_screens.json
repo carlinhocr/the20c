@@ -44,7 +44,7 @@
     "3": {
         "ID": "3",
         "Name": "startScreen",
-        "Action1": "COMENZAR EL JUEGO",
+        "Action1": "MIRAR ALREDEDOR",
         "Action2": "TIRAR AGUAR, EMPEZAR TIME",
         "Action3": "LINTERNA",
         "Action4": "GRITAR",

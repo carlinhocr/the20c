@@ -327,7 +327,8 @@ action_0_death_probability:
   .byte 0
 
 action_0_description:
-  .ascii "Con esfuerzo, te incorporas sin saber como. Semejante derrumbe deberia haber sido mortal. El frio no duele, todavia."
+  .ascii "Con esfuerzo, te incorporas sin saber como. Semejante derrumbe deberia haber sid"
+  .ascii "o mortal. El frio no duele, todavia."
   .ascii "e"
 
 action_0_desc_action_failed:
@@ -391,7 +392,7 @@ action_1_hide_fear:
   .byte 0  ; off
 
 action_1_hide_flashlight:
-  .byte 0  ; off
+  .byte 1  ; on
 
 ; ── Action 2: GRITAR POR AYUDA ──────────────────────────
 action_2_id:
@@ -527,7 +528,8 @@ action_4_death_probability:
   .byte 1
 
 action_4_description:
-  .ascii "El eco tarda demasiado en volver. Sientes que algo se mueve encima de ti. Debe ser tu imaginacion, te repites."
+  .ascii "El eco tarda demasiado en volver. Sientes que algo se mueve encima de ti. Debe s"
+  .ascii "er tu imaginacion, te repites."
   .ascii "e"
 
 action_4_desc_action_failed:
@@ -927,7 +929,9 @@ action_12_death_probability:
   .byte 0
 
 action_12_description:
-  .ascii "Por un momento consideras que mover toneladas de rocas sin equipamiento indicado tal vez sea inutil. Explorar la caverna, aun sin conocerla, puede tener mejores resultados."
+  .ascii "Por un momento consideras que mover toneladas de rocas sin equipamiento indicado"
+  .ascii " tal vez sea inutil. Explorar la caverna, aun sin conocerla, puede tener mejores"
+  .ascii " resultados."
   .ascii "e"
 
 action_12_desc_action_failed:

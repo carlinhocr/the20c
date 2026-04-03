@@ -406,7 +406,7 @@ screen_3_name:
   .ascii "e"
 
 screen_3_action1:
-  .byte 8  ; COMENZAR EL JUEGO
+  .byte 1  ; MIRAR ALREDEDOR
 
 screen_3_action2:
   .byte 14  ; TIRAR AGUAR, EMPEZAR TIME

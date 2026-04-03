@@ -19,10 +19,19 @@
     "1": {
         "ID": "1",
         "Name": "MIRAR ALREDEDOR",
+        "Alias": "",
         "SensorID": 255,
         "SensorActive": false,
+        "ScreenID": 255,
         "Cost": 15,
-        "Description": "Desde el suelo solo se ve oscuridad"
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 0,
+        "Description": "Desde el suelo solo se ve oscuridad",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 1
     },
     "2": {
         "ID": "2",

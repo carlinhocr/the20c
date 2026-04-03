@@ -5,6 +5,22 @@ JSON_FILE = "acs_actions.json"
 ASM_FILE  = "acs_actions.asm"
 
 
+def ascii_lines(text):
+    """
+    Split text on real newline characters and return a list of .ascii directive strings.
+    Each segment becomes its own .ascii line; a .ascii "\\n" line is inserted between
+    segments so the newline character is preserved in the assembled output.
+    """
+    segments = text.split("\n")
+    out = []
+    for seg in segments:
+        while len(seg) > 80:
+            out.append(f'  .ascii "{seg[:80]}"')
+            seg = seg[80:]
+        out.append(f'  .ascii "{seg}"')
+    return out
+
+
 def sanitize_id(name):
     """Turn an action name into a safe ASM label prefix (lowercase, spaces→_)."""
     return name.strip().lower().replace(" ", "_").replace("-", "_")
@@ -156,14 +172,14 @@ def to_asm(actions):
 
         # Name
         lines.append(f"{label}_name:")
-        lines.append(f'  .ascii "{name_str}"')
+        lines.extend(ascii_lines(name_str))
         lines.append('  .ascii "e"')
         lines.append("")
 
         # Alias
         alias_str = act.get("Alias", "").replace('"', '\\"')
         lines.append(f"{label}_alias:")
-        lines.append(f'  .ascii "{alias_str}"')
+        lines.extend(ascii_lines(alias_str))
         lines.append('  .ascii "e"')
         lines.append("")
 
@@ -231,14 +247,14 @@ def to_asm(actions):
 
         # Description
         lines.append(f"{label}_description:")
-        lines.append(f'  .ascii "{desc_str}"')
+        lines.extend(ascii_lines(desc_str))
         lines.append('  .ascii "e"')
         lines.append("")
 
         # Description Action Failed
         desc_failed_str = act.get("DescriptionActionFailed", "").replace('"', '\\"')
         lines.append(f"{label}_desc_action_failed:")
-        lines.append(f'  .ascii "{desc_failed_str}"')
+        lines.extend(ascii_lines(desc_failed_str))
         lines.append('  .ascii "e"')
         lines.append("")
 
