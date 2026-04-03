@@ -854,7 +854,7 @@ action_11_name:
   .ascii "e"
 
 action_11_alias:
-  .ascii ""
+  .ascii "FORZAR ENTRADA"
   .ascii "e"
 
 action_11_sensor_id:
@@ -904,7 +904,7 @@ action_12_name:
   .ascii "e"
 
 action_12_alias:
-  .ascii ""
+  .ascii "VOLVER A MIRAR ADELANTE"
   .ascii "e"
 
 action_12_sensor_id:
@@ -956,7 +956,7 @@ action_13_name:
   .ascii "e"
 
 action_13_alias:
-  .ascii ""
+  .ascii "MUERTE DIRECTA"
   .ascii "e"
 
 action_13_sensor_id:
@@ -1006,7 +1006,7 @@ action_14_name:
   .ascii "e"
 
 action_14_alias:
-  .ascii ""
+  .ascii "TIRAR AGUAR, EMPEZAR TIME"
   .ascii "e"
 
 action_14_sensor_id:

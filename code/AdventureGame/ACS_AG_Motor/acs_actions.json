@@ -189,25 +189,41 @@
     "11": {
         "ID": "11",
         "Name": "FORZAR ENTRADA",
+        "Alias": "FORZAR ENTRADA",
         "SensorID": 255,
         "SensorActive": false,
         "ScreenID": 8,
         "Cost": 20,
-        "Description": "Intentas mover las rocas de la entrada."
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 0,
+        "Description": "Intentas mover las rocas de la entrada.",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     },
     "12": {
         "ID": "12",
         "Name": "VOLVER A MIRAR ADELANTE",
+        "Alias": "VOLVER A MIRAR ADELANTE",
         "SensorID": 255,
         "SensorActive": false,
         "ScreenID": 2,
         "Cost": 20,
-        "Description": "Por un momento consideras que mover toneladas de rocas sin equipamiento indicado tal vez sea inutil. Explorar la caverna, aun sin conocerla, puede tener mejores resultados."
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 0,
+        "Description": "Por un momento consideras que mover toneladas de rocas sin equipamiento indicado tal vez sea inutil. Explorar la caverna, aun sin conocerla, puede tener mejores resultados.",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     },
     "13": {
         "ID": "13",
         "Name": "MUERTE DIRECTA",
-        "Alias": "",
+        "Alias": "MUERTE DIRECTA",
         "SensorID": 255,
         "SensorActive": false,
         "ScreenID": 5,
@@ -224,7 +240,7 @@
     "14": {
         "ID": "14",
         "Name": "TIRAR AGUAR, EMPEZAR TIME",
-        "Alias": "",
+        "Alias": "TIRAR AGUAR, EMPEZAR TIME",
         "SensorID": 0,
         "SensorActive": true,
         "ScreenID": 255,
