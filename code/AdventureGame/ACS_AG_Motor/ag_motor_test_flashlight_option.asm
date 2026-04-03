@@ -700,7 +700,7 @@ loadConstants:
   lda #$0
   sta moveNextScreen
   ;add it to the SCREEN FILE to choose in the dashboard in which screen to start
-  lda #$0; start with screen id 0 the start screen
+  lda #$3; start with screen id 0 the start screen
   sta screenCurrentID  
   lda #$ff
   sta userOptionSelection  
