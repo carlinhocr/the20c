@@ -2,7 +2,7 @@
     "0": {
         "ID": "0",
         "Name": "LEVANTARSE",
-        "Alias": "Pirulo",
+        "Alias": "LEVANTARSE",
         "SensorID": 0,
         "SensorActive": true,
         "ScreenID": 1,
@@ -19,7 +19,7 @@
     "1": {
         "ID": "1",
         "Name": "MIRAR ALREDEDOR",
-        "Alias": "",
+        "Alias": "MIRAR ALREDEDOR",
         "SensorID": 255,
         "SensorActive": false,
         "ScreenID": 255,
@@ -36,6 +36,7 @@
     "2": {
         "ID": "2",
         "Name": "GRITAR POR AYUDA",
+        "Alias": "GRITAR POR AYUDA",        
         "SensorID": 255,
         "SensorActive": false,
         "ScreenID": 255,
@@ -61,7 +62,7 @@
     "4": {
         "ID": "4",
         "Name": "GRITAR",
-        "Alias": "",
+        "Alias": "GRITAR",   
         "SensorID": 255,
         "SensorActive": false,
         "ScreenID": 255,
@@ -78,7 +79,7 @@
     "5": {
         "ID": "5",
         "Name": "LINTERNA",
-        "Alias": "",
+        "Alias": "LINTERNA",
         "SensorID": 6,
         "SensorActive": true,
         "ScreenID": 255,
@@ -95,6 +96,7 @@
     "6": {
         "ID": "6",
         "Name": "EXPLORAR CAMINO",
+        "Alias": "EXPLORAR CAMINO",        
         "SensorID": 255,
         "SensorActive": false,
         "ScreenID": 9,
@@ -104,6 +106,7 @@
     "7": {
         "ID": "7",
         "Name": "VEO QUE CAE AGUA",
+        "Alias": "VEO QUE CAE AGUA",          
         "SensorID": 0,
         "SensorActive": true,
         "ScreenID": 2,
@@ -113,6 +116,7 @@
     "8": {
         "ID": "8",
         "Name": "COMENZAR EL JUEGO",
+        "Alias": "COMENZAR EL JUEGO",         
         "SensorID": 3,
         "SensorActive": true,
         "ScreenID": 0,
@@ -122,6 +126,7 @@
     "9": {
         "ID": "9",
         "Name": "TERMINAR EL JUEGO",
+        "Alias": "TERMINAR EL JUEGO",          
         "SensorID": 4,
         "SensorActive": false,
         "ScreenID": 3,

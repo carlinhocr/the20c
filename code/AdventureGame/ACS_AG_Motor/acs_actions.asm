@@ -302,7 +302,7 @@ action_0_name:
   .ascii "e"
 
 action_0_alias:
-  .ascii "Pirulo"
+  .ascii "LEVANTARSE"
   .ascii "e"
 
 action_0_sensor_id:
@@ -353,7 +353,7 @@ action_1_name:
   .ascii "e"
 
 action_1_alias:
-  .ascii ""
+  .ascii "MIRAR ALREDEDOR"
   .ascii "e"
 
 action_1_sensor_id:
@@ -403,7 +403,7 @@ action_2_name:
   .ascii "e"
 
 action_2_alias:
-  .ascii ""
+  .ascii "GRITAR POR AYUDA"
   .ascii "e"
 
 action_2_sensor_id:
@@ -503,7 +503,7 @@ action_4_name:
   .ascii "e"
 
 action_4_alias:
-  .ascii ""
+  .ascii "GRITAR"
   .ascii "e"
 
 action_4_sensor_id:
@@ -554,7 +554,7 @@ action_5_name:
   .ascii "e"
 
 action_5_alias:
-  .ascii ""
+  .ascii "LINTERNA"
   .ascii "e"
 
 action_5_sensor_id:
@@ -604,7 +604,7 @@ action_6_name:
   .ascii "e"
 
 action_6_alias:
-  .ascii ""
+  .ascii "EXPLORAR CAMINO"
   .ascii "e"
 
 action_6_sensor_id:
@@ -654,7 +654,7 @@ action_7_name:
   .ascii "e"
 
 action_7_alias:
-  .ascii ""
+  .ascii "VEO QUE CAE AGUA"
   .ascii "e"
 
 action_7_sensor_id:
@@ -704,7 +704,7 @@ action_8_name:
   .ascii "e"
 
 action_8_alias:
-  .ascii ""
+  .ascii "COMENZAR EL JUEGO"
   .ascii "e"
 
 action_8_sensor_id:
@@ -754,7 +754,7 @@ action_9_name:
   .ascii "e"
 
 action_9_alias:
-  .ascii ""
+  .ascii "TERMINAR EL JUEGO"
   .ascii "e"
 
 action_9_sensor_id:
