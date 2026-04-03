@@ -453,7 +453,7 @@ action_3_name:
   .ascii "e"
 
 action_3_alias:
-  .ascii ""
+  .ascii "MIRAR ENTRADA"
   .ascii "e"
 
 action_3_sensor_id:
@@ -804,7 +804,7 @@ action_10_name:
   .ascii "e"
 
 action_10_alias:
-  .ascii ""
+  .ascii "EXPLORAR MARCAS"
   .ascii "e"
 
 action_10_sensor_id:
