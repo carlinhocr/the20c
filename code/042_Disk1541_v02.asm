@@ -105,7 +105,7 @@ DATA_IN     = %00001000         ; PB3 - DATA input (1 = line is low/asserted)
 CLK_IN      = %00010000         ; PB4 - CLK  input (1 = line is low/asserted)
 
 ; --- Combined masks ---
-ALL_OUTPUTS = DATA_OUT | CLK_OUT | ATN_OUT  ; = %00000111
+ALL_OUTPUTS = DATA_OUT + CLK_OUT + ATN_OUT  ; = %00000111
 ALL_RELEASE = %00000000         ; All outputs released (lines go high via pull-ups)
 
 
@@ -139,7 +139,6 @@ CHAN_CMD     = 15                ; Channel 15 = command/status channel
 ; modes (zero-page addressing is 1 byte shorter and 1 cycle faster than
 ; absolute addressing). We use it for frequently-accessed variables.
 
-            .segment "ZEROPAGE"
             .org $0000
 
 ; --- Pointer for indirect addressing (used to access RAM buffers) ---
@@ -177,7 +176,6 @@ BUFFER_SIZE  = BUFFER_END - BUFFER_START + 1  ; = 15,872 bytes max
 ; The program resides in ROM at $8000-$FFFF. The 6502 reads its reset
 ; vector from $FFFC-$FFFD, which points to our RESET entry point.
 
-            .segment "CODE"
             .org $8000
 
 
@@ -282,7 +280,7 @@ ATN_ASSERT:
 ;-----------------------------------------------------------------------
 ATN_RELEASE:
             LDA VIA_PORTB
-            AND #~ATN_OUT & $FF ; Clear bit 2 = 0 (release ATN)
+            AND #$FF-ATN_OUT    ; Clear bit 2 = 0 (release ATN)
             STA VIA_PORTB
             RTS
 
@@ -303,7 +301,7 @@ CLK_ASSERT:
 ;-----------------------------------------------------------------------
 CLK_RELEASE:
             LDA VIA_PORTB
-            AND #~CLK_OUT & $FF ; Clear bit 1 = 0 (release CLK)
+            AND #$FF-CLK_OUT    ; Clear bit 1 = 0 (release CLK)
             STA VIA_PORTB
             RTS
 
@@ -324,7 +322,7 @@ DATA_ASSERT:
 ;-----------------------------------------------------------------------
 DATA_RELEASE:
             LDA VIA_PORTB
-            AND #~DATA_OUT & $FF ; Clear bit 0 = 0 (release DATA)
+            AND #$FF-DATA_OUT   ; Clear bit 0 = 0 (release DATA)
             STA VIA_PORTB
             RTS
 
@@ -406,14 +404,16 @@ DELAY_US:
 ; Inner loop: 5 cycles x 200 iterations = 1000 cycles approximately.
 ;-----------------------------------------------------------------------
 DELAY_1MS:
-            PHX                 ; Save X (6502 - use PHA+TAX if no PHX)
+            TXA                 ; Save X register
+            PHA                 ; Push A (which holds X) onto stack
             LDX #200            ; Loop counter
 .loop_1ms:
             NOP                 ; 2 cycles \
             NOP                 ; 2 cycles  } = 5 cycles per iteration
             DEX                 ; 2 cycles /   (approximate)
             BNE .loop_1ms       ; 3/2 cycles
-            PLX                 ; Restore X
+            PLA                 ; Pull saved X value
+            TAX                 ; Restore X register
             RTS
 
 ;-----------------------------------------------------------------------
@@ -1663,11 +1663,5 @@ IRQ_HANDLER:
 ;The two main routines you asked for — IEC_READ_FILE reads a file from disk into RAM at $0200, 
 ;and IEC_WRITE_FILE writes data from that buffer to a disk file. 
 ;Both handle OPEN, data transfer with EOI on the last byte, and CLOSE.
-;Utilities & demo (Sections 9–11): Drive error channel reader, 
-;a demo main program showing both read and write operations, and the 6502 vector table at $FFFA.
-;A few things to keep in mind for your hardware build: 
-;the VIA PB0–PB2 outputs need open-collector drivers (transistors or buffers with external pull-up resistors to +5V, typically 1kΩ) 
-;since the IEC bus is active-low. 
-;The input pins PB3–PB4 should read the actual bus state after the pull-ups. 
-;The .byte/.word/.org directives follow common 6502 assembler syntax (ca65, DASM, etc.) 
-;but you may need minor adjustments for your specific assembler.
+;Utilities & demo (Sections 9–11): Drive error channel reader, a demo main program showing both read and write operations, and the 6502 vector table at $FFFA.
+;A few things to keep in mind for your hardware build: the VIA PB0-PB2 outputs need open-collector drivers (transistors or buffers with external pull-up resistors to +5V, typically 1k) since the IEC bus is active-low. The input pins PB3-PB4 should read the actual bus state after the pull-ups. This file uses vasm oldstyle syntax with -dotdir (.byte, .word, .org). Assemble with: vasm6502_oldstyle -Fbin -dotdir -o disk1541.bin 042_Disk1541_vasm.asm

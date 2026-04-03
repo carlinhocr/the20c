@@ -105,7 +105,7 @@ DATA_IN     = %00001000         ; PB3 - DATA input (1 = line is low/asserted)
 CLK_IN      = %00010000         ; PB4 - CLK  input (1 = line is low/asserted)
 
 ; --- Combined masks ---
-ALL_OUTPUTS = DATA_OUT | CLK_OUT | ATN_OUT  ; = %00000111
+ALL_OUTPUTS = DATA_OUT + CLK_OUT + ATN_OUT  ; = %00000111
 ALL_RELEASE = %00000000         ; All outputs released (lines go high via pull-ups)
 
 
@@ -139,7 +139,6 @@ CHAN_CMD     = 15                ; Channel 15 = command/status channel
 ; modes (zero-page addressing is 1 byte shorter and 1 cycle faster than
 ; absolute addressing). We use it for frequently-accessed variables.
 
-            .segment "ZEROPAGE"
             .org $0000
 
 ; --- Pointer for indirect addressing (used to access RAM buffers) ---
@@ -177,7 +176,6 @@ BUFFER_SIZE  = BUFFER_END - BUFFER_START + 1  ; = 15,872 bytes max
 ; The program resides in ROM at $8000-$FFFF. The 6502 reads its reset
 ; vector from $FFFC-$FFFD, which points to our RESET entry point.
 
-            .segment "CODE"
             .org $8000
 
 
@@ -282,7 +280,7 @@ ATN_ASSERT:
 ;-----------------------------------------------------------------------
 ATN_RELEASE:
             LDA VIA_PORTB
-            AND #~ATN_OUT & $FF ; Clear bit 2 = 0 (release ATN)
+            AND #$FF-ATN_OUT    ; Clear bit 2 = 0 (release ATN)
             STA VIA_PORTB
             RTS
 
@@ -303,7 +301,7 @@ CLK_ASSERT:
 ;-----------------------------------------------------------------------
 CLK_RELEASE:
             LDA VIA_PORTB
-            AND #~CLK_OUT & $FF ; Clear bit 1 = 0 (release CLK)
+            AND #$FF-CLK_OUT    ; Clear bit 1 = 0 (release CLK)
             STA VIA_PORTB
             RTS
 
@@ -324,7 +322,7 @@ DATA_ASSERT:
 ;-----------------------------------------------------------------------
 DATA_RELEASE:
             LDA VIA_PORTB
-            AND #~DATA_OUT & $FF ; Clear bit 0 = 0 (release DATA)
+            AND #$FF-DATA_OUT   ; Clear bit 0 = 0 (release DATA)
             STA VIA_PORTB
             RTS
 
@@ -406,14 +404,16 @@ DELAY_US:
 ; Inner loop: 5 cycles x 200 iterations = 1000 cycles approximately.
 ;-----------------------------------------------------------------------
 DELAY_1MS:
-            PHX                 ; Save X (6502 - use PHA+TAX if no PHX)
+            TXA                 ; Save X register
+            PHA                 ; Push A (which holds X) onto stack
             LDX #200            ; Loop counter
 .loop_1ms:
             NOP                 ; 2 cycles \
             NOP                 ; 2 cycles  } = 5 cycles per iteration
             DEX                 ; 2 cycles /   (approximate)
             BNE .loop_1ms       ; 3/2 cycles
-            PLX                 ; Restore X
+            PLA                 ; Pull saved X value
+            TAX                 ; Restore X register
             RTS
 
 ;-----------------------------------------------------------------------
@@ -1445,13 +1445,215 @@ IEC_READ_STATUS:
 ;===============================================================================
 ;===============================================================================
 ;
+;   SECTION 9B: FORMAT DISK (NEW HEADER)
+;
+;   IEC_FORMAT_DISK - Format (initialize) a disk in the 1541 drive.
+;
+;   The 1541 formats a disk when it receives the command string
+;   "N0:diskname,id" on the command channel (channel 15).
+;
+;   - "N" is the NEW (format) command
+;   - "0:" is the drive number (always 0 on a single 1541)
+;   - "diskname" is up to 16 characters for the disk name
+;   - "id" is a 2-character disk ID (e.g. "A1")
+;
+;   Input:
+;     ZP_PTR_LO/HI = pointer to null-terminated format command string
+;                     e.g. "N0:MYDISK,A1"
+;
+;   Output:
+;     IEC_STATUS = 0 on success, nonzero on error
+;
+;   WARNING: This erases ALL data on the disk! It takes about
+;   90 seconds to complete on a real 1541 drive.
+;
+;   Protocol sequence:
+;     1. LISTEN device
+;     2. Send secondary address for command channel ($6F = $60+15)
+;     3. Release ATN, send the format command string with EOI
+;     4. UNLISTEN
+;     5. Wait for drive to finish (read status until not busy)
+;
+;===============================================================================
+;===============================================================================
+
+IEC_FORMAT_DISK:
+            ; --- Clear status ---
+            LDA #$00
+            STA IEC_STATUS
+
+            ; --- Step 1: LISTEN the device ---
+            JSR IEC_LISTEN
+            LDA IEC_STATUS
+            BNE .fmt_error      ; Device not present
+
+            ; --- Step 2: Send secondary address for command channel ---
+            ; Channel 15 = command/status channel
+            ; Secondary address = $60 + 15 = $6F (data transfer mode)
+            LDA #SA_DATA
+            ORA #CHAN_CMD       ; $60 + 15 = $6F
+            JSR IEC_SEND_SECONDARY
+
+            ; --- Step 3: Release ATN and send the format command string ---
+            JSR ATN_RELEASE
+            JSR CLK_ASSERT      ; We are the talker
+
+            ; Send each character of the command string
+            LDY #$00
+.fmt_send_loop:
+            LDA (ZP_PTR_LO),Y  ; Load next character
+            BEQ .fmt_send_done ; Null terminator = done
+
+            ; Check if next char is the last one
+            INY
+            PHA                 ; Save current char
+            LDA (ZP_PTR_LO),Y  ; Peek at next char
+            BNE .fmt_not_last   ; Not null = not last
+
+            ; This IS the last character - set EOI
+            LDA #$FF
+            STA IEC_EOI_FLAG
+            JMP .fmt_send_char
+
+.fmt_not_last:
+            LDA #$00
+            STA IEC_EOI_FLAG
+
+.fmt_send_char:
+            PLA                 ; Restore current char
+            JSR IEC_SEND_BYTE
+            LDA IEC_STATUS
+            BNE .fmt_error
+            JMP .fmt_send_loop
+
+.fmt_send_done:
+            ; --- Step 4: UNLISTEN ---
+            JSR IEC_UNLISTEN
+
+            ; --- Step 5: Wait for the format to complete ---
+            ; The 1541 takes ~90 seconds to format a disk.
+            ; We poll the status channel until the drive responds.
+            ; A short delay before first poll lets the drive start.
+            LDA #100            ; 100 ms initial delay
+            JSR DELAY_LONG
+
+            ; Read drive status to check result
+            JSR IEC_READ_STATUS
+
+.fmt_error:
+            RTS
+
+
+;===============================================================================
+;===============================================================================
+;
+;   SECTION 9C: DELETE FILE (SCRATCH)
+;
+;   IEC_DELETE_FILE - Delete (scratch) a file from the disk.
+;
+;   The 1541 deletes a file when it receives the command string
+;   "S0:filename" on the command channel (channel 15).
+;
+;   - "S" is the SCRATCH (delete) command
+;   - "0:" is the drive number
+;   - "filename" is the name of the file to delete
+;
+;   Wildcards are supported:
+;     "S0:FILE*"   - delete all files starting with "FILE"
+;     "S0:*"       - delete ALL files on the disk (careful!)
+;     "S0:FI?E"    - ? matches any single character
+;
+;   Input:
+;     ZP_PTR_LO/HI = pointer to null-terminated scratch command string
+;                     e.g. "S0:MYFILE"
+;
+;   Output:
+;     IEC_STATUS = 0 on success, nonzero on error
+;     After calling IEC_READ_STATUS, the status string will show:
+;       "01, FILES SCRATCHED,xx,00" where xx = number of files deleted
+;       "62, FILE NOT FOUND,00,00" if the file doesn't exist
+;
+;   Protocol sequence:
+;     1. LISTEN device
+;     2. Send secondary address for command channel ($6F)
+;     3. Release ATN, send the scratch command string with EOI
+;     4. UNLISTEN
+;     5. Read status to confirm deletion
+;
+;===============================================================================
+;===============================================================================
+
+IEC_DELETE_FILE:
+            ; --- Clear status ---
+            LDA #$00
+            STA IEC_STATUS
+
+            ; --- Step 1: LISTEN the device ---
+            JSR IEC_LISTEN
+            LDA IEC_STATUS
+            BNE .del_error      ; Device not present
+
+            ; --- Step 2: Send secondary address for command channel ---
+            LDA #SA_DATA
+            ORA #CHAN_CMD       ; $60 + 15 = $6F
+            JSR IEC_SEND_SECONDARY
+
+            ; --- Step 3: Release ATN and send the scratch command string ---
+            JSR ATN_RELEASE
+            JSR CLK_ASSERT      ; We are the talker
+
+            ; Send each character of the command string
+            LDY #$00
+.del_send_loop:
+            LDA (ZP_PTR_LO),Y  ; Load next character
+            BEQ .del_send_done ; Null terminator = done
+
+            ; Check if next char is the last one
+            INY
+            PHA                 ; Save current char
+            LDA (ZP_PTR_LO),Y  ; Peek at next char
+            BNE .del_not_last   ; Not null = not last
+
+            ; This IS the last character - set EOI
+            LDA #$FF
+            STA IEC_EOI_FLAG
+            JMP .del_send_char
+
+.del_not_last:
+            LDA #$00
+            STA IEC_EOI_FLAG
+
+.del_send_char:
+            PLA                 ; Restore current char
+            JSR IEC_SEND_BYTE
+            LDA IEC_STATUS
+            BNE .del_error
+            JMP .del_send_loop
+
+.del_send_done:
+            ; --- Step 4: UNLISTEN ---
+            JSR IEC_UNLISTEN
+
+            ; --- Step 5: Read status to confirm deletion ---
+            ; The status will report how many files were scratched.
+            JSR IEC_READ_STATUS
+
+.del_error:
+            RTS
+
+
+;===============================================================================
+;===============================================================================
+;
 ;   SECTION 10: MAIN PROGRAM / DEMO
 ;
-;   This demonstrates how to use the above routines. It shows two
+;   This demonstrates how to use the above routines. It shows four
 ;   complete operations:
 ;
 ;   DEMO 1: Read a file called "TESTFILE" from disk into RAM
 ;   DEMO 2: Write 256 bytes from RAM to a file called "OUTFILE"
+;   DEMO 3: Delete (scratch) the file "OUTFILE" from disk
+;   DEMO 4: Format a disk with name "MYDISK" and ID "A1"
 ;
 ;   You can replace these with your own application logic.
 ;
@@ -1537,12 +1739,89 @@ MAIN:
             BNE .write_failed
 
             ; Success! File written to disk.
-            JMP .halt           ; Done with demo
+            JMP .demo_delete    ; Continue to demo 3
 
 .write_failed:
             JSR IEC_READ_STATUS
             ; Error string at BUFFER_START
-            ; Fall through to halt
+            JMP .halt           ; Stop on error
+
+            ;===================================================================
+            ; DEMO 3: DELETE (SCRATCH) A FILE FROM DISK
+            ;===================================================================
+            ;
+            ; To delete a file, we:
+            ;   1. Point ZP_PTR to the scratch command string "S0:filename"
+            ;   2. Call IEC_DELETE_FILE
+            ;   3. Check IEC_STATUS for errors
+            ;   4. The status string at BUFFER_START shows how many files
+            ;      were scratched (e.g. "01, FILES SCRATCHED,01,00")
+            ;
+
+.demo_delete:
+            ; Point to the scratch command string
+            LDA #<CMD_SCRATCH
+            STA ZP_PTR_LO
+            LDA #>CMD_SCRATCH
+            STA ZP_PTR_HI
+
+            ; Delete the file!
+            JSR IEC_DELETE_FILE
+
+            ; Check result
+            LDA IEC_STATUS
+            BNE .delete_failed
+
+            ; Success! File deleted.
+            ; The status at BUFFER_START tells us how many were scratched.
+            JMP .demo_format    ; Continue to demo 4
+
+.delete_failed:
+            ; The status string at BUFFER_START explains the error.
+            ; "62, FILE NOT FOUND,00,00" means the file didn't exist.
+            JMP .halt           ; Stop on error
+
+            ;===================================================================
+            ; DEMO 4: FORMAT (INITIALIZE) A DISK
+            ;===================================================================
+            ;
+            ; To format a disk, we:
+            ;   1. Point ZP_PTR to the format command string "N0:name,id"
+            ;   2. Call IEC_FORMAT_DISK
+            ;   3. Check IEC_STATUS for errors
+            ;
+            ; WARNING: This erases ALL data on the disk!
+            ; It takes about 90 seconds on a real 1541.
+            ;
+            ; NOTE: This demo is commented out with a JMP .halt before it
+            ;       to prevent accidental formatting. Remove the JMP to
+            ;       enable it.
+            ;
+
+.demo_format:
+            ; SAFETY: Skip format by default to avoid accidental data loss.
+            ; Remove the next line to actually format the disk.
+            JMP .halt
+
+            ; Point to the format command string
+            LDA #<CMD_FORMAT
+            STA ZP_PTR_LO
+            LDA #>CMD_FORMAT
+            STA ZP_PTR_HI
+
+            ; Format the disk!
+            JSR IEC_FORMAT_DISK
+
+            ; Check result
+            LDA IEC_STATUS
+            BNE .format_failed
+
+            ; Success! Disk formatted.
+            JMP .halt
+
+.format_failed:
+            ; Status at BUFFER_START has the error message.
+            JMP .halt
 
 .halt:
             ; --- System halt ---
@@ -1552,22 +1831,35 @@ MAIN:
 
 
 ;===============================================================================
-; FILENAME STRINGS
+; FILENAME AND COMMAND STRINGS
 ;===============================================================================
-; These are null-terminated filename strings used by the demo.
+; These are null-terminated strings used by the demo.
 ;
-; Format: "drivenumber:filename,type,mode"
+; FILENAME FORMAT: "drivenumber:filename,type,mode"
 ;   Drive number: 0 (only option on single-drive 1541)
 ;   Type: P = Program (PRG), S = Sequential (SEQ), U = User (USR)
 ;   Mode: R = Read, W = Write
+;   The "@" prefix means "save with replace" (overwrite existing file).
 ;
-; The "@" prefix means "save with replace" (overwrite existing file).
+; COMMAND FORMAT: The 1541 DOS accepts commands on channel 15:
+;   "N0:diskname,id"  - Format (new) disk with name and 2-char ID
+;   "S0:filename"     - Scratch (delete) a file
+;   "R0:newname=oldname" - Rename a file
+;   "C0:dest=source"  - Copy a file
+;   "I0"              - Initialize (re-read BAM from disk)
+;   "V0"              - Validate (collect garbage/fix BAM)
 
 FNAME_READ:
             .byte "0:TESTFILE,P,R", $00  ; Open TESTFILE as PRG for reading
 
 FNAME_WRITE:
             .byte "@0:OUTFILE,P,W", $00  ; Write OUTFILE as PRG (overwrite if exists)
+
+CMD_SCRATCH:
+            .byte "S0:OUTFILE", $00      ; Delete OUTFILE from disk
+
+CMD_FORMAT:
+            .byte "N0:MYDISK,A1", $00    ; Format disk: name="MYDISK", ID="A1"
 
 
 ;===============================================================================
@@ -1639,6 +1931,17 @@ IRQ_HANDLER:
 ;           Data at BUFFER_START, size in FILE_SIZE_LO/HI
 ;   Output: IEC_STATUS = 0 on success
 ;
+; IEC_DELETE_FILE:
+;   Input:  ZP_PTR_LO/HI -> null-terminated scratch command "S0:filename"
+;   Output: IEC_STATUS = 0 on success
+;           Status string at BUFFER_START (shows files scratched count)
+;
+; IEC_FORMAT_DISK:
+;   Input:  ZP_PTR_LO/HI -> null-terminated format command "N0:name,id"
+;   Output: IEC_STATUS = 0 on success
+;           Status string at BUFFER_START
+;           WARNING: Erases all data! Takes ~90 seconds on real hardware.
+;
 ; IEC_READ_STATUS:
 ;   Output: Drive status string at BUFFER_START (null-terminated)
 ;
@@ -1651,23 +1954,23 @@ IRQ_HANDLER:
 ;   $8000-$FFFF  This program (ROM)
 ;
 ;===============================================================================
-;Hardware layer (Sections 1–3): 
+;Hardware layer (Sections 1-3): 
 ;VIA initialization, individual line control routines (ATN/CLK/DATA assert/release/read), 
 ;and timing delays using VIA Timer 1.
 ;Bit-level protocol (Section 4): 
 ;The core IEC_SEND_BYTE, IEC_SEND_BYTE_ATN, and IEC_RECEIVE_BYTE routines 
-;;that transfer bytes LSB-first with full CLK/DATA handshaking and EOI detection.
+;that transfer bytes LSB-first with full CLK/DATA handshaking and EOI detection.
 ;Bus commands (Section 5): LISTEN, TALK, UNLISTEN, UNTALK, secondary address sending,
 ; and the bus turnaround sequence for switching talker/listener roles.
-;File operations (Sections 6–8): 
-;The two main routines you asked for — IEC_READ_FILE reads a file from disk into RAM at $0200, 
+;File operations (Sections 6-8): 
+;IEC_READ_FILE reads a file from disk into RAM at $0200, 
 ;and IEC_WRITE_FILE writes data from that buffer to a disk file. 
 ;Both handle OPEN, data transfer with EOI on the last byte, and CLOSE.
-;Utilities & demo (Sections 9–11): Drive error channel reader, 
-;a demo main program showing both read and write operations, and the 6502 vector table at $FFFA.
-;A few things to keep in mind for your hardware build: 
-;the VIA PB0–PB2 outputs need open-collector drivers (transistors or buffers with external pull-up resistors to +5V, typically 1kΩ) 
-;since the IEC bus is active-low. 
-;The input pins PB3–PB4 should read the actual bus state after the pull-ups. 
-;The .byte/.word/.org directives follow common 6502 assembler syntax (ca65, DASM, etc.) 
-;but you may need minor adjustments for your specific assembler.
+;Disk management (Sections 9B-9C):
+;IEC_FORMAT_DISK sends the "N" command to format/initialize a disk.
+;IEC_DELETE_FILE sends the "S" command to scratch (delete) files.
+;Utilities & demo (Sections 9-11): Drive error channel reader, a demo main 
+;program showing read, write, delete, and format operations, and the 6502 
+;vector table at $FFFA.
+;This file uses vasm oldstyle syntax with -dotdir (.byte, .word, .org). 
+;Assemble with: vasm6502_oldstyle -Fbin -dotdir -o disk1541.bin 042_Disk1541_vasm.asm
