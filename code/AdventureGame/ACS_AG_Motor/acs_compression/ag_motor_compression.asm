@@ -358,7 +358,7 @@ programStart:
   jsr screenInit
   jsr lcdDemoMessage
   jsr printTokenExample
-  ;jsr printTokenGroupExample
+  jsr printTokenGroupExample
 loopP:
   jmp loopP  
 
@@ -670,13 +670,13 @@ printTokenGroup:
   tya
   pha
   ;here print first line
-  ldy #$ff
+  ldx #$ff
 printGroupTokenLoop:
-  iny
-  lda (tokenGroupLowByte),Y
+  inx
+  lda tokenGroupLowByte,x
   sta tokenLowByte
-  iny
-  lda (tokenGroupHighByte),Y
+  inx
+  lda tokenGroupHighByte,x
   sta tokenHighByte
   lda tokenLowByte
   cmp #$ff
