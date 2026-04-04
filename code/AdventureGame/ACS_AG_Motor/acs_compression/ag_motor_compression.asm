@@ -111,7 +111,10 @@ sourceDashboardVectorLow=$ba
 sourceDashboardVectorHigh=$bb
 sensorDataVectorLow=$bc
 sensorDataVectorHigh=$bd
-
+tokenLowByte=               $be
+tokenHighByte=              $bf
+tokenGroupLowByte=          $c0
+tokenGroupHighByte=         $c1
 pivotZpLow=$fe
 pivotZpHigh=$ff
 
@@ -354,6 +357,11 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
+  jsr printTokenExample
+  jsr printTokenGroupExample
+loopP:
+  jmp loopP  
+
   ;jmp listeningMode
   ;start MainProgran and I save stack space by not jumping to it
 mainProgram:
@@ -665,10 +673,10 @@ printTokenGroup:
   ldy #$ff
 printGroupTokenLoop:
   iny
-  lda (screen_0_description_compressed),Y
+  lda (tokenGroupLowByte),Y
   sta tokenGroupLowByte
   iny
-  lda (screen_0_description_compressed),Y
+  lda (tokenGroupHighByte),Y
   sta tokenGroupHighByte
   lda tokenGroupLowByte
   cmp #$ff
@@ -4594,9 +4602,9 @@ initialScreen:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
   
-  .org $a000
+  .org $a100
   .include "acs_screens.asm"  
-  .org $c600  
+  .org $cb00  
   .include "acs_actions.asm"
   .org $ea00
   .include "acs_sensors.asm"
