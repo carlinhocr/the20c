@@ -273,7 +273,7 @@ token_2:  ; "piedra "
 
 token_3:  ; "húmeda.\n"
   .ascii "húmeda."
-  .byte $0A  ; \n
+  .byte $0a  ; \n
   .byte $00  ; end-of-token sentinel
 
 token_4:  ; "La "
