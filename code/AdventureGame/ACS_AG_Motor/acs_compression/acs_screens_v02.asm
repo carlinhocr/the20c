@@ -261,756 +261,1020 @@ token_dict_index:
 
 token_0:  ; "Despiertas "
   .ascii "Despiertas "
+  .byte $00  ; end-of-token sentinel
 
 token_1:  ; "sobre "
   .ascii "sobre "
+  .byte $00  ; end-of-token sentinel
 
 token_2:  ; "piedra "
   .ascii "piedra "
+  .byte $00  ; end-of-token sentinel
 
 token_3:  ; "húmeda.\n"
   .ascii "húmeda.\n"
+  .byte $0a  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_4:  ; "La "
   .ascii "La "
+  .byte $00  ; end-of-token sentinel
 
 token_5:  ; "caverna "
   .ascii "caverna "
+  .byte $00  ; end-of-token sentinel
 
 token_6:  ; "se "
   .ascii "se "
+  .byte $00  ; end-of-token sentinel
 
 token_7:  ; "cerro "
   .ascii "cerro "
+  .byte $00  ; end-of-token sentinel
 
 token_8:  ; "detrás "
   .ascii "detrás "
+  .byte $00  ; end-of-token sentinel
 
 token_9:  ; "de "
   .ascii "de "
+  .byte $00  ; end-of-token sentinel
 
 token_10:  ; "ti. \n"
-  .ascii "ti. \n"
+  .ascii "ti. "
+  .byte $0A  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_11:  ; "Un "
   .ascii "Un "
+  .byte $00  ; end-of-token sentinel
 
 token_12:  ; "derrumbe "
   .ascii "derrumbe "
+  .byte $00  ; end-of-token sentinel
 
 token_13:  ; "rocas "
   .ascii "rocas "
+  .byte $00  ; end-of-token sentinel
 
 token_14:  ; "antiguas, "
   .ascii "antiguas, "
+  .byte $00  ; end-of-token sentinel
 
 token_15:  ; "pesadas, "
   .ascii "pesadas, "
+  .byte $00  ; end-of-token sentinel
 
 token_16:  ; "acomodadas "
   .ascii "acomodadas "
+  .byte $00  ; end-of-token sentinel
 
 token_17:  ; "como "
   .ascii "como "
+  .byte $00  ; end-of-token sentinel
 
 token_18:  ; "si "
   .ascii "si "
+  .byte $00  ; end-of-token sentinel
 
 token_19:  ; "el "
   .ascii "el "
+  .byte $00  ; end-of-token sentinel
 
 token_20:  ; "colapso "
   .ascii "colapso "
+  .byte $00  ; end-of-token sentinel
 
 token_21:  ; "hubiera "
   .ascii "hubiera "
+  .byte $00  ; end-of-token sentinel
 
 token_22:  ; "sido "
   .ascii "sido "
+  .byte $00  ; end-of-token sentinel
 
 token_23:  ; "final, "
   .ascii "final, "
+  .byte $00  ; end-of-token sentinel
 
 token_24:  ; "no "
   .ascii "no "
+  .byte $00  ; end-of-token sentinel
 
 token_25:  ; "accidental.\n"
-  .ascii "accidental.\n"
+  .ascii "accidental."
+  .byte $0A  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_26:  ; "El "
   .ascii "El "
+  .byte $00  ; end-of-token sentinel
 
 token_27:  ; "frío "
   .ascii "frío "
+  .byte $00  ; end-of-token sentinel
 
 token_28:  ; "duele "
   .ascii "duele "
+  .byte $00  ; end-of-token sentinel
 
 token_29:  ; "todavía. \n"
-  .ascii "todavía. \n"
+  .ascii "todavía. "
+  .byte $0A  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_30:  ; "Sientes "
   .ascii "Sientes "
+  .byte $00  ; end-of-token sentinel
 
 token_31:  ; "un "
   .ascii "un "
+  .byte $00  ; end-of-token sentinel
 
 token_32:  ; "constante "
   .ascii "constante "
+  .byte $00  ; end-of-token sentinel
 
 token_33:  ; "goteo "
   .ascii "goteo "
+  .byte $00  ; end-of-token sentinel
 
 token_34:  ; "agua, "
   .ascii "agua, "
+  .byte $00  ; end-of-token sentinel
 
 token_35:  ; "cada "
   .ascii "cada "
+  .byte $00  ; end-of-token sentinel
 
 token_36:  ; "vez "
   .ascii "vez "
+  .byte $00  ; end-of-token sentinel
 
 token_37:  ; "mas "
   .ascii "mas "
+  .byte $00  ; end-of-token sentinel
 
 token_38:  ; "cerca "
   .ascii "cerca "
+  .byte $00  ; end-of-token sentinel
 
 token_39:  ; "ti."
   .ascii "ti."
+  .byte $00  ; end-of-token sentinel
 
 token_40:  ; "Al "
   .ascii "Al "
+  .byte $00  ; end-of-token sentinel
 
 token_41:  ; "levantarte, "
   .ascii "levantarte, "
+  .byte $00  ; end-of-token sentinel
 
 token_42:  ; "miras "
   .ascii "miras "
+  .byte $00  ; end-of-token sentinel
 
 token_43:  ; "a "
   .ascii "a "
+  .byte $00  ; end-of-token sentinel
 
 token_44:  ; "tu "
   .ascii "tu "
+  .byte $00  ; end-of-token sentinel
 
 token_45:  ; "alrededor.\n"
-  .ascii "alrededor.\n"
+  .ascii "alrededor."
+  .byte $0A  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_46:  ; "Ves "
   .ascii "Ves "
+  .byte $00  ; end-of-token sentinel
 
 token_47:  ; "que "
   .ascii "que "
+  .byte $00  ; end-of-token sentinel
 
 token_48:  ; "agua "
   .ascii "agua "
+  .byte $00  ; end-of-token sentinel
 
 token_49:  ; "gotea "
   .ascii "gotea "
+  .byte $00  ; end-of-token sentinel
 
 token_50:  ; "lenta, "
   .ascii "lenta, "
+  .byte $00  ; end-of-token sentinel
 
 token_51:  ; "pero "
   .ascii "pero "
+  .byte $00  ; end-of-token sentinel
 
 token_52:  ; "constantemente, "
   .ascii "constantemente, "
+  .byte $00  ; end-of-token sentinel
 
 token_53:  ; "inundando "
   .ascii "inundando "
+  .byte $00  ; end-of-token sentinel
 
 token_54:  ; "la "
   .ascii "la "
+  .byte $00  ; end-of-token sentinel
 
 token_55:  ; "caverna.\n"
-  .ascii "caverna.\n"
+  .ascii "caverna."
+  .byte $0A  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_56:  ; "Como "
   .ascii "Como "
+  .byte $00  ; end-of-token sentinel
 
 token_57:  ; "midiera "
   .ascii "midiera "
+  .byte $00  ; end-of-token sentinel
 
 token_58:  ; "tiempo."
   .ascii "tiempo."
+  .byte $00  ; end-of-token sentinel
 
 token_59:  ; "abre "
   .ascii "abre "
+  .byte $00  ; end-of-token sentinel
 
 token_60:  ; "en "
   .ascii "en "
+  .byte $00  ; end-of-token sentinel
 
 token_61:  ; "una "
   .ascii "una "
+  .byte $00  ; end-of-token sentinel
 
 token_62:  ; "cámara "
   .ascii "cámara "
+  .byte $00  ; end-of-token sentinel
 
 token_63:  ; "amplia "
   .ascii "amplia "
+  .byte $00  ; end-of-token sentinel
 
 token_64:  ; "baja. \n"
-  .ascii "baja. \n"
+  .ascii "baja. "
+  .byte $0A  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_65:  ; "techo "
   .ascii "techo "
+  .byte $00  ; end-of-token sentinel
 
 token_66:  ; "parece "
   .ascii "parece "
+  .byte $00  ; end-of-token sentinel
 
 token_67:  ; "aplastarte "
   .ascii "aplastarte "
+  .byte $00  ; end-of-token sentinel
 
 token_68:  ; "con "
   .ascii "con "
+  .byte $00  ; end-of-token sentinel
 
 token_69:  ; "su "
   .ascii "su "
+  .byte $00  ; end-of-token sentinel
 
 token_70:  ; "peso, "
   .ascii "peso, "
+  .byte $00  ; end-of-token sentinel
 
 token_71:  ; "estalactitas "
   .ascii "estalactitas "
+  .byte $00  ; end-of-token sentinel
 
 token_72:  ; "afiladas "
   .ascii "afiladas "
+  .byte $00  ; end-of-token sentinel
 
 token_73:  ; "cuelgan "
   .ascii "cuelgan "
+  .byte $00  ; end-of-token sentinel
 
 token_74:  ; "peligrosamente "
   .ascii "peligrosamente "
+  .byte $00  ; end-of-token sentinel
 
 token_75:  ; "del "
   .ascii "del "
+  .byte $00  ; end-of-token sentinel
 
 token_76:  ; "mismo. \n"
-  .ascii "mismo. \n"
+  .ascii "mismo. "
+  .byte $0A  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_77:  ; "Las "
   .ascii "Las "
+  .byte $00  ; end-of-token sentinel
 
 token_78:  ; "paredes "
   .ascii "paredes "
+  .byte $00  ; end-of-token sentinel
 
 token_79:  ; "son "
   .ascii "son "
+  .byte $00  ; end-of-token sentinel
 
 token_80:  ; "rugosas, "
   .ascii "rugosas, "
+  .byte $00  ; end-of-token sentinel
 
 token_81:  ; "húmedas "
   .ascii "húmedas "
+  .byte $00  ; end-of-token sentinel
 
 token_82:  ; "al "
   .ascii "al "
+  .byte $00  ; end-of-token sentinel
 
 token_83:  ; "tacto, "
   .ascii "tacto, "
+  .byte $00  ; end-of-token sentinel
 
 token_84:  ; "y "
   .ascii "y "
+  .byte $00  ; end-of-token sentinel
 
 token_85:  ; "reflejan "
   .ascii "reflejan "
+  .byte $00  ; end-of-token sentinel
 
 token_86:  ; "luz "
   .ascii "luz "
+  .byte $00  ; end-of-token sentinel
 
 token_87:  ; "apagada "
   .ascii "apagada "
+  .byte $00  ; end-of-token sentinel
 
 token_88:  ; "tiene "
   .ascii "tiene "
+  .byte $00  ; end-of-token sentinel
 
 token_89:  ; "fuente "
   .ascii "fuente "
+  .byte $00  ; end-of-token sentinel
 
 token_90:  ; "clara. \n"
-  .ascii "clara. \n"
+  .ascii "clara. "
+  .byte $0A  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_91:  ; "aire "
   .ascii "aire "
+  .byte $00  ; end-of-token sentinel
 
 token_92:  ; "es "
   .ascii "es "
+  .byte $00  ; end-of-token sentinel
 
 token_93:  ; "estancado. \n"
-  .ascii "estancado. \n"
+  .ascii "estancado. "
+  .byte $0A  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_94:  ; "Huele "
   .ascii "Huele "
+  .byte $00  ; end-of-token sentinel
 
 token_95:  ; "roca "
   .ascii "roca "
+  .byte $00  ; end-of-token sentinel
 
 token_96:  ; "mojada "
   .ascii "mojada "
+  .byte $00  ; end-of-token sentinel
 
 token_97:  ; "algo "
   .ascii "algo "
+  .byte $00  ; end-of-token sentinel
 
 token_98:  ; "más "
   .ascii "más "
+  .byte $00  ; end-of-token sentinel
 
 token_99:  ; "viejo, "
   .ascii "viejo, "
+  .byte $00  ; end-of-token sentinel
 
 token_100:  ; "casi "
   .ascii "casi "
+  .byte $00  ; end-of-token sentinel
 
 token_101:  ; "orgánico. \n"
-  .ascii "orgánico. \n"
+  .ascii "orgánico. "
+  .byte $0A  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_102:  ; "suelo "
   .ascii "suelo "
+  .byte $00  ; end-of-token sentinel
 
 token_103:  ; "marcas "
   .ascii "marcas "
+  .byte $00  ; end-of-token sentinel
 
 token_104:  ; "irregulares, "
   .ascii "irregulares, "
+  .byte $00  ; end-of-token sentinel
 
 token_105:  ; "pasos "
   .ascii "pasos "
+  .byte $00  ; end-of-token sentinel
 
 token_106:  ; "interrumpidos "
   .ascii "interrumpidos "
+  .byte $00  ; end-of-token sentinel
 
 token_107:  ; "camino "
   .ascii "camino "
+  .byte $00  ; end-of-token sentinel
 
 token_108:  ; "pierde "
   .ascii "pierde "
+  .byte $00  ; end-of-token sentinel
 
 token_109:  ; "oscuridad\n"
-  .ascii "oscuridad\n"
+  .ascii "oscuridad"
+  .byte $0A  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_110:  ; "Siente "
   .ascii "Siente "
+  .byte $00  ; end-of-token sentinel
 
 token_111:  ; "o "
   .ascii "o "
+  .byte $00  ; end-of-token sentinel
 
 token_112:  ; "alguien "
   .ascii "alguien "
+  .byte $00  ; end-of-token sentinel
 
 token_113:  ; "puede "
   .ascii "puede "
+  .byte $00  ; end-of-token sentinel
 
 token_114:  ; "estar "
   .ascii "estar "
+  .byte $00  ; end-of-token sentinel
 
 token_115:  ; "acechando"
   .ascii "acechando"
+  .byte $00  ; end-of-token sentinel
 
 token_116:  ; "Bienvenido "
   .ascii "Bienvenido "
+  .byte $00  ; end-of-token sentinel
 
 token_117:  ; "aventura "
   .ascii "aventura "
+  .byte $00  ; end-of-token sentinel
 
 token_118:  ; "gráfica "
   .ascii "gráfica "
+  .byte $00  ; end-of-token sentinel
 
 token_119:  ; "Espectacular "
   .ascii "Espectacular "
+  .byte $00  ; end-of-token sentinel
 
 token_120:  ; "mundo"
   .ascii "mundo"
+  .byte $00  ; end-of-token sentinel
 
 token_121:  ; "era "
   .ascii "era "
+  .byte $00  ; end-of-token sentinel
 
 token_122:  ; "hipnotico. "
   .ascii "hipnotico. "
+  .byte $00  ; end-of-token sentinel
 
 token_123:  ; "Gota, "
   .ascii "Gota, "
+  .byte $00  ; end-of-token sentinel
 
 token_124:  ; "pausa, "
   .ascii "pausa, "
+  .byte $00  ; end-of-token sentinel
 
 token_125:  ; "gota. "
   .ascii "gota. "
+  .byte $00  ; end-of-token sentinel
 
 token_126:  ; "comenzo "
   .ascii "comenzo "
+  .byte $00  ; end-of-token sentinel
 
 token_127:  ; "entumecer "
   .ascii "entumecer "
+  .byte $00  ; end-of-token sentinel
 
 token_128:  ; "tus "
   .ascii "tus "
+  .byte $00  ; end-of-token sentinel
 
 token_129:  ; "extremidades "
   .ascii "extremidades "
+  .byte $00  ; end-of-token sentinel
 
 token_130:  ; "hasta "
   .ascii "hasta "
+  .byte $00  ; end-of-token sentinel
 
 token_131:  ; "dejaste "
   .ascii "dejaste "
+  .byte $00  ; end-of-token sentinel
 
 token_132:  ; "sentirlas. "
   .ascii "sentirlas. "
+  .byte $00  ; end-of-token sentinel
 
 token_133:  ; "eterno "
   .ascii "eterno "
+  .byte $00  ; end-of-token sentinel
 
 token_134:  ; "sueño "
   .ascii "sueño "
+  .byte $00  ; end-of-token sentinel
 
 token_135:  ; "te "
   .ascii "te "
+  .byte $00  ; end-of-token sentinel
 
 token_136:  ; "dio "
   .ascii "dio "
+  .byte $00  ; end-of-token sentinel
 
 token_137:  ; "bienvenida."
   .ascii "bienvenida."
+  .byte $00  ; end-of-token sentinel
 
 token_138:  ; "Asi "
   .ascii "Asi "
+  .byte $00  ; end-of-token sentinel
 
 token_139:  ; "terminas "
   .ascii "terminas "
+  .byte $00  ; end-of-token sentinel
 
 token_140:  ; "dias "
   .ascii "dias "
+  .byte $00  ; end-of-token sentinel
 
 token_141:  ; "atrapado "
   .ascii "atrapado "
+  .byte $00  ; end-of-token sentinel
 
 token_142:  ; "Caverna"
   .ascii "Caverna"
+  .byte $00  ; end-of-token sentinel
 
 token_143:  ; "Entre "
   .ascii "Entre "
+  .byte $00  ; end-of-token sentinel
 
 token_144:  ; "las "
   .ascii "las "
+  .byte $00  ; end-of-token sentinel
 
 token_145:  ; "hay "
   .ascii "hay "
+  .byte $00  ; end-of-token sentinel
 
 token_146:  ; "rendijas "
   .ascii "rendijas "
+  .byte $00  ; end-of-token sentinel
 
 token_147:  ; "por "
   .ascii "por "
+  .byte $00  ; end-of-token sentinel
 
 token_148:  ; "donde "
   .ascii "donde "
+  .byte $00  ; end-of-token sentinel
 
 token_149:  ; "entra "
   .ascii "entra "
+  .byte $00  ; end-of-token sentinel
 
 token_150:  ; "viciado, "
   .ascii "viciado, "
+  .byte $00  ; end-of-token sentinel
 
 token_151:  ; "ninguna "
   .ascii "ninguna "
+  .byte $00  ; end-of-token sentinel
 
 token_152:  ; "lo "
   .ascii "lo "
+  .byte $00  ; end-of-token sentinel
 
 token_153:  ; "bastante "
   .ascii "bastante "
+  .byte $00  ; end-of-token sentinel
 
 token_154:  ; "grande "
   .ascii "grande "
+  .byte $00  ; end-of-token sentinel
 
 token_155:  ; "para "
   .ascii "para "
+  .byte $00  ; end-of-token sentinel
 
 token_156:  ; "pasar. "
   .ascii "pasar. "
+  .byte $00  ; end-of-token sentinel
 
 token_157:  ; "Hay "
   .ascii "Hay "
+  .byte $00  ; end-of-token sentinel
 
 token_158:  ; "intentado "
   .ascii "intentado "
+  .byte $00  ; end-of-token sentinel
 
 token_159:  ; "moverlas "
   .ascii "moverlas "
+  .byte $00  ; end-of-token sentinel
 
 token_160:  ; "detenido "
   .ascii "detenido "
+  .byte $00  ; end-of-token sentinel
 
 token_161:  ; "mitad "
   .ascii "mitad "
+  .byte $00  ; end-of-token sentinel
 
 token_162:  ; "camino. "
   .ascii "camino. "
+  .byte $00  ; end-of-token sentinel
 
 token_163:  ; "Tal "
   .ascii "Tal "
+  .byte $00  ; end-of-token sentinel
 
 token_164:  ; "sea "
   .ascii "sea "
+  .byte $00  ; end-of-token sentinel
 
 token_165:  ; "opcion "
   .ascii "opcion "
+  .byte $00  ; end-of-token sentinel
 
 token_166:  ; "volver "
   .ascii "volver "
+  .byte $00  ; end-of-token sentinel
 
 token_167:  ; "ahí, "
   .ascii "ahí, "
+  .byte $00  ; end-of-token sentinel
 
 token_168:  ; "idea "
   .ascii "idea "
+  .byte $00  ; end-of-token sentinel
 
 token_169:  ; "explorar "
   .ascii "explorar "
+  .byte $00  ; end-of-token sentinel
 
 token_170:  ; "oscuras "
   .ascii "oscuras "
+  .byte $00  ; end-of-token sentinel
 
 token_171:  ; "tentadora."
   .ascii "tentadora."
+  .byte $00  ; end-of-token sentinel
 
 token_172:  ; "Este "
   .ascii "Este "
+  .byte $00  ; end-of-token sentinel
 
 token_173:  ; "PITFALL"
   .ascii "PITFALL"
+  .byte $00  ; end-of-token sentinel
 
 token_174:  ; "comienza "
   .ascii "comienza "
+  .byte $00  ; end-of-token sentinel
 
 token_175:  ; "temblar "
   .ascii "temblar "
+  .byte $00  ; end-of-token sentinel
 
 token_176:  ; "entrada "
   .ascii "entrada "
+  .byte $00  ; end-of-token sentinel
 
 token_177:  ; "empieza "
   .ascii "empieza "
+  .byte $00  ; end-of-token sentinel
 
 token_178:  ; "desmoronarse "
   .ascii "desmoronarse "
+  .byte $00  ; end-of-token sentinel
 
 token_179:  ; "ti. "
   .ascii "ti. "
+  .byte $00  ; end-of-token sentinel
 
 token_180:  ; "Lo "
   .ascii "Lo "
+  .byte $00  ; end-of-token sentinel
 
 token_181:  ; "ultimo "
   .ascii "ultimo "
+  .byte $00  ; end-of-token sentinel
 
 token_182:  ; "piensas "
   .ascii "piensas "
+  .byte $00  ; end-of-token sentinel
 
 token_183:  ; "estaban "
   .ascii "estaban "
+  .byte $00  ; end-of-token sentinel
 
 token_184:  ; "sellando "
   .ascii "sellando "
+  .byte $00  ; end-of-token sentinel
 
 token_185:  ; "salida. "
   .ascii "salida. "
+  .byte $00  ; end-of-token sentinel
 
 token_186:  ; "Estaban "
   .ascii "Estaban "
+  .byte $00  ; end-of-token sentinel
 
 token_187:  ; "sosteniendo "
   .ascii "sosteniendo "
+  .byte $00  ; end-of-token sentinel
 
 token_188:  ; "resto\n"
-  .ascii "resto\n"
+  .ascii "resto"
+  .byte $0A  ; \n
+  .byte $00  ; end-of-token sentinel
 
 token_189:  ; "Haz "
   .ascii "Haz "
+  .byte $00  ; end-of-token sentinel
 
 token_190:  ; "muerto"
   .ascii "muerto"
+  .byte $00  ; end-of-token sentinel
 
 token_191:  ; "Luego "
   .ascii "Luego "
+  .byte $00  ; end-of-token sentinel
 
 token_192:  ; "pasillo, "
   .ascii "pasillo, "
+  .byte $00  ; end-of-token sentinel
 
 token_193:  ; "encuentras "
   .ascii "encuentras "
+  .byte $00  ; end-of-token sentinel
 
 token_194:  ; "sala "
   .ascii "sala "
+  .byte $00  ; end-of-token sentinel
 
 token_195:  ; "grande. "
   .ascii "grande. "
+  .byte $00  ; end-of-token sentinel
 
 token_196:  ; "Dos "
   .ascii "Dos "
+  .byte $00  ; end-of-token sentinel
 
 token_197:  ; "tuneles "
   .ascii "tuneles "
+  .byte $00  ; end-of-token sentinel
 
 token_198:  ; "abren "
   .ascii "abren "
+  .byte $00  ; end-of-token sentinel
 
 token_199:  ; "frente "
   .ascii "frente "
+  .byte $00  ; end-of-token sentinel
 
 token_200:  ; "Decidir "
   .ascii "Decidir "
+  .byte $00  ; end-of-token sentinel
 
 token_201:  ; "estas "
   .ascii "estas "
+  .byte $00  ; end-of-token sentinel
 
 token_202:  ; "condiciones "
   .ascii "condiciones "
+  .byte $00  ; end-of-token sentinel
 
 token_203:  ; "dificil, "
   .ascii "dificil, "
+  .byte $00  ; end-of-token sentinel
 
 token_204:  ; "necesario. "
   .ascii "necesario. "
+  .byte $00  ; end-of-token sentinel
 
 token_205:  ; "sigue "
   .ascii "sigue "
+  .byte $00  ; end-of-token sentinel
 
 token_206:  ; "subiendo "
   .ascii "subiendo "
+  .byte $00  ; end-of-token sentinel
 
 token_207:  ; "lentamente."
   .ascii "lentamente."
+  .byte $00  ; end-of-token sentinel
 
 token_208:  ; "A "
   .ascii "A "
+  .byte $00  ; end-of-token sentinel
 
 token_209:  ; "ciegas "
   .ascii "ciegas "
+  .byte $00  ; end-of-token sentinel
 
 token_210:  ; "tanteas "
   .ascii "tanteas "
+  .byte $00  ; end-of-token sentinel
 
 token_211:  ; "pared "
   .ascii "pared "
+  .byte $00  ; end-of-token sentinel
 
 token_212:  ; "acaba. "
   .ascii "acaba. "
+  .byte $00  ; end-of-token sentinel
 
 token_213:  ; "Tienes "
   .ascii "Tienes "
+  .byte $00  ; end-of-token sentinel
 
 token_214:  ; "sensacion "
   .ascii "sensacion "
+  .byte $00  ; end-of-token sentinel
 
 token_215:  ; "llegaste "
   .ascii "llegaste "
+  .byte $00  ; end-of-token sentinel
 
 token_216:  ; "lugar "
   .ascii "lugar "
+  .byte $00  ; end-of-token sentinel
 
 token_217:  ; "espacioso. "
   .ascii "espacioso. "
+  .byte $00  ; end-of-token sentinel
 
 token_218:  ; "Recorres "
   .ascii "Recorres "
+  .byte $00  ; end-of-token sentinel
 
 token_219:  ; "tientas "
   .ascii "tientas "
+  .byte $00  ; end-of-token sentinel
 
 token_220:  ; "dos "
   .ascii "dos "
+  .byte $00  ; end-of-token sentinel
 
 token_221:  ; "grandes "
   .ascii "grandes "
+  .byte $00  ; end-of-token sentinel
 
 token_222:  ; "huecos. "
   .ascii "huecos. "
+  .byte $00  ; end-of-token sentinel
 
 token_223:  ; "¿Tal "
   .ascii "¿Tal "
+  .byte $00  ; end-of-token sentinel
 
 token_224:  ; "sean "
   .ascii "sean "
+  .byte $00  ; end-of-token sentinel
 
 token_225:  ; "tuneles?. "
   .ascii "tuneles?. "
+  .byte $00  ; end-of-token sentinel
 
 token_226:  ; "No "
   .ascii "No "
+  .byte $00  ; end-of-token sentinel
 
 token_227:  ; "detienes "
   .ascii "detienes "
+  .byte $00  ; end-of-token sentinel
 
 token_228:  ; "demasiado "
   .ascii "demasiado "
+  .byte $00  ; end-of-token sentinel
 
 token_229:  ; "pensarlo, "
   .ascii "pensarlo, "
+  .byte $00  ; end-of-token sentinel
 
 token_230:  ; "sientes "
   .ascii "sientes "
+  .byte $00  ; end-of-token sentinel
 
 token_231:  ; "contacto "
   .ascii "contacto "
+  .byte $00  ; end-of-token sentinel
 
 token_232:  ; "cuerpo."
   .ascii "cuerpo."
+  .byte $00  ; end-of-token sentinel
 
 token_233:  ; "Tardaste "
   .ascii "Tardaste "
+  .byte $00  ; end-of-token sentinel
 
 token_234:  ; "Muuuucho "
   .ascii "Muuuucho "
+  .byte $00  ; end-of-token sentinel
 
 token_235:  ; "quedaste "
   .ascii "quedaste "
+  .byte $00  ; end-of-token sentinel
 
 token_236:  ; "sin "
   .ascii "sin "
+  .byte $00  ; end-of-token sentinel
 
 token_237:  ; "tiempo....."
   .ascii "tiempo....."
+  .byte $00  ; end-of-token sentinel
 
 token_238:  ; "enemigo "
   .ascii "enemigo "
+  .byte $00  ; end-of-token sentinel
 
 token_239:  ; "siempre "
   .ascii "siempre "
+  .byte $00  ; end-of-token sentinel
 
 token_240:  ; "acechaba "
   .ascii "acechaba "
+  .byte $00  ; end-of-token sentinel
 
 token_241:  ; "atrapó, "
   .ascii "atrapó, "
+  .byte $00  ; end-of-token sentinel
 
 token_242:  ; "este "
   .ascii "este "
+  .byte $00  ; end-of-token sentinel
 
 token_243:  ; "fin"
   .ascii "fin"
+  .byte $00  ; end-of-token sentinel
 
 token_244:  ; "Tu "
   .ascii "Tu "
+  .byte $00  ; end-of-token sentinel
 
 token_245:  ; "acción "
   .ascii "acción "
+  .byte $00  ; end-of-token sentinel
 
 token_246:  ; "tenía "
   .ascii "tenía "
+  .byte $00  ; end-of-token sentinel
 
 token_247:  ; "gran "
   .ascii "gran "
+  .byte $00  ; end-of-token sentinel
 
 token_248:  ; "chance "
   .ascii "chance "
+  .byte $00  ; end-of-token sentinel
 
 token_249:  ; "fallar "
   .ascii "fallar "
+  .byte $00  ; end-of-token sentinel
 
 token_250:  ; "falló. "
   .ascii "falló. "
+  .byte $00  ; end-of-token sentinel
 
 token_dict_count:
   .byte 251
@@ -1285,6 +1549,7 @@ screen_0_id:
 
 screen_0_name:
   .ascii "s1s1"
+  .byte $00  ; end-of-string sentinel
 
 screen_0_action1:
   .byte 0  ; LEVANTARSE
@@ -1299,12 +1564,17 @@ screen_0_action4:
   .byte 13  ; MUERTE DIRECTA
 
 screen_0_description:
-  .ascii "Despiertas sobre piedra húmeda.\n"
-  .ascii "La caverna se cerro detrás de ti. \n"
+  .ascii "Despiertas sobre piedra húmeda."
+  .byte $0A  ; \n
+  .ascii "La caverna se cerro detrás de ti. "
+  .byte $0A  ; \n
   .ascii "Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera si"
-  .ascii "do final, no accidental.\n"
-  .ascii "El frío no duele todavía. \n"
+  .ascii "do final, no accidental."
+  .byte $0A  ; \n
+  .ascii "El frío no duele todavía. "
+  .byte $0A  ; \n
   .ascii "Sientes un constante goteo de agua, cada vez mas cerca de ti."
+  .byte $00  ; end-of-string sentinel
 
 screen_0_description_compressed:
   .word token_0  ; "Despiertas "
@@ -1355,62 +1625,65 @@ screen_0_description_compressed:
 
 screen_0_ascii:
   .ascii "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░#########░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░#         ##░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░#             #░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░#                ##░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░░░░░░░░░░░######                   #####░░░░░░░░░░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░░░░░░░░░░#     #                   #    #░░░░░░░░░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░░░░░░░░##     #                     #  # ###░░░░░░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░░░░░░░░#     #                      # #     #░░░░░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░░░░░░░#    #########                #####    #░░░░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░░░░░#######         #       ########      #   #░░░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░░░░#                 #######     ##        #   #░░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░░##                  ##           ##        #   #░░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░░░#                     ###           #       ######░░░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░░##                      ##             ##     ###   ##░░░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░░░#####                    #                #   ##       ##░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░░#      #    ####         ###                ###            #░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░#        ## #    #       #########        ###  #            #░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░#          ##      #   ###         ##     #   ########       #░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░#         #         ###              ##  #####        ##      #░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░#        #            #                ##              ##    #░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░#       #              #               #                ##   #░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░░#     #                #             #                  #  #░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░░##    #                 #            #                    # #░░░░░░░░░░"
-  .ascii "\n"
+  .byte $0A  ; \n
   .ascii "░░░░░░░░##    ##                 ##            #                  #   #░░░░░░░░░"
+  .byte $00  ; end-of-string sentinel
 
 screen_0_flashlight_on:
-  .ascii "\n"
+  .byte $0A  ; \n
+  .byte $00  ; end-of-string sentinel
 
 screen_0_flashlight_on_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_0_flashlight_off:
+  .byte $00  ; end-of-string sentinel
 
 screen_0_flashlight_off_compressed:
   .word $FFFF  ; end sentinel (empty)
@@ -1430,6 +1703,7 @@ screen_1_id:
 
 screen_1_name:
   .ascii "s1s2"
+  .byte $00  ; end-of-string sentinel
 
 screen_1_action1:
   .byte 7  ; VEO QUE CAE AGUA
@@ -1444,9 +1718,12 @@ screen_1_action4:
   .byte 255  ; none
 
 screen_1_description:
-  .ascii "Al levantarte, miras a tu alrededor.\n"
-  .ascii "Ves que el agua gotea lenta, pero constantemente, inundando la caverna.\n"
+  .ascii "Al levantarte, miras a tu alrededor."
+  .byte $0A  ; \n
+  .ascii "Ves que el agua gotea lenta, pero constantemente, inundando la caverna."
+  .byte $0A  ; \n
   .ascii "Como si midiera el tiempo."
+  .byte $00  ; end-of-string sentinel
 
 screen_1_description_compressed:
   .word token_40  ; "Al "
@@ -1474,13 +1751,16 @@ screen_1_description_compressed:
   .word $FFFF  ; end sentinel
 
 screen_1_ascii:
+  .byte $00  ; end-of-string sentinel
 
 screen_1_flashlight_on:
+  .byte $00  ; end-of-string sentinel
 
 screen_1_flashlight_on_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_1_flashlight_off:
+  .byte $00  ; end-of-string sentinel
 
 screen_1_flashlight_off_compressed:
   .word $FFFF  ; end sentinel (empty)
@@ -1500,6 +1780,7 @@ screen_2_id:
 
 screen_2_name:
   .ascii "s1s3"
+  .byte $00  ; end-of-string sentinel
 
 screen_2_action1:
   .byte 3  ; MIRAR ENTRADA
@@ -1514,16 +1795,23 @@ screen_2_action4:
   .byte 4  ; GRITAR
 
 screen_2_description:
-  .ascii "La caverna se abre en una cámara amplia pero baja. \n"
+  .ascii "La caverna se abre en una cámara amplia pero baja. "
+  .byte $0A  ; \n
   .ascii "El techo parece aplastarte con su peso, estalactitas afiladas cuelgan peligrosam"
-  .ascii "ente del mismo. \n"
+  .ascii "ente del mismo. "
+  .byte $0A  ; \n
   .ascii "Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tie"
-  .ascii "ne fuente clara. \n"
-  .ascii "El aire es frío y estancado. \n"
-  .ascii "Huele a roca mojada y a algo más viejo, casi orgánico. \n"
+  .ascii "ne fuente clara. "
+  .byte $0A  ; \n
+  .ascii "El aire es frío y estancado. "
+  .byte $0A  ; \n
+  .ascii "Huele a roca mojada y a algo más viejo, casi orgánico. "
+  .byte $0A  ; \n
   .ascii "El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se "
-  .ascii "pierde en la oscuridad\n"
+  .ascii "pierde en la oscuridad"
+  .byte $0A  ; \n
   .ascii "Siente que algo o alguien puede estar acechando"
+  .byte $00  ; end-of-string sentinel
 
 screen_2_description_compressed:
   .word token_4  ; "La "
@@ -1611,13 +1899,16 @@ screen_2_description_compressed:
   .word $FFFF  ; end sentinel
 
 screen_2_ascii:
+  .byte $00  ; end-of-string sentinel
 
 screen_2_flashlight_on:
+  .byte $00  ; end-of-string sentinel
 
 screen_2_flashlight_on_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_2_flashlight_off:
+  .byte $00  ; end-of-string sentinel
 
 screen_2_flashlight_off_compressed:
   .word $FFFF  ; end sentinel (empty)
@@ -1637,6 +1928,7 @@ screen_3_id:
 
 screen_3_name:
   .ascii "startScreen"
+  .byte $00  ; end-of-string sentinel
 
 screen_3_action1:
   .byte 1  ; MIRAR ALREDEDOR
@@ -1652,6 +1944,7 @@ screen_3_action4:
 
 screen_3_description:
   .ascii "Bienvenido a la aventura gráfica más Espectacular del mundo"
+  .byte $00  ; end-of-string sentinel
 
 screen_3_description_compressed:
   .word token_116  ; "Bienvenido "
@@ -1666,13 +1959,16 @@ screen_3_description_compressed:
   .word $FFFF  ; end sentinel
 
 screen_3_ascii:
+  .byte $00  ; end-of-string sentinel
 
 screen_3_flashlight_on:
+  .byte $00  ; end-of-string sentinel
 
 screen_3_flashlight_on_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_3_flashlight_off:
+  .byte $00  ; end-of-string sentinel
 
 screen_3_flashlight_off_compressed:
   .word $FFFF  ; end sentinel (empty)
@@ -1692,6 +1988,7 @@ screen_4_id:
 
 screen_4_name:
   .ascii "endScreens1s1"
+  .byte $00  ; end-of-string sentinel
 
 screen_4_action1:
   .byte 9  ; TERMINAR EL JUEGO
@@ -1709,6 +2006,7 @@ screen_4_description:
   .ascii "El constante goteo era hipnotico. Gota, pausa, gota. El agua comenzo a entumecer"
   .ascii " tus extremidades hasta que dejaste de sentirlas. Un eterno sueño te dio la bien"
   .ascii "venida."
+  .byte $00  ; end-of-string sentinel
 
 screen_4_description_compressed:
   .word token_26  ; "El "
@@ -1741,13 +2039,16 @@ screen_4_description_compressed:
   .word $FFFF  ; end sentinel
 
 screen_4_ascii:
+  .byte $00  ; end-of-string sentinel
 
 screen_4_flashlight_on:
+  .byte $00  ; end-of-string sentinel
 
 screen_4_flashlight_on_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_4_flashlight_off:
+  .byte $00  ; end-of-string sentinel
 
 screen_4_flashlight_off_compressed:
   .word $FFFF  ; end sentinel (empty)
@@ -1767,6 +2068,7 @@ screen_5_id:
 
 screen_5_name:
   .ascii "endScreenDefault"
+  .byte $00  ; end-of-string sentinel
 
 screen_5_action1:
   .byte 9  ; TERMINAR EL JUEGO
@@ -1782,6 +2084,7 @@ screen_5_action4:
 
 screen_5_description:
   .ascii "Asi terminas tus dias atrapado en la Caverna"
+  .byte $00  ; end-of-string sentinel
 
 screen_5_description_compressed:
   .word token_138  ; "Asi "
@@ -1795,13 +2098,16 @@ screen_5_description_compressed:
   .word $FFFF  ; end sentinel
 
 screen_5_ascii:
+  .byte $00  ; end-of-string sentinel
 
 screen_5_flashlight_on:
+  .byte $00  ; end-of-string sentinel
 
 screen_5_flashlight_on_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_5_flashlight_off:
+  .byte $00  ; end-of-string sentinel
 
 screen_5_flashlight_off_compressed:
   .word $FFFF  ; end sentinel (empty)
@@ -1821,6 +2127,7 @@ screen_6_id:
 
 screen_6_name:
   .ascii "s1s4"
+  .byte $00  ; end-of-string sentinel
 
 screen_6_action1:
   .byte 10  ; EXPLORAR MARCAS
@@ -1839,6 +2146,7 @@ screen_6_description:
   .ascii "nte grande para pasar. Hay marcas irregulares, como si alguien hubiera intentado"
   .ascii " moverlas y se hubiera detenido a mitad de camino. Tal vez no sea una opcion vol"
   .ascii "ver por ahí, pero la idea de explorar una caverna a oscuras no parece tentadora."
+  .byte $00  ; end-of-string sentinel
 
 screen_6_description_compressed:
   .word token_143  ; "Entre "
@@ -1899,13 +2207,16 @@ screen_6_description_compressed:
   .word $FFFF  ; end sentinel
 
 screen_6_ascii:
+  .byte $00  ; end-of-string sentinel
 
 screen_6_flashlight_on:
+  .byte $00  ; end-of-string sentinel
 
 screen_6_flashlight_on_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_6_flashlight_off:
+  .byte $00  ; end-of-string sentinel
 
 screen_6_flashlight_off_compressed:
   .word $FFFF  ; end sentinel (empty)
@@ -1925,6 +2236,7 @@ screen_7_id:
 
 screen_7_name:
   .ascii "s1s5"
+  .byte $00  ; end-of-string sentinel
 
 screen_7_action1:
   .byte 12  ; VOLVER A MIRAR ADELANTE
@@ -1940,6 +2252,7 @@ screen_7_action4:
 
 screen_7_description:
   .ascii "Este es el PITFALL"
+  .byte $00  ; end-of-string sentinel
 
 screen_7_description_compressed:
   .word token_172  ; "Este "
@@ -1949,13 +2262,16 @@ screen_7_description_compressed:
   .word $FFFF  ; end sentinel
 
 screen_7_ascii:
+  .byte $00  ; end-of-string sentinel
 
 screen_7_flashlight_on:
+  .byte $00  ; end-of-string sentinel
 
 screen_7_flashlight_on_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_7_flashlight_off:
+  .byte $00  ; end-of-string sentinel
 
 screen_7_flashlight_off_compressed:
   .word $FFFF  ; end sentinel (empty)
@@ -1975,6 +2291,7 @@ screen_8_id:
 
 screen_8_name:
   .ascii "endScreens1s4"
+  .byte $00  ; end-of-string sentinel
 
 screen_8_action1:
   .byte 9  ; TERMINAR EL JUEGO
@@ -1990,9 +2307,10 @@ screen_8_action4:
 
 screen_8_description:
   .ascii "El suelo comienza a temblar y entrada empieza a desmoronarse sobre ti. Lo ultimo"
-  .ascii " que piensas es que no estaban sellando la salida. Estaban sosteniendo el resto\"
-  .ascii "n"
+  .ascii " que piensas es que no estaban sellando la salida. Estaban sosteniendo el resto"
+  .byte $0A  ; \n
   .ascii "Haz muerto"
+  .byte $00  ; end-of-string sentinel
 
 screen_8_description_compressed:
   .word token_26  ; "El "
@@ -2027,13 +2345,16 @@ screen_8_description_compressed:
   .word $FFFF  ; end sentinel
 
 screen_8_ascii:
+  .byte $00  ; end-of-string sentinel
 
 screen_8_flashlight_on:
+  .byte $00  ; end-of-string sentinel
 
 screen_8_flashlight_on_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_8_flashlight_off:
+  .byte $00  ; end-of-string sentinel
 
 screen_8_flashlight_off_compressed:
   .word $FFFF  ; end sentinel (empty)
@@ -2053,6 +2374,7 @@ screen_9_id:
 
 screen_9_name:
   .ascii "s2s1"
+  .byte $00  ; end-of-string sentinel
 
 screen_9_action1:
   .byte 255  ; none
@@ -2067,16 +2389,19 @@ screen_9_action4:
   .byte 255  ; none
 
 screen_9_description:
+  .byte $00  ; end-of-string sentinel
 
 screen_9_description_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_9_ascii:
+  .byte $00  ; end-of-string sentinel
 
 screen_9_flashlight_on:
   .ascii "Luego de explorar el pasillo, te encuentras con una sala grande. Dos tuneles se "
   .ascii "abren frente a ti. Decidir en estas condiciones es dificil, pero necesario. El a"
   .ascii "gua sigue subiendo lentamente."
+  .byte $00  ; end-of-string sentinel
 
 screen_9_flashlight_on_compressed:
   .word token_191  ; "Luego "
@@ -2117,6 +2442,7 @@ screen_9_flashlight_off:
   .ascii "e que llegaste a un lugar mas espacioso. Recorres la pared a tientas y encuentra"
   .ascii "s dos grandes huecos. ¿Tal vez sean tuneles?. No te detienes demasiado a pensarl"
   .ascii "o, sientes mas agua en contacto con tu cuerpo."
+  .byte $00  ; end-of-string sentinel
 
 screen_9_flashlight_off_compressed:
   .word token_208  ; "A "
@@ -2186,6 +2512,7 @@ screen_10_id:
 
 screen_10_name:
   .ascii "EndScreenSimulationTimeisUp"
+  .byte $00  ; end-of-string sentinel
 
 screen_10_action1:
   .byte 9  ; TERMINAR EL JUEGO
@@ -2201,6 +2528,7 @@ screen_10_action4:
 
 screen_10_description:
   .ascii "Tardaste Muuuucho y te quedaste sin tiempo....."
+  .byte $00  ; end-of-string sentinel
 
 screen_10_description_compressed:
   .word token_233  ; "Tardaste "
@@ -2213,13 +2541,16 @@ screen_10_description_compressed:
   .word $FFFF  ; end sentinel
 
 screen_10_ascii:
+  .byte $00  ; end-of-string sentinel
 
 screen_10_flashlight_on:
+  .byte $00  ; end-of-string sentinel
 
 screen_10_flashlight_on_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_10_flashlight_off:
+  .byte $00  ; end-of-string sentinel
 
 screen_10_flashlight_off_compressed:
   .word $FFFF  ; end sentinel (empty)
@@ -2239,6 +2570,7 @@ screen_11_id:
 
 screen_11_name:
   .ascii "endScreenByEnemy"
+  .byte $00  ; end-of-string sentinel
 
 screen_11_action1:
   .byte 9  ; TERMINAR EL JUEGO
@@ -2254,6 +2586,7 @@ screen_11_action4:
 
 screen_11_description:
   .ascii "El enemigo que siempre acechaba te atrapó, este es tu fin"
+  .byte $00  ; end-of-string sentinel
 
 screen_11_description_compressed:
   .word token_26  ; "El "
@@ -2270,13 +2603,16 @@ screen_11_description_compressed:
   .word $FFFF  ; end sentinel
 
 screen_11_ascii:
+  .byte $00  ; end-of-string sentinel
 
 screen_11_flashlight_on:
+  .byte $00  ; end-of-string sentinel
 
 screen_11_flashlight_on_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_11_flashlight_off:
+  .byte $00  ; end-of-string sentinel
 
 screen_11_flashlight_off_compressed:
   .word $FFFF  ; end sentinel (empty)
@@ -2296,6 +2632,7 @@ screen_12_id:
 
 screen_12_name:
   .ascii "endScreenByActionFailed"
+  .byte $00  ; end-of-string sentinel
 
 screen_12_action1:
   .byte 9  ; TERMINAR EL JUEGO
@@ -2311,6 +2648,7 @@ screen_12_action4:
 
 screen_12_description:
   .ascii "Tu acción tenía una gran chance de fallar y falló. Este es tu fin"
+  .byte $00  ; end-of-string sentinel
 
 screen_12_description_compressed:
   .word token_244  ; "Tu "
@@ -2330,13 +2668,16 @@ screen_12_description_compressed:
   .word $FFFF  ; end sentinel
 
 screen_12_ascii:
+  .byte $00  ; end-of-string sentinel
 
 screen_12_flashlight_on:
+  .byte $00  ; end-of-string sentinel
 
 screen_12_flashlight_on_compressed:
   .word $FFFF  ; end sentinel (empty)
 
 screen_12_flashlight_off:
+  .byte $00  ; end-of-string sentinel
 
 screen_12_flashlight_off_compressed:
   .word $FFFF  ; end sentinel (empty)
