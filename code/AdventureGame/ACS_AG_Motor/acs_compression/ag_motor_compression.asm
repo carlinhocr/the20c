@@ -358,7 +358,7 @@ programStart:
   jsr screenInit
   jsr lcdDemoMessage
   jsr printTokenExample
-  jsr printTokenGroupExample
+  ;jsr printTokenGroupExample
 loopP:
   jmp loopP  
 
