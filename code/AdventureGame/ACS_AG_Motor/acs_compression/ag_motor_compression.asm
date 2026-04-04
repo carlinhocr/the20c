@@ -670,7 +670,7 @@ printTokenGroup:
   tya
   pha
   ;here print first line
-  ldx #$ff
+  ldy #$ff
 printGroupTokenLoop:
   iny
   lda (tokenGroupLowByte),y
