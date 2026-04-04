@@ -672,10 +672,10 @@ printTokenGroup:
   ;here print first line
   ldx #$ff
 printGroupTokenLoop:
-  inx
+  iny
   lda (tokenGroupLowByte),y
   sta tokenLowByte
-  inx
+  iny
   lda (tokenGroupLowByte),y
   sta tokenHighByte
   lda tokenLowByte
