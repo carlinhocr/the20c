@@ -674,14 +674,14 @@ printTokenGroup:
 printGroupTokenLoop:
   iny
   lda (tokenGroupLowByte),Y
-  sta tokenGroupLowByte
+  sta tokenLowByte
   iny
   lda (tokenGroupHighByte),Y
-  sta tokenGroupHighByte
-  lda tokenGroupLowByte
+  sta tokenHighByte
+  lda tokenLowByte
   cmp #$ff
   bne printGroupTokenPrint
-  lda tokenGroupHighByte
+  lda tokenHighByte
   cmp #$ff
   bne printGroupTokenPrint
   jmp printGroupTokenEnd
