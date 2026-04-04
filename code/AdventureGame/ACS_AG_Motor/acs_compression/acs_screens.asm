@@ -3,1355 +3,2077 @@
 ; ============================================================
 
 ; ════════════════════════════════════════════════════════════
-;  Token Dictionary — compressed string tokens
+;  ACS Shared Token Dictionary
+;  1-byte IDs, implicit space between words
+;  $FF=end  $FE=\n  $FA..$F9=inline literal
+;  249 entries
 ; ════════════════════════════════════════════════════════════
 
 token_dict_index:
-  .word token_0  ; [0] "Despiertas "
-  .word token_1  ; [1] "sobre "
-  .word token_2  ; [2] "piedra "
-  .word token_3  ; [3] "húmeda.\n"
-  .word token_4  ; [4] "La "
-  .word token_5  ; [5] "caverna "
-  .word token_6  ; [6] "se "
-  .word token_7  ; [7] "cerro "
-  .word token_8  ; [8] "detrás "
-  .word token_9  ; [9] "de "
-  .word token_10  ; [10] "ti. \n"
-  .word token_11  ; [11] "Un "
-  .word token_12  ; [12] "derrumbe "
-  .word token_13  ; [13] "rocas "
-  .word token_14  ; [14] "antiguas, "
-  .word token_15  ; [15] "pesadas, "
-  .word token_16  ; [16] "acomodadas "
-  .word token_17  ; [17] "como "
-  .word token_18  ; [18] "si "
-  .word token_19  ; [19] "el "
-  .word token_20  ; [20] "colapso "
-  .word token_21  ; [21] "hubiera "
-  .word token_22  ; [22] "sido "
-  .word token_23  ; [23] "final, "
-  .word token_24  ; [24] "no "
-  .word token_25  ; [25] "accidental.\n"
-  .word token_26  ; [26] "El "
-  .word token_27  ; [27] "frío "
-  .word token_28  ; [28] "duele "
-  .word token_29  ; [29] "todavía. \n"
-  .word token_30  ; [30] "Sientes "
-  .word token_31  ; [31] "un "
-  .word token_32  ; [32] "constante "
-  .word token_33  ; [33] "goteo "
-  .word token_34  ; [34] "agua, "
-  .word token_35  ; [35] "cada "
-  .word token_36  ; [36] "vez "
-  .word token_37  ; [37] "mas "
-  .word token_38  ; [38] "cerca "
-  .word token_39  ; [39] "ti."
-  .word token_40  ; [40] "Al "
-  .word token_41  ; [41] "levantarte, "
-  .word token_42  ; [42] "miras "
-  .word token_43  ; [43] "a "
-  .word token_44  ; [44] "tu "
-  .word token_45  ; [45] "alrededor.\n"
-  .word token_46  ; [46] "Ves "
-  .word token_47  ; [47] "que "
-  .word token_48  ; [48] "agua "
-  .word token_49  ; [49] "gotea "
-  .word token_50  ; [50] "lenta, "
-  .word token_51  ; [51] "pero "
-  .word token_52  ; [52] "constantemente, "
-  .word token_53  ; [53] "inundando "
-  .word token_54  ; [54] "la "
-  .word token_55  ; [55] "caverna.\n"
-  .word token_56  ; [56] "Como "
-  .word token_57  ; [57] "midiera "
-  .word token_58  ; [58] "tiempo."
-  .word token_59  ; [59] "abre "
-  .word token_60  ; [60] "en "
-  .word token_61  ; [61] "una "
-  .word token_62  ; [62] "cámara "
-  .word token_63  ; [63] "amplia "
-  .word token_64  ; [64] "baja. \n"
-  .word token_65  ; [65] "techo "
-  .word token_66  ; [66] "parece "
-  .word token_67  ; [67] "aplastarte "
-  .word token_68  ; [68] "con "
-  .word token_69  ; [69] "su "
-  .word token_70  ; [70] "peso, "
-  .word token_71  ; [71] "estalactitas "
-  .word token_72  ; [72] "afiladas "
-  .word token_73  ; [73] "cuelgan "
-  .word token_74  ; [74] "peligrosamente "
-  .word token_75  ; [75] "del "
-  .word token_76  ; [76] "mismo. \n"
-  .word token_77  ; [77] "Las "
-  .word token_78  ; [78] "paredes "
-  .word token_79  ; [79] "son "
-  .word token_80  ; [80] "rugosas, "
-  .word token_81  ; [81] "húmedas "
-  .word token_82  ; [82] "al "
-  .word token_83  ; [83] "tacto, "
-  .word token_84  ; [84] "y "
-  .word token_85  ; [85] "reflejan "
-  .word token_86  ; [86] "luz "
-  .word token_87  ; [87] "apagada "
-  .word token_88  ; [88] "tiene "
-  .word token_89  ; [89] "fuente "
-  .word token_90  ; [90] "clara. \n"
-  .word token_91  ; [91] "aire "
-  .word token_92  ; [92] "es "
-  .word token_93  ; [93] "estancado. \n"
-  .word token_94  ; [94] "Huele "
-  .word token_95  ; [95] "roca "
-  .word token_96  ; [96] "mojada "
-  .word token_97  ; [97] "algo "
-  .word token_98  ; [98] "más "
-  .word token_99  ; [99] "viejo, "
-  .word token_100  ; [100] "casi "
-  .word token_101  ; [101] "orgánico. \n"
-  .word token_102  ; [102] "suelo "
-  .word token_103  ; [103] "marcas "
-  .word token_104  ; [104] "irregulares, "
-  .word token_105  ; [105] "pasos "
-  .word token_106  ; [106] "interrumpidos "
-  .word token_107  ; [107] "camino "
-  .word token_108  ; [108] "pierde "
-  .word token_109  ; [109] "oscuridad\n"
-  .word token_110  ; [110] "Siente "
-  .word token_111  ; [111] "o "
-  .word token_112  ; [112] "alguien "
-  .word token_113  ; [113] "puede "
-  .word token_114  ; [114] "estar "
-  .word token_115  ; [115] "acechando"
-  .word token_116  ; [116] "Bienvenido "
-  .word token_117  ; [117] "aventura "
-  .word token_118  ; [118] "gráfica "
-  .word token_119  ; [119] "Espectacular "
-  .word token_120  ; [120] "mundo"
-  .word token_121  ; [121] "era "
-  .word token_122  ; [122] "hipnotico. "
-  .word token_123  ; [123] "Gota, "
-  .word token_124  ; [124] "pausa, "
-  .word token_125  ; [125] "gota. "
-  .word token_126  ; [126] "comenzo "
-  .word token_127  ; [127] "entumecer "
-  .word token_128  ; [128] "tus "
-  .word token_129  ; [129] "extremidades "
-  .word token_130  ; [130] "hasta "
-  .word token_131  ; [131] "dejaste "
-  .word token_132  ; [132] "sentirlas. "
-  .word token_133  ; [133] "eterno "
-  .word token_134  ; [134] "sueño "
-  .word token_135  ; [135] "te "
-  .word token_136  ; [136] "dio "
-  .word token_137  ; [137] "bienvenida."
-  .word token_138  ; [138] "Asi "
-  .word token_139  ; [139] "terminas "
-  .word token_140  ; [140] "dias "
-  .word token_141  ; [141] "atrapado "
-  .word token_142  ; [142] "Caverna"
-  .word token_143  ; [143] "Entre "
-  .word token_144  ; [144] "las "
-  .word token_145  ; [145] "hay "
-  .word token_146  ; [146] "rendijas "
-  .word token_147  ; [147] "por "
-  .word token_148  ; [148] "donde "
-  .word token_149  ; [149] "entra "
-  .word token_150  ; [150] "viciado, "
-  .word token_151  ; [151] "ninguna "
-  .word token_152  ; [152] "lo "
-  .word token_153  ; [153] "bastante "
-  .word token_154  ; [154] "grande "
-  .word token_155  ; [155] "para "
-  .word token_156  ; [156] "pasar. "
-  .word token_157  ; [157] "Hay "
-  .word token_158  ; [158] "intentado "
-  .word token_159  ; [159] "moverlas "
-  .word token_160  ; [160] "detenido "
-  .word token_161  ; [161] "mitad "
-  .word token_162  ; [162] "camino. "
-  .word token_163  ; [163] "Tal "
-  .word token_164  ; [164] "sea "
-  .word token_165  ; [165] "opcion "
-  .word token_166  ; [166] "volver "
-  .word token_167  ; [167] "ahí, "
-  .word token_168  ; [168] "idea "
-  .word token_169  ; [169] "explorar "
-  .word token_170  ; [170] "oscuras "
-  .word token_171  ; [171] "tentadora."
-  .word token_172  ; [172] "Este "
-  .word token_173  ; [173] "PITFALL"
-  .word token_174  ; [174] "comienza "
-  .word token_175  ; [175] "temblar "
-  .word token_176  ; [176] "entrada "
-  .word token_177  ; [177] "empieza "
-  .word token_178  ; [178] "desmoronarse "
-  .word token_179  ; [179] "ti. "
-  .word token_180  ; [180] "Lo "
-  .word token_181  ; [181] "ultimo "
-  .word token_182  ; [182] "piensas "
-  .word token_183  ; [183] "estaban "
-  .word token_184  ; [184] "sellando "
-  .word token_185  ; [185] "salida. "
-  .word token_186  ; [186] "Estaban "
-  .word token_187  ; [187] "sosteniendo "
-  .word token_188  ; [188] "resto\n"
-  .word token_189  ; [189] "Haz "
-  .word token_190  ; [190] "muerto"
-  .word token_191  ; [191] "Luego "
-  .word token_192  ; [192] "pasillo, "
-  .word token_193  ; [193] "encuentras "
-  .word token_194  ; [194] "sala "
-  .word token_195  ; [195] "grande. "
-  .word token_196  ; [196] "Dos "
-  .word token_197  ; [197] "tuneles "
-  .word token_198  ; [198] "abren "
-  .word token_199  ; [199] "frente "
-  .word token_200  ; [200] "Decidir "
-  .word token_201  ; [201] "estas "
-  .word token_202  ; [202] "condiciones "
-  .word token_203  ; [203] "dificil, "
-  .word token_204  ; [204] "necesario. "
-  .word token_205  ; [205] "sigue "
-  .word token_206  ; [206] "subiendo "
-  .word token_207  ; [207] "lentamente."
-  .word token_208  ; [208] "A "
-  .word token_209  ; [209] "ciegas "
-  .word token_210  ; [210] "tanteas "
-  .word token_211  ; [211] "pared "
-  .word token_212  ; [212] "acaba. "
-  .word token_213  ; [213] "Tienes "
-  .word token_214  ; [214] "sensacion "
-  .word token_215  ; [215] "llegaste "
-  .word token_216  ; [216] "lugar "
-  .word token_217  ; [217] "espacioso. "
-  .word token_218  ; [218] "Recorres "
-  .word token_219  ; [219] "tientas "
-  .word token_220  ; [220] "dos "
-  .word token_221  ; [221] "grandes "
-  .word token_222  ; [222] "huecos. "
-  .word token_223  ; [223] "¿Tal "
-  .word token_224  ; [224] "sean "
-  .word token_225  ; [225] "tuneles?. "
-  .word token_226  ; [226] "No "
-  .word token_227  ; [227] "detienes "
-  .word token_228  ; [228] "demasiado "
-  .word token_229  ; [229] "pensarlo, "
-  .word token_230  ; [230] "sientes "
-  .word token_231  ; [231] "contacto "
-  .word token_232  ; [232] "cuerpo."
-  .word token_233  ; [233] "Tardaste "
-  .word token_234  ; [234] "Muuuucho "
-  .word token_235  ; [235] "quedaste "
-  .word token_236  ; [236] "sin "
-  .word token_237  ; [237] "tiempo....."
-  .word token_238  ; [238] "enemigo "
-  .word token_239  ; [239] "siempre "
-  .word token_240  ; [240] "acechaba "
-  .word token_241  ; [241] "atrapó, "
-  .word token_242  ; [242] "este "
-  .word token_243  ; [243] "fin"
-  .word token_244  ; [244] "Tu "
-  .word token_245  ; [245] "acción "
-  .word token_246  ; [246] "tenía "
-  .word token_247  ; [247] "gran "
-  .word token_248  ; [248] "chance "
-  .word token_249  ; [249] "fallar "
-  .word token_250  ; [250] "falló. "
-
-token_0:  ; "Despiertas "
-  .ascii "Despiertas "
-
-token_1:  ; "sobre "
-  .ascii "sobre "
-
-token_2:  ; "piedra "
-  .ascii "piedra "
-
-token_3:  ; "húmeda.\n"
-  .ascii "húmeda.\n"
-
-token_4:  ; "La "
-  .ascii "La "
-
-token_5:  ; "caverna "
-  .ascii "caverna "
-
-token_6:  ; "se "
-  .ascii "se "
-
-token_7:  ; "cerro "
-  .ascii "cerro "
-
-token_8:  ; "detrás "
-  .ascii "detrás "
-
-token_9:  ; "de "
-  .ascii "de "
-
-token_10:  ; "ti. \n"
-  .ascii "ti. \n"
-
-token_11:  ; "Un "
-  .ascii "Un "
-
-token_12:  ; "derrumbe "
-  .ascii "derrumbe "
-
-token_13:  ; "rocas "
-  .ascii "rocas "
-
-token_14:  ; "antiguas, "
-  .ascii "antiguas, "
-
-token_15:  ; "pesadas, "
-  .ascii "pesadas, "
-
-token_16:  ; "acomodadas "
-  .ascii "acomodadas "
-
-token_17:  ; "como "
-  .ascii "como "
-
-token_18:  ; "si "
-  .ascii "si "
-
-token_19:  ; "el "
-  .ascii "el "
-
-token_20:  ; "colapso "
-  .ascii "colapso "
-
-token_21:  ; "hubiera "
-  .ascii "hubiera "
-
-token_22:  ; "sido "
-  .ascii "sido "
-
-token_23:  ; "final, "
-  .ascii "final, "
-
-token_24:  ; "no "
-  .ascii "no "
-
-token_25:  ; "accidental.\n"
-  .ascii "accidental.\n"
-
-token_26:  ; "El "
-  .ascii "El "
-
-token_27:  ; "frío "
-  .ascii "frío "
-
-token_28:  ; "duele "
-  .ascii "duele "
-
-token_29:  ; "todavía. \n"
-  .ascii "todavía. \n"
-
-token_30:  ; "Sientes "
-  .ascii "Sientes "
-
-token_31:  ; "un "
-  .ascii "un "
-
-token_32:  ; "constante "
-  .ascii "constante "
-
-token_33:  ; "goteo "
-  .ascii "goteo "
-
-token_34:  ; "agua, "
-  .ascii "agua, "
-
-token_35:  ; "cada "
-  .ascii "cada "
-
-token_36:  ; "vez "
-  .ascii "vez "
-
-token_37:  ; "mas "
-  .ascii "mas "
-
-token_38:  ; "cerca "
-  .ascii "cerca "
-
-token_39:  ; "ti."
-  .ascii "ti."
-
-token_40:  ; "Al "
-  .ascii "Al "
-
-token_41:  ; "levantarte, "
-  .ascii "levantarte, "
-
-token_42:  ; "miras "
-  .ascii "miras "
-
-token_43:  ; "a "
-  .ascii "a "
-
-token_44:  ; "tu "
-  .ascii "tu "
-
-token_45:  ; "alrededor.\n"
-  .ascii "alrededor.\n"
-
-token_46:  ; "Ves "
-  .ascii "Ves "
-
-token_47:  ; "que "
-  .ascii "que "
-
-token_48:  ; "agua "
-  .ascii "agua "
-
-token_49:  ; "gotea "
-  .ascii "gotea "
-
-token_50:  ; "lenta, "
-  .ascii "lenta, "
-
-token_51:  ; "pero "
-  .ascii "pero "
-
-token_52:  ; "constantemente, "
-  .ascii "constantemente, "
-
-token_53:  ; "inundando "
-  .ascii "inundando "
-
-token_54:  ; "la "
-  .ascii "la "
-
-token_55:  ; "caverna.\n"
-  .ascii "caverna.\n"
-
-token_56:  ; "Como "
-  .ascii "Como "
-
-token_57:  ; "midiera "
-  .ascii "midiera "
-
-token_58:  ; "tiempo."
-  .ascii "tiempo."
-
-token_59:  ; "abre "
-  .ascii "abre "
-
-token_60:  ; "en "
-  .ascii "en "
-
-token_61:  ; "una "
-  .ascii "una "
-
-token_62:  ; "cámara "
-  .ascii "cámara "
-
-token_63:  ; "amplia "
-  .ascii "amplia "
-
-token_64:  ; "baja. \n"
-  .ascii "baja. \n"
-
-token_65:  ; "techo "
-  .ascii "techo "
-
-token_66:  ; "parece "
-  .ascii "parece "
-
-token_67:  ; "aplastarte "
-  .ascii "aplastarte "
-
-token_68:  ; "con "
-  .ascii "con "
-
-token_69:  ; "su "
-  .ascii "su "
-
-token_70:  ; "peso, "
-  .ascii "peso, "
-
-token_71:  ; "estalactitas "
-  .ascii "estalactitas "
-
-token_72:  ; "afiladas "
-  .ascii "afiladas "
-
-token_73:  ; "cuelgan "
-  .ascii "cuelgan "
-
-token_74:  ; "peligrosamente "
-  .ascii "peligrosamente "
-
-token_75:  ; "del "
-  .ascii "del "
-
-token_76:  ; "mismo. \n"
-  .ascii "mismo. \n"
-
-token_77:  ; "Las "
-  .ascii "Las "
-
-token_78:  ; "paredes "
-  .ascii "paredes "
-
-token_79:  ; "son "
-  .ascii "son "
-
-token_80:  ; "rugosas, "
-  .ascii "rugosas, "
-
-token_81:  ; "húmedas "
-  .ascii "húmedas "
-
-token_82:  ; "al "
-  .ascii "al "
-
-token_83:  ; "tacto, "
-  .ascii "tacto, "
-
-token_84:  ; "y "
-  .ascii "y "
-
-token_85:  ; "reflejan "
-  .ascii "reflejan "
-
-token_86:  ; "luz "
-  .ascii "luz "
-
-token_87:  ; "apagada "
-  .ascii "apagada "
-
-token_88:  ; "tiene "
-  .ascii "tiene "
-
-token_89:  ; "fuente "
-  .ascii "fuente "
-
-token_90:  ; "clara. \n"
-  .ascii "clara. \n"
-
-token_91:  ; "aire "
-  .ascii "aire "
-
-token_92:  ; "es "
-  .ascii "es "
-
-token_93:  ; "estancado. \n"
-  .ascii "estancado. \n"
-
-token_94:  ; "Huele "
-  .ascii "Huele "
-
-token_95:  ; "roca "
-  .ascii "roca "
-
-token_96:  ; "mojada "
-  .ascii "mojada "
-
-token_97:  ; "algo "
-  .ascii "algo "
-
-token_98:  ; "más "
-  .ascii "más "
-
-token_99:  ; "viejo, "
-  .ascii "viejo, "
-
-token_100:  ; "casi "
-  .ascii "casi "
-
-token_101:  ; "orgánico. \n"
-  .ascii "orgánico. \n"
-
-token_102:  ; "suelo "
-  .ascii "suelo "
-
-token_103:  ; "marcas "
-  .ascii "marcas "
-
-token_104:  ; "irregulares, "
-  .ascii "irregulares, "
-
-token_105:  ; "pasos "
-  .ascii "pasos "
-
-token_106:  ; "interrumpidos "
-  .ascii "interrumpidos "
-
-token_107:  ; "camino "
-  .ascii "camino "
-
-token_108:  ; "pierde "
-  .ascii "pierde "
-
-token_109:  ; "oscuridad\n"
-  .ascii "oscuridad\n"
-
-token_110:  ; "Siente "
-  .ascii "Siente "
-
-token_111:  ; "o "
-  .ascii "o "
-
-token_112:  ; "alguien "
-  .ascii "alguien "
-
-token_113:  ; "puede "
-  .ascii "puede "
-
-token_114:  ; "estar "
-  .ascii "estar "
+  .word token_0  ; [0] "a" (x77)
+  .word token_1  ; [1] "el" (x70)
+  .word token_2  ; [2] "la" (x65)
+  .word token_3  ; [3] "te" (x49)
+  .word token_4  ; [4] "Accion" (x48)
+  .word token_5  ; [5] "de" (x45)
+  .word token_6  ; [6] "y" (x32)
+  .word token_7  ; [7] "que" (x31)
+  .word token_8  ; [8] "una" (x27)
+  .word token_9  ; [9] "La" (x26)
+  .word token_10  ; [10] "raices" (x26)
+  .word token_11  ; [11] "en" (x25)
+  .word token_12  ; [12] "El" (x24)
+  .word token_13  ; [13] "se" (x24)
+  .word token_14  ; [14] "Exitosa:" (x24)
+  .word token_15  ; [15] "Fallida:" (x24)
+  .word token_16  ; [16] "un" (x22)
+  .word token_17  ; [17] "No" (x22)
+  .word token_18  ; [18] "Comenzas" (x20)
+  .word token_19  ; [19] "las" (x19)
+  .word token_20  ; [20] "por" (x18)
+  .word token_21  ; [21] "Muerte" (x18)
+  .word token_22  ; [22] "hay" (x17)
+  .word token_23  ; [23] "Procedes" (x16)
+  .word token_24  ; [24] "Elegis" (x15)
+  .word token_25  ; [25] "no" (x14)
+  .word token_26  ; [26] "[LINTERNA]" (x13)
+  .word token_27  ; [27] "salida." (x13)
+  .word token_28  ; [28] "simbolo" (x13)
+  .word token_29  ; [29] "Presionas" (x13)
+  .word token_30  ; [30] "mas" (x12)
+  .word token_31  ; [31] "camino" (x12)
+  .word token_32  ; [32] "LA" (x11)
+  .word token_33  ; [33] "con" (x11)
+  .word token_34  ; [34] "parece" (x11)
+  .word token_35  ; [35] "sala" (x11)
+  .word token_36  ; [36] "pero" (x11)
+  .word token_37  ; [37] "pantalla" (x11)
+  .word token_38  ; [38] "iluminar" (x11)
+  .word token_39  ; [39] "EL" (x10)
+  .word token_40  ; [40] "ROCAS" (x10)
+  .word token_41  ; [41] "UN" (x10)
+  .word token_42  ; [42] "llegar" (x10)
+  .word token_43  ; [43] "miedo" (x10)
+  .word token_44  ; [44] "descender" (x10)
+  .word token_45  ; [45] "Te" (x9)
+  .word token_46  ; [46] "al" (x9)
+  .word token_47  ; [47] "linterna" (x9)
+  .word token_48  ; [48] "del" (x9)
+  .word token_49  ; [49] "anterior" (x9)
+  .word token_50  ; [50] "Se" (x8)
+  .word token_51  ; [51] "soga." (x8)
+  .word token_52  ; [52] "Logras" (x8)
+  .word token_53  ; [53] "nadar" (x8)
+  .word token_54  ; [54] "A" (x7)
+  .word token_55  ; [55] "ser" (x7)
+  .word token_56  ; [56] "Exploras" (x7)
+  .word token_57  ; [57] "¡ENCONTRAS" (x7)
+  .word token_58  ; [58] "SECRETO!" (x7)
+  .word token_59  ; [59] "Podes" (x7)
+  .word token_60  ; [60] "o" (x7)
+  .word token_61  ; [61] "[OSCURIDAD]" (x7)
+  .word token_62  ; [62] "lo" (x7)
+  .word token_63  ; [63] "rapidamente" (x7)
+  .word token_64  ; [64] "juego" (x7)
+  .word token_65  ; [65] "TE" (x6)
+  .word token_66  ; [66] "Y" (x6)
+  .word token_67  ; [67] "Las" (x6)
+  .word token_68  ; [68] "encontras" (x6)
+  .word token_69  ; [69] "Hay" (x6)
+  .word token_70  ; [70] "algo" (x6)
+  .word token_71  ; [71] "otro" (x6)
+  .word token_72  ; [72] "es" (x6)
+  .word token_73  ; [73] "LAS" (x6)
+  .word token_74  ; [74] "Continua" (x6)
+  .word token_75  ; [75] "mala" (x6)
+  .word token_76  ; [76] "pasada" (x6)
+  .word token_77  ; [77] "correcto" (x6)
+  .word token_78  ; [78] "Descendiste" (x6)
+  .word token_79  ; [79] "hasta" (x6)
+  .word token_80  ; [80] "descanso" (x6)
+  .word token_81  ; [81] "feedback," (x6)
+  .word token_82  ; [82] "inquietas" (x6)
+  .word token_83  ; [83] "cierra." (x6)
+  .word token_84  ; [84] "DE" (x5)
+  .word token_85  ; [85] "Iluminas" (x5)
+  .word token_86  ; [86] "Parece" (x5)
+  .word token_87  ; [87] "marcas" (x5)
+  .word token_88  ; [88] "tu" (x5)
+  .word token_89  ; [89] "caverna" (x5)
+  .word token_90  ; [90] "sin" (x5)
+  .word token_91  ; [91] "pared" (x5)
+  .word token_92  ; [92] "esta" (x5)
+  .word token_93  ; [93] "solo" (x5)
+  .word token_94  ; [94] "para" (x5)
+  .word token_95  ; [95] "lento." (x5)
+  .word token_96  ; [96] "pasillo" (x5)
+  .word token_97  ; [97] "lentamente" (x5)
+  .word token_98  ; [98] "jugo" (x5)
+  .word token_99  ; [99] "soltaste" (x5)
+  .word token_100  ; [100] "EN" (x4)
+  .word token_101  ; [101] "ESTAS" (x4)
+  .word token_102  ; [102] "tener" (x4)
+  .word token_103  ; [103] "fondo." (x4)
+  .word token_104  ; [104] "tuyo." (x4)
+  .word token_105  ; [105] "salida" (x4)
+  .word token_106  ; [106] "derecha" (x4)
+  .word token_107  ; [107] "Sentis" (x4)
+  .word token_108  ; [108] "Tu" (x4)
+  .word token_109  ; [109] "muestra" (x4)
+  .word token_110  ; [110] "seguir." (x4)
+  .word token_111  ; [111] "Un" (x4)
+  .word token_112  ; [112] "Llegas" (x4)
+  .word token_113  ; [113] "explorar" (x4)
+  .word token_114  ; [114] "sala." (x4)
+  .word token_115  ; [115] "estas" (x4)
+  .word token_116  ; [116] "habitacion" (x4)
+  .word token_117  ; [117] "Volver" (x4)
+  .word token_118  ; [118] "perdes" (x4)
+  .word token_119  ; [119] "mal" (x4)
+  .word token_120  ; [120] "va" (x4)
+  .word token_121  ; [121] "Pasaste" (x4)
+  .word token_122  ; [122] "grandes." (x4)
+  .word token_123  ; [123] "rapido." (x4)
+  .word token_124  ; [124] "aumenta" (x4)
+  .word token_125  ; [125] "ritmo." (x4)
+  .word token_126  ; [126] "Pasas" (x4)
+  .word token_127  ; [127] "agujero" (x4)
+  .word token_128  ; [128] "POR" (x3)
+  .word token_129  ; [129] "QUE" (x3)
+  .word token_130  ; [130] "TENES" (x3)
+  .word token_131  ; [131] "O" (x3)
+  .word token_132  ; [132] "TIEMPO" (x3)
+  .word token_133  ; [133] "SE" (x3)
+  .word token_134  ; [134] "agua" (x3)
+  .word token_135  ; [135] "grande." (x3)
+  .word token_136  ; [136] "salidas" (x3)
+  .word token_137  ; [137] "debajo" (x3)
+  .word token_138  ; [138] "Al" (x3)
+  .word token_139  ; [139] "sentis" (x3)
+  .word token_140  ; [140] "analizar" (x3)
+  .word token_141  ; [141] "Salida" (x3)
+  .word token_142  ; [142] "rodearlo" (x3)
+  .word token_143  ; [143] "izquierda." (x3)
+  .word token_144  ; [144] "temblor" (x3)
+  .word token_145  ; [145] "Dibujo" (x3)
+  .word token_146  ; [146] "pasillo," (x3)
+  .word token_147  ; [147] "techo" (x3)
+  .word token_148  ; [148] "fondo" (x3)
+  .word token_149  ; [149] "tiene" (x3)
+  .word token_150  ; [150] "encuentra" (x3)
+  .word token_151  ; [151] "alli." (x3)
+  .word token_152  ; [152] "cubierta" (x3)
+  .word token_153  ; [153] "diferentes" (x3)
+  .word token_154  ; [154] "tamaños." (x3)
+  .word token_155  ; [155] "2" (x3)
+  .word token_156  ; [156] "suelo" (x3)
+  .word token_157  ; [157] "nada" (x3)
+  .word token_158  ; [158] "pequeñas." (x3)
+  .word token_159  ; [159] "salir" (x3)
+  .word token_160  ; [160] "tunel" (x3)
+  .word token_161  ; [161] "MUERTE." (x3)
+  .word token_162  ; [162] "flujo" (x3)
+  .word token_163  ; [163] "Avanzas" (x3)
+  .word token_164  ; [164] "comienza" (x3)
+  .word token_165  ; [165] "parpadear" (x3)
+  .word token_166  ; [166] "apaga." (x3)
+  .word token_167  ; [167] "angosto." (x3)
+  .word token_168  ; [168] "Algo" (x3)
+  .word token_169  ; [169] "hizo" (x3)
+  .word token_170  ; [170] "hacer" (x3)
+  .word token_171  ; [171] "ruido." (x3)
+  .word token_172  ; [172] "cae" (x3)
+  .word token_173  ; [173] "lado" (x3)
+  .word token_174  ; [174] "Vuelve" (x3)
+  .word token_175  ; [175] "Volves" (x3)
+  .word token_176  ; [176] "corto" (x3)
+  .word token_177  ; [177] "extraer" (x3)
+  .word token_178  ; [178] "atrapan." (x3)
+  .word token_179  ; [179] "corriente" (x3)
+  .word token_180  ; [180] "arrastra." (x3)
+  .word token_181  ; [181] "Camino" (x3)
+  .word token_182  ; [182] "exitoso" (x3)
+  .word token_183  ; [183] "OSCURIDAD." (x2)
+  .word token_184  ; [184] "AGUA." (x2)
+  .word token_185  ; [185] "GRITAS" (x2)
+  .word token_186  ; [186] "AYUDA." (x2)
+  .word token_187  ; [187] "NO" (x2)
+  .word token_188  ; [188] "PODES" (x2)
+  .word token_189  ; [189] "UNA" (x2)
+  .word token_190  ; [190] "ENCIMA." (x2)
+  .word token_191  ; [191] "MANERA" (x2)
+  .word token_192  ; [192] "sigue" (x2)
+  .word token_193  ; [193] "derrumba" (x2)
+  .word token_194  ; [194] "puede" (x2)
+  .word token_195  ; [195] "habitacion." (x2)
+  .word token_196  ; [196] "eco" (x2)
+  .word token_197  ; [197] "3" (x2)
+  .word token_198  ; [198] "unas" (x2)
+  .word token_199  ; [199] "forma" (x2)
+  .word token_200  ; [200] "apremia." (x2)
+  .word token_201  ; [201] "escuchas" (x2)
+  .word token_202  ; [202] "aire" (x2)
+  .word token_203  ; [203] "techo." (x2)
+  .word token_204  ; [204] "obstaculo." (x2)
+  .word token_205  ; [205] "detras" (x2)
+  .word token_206  ; [206] "obstaculo" (x2)
+  .word token_207  ; [207] "cuando" (x2)
+  .word token_208  ; [208] "parpadea" (x2)
+  .word token_209  ; [209] "estalactita" (x2)
+  .word token_210  ; [210] "podes" (x2)
+  .word token_211  ; [211] "atencion" (x2)
+  .word token_212  ; [212] "ve" (x2)
+  .word token_213  ; [213] "pozo" (x2)
+  .word token_214  ; [214] "visible." (x2)
+  .word token_215  ; [215] "soga" (x2)
+  .word token_216  ; [216] "Encontras" (x2)
+  .word token_217  ; [217] "salientes" (x2)
+  .word token_218  ; [218] "descenso" (x2)
+  .word token_219  ; [219] "rapido" (x2)
+  .word token_220  ; [220] "saliente." (x2)
+  .word token_221  ; [221] "zona" (x2)
+  .word token_222  ; [222] "estar" (x2)
+  .word token_223  ; [223] "cerca" (x2)
+  .word token_224  ; [224] "Sala" (x2)
+  .word token_225  ; [225] "parpadea." (x2)
+  .word token_226  ; [226] "grandes" (x2)
+  .word token_227  ; [227] "entre" (x2)
+  .word token_228  ; [228] "pared." (x2)
+  .word token_229  ; [229] "linterna," (x2)
+  .word token_230  ; [230] "presencia" (x2)
+  .word token_231  ; [231] "Decidis" (x2)
+  .word token_232  ; [232] "cuales" (x2)
+  .word token_233  ; [233] "iluminas" (x2)
+  .word token_234  ; [234] "Imagen" (x2)
+  .word token_235  ; [235] "tiempo" (x2)
+  .word token_236  ; [236] "situacion." (x2)
+  .word token_237  ; [237] "burbuja" (x2)
+  .word token_238  ; [238] "final" (x2)
+  .word token_239  ; [239] "tenes" (x2)
+  .word token_240  ; [240] "luz" (x2)
+  .word token_241  ; [241] "pilar" (x2)
+  .word token_242  ; [242] "Una" (x2)
+  .word token_243  ; [243] "apertura" (x2)
+  .word token_244  ; [244] "Tenes" (x2)
+  .word token_245  ; [245] "decidir" (x2)
+  .word token_246  ; [246] "siempre" (x2)
+  .word token_247  ; [247] "fin" (x2)
+  .word token_248  ; [248] "DEL" (x2)
+
+token_0:  ; "a"
+  .ascii "a"
+
+token_1:  ; "el"
+  .ascii "el"
+
+token_2:  ; "la"
+  .ascii "la"
+
+token_3:  ; "te"
+  .ascii "te"
+
+token_4:  ; "Accion"
+  .ascii "Accion"
+
+token_5:  ; "de"
+  .ascii "de"
+
+token_6:  ; "y"
+  .ascii "y"
+
+token_7:  ; "que"
+  .ascii "que"
+
+token_8:  ; "una"
+  .ascii "una"
+
+token_9:  ; "La"
+  .ascii "La"
+
+token_10:  ; "raices"
+  .ascii "raices"
+
+token_11:  ; "en"
+  .ascii "en"
+
+token_12:  ; "El"
+  .ascii "El"
+
+token_13:  ; "se"
+  .ascii "se"
+
+token_14:  ; "Exitosa:"
+  .ascii "Exitosa:"
+
+token_15:  ; "Fallida:"
+  .ascii "Fallida:"
+
+token_16:  ; "un"
+  .ascii "un"
+
+token_17:  ; "No"
+  .ascii "No"
+
+token_18:  ; "Comenzas"
+  .ascii "Comenzas"
+
+token_19:  ; "las"
+  .ascii "las"
+
+token_20:  ; "por"
+  .ascii "por"
+
+token_21:  ; "Muerte"
+  .ascii "Muerte"
+
+token_22:  ; "hay"
+  .ascii "hay"
+
+token_23:  ; "Procedes"
+  .ascii "Procedes"
+
+token_24:  ; "Elegis"
+  .ascii "Elegis"
+
+token_25:  ; "no"
+  .ascii "no"
+
+token_26:  ; "[LINTERNA]"
+  .ascii "[LINTERNA]"
+
+token_27:  ; "salida."
+  .ascii "salida."
+
+token_28:  ; "simbolo"
+  .ascii "simbolo"
+
+token_29:  ; "Presionas"
+  .ascii "Presionas"
+
+token_30:  ; "mas"
+  .ascii "mas"
+
+token_31:  ; "camino"
+  .ascii "camino"
+
+token_32:  ; "LA"
+  .ascii "LA"
+
+token_33:  ; "con"
+  .ascii "con"
+
+token_34:  ; "parece"
+  .ascii "parece"
+
+token_35:  ; "sala"
+  .ascii "sala"
+
+token_36:  ; "pero"
+  .ascii "pero"
+
+token_37:  ; "pantalla"
+  .ascii "pantalla"
+
+token_38:  ; "iluminar"
+  .ascii "iluminar"
+
+token_39:  ; "EL"
+  .ascii "EL"
+
+token_40:  ; "ROCAS"
+  .ascii "ROCAS"
+
+token_41:  ; "UN"
+  .ascii "UN"
+
+token_42:  ; "llegar"
+  .ascii "llegar"
+
+token_43:  ; "miedo"
+  .ascii "miedo"
+
+token_44:  ; "descender"
+  .ascii "descender"
+
+token_45:  ; "Te"
+  .ascii "Te"
+
+token_46:  ; "al"
+  .ascii "al"
+
+token_47:  ; "linterna"
+  .ascii "linterna"
+
+token_48:  ; "del"
+  .ascii "del"
+
+token_49:  ; "anterior"
+  .ascii "anterior"
+
+token_50:  ; "Se"
+  .ascii "Se"
+
+token_51:  ; "soga."
+  .ascii "soga."
+
+token_52:  ; "Logras"
+  .ascii "Logras"
+
+token_53:  ; "nadar"
+  .ascii "nadar"
+
+token_54:  ; "A"
+  .ascii "A"
+
+token_55:  ; "ser"
+  .ascii "ser"
+
+token_56:  ; "Exploras"
+  .ascii "Exploras"
+
+token_57:  ; "¡ENCONTRAS"
+  .ascii "¡ENCONTRAS"
+
+token_58:  ; "SECRETO!"
+  .ascii "SECRETO!"
+
+token_59:  ; "Podes"
+  .ascii "Podes"
+
+token_60:  ; "o"
+  .ascii "o"
+
+token_61:  ; "[OSCURIDAD]"
+  .ascii "[OSCURIDAD]"
+
+token_62:  ; "lo"
+  .ascii "lo"
+
+token_63:  ; "rapidamente"
+  .ascii "rapidamente"
+
+token_64:  ; "juego"
+  .ascii "juego"
+
+token_65:  ; "TE"
+  .ascii "TE"
+
+token_66:  ; "Y"
+  .ascii "Y"
+
+token_67:  ; "Las"
+  .ascii "Las"
+
+token_68:  ; "encontras"
+  .ascii "encontras"
+
+token_69:  ; "Hay"
+  .ascii "Hay"
+
+token_70:  ; "algo"
+  .ascii "algo"
+
+token_71:  ; "otro"
+  .ascii "otro"
+
+token_72:  ; "es"
+  .ascii "es"
+
+token_73:  ; "LAS"
+  .ascii "LAS"
+
+token_74:  ; "Continua"
+  .ascii "Continua"
+
+token_75:  ; "mala"
+  .ascii "mala"
+
+token_76:  ; "pasada"
+  .ascii "pasada"
+
+token_77:  ; "correcto"
+  .ascii "correcto"
+
+token_78:  ; "Descendiste"
+  .ascii "Descendiste"
+
+token_79:  ; "hasta"
+  .ascii "hasta"
+
+token_80:  ; "descanso"
+  .ascii "descanso"
+
+token_81:  ; "feedback,"
+  .ascii "feedback,"
+
+token_82:  ; "inquietas"
+  .ascii "inquietas"
+
+token_83:  ; "cierra."
+  .ascii "cierra."
+
+token_84:  ; "DE"
+  .ascii "DE"
+
+token_85:  ; "Iluminas"
+  .ascii "Iluminas"
+
+token_86:  ; "Parece"
+  .ascii "Parece"
+
+token_87:  ; "marcas"
+  .ascii "marcas"
+
+token_88:  ; "tu"
+  .ascii "tu"
+
+token_89:  ; "caverna"
+  .ascii "caverna"
+
+token_90:  ; "sin"
+  .ascii "sin"
+
+token_91:  ; "pared"
+  .ascii "pared"
+
+token_92:  ; "esta"
+  .ascii "esta"
+
+token_93:  ; "solo"
+  .ascii "solo"
+
+token_94:  ; "para"
+  .ascii "para"
+
+token_95:  ; "lento."
+  .ascii "lento."
+
+token_96:  ; "pasillo"
+  .ascii "pasillo"
+
+token_97:  ; "lentamente"
+  .ascii "lentamente"
+
+token_98:  ; "jugo"
+  .ascii "jugo"
+
+token_99:  ; "soltaste"
+  .ascii "soltaste"
+
+token_100:  ; "EN"
+  .ascii "EN"
+
+token_101:  ; "ESTAS"
+  .ascii "ESTAS"
+
+token_102:  ; "tener"
+  .ascii "tener"
+
+token_103:  ; "fondo."
+  .ascii "fondo."
+
+token_104:  ; "tuyo."
+  .ascii "tuyo."
+
+token_105:  ; "salida"
+  .ascii "salida"
+
+token_106:  ; "derecha"
+  .ascii "derecha"
+
+token_107:  ; "Sentis"
+  .ascii "Sentis"
+
+token_108:  ; "Tu"
+  .ascii "Tu"
+
+token_109:  ; "muestra"
+  .ascii "muestra"
+
+token_110:  ; "seguir."
+  .ascii "seguir."
+
+token_111:  ; "Un"
+  .ascii "Un"
+
+token_112:  ; "Llegas"
+  .ascii "Llegas"
 
-token_115:  ; "acechando"
-  .ascii "acechando"
+token_113:  ; "explorar"
+  .ascii "explorar"
 
-token_116:  ; "Bienvenido "
-  .ascii "Bienvenido "
+token_114:  ; "sala."
+  .ascii "sala."
 
-token_117:  ; "aventura "
-  .ascii "aventura "
+token_115:  ; "estas"
+  .ascii "estas"
 
-token_118:  ; "gráfica "
-  .ascii "gráfica "
+token_116:  ; "habitacion"
+  .ascii "habitacion"
 
-token_119:  ; "Espectacular "
-  .ascii "Espectacular "
+token_117:  ; "Volver"
+  .ascii "Volver"
 
-token_120:  ; "mundo"
-  .ascii "mundo"
+token_118:  ; "perdes"
+  .ascii "perdes"
 
-token_121:  ; "era "
-  .ascii "era "
+token_119:  ; "mal"
+  .ascii "mal"
 
-token_122:  ; "hipnotico. "
-  .ascii "hipnotico. "
+token_120:  ; "va"
+  .ascii "va"
 
-token_123:  ; "Gota, "
-  .ascii "Gota, "
+token_121:  ; "Pasaste"
+  .ascii "Pasaste"
 
-token_124:  ; "pausa, "
-  .ascii "pausa, "
+token_122:  ; "grandes."
+  .ascii "grandes."
 
-token_125:  ; "gota. "
-  .ascii "gota. "
+token_123:  ; "rapido."
+  .ascii "rapido."
 
-token_126:  ; "comenzo "
-  .ascii "comenzo "
+token_124:  ; "aumenta"
+  .ascii "aumenta"
 
-token_127:  ; "entumecer "
-  .ascii "entumecer "
+token_125:  ; "ritmo."
+  .ascii "ritmo."
 
-token_128:  ; "tus "
-  .ascii "tus "
+token_126:  ; "Pasas"
+  .ascii "Pasas"
 
-token_129:  ; "extremidades "
-  .ascii "extremidades "
+token_127:  ; "agujero"
+  .ascii "agujero"
 
-token_130:  ; "hasta "
-  .ascii "hasta "
+token_128:  ; "POR"
+  .ascii "POR"
 
-token_131:  ; "dejaste "
-  .ascii "dejaste "
+token_129:  ; "QUE"
+  .ascii "QUE"
 
-token_132:  ; "sentirlas. "
-  .ascii "sentirlas. "
+token_130:  ; "TENES"
+  .ascii "TENES"
 
-token_133:  ; "eterno "
-  .ascii "eterno "
+token_131:  ; "O"
+  .ascii "O"
 
-token_134:  ; "sueño "
-  .ascii "sueño "
+token_132:  ; "TIEMPO"
+  .ascii "TIEMPO"
 
-token_135:  ; "te "
-  .ascii "te "
+token_133:  ; "SE"
+  .ascii "SE"
 
-token_136:  ; "dio "
-  .ascii "dio "
+token_134:  ; "agua"
+  .ascii "agua"
 
-token_137:  ; "bienvenida."
-  .ascii "bienvenida."
+token_135:  ; "grande."
+  .ascii "grande."
 
-token_138:  ; "Asi "
-  .ascii "Asi "
+token_136:  ; "salidas"
+  .ascii "salidas"
 
-token_139:  ; "terminas "
-  .ascii "terminas "
+token_137:  ; "debajo"
+  .ascii "debajo"
 
-token_140:  ; "dias "
-  .ascii "dias "
+token_138:  ; "Al"
+  .ascii "Al"
 
-token_141:  ; "atrapado "
-  .ascii "atrapado "
+token_139:  ; "sentis"
+  .ascii "sentis"
 
-token_142:  ; "Caverna"
-  .ascii "Caverna"
+token_140:  ; "analizar"
+  .ascii "analizar"
 
-token_143:  ; "Entre "
-  .ascii "Entre "
+token_141:  ; "Salida"
+  .ascii "Salida"
 
-token_144:  ; "las "
-  .ascii "las "
+token_142:  ; "rodearlo"
+  .ascii "rodearlo"
 
-token_145:  ; "hay "
-  .ascii "hay "
+token_143:  ; "izquierda."
+  .ascii "izquierda."
 
-token_146:  ; "rendijas "
-  .ascii "rendijas "
+token_144:  ; "temblor"
+  .ascii "temblor"
 
-token_147:  ; "por "
-  .ascii "por "
+token_145:  ; "Dibujo"
+  .ascii "Dibujo"
 
-token_148:  ; "donde "
-  .ascii "donde "
+token_146:  ; "pasillo,"
+  .ascii "pasillo,"
 
-token_149:  ; "entra "
-  .ascii "entra "
+token_147:  ; "techo"
+  .ascii "techo"
 
-token_150:  ; "viciado, "
-  .ascii "viciado, "
+token_148:  ; "fondo"
+  .ascii "fondo"
 
-token_151:  ; "ninguna "
-  .ascii "ninguna "
+token_149:  ; "tiene"
+  .ascii "tiene"
 
-token_152:  ; "lo "
-  .ascii "lo "
+token_150:  ; "encuentra"
+  .ascii "encuentra"
 
-token_153:  ; "bastante "
-  .ascii "bastante "
+token_151:  ; "alli."
+  .ascii "alli."
 
-token_154:  ; "grande "
-  .ascii "grande "
+token_152:  ; "cubierta"
+  .ascii "cubierta"
 
-token_155:  ; "para "
-  .ascii "para "
+token_153:  ; "diferentes"
+  .ascii "diferentes"
 
-token_156:  ; "pasar. "
-  .ascii "pasar. "
+token_154:  ; "tamaños."
+  .ascii "tamaños."
 
-token_157:  ; "Hay "
-  .ascii "Hay "
+token_155:  ; "2"
+  .ascii "2"
 
-token_158:  ; "intentado "
-  .ascii "intentado "
+token_156:  ; "suelo"
+  .ascii "suelo"
 
-token_159:  ; "moverlas "
-  .ascii "moverlas "
+token_157:  ; "nada"
+  .ascii "nada"
 
-token_160:  ; "detenido "
-  .ascii "detenido "
+token_158:  ; "pequeñas."
+  .ascii "pequeñas."
 
-token_161:  ; "mitad "
-  .ascii "mitad "
+token_159:  ; "salir"
+  .ascii "salir"
 
-token_162:  ; "camino. "
-  .ascii "camino. "
+token_160:  ; "tunel"
+  .ascii "tunel"
 
-token_163:  ; "Tal "
-  .ascii "Tal "
+token_161:  ; "MUERTE."
+  .ascii "MUERTE."
 
-token_164:  ; "sea "
-  .ascii "sea "
+token_162:  ; "flujo"
+  .ascii "flujo"
 
-token_165:  ; "opcion "
-  .ascii "opcion "
+token_163:  ; "Avanzas"
+  .ascii "Avanzas"
 
-token_166:  ; "volver "
-  .ascii "volver "
+token_164:  ; "comienza"
+  .ascii "comienza"
 
-token_167:  ; "ahí, "
-  .ascii "ahí, "
+token_165:  ; "parpadear"
+  .ascii "parpadear"
 
-token_168:  ; "idea "
-  .ascii "idea "
+token_166:  ; "apaga."
+  .ascii "apaga."
 
-token_169:  ; "explorar "
-  .ascii "explorar "
+token_167:  ; "angosto."
+  .ascii "angosto."
 
-token_170:  ; "oscuras "
-  .ascii "oscuras "
+token_168:  ; "Algo"
+  .ascii "Algo"
 
-token_171:  ; "tentadora."
-  .ascii "tentadora."
+token_169:  ; "hizo"
+  .ascii "hizo"
 
-token_172:  ; "Este "
-  .ascii "Este "
+token_170:  ; "hacer"
+  .ascii "hacer"
 
-token_173:  ; "PITFALL"
-  .ascii "PITFALL"
+token_171:  ; "ruido."
+  .ascii "ruido."
 
-token_174:  ; "comienza "
-  .ascii "comienza "
+token_172:  ; "cae"
+  .ascii "cae"
 
-token_175:  ; "temblar "
-  .ascii "temblar "
+token_173:  ; "lado"
+  .ascii "lado"
 
-token_176:  ; "entrada "
-  .ascii "entrada "
+token_174:  ; "Vuelve"
+  .ascii "Vuelve"
 
-token_177:  ; "empieza "
-  .ascii "empieza "
+token_175:  ; "Volves"
+  .ascii "Volves"
 
-token_178:  ; "desmoronarse "
-  .ascii "desmoronarse "
+token_176:  ; "corto"
+  .ascii "corto"
 
-token_179:  ; "ti. "
-  .ascii "ti. "
+token_177:  ; "extraer"
+  .ascii "extraer"
 
-token_180:  ; "Lo "
-  .ascii "Lo "
+token_178:  ; "atrapan."
+  .ascii "atrapan."
 
-token_181:  ; "ultimo "
-  .ascii "ultimo "
+token_179:  ; "corriente"
+  .ascii "corriente"
 
-token_182:  ; "piensas "
-  .ascii "piensas "
+token_180:  ; "arrastra."
+  .ascii "arrastra."
 
-token_183:  ; "estaban "
-  .ascii "estaban "
+token_181:  ; "Camino"
+  .ascii "Camino"
 
-token_184:  ; "sellando "
-  .ascii "sellando "
+token_182:  ; "exitoso"
+  .ascii "exitoso"
 
-token_185:  ; "salida. "
-  .ascii "salida. "
+token_183:  ; "OSCURIDAD."
+  .ascii "OSCURIDAD."
 
-token_186:  ; "Estaban "
-  .ascii "Estaban "
+token_184:  ; "AGUA."
+  .ascii "AGUA."
 
-token_187:  ; "sosteniendo "
-  .ascii "sosteniendo "
+token_185:  ; "GRITAS"
+  .ascii "GRITAS"
 
-token_188:  ; "resto\n"
-  .ascii "resto\n"
+token_186:  ; "AYUDA."
+  .ascii "AYUDA."
 
-token_189:  ; "Haz "
-  .ascii "Haz "
+token_187:  ; "NO"
+  .ascii "NO"
 
-token_190:  ; "muerto"
-  .ascii "muerto"
+token_188:  ; "PODES"
+  .ascii "PODES"
 
-token_191:  ; "Luego "
-  .ascii "Luego "
+token_189:  ; "UNA"
+  .ascii "UNA"
 
-token_192:  ; "pasillo, "
-  .ascii "pasillo, "
+token_190:  ; "ENCIMA."
+  .ascii "ENCIMA."
 
-token_193:  ; "encuentras "
-  .ascii "encuentras "
+token_191:  ; "MANERA"
+  .ascii "MANERA"
 
-token_194:  ; "sala "
-  .ascii "sala "
+token_192:  ; "sigue"
+  .ascii "sigue"
 
-token_195:  ; "grande. "
-  .ascii "grande. "
+token_193:  ; "derrumba"
+  .ascii "derrumba"
 
-token_196:  ; "Dos "
-  .ascii "Dos "
+token_194:  ; "puede"
+  .ascii "puede"
 
-token_197:  ; "tuneles "
-  .ascii "tuneles "
+token_195:  ; "habitacion."
+  .ascii "habitacion."
 
-token_198:  ; "abren "
-  .ascii "abren "
+token_196:  ; "eco"
+  .ascii "eco"
 
-token_199:  ; "frente "
-  .ascii "frente "
+token_197:  ; "3"
+  .ascii "3"
 
-token_200:  ; "Decidir "
-  .ascii "Decidir "
+token_198:  ; "unas"
+  .ascii "unas"
 
-token_201:  ; "estas "
-  .ascii "estas "
+token_199:  ; "forma"
+  .ascii "forma"
 
-token_202:  ; "condiciones "
-  .ascii "condiciones "
+token_200:  ; "apremia."
+  .ascii "apremia."
 
-token_203:  ; "dificil, "
-  .ascii "dificil, "
+token_201:  ; "escuchas"
+  .ascii "escuchas"
 
-token_204:  ; "necesario. "
-  .ascii "necesario. "
+token_202:  ; "aire"
+  .ascii "aire"
 
-token_205:  ; "sigue "
-  .ascii "sigue "
+token_203:  ; "techo."
+  .ascii "techo."
 
-token_206:  ; "subiendo "
-  .ascii "subiendo "
+token_204:  ; "obstaculo."
+  .ascii "obstaculo."
 
-token_207:  ; "lentamente."
-  .ascii "lentamente."
+token_205:  ; "detras"
+  .ascii "detras"
 
-token_208:  ; "A "
-  .ascii "A "
+token_206:  ; "obstaculo"
+  .ascii "obstaculo"
 
-token_209:  ; "ciegas "
-  .ascii "ciegas "
+token_207:  ; "cuando"
+  .ascii "cuando"
 
-token_210:  ; "tanteas "
-  .ascii "tanteas "
+token_208:  ; "parpadea"
+  .ascii "parpadea"
 
-token_211:  ; "pared "
-  .ascii "pared "
+token_209:  ; "estalactita"
+  .ascii "estalactita"
 
-token_212:  ; "acaba. "
-  .ascii "acaba. "
+token_210:  ; "podes"
+  .ascii "podes"
 
-token_213:  ; "Tienes "
-  .ascii "Tienes "
+token_211:  ; "atencion"
+  .ascii "atencion"
 
-token_214:  ; "sensacion "
-  .ascii "sensacion "
+token_212:  ; "ve"
+  .ascii "ve"
 
-token_215:  ; "llegaste "
-  .ascii "llegaste "
+token_213:  ; "pozo"
+  .ascii "pozo"
 
-token_216:  ; "lugar "
-  .ascii "lugar "
+token_214:  ; "visible."
+  .ascii "visible."
 
-token_217:  ; "espacioso. "
-  .ascii "espacioso. "
+token_215:  ; "soga"
+  .ascii "soga"
 
-token_218:  ; "Recorres "
-  .ascii "Recorres "
+token_216:  ; "Encontras"
+  .ascii "Encontras"
 
-token_219:  ; "tientas "
-  .ascii "tientas "
+token_217:  ; "salientes"
+  .ascii "salientes"
 
-token_220:  ; "dos "
-  .ascii "dos "
+token_218:  ; "descenso"
+  .ascii "descenso"
 
-token_221:  ; "grandes "
-  .ascii "grandes "
+token_219:  ; "rapido"
+  .ascii "rapido"
 
-token_222:  ; "huecos. "
-  .ascii "huecos. "
+token_220:  ; "saliente."
+  .ascii "saliente."
 
-token_223:  ; "¿Tal "
-  .ascii "¿Tal "
+token_221:  ; "zona"
+  .ascii "zona"
 
-token_224:  ; "sean "
-  .ascii "sean "
+token_222:  ; "estar"
+  .ascii "estar"
 
-token_225:  ; "tuneles?. "
-  .ascii "tuneles?. "
+token_223:  ; "cerca"
+  .ascii "cerca"
 
-token_226:  ; "No "
-  .ascii "No "
+token_224:  ; "Sala"
+  .ascii "Sala"
 
-token_227:  ; "detienes "
-  .ascii "detienes "
+token_225:  ; "parpadea."
+  .ascii "parpadea."
 
-token_228:  ; "demasiado "
-  .ascii "demasiado "
+token_226:  ; "grandes"
+  .ascii "grandes"
 
-token_229:  ; "pensarlo, "
-  .ascii "pensarlo, "
+token_227:  ; "entre"
+  .ascii "entre"
 
-token_230:  ; "sientes "
-  .ascii "sientes "
+token_228:  ; "pared."
+  .ascii "pared."
 
-token_231:  ; "contacto "
-  .ascii "contacto "
+token_229:  ; "linterna,"
+  .ascii "linterna,"
 
-token_232:  ; "cuerpo."
-  .ascii "cuerpo."
+token_230:  ; "presencia"
+  .ascii "presencia"
 
-token_233:  ; "Tardaste "
-  .ascii "Tardaste "
+token_231:  ; "Decidis"
+  .ascii "Decidis"
 
-token_234:  ; "Muuuucho "
-  .ascii "Muuuucho "
+token_232:  ; "cuales"
+  .ascii "cuales"
 
-token_235:  ; "quedaste "
-  .ascii "quedaste "
+token_233:  ; "iluminas"
+  .ascii "iluminas"
 
-token_236:  ; "sin "
-  .ascii "sin "
+token_234:  ; "Imagen"
+  .ascii "Imagen"
 
-token_237:  ; "tiempo....."
-  .ascii "tiempo....."
+token_235:  ; "tiempo"
+  .ascii "tiempo"
 
-token_238:  ; "enemigo "
-  .ascii "enemigo "
+token_236:  ; "situacion."
+  .ascii "situacion."
 
-token_239:  ; "siempre "
-  .ascii "siempre "
+token_237:  ; "burbuja"
+  .ascii "burbuja"
 
-token_240:  ; "acechaba "
-  .ascii "acechaba "
+token_238:  ; "final"
+  .ascii "final"
 
-token_241:  ; "atrapó, "
-  .ascii "atrapó, "
+token_239:  ; "tenes"
+  .ascii "tenes"
 
-token_242:  ; "este "
-  .ascii "este "
+token_240:  ; "luz"
+  .ascii "luz"
 
-token_243:  ; "fin"
+token_241:  ; "pilar"
+  .ascii "pilar"
+
+token_242:  ; "Una"
+  .ascii "Una"
+
+token_243:  ; "apertura"
+  .ascii "apertura"
+
+token_244:  ; "Tenes"
+  .ascii "Tenes"
+
+token_245:  ; "decidir"
+  .ascii "decidir"
+
+token_246:  ; "siempre"
+  .ascii "siempre"
+
+token_247:  ; "fin"
   .ascii "fin"
 
-token_244:  ; "Tu "
-  .ascii "Tu "
-
-token_245:  ; "acción "
-  .ascii "acción "
-
-token_246:  ; "tenía "
-  .ascii "tenía "
-
-token_247:  ; "gran "
-  .ascii "gran "
-
-token_248:  ; "chance "
-  .ascii "chance "
-
-token_249:  ; "fallar "
-  .ascii "fallar "
-
-token_250:  ; "falló. "
-  .ascii "falló. "
+token_248:  ; "DEL"
+  .ascii "DEL"
 
 token_dict_count:
-  .byte 251
+  .byte 249
 
 screens_index:
-  .word screen_pointers_0  ; s1s1
-  .word screen_pointers_1  ; s1s2
-  .word screen_pointers_2  ; s1s3
-  .word screen_pointers_3  ; startScreen
-  .word screen_pointers_4  ; endScreens1s1
-  .word screen_pointers_5  ; endScreenDefault
-  .word screen_pointers_6  ; s1s4
-  .word screen_pointers_7  ; s1s5
-  .word screen_pointers_8  ; endScreens1s4
-  .word screen_pointers_9  ; s2s1
-  .word screen_pointers_10  ; EndScreenSimulationTimeisUp
-  .word screen_pointers_11  ; endScreenByEnemy
-  .word screen_pointers_12  ; endScreenByActionFailed
+  .word screen_pointers_0  ; StartScreen
+  .word screen_pointers_1  ; S01P01
+  .word screen_pointers_2  ; S01P02
+  .word screen_pointers_3  ; S01P03
+  .word screen_pointers_4  ; S01P04
+  .word screen_pointers_5  ; S01P05
+  .word screen_pointers_6  ; S01P06
+  .word screen_pointers_7  ; S01P07
+  .word screen_pointers_8  ; S02P01
+  .word screen_pointers_9  ; S02P02
+  .word screen_pointers_10  ; S02P03
+  .word screen_pointers_11  ; S02P04
+  .word screen_pointers_12  ; S02P05
+  .word screen_pointers_13  ; S02P06
+  .word screen_pointers_14  ; S02P07
+  .word screen_pointers_15  ; S03P01
+  .word screen_pointers_16  ; S03P02
+  .word screen_pointers_17  ; S03P03
+  .word screen_pointers_18  ; S03P04
+  .word screen_pointers_19  ; S03P05
+  .word screen_pointers_20  ; S03P06
+  .word screen_pointers_21  ; S03P07
+  .word screen_pointers_22  ; S03P08
+  .word screen_pointers_23  ; S03P09
+  .word screen_pointers_24  ; S04P01
+  .word screen_pointers_25  ; S04P02
+  .word screen_pointers_26  ; S04P03
+  .word screen_pointers_27  ; S04P04
+  .word screen_pointers_28  ; S04P05
+  .word screen_pointers_29  ; S05P01
+  .word screen_pointers_30  ; S05P02
+  .word screen_pointers_31  ; S05P03
+  .word screen_pointers_32  ; S05P04
+  .word screen_pointers_33  ; S05P05
+  .word screen_pointers_34  ; S05P06
+  .word screen_pointers_35  ; S05P07
+  .word screen_pointers_36  ; S06P01
+  .word screen_pointers_37  ; S06P02
+  .word screen_pointers_38  ; S06P03
+  .word screen_pointers_39  ; S06P04
+  .word screen_pointers_40  ; S07P01
+  .word screen_pointers_41  ; S07P02
+  .word screen_pointers_42  ; S07P03
+  .word screen_pointers_43  ; S07P04
+  .word screen_pointers_44  ; S07P05
+  .word screen_pointers_45  ; S07P06
+  .word screen_pointers_46  ; S07P07
+  .word screen_pointers_47  ; S08P01
+  .word screen_pointers_48  ; S08P02
+  .word screen_pointers_49  ; S08P03
+  .word screen_pointers_50  ; S03P04
+  .word screen_pointers_51  ; S08P04
+  .word screen_pointers_52  ; FINAL
+  .word screen_pointers_53  ; EndScreenSimulationTimeisUp
+  .word screen_pointers_54  ; endScreenByEnemy
+  .word screen_pointers_55  ; endScreenByActionFailed
 screens_index_record_length:
-  .byte 2  ; each screens_index entry is 1 .word (2 bytes)
+  .byte 2
 
 screens_pointers:
 screen_pointers_0:
-  .word screen_0_id                          ; s1s1 id                          [0,1]
-  .word screen_0_name                        ; s1s1 name                        [2,3]
-  .word screen_0_action1                     ; s1s1 action1                     [4,5]
-  .word screen_0_action2                     ; s1s1 action2                     [6,7]
-  .word screen_0_action3                     ; s1s1 action3                     [8,9]
-  .word screen_0_action4                     ; s1s1 action4                     [10,11]
-  .word screen_0_description                 ; s1s1 description                 [12,13]
-  .word screen_0_ascii                       ; s1s1 ascii                       [14,15]
-  .word screen_0_flashlight_on               ; s1s1 flashlight_on               [16,17]
-  .word screen_0_flashlight_off              ; s1s1 flashlight_off              [18,19]
-  .word screen_0_enemy_probability           ; s1s1 enemy_probability           [20,21]
-  .word screen_0_is_secret_screen            ; s1s1 is_secret_screen            [22,23]
-  .word screen_0_is_end_screen               ; s1s1 is_end_screen               [24,25]
-  .word screen_0_description_compressed      ; s1s1 description_compressed      [26,27]
-  .word screen_0_flashlight_on_compressed    ; s1s1 flashlight_on_compressed    [28,29]
-  .word screen_0_flashlight_off_compressed   ; s1s1 flashlight_off_compressed   [30,31]
+  .word screen_0_id                                 ; StartScreen id [0,1]
+  .word screen_0_name                               ; StartScreen name [2,3]
+  .word screen_0_action1                            ; StartScreen action1 [4,5]
+  .word screen_0_action2                            ; StartScreen action2 [6,7]
+  .word screen_0_action3                            ; StartScreen action3 [8,9]
+  .word screen_0_action4                            ; StartScreen action4 [10,11]
+  .word screen_0_description                        ; StartScreen description [12,13]
+  .word screen_0_ascii                              ; StartScreen ascii [14,15]
+  .word screen_0_flashlight_on                      ; StartScreen flashlight_on [16,17]
+  .word screen_0_flashlight_off                     ; StartScreen flashlight_off [18,19]
+  .word screen_0_enemy_probability                  ; StartScreen enemy_probability [20,21]
+  .word screen_0_is_secret_screen                   ; StartScreen is_secret_screen [22,23]
+  .word screen_0_is_end_screen                      ; StartScreen is_end_screen [24,25]
+  .word screen_0_description_compressed             ; StartScreen description_compressed [26,27]
+  .word screen_0_flashlight_on_compressed           ; StartScreen flashlight_on_compressed [28,29]
+  .word screen_0_flashlight_off_compressed          ; StartScreen flashlight_off_compressed [30,31]
 screen_pointers_1:
-  .word screen_1_id                          ; s1s2 id                          [32,33]
-  .word screen_1_name                        ; s1s2 name                        [34,35]
-  .word screen_1_action1                     ; s1s2 action1                     [36,37]
-  .word screen_1_action2                     ; s1s2 action2                     [38,39]
-  .word screen_1_action3                     ; s1s2 action3                     [40,41]
-  .word screen_1_action4                     ; s1s2 action4                     [42,43]
-  .word screen_1_description                 ; s1s2 description                 [44,45]
-  .word screen_1_ascii                       ; s1s2 ascii                       [46,47]
-  .word screen_1_flashlight_on               ; s1s2 flashlight_on               [48,49]
-  .word screen_1_flashlight_off              ; s1s2 flashlight_off              [50,51]
-  .word screen_1_enemy_probability           ; s1s2 enemy_probability           [52,53]
-  .word screen_1_is_secret_screen            ; s1s2 is_secret_screen            [54,55]
-  .word screen_1_is_end_screen               ; s1s2 is_end_screen               [56,57]
-  .word screen_1_description_compressed      ; s1s2 description_compressed      [58,59]
-  .word screen_1_flashlight_on_compressed    ; s1s2 flashlight_on_compressed    [60,61]
-  .word screen_1_flashlight_off_compressed   ; s1s2 flashlight_off_compressed   [62,63]
+  .word screen_1_id                                 ; S01P01 id [32,33]
+  .word screen_1_name                               ; S01P01 name [34,35]
+  .word screen_1_action1                            ; S01P01 action1 [36,37]
+  .word screen_1_action2                            ; S01P01 action2 [38,39]
+  .word screen_1_action3                            ; S01P01 action3 [40,41]
+  .word screen_1_action4                            ; S01P01 action4 [42,43]
+  .word screen_1_description                        ; S01P01 description [44,45]
+  .word screen_1_ascii                              ; S01P01 ascii [46,47]
+  .word screen_1_flashlight_on                      ; S01P01 flashlight_on [48,49]
+  .word screen_1_flashlight_off                     ; S01P01 flashlight_off [50,51]
+  .word screen_1_enemy_probability                  ; S01P01 enemy_probability [52,53]
+  .word screen_1_is_secret_screen                   ; S01P01 is_secret_screen [54,55]
+  .word screen_1_is_end_screen                      ; S01P01 is_end_screen [56,57]
+  .word screen_1_description_compressed             ; S01P01 description_compressed [58,59]
+  .word screen_1_flashlight_on_compressed           ; S01P01 flashlight_on_compressed [60,61]
+  .word screen_1_flashlight_off_compressed          ; S01P01 flashlight_off_compressed [62,63]
 screen_pointers_2:
-  .word screen_2_id                          ; s1s3 id                          [64,65]
-  .word screen_2_name                        ; s1s3 name                        [66,67]
-  .word screen_2_action1                     ; s1s3 action1                     [68,69]
-  .word screen_2_action2                     ; s1s3 action2                     [70,71]
-  .word screen_2_action3                     ; s1s3 action3                     [72,73]
-  .word screen_2_action4                     ; s1s3 action4                     [74,75]
-  .word screen_2_description                 ; s1s3 description                 [76,77]
-  .word screen_2_ascii                       ; s1s3 ascii                       [78,79]
-  .word screen_2_flashlight_on               ; s1s3 flashlight_on               [80,81]
-  .word screen_2_flashlight_off              ; s1s3 flashlight_off              [82,83]
-  .word screen_2_enemy_probability           ; s1s3 enemy_probability           [84,85]
-  .word screen_2_is_secret_screen            ; s1s3 is_secret_screen            [86,87]
-  .word screen_2_is_end_screen               ; s1s3 is_end_screen               [88,89]
-  .word screen_2_description_compressed      ; s1s3 description_compressed      [90,91]
-  .word screen_2_flashlight_on_compressed    ; s1s3 flashlight_on_compressed    [92,93]
-  .word screen_2_flashlight_off_compressed   ; s1s3 flashlight_off_compressed   [94,95]
+  .word screen_2_id                                 ; S01P02 id [64,65]
+  .word screen_2_name                               ; S01P02 name [66,67]
+  .word screen_2_action1                            ; S01P02 action1 [68,69]
+  .word screen_2_action2                            ; S01P02 action2 [70,71]
+  .word screen_2_action3                            ; S01P02 action3 [72,73]
+  .word screen_2_action4                            ; S01P02 action4 [74,75]
+  .word screen_2_description                        ; S01P02 description [76,77]
+  .word screen_2_ascii                              ; S01P02 ascii [78,79]
+  .word screen_2_flashlight_on                      ; S01P02 flashlight_on [80,81]
+  .word screen_2_flashlight_off                     ; S01P02 flashlight_off [82,83]
+  .word screen_2_enemy_probability                  ; S01P02 enemy_probability [84,85]
+  .word screen_2_is_secret_screen                   ; S01P02 is_secret_screen [86,87]
+  .word screen_2_is_end_screen                      ; S01P02 is_end_screen [88,89]
+  .word screen_2_description_compressed             ; S01P02 description_compressed [90,91]
+  .word screen_2_flashlight_on_compressed           ; S01P02 flashlight_on_compressed [92,93]
+  .word screen_2_flashlight_off_compressed          ; S01P02 flashlight_off_compressed [94,95]
 screen_pointers_3:
-  .word screen_3_id                          ; startScreen id                          [96,97]
-  .word screen_3_name                        ; startScreen name                        [98,99]
-  .word screen_3_action1                     ; startScreen action1                     [100,101]
-  .word screen_3_action2                     ; startScreen action2                     [102,103]
-  .word screen_3_action3                     ; startScreen action3                     [104,105]
-  .word screen_3_action4                     ; startScreen action4                     [106,107]
-  .word screen_3_description                 ; startScreen description                 [108,109]
-  .word screen_3_ascii                       ; startScreen ascii                       [110,111]
-  .word screen_3_flashlight_on               ; startScreen flashlight_on               [112,113]
-  .word screen_3_flashlight_off              ; startScreen flashlight_off              [114,115]
-  .word screen_3_enemy_probability           ; startScreen enemy_probability           [116,117]
-  .word screen_3_is_secret_screen            ; startScreen is_secret_screen            [118,119]
-  .word screen_3_is_end_screen               ; startScreen is_end_screen               [120,121]
-  .word screen_3_description_compressed      ; startScreen description_compressed      [122,123]
-  .word screen_3_flashlight_on_compressed    ; startScreen flashlight_on_compressed    [124,125]
-  .word screen_3_flashlight_off_compressed   ; startScreen flashlight_off_compressed   [126,127]
+  .word screen_3_id                                 ; S01P03 id [96,97]
+  .word screen_3_name                               ; S01P03 name [98,99]
+  .word screen_3_action1                            ; S01P03 action1 [100,101]
+  .word screen_3_action2                            ; S01P03 action2 [102,103]
+  .word screen_3_action3                            ; S01P03 action3 [104,105]
+  .word screen_3_action4                            ; S01P03 action4 [106,107]
+  .word screen_3_description                        ; S01P03 description [108,109]
+  .word screen_3_ascii                              ; S01P03 ascii [110,111]
+  .word screen_3_flashlight_on                      ; S01P03 flashlight_on [112,113]
+  .word screen_3_flashlight_off                     ; S01P03 flashlight_off [114,115]
+  .word screen_3_enemy_probability                  ; S01P03 enemy_probability [116,117]
+  .word screen_3_is_secret_screen                   ; S01P03 is_secret_screen [118,119]
+  .word screen_3_is_end_screen                      ; S01P03 is_end_screen [120,121]
+  .word screen_3_description_compressed             ; S01P03 description_compressed [122,123]
+  .word screen_3_flashlight_on_compressed           ; S01P03 flashlight_on_compressed [124,125]
+  .word screen_3_flashlight_off_compressed          ; S01P03 flashlight_off_compressed [126,127]
 screen_pointers_4:
-  .word screen_4_id                          ; endScreens1s1 id                          [128,129]
-  .word screen_4_name                        ; endScreens1s1 name                        [130,131]
-  .word screen_4_action1                     ; endScreens1s1 action1                     [132,133]
-  .word screen_4_action2                     ; endScreens1s1 action2                     [134,135]
-  .word screen_4_action3                     ; endScreens1s1 action3                     [136,137]
-  .word screen_4_action4                     ; endScreens1s1 action4                     [138,139]
-  .word screen_4_description                 ; endScreens1s1 description                 [140,141]
-  .word screen_4_ascii                       ; endScreens1s1 ascii                       [142,143]
-  .word screen_4_flashlight_on               ; endScreens1s1 flashlight_on               [144,145]
-  .word screen_4_flashlight_off              ; endScreens1s1 flashlight_off              [146,147]
-  .word screen_4_enemy_probability           ; endScreens1s1 enemy_probability           [148,149]
-  .word screen_4_is_secret_screen            ; endScreens1s1 is_secret_screen            [150,151]
-  .word screen_4_is_end_screen               ; endScreens1s1 is_end_screen               [152,153]
-  .word screen_4_description_compressed      ; endScreens1s1 description_compressed      [154,155]
-  .word screen_4_flashlight_on_compressed    ; endScreens1s1 flashlight_on_compressed    [156,157]
-  .word screen_4_flashlight_off_compressed   ; endScreens1s1 flashlight_off_compressed   [158,159]
+  .word screen_4_id                                 ; S01P04 id [128,129]
+  .word screen_4_name                               ; S01P04 name [130,131]
+  .word screen_4_action1                            ; S01P04 action1 [132,133]
+  .word screen_4_action2                            ; S01P04 action2 [134,135]
+  .word screen_4_action3                            ; S01P04 action3 [136,137]
+  .word screen_4_action4                            ; S01P04 action4 [138,139]
+  .word screen_4_description                        ; S01P04 description [140,141]
+  .word screen_4_ascii                              ; S01P04 ascii [142,143]
+  .word screen_4_flashlight_on                      ; S01P04 flashlight_on [144,145]
+  .word screen_4_flashlight_off                     ; S01P04 flashlight_off [146,147]
+  .word screen_4_enemy_probability                  ; S01P04 enemy_probability [148,149]
+  .word screen_4_is_secret_screen                   ; S01P04 is_secret_screen [150,151]
+  .word screen_4_is_end_screen                      ; S01P04 is_end_screen [152,153]
+  .word screen_4_description_compressed             ; S01P04 description_compressed [154,155]
+  .word screen_4_flashlight_on_compressed           ; S01P04 flashlight_on_compressed [156,157]
+  .word screen_4_flashlight_off_compressed          ; S01P04 flashlight_off_compressed [158,159]
 screen_pointers_5:
-  .word screen_5_id                          ; endScreenDefault id                          [160,161]
-  .word screen_5_name                        ; endScreenDefault name                        [162,163]
-  .word screen_5_action1                     ; endScreenDefault action1                     [164,165]
-  .word screen_5_action2                     ; endScreenDefault action2                     [166,167]
-  .word screen_5_action3                     ; endScreenDefault action3                     [168,169]
-  .word screen_5_action4                     ; endScreenDefault action4                     [170,171]
-  .word screen_5_description                 ; endScreenDefault description                 [172,173]
-  .word screen_5_ascii                       ; endScreenDefault ascii                       [174,175]
-  .word screen_5_flashlight_on               ; endScreenDefault flashlight_on               [176,177]
-  .word screen_5_flashlight_off              ; endScreenDefault flashlight_off              [178,179]
-  .word screen_5_enemy_probability           ; endScreenDefault enemy_probability           [180,181]
-  .word screen_5_is_secret_screen            ; endScreenDefault is_secret_screen            [182,183]
-  .word screen_5_is_end_screen               ; endScreenDefault is_end_screen               [184,185]
-  .word screen_5_description_compressed      ; endScreenDefault description_compressed      [186,187]
-  .word screen_5_flashlight_on_compressed    ; endScreenDefault flashlight_on_compressed    [188,189]
-  .word screen_5_flashlight_off_compressed   ; endScreenDefault flashlight_off_compressed   [190,191]
+  .word screen_5_id                                 ; S01P05 id [160,161]
+  .word screen_5_name                               ; S01P05 name [162,163]
+  .word screen_5_action1                            ; S01P05 action1 [164,165]
+  .word screen_5_action2                            ; S01P05 action2 [166,167]
+  .word screen_5_action3                            ; S01P05 action3 [168,169]
+  .word screen_5_action4                            ; S01P05 action4 [170,171]
+  .word screen_5_description                        ; S01P05 description [172,173]
+  .word screen_5_ascii                              ; S01P05 ascii [174,175]
+  .word screen_5_flashlight_on                      ; S01P05 flashlight_on [176,177]
+  .word screen_5_flashlight_off                     ; S01P05 flashlight_off [178,179]
+  .word screen_5_enemy_probability                  ; S01P05 enemy_probability [180,181]
+  .word screen_5_is_secret_screen                   ; S01P05 is_secret_screen [182,183]
+  .word screen_5_is_end_screen                      ; S01P05 is_end_screen [184,185]
+  .word screen_5_description_compressed             ; S01P05 description_compressed [186,187]
+  .word screen_5_flashlight_on_compressed           ; S01P05 flashlight_on_compressed [188,189]
+  .word screen_5_flashlight_off_compressed          ; S01P05 flashlight_off_compressed [190,191]
 screen_pointers_6:
-  .word screen_6_id                          ; s1s4 id                          [192,193]
-  .word screen_6_name                        ; s1s4 name                        [194,195]
-  .word screen_6_action1                     ; s1s4 action1                     [196,197]
-  .word screen_6_action2                     ; s1s4 action2                     [198,199]
-  .word screen_6_action3                     ; s1s4 action3                     [200,201]
-  .word screen_6_action4                     ; s1s4 action4                     [202,203]
-  .word screen_6_description                 ; s1s4 description                 [204,205]
-  .word screen_6_ascii                       ; s1s4 ascii                       [206,207]
-  .word screen_6_flashlight_on               ; s1s4 flashlight_on               [208,209]
-  .word screen_6_flashlight_off              ; s1s4 flashlight_off              [210,211]
-  .word screen_6_enemy_probability           ; s1s4 enemy_probability           [212,213]
-  .word screen_6_is_secret_screen            ; s1s4 is_secret_screen            [214,215]
-  .word screen_6_is_end_screen               ; s1s4 is_end_screen               [216,217]
-  .word screen_6_description_compressed      ; s1s4 description_compressed      [218,219]
-  .word screen_6_flashlight_on_compressed    ; s1s4 flashlight_on_compressed    [220,221]
-  .word screen_6_flashlight_off_compressed   ; s1s4 flashlight_off_compressed   [222,223]
+  .word screen_6_id                                 ; S01P06 id [192,193]
+  .word screen_6_name                               ; S01P06 name [194,195]
+  .word screen_6_action1                            ; S01P06 action1 [196,197]
+  .word screen_6_action2                            ; S01P06 action2 [198,199]
+  .word screen_6_action3                            ; S01P06 action3 [200,201]
+  .word screen_6_action4                            ; S01P06 action4 [202,203]
+  .word screen_6_description                        ; S01P06 description [204,205]
+  .word screen_6_ascii                              ; S01P06 ascii [206,207]
+  .word screen_6_flashlight_on                      ; S01P06 flashlight_on [208,209]
+  .word screen_6_flashlight_off                     ; S01P06 flashlight_off [210,211]
+  .word screen_6_enemy_probability                  ; S01P06 enemy_probability [212,213]
+  .word screen_6_is_secret_screen                   ; S01P06 is_secret_screen [214,215]
+  .word screen_6_is_end_screen                      ; S01P06 is_end_screen [216,217]
+  .word screen_6_description_compressed             ; S01P06 description_compressed [218,219]
+  .word screen_6_flashlight_on_compressed           ; S01P06 flashlight_on_compressed [220,221]
+  .word screen_6_flashlight_off_compressed          ; S01P06 flashlight_off_compressed [222,223]
 screen_pointers_7:
-  .word screen_7_id                          ; s1s5 id                          [224,225]
-  .word screen_7_name                        ; s1s5 name                        [226,227]
-  .word screen_7_action1                     ; s1s5 action1                     [228,229]
-  .word screen_7_action2                     ; s1s5 action2                     [230,231]
-  .word screen_7_action3                     ; s1s5 action3                     [232,233]
-  .word screen_7_action4                     ; s1s5 action4                     [234,235]
-  .word screen_7_description                 ; s1s5 description                 [236,237]
-  .word screen_7_ascii                       ; s1s5 ascii                       [238,239]
-  .word screen_7_flashlight_on               ; s1s5 flashlight_on               [240,241]
-  .word screen_7_flashlight_off              ; s1s5 flashlight_off              [242,243]
-  .word screen_7_enemy_probability           ; s1s5 enemy_probability           [244,245]
-  .word screen_7_is_secret_screen            ; s1s5 is_secret_screen            [246,247]
-  .word screen_7_is_end_screen               ; s1s5 is_end_screen               [248,249]
-  .word screen_7_description_compressed      ; s1s5 description_compressed      [250,251]
-  .word screen_7_flashlight_on_compressed    ; s1s5 flashlight_on_compressed    [252,253]
-  .word screen_7_flashlight_off_compressed   ; s1s5 flashlight_off_compressed   [254,255]
+  .word screen_7_id                                 ; S01P07 id [224,225]
+  .word screen_7_name                               ; S01P07 name [226,227]
+  .word screen_7_action1                            ; S01P07 action1 [228,229]
+  .word screen_7_action2                            ; S01P07 action2 [230,231]
+  .word screen_7_action3                            ; S01P07 action3 [232,233]
+  .word screen_7_action4                            ; S01P07 action4 [234,235]
+  .word screen_7_description                        ; S01P07 description [236,237]
+  .word screen_7_ascii                              ; S01P07 ascii [238,239]
+  .word screen_7_flashlight_on                      ; S01P07 flashlight_on [240,241]
+  .word screen_7_flashlight_off                     ; S01P07 flashlight_off [242,243]
+  .word screen_7_enemy_probability                  ; S01P07 enemy_probability [244,245]
+  .word screen_7_is_secret_screen                   ; S01P07 is_secret_screen [246,247]
+  .word screen_7_is_end_screen                      ; S01P07 is_end_screen [248,249]
+  .word screen_7_description_compressed             ; S01P07 description_compressed [250,251]
+  .word screen_7_flashlight_on_compressed           ; S01P07 flashlight_on_compressed [252,253]
+  .word screen_7_flashlight_off_compressed          ; S01P07 flashlight_off_compressed [254,255]
 screen_pointers_8:
-  .word screen_8_id                          ; endScreens1s4 id                          [256,257]
-  .word screen_8_name                        ; endScreens1s4 name                        [258,259]
-  .word screen_8_action1                     ; endScreens1s4 action1                     [260,261]
-  .word screen_8_action2                     ; endScreens1s4 action2                     [262,263]
-  .word screen_8_action3                     ; endScreens1s4 action3                     [264,265]
-  .word screen_8_action4                     ; endScreens1s4 action4                     [266,267]
-  .word screen_8_description                 ; endScreens1s4 description                 [268,269]
-  .word screen_8_ascii                       ; endScreens1s4 ascii                       [270,271]
-  .word screen_8_flashlight_on               ; endScreens1s4 flashlight_on               [272,273]
-  .word screen_8_flashlight_off              ; endScreens1s4 flashlight_off              [274,275]
-  .word screen_8_enemy_probability           ; endScreens1s4 enemy_probability           [276,277]
-  .word screen_8_is_secret_screen            ; endScreens1s4 is_secret_screen            [278,279]
-  .word screen_8_is_end_screen               ; endScreens1s4 is_end_screen               [280,281]
-  .word screen_8_description_compressed      ; endScreens1s4 description_compressed      [282,283]
-  .word screen_8_flashlight_on_compressed    ; endScreens1s4 flashlight_on_compressed    [284,285]
-  .word screen_8_flashlight_off_compressed   ; endScreens1s4 flashlight_off_compressed   [286,287]
+  .word screen_8_id                                 ; S02P01 id [256,257]
+  .word screen_8_name                               ; S02P01 name [258,259]
+  .word screen_8_action1                            ; S02P01 action1 [260,261]
+  .word screen_8_action2                            ; S02P01 action2 [262,263]
+  .word screen_8_action3                            ; S02P01 action3 [264,265]
+  .word screen_8_action4                            ; S02P01 action4 [266,267]
+  .word screen_8_description                        ; S02P01 description [268,269]
+  .word screen_8_ascii                              ; S02P01 ascii [270,271]
+  .word screen_8_flashlight_on                      ; S02P01 flashlight_on [272,273]
+  .word screen_8_flashlight_off                     ; S02P01 flashlight_off [274,275]
+  .word screen_8_enemy_probability                  ; S02P01 enemy_probability [276,277]
+  .word screen_8_is_secret_screen                   ; S02P01 is_secret_screen [278,279]
+  .word screen_8_is_end_screen                      ; S02P01 is_end_screen [280,281]
+  .word screen_8_description_compressed             ; S02P01 description_compressed [282,283]
+  .word screen_8_flashlight_on_compressed           ; S02P01 flashlight_on_compressed [284,285]
+  .word screen_8_flashlight_off_compressed          ; S02P01 flashlight_off_compressed [286,287]
 screen_pointers_9:
-  .word screen_9_id                          ; s2s1 id                          [288,289]
-  .word screen_9_name                        ; s2s1 name                        [290,291]
-  .word screen_9_action1                     ; s2s1 action1                     [292,293]
-  .word screen_9_action2                     ; s2s1 action2                     [294,295]
-  .word screen_9_action3                     ; s2s1 action3                     [296,297]
-  .word screen_9_action4                     ; s2s1 action4                     [298,299]
-  .word screen_9_description                 ; s2s1 description                 [300,301]
-  .word screen_9_ascii                       ; s2s1 ascii                       [302,303]
-  .word screen_9_flashlight_on               ; s2s1 flashlight_on               [304,305]
-  .word screen_9_flashlight_off              ; s2s1 flashlight_off              [306,307]
-  .word screen_9_enemy_probability           ; s2s1 enemy_probability           [308,309]
-  .word screen_9_is_secret_screen            ; s2s1 is_secret_screen            [310,311]
-  .word screen_9_is_end_screen               ; s2s1 is_end_screen               [312,313]
-  .word screen_9_description_compressed      ; s2s1 description_compressed      [314,315]
-  .word screen_9_flashlight_on_compressed    ; s2s1 flashlight_on_compressed    [316,317]
-  .word screen_9_flashlight_off_compressed   ; s2s1 flashlight_off_compressed   [318,319]
+  .word screen_9_id                                 ; S02P02 id [288,289]
+  .word screen_9_name                               ; S02P02 name [290,291]
+  .word screen_9_action1                            ; S02P02 action1 [292,293]
+  .word screen_9_action2                            ; S02P02 action2 [294,295]
+  .word screen_9_action3                            ; S02P02 action3 [296,297]
+  .word screen_9_action4                            ; S02P02 action4 [298,299]
+  .word screen_9_description                        ; S02P02 description [300,301]
+  .word screen_9_ascii                              ; S02P02 ascii [302,303]
+  .word screen_9_flashlight_on                      ; S02P02 flashlight_on [304,305]
+  .word screen_9_flashlight_off                     ; S02P02 flashlight_off [306,307]
+  .word screen_9_enemy_probability                  ; S02P02 enemy_probability [308,309]
+  .word screen_9_is_secret_screen                   ; S02P02 is_secret_screen [310,311]
+  .word screen_9_is_end_screen                      ; S02P02 is_end_screen [312,313]
+  .word screen_9_description_compressed             ; S02P02 description_compressed [314,315]
+  .word screen_9_flashlight_on_compressed           ; S02P02 flashlight_on_compressed [316,317]
+  .word screen_9_flashlight_off_compressed          ; S02P02 flashlight_off_compressed [318,319]
 screen_pointers_10:
-  .word screen_10_id                          ; EndScreenSimulationTimeisUp id                          [320,321]
-  .word screen_10_name                        ; EndScreenSimulationTimeisUp name                        [322,323]
-  .word screen_10_action1                     ; EndScreenSimulationTimeisUp action1                     [324,325]
-  .word screen_10_action2                     ; EndScreenSimulationTimeisUp action2                     [326,327]
-  .word screen_10_action3                     ; EndScreenSimulationTimeisUp action3                     [328,329]
-  .word screen_10_action4                     ; EndScreenSimulationTimeisUp action4                     [330,331]
-  .word screen_10_description                 ; EndScreenSimulationTimeisUp description                 [332,333]
-  .word screen_10_ascii                       ; EndScreenSimulationTimeisUp ascii                       [334,335]
-  .word screen_10_flashlight_on               ; EndScreenSimulationTimeisUp flashlight_on               [336,337]
-  .word screen_10_flashlight_off              ; EndScreenSimulationTimeisUp flashlight_off              [338,339]
-  .word screen_10_enemy_probability           ; EndScreenSimulationTimeisUp enemy_probability           [340,341]
-  .word screen_10_is_secret_screen            ; EndScreenSimulationTimeisUp is_secret_screen            [342,343]
-  .word screen_10_is_end_screen               ; EndScreenSimulationTimeisUp is_end_screen               [344,345]
-  .word screen_10_description_compressed      ; EndScreenSimulationTimeisUp description_compressed      [346,347]
-  .word screen_10_flashlight_on_compressed    ; EndScreenSimulationTimeisUp flashlight_on_compressed    [348,349]
-  .word screen_10_flashlight_off_compressed   ; EndScreenSimulationTimeisUp flashlight_off_compressed   [350,351]
+  .word screen_10_id                                 ; S02P03 id [320,321]
+  .word screen_10_name                               ; S02P03 name [322,323]
+  .word screen_10_action1                            ; S02P03 action1 [324,325]
+  .word screen_10_action2                            ; S02P03 action2 [326,327]
+  .word screen_10_action3                            ; S02P03 action3 [328,329]
+  .word screen_10_action4                            ; S02P03 action4 [330,331]
+  .word screen_10_description                        ; S02P03 description [332,333]
+  .word screen_10_ascii                              ; S02P03 ascii [334,335]
+  .word screen_10_flashlight_on                      ; S02P03 flashlight_on [336,337]
+  .word screen_10_flashlight_off                     ; S02P03 flashlight_off [338,339]
+  .word screen_10_enemy_probability                  ; S02P03 enemy_probability [340,341]
+  .word screen_10_is_secret_screen                   ; S02P03 is_secret_screen [342,343]
+  .word screen_10_is_end_screen                      ; S02P03 is_end_screen [344,345]
+  .word screen_10_description_compressed             ; S02P03 description_compressed [346,347]
+  .word screen_10_flashlight_on_compressed           ; S02P03 flashlight_on_compressed [348,349]
+  .word screen_10_flashlight_off_compressed          ; S02P03 flashlight_off_compressed [350,351]
 screen_pointers_11:
-  .word screen_11_id                          ; endScreenByEnemy id                          [352,353]
-  .word screen_11_name                        ; endScreenByEnemy name                        [354,355]
-  .word screen_11_action1                     ; endScreenByEnemy action1                     [356,357]
-  .word screen_11_action2                     ; endScreenByEnemy action2                     [358,359]
-  .word screen_11_action3                     ; endScreenByEnemy action3                     [360,361]
-  .word screen_11_action4                     ; endScreenByEnemy action4                     [362,363]
-  .word screen_11_description                 ; endScreenByEnemy description                 [364,365]
-  .word screen_11_ascii                       ; endScreenByEnemy ascii                       [366,367]
-  .word screen_11_flashlight_on               ; endScreenByEnemy flashlight_on               [368,369]
-  .word screen_11_flashlight_off              ; endScreenByEnemy flashlight_off              [370,371]
-  .word screen_11_enemy_probability           ; endScreenByEnemy enemy_probability           [372,373]
-  .word screen_11_is_secret_screen            ; endScreenByEnemy is_secret_screen            [374,375]
-  .word screen_11_is_end_screen               ; endScreenByEnemy is_end_screen               [376,377]
-  .word screen_11_description_compressed      ; endScreenByEnemy description_compressed      [378,379]
-  .word screen_11_flashlight_on_compressed    ; endScreenByEnemy flashlight_on_compressed    [380,381]
-  .word screen_11_flashlight_off_compressed   ; endScreenByEnemy flashlight_off_compressed   [382,383]
+  .word screen_11_id                                 ; S02P04 id [352,353]
+  .word screen_11_name                               ; S02P04 name [354,355]
+  .word screen_11_action1                            ; S02P04 action1 [356,357]
+  .word screen_11_action2                            ; S02P04 action2 [358,359]
+  .word screen_11_action3                            ; S02P04 action3 [360,361]
+  .word screen_11_action4                            ; S02P04 action4 [362,363]
+  .word screen_11_description                        ; S02P04 description [364,365]
+  .word screen_11_ascii                              ; S02P04 ascii [366,367]
+  .word screen_11_flashlight_on                      ; S02P04 flashlight_on [368,369]
+  .word screen_11_flashlight_off                     ; S02P04 flashlight_off [370,371]
+  .word screen_11_enemy_probability                  ; S02P04 enemy_probability [372,373]
+  .word screen_11_is_secret_screen                   ; S02P04 is_secret_screen [374,375]
+  .word screen_11_is_end_screen                      ; S02P04 is_end_screen [376,377]
+  .word screen_11_description_compressed             ; S02P04 description_compressed [378,379]
+  .word screen_11_flashlight_on_compressed           ; S02P04 flashlight_on_compressed [380,381]
+  .word screen_11_flashlight_off_compressed          ; S02P04 flashlight_off_compressed [382,383]
 screen_pointers_12:
-  .word screen_12_id                          ; endScreenByActionFailed id                          [384,385]
-  .word screen_12_name                        ; endScreenByActionFailed name                        [386,387]
-  .word screen_12_action1                     ; endScreenByActionFailed action1                     [388,389]
-  .word screen_12_action2                     ; endScreenByActionFailed action2                     [390,391]
-  .word screen_12_action3                     ; endScreenByActionFailed action3                     [392,393]
-  .word screen_12_action4                     ; endScreenByActionFailed action4                     [394,395]
-  .word screen_12_description                 ; endScreenByActionFailed description                 [396,397]
-  .word screen_12_ascii                       ; endScreenByActionFailed ascii                       [398,399]
-  .word screen_12_flashlight_on               ; endScreenByActionFailed flashlight_on               [400,401]
-  .word screen_12_flashlight_off              ; endScreenByActionFailed flashlight_off              [402,403]
-  .word screen_12_enemy_probability           ; endScreenByActionFailed enemy_probability           [404,405]
-  .word screen_12_is_secret_screen            ; endScreenByActionFailed is_secret_screen            [406,407]
-  .word screen_12_is_end_screen               ; endScreenByActionFailed is_end_screen               [408,409]
-  .word screen_12_description_compressed      ; endScreenByActionFailed description_compressed      [410,411]
-  .word screen_12_flashlight_on_compressed    ; endScreenByActionFailed flashlight_on_compressed    [412,413]
-  .word screen_12_flashlight_off_compressed   ; endScreenByActionFailed flashlight_off_compressed   [414,415]
+  .word screen_12_id                                 ; S02P05 id [384,385]
+  .word screen_12_name                               ; S02P05 name [386,387]
+  .word screen_12_action1                            ; S02P05 action1 [388,389]
+  .word screen_12_action2                            ; S02P05 action2 [390,391]
+  .word screen_12_action3                            ; S02P05 action3 [392,393]
+  .word screen_12_action4                            ; S02P05 action4 [394,395]
+  .word screen_12_description                        ; S02P05 description [396,397]
+  .word screen_12_ascii                              ; S02P05 ascii [398,399]
+  .word screen_12_flashlight_on                      ; S02P05 flashlight_on [400,401]
+  .word screen_12_flashlight_off                     ; S02P05 flashlight_off [402,403]
+  .word screen_12_enemy_probability                  ; S02P05 enemy_probability [404,405]
+  .word screen_12_is_secret_screen                   ; S02P05 is_secret_screen [406,407]
+  .word screen_12_is_end_screen                      ; S02P05 is_end_screen [408,409]
+  .word screen_12_description_compressed             ; S02P05 description_compressed [410,411]
+  .word screen_12_flashlight_on_compressed           ; S02P05 flashlight_on_compressed [412,413]
+  .word screen_12_flashlight_off_compressed          ; S02P05 flashlight_off_compressed [414,415]
+screen_pointers_13:
+  .word screen_13_id                                 ; S02P06 id [416,417]
+  .word screen_13_name                               ; S02P06 name [418,419]
+  .word screen_13_action1                            ; S02P06 action1 [420,421]
+  .word screen_13_action2                            ; S02P06 action2 [422,423]
+  .word screen_13_action3                            ; S02P06 action3 [424,425]
+  .word screen_13_action4                            ; S02P06 action4 [426,427]
+  .word screen_13_description                        ; S02P06 description [428,429]
+  .word screen_13_ascii                              ; S02P06 ascii [430,431]
+  .word screen_13_flashlight_on                      ; S02P06 flashlight_on [432,433]
+  .word screen_13_flashlight_off                     ; S02P06 flashlight_off [434,435]
+  .word screen_13_enemy_probability                  ; S02P06 enemy_probability [436,437]
+  .word screen_13_is_secret_screen                   ; S02P06 is_secret_screen [438,439]
+  .word screen_13_is_end_screen                      ; S02P06 is_end_screen [440,441]
+  .word screen_13_description_compressed             ; S02P06 description_compressed [442,443]
+  .word screen_13_flashlight_on_compressed           ; S02P06 flashlight_on_compressed [444,445]
+  .word screen_13_flashlight_off_compressed          ; S02P06 flashlight_off_compressed [446,447]
+screen_pointers_14:
+  .word screen_14_id                                 ; S02P07 id [448,449]
+  .word screen_14_name                               ; S02P07 name [450,451]
+  .word screen_14_action1                            ; S02P07 action1 [452,453]
+  .word screen_14_action2                            ; S02P07 action2 [454,455]
+  .word screen_14_action3                            ; S02P07 action3 [456,457]
+  .word screen_14_action4                            ; S02P07 action4 [458,459]
+  .word screen_14_description                        ; S02P07 description [460,461]
+  .word screen_14_ascii                              ; S02P07 ascii [462,463]
+  .word screen_14_flashlight_on                      ; S02P07 flashlight_on [464,465]
+  .word screen_14_flashlight_off                     ; S02P07 flashlight_off [466,467]
+  .word screen_14_enemy_probability                  ; S02P07 enemy_probability [468,469]
+  .word screen_14_is_secret_screen                   ; S02P07 is_secret_screen [470,471]
+  .word screen_14_is_end_screen                      ; S02P07 is_end_screen [472,473]
+  .word screen_14_description_compressed             ; S02P07 description_compressed [474,475]
+  .word screen_14_flashlight_on_compressed           ; S02P07 flashlight_on_compressed [476,477]
+  .word screen_14_flashlight_off_compressed          ; S02P07 flashlight_off_compressed [478,479]
+screen_pointers_15:
+  .word screen_15_id                                 ; S03P01 id [480,481]
+  .word screen_15_name                               ; S03P01 name [482,483]
+  .word screen_15_action1                            ; S03P01 action1 [484,485]
+  .word screen_15_action2                            ; S03P01 action2 [486,487]
+  .word screen_15_action3                            ; S03P01 action3 [488,489]
+  .word screen_15_action4                            ; S03P01 action4 [490,491]
+  .word screen_15_description                        ; S03P01 description [492,493]
+  .word screen_15_ascii                              ; S03P01 ascii [494,495]
+  .word screen_15_flashlight_on                      ; S03P01 flashlight_on [496,497]
+  .word screen_15_flashlight_off                     ; S03P01 flashlight_off [498,499]
+  .word screen_15_enemy_probability                  ; S03P01 enemy_probability [500,501]
+  .word screen_15_is_secret_screen                   ; S03P01 is_secret_screen [502,503]
+  .word screen_15_is_end_screen                      ; S03P01 is_end_screen [504,505]
+  .word screen_15_description_compressed             ; S03P01 description_compressed [506,507]
+  .word screen_15_flashlight_on_compressed           ; S03P01 flashlight_on_compressed [508,509]
+  .word screen_15_flashlight_off_compressed          ; S03P01 flashlight_off_compressed [510,511]
+screen_pointers_16:
+  .word screen_16_id                                 ; S03P02 id [512,513]
+  .word screen_16_name                               ; S03P02 name [514,515]
+  .word screen_16_action1                            ; S03P02 action1 [516,517]
+  .word screen_16_action2                            ; S03P02 action2 [518,519]
+  .word screen_16_action3                            ; S03P02 action3 [520,521]
+  .word screen_16_action4                            ; S03P02 action4 [522,523]
+  .word screen_16_description                        ; S03P02 description [524,525]
+  .word screen_16_ascii                              ; S03P02 ascii [526,527]
+  .word screen_16_flashlight_on                      ; S03P02 flashlight_on [528,529]
+  .word screen_16_flashlight_off                     ; S03P02 flashlight_off [530,531]
+  .word screen_16_enemy_probability                  ; S03P02 enemy_probability [532,533]
+  .word screen_16_is_secret_screen                   ; S03P02 is_secret_screen [534,535]
+  .word screen_16_is_end_screen                      ; S03P02 is_end_screen [536,537]
+  .word screen_16_description_compressed             ; S03P02 description_compressed [538,539]
+  .word screen_16_flashlight_on_compressed           ; S03P02 flashlight_on_compressed [540,541]
+  .word screen_16_flashlight_off_compressed          ; S03P02 flashlight_off_compressed [542,543]
+screen_pointers_17:
+  .word screen_17_id                                 ; S03P03 id [544,545]
+  .word screen_17_name                               ; S03P03 name [546,547]
+  .word screen_17_action1                            ; S03P03 action1 [548,549]
+  .word screen_17_action2                            ; S03P03 action2 [550,551]
+  .word screen_17_action3                            ; S03P03 action3 [552,553]
+  .word screen_17_action4                            ; S03P03 action4 [554,555]
+  .word screen_17_description                        ; S03P03 description [556,557]
+  .word screen_17_ascii                              ; S03P03 ascii [558,559]
+  .word screen_17_flashlight_on                      ; S03P03 flashlight_on [560,561]
+  .word screen_17_flashlight_off                     ; S03P03 flashlight_off [562,563]
+  .word screen_17_enemy_probability                  ; S03P03 enemy_probability [564,565]
+  .word screen_17_is_secret_screen                   ; S03P03 is_secret_screen [566,567]
+  .word screen_17_is_end_screen                      ; S03P03 is_end_screen [568,569]
+  .word screen_17_description_compressed             ; S03P03 description_compressed [570,571]
+  .word screen_17_flashlight_on_compressed           ; S03P03 flashlight_on_compressed [572,573]
+  .word screen_17_flashlight_off_compressed          ; S03P03 flashlight_off_compressed [574,575]
+screen_pointers_18:
+  .word screen_18_id                                 ; S03P04 id [576,577]
+  .word screen_18_name                               ; S03P04 name [578,579]
+  .word screen_18_action1                            ; S03P04 action1 [580,581]
+  .word screen_18_action2                            ; S03P04 action2 [582,583]
+  .word screen_18_action3                            ; S03P04 action3 [584,585]
+  .word screen_18_action4                            ; S03P04 action4 [586,587]
+  .word screen_18_description                        ; S03P04 description [588,589]
+  .word screen_18_ascii                              ; S03P04 ascii [590,591]
+  .word screen_18_flashlight_on                      ; S03P04 flashlight_on [592,593]
+  .word screen_18_flashlight_off                     ; S03P04 flashlight_off [594,595]
+  .word screen_18_enemy_probability                  ; S03P04 enemy_probability [596,597]
+  .word screen_18_is_secret_screen                   ; S03P04 is_secret_screen [598,599]
+  .word screen_18_is_end_screen                      ; S03P04 is_end_screen [600,601]
+  .word screen_18_description_compressed             ; S03P04 description_compressed [602,603]
+  .word screen_18_flashlight_on_compressed           ; S03P04 flashlight_on_compressed [604,605]
+  .word screen_18_flashlight_off_compressed          ; S03P04 flashlight_off_compressed [606,607]
+screen_pointers_19:
+  .word screen_19_id                                 ; S03P05 id [608,609]
+  .word screen_19_name                               ; S03P05 name [610,611]
+  .word screen_19_action1                            ; S03P05 action1 [612,613]
+  .word screen_19_action2                            ; S03P05 action2 [614,615]
+  .word screen_19_action3                            ; S03P05 action3 [616,617]
+  .word screen_19_action4                            ; S03P05 action4 [618,619]
+  .word screen_19_description                        ; S03P05 description [620,621]
+  .word screen_19_ascii                              ; S03P05 ascii [622,623]
+  .word screen_19_flashlight_on                      ; S03P05 flashlight_on [624,625]
+  .word screen_19_flashlight_off                     ; S03P05 flashlight_off [626,627]
+  .word screen_19_enemy_probability                  ; S03P05 enemy_probability [628,629]
+  .word screen_19_is_secret_screen                   ; S03P05 is_secret_screen [630,631]
+  .word screen_19_is_end_screen                      ; S03P05 is_end_screen [632,633]
+  .word screen_19_description_compressed             ; S03P05 description_compressed [634,635]
+  .word screen_19_flashlight_on_compressed           ; S03P05 flashlight_on_compressed [636,637]
+  .word screen_19_flashlight_off_compressed          ; S03P05 flashlight_off_compressed [638,639]
+screen_pointers_20:
+  .word screen_20_id                                 ; S03P06 id [640,641]
+  .word screen_20_name                               ; S03P06 name [642,643]
+  .word screen_20_action1                            ; S03P06 action1 [644,645]
+  .word screen_20_action2                            ; S03P06 action2 [646,647]
+  .word screen_20_action3                            ; S03P06 action3 [648,649]
+  .word screen_20_action4                            ; S03P06 action4 [650,651]
+  .word screen_20_description                        ; S03P06 description [652,653]
+  .word screen_20_ascii                              ; S03P06 ascii [654,655]
+  .word screen_20_flashlight_on                      ; S03P06 flashlight_on [656,657]
+  .word screen_20_flashlight_off                     ; S03P06 flashlight_off [658,659]
+  .word screen_20_enemy_probability                  ; S03P06 enemy_probability [660,661]
+  .word screen_20_is_secret_screen                   ; S03P06 is_secret_screen [662,663]
+  .word screen_20_is_end_screen                      ; S03P06 is_end_screen [664,665]
+  .word screen_20_description_compressed             ; S03P06 description_compressed [666,667]
+  .word screen_20_flashlight_on_compressed           ; S03P06 flashlight_on_compressed [668,669]
+  .word screen_20_flashlight_off_compressed          ; S03P06 flashlight_off_compressed [670,671]
+screen_pointers_21:
+  .word screen_21_id                                 ; S03P07 id [672,673]
+  .word screen_21_name                               ; S03P07 name [674,675]
+  .word screen_21_action1                            ; S03P07 action1 [676,677]
+  .word screen_21_action2                            ; S03P07 action2 [678,679]
+  .word screen_21_action3                            ; S03P07 action3 [680,681]
+  .word screen_21_action4                            ; S03P07 action4 [682,683]
+  .word screen_21_description                        ; S03P07 description [684,685]
+  .word screen_21_ascii                              ; S03P07 ascii [686,687]
+  .word screen_21_flashlight_on                      ; S03P07 flashlight_on [688,689]
+  .word screen_21_flashlight_off                     ; S03P07 flashlight_off [690,691]
+  .word screen_21_enemy_probability                  ; S03P07 enemy_probability [692,693]
+  .word screen_21_is_secret_screen                   ; S03P07 is_secret_screen [694,695]
+  .word screen_21_is_end_screen                      ; S03P07 is_end_screen [696,697]
+  .word screen_21_description_compressed             ; S03P07 description_compressed [698,699]
+  .word screen_21_flashlight_on_compressed           ; S03P07 flashlight_on_compressed [700,701]
+  .word screen_21_flashlight_off_compressed          ; S03P07 flashlight_off_compressed [702,703]
+screen_pointers_22:
+  .word screen_22_id                                 ; S03P08 id [704,705]
+  .word screen_22_name                               ; S03P08 name [706,707]
+  .word screen_22_action1                            ; S03P08 action1 [708,709]
+  .word screen_22_action2                            ; S03P08 action2 [710,711]
+  .word screen_22_action3                            ; S03P08 action3 [712,713]
+  .word screen_22_action4                            ; S03P08 action4 [714,715]
+  .word screen_22_description                        ; S03P08 description [716,717]
+  .word screen_22_ascii                              ; S03P08 ascii [718,719]
+  .word screen_22_flashlight_on                      ; S03P08 flashlight_on [720,721]
+  .word screen_22_flashlight_off                     ; S03P08 flashlight_off [722,723]
+  .word screen_22_enemy_probability                  ; S03P08 enemy_probability [724,725]
+  .word screen_22_is_secret_screen                   ; S03P08 is_secret_screen [726,727]
+  .word screen_22_is_end_screen                      ; S03P08 is_end_screen [728,729]
+  .word screen_22_description_compressed             ; S03P08 description_compressed [730,731]
+  .word screen_22_flashlight_on_compressed           ; S03P08 flashlight_on_compressed [732,733]
+  .word screen_22_flashlight_off_compressed          ; S03P08 flashlight_off_compressed [734,735]
+screen_pointers_23:
+  .word screen_23_id                                 ; S03P09 id [736,737]
+  .word screen_23_name                               ; S03P09 name [738,739]
+  .word screen_23_action1                            ; S03P09 action1 [740,741]
+  .word screen_23_action2                            ; S03P09 action2 [742,743]
+  .word screen_23_action3                            ; S03P09 action3 [744,745]
+  .word screen_23_action4                            ; S03P09 action4 [746,747]
+  .word screen_23_description                        ; S03P09 description [748,749]
+  .word screen_23_ascii                              ; S03P09 ascii [750,751]
+  .word screen_23_flashlight_on                      ; S03P09 flashlight_on [752,753]
+  .word screen_23_flashlight_off                     ; S03P09 flashlight_off [754,755]
+  .word screen_23_enemy_probability                  ; S03P09 enemy_probability [756,757]
+  .word screen_23_is_secret_screen                   ; S03P09 is_secret_screen [758,759]
+  .word screen_23_is_end_screen                      ; S03P09 is_end_screen [760,761]
+  .word screen_23_description_compressed             ; S03P09 description_compressed [762,763]
+  .word screen_23_flashlight_on_compressed           ; S03P09 flashlight_on_compressed [764,765]
+  .word screen_23_flashlight_off_compressed          ; S03P09 flashlight_off_compressed [766,767]
+screen_pointers_24:
+  .word screen_24_id                                 ; S04P01 id [768,769]
+  .word screen_24_name                               ; S04P01 name [770,771]
+  .word screen_24_action1                            ; S04P01 action1 [772,773]
+  .word screen_24_action2                            ; S04P01 action2 [774,775]
+  .word screen_24_action3                            ; S04P01 action3 [776,777]
+  .word screen_24_action4                            ; S04P01 action4 [778,779]
+  .word screen_24_description                        ; S04P01 description [780,781]
+  .word screen_24_ascii                              ; S04P01 ascii [782,783]
+  .word screen_24_flashlight_on                      ; S04P01 flashlight_on [784,785]
+  .word screen_24_flashlight_off                     ; S04P01 flashlight_off [786,787]
+  .word screen_24_enemy_probability                  ; S04P01 enemy_probability [788,789]
+  .word screen_24_is_secret_screen                   ; S04P01 is_secret_screen [790,791]
+  .word screen_24_is_end_screen                      ; S04P01 is_end_screen [792,793]
+  .word screen_24_description_compressed             ; S04P01 description_compressed [794,795]
+  .word screen_24_flashlight_on_compressed           ; S04P01 flashlight_on_compressed [796,797]
+  .word screen_24_flashlight_off_compressed          ; S04P01 flashlight_off_compressed [798,799]
+screen_pointers_25:
+  .word screen_25_id                                 ; S04P02 id [800,801]
+  .word screen_25_name                               ; S04P02 name [802,803]
+  .word screen_25_action1                            ; S04P02 action1 [804,805]
+  .word screen_25_action2                            ; S04P02 action2 [806,807]
+  .word screen_25_action3                            ; S04P02 action3 [808,809]
+  .word screen_25_action4                            ; S04P02 action4 [810,811]
+  .word screen_25_description                        ; S04P02 description [812,813]
+  .word screen_25_ascii                              ; S04P02 ascii [814,815]
+  .word screen_25_flashlight_on                      ; S04P02 flashlight_on [816,817]
+  .word screen_25_flashlight_off                     ; S04P02 flashlight_off [818,819]
+  .word screen_25_enemy_probability                  ; S04P02 enemy_probability [820,821]
+  .word screen_25_is_secret_screen                   ; S04P02 is_secret_screen [822,823]
+  .word screen_25_is_end_screen                      ; S04P02 is_end_screen [824,825]
+  .word screen_25_description_compressed             ; S04P02 description_compressed [826,827]
+  .word screen_25_flashlight_on_compressed           ; S04P02 flashlight_on_compressed [828,829]
+  .word screen_25_flashlight_off_compressed          ; S04P02 flashlight_off_compressed [830,831]
+screen_pointers_26:
+  .word screen_26_id                                 ; S04P03 id [832,833]
+  .word screen_26_name                               ; S04P03 name [834,835]
+  .word screen_26_action1                            ; S04P03 action1 [836,837]
+  .word screen_26_action2                            ; S04P03 action2 [838,839]
+  .word screen_26_action3                            ; S04P03 action3 [840,841]
+  .word screen_26_action4                            ; S04P03 action4 [842,843]
+  .word screen_26_description                        ; S04P03 description [844,845]
+  .word screen_26_ascii                              ; S04P03 ascii [846,847]
+  .word screen_26_flashlight_on                      ; S04P03 flashlight_on [848,849]
+  .word screen_26_flashlight_off                     ; S04P03 flashlight_off [850,851]
+  .word screen_26_enemy_probability                  ; S04P03 enemy_probability [852,853]
+  .word screen_26_is_secret_screen                   ; S04P03 is_secret_screen [854,855]
+  .word screen_26_is_end_screen                      ; S04P03 is_end_screen [856,857]
+  .word screen_26_description_compressed             ; S04P03 description_compressed [858,859]
+  .word screen_26_flashlight_on_compressed           ; S04P03 flashlight_on_compressed [860,861]
+  .word screen_26_flashlight_off_compressed          ; S04P03 flashlight_off_compressed [862,863]
+screen_pointers_27:
+  .word screen_27_id                                 ; S04P04 id [864,865]
+  .word screen_27_name                               ; S04P04 name [866,867]
+  .word screen_27_action1                            ; S04P04 action1 [868,869]
+  .word screen_27_action2                            ; S04P04 action2 [870,871]
+  .word screen_27_action3                            ; S04P04 action3 [872,873]
+  .word screen_27_action4                            ; S04P04 action4 [874,875]
+  .word screen_27_description                        ; S04P04 description [876,877]
+  .word screen_27_ascii                              ; S04P04 ascii [878,879]
+  .word screen_27_flashlight_on                      ; S04P04 flashlight_on [880,881]
+  .word screen_27_flashlight_off                     ; S04P04 flashlight_off [882,883]
+  .word screen_27_enemy_probability                  ; S04P04 enemy_probability [884,885]
+  .word screen_27_is_secret_screen                   ; S04P04 is_secret_screen [886,887]
+  .word screen_27_is_end_screen                      ; S04P04 is_end_screen [888,889]
+  .word screen_27_description_compressed             ; S04P04 description_compressed [890,891]
+  .word screen_27_flashlight_on_compressed           ; S04P04 flashlight_on_compressed [892,893]
+  .word screen_27_flashlight_off_compressed          ; S04P04 flashlight_off_compressed [894,895]
+screen_pointers_28:
+  .word screen_28_id                                 ; S04P05 id [896,897]
+  .word screen_28_name                               ; S04P05 name [898,899]
+  .word screen_28_action1                            ; S04P05 action1 [900,901]
+  .word screen_28_action2                            ; S04P05 action2 [902,903]
+  .word screen_28_action3                            ; S04P05 action3 [904,905]
+  .word screen_28_action4                            ; S04P05 action4 [906,907]
+  .word screen_28_description                        ; S04P05 description [908,909]
+  .word screen_28_ascii                              ; S04P05 ascii [910,911]
+  .word screen_28_flashlight_on                      ; S04P05 flashlight_on [912,913]
+  .word screen_28_flashlight_off                     ; S04P05 flashlight_off [914,915]
+  .word screen_28_enemy_probability                  ; S04P05 enemy_probability [916,917]
+  .word screen_28_is_secret_screen                   ; S04P05 is_secret_screen [918,919]
+  .word screen_28_is_end_screen                      ; S04P05 is_end_screen [920,921]
+  .word screen_28_description_compressed             ; S04P05 description_compressed [922,923]
+  .word screen_28_flashlight_on_compressed           ; S04P05 flashlight_on_compressed [924,925]
+  .word screen_28_flashlight_off_compressed          ; S04P05 flashlight_off_compressed [926,927]
+screen_pointers_29:
+  .word screen_29_id                                 ; S05P01 id [928,929]
+  .word screen_29_name                               ; S05P01 name [930,931]
+  .word screen_29_action1                            ; S05P01 action1 [932,933]
+  .word screen_29_action2                            ; S05P01 action2 [934,935]
+  .word screen_29_action3                            ; S05P01 action3 [936,937]
+  .word screen_29_action4                            ; S05P01 action4 [938,939]
+  .word screen_29_description                        ; S05P01 description [940,941]
+  .word screen_29_ascii                              ; S05P01 ascii [942,943]
+  .word screen_29_flashlight_on                      ; S05P01 flashlight_on [944,945]
+  .word screen_29_flashlight_off                     ; S05P01 flashlight_off [946,947]
+  .word screen_29_enemy_probability                  ; S05P01 enemy_probability [948,949]
+  .word screen_29_is_secret_screen                   ; S05P01 is_secret_screen [950,951]
+  .word screen_29_is_end_screen                      ; S05P01 is_end_screen [952,953]
+  .word screen_29_description_compressed             ; S05P01 description_compressed [954,955]
+  .word screen_29_flashlight_on_compressed           ; S05P01 flashlight_on_compressed [956,957]
+  .word screen_29_flashlight_off_compressed          ; S05P01 flashlight_off_compressed [958,959]
+screen_pointers_30:
+  .word screen_30_id                                 ; S05P02 id [960,961]
+  .word screen_30_name                               ; S05P02 name [962,963]
+  .word screen_30_action1                            ; S05P02 action1 [964,965]
+  .word screen_30_action2                            ; S05P02 action2 [966,967]
+  .word screen_30_action3                            ; S05P02 action3 [968,969]
+  .word screen_30_action4                            ; S05P02 action4 [970,971]
+  .word screen_30_description                        ; S05P02 description [972,973]
+  .word screen_30_ascii                              ; S05P02 ascii [974,975]
+  .word screen_30_flashlight_on                      ; S05P02 flashlight_on [976,977]
+  .word screen_30_flashlight_off                     ; S05P02 flashlight_off [978,979]
+  .word screen_30_enemy_probability                  ; S05P02 enemy_probability [980,981]
+  .word screen_30_is_secret_screen                   ; S05P02 is_secret_screen [982,983]
+  .word screen_30_is_end_screen                      ; S05P02 is_end_screen [984,985]
+  .word screen_30_description_compressed             ; S05P02 description_compressed [986,987]
+  .word screen_30_flashlight_on_compressed           ; S05P02 flashlight_on_compressed [988,989]
+  .word screen_30_flashlight_off_compressed          ; S05P02 flashlight_off_compressed [990,991]
+screen_pointers_31:
+  .word screen_31_id                                 ; S05P03 id [992,993]
+  .word screen_31_name                               ; S05P03 name [994,995]
+  .word screen_31_action1                            ; S05P03 action1 [996,997]
+  .word screen_31_action2                            ; S05P03 action2 [998,999]
+  .word screen_31_action3                            ; S05P03 action3 [1000,1001]
+  .word screen_31_action4                            ; S05P03 action4 [1002,1003]
+  .word screen_31_description                        ; S05P03 description [1004,1005]
+  .word screen_31_ascii                              ; S05P03 ascii [1006,1007]
+  .word screen_31_flashlight_on                      ; S05P03 flashlight_on [1008,1009]
+  .word screen_31_flashlight_off                     ; S05P03 flashlight_off [1010,1011]
+  .word screen_31_enemy_probability                  ; S05P03 enemy_probability [1012,1013]
+  .word screen_31_is_secret_screen                   ; S05P03 is_secret_screen [1014,1015]
+  .word screen_31_is_end_screen                      ; S05P03 is_end_screen [1016,1017]
+  .word screen_31_description_compressed             ; S05P03 description_compressed [1018,1019]
+  .word screen_31_flashlight_on_compressed           ; S05P03 flashlight_on_compressed [1020,1021]
+  .word screen_31_flashlight_off_compressed          ; S05P03 flashlight_off_compressed [1022,1023]
+screen_pointers_32:
+  .word screen_32_id                                 ; S05P04 id [1024,1025]
+  .word screen_32_name                               ; S05P04 name [1026,1027]
+  .word screen_32_action1                            ; S05P04 action1 [1028,1029]
+  .word screen_32_action2                            ; S05P04 action2 [1030,1031]
+  .word screen_32_action3                            ; S05P04 action3 [1032,1033]
+  .word screen_32_action4                            ; S05P04 action4 [1034,1035]
+  .word screen_32_description                        ; S05P04 description [1036,1037]
+  .word screen_32_ascii                              ; S05P04 ascii [1038,1039]
+  .word screen_32_flashlight_on                      ; S05P04 flashlight_on [1040,1041]
+  .word screen_32_flashlight_off                     ; S05P04 flashlight_off [1042,1043]
+  .word screen_32_enemy_probability                  ; S05P04 enemy_probability [1044,1045]
+  .word screen_32_is_secret_screen                   ; S05P04 is_secret_screen [1046,1047]
+  .word screen_32_is_end_screen                      ; S05P04 is_end_screen [1048,1049]
+  .word screen_32_description_compressed             ; S05P04 description_compressed [1050,1051]
+  .word screen_32_flashlight_on_compressed           ; S05P04 flashlight_on_compressed [1052,1053]
+  .word screen_32_flashlight_off_compressed          ; S05P04 flashlight_off_compressed [1054,1055]
+screen_pointers_33:
+  .word screen_33_id                                 ; S05P05 id [1056,1057]
+  .word screen_33_name                               ; S05P05 name [1058,1059]
+  .word screen_33_action1                            ; S05P05 action1 [1060,1061]
+  .word screen_33_action2                            ; S05P05 action2 [1062,1063]
+  .word screen_33_action3                            ; S05P05 action3 [1064,1065]
+  .word screen_33_action4                            ; S05P05 action4 [1066,1067]
+  .word screen_33_description                        ; S05P05 description [1068,1069]
+  .word screen_33_ascii                              ; S05P05 ascii [1070,1071]
+  .word screen_33_flashlight_on                      ; S05P05 flashlight_on [1072,1073]
+  .word screen_33_flashlight_off                     ; S05P05 flashlight_off [1074,1075]
+  .word screen_33_enemy_probability                  ; S05P05 enemy_probability [1076,1077]
+  .word screen_33_is_secret_screen                   ; S05P05 is_secret_screen [1078,1079]
+  .word screen_33_is_end_screen                      ; S05P05 is_end_screen [1080,1081]
+  .word screen_33_description_compressed             ; S05P05 description_compressed [1082,1083]
+  .word screen_33_flashlight_on_compressed           ; S05P05 flashlight_on_compressed [1084,1085]
+  .word screen_33_flashlight_off_compressed          ; S05P05 flashlight_off_compressed [1086,1087]
+screen_pointers_34:
+  .word screen_34_id                                 ; S05P06 id [1088,1089]
+  .word screen_34_name                               ; S05P06 name [1090,1091]
+  .word screen_34_action1                            ; S05P06 action1 [1092,1093]
+  .word screen_34_action2                            ; S05P06 action2 [1094,1095]
+  .word screen_34_action3                            ; S05P06 action3 [1096,1097]
+  .word screen_34_action4                            ; S05P06 action4 [1098,1099]
+  .word screen_34_description                        ; S05P06 description [1100,1101]
+  .word screen_34_ascii                              ; S05P06 ascii [1102,1103]
+  .word screen_34_flashlight_on                      ; S05P06 flashlight_on [1104,1105]
+  .word screen_34_flashlight_off                     ; S05P06 flashlight_off [1106,1107]
+  .word screen_34_enemy_probability                  ; S05P06 enemy_probability [1108,1109]
+  .word screen_34_is_secret_screen                   ; S05P06 is_secret_screen [1110,1111]
+  .word screen_34_is_end_screen                      ; S05P06 is_end_screen [1112,1113]
+  .word screen_34_description_compressed             ; S05P06 description_compressed [1114,1115]
+  .word screen_34_flashlight_on_compressed           ; S05P06 flashlight_on_compressed [1116,1117]
+  .word screen_34_flashlight_off_compressed          ; S05P06 flashlight_off_compressed [1118,1119]
+screen_pointers_35:
+  .word screen_35_id                                 ; S05P07 id [1120,1121]
+  .word screen_35_name                               ; S05P07 name [1122,1123]
+  .word screen_35_action1                            ; S05P07 action1 [1124,1125]
+  .word screen_35_action2                            ; S05P07 action2 [1126,1127]
+  .word screen_35_action3                            ; S05P07 action3 [1128,1129]
+  .word screen_35_action4                            ; S05P07 action4 [1130,1131]
+  .word screen_35_description                        ; S05P07 description [1132,1133]
+  .word screen_35_ascii                              ; S05P07 ascii [1134,1135]
+  .word screen_35_flashlight_on                      ; S05P07 flashlight_on [1136,1137]
+  .word screen_35_flashlight_off                     ; S05P07 flashlight_off [1138,1139]
+  .word screen_35_enemy_probability                  ; S05P07 enemy_probability [1140,1141]
+  .word screen_35_is_secret_screen                   ; S05P07 is_secret_screen [1142,1143]
+  .word screen_35_is_end_screen                      ; S05P07 is_end_screen [1144,1145]
+  .word screen_35_description_compressed             ; S05P07 description_compressed [1146,1147]
+  .word screen_35_flashlight_on_compressed           ; S05P07 flashlight_on_compressed [1148,1149]
+  .word screen_35_flashlight_off_compressed          ; S05P07 flashlight_off_compressed [1150,1151]
+screen_pointers_36:
+  .word screen_36_id                                 ; S06P01 id [1152,1153]
+  .word screen_36_name                               ; S06P01 name [1154,1155]
+  .word screen_36_action1                            ; S06P01 action1 [1156,1157]
+  .word screen_36_action2                            ; S06P01 action2 [1158,1159]
+  .word screen_36_action3                            ; S06P01 action3 [1160,1161]
+  .word screen_36_action4                            ; S06P01 action4 [1162,1163]
+  .word screen_36_description                        ; S06P01 description [1164,1165]
+  .word screen_36_ascii                              ; S06P01 ascii [1166,1167]
+  .word screen_36_flashlight_on                      ; S06P01 flashlight_on [1168,1169]
+  .word screen_36_flashlight_off                     ; S06P01 flashlight_off [1170,1171]
+  .word screen_36_enemy_probability                  ; S06P01 enemy_probability [1172,1173]
+  .word screen_36_is_secret_screen                   ; S06P01 is_secret_screen [1174,1175]
+  .word screen_36_is_end_screen                      ; S06P01 is_end_screen [1176,1177]
+  .word screen_36_description_compressed             ; S06P01 description_compressed [1178,1179]
+  .word screen_36_flashlight_on_compressed           ; S06P01 flashlight_on_compressed [1180,1181]
+  .word screen_36_flashlight_off_compressed          ; S06P01 flashlight_off_compressed [1182,1183]
+screen_pointers_37:
+  .word screen_37_id                                 ; S06P02 id [1184,1185]
+  .word screen_37_name                               ; S06P02 name [1186,1187]
+  .word screen_37_action1                            ; S06P02 action1 [1188,1189]
+  .word screen_37_action2                            ; S06P02 action2 [1190,1191]
+  .word screen_37_action3                            ; S06P02 action3 [1192,1193]
+  .word screen_37_action4                            ; S06P02 action4 [1194,1195]
+  .word screen_37_description                        ; S06P02 description [1196,1197]
+  .word screen_37_ascii                              ; S06P02 ascii [1198,1199]
+  .word screen_37_flashlight_on                      ; S06P02 flashlight_on [1200,1201]
+  .word screen_37_flashlight_off                     ; S06P02 flashlight_off [1202,1203]
+  .word screen_37_enemy_probability                  ; S06P02 enemy_probability [1204,1205]
+  .word screen_37_is_secret_screen                   ; S06P02 is_secret_screen [1206,1207]
+  .word screen_37_is_end_screen                      ; S06P02 is_end_screen [1208,1209]
+  .word screen_37_description_compressed             ; S06P02 description_compressed [1210,1211]
+  .word screen_37_flashlight_on_compressed           ; S06P02 flashlight_on_compressed [1212,1213]
+  .word screen_37_flashlight_off_compressed          ; S06P02 flashlight_off_compressed [1214,1215]
+screen_pointers_38:
+  .word screen_38_id                                 ; S06P03 id [1216,1217]
+  .word screen_38_name                               ; S06P03 name [1218,1219]
+  .word screen_38_action1                            ; S06P03 action1 [1220,1221]
+  .word screen_38_action2                            ; S06P03 action2 [1222,1223]
+  .word screen_38_action3                            ; S06P03 action3 [1224,1225]
+  .word screen_38_action4                            ; S06P03 action4 [1226,1227]
+  .word screen_38_description                        ; S06P03 description [1228,1229]
+  .word screen_38_ascii                              ; S06P03 ascii [1230,1231]
+  .word screen_38_flashlight_on                      ; S06P03 flashlight_on [1232,1233]
+  .word screen_38_flashlight_off                     ; S06P03 flashlight_off [1234,1235]
+  .word screen_38_enemy_probability                  ; S06P03 enemy_probability [1236,1237]
+  .word screen_38_is_secret_screen                   ; S06P03 is_secret_screen [1238,1239]
+  .word screen_38_is_end_screen                      ; S06P03 is_end_screen [1240,1241]
+  .word screen_38_description_compressed             ; S06P03 description_compressed [1242,1243]
+  .word screen_38_flashlight_on_compressed           ; S06P03 flashlight_on_compressed [1244,1245]
+  .word screen_38_flashlight_off_compressed          ; S06P03 flashlight_off_compressed [1246,1247]
+screen_pointers_39:
+  .word screen_39_id                                 ; S06P04 id [1248,1249]
+  .word screen_39_name                               ; S06P04 name [1250,1251]
+  .word screen_39_action1                            ; S06P04 action1 [1252,1253]
+  .word screen_39_action2                            ; S06P04 action2 [1254,1255]
+  .word screen_39_action3                            ; S06P04 action3 [1256,1257]
+  .word screen_39_action4                            ; S06P04 action4 [1258,1259]
+  .word screen_39_description                        ; S06P04 description [1260,1261]
+  .word screen_39_ascii                              ; S06P04 ascii [1262,1263]
+  .word screen_39_flashlight_on                      ; S06P04 flashlight_on [1264,1265]
+  .word screen_39_flashlight_off                     ; S06P04 flashlight_off [1266,1267]
+  .word screen_39_enemy_probability                  ; S06P04 enemy_probability [1268,1269]
+  .word screen_39_is_secret_screen                   ; S06P04 is_secret_screen [1270,1271]
+  .word screen_39_is_end_screen                      ; S06P04 is_end_screen [1272,1273]
+  .word screen_39_description_compressed             ; S06P04 description_compressed [1274,1275]
+  .word screen_39_flashlight_on_compressed           ; S06P04 flashlight_on_compressed [1276,1277]
+  .word screen_39_flashlight_off_compressed          ; S06P04 flashlight_off_compressed [1278,1279]
+screen_pointers_40:
+  .word screen_40_id                                 ; S07P01 id [1280,1281]
+  .word screen_40_name                               ; S07P01 name [1282,1283]
+  .word screen_40_action1                            ; S07P01 action1 [1284,1285]
+  .word screen_40_action2                            ; S07P01 action2 [1286,1287]
+  .word screen_40_action3                            ; S07P01 action3 [1288,1289]
+  .word screen_40_action4                            ; S07P01 action4 [1290,1291]
+  .word screen_40_description                        ; S07P01 description [1292,1293]
+  .word screen_40_ascii                              ; S07P01 ascii [1294,1295]
+  .word screen_40_flashlight_on                      ; S07P01 flashlight_on [1296,1297]
+  .word screen_40_flashlight_off                     ; S07P01 flashlight_off [1298,1299]
+  .word screen_40_enemy_probability                  ; S07P01 enemy_probability [1300,1301]
+  .word screen_40_is_secret_screen                   ; S07P01 is_secret_screen [1302,1303]
+  .word screen_40_is_end_screen                      ; S07P01 is_end_screen [1304,1305]
+  .word screen_40_description_compressed             ; S07P01 description_compressed [1306,1307]
+  .word screen_40_flashlight_on_compressed           ; S07P01 flashlight_on_compressed [1308,1309]
+  .word screen_40_flashlight_off_compressed          ; S07P01 flashlight_off_compressed [1310,1311]
+screen_pointers_41:
+  .word screen_41_id                                 ; S07P02 id [1312,1313]
+  .word screen_41_name                               ; S07P02 name [1314,1315]
+  .word screen_41_action1                            ; S07P02 action1 [1316,1317]
+  .word screen_41_action2                            ; S07P02 action2 [1318,1319]
+  .word screen_41_action3                            ; S07P02 action3 [1320,1321]
+  .word screen_41_action4                            ; S07P02 action4 [1322,1323]
+  .word screen_41_description                        ; S07P02 description [1324,1325]
+  .word screen_41_ascii                              ; S07P02 ascii [1326,1327]
+  .word screen_41_flashlight_on                      ; S07P02 flashlight_on [1328,1329]
+  .word screen_41_flashlight_off                     ; S07P02 flashlight_off [1330,1331]
+  .word screen_41_enemy_probability                  ; S07P02 enemy_probability [1332,1333]
+  .word screen_41_is_secret_screen                   ; S07P02 is_secret_screen [1334,1335]
+  .word screen_41_is_end_screen                      ; S07P02 is_end_screen [1336,1337]
+  .word screen_41_description_compressed             ; S07P02 description_compressed [1338,1339]
+  .word screen_41_flashlight_on_compressed           ; S07P02 flashlight_on_compressed [1340,1341]
+  .word screen_41_flashlight_off_compressed          ; S07P02 flashlight_off_compressed [1342,1343]
+screen_pointers_42:
+  .word screen_42_id                                 ; S07P03 id [1344,1345]
+  .word screen_42_name                               ; S07P03 name [1346,1347]
+  .word screen_42_action1                            ; S07P03 action1 [1348,1349]
+  .word screen_42_action2                            ; S07P03 action2 [1350,1351]
+  .word screen_42_action3                            ; S07P03 action3 [1352,1353]
+  .word screen_42_action4                            ; S07P03 action4 [1354,1355]
+  .word screen_42_description                        ; S07P03 description [1356,1357]
+  .word screen_42_ascii                              ; S07P03 ascii [1358,1359]
+  .word screen_42_flashlight_on                      ; S07P03 flashlight_on [1360,1361]
+  .word screen_42_flashlight_off                     ; S07P03 flashlight_off [1362,1363]
+  .word screen_42_enemy_probability                  ; S07P03 enemy_probability [1364,1365]
+  .word screen_42_is_secret_screen                   ; S07P03 is_secret_screen [1366,1367]
+  .word screen_42_is_end_screen                      ; S07P03 is_end_screen [1368,1369]
+  .word screen_42_description_compressed             ; S07P03 description_compressed [1370,1371]
+  .word screen_42_flashlight_on_compressed           ; S07P03 flashlight_on_compressed [1372,1373]
+  .word screen_42_flashlight_off_compressed          ; S07P03 flashlight_off_compressed [1374,1375]
+screen_pointers_43:
+  .word screen_43_id                                 ; S07P04 id [1376,1377]
+  .word screen_43_name                               ; S07P04 name [1378,1379]
+  .word screen_43_action1                            ; S07P04 action1 [1380,1381]
+  .word screen_43_action2                            ; S07P04 action2 [1382,1383]
+  .word screen_43_action3                            ; S07P04 action3 [1384,1385]
+  .word screen_43_action4                            ; S07P04 action4 [1386,1387]
+  .word screen_43_description                        ; S07P04 description [1388,1389]
+  .word screen_43_ascii                              ; S07P04 ascii [1390,1391]
+  .word screen_43_flashlight_on                      ; S07P04 flashlight_on [1392,1393]
+  .word screen_43_flashlight_off                     ; S07P04 flashlight_off [1394,1395]
+  .word screen_43_enemy_probability                  ; S07P04 enemy_probability [1396,1397]
+  .word screen_43_is_secret_screen                   ; S07P04 is_secret_screen [1398,1399]
+  .word screen_43_is_end_screen                      ; S07P04 is_end_screen [1400,1401]
+  .word screen_43_description_compressed             ; S07P04 description_compressed [1402,1403]
+  .word screen_43_flashlight_on_compressed           ; S07P04 flashlight_on_compressed [1404,1405]
+  .word screen_43_flashlight_off_compressed          ; S07P04 flashlight_off_compressed [1406,1407]
+screen_pointers_44:
+  .word screen_44_id                                 ; S07P05 id [1408,1409]
+  .word screen_44_name                               ; S07P05 name [1410,1411]
+  .word screen_44_action1                            ; S07P05 action1 [1412,1413]
+  .word screen_44_action2                            ; S07P05 action2 [1414,1415]
+  .word screen_44_action3                            ; S07P05 action3 [1416,1417]
+  .word screen_44_action4                            ; S07P05 action4 [1418,1419]
+  .word screen_44_description                        ; S07P05 description [1420,1421]
+  .word screen_44_ascii                              ; S07P05 ascii [1422,1423]
+  .word screen_44_flashlight_on                      ; S07P05 flashlight_on [1424,1425]
+  .word screen_44_flashlight_off                     ; S07P05 flashlight_off [1426,1427]
+  .word screen_44_enemy_probability                  ; S07P05 enemy_probability [1428,1429]
+  .word screen_44_is_secret_screen                   ; S07P05 is_secret_screen [1430,1431]
+  .word screen_44_is_end_screen                      ; S07P05 is_end_screen [1432,1433]
+  .word screen_44_description_compressed             ; S07P05 description_compressed [1434,1435]
+  .word screen_44_flashlight_on_compressed           ; S07P05 flashlight_on_compressed [1436,1437]
+  .word screen_44_flashlight_off_compressed          ; S07P05 flashlight_off_compressed [1438,1439]
+screen_pointers_45:
+  .word screen_45_id                                 ; S07P06 id [1440,1441]
+  .word screen_45_name                               ; S07P06 name [1442,1443]
+  .word screen_45_action1                            ; S07P06 action1 [1444,1445]
+  .word screen_45_action2                            ; S07P06 action2 [1446,1447]
+  .word screen_45_action3                            ; S07P06 action3 [1448,1449]
+  .word screen_45_action4                            ; S07P06 action4 [1450,1451]
+  .word screen_45_description                        ; S07P06 description [1452,1453]
+  .word screen_45_ascii                              ; S07P06 ascii [1454,1455]
+  .word screen_45_flashlight_on                      ; S07P06 flashlight_on [1456,1457]
+  .word screen_45_flashlight_off                     ; S07P06 flashlight_off [1458,1459]
+  .word screen_45_enemy_probability                  ; S07P06 enemy_probability [1460,1461]
+  .word screen_45_is_secret_screen                   ; S07P06 is_secret_screen [1462,1463]
+  .word screen_45_is_end_screen                      ; S07P06 is_end_screen [1464,1465]
+  .word screen_45_description_compressed             ; S07P06 description_compressed [1466,1467]
+  .word screen_45_flashlight_on_compressed           ; S07P06 flashlight_on_compressed [1468,1469]
+  .word screen_45_flashlight_off_compressed          ; S07P06 flashlight_off_compressed [1470,1471]
+screen_pointers_46:
+  .word screen_46_id                                 ; S07P07 id [1472,1473]
+  .word screen_46_name                               ; S07P07 name [1474,1475]
+  .word screen_46_action1                            ; S07P07 action1 [1476,1477]
+  .word screen_46_action2                            ; S07P07 action2 [1478,1479]
+  .word screen_46_action3                            ; S07P07 action3 [1480,1481]
+  .word screen_46_action4                            ; S07P07 action4 [1482,1483]
+  .word screen_46_description                        ; S07P07 description [1484,1485]
+  .word screen_46_ascii                              ; S07P07 ascii [1486,1487]
+  .word screen_46_flashlight_on                      ; S07P07 flashlight_on [1488,1489]
+  .word screen_46_flashlight_off                     ; S07P07 flashlight_off [1490,1491]
+  .word screen_46_enemy_probability                  ; S07P07 enemy_probability [1492,1493]
+  .word screen_46_is_secret_screen                   ; S07P07 is_secret_screen [1494,1495]
+  .word screen_46_is_end_screen                      ; S07P07 is_end_screen [1496,1497]
+  .word screen_46_description_compressed             ; S07P07 description_compressed [1498,1499]
+  .word screen_46_flashlight_on_compressed           ; S07P07 flashlight_on_compressed [1500,1501]
+  .word screen_46_flashlight_off_compressed          ; S07P07 flashlight_off_compressed [1502,1503]
+screen_pointers_47:
+  .word screen_47_id                                 ; S08P01 id [1504,1505]
+  .word screen_47_name                               ; S08P01 name [1506,1507]
+  .word screen_47_action1                            ; S08P01 action1 [1508,1509]
+  .word screen_47_action2                            ; S08P01 action2 [1510,1511]
+  .word screen_47_action3                            ; S08P01 action3 [1512,1513]
+  .word screen_47_action4                            ; S08P01 action4 [1514,1515]
+  .word screen_47_description                        ; S08P01 description [1516,1517]
+  .word screen_47_ascii                              ; S08P01 ascii [1518,1519]
+  .word screen_47_flashlight_on                      ; S08P01 flashlight_on [1520,1521]
+  .word screen_47_flashlight_off                     ; S08P01 flashlight_off [1522,1523]
+  .word screen_47_enemy_probability                  ; S08P01 enemy_probability [1524,1525]
+  .word screen_47_is_secret_screen                   ; S08P01 is_secret_screen [1526,1527]
+  .word screen_47_is_end_screen                      ; S08P01 is_end_screen [1528,1529]
+  .word screen_47_description_compressed             ; S08P01 description_compressed [1530,1531]
+  .word screen_47_flashlight_on_compressed           ; S08P01 flashlight_on_compressed [1532,1533]
+  .word screen_47_flashlight_off_compressed          ; S08P01 flashlight_off_compressed [1534,1535]
+screen_pointers_48:
+  .word screen_48_id                                 ; S08P02 id [1536,1537]
+  .word screen_48_name                               ; S08P02 name [1538,1539]
+  .word screen_48_action1                            ; S08P02 action1 [1540,1541]
+  .word screen_48_action2                            ; S08P02 action2 [1542,1543]
+  .word screen_48_action3                            ; S08P02 action3 [1544,1545]
+  .word screen_48_action4                            ; S08P02 action4 [1546,1547]
+  .word screen_48_description                        ; S08P02 description [1548,1549]
+  .word screen_48_ascii                              ; S08P02 ascii [1550,1551]
+  .word screen_48_flashlight_on                      ; S08P02 flashlight_on [1552,1553]
+  .word screen_48_flashlight_off                     ; S08P02 flashlight_off [1554,1555]
+  .word screen_48_enemy_probability                  ; S08P02 enemy_probability [1556,1557]
+  .word screen_48_is_secret_screen                   ; S08P02 is_secret_screen [1558,1559]
+  .word screen_48_is_end_screen                      ; S08P02 is_end_screen [1560,1561]
+  .word screen_48_description_compressed             ; S08P02 description_compressed [1562,1563]
+  .word screen_48_flashlight_on_compressed           ; S08P02 flashlight_on_compressed [1564,1565]
+  .word screen_48_flashlight_off_compressed          ; S08P02 flashlight_off_compressed [1566,1567]
+screen_pointers_49:
+  .word screen_49_id                                 ; S08P03 id [1568,1569]
+  .word screen_49_name                               ; S08P03 name [1570,1571]
+  .word screen_49_action1                            ; S08P03 action1 [1572,1573]
+  .word screen_49_action2                            ; S08P03 action2 [1574,1575]
+  .word screen_49_action3                            ; S08P03 action3 [1576,1577]
+  .word screen_49_action4                            ; S08P03 action4 [1578,1579]
+  .word screen_49_description                        ; S08P03 description [1580,1581]
+  .word screen_49_ascii                              ; S08P03 ascii [1582,1583]
+  .word screen_49_flashlight_on                      ; S08P03 flashlight_on [1584,1585]
+  .word screen_49_flashlight_off                     ; S08P03 flashlight_off [1586,1587]
+  .word screen_49_enemy_probability                  ; S08P03 enemy_probability [1588,1589]
+  .word screen_49_is_secret_screen                   ; S08P03 is_secret_screen [1590,1591]
+  .word screen_49_is_end_screen                      ; S08P03 is_end_screen [1592,1593]
+  .word screen_49_description_compressed             ; S08P03 description_compressed [1594,1595]
+  .word screen_49_flashlight_on_compressed           ; S08P03 flashlight_on_compressed [1596,1597]
+  .word screen_49_flashlight_off_compressed          ; S08P03 flashlight_off_compressed [1598,1599]
+screen_pointers_50:
+  .word screen_50_id                                 ; S03P04 id [1600,1601]
+  .word screen_50_name                               ; S03P04 name [1602,1603]
+  .word screen_50_action1                            ; S03P04 action1 [1604,1605]
+  .word screen_50_action2                            ; S03P04 action2 [1606,1607]
+  .word screen_50_action3                            ; S03P04 action3 [1608,1609]
+  .word screen_50_action4                            ; S03P04 action4 [1610,1611]
+  .word screen_50_description                        ; S03P04 description [1612,1613]
+  .word screen_50_ascii                              ; S03P04 ascii [1614,1615]
+  .word screen_50_flashlight_on                      ; S03P04 flashlight_on [1616,1617]
+  .word screen_50_flashlight_off                     ; S03P04 flashlight_off [1618,1619]
+  .word screen_50_enemy_probability                  ; S03P04 enemy_probability [1620,1621]
+  .word screen_50_is_secret_screen                   ; S03P04 is_secret_screen [1622,1623]
+  .word screen_50_is_end_screen                      ; S03P04 is_end_screen [1624,1625]
+  .word screen_50_description_compressed             ; S03P04 description_compressed [1626,1627]
+  .word screen_50_flashlight_on_compressed           ; S03P04 flashlight_on_compressed [1628,1629]
+  .word screen_50_flashlight_off_compressed          ; S03P04 flashlight_off_compressed [1630,1631]
+screen_pointers_51:
+  .word screen_51_id                                 ; S08P04 id [1632,1633]
+  .word screen_51_name                               ; S08P04 name [1634,1635]
+  .word screen_51_action1                            ; S08P04 action1 [1636,1637]
+  .word screen_51_action2                            ; S08P04 action2 [1638,1639]
+  .word screen_51_action3                            ; S08P04 action3 [1640,1641]
+  .word screen_51_action4                            ; S08P04 action4 [1642,1643]
+  .word screen_51_description                        ; S08P04 description [1644,1645]
+  .word screen_51_ascii                              ; S08P04 ascii [1646,1647]
+  .word screen_51_flashlight_on                      ; S08P04 flashlight_on [1648,1649]
+  .word screen_51_flashlight_off                     ; S08P04 flashlight_off [1650,1651]
+  .word screen_51_enemy_probability                  ; S08P04 enemy_probability [1652,1653]
+  .word screen_51_is_secret_screen                   ; S08P04 is_secret_screen [1654,1655]
+  .word screen_51_is_end_screen                      ; S08P04 is_end_screen [1656,1657]
+  .word screen_51_description_compressed             ; S08P04 description_compressed [1658,1659]
+  .word screen_51_flashlight_on_compressed           ; S08P04 flashlight_on_compressed [1660,1661]
+  .word screen_51_flashlight_off_compressed          ; S08P04 flashlight_off_compressed [1662,1663]
+screen_pointers_52:
+  .word screen_52_id                                 ; FINAL id [1664,1665]
+  .word screen_52_name                               ; FINAL name [1666,1667]
+  .word screen_52_action1                            ; FINAL action1 [1668,1669]
+  .word screen_52_action2                            ; FINAL action2 [1670,1671]
+  .word screen_52_action3                            ; FINAL action3 [1672,1673]
+  .word screen_52_action4                            ; FINAL action4 [1674,1675]
+  .word screen_52_description                        ; FINAL description [1676,1677]
+  .word screen_52_ascii                              ; FINAL ascii [1678,1679]
+  .word screen_52_flashlight_on                      ; FINAL flashlight_on [1680,1681]
+  .word screen_52_flashlight_off                     ; FINAL flashlight_off [1682,1683]
+  .word screen_52_enemy_probability                  ; FINAL enemy_probability [1684,1685]
+  .word screen_52_is_secret_screen                   ; FINAL is_secret_screen [1686,1687]
+  .word screen_52_is_end_screen                      ; FINAL is_end_screen [1688,1689]
+  .word screen_52_description_compressed             ; FINAL description_compressed [1690,1691]
+  .word screen_52_flashlight_on_compressed           ; FINAL flashlight_on_compressed [1692,1693]
+  .word screen_52_flashlight_off_compressed          ; FINAL flashlight_off_compressed [1694,1695]
+screen_pointers_53:
+  .word screen_53_id                                 ; EndScreenSimulationTimeisUp id [1696,1697]
+  .word screen_53_name                               ; EndScreenSimulationTimeisUp name [1698,1699]
+  .word screen_53_action1                            ; EndScreenSimulationTimeisUp action1 [1700,1701]
+  .word screen_53_action2                            ; EndScreenSimulationTimeisUp action2 [1702,1703]
+  .word screen_53_action3                            ; EndScreenSimulationTimeisUp action3 [1704,1705]
+  .word screen_53_action4                            ; EndScreenSimulationTimeisUp action4 [1706,1707]
+  .word screen_53_description                        ; EndScreenSimulationTimeisUp description [1708,1709]
+  .word screen_53_ascii                              ; EndScreenSimulationTimeisUp ascii [1710,1711]
+  .word screen_53_flashlight_on                      ; EndScreenSimulationTimeisUp flashlight_on [1712,1713]
+  .word screen_53_flashlight_off                     ; EndScreenSimulationTimeisUp flashlight_off [1714,1715]
+  .word screen_53_enemy_probability                  ; EndScreenSimulationTimeisUp enemy_probability [1716,1717]
+  .word screen_53_is_secret_screen                   ; EndScreenSimulationTimeisUp is_secret_screen [1718,1719]
+  .word screen_53_is_end_screen                      ; EndScreenSimulationTimeisUp is_end_screen [1720,1721]
+  .word screen_53_description_compressed             ; EndScreenSimulationTimeisUp description_compressed [1722,1723]
+  .word screen_53_flashlight_on_compressed           ; EndScreenSimulationTimeisUp flashlight_on_compressed [1724,1725]
+  .word screen_53_flashlight_off_compressed          ; EndScreenSimulationTimeisUp flashlight_off_compressed [1726,1727]
+screen_pointers_54:
+  .word screen_54_id                                 ; endScreenByEnemy id [1728,1729]
+  .word screen_54_name                               ; endScreenByEnemy name [1730,1731]
+  .word screen_54_action1                            ; endScreenByEnemy action1 [1732,1733]
+  .word screen_54_action2                            ; endScreenByEnemy action2 [1734,1735]
+  .word screen_54_action3                            ; endScreenByEnemy action3 [1736,1737]
+  .word screen_54_action4                            ; endScreenByEnemy action4 [1738,1739]
+  .word screen_54_description                        ; endScreenByEnemy description [1740,1741]
+  .word screen_54_ascii                              ; endScreenByEnemy ascii [1742,1743]
+  .word screen_54_flashlight_on                      ; endScreenByEnemy flashlight_on [1744,1745]
+  .word screen_54_flashlight_off                     ; endScreenByEnemy flashlight_off [1746,1747]
+  .word screen_54_enemy_probability                  ; endScreenByEnemy enemy_probability [1748,1749]
+  .word screen_54_is_secret_screen                   ; endScreenByEnemy is_secret_screen [1750,1751]
+  .word screen_54_is_end_screen                      ; endScreenByEnemy is_end_screen [1752,1753]
+  .word screen_54_description_compressed             ; endScreenByEnemy description_compressed [1754,1755]
+  .word screen_54_flashlight_on_compressed           ; endScreenByEnemy flashlight_on_compressed [1756,1757]
+  .word screen_54_flashlight_off_compressed          ; endScreenByEnemy flashlight_off_compressed [1758,1759]
+screen_pointers_55:
+  .word screen_55_id                                 ; endScreenByActionFailed id [1760,1761]
+  .word screen_55_name                               ; endScreenByActionFailed name [1762,1763]
+  .word screen_55_action1                            ; endScreenByActionFailed action1 [1764,1765]
+  .word screen_55_action2                            ; endScreenByActionFailed action2 [1766,1767]
+  .word screen_55_action3                            ; endScreenByActionFailed action3 [1768,1769]
+  .word screen_55_action4                            ; endScreenByActionFailed action4 [1770,1771]
+  .word screen_55_description                        ; endScreenByActionFailed description [1772,1773]
+  .word screen_55_ascii                              ; endScreenByActionFailed ascii [1774,1775]
+  .word screen_55_flashlight_on                      ; endScreenByActionFailed flashlight_on [1776,1777]
+  .word screen_55_flashlight_off                     ; endScreenByActionFailed flashlight_off [1778,1779]
+  .word screen_55_enemy_probability                  ; endScreenByActionFailed enemy_probability [1780,1781]
+  .word screen_55_is_secret_screen                   ; endScreenByActionFailed is_secret_screen [1782,1783]
+  .word screen_55_is_end_screen                      ; endScreenByActionFailed is_end_screen [1784,1785]
+  .word screen_55_description_compressed             ; endScreenByActionFailed description_compressed [1786,1787]
+  .word screen_55_flashlight_on_compressed           ; endScreenByActionFailed flashlight_on_compressed [1788,1789]
+  .word screen_55_flashlight_off_compressed          ; endScreenByActionFailed flashlight_off_compressed [1790,1791]
 screen_action_offset:
-  .byte 4  ; (byte of screen_0_action1 in screens_pointers)
+  .byte 4
 screen_description_offset:
-  .byte 12  ; (byte of screen_0_description in screens_pointers)
+  .byte 12
 screen_ascii_offset:
-  .byte 14  ; (byte of screen_0_ascii in screens_pointers)
+  .byte 14
 screen_flashlight_on_offset:
-  .byte 16  ; (byte of screen_0_flashlight_on in screens_pointers)
+  .byte 16
 screen_flashlight_off_offset:
-  .byte 18  ; (byte of screen_0_flashlight_off in screens_pointers)
+  .byte 18
 screen_enemy_probability_offset:
-  .byte 20  ; (byte of screen_0_enemy_probability in screens_pointers)
+  .byte 20
 screen_is_secret_screen_offset:
-  .byte 22  ; (byte of screen_0_is_secret_screen in screens_pointers)
+  .byte 22
 screen_is_end_screen_offset:
-  .byte 24  ; (byte of screen_0_is_end_screen in screens_pointers)
+  .byte 24
 screen_description_compressed_offset:
-  .byte 26  ; (byte of screen_0_description_compressed in screens_pointers)
+  .byte 26
 screen_flashlight_on_compressed_offset:
-  .byte 28  ; (byte of screen_0_flashlight_on_compressed in screens_pointers)
+  .byte 28
 screen_flashlight_off_compressed_offset:
-  .byte 30  ; (byte of screen_0_flashlight_off_compressed in screens_pointers)
+  .byte 30
 screen_record_length:
-  .byte 32  ; (total .word bytes per screen record)
+  .byte 32
 
-; ── Screen 0: s1s1 ──────────────────────────
+; ── Screen 0: StartScreen ──────────────────────────
 screen_0_id:
   .byte 0
 
 screen_0_name:
-  .ascii "s1s1"
+  .ascii "StartScreen"
 
 screen_0_action1:
-  .byte 0  ; LEVANTARSE
+  .byte 0  ; START-COMENZAR
 
 screen_0_action2:
-  .byte 1  ; MIRAR ALREDEDOR
+  .byte 255  ; none
 
 screen_0_action3:
-  .byte 2  ; GRITAR POR AYUDA
+  .byte 255  ; none
 
 screen_0_action4:
-  .byte 13  ; MUERTE DIRECTA
+  .byte 255  ; none
 
 screen_0_description:
-  .ascii "Despiertas sobre piedra húmeda.\n"
-  .ascii "La caverna se cerro detrás de ti. \n"
-  .ascii "Un derrumbe de rocas antiguas, pesadas, acomodadas como si el colapso hubiera si"
-  .ascii "do final, no accidental.\n"
-  .ascii "El frío no duele todavía. \n"
-  .ascii "Sientes un constante goteo de agua, cada vez mas cerca de ti."
+  ;.ascii "BIENVENIDX A LA PRIMER AVENTURA DE LA 20C"
 
 screen_0_description_compressed:
-  .word token_0  ; "Despiertas "
-  .word token_1  ; "sobre "
-  .word token_2  ; "piedra "
-  .word token_3  ; "húmeda.\n"
-  .word token_4  ; "La "
-  .word token_5  ; "caverna "
-  .word token_6  ; "se "
-  .word token_7  ; "cerro "
-  .word token_8  ; "detrás "
-  .word token_9  ; "de "
-  .word token_10  ; "ti. \n"
-  .word token_11  ; "Un "
-  .word token_12  ; "derrumbe "
-  .word token_9  ; "de "
-  .word token_13  ; "rocas "
-  .word token_14  ; "antiguas, "
-  .word token_15  ; "pesadas, "
-  .word token_16  ; "acomodadas "
-  .word token_17  ; "como "
-  .word token_18  ; "si "
-  .word token_19  ; "el "
-  .word token_20  ; "colapso "
-  .word token_21  ; "hubiera "
-  .word token_22  ; "sido "
-  .word token_23  ; "final, "
-  .word token_24  ; "no "
-  .word token_25  ; "accidental.\n"
-  .word token_26  ; "El "
-  .word token_27  ; "frío "
-  .word token_24  ; "no "
-  .word token_28  ; "duele "
-  .word token_29  ; "todavía. \n"
-  .word token_30  ; "Sientes "
-  .word token_31  ; "un "
-  .word token_32  ; "constante "
-  .word token_33  ; "goteo "
-  .word token_9  ; "de "
-  .word token_34  ; "agua, "
-  .word token_35  ; "cada "
-  .word token_36  ; "vez "
-  .word token_37  ; "mas "
-  .word token_38  ; "cerca "
-  .word token_9  ; "de "
-  .word token_39  ; "ti."
-  .word $FFFF  ; end sentinel
+  .byte $FA, $42, $49, $45, $4E, $56, $45, $4E, $49, $44, $58, $F9  ; "BIENVENIDX"
+  .byte $36, $20, $FA, $50, $52, $49, $4D, $45, $52, $F9, $FA, $41, $56, $45, $4E, $54, $55, $52, $41, $F9  ; A | LA | "PRIMER" | "AVENTURA"
+  .byte $54, $20, $FA, $32, $30, $43, $F9, $FF  ; DE | LA | "20C" | end
 
 screen_0_ascii:
   .ascii "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -1405,18 +2127,17 @@ screen_0_ascii:
   .ascii "░░░░░░░░##    ##                 ##            #                  #   #░░░░░░░░░"
 
 screen_0_flashlight_on:
-  .ascii "\n"
 
 screen_0_flashlight_on_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_0_flashlight_off:
 
 screen_0_flashlight_off_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_0_enemy_probability:
-  .byte 33
+  .byte 0
 
 screen_0_is_secret_screen:
   .byte 0  ; no
@@ -1424,15 +2145,15 @@ screen_0_is_secret_screen:
 screen_0_is_end_screen:
   .byte 0  ; no
 
-; ── Screen 1: s1s2 ──────────────────────────
+; ── Screen 1: S01P01 ──────────────────────────
 screen_1_id:
   .byte 1
 
 screen_1_name:
-  .ascii "s1s2"
+  .ascii "S01P01"
 
 screen_1_action1:
-  .byte 7  ; VEO QUE CAE AGUA
+  .byte 1  ; S01P01-LEVANTARSE
 
 screen_1_action2:
   .byte 255  ; none
@@ -1444,46 +2165,23 @@ screen_1_action4:
   .byte 255  ; none
 
 screen_1_description:
-  .ascii "Al levantarte, miras a tu alrededor.\n"
-  .ascii "Ves que el agua gotea lenta, pero constantemente, inundando la caverna.\n"
-  .ascii "Como si midiera el tiempo."
+  ;.ascii "TE DESPERTAS EN LA OSCURIDAD."
 
 screen_1_description_compressed:
-  .word token_40  ; "Al "
-  .word token_41  ; "levantarte, "
-  .word token_42  ; "miras "
-  .word token_43  ; "a "
-  .word token_44  ; "tu "
-  .word token_45  ; "alrededor.\n"
-  .word token_46  ; "Ves "
-  .word token_47  ; "que "
-  .word token_19  ; "el "
-  .word token_48  ; "agua "
-  .word token_49  ; "gotea "
-  .word token_50  ; "lenta, "
-  .word token_51  ; "pero "
-  .word token_52  ; "constantemente, "
-  .word token_53  ; "inundando "
-  .word token_54  ; "la "
-  .word token_55  ; "caverna.\n"
-  .word token_56  ; "Como "
-  .word token_18  ; "si "
-  .word token_57  ; "midiera "
-  .word token_19  ; "el "
-  .word token_58  ; "tiempo."
-  .word $FFFF  ; end sentinel
+  .byte $41, $FA, $44, $45, $53, $50, $45, $52, $54, $41, $53, $F9  ; TE | "DESPERTAS"
+  .byte $64, $20, $B7, $FF  ; EN | LA | OSCURIDAD. | end
 
 screen_1_ascii:
 
 screen_1_flashlight_on:
 
 screen_1_flashlight_on_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_1_flashlight_off:
 
 screen_1_flashlight_off_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_1_enemy_probability:
   .byte 0
@@ -1494,136 +2192,47 @@ screen_1_is_secret_screen:
 screen_1_is_end_screen:
   .byte 0  ; no
 
-; ── Screen 2: s1s3 ──────────────────────────
+; ── Screen 2: S01P02 ──────────────────────────
 screen_2_id:
   .byte 2
 
 screen_2_name:
-  .ascii "s1s3"
+  .ascii "S01P02"
 
 screen_2_action1:
-  .byte 3  ; MIRAR ENTRADA
+  .byte 2  ; S01P02-GRITARPORAYUDA
 
 screen_2_action2:
-  .byte 5  ; LINTERNA
+  .byte 255  ; none
 
 screen_2_action3:
-  .byte 6  ; EXPLORAR CAMINO
+  .byte 255  ; none
 
 screen_2_action4:
-  .byte 4  ; GRITAR
+  .byte 255  ; none
 
 screen_2_description:
-  .ascii "La caverna se abre en una cámara amplia pero baja. \n"
-  .ascii "El techo parece aplastarte con su peso, estalactitas afiladas cuelgan peligrosam"
-  .ascii "ente del mismo. \n"
-  .ascii "Las paredes son rugosas, húmedas al tacto, y reflejan una luz apagada que no tie"
-  .ascii "ne fuente clara. \n"
-  .ascii "El aire es frío y estancado. \n"
-  .ascii "Huele a roca mojada y a algo más viejo, casi orgánico. \n"
-  .ascii "El suelo tiene marcas irregulares, como pasos interrumpidos en un camino que se "
-  .ascii "pierde en la oscuridad\n"
-  .ascii "Siente que algo o alguien puede estar acechando"
+  ;.ascii "ESTAS EN LA OSCURIDAD Y SENTIS EL AGUA. GRITAS POR AYUDA."
 
 screen_2_description_compressed:
-  .word token_4  ; "La "
-  .word token_5  ; "caverna "
-  .word token_6  ; "se "
-  .word token_59  ; "abre "
-  .word token_60  ; "en "
-  .word token_61  ; "una "
-  .word token_62  ; "cámara "
-  .word token_63  ; "amplia "
-  .word token_51  ; "pero "
-  .word token_64  ; "baja. \n"
-  .word token_26  ; "El "
-  .word token_65  ; "techo "
-  .word token_66  ; "parece "
-  .word token_67  ; "aplastarte "
-  .word token_68  ; "con "
-  .word token_69  ; "su "
-  .word token_70  ; "peso, "
-  .word token_71  ; "estalactitas "
-  .word token_72  ; "afiladas "
-  .word token_73  ; "cuelgan "
-  .word token_74  ; "peligrosamente "
-  .word token_75  ; "del "
-  .word token_76  ; "mismo. \n"
-  .word token_77  ; "Las "
-  .word token_78  ; "paredes "
-  .word token_79  ; "son "
-  .word token_80  ; "rugosas, "
-  .word token_81  ; "húmedas "
-  .word token_82  ; "al "
-  .word token_83  ; "tacto, "
-  .word token_84  ; "y "
-  .word token_85  ; "reflejan "
-  .word token_61  ; "una "
-  .word token_86  ; "luz "
-  .word token_87  ; "apagada "
-  .word token_47  ; "que "
-  .word token_24  ; "no "
-  .word token_88  ; "tiene "
-  .word token_89  ; "fuente "
-  .word token_90  ; "clara. \n"
-  .word token_26  ; "El "
-  .word token_91  ; "aire "
-  .word token_92  ; "es "
-  .word token_27  ; "frío "
-  .word token_84  ; "y "
-  .word token_93  ; "estancado. \n"
-  .word token_94  ; "Huele "
-  .word token_43  ; "a "
-  .word token_95  ; "roca "
-  .word token_96  ; "mojada "
-  .word token_84  ; "y "
-  .word token_43  ; "a "
-  .word token_97  ; "algo "
-  .word token_98  ; "más "
-  .word token_99  ; "viejo, "
-  .word token_100  ; "casi "
-  .word token_101  ; "orgánico. \n"
-  .word token_26  ; "El "
-  .word token_102  ; "suelo "
-  .word token_88  ; "tiene "
-  .word token_103  ; "marcas "
-  .word token_104  ; "irregulares, "
-  .word token_17  ; "como "
-  .word token_105  ; "pasos "
-  .word token_106  ; "interrumpidos "
-  .word token_60  ; "en "
-  .word token_31  ; "un "
-  .word token_107  ; "camino "
-  .word token_47  ; "que "
-  .word token_6  ; "se "
-  .word token_108  ; "pierde "
-  .word token_60  ; "en "
-  .word token_54  ; "la "
-  .word token_109  ; "oscuridad\n"
-  .word token_110  ; "Siente "
-  .word token_47  ; "que "
-  .word token_97  ; "algo "
-  .word token_111  ; "o "
-  .word token_112  ; "alguien "
-  .word token_113  ; "puede "
-  .word token_114  ; "estar "
-  .word token_115  ; "acechando"
-  .word $FFFF  ; end sentinel
+  .byte $65, $64, $20, $FA, $4F, $53, $43, $55, $52, $49, $44, $41, $44, $F9  ; ESTAS | EN | LA | "OSCURIDAD"
+  .byte $42, $FA, $53, $45, $4E, $54, $49, $53, $F9, $27, $B8, $B9  ; Y | "SENTIS" | EL | AGUA. | GRITAS
+  .byte $80, $BA, $FF  ; POR | AYUDA. | end
 
 screen_2_ascii:
 
 screen_2_flashlight_on:
 
 screen_2_flashlight_on_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_2_flashlight_off:
 
 screen_2_flashlight_off_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_2_enemy_probability:
-  .byte 1
+  .byte 0
 
 screen_2_is_secret_screen:
   .byte 0  ; no
@@ -1631,54 +2240,52 @@ screen_2_is_secret_screen:
 screen_2_is_end_screen:
   .byte 0  ; no
 
-; ── Screen 3: startScreen ──────────────────────────
+; ── Screen 3: S01P03 ──────────────────────────
 screen_3_id:
   .byte 3
 
 screen_3_name:
-  .ascii "startScreen"
+  .ascii "S01P03"
 
 screen_3_action1:
-  .byte 1  ; MIRAR ALREDEDOR
+  .byte 4  ; S01P03-EXPLORAR
 
 screen_3_action2:
-  .byte 14  ; TIRAR AGUAR, EMPEZAR TIME
+  .byte 3  ; LINTERNACORAZON-TOGGLE
 
 screen_3_action3:
-  .byte 5  ; LINTERNA
+  .byte 255  ; none
 
 screen_3_action4:
-  .byte 4  ; GRITAR
+  .byte 255  ; none
 
 screen_3_description:
-  .ascii "Bienvenido a la aventura gráfica más Espectacular del mundo"
+  ;.ascii "RECORDAS QUE TENES LA LINTERNA. NO TIENE MUCHA BATERIA. PODES CONTINUAR COMENZAR"
+  ;.ascii " A EXPLORAR O USARLA. EL TIEMPO PASA."
 
 screen_3_description_compressed:
-  .word token_116  ; "Bienvenido "
-  .word token_43  ; "a "
-  .word token_54  ; "la "
-  .word token_117  ; "aventura "
-  .word token_118  ; "gráfica "
-  .word token_98  ; "más "
-  .word token_119  ; "Espectacular "
-  .word token_75  ; "del "
-  .word token_120  ; "mundo"
-  .word $FFFF  ; end sentinel
+  .byte $FA, $52, $45, $43, $4F, $52, $44, $41, $53, $F9, $81, $82  ; "RECORDAS" | QUE | TENES
+  .byte $20, $FA, $4C, $49, $4E, $54, $45, $52, $4E, $41, $2E, $F9  ; LA | "LINTERNA."
+  .byte $BB, $FA, $54, $49, $45, $4E, $45, $F9, $FA, $4D, $55, $43, $48, $41, $F9  ; NO | "TIENE" | "MUCHA"
+  .byte $FA, $42, $41, $54, $45, $52, $49, $41, $2E, $F9, $BC, $FA, $43, $4F, $4E, $54, $49, $4E, $55, $41, $52, $F9  ; "BATERIA." | PODES | "CONTINUAR"
+  .byte $FA, $43, $4F, $4D, $45, $4E, $5A, $41, $52, $F9, $36, $FA, $45, $58, $50, $4C, $4F, $52, $41, $52, $F9  ; "COMENZAR" | A | "EXPLORAR"
+  .byte $83, $FA, $55, $53, $41, $52, $4C, $41, $2E, $F9, $27, $84  ; O | "USARLA." | EL | TIEMPO
+  .byte $FA, $50, $41, $53, $41, $2E, $F9, $FF  ; "PASA." | end
 
 screen_3_ascii:
 
 screen_3_flashlight_on:
 
 screen_3_flashlight_on_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_3_flashlight_off:
 
 screen_3_flashlight_off_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_3_enemy_probability:
-  .byte 2
+  .byte 0
 
 screen_3_is_secret_screen:
   .byte 0  ; no
@@ -1686,71 +2293,45 @@ screen_3_is_secret_screen:
 screen_3_is_end_screen:
   .byte 0  ; no
 
-; ── Screen 4: endScreens1s1 ──────────────────────────
+; ── Screen 4: S01P04 ──────────────────────────
 screen_4_id:
   .byte 4
 
 screen_4_name:
-  .ascii "endScreens1s1"
+  .ascii "S01P04"
 
 screen_4_action1:
-  .byte 9  ; TERMINAR EL JUEGO
+  .byte 5  ; S01P04-ROCASLINTERNA
 
 screen_4_action2:
-  .byte 255  ; none
+  .byte 6  ; S01P04-ROCASOSCURIDAD
 
 screen_4_action3:
-  .byte 255  ; none
+  .byte 3  ; LINTERNACORAZON-TOGGLE
 
 screen_4_action4:
   .byte 255  ; none
 
 screen_4_description:
-  .ascii "El constante goteo era hipnotico. Gota, pausa, gota. El agua comenzo a entumecer"
-  .ascii " tus extremidades hasta que dejaste de sentirlas. Un eterno sueño te dio la bien"
-  .ascii "venida."
 
 screen_4_description_compressed:
-  .word token_26  ; "El "
-  .word token_32  ; "constante "
-  .word token_33  ; "goteo "
-  .word token_121  ; "era "
-  .word token_122  ; "hipnotico. "
-  .word token_123  ; "Gota, "
-  .word token_124  ; "pausa, "
-  .word token_125  ; "gota. "
-  .word token_26  ; "El "
-  .word token_48  ; "agua "
-  .word token_126  ; "comenzo "
-  .word token_43  ; "a "
-  .word token_127  ; "entumecer "
-  .word token_128  ; "tus "
-  .word token_129  ; "extremidades "
-  .word token_130  ; "hasta "
-  .word token_47  ; "que "
-  .word token_131  ; "dejaste "
-  .word token_9  ; "de "
-  .word token_132  ; "sentirlas. "
-  .word token_11  ; "Un "
-  .word token_133  ; "eterno "
-  .word token_134  ; "sueño "
-  .word token_135  ; "te "
-  .word token_136  ; "dio "
-  .word token_54  ; "la "
-  .word token_137  ; "bienvenida."
-  .word $FFFF  ; end sentinel
+  .byte $FF  ; end (empty)
 
 screen_4_ascii:
 
 screen_4_flashlight_on:
+  ;.ascii "ILUMINAS ROCAS (TENES LINTERNA)"
 
 screen_4_flashlight_on_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FA, $49, $4C, $55, $4D, $49, $4E, $41, $53, $F9, $28, $FA, $28, $54, $45, $4E, $45, $53, $F9  ; "ILUMINAS" | ROCAS | "(TENES"
+  .byte $FA, $4C, $49, $4E, $54, $45, $52, $4E, $41, $29, $F9, $FF  ; "LINTERNA)" | end
 
 screen_4_flashlight_off:
+  ;.ascii "TOCAS ROCAS (ESTAS A OSCURAS)"
 
 screen_4_flashlight_off_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FA, $54, $4F, $43, $41, $53, $F9, $28, $FA, $28, $45, $53, $54, $41, $53, $F9  ; "TOCAS" | ROCAS | "(ESTAS"
+  .byte $36, $FA, $4F, $53, $43, $55, $52, $41, $53, $29, $F9, $FF  ; A | "OSCURAS)" | end
 
 screen_4_enemy_probability:
   .byte 0
@@ -1761,18 +2342,18 @@ screen_4_is_secret_screen:
 screen_4_is_end_screen:
   .byte 0  ; no
 
-; ── Screen 5: endScreenDefault ──────────────────────────
+; ── Screen 5: S01P05 ──────────────────────────
 screen_5_id:
   .byte 5
 
 screen_5_name:
-  .ascii "endScreenDefault"
+  .ascii "S01P05"
 
 screen_5_action1:
-  .byte 9  ; TERMINAR EL JUEGO
+  .byte 7  ; S01P05-EXTRAERROCA
 
 screen_5_action2:
-  .byte 255  ; none
+  .byte 8  ; S01P05-IGNORAR
 
 screen_5_action3:
   .byte 255  ; none
@@ -1781,30 +2362,27 @@ screen_5_action4:
   .byte 255  ; none
 
 screen_5_description:
-  .ascii "Asi terminas tus dias atrapado en la Caverna"
+  ;.ascii "HAY UNA ROCA QUE TE LLAMA LA ATENCION. PODES MOVERLA, PERO SE TE PUEDE CAER TODO"
+  ;.ascii " ENCIMA."
 
 screen_5_description_compressed:
-  .word token_138  ; "Asi "
-  .word token_139  ; "terminas "
-  .word token_128  ; "tus "
-  .word token_140  ; "dias "
-  .word token_141  ; "atrapado "
-  .word token_60  ; "en "
-  .word token_54  ; "la "
-  .word token_142  ; "Caverna"
-  .word $FFFF  ; end sentinel
+  .byte $FA, $48, $41, $59, $F9, $BD, $FA, $52, $4F, $43, $41, $F9  ; "HAY" | UNA | "ROCA"
+  .byte $81, $41, $FA, $4C, $4C, $41, $4D, $41, $F9, $20, $FA, $41, $54, $45, $4E, $43, $49, $4F, $4E, $2E, $F9  ; QUE | TE | "LLAMA" | LA | "ATENCION."
+  .byte $BC, $FA, $4D, $4F, $56, $45, $52, $4C, $41, $2C, $F9, $FA, $50, $45, $52, $4F, $F9  ; PODES | "MOVERLA," | "PERO"
+  .byte $85, $41, $FA, $50, $55, $45, $44, $45, $F9, $FA, $43, $41, $45, $52, $F9  ; SE | TE | "PUEDE" | "CAER"
+  .byte $FA, $54, $4F, $44, $4F, $F9, $BE, $FF  ; "TODO" | ENCIMA. | end
 
 screen_5_ascii:
 
 screen_5_flashlight_on:
 
 screen_5_flashlight_on_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_5_flashlight_off:
 
 screen_5_flashlight_off_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_5_enemy_probability:
   .byte 0
@@ -1813,171 +2391,125 @@ screen_5_is_secret_screen:
   .byte 0  ; no
 
 screen_5_is_end_screen:
-  .byte 1  ; yes
+  .byte 0  ; no
 
-; ── Screen 6: s1s4 ──────────────────────────
+; ── Screen 6: S01P06 ──────────────────────────
 screen_6_id:
   .byte 6
 
 screen_6_name:
-  .ascii "s1s4"
+  .ascii "S01P06"
 
 screen_6_action1:
-  .byte 10  ; EXPLORAR MARCAS
+  .byte 9  ; S01P06-CONTINUAR
 
 screen_6_action2:
-  .byte 11  ; FORZAR ENTRADA
+  .byte 255  ; none
 
 screen_6_action3:
-  .byte 12  ; VOLVER A MIRAR ADELANTE
+  .byte 255  ; none
 
 screen_6_action4:
   .byte 255  ; none
 
 screen_6_description:
-  .ascii "Entre las rocas hay rendijas por donde entra aire viciado, pero ninguna lo basta"
-  .ascii "nte grande para pasar. Hay marcas irregulares, como si alguien hubiera intentado"
-  .ascii " moverlas y se hubiera detenido a mitad de camino. Tal vez no sea una opcion vol"
-  .ascii "ver por ahí, pero la idea de explorar una caverna a oscuras no parece tentadora."
+  ;.ascii "ENCONTRAS UN SECRETO"
 
 screen_6_description_compressed:
-  .word token_143  ; "Entre "
-  .word token_144  ; "las "
-  .word token_13  ; "rocas "
-  .word token_145  ; "hay "
-  .word token_146  ; "rendijas "
-  .word token_147  ; "por "
-  .word token_148  ; "donde "
-  .word token_149  ; "entra "
-  .word token_91  ; "aire "
-  .word token_150  ; "viciado, "
-  .word token_51  ; "pero "
-  .word token_151  ; "ninguna "
-  .word token_152  ; "lo "
-  .word token_153  ; "bastante "
-  .word token_154  ; "grande "
-  .word token_155  ; "para "
-  .word token_156  ; "pasar. "
-  .word token_157  ; "Hay "
-  .word token_103  ; "marcas "
-  .word token_104  ; "irregulares, "
-  .word token_17  ; "como "
-  .word token_18  ; "si "
-  .word token_112  ; "alguien "
-  .word token_21  ; "hubiera "
-  .word token_158  ; "intentado "
-  .word token_159  ; "moverlas "
-  .word token_84  ; "y "
-  .word token_6  ; "se "
-  .word token_21  ; "hubiera "
-  .word token_160  ; "detenido "
-  .word token_43  ; "a "
-  .word token_161  ; "mitad "
-  .word token_9  ; "de "
-  .word token_162  ; "camino. "
-  .word token_163  ; "Tal "
-  .word token_36  ; "vez "
-  .word token_24  ; "no "
-  .word token_164  ; "sea "
-  .word token_61  ; "una "
-  .word token_165  ; "opcion "
-  .word token_166  ; "volver "
-  .word token_147  ; "por "
-  .word token_167  ; "ahí, "
-  .word token_51  ; "pero "
-  .word token_54  ; "la "
-  .word token_168  ; "idea "
-  .word token_9  ; "de "
-  .word token_169  ; "explorar "
-  .word token_61  ; "una "
-  .word token_5  ; "caverna "
-  .word token_43  ; "a "
-  .word token_170  ; "oscuras "
-  .word token_24  ; "no "
-  .word token_66  ; "parece "
-  .word token_171  ; "tentadora."
-  .word $FFFF  ; end sentinel
+  .byte $FA, $45, $4E, $43, $4F, $4E, $54, $52, $41, $53, $F9, $29  ; "ENCONTRAS" | UN
+  .byte $FA, $53, $45, $43, $52, $45, $54, $4F, $F9, $FF  ; "SECRETO" | end
 
 screen_6_ascii:
+  .ascii "\n"
+  .ascii "\n"
+  .ascii "PPPPPP  II  TTTTTT  FFFFFF   AAAA   LL      LL  \n"
+  .ascii "PP  PP  II  TTTTTT  FFF     AA  AA  LL      LL\n"
+  .ascii "PP  PP  II    TT    FFF     AA  AA  LL      LL\n"
+  .ascii "PPPPPP  II    TT    FFFFFF  AAAAAA  LL      LL\n"
+  .ascii "PP      II    TT    FF      AA  AA  LL      LL\n"
+  .ascii "PP      II    TT    FF      AA  AA  LL      LL\n"
+  .ascii "PP      II    TT    FF      AA  AA  LLLLLL  LLLLLL"
 
 screen_6_flashlight_on:
 
 screen_6_flashlight_on_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_6_flashlight_off:
 
 screen_6_flashlight_off_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_6_enemy_probability:
   .byte 0
 
 screen_6_is_secret_screen:
-  .byte 0  ; no
+  .byte 1  ; yes
 
 screen_6_is_end_screen:
   .byte 0  ; no
 
-; ── Screen 7: s1s5 ──────────────────────────
+; ── Screen 7: S01P07 ──────────────────────────
 screen_7_id:
   .byte 7
 
 screen_7_name:
-  .ascii "s1s5"
+  .ascii "S01P07"
 
 screen_7_action1:
-  .byte 12  ; VOLVER A MIRAR ADELANTE
+  .byte 10  ; S01P07-ROCASSEGURO
 
 screen_7_action2:
-  .byte 255  ; none
+  .byte 11  ; S01P07-ROCASRAPIDO
 
 screen_7_action3:
-  .byte 255  ; none
+  .byte 3  ; LINTERNACORAZON-TOGGLE
 
 screen_7_action4:
   .byte 255  ; none
 
 screen_7_description:
-  .ascii "Este es el PITFALL"
+  ;.ascii "ESTAS ENCERRADO, TENES QUE TOMAR UNA DECISION. RETIRAR ROCAS DE MANERA SEGURA O "
+  ;.ascii "HACERLO A LA FUERZA. EL TIEMPO APREMIA."
 
 screen_7_description_compressed:
-  .word token_172  ; "Este "
-  .word token_92  ; "es "
-  .word token_19  ; "el "
-  .word token_173  ; "PITFALL"
-  .word $FFFF  ; end sentinel
+  .byte $65, $FA, $45, $4E, $43, $45, $52, $52, $41, $44, $4F, $2C, $F9  ; ESTAS | "ENCERRADO,"
+  .byte $82, $81, $FA, $54, $4F, $4D, $41, $52, $F9, $BD, $FA, $44, $45, $43, $49, $53, $49, $4F, $4E, $2E, $F9  ; TENES | QUE | "TOMAR" | UNA | "DECISION."
+  .byte $FA, $52, $45, $54, $49, $52, $41, $52, $F9, $28, $54, $BF  ; "RETIRAR" | ROCAS | DE | MANERA
+  .byte $FA, $53, $45, $47, $55, $52, $41, $F9, $83, $FA, $48, $41, $43, $45, $52, $4C, $4F, $F9  ; "SEGURA" | O | "HACERLO"
+  .byte $36, $20, $FA, $46, $55, $45, $52, $5A, $41, $2E, $F9, $27  ; A | LA | "FUERZA." | EL
+  .byte $84, $FA, $41, $50, $52, $45, $4D, $49, $41, $2E, $F9, $FF  ; TIEMPO | "APREMIA." | end
 
 screen_7_ascii:
 
 screen_7_flashlight_on:
 
 screen_7_flashlight_on_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_7_flashlight_off:
 
 screen_7_flashlight_off_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_7_enemy_probability:
   .byte 0
 
 screen_7_is_secret_screen:
-  .byte 1  ; yes
+  .byte 0  ; no
 
 screen_7_is_end_screen:
   .byte 0  ; no
 
-; ── Screen 8: endScreens1s4 ──────────────────────────
+; ── Screen 8: S02P01 ──────────────────────────
 screen_8_id:
   .byte 8
 
 screen_8_name:
-  .ascii "endScreens1s4"
+  .ascii "S02P01"
 
 screen_8_action1:
-  .byte 9  ; TERMINAR EL JUEGO
+  .byte 255  ; none
 
 screen_8_action2:
   .byte 255  ; none
@@ -1989,54 +2521,25 @@ screen_8_action4:
   .byte 255  ; none
 
 screen_8_description:
-  .ascii "El suelo comienza a temblar y entrada empieza a desmoronarse sobre ti. Lo ultimo"
-  .ascii " que piensas es que no estaban sellando la salida. Estaban sosteniendo el resto\"
-  .ascii "n"
-  .ascii "Haz muerto"
+  ;.ascii "Sobreviviste a la experiencia. El agua sigue corriendo. "
 
 screen_8_description_compressed:
-  .word token_26  ; "El "
-  .word token_102  ; "suelo "
-  .word token_174  ; "comienza "
-  .word token_43  ; "a "
-  .word token_175  ; "temblar "
-  .word token_84  ; "y "
-  .word token_176  ; "entrada "
-  .word token_177  ; "empieza "
-  .word token_43  ; "a "
-  .word token_178  ; "desmoronarse "
-  .word token_1  ; "sobre "
-  .word token_179  ; "ti. "
-  .word token_180  ; "Lo "
-  .word token_181  ; "ultimo "
-  .word token_47  ; "que "
-  .word token_182  ; "piensas "
-  .word token_92  ; "es "
-  .word token_47  ; "que "
-  .word token_24  ; "no "
-  .word token_183  ; "estaban "
-  .word token_184  ; "sellando "
-  .word token_54  ; "la "
-  .word token_185  ; "salida. "
-  .word token_186  ; "Estaban "
-  .word token_187  ; "sosteniendo "
-  .word token_19  ; "el "
-  .word token_188  ; "resto\n"
-  .word token_189  ; "Haz "
-  .word token_190  ; "muerto"
-  .word $FFFF  ; end sentinel
+  .byte $FA, $53, $6F, $62, $72, $65, $76, $69, $76, $69, $73, $74, $65, $F9  ; "Sobreviviste"
+  .byte $00, $02, $FA, $65, $78, $70, $65, $72, $69, $65, $6E, $63, $69, $61, $2E, $F9  ; a | la | "experiencia."
+  .byte $0C, $86, $C0, $FA, $63, $6F, $72, $72, $69, $65, $6E, $64, $6F, $2E, $F9  ; El | agua | sigue | "corriendo."
+  .byte $FF  ; end
 
 screen_8_ascii:
 
 screen_8_flashlight_on:
 
 screen_8_flashlight_on_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_8_flashlight_off:
 
 screen_8_flashlight_off_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_8_enemy_probability:
   .byte 0
@@ -2047,18 +2550,18 @@ screen_8_is_secret_screen:
 screen_8_is_end_screen:
   .byte 0  ; no
 
-; ── Screen 9: s2s1 ──────────────────────────
+; ── Screen 9: S02P02 ──────────────────────────
 screen_9_id:
   .byte 9
 
 screen_9_name:
-  .ascii "s2s1"
+  .ascii "S02P02"
 
 screen_9_action1:
-  .byte 255  ; none
+  .byte 13  ; S02P02-DESCANSAR
 
 screen_9_action2:
-  .byte 255  ; none
+  .byte 14  ; S02P02-CORRER
 
 screen_9_action3:
   .byte 255  ; none
@@ -2067,109 +2570,34 @@ screen_9_action4:
   .byte 255  ; none
 
 screen_9_description:
+  ;.ascii "Detras tuyo se derrumba el paso.  Esto te altera. Descansar puede ayudar a que n"
+  ;.ascii "o te desesperes y veas con otra optica las cosas."
 
 screen_9_description_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FA, $44, $65, $74, $72, $61, $73, $F9, $FA, $74, $75, $79, $6F, $F9  ; "Detras" | "tuyo"
+  .byte $0D, $C1, $01, $FA, $70, $61, $73, $6F, $2E, $F9, $FA, $45, $73, $74, $6F, $F9  ; se | derrumba | el | "paso." | "Esto"
+  .byte $03, $FA, $61, $6C, $74, $65, $72, $61, $2E, $F9, $FA, $44, $65, $73, $63, $61, $6E, $73, $61, $72, $F9  ; te | "altera." | "Descansar"
+  .byte $C2, $FA, $61, $79, $75, $64, $61, $72, $F9, $00, $07, $19  ; puede | "ayudar" | a | que | no
+  .byte $03, $FA, $64, $65, $73, $65, $73, $70, $65, $72, $65, $73, $F9  ; te | "desesperes"
+  .byte $06, $FA, $76, $65, $61, $73, $F9, $21, $FA, $6F, $74, $72, $61, $F9  ; y | "veas" | con | "otra"
+  .byte $FA, $6F, $70, $74, $69, $63, $61, $F9, $13, $FA, $63, $6F, $73, $61, $73, $2E, $F9  ; "optica" | las | "cosas."
+  .byte $FF  ; end
 
 screen_9_ascii:
 
 screen_9_flashlight_on:
-  .ascii "Luego de explorar el pasillo, te encuentras con una sala grande. Dos tuneles se "
-  .ascii "abren frente a ti. Decidir en estas condiciones es dificil, pero necesario. El a"
-  .ascii "gua sigue subiendo lentamente."
+  ;.ascii "Iluminas la habitacion. Parece ser grande."
 
 screen_9_flashlight_on_compressed:
-  .word token_191  ; "Luego "
-  .word token_9  ; "de "
-  .word token_169  ; "explorar "
-  .word token_19  ; "el "
-  .word token_192  ; "pasillo, "
-  .word token_135  ; "te "
-  .word token_193  ; "encuentras "
-  .word token_68  ; "con "
-  .word token_61  ; "una "
-  .word token_194  ; "sala "
-  .word token_195  ; "grande. "
-  .word token_196  ; "Dos "
-  .word token_197  ; "tuneles "
-  .word token_6  ; "se "
-  .word token_198  ; "abren "
-  .word token_199  ; "frente "
-  .word token_43  ; "a "
-  .word token_179  ; "ti. "
-  .word token_200  ; "Decidir "
-  .word token_60  ; "en "
-  .word token_201  ; "estas "
-  .word token_202  ; "condiciones "
-  .word token_92  ; "es "
-  .word token_203  ; "dificil, "
-  .word token_51  ; "pero "
-  .word token_204  ; "necesario. "
-  .word token_26  ; "El "
-  .word token_48  ; "agua "
-  .word token_205  ; "sigue "
-  .word token_206  ; "subiendo "
-  .word token_207  ; "lentamente."
-  .word $FFFF  ; end sentinel
+  .byte $55, $02, $C3, $56, $37, $87, $FF  ; Iluminas | la | habitacion. | Parece | ser | grande. | end
 
 screen_9_flashlight_off:
-  .ascii "A ciegas tanteas la pared del pasillo, hasta que se acaba. Tienes la sensacion d"
-  .ascii "e que llegaste a un lugar mas espacioso. Recorres la pared a tientas y encuentra"
-  .ascii "s dos grandes huecos. ¿Tal vez sean tuneles?. No te detienes demasiado a pensarl"
-  .ascii "o, sientes mas agua en contacto con tu cuerpo."
+  ;.ascii "Gritas en la habitacion. El eco tarda en llegar. Parece ser una grande."
 
 screen_9_flashlight_off_compressed:
-  .word token_208  ; "A "
-  .word token_209  ; "ciegas "
-  .word token_210  ; "tanteas "
-  .word token_54  ; "la "
-  .word token_211  ; "pared "
-  .word token_75  ; "del "
-  .word token_192  ; "pasillo, "
-  .word token_130  ; "hasta "
-  .word token_47  ; "que "
-  .word token_6  ; "se "
-  .word token_212  ; "acaba. "
-  .word token_213  ; "Tienes "
-  .word token_54  ; "la "
-  .word token_214  ; "sensacion "
-  .word token_9  ; "de "
-  .word token_47  ; "que "
-  .word token_215  ; "llegaste "
-  .word token_43  ; "a "
-  .word token_31  ; "un "
-  .word token_216  ; "lugar "
-  .word token_37  ; "mas "
-  .word token_217  ; "espacioso. "
-  .word token_218  ; "Recorres "
-  .word token_54  ; "la "
-  .word token_211  ; "pared "
-  .word token_43  ; "a "
-  .word token_219  ; "tientas "
-  .word token_84  ; "y "
-  .word token_193  ; "encuentras "
-  .word token_220  ; "dos "
-  .word token_221  ; "grandes "
-  .word token_222  ; "huecos. "
-  .word token_223  ; "¿Tal "
-  .word token_36  ; "vez "
-  .word token_224  ; "sean "
-  .word token_225  ; "tuneles?. "
-  .word token_226  ; "No "
-  .word token_135  ; "te "
-  .word token_227  ; "detienes "
-  .word token_228  ; "demasiado "
-  .word token_43  ; "a "
-  .word token_229  ; "pensarlo, "
-  .word token_230  ; "sientes "
-  .word token_37  ; "mas "
-  .word token_48  ; "agua "
-  .word token_60  ; "en "
-  .word token_231  ; "contacto "
-  .word token_68  ; "con "
-  .word token_44  ; "tu "
-  .word token_232  ; "cuerpo."
-  .word $FFFF  ; end sentinel
+  .byte $FA, $47, $72, $69, $74, $61, $73, $F9, $0B, $02, $C3, $0C  ; "Gritas" | en | la | habitacion. | El
+  .byte $C4, $FA, $74, $61, $72, $64, $61, $F9, $0B, $FA, $6C, $6C, $65, $67, $61, $72, $2E, $F9  ; eco | "tarda" | en | "llegar."
+  .byte $56, $37, $08, $87, $FF  ; Parece | ser | una | grande. | end
 
 screen_9_enemy_probability:
   .byte 0
@@ -2180,49 +2608,58 @@ screen_9_is_secret_screen:
 screen_9_is_end_screen:
   .byte 0  ; no
 
-; ── Screen 10: EndScreenSimulationTimeisUp ──────────────────────────
+; ── Screen 10: S02P03 ──────────────────────────
 screen_10_id:
   .byte 10
 
 screen_10_name:
-  .ascii "EndScreenSimulationTimeisUp"
+  .ascii "S02P03"
 
 screen_10_action1:
-  .byte 9  ; TERMINAR EL JUEGO
+  .byte 16  ; S02P03-ANALIZARMARCAS
 
 screen_10_action2:
-  .byte 255  ; none
+  .byte 17  ; S02P03-ELEGIR SALIDA
 
 screen_10_action3:
-  .byte 255  ; none
+  .byte 18  ; S02P03-EXPLORARREFLEJO
 
 screen_10_action4:
-  .byte 255  ; none
+  .byte 3  ; LINTERNACORAZON-TOGGLE
 
 screen_10_description:
-  .ascii "Tardaste Muuuucho y te quedaste sin tiempo....."
+  ;.ascii "Las opciones parecen tener mas claridad"
 
 screen_10_description_compressed:
-  .word token_233  ; "Tardaste "
-  .word token_234  ; "Muuuucho "
-  .word token_84  ; "y "
-  .word token_135  ; "te "
-  .word token_235  ; "quedaste "
-  .word token_236  ; "sin "
-  .word token_237  ; "tiempo....."
-  .word $FFFF  ; end sentinel
+  .byte $43, $FA, $6F, $70, $63, $69, $6F, $6E, $65, $73, $F9, $FA, $70, $61, $72, $65, $63, $65, $6E, $F9  ; Las | "opciones" | "parecen"
+  .byte $66, $1E, $FA, $63, $6C, $61, $72, $69, $64, $61, $64, $F9  ; tener | mas | "claridad"
+  .byte $FF  ; end
 
 screen_10_ascii:
 
 screen_10_flashlight_on:
+  ;.ascii "Te encontras en un espacio grande, 3 salidas se ven al fondo. Hay unas extrañas "
+  ;.ascii "marcas debajo tuyo.\n"
+  ;.ascii "\n"
+  ;.ascii "Cerca de una de la salida derecha algo devuelve el reflejo."
 
 screen_10_flashlight_on_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $2D, $44, $0B, $10, $FA, $65, $73, $70, $61, $63, $69, $6F, $F9  ; Te | encontras | en | un | "espacio"
+  .byte $FA, $67, $72, $61, $6E, $64, $65, $2C, $F9, $C5, $88, $0D  ; "grande," | 3 | salidas | se
+  .byte $FA, $76, $65, $6E, $F9, $2E, $67, $45, $C6, $FA, $65, $78, $74, $72, $61, $C3, $B1, $61, $73, $F9  ; "ven" | al | fondo. | Hay | unas | "extrañas"
+  .byte $57, $89, $68, $FE, $FE, $FA, $43, $65, $72, $63, $61, $F9  ; marcas | debajo | tuyo. | \n | \n | "Cerca"
+  .byte $05, $08, $05, $02, $69, $6A, $46, $FA, $64, $65, $76, $75, $65, $6C, $76, $65, $F9  ; de | una | de | la | salida | derecha | algo | "devuelve"
+  .byte $01, $FA, $72, $65, $66, $6C, $65, $6A, $6F, $2E, $F9, $FF  ; el | "reflejo." | end
 
 screen_10_flashlight_off:
+  ;.ascii "Exploras la sala, encontras que hay 3 salidas/entradas al otro lado. Sentis unas"
+  ;.ascii " marcas  debajo tuyo."
 
 screen_10_flashlight_off_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $38, $02, $FA, $73, $61, $6C, $61, $2C, $F9, $44, $07, $16  ; Exploras | la | "sala," | encontras | que | hay
+  .byte $C5, $FA, $73, $61, $6C, $69, $64, $61, $73, $2F, $65, $6E, $74, $72, $61, $64, $61, $73, $F9  ; 3 | "salidas/entradas"
+  .byte $2E, $47, $FA, $6C, $61, $64, $6F, $2E, $F9, $6B, $C6, $57  ; al | otro | "lado." | Sentis | unas | marcas
+  .byte $89, $68, $FF  ; debajo | tuyo. | end
 
 screen_10_enemy_probability:
   .byte 0
@@ -2231,17 +2668,17 @@ screen_10_is_secret_screen:
   .byte 0  ; no
 
 screen_10_is_end_screen:
-  .byte 1  ; yes
+  .byte 0  ; no
 
-; ── Screen 11: endScreenByEnemy ──────────────────────────
+; ── Screen 11: S02P04 ──────────────────────────
 screen_11_id:
   .byte 11
 
 screen_11_name:
-  .ascii "endScreenByEnemy"
+  .ascii "S02P04"
 
 screen_11_action1:
-  .byte 9  ; TERMINAR EL JUEGO
+  .byte 19  ; S02P0456-VOLVER
 
 screen_11_action2:
   .byte 255  ; none
@@ -2253,33 +2690,27 @@ screen_11_action4:
   .byte 255  ; none
 
 screen_11_description:
-  .ascii "El enemigo que siempre acechaba te atrapó, este es tu fin"
 
 screen_11_description_compressed:
-  .word token_26  ; "El "
-  .word token_238  ; "enemigo "
-  .word token_47  ; "que "
-  .word token_239  ; "siempre "
-  .word token_240  ; "acechaba "
-  .word token_135  ; "te "
-  .word token_241  ; "atrapó, "
-  .word token_242  ; "este "
-  .word token_92  ; "es "
-  .word token_44  ; "tu "
-  .word token_243  ; "fin"
-  .word $FFFF  ; end sentinel
+  .byte $FF  ; end (empty)
 
 screen_11_ascii:
 
 screen_11_flashlight_on:
+  ;.ascii "Ves la siguiente forma (patron viento)"
 
 screen_11_flashlight_on_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FA, $56, $65, $73, $F9, $02, $FA, $73, $69, $67, $75, $69, $65, $6E, $74, $65, $F9  ; "Ves" | la | "siguiente"
+  .byte $C7, $FA, $28, $70, $61, $74, $72, $6F, $6E, $F9, $FA, $76, $69, $65, $6E, $74, $6F, $29, $F9  ; forma | "(patron" | "viento)"
+  .byte $FF  ; end
 
 screen_11_flashlight_off:
+  ;.ascii "Al tacto sentis un patron de forma espiralada"
 
 screen_11_flashlight_off_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $8A, $FA, $74, $61, $63, $74, $6F, $F9, $8B, $10, $FA, $70, $61, $74, $72, $6F, $6E, $F9  ; Al | "tacto" | sentis | un | "patron"
+  .byte $05, $C7, $FA, $65, $73, $70, $69, $72, $61, $6C, $61, $64, $61, $F9  ; de | forma | "espiralada"
+  .byte $FF  ; end
 
 screen_11_enemy_probability:
   .byte 0
@@ -2288,17 +2719,17 @@ screen_11_is_secret_screen:
   .byte 0  ; no
 
 screen_11_is_end_screen:
-  .byte 1  ; yes
+  .byte 0  ; no
 
-; ── Screen 12: endScreenByActionFailed ──────────────────────────
+; ── Screen 12: S02P05 ──────────────────────────
 screen_12_id:
   .byte 12
 
 screen_12_name:
-  .ascii "endScreenByActionFailed"
+  .ascii "S02P05"
 
 screen_12_action1:
-  .byte 9  ; TERMINAR EL JUEGO
+  .byte 19  ; S02P0456-VOLVER
 
 screen_12_action2:
   .byte 255  ; none
@@ -2310,58 +2741,2291 @@ screen_12_action4:
   .byte 255  ; none
 
 screen_12_description:
-  .ascii "Tu acción tenía una gran chance de fallar y falló. Este es tu fin"
+  ;.ascii "¡ENCONTRAS UN SECRETO!"
 
 screen_12_description_compressed:
-  .word token_244  ; "Tu "
-  .word token_245  ; "acción "
-  .word token_246  ; "tenía "
-  .word token_61  ; "una "
-  .word token_247  ; "gran "
-  .word token_248  ; "chance "
-  .word token_9  ; "de "
-  .word token_249  ; "fallar "
-  .word token_84  ; "y "
-  .word token_250  ; "falló. "
-  .word token_172  ; "Este "
-  .word token_92  ; "es "
-  .word token_44  ; "tu "
-  .word token_243  ; "fin"
-  .word $FFFF  ; end sentinel
+  .byte $39, $29, $3A, $FF  ; ¡ENCONTRAS | UN | SECRETO! | end
 
 screen_12_ascii:
+  .ascii "Herramienta rota clavada en la pared.\n"
+  .ascii "\n"
+  .ascii "NO SOS LA PRIMER PERSONA AQUI"
 
 screen_12_flashlight_on:
 
 screen_12_flashlight_on_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_12_flashlight_off:
 
 screen_12_flashlight_off_compressed:
-  .word $FFFF  ; end sentinel (empty)
+  .byte $FF  ; end (empty)
 
 screen_12_enemy_probability:
   .byte 0
 
 screen_12_is_secret_screen:
-  .byte 0  ; no
-
-screen_12_is_end_screen:
   .byte 1  ; yes
 
-; ── Total screen count ──────────────────────────────────────
-screen_count:
+screen_12_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 13: S02P06 ──────────────────────────
+screen_13_id:
   .byte 13
 
-; ── Total secret screens count ──────────────────────────────
-screens_with_secrets:
-  .byte 1
+screen_13_name:
+  .ascii "S02P06"
 
-; ── Compression stats ─────────────────────────────────────
-;  Unique tokens in dictionary: 251
-;  Original string bytes (Description+Flashlight fields): 2319
-;  Compressed token refs bytes: 814
-;  Dictionary overhead bytes: 2520
-;  Net with dictionary: 3334 vs 2319 original
-;  Savings: -1015 bytes (-43.8%)
+screen_13_action1:
+  .byte 20  ; S02P06-ANALIZARSALIDAS
+
+screen_13_action2:
+  .byte 21  ; S02P06-PROBARSUERTE
+
+screen_13_action3:
+  .byte 15  ; DESCANSAR
+
+screen_13_action4:
+  .byte 19  ; S02P0456-VOLVER
+
+screen_13_description:
+  ;.ascii "El agua sigue corriendo, la desesperacion apremia.\n"
+  ;.ascii "\n"
+  ;.ascii "Podes analizar las salidas o probar tu suerte."
+
+screen_13_description_compressed:
+  .byte $0C, $86, $C0, $FA, $63, $6F, $72, $72, $69, $65, $6E, $64, $6F, $2C, $F9  ; El | agua | sigue | "corriendo,"
+  .byte $02, $FA, $64, $65, $73, $65, $73, $70, $65, $72, $61, $63, $69, $6F, $6E, $F9  ; la | "desesperacion"
+  .byte $C8, $FE, $FE, $3B, $8C, $13, $88, $3C, $FA, $70, $72, $6F, $62, $61, $72, $F9  ; apremia. | \n | \n | Podes | analizar | las | salidas | o | "probar"
+  .byte $58, $FA, $73, $75, $65, $72, $74, $65, $2E, $F9, $FF  ; tu | "suerte." | end
+
+screen_13_ascii:
+
+screen_13_flashlight_on:
+
+screen_13_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_13_flashlight_off:
+
+screen_13_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_13_enemy_probability:
+  .byte 0
+
+screen_13_is_secret_screen:
+  .byte 0  ; no
+
+screen_13_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 14: S02P07 ──────────────────────────
+screen_14_id:
+  .byte 14
+
+screen_14_name:
+  .ascii "S02P07"
+
+screen_14_action1:
+  .byte 22  ; S02P07-SALIDADERECHA
+
+screen_14_action2:
+  .byte 23  ; S02P07-SALIDACENTRO
+
+screen_14_action3:
+  .byte 24  ; S02P07-SALIDAIZQUIERDA
+
+screen_14_action4:
+  .byte 25  ; S02P07-VOLVER
+
+screen_14_description:
+  ;.ascii "Examinas las opciones.\n"
+  ;.ascii "\n"
+  ;.ascii "Salida derecha: escuchas ruidos, podria ser actividad\n"
+  ;.ascii "\n"
+  ;.ascii "Salida centro: parece haber iluminacion\n"
+  ;.ascii "\n"
+  ;.ascii "Salida izquierda: sentis una leve correntada de aire"
+
+screen_14_description_compressed:
+  .byte $FA, $45, $78, $61, $6D, $69, $6E, $61, $73, $F9, $13, $FA, $6F, $70, $63, $69, $6F, $6E, $65, $73, $2E, $F9  ; "Examinas" | las | "opciones."
+  .byte $FE, $FE, $8D, $FA, $64, $65, $72, $65, $63, $68, $61, $3A, $F9  ; \n | \n | Salida | "derecha:"
+  .byte $C9, $FA, $72, $75, $69, $64, $6F, $73, $2C, $F9, $FA, $70, $6F, $64, $72, $69, $61, $F9  ; escuchas | "ruidos," | "podria"
+  .byte $37, $FA, $61, $63, $74, $69, $76, $69, $64, $61, $64, $F9  ; ser | "actividad"
+  .byte $FE, $FE, $8D, $FA, $63, $65, $6E, $74, $72, $6F, $3A, $F9  ; \n | \n | Salida | "centro:"
+  .byte $22, $FA, $68, $61, $62, $65, $72, $F9, $FA, $69, $6C, $75, $6D, $69, $6E, $61, $63, $69, $6F, $6E, $F9  ; parece | "haber" | "iluminacion"
+  .byte $FE, $FE, $8D, $FA, $69, $7A, $71, $75, $69, $65, $72, $64, $61, $3A, $F9  ; \n | \n | Salida | "izquierda:"
+  .byte $8B, $08, $FA, $6C, $65, $76, $65, $F9, $FA, $63, $6F, $72, $72, $65, $6E, $74, $61, $64, $61, $F9  ; sentis | una | "leve" | "correntada"
+  .byte $05, $CA, $FF  ; de | aire | end
+
+screen_14_ascii:
+
+screen_14_flashlight_on:
+
+screen_14_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_14_flashlight_off:
+
+screen_14_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_14_enemy_probability:
+  .byte 0
+
+screen_14_is_secret_screen:
+  .byte 0  ; no
+
+screen_14_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 15: S03P01 ──────────────────────────
+screen_15_id:
+  .byte 15
+
+screen_15_name:
+  .ascii "S03P01"
+
+screen_15_action1:
+  .byte 26  ; S03P01-AVANZARCUIDADO
+
+screen_15_action2:
+  .byte 27  ; S03P01-AVANZARCORRIENDO
+
+screen_15_action3:
+  .byte 15  ; DESCANSAR
+
+screen_15_action4:
+  .byte 3  ; LINTERNACORAZON-TOGGLE
+
+screen_15_description:
+  ;.ascii "La caverna parece interminable."
+
+screen_15_description_compressed:
+  .byte $09, $59, $22, $FA, $69, $6E, $74, $65, $72, $6D, $69, $6E, $61, $62, $6C, $65, $2E, $F9  ; La | caverna | parece | "interminable."
+  .byte $FF  ; end
+
+screen_15_ascii:
+
+screen_15_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "Pasillo largo y extrecho. Estalactitas en el techo. Mucho silencio."
+
+screen_15_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $FA, $50, $61, $73, $69, $6C, $6C, $6F, $F9  ; [LINTERNA] | \n | \n | "Pasillo"
+  .byte $FA, $6C, $61, $72, $67, $6F, $F9, $06, $FA, $65, $78, $74, $72, $65, $63, $68, $6F, $2E, $F9  ; "largo" | y | "extrecho."
+  .byte $FA, $45, $73, $74, $61, $6C, $61, $63, $74, $69, $74, $61, $73, $F9  ; "Estalactitas"
+  .byte $0B, $01, $CB, $FA, $4D, $75, $63, $68, $6F, $F9, $FA, $73, $69, $6C, $65, $6E, $63, $69, $6F, $2E, $F9  ; en | el | techo. | "Mucho" | "silencio."
+  .byte $FF  ; end
+
+screen_15_flashlight_off:
+  ;.ascii "[OSCURIDAD]\n"
+  ;.ascii "\n"
+  ;.ascii "Silencio antinatural, ningun eco responde"
+
+screen_15_flashlight_off_compressed:
+  .byte $3D, $FE, $FE, $FA, $53, $69, $6C, $65, $6E, $63, $69, $6F, $F9  ; [OSCURIDAD] | \n | \n | "Silencio"
+  .byte $FA, $61, $6E, $74, $69, $6E, $61, $74, $75, $72, $61, $6C, $2C, $F9  ; "antinatural,"
+  .byte $FA, $6E, $69, $6E, $67, $75, $6E, $F9, $C4, $FA, $72, $65, $73, $70, $6F, $6E, $64, $65, $F9  ; "ningun" | eco | "responde"
+  .byte $FF  ; end
+
+screen_15_enemy_probability:
+  .byte 0
+
+screen_15_is_secret_screen:
+  .byte 0  ; no
+
+screen_15_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 16: S03P02 ──────────────────────────
+screen_16_id:
+  .byte 16
+
+screen_16_name:
+  .ascii "S03P02"
+
+screen_16_action1:
+  .byte 28  ; S03P02-ENCENDERLINTERNA
+
+screen_16_action2:
+  .byte 29  ; S03P02-MANTENERAPAGADA
+
+screen_16_action3:
+  .byte 255  ; none
+
+screen_16_action4:
+  .byte 255  ; none
+
+screen_16_description:
+  ;.ascii "Te encontras con un obstaculo.\n"
+  ;.ascii "\n"
+  ;.ascii "Escuchas algo detras tuyo."
+
+screen_16_description_compressed:
+  .byte $2D, $44, $21, $10, $CC, $FE, $FE, $FA, $45, $73, $63, $75, $63, $68, $61, $73, $F9  ; Te | encontras | con | un | obstaculo. | \n | \n | "Escuchas"
+  .byte $46, $CD, $68, $FF  ; algo | detras | tuyo. | end
+
+screen_16_ascii:
+
+screen_16_flashlight_on:
+
+screen_16_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_16_flashlight_off:
+
+screen_16_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_16_enemy_probability:
+  .byte 0
+
+screen_16_is_secret_screen:
+  .byte 0  ; no
+
+screen_16_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 17: S03P03 ──────────────────────────
+screen_17_id:
+  .byte 17
+
+screen_17_name:
+  .ascii "S03P03"
+
+screen_17_action1:
+  .byte 30  ; S03P03-ILUMINARTECHO
+
+screen_17_action2:
+  .byte 31  ; S03P03-ELEGIRCAMINO
+
+screen_17_action3:
+  .byte 15  ; DESCANSAR
+
+screen_17_action4:
+  .byte 3  ; LINTERNACORAZON-TOGGLE
+
+screen_17_description:
+  ;.ascii "El obstaculo interfiere en tu camino. Podes rodearlo por la derecha o la izquier"
+  ;.ascii "da. Estas por comenzar a rodearlo cuando sentis un temblor en el techo."
+
+screen_17_description_compressed:
+  .byte $0C, $CE, $FA, $69, $6E, $74, $65, $72, $66, $69, $65, $72, $65, $F9  ; El | obstaculo | "interfiere"
+  .byte $0B, $58, $FA, $63, $61, $6D, $69, $6E, $6F, $2E, $F9, $3B  ; en | tu | "camino." | Podes
+  .byte $8E, $14, $02, $6A, $3C, $02, $8F, $FA, $45, $73, $74, $61, $73, $F9  ; rodearlo | por | la | derecha | o | la | izquierda. | "Estas"
+  .byte $14, $FA, $63, $6F, $6D, $65, $6E, $7A, $61, $72, $F9, $00  ; por | "comenzar" | a
+  .byte $8E, $CF, $8B, $10, $90, $0B, $01, $CB, $FF  ; rodearlo | cuando | sentis | un | temblor | en | el | techo. | end
+
+screen_17_ascii:
+
+screen_17_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "Tu linterna parpadea"
+
+screen_17_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $6C, $2F, $D0, $FF  ; [LINTERNA] | \n | \n | Tu | linterna | parpadea | end
+
+screen_17_flashlight_off:
+
+screen_17_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_17_enemy_probability:
+  .byte 25
+
+screen_17_is_secret_screen:
+  .byte 0  ; no
+
+screen_17_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 18: S03P04 ──────────────────────────
+screen_18_id:
+  .byte 18
+
+screen_18_name:
+  .ascii "S03P04"
+
+screen_18_action1:
+  .byte 32  ; S03P04-VOLVER
+
+screen_18_action2:
+  .byte 255  ; none
+
+screen_18_action3:
+  .byte 255  ; none
+
+screen_18_action4:
+  .byte 255  ; none
+
+screen_18_description:
+  ;.ascii "Dibujo que muestra una estalactita a la derecha y un hueco a la izquierda."
+
+screen_18_description_compressed:
+  .byte $91, $07, $6D, $08, $D1, $00, $02, $6A, $06, $10, $FA, $68, $75, $65, $63, $6F, $F9  ; Dibujo | que | muestra | una | estalactita | a | la | derecha | y | un | "hueco"
+  .byte $00, $02, $8F, $FF  ; a | la | izquierda. | end
+
+screen_18_ascii:
+
+screen_18_flashlight_on:
+
+screen_18_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_18_flashlight_off:
+
+screen_18_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_18_enemy_probability:
+  .byte 0
+
+screen_18_is_secret_screen:
+  .byte 0  ; no
+
+screen_18_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 19: S03P05 ──────────────────────────
+screen_19_id:
+  .byte 19
+
+screen_19_name:
+  .ascii "S03P05"
+
+screen_19_action1:
+  .byte 33  ; S03P05-ELEGIRDERECHA
+
+screen_19_action2:
+  .byte 34  ; S03P05-ELEGIRIZQUIERDA
+
+screen_19_action3:
+  .byte 255  ; none
+
+screen_19_action4:
+  .byte 255  ; none
+
+screen_19_description:
+  ;.ascii "Elegis el camino a seguir.\n"
+  ;.ascii "\n"
+
+screen_19_description_compressed:
+  .byte $18, $01, $1F, $00, $6E, $FE, $FE, $FF  ; Elegis | el | camino | a | seguir. | \n | \n | end
+
+screen_19_ascii:
+
+screen_19_flashlight_on:
+
+screen_19_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_19_flashlight_off:
+
+screen_19_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_19_enemy_probability:
+  .byte 0
+
+screen_19_is_secret_screen:
+  .byte 0  ; no
+
+screen_19_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 20: S03P06 ──────────────────────────
+screen_20_id:
+  .byte 20
+
+screen_20_name:
+  .ascii "S03P06"
+
+screen_20_action1:
+  .byte 35  ; S03P06-ILUMINARTECHO
+
+screen_20_action2:
+  .byte 36  ; S03P06-ELEGIRCAMINO
+
+screen_20_action3:
+  .byte 15  ; DESCANSAR
+
+screen_20_action4:
+  .byte 3  ; LINTERNACORAZON-TOGGLE
+
+screen_20_description:
+  ;.ascii "Seguis por el pasillo, te encontras otro obstaculo.\n"
+  ;.ascii "\n"
+  ;.ascii "Nuevamente podes rodearlo por la derecha o la izquierda."
+
+screen_20_description_compressed:
+  .byte $FA, $53, $65, $67, $75, $69, $73, $F9, $14, $01, $92, $03  ; "Seguis" | por | el | pasillo, | te
+  .byte $44, $47, $CC, $FE, $FE, $FA, $4E, $75, $65, $76, $61, $6D, $65, $6E, $74, $65, $F9  ; encontras | otro | obstaculo. | \n | \n | "Nuevamente"
+  .byte $D2, $8E, $14, $02, $6A, $3C, $02, $8F, $FF  ; podes | rodearlo | por | la | derecha | o | la | izquierda. | end
+
+screen_20_ascii:
+
+screen_20_flashlight_on:
+
+screen_20_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_20_flashlight_off:
+
+screen_20_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_20_enemy_probability:
+  .byte 0
+
+screen_20_is_secret_screen:
+  .byte 0  ; no
+
+screen_20_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 21: S03P07 ──────────────────────────
+screen_21_id:
+  .byte 21
+
+screen_21_name:
+  .ascii "S03P07"
+
+screen_21_action1:
+  .byte 37  ; S03P07-ILUMINARMARCAS
+
+screen_21_action2:
+  .byte 38  ; S03P07-VOLVER
+
+screen_21_action3:
+  .byte 255  ; none
+
+screen_21_action4:
+  .byte 255  ; none
+
+screen_21_description:
+  ;.ascii "Dibujo que muestra un techo liso. Unas marcas llaman la atencion en la parte sup"
+  ;.ascii "erior del obstaculo"
+
+screen_21_description_compressed:
+  .byte $91, $07, $6D, $10, $93, $FA, $6C, $69, $73, $6F, $2E, $F9  ; Dibujo | que | muestra | un | techo | "liso."
+  .byte $FA, $55, $6E, $61, $73, $F9, $57, $FA, $6C, $6C, $61, $6D, $61, $6E, $F9  ; "Unas" | marcas | "llaman"
+  .byte $02, $D3, $0B, $02, $FA, $70, $61, $72, $74, $65, $F9, $FA, $73, $75, $70, $65, $72, $69, $6F, $72, $F9  ; la | atencion | en | la | "parte" | "superior"
+  .byte $30, $CE, $FF  ; del | obstaculo | end
+
+screen_21_ascii:
+
+screen_21_flashlight_on:
+
+screen_21_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_21_flashlight_off:
+
+screen_21_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_21_enemy_probability:
+  .byte 0
+
+screen_21_is_secret_screen:
+  .byte 0  ; no
+
+screen_21_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 22: S03P08 ──────────────────────────
+screen_22_id:
+  .byte 22
+
+screen_22_name:
+  .ascii "S03P08"
+
+screen_22_action1:
+  .byte 39  ; S03P08-VOLVER
+
+screen_22_action2:
+  .byte 255  ; none
+
+screen_22_action3:
+  .byte 255  ; none
+
+screen_22_action4:
+  .byte 255  ; none
+
+screen_22_description:
+  ;.ascii "¡ENCONTRAS UN SECRETO!"
+
+screen_22_description_compressed:
+  .byte $39, $29, $3A, $FF  ; ¡ENCONTRAS | UN | SECRETO! | end
+
+screen_22_ascii:
+  .ascii "Secreto: Marcas que suben hasta perderse en el techo.\n"
+  .ascii "\n"
+  .ascii "ALGO O ALGUIEN PARECE HABER SIDO ARRASTRADO"
+
+screen_22_flashlight_on:
+
+screen_22_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_22_flashlight_off:
+
+screen_22_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_22_enemy_probability:
+  .byte 25
+
+screen_22_is_secret_screen:
+  .byte 1  ; yes
+
+screen_22_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 23: S03P09 ──────────────────────────
+screen_23_id:
+  .byte 23
+
+screen_23_name:
+  .ascii "S03P09"
+
+screen_23_action1:
+  .byte 40  ; S03P09-ELEGIRDERECHA
+
+screen_23_action2:
+  .byte 41  ; S03P09-ELEGIRIZQUIERDA
+
+screen_23_action3:
+  .byte 255  ; none
+
+screen_23_action4:
+  .byte 255  ; none
+
+screen_23_description:
+  ;.ascii "Elegis el camino a seguir."
+
+screen_23_description_compressed:
+  .byte $18, $01, $1F, $00, $6E, $FF  ; Elegis | el | camino | a | seguir. | end
+
+screen_23_ascii:
+
+screen_23_flashlight_on:
+
+screen_23_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_23_flashlight_off:
+
+screen_23_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_23_enemy_probability:
+  .byte 0
+
+screen_23_is_secret_screen:
+  .byte 0  ; no
+
+screen_23_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 24: S04P01 ──────────────────────────
+screen_24_id:
+  .byte 24
+
+screen_24_name:
+  .ascii "S04P01"
+
+screen_24_action1:
+  .byte 42  ; S04P01-DESCENDER
+
+screen_24_action2:
+  .byte 15  ; DESCANSAR
+
+screen_24_action3:
+  .byte 3  ; LINTERNACORAZON-TOGGLE
+
+screen_24_action4:
+  .byte 255  ; none
+
+screen_24_description:
+  ;.ascii "El camino se ve interrumpido por un agujero."
+
+screen_24_description_compressed:
+  .byte $0C, $1F, $0D, $D4, $FA, $69, $6E, $74, $65, $72, $72, $75, $6D, $70, $69, $64, $6F, $F9  ; El | camino | se | ve | "interrumpido"
+  .byte $14, $10, $FA, $61, $67, $75, $6A, $65, $72, $6F, $2E, $F9  ; por | un | "agujero."
+  .byte $FF  ; end
+
+screen_24_ascii:
+
+screen_24_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "Es un pozo vertical sin fondo visible. Hay una soga que sobresale y desciende."
+
+screen_24_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $FA, $45, $73, $F9, $10, $D5, $FA, $76, $65, $72, $74, $69, $63, $61, $6C, $F9  ; [LINTERNA] | \n | \n | "Es" | un | pozo | "vertical"
+  .byte $5A, $94, $D6, $45, $08, $D7, $07, $FA, $73, $6F, $62, $72, $65, $73, $61, $6C, $65, $F9  ; sin | fondo | visible. | Hay | una | soga | que | "sobresale"
+  .byte $06, $FA, $64, $65, $73, $63, $69, $65, $6E, $64, $65, $2E, $F9  ; y | "desciende."
+  .byte $FF  ; end
+
+screen_24_flashlight_off:
+  ;.ascii "[OSCURIDAD]\n"
+  ;.ascii "\n"
+  ;.ascii "Tiras una piedra y no escuchas cuando toca el fondo."
+
+screen_24_flashlight_off_compressed:
+  .byte $3D, $FE, $FE, $FA, $54, $69, $72, $61, $73, $F9, $08, $FA, $70, $69, $65, $64, $72, $61, $F9  ; [OSCURIDAD] | \n | \n | "Tiras" | una | "piedra"
+  .byte $06, $19, $C9, $CF, $FA, $74, $6F, $63, $61, $F9, $01, $67  ; y | no | escuchas | cuando | "toca" | el | fondo.
+  .byte $FF  ; end
+
+screen_24_enemy_probability:
+  .byte 0
+
+screen_24_is_secret_screen:
+  .byte 0  ; no
+
+screen_24_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 25: S04P02 ──────────────────────────
+screen_25_id:
+  .byte 25
+
+screen_25_name:
+  .ascii "S04P02"
+
+screen_25_action1:
+  .byte 43  ; S04P02-USARSALIENTE
+
+screen_25_action2:
+  .byte 44  ; S04P02-NOUSARSALIENTES
+
+screen_25_action3:
+  .byte 255  ; none
+
+screen_25_action4:
+  .byte 255  ; none
+
+screen_25_description:
+  ;.ascii "Encontras que el pozo tiene algunas salientes que pueden ayudarte. Un descenso s"
+  ;.ascii "eguro llevaria mas tiempo. Por otro lado, no sabes por que esa soga se encuentra"
+  ;.ascii " alli. Un descenso rapido puede ser riesgoso."
+
+screen_25_description_compressed:
+  .byte $D8, $07, $01, $D5, $95, $FA, $61, $6C, $67, $75, $6E, $61, $73, $F9  ; Encontras | que | el | pozo | tiene | "algunas"
+  .byte $D9, $07, $FA, $70, $75, $65, $64, $65, $6E, $F9, $FA, $61, $79, $75, $64, $61, $72, $74, $65, $2E, $F9  ; salientes | que | "pueden" | "ayudarte."
+  .byte $6F, $DA, $FA, $73, $65, $67, $75, $72, $6F, $F9, $FA, $6C, $6C, $65, $76, $61, $72, $69, $61, $F9  ; Un | descenso | "seguro" | "llevaria"
+  .byte $1E, $FA, $74, $69, $65, $6D, $70, $6F, $2E, $F9, $FA, $50, $6F, $72, $F9  ; mas | "tiempo." | "Por"
+  .byte $47, $FA, $6C, $61, $64, $6F, $2C, $F9, $19, $FA, $73, $61, $62, $65, $73, $F9  ; otro | "lado," | no | "sabes"
+  .byte $14, $07, $FA, $65, $73, $61, $F9, $D7, $0D, $96, $97, $6F  ; por | que | "esa" | soga | se | encuentra | alli. | Un
+  .byte $DA, $DB, $C2, $37, $FA, $72, $69, $65, $73, $67, $6F, $73, $6F, $2E, $F9  ; descenso | rapido | puede | ser | "riesgoso."
+  .byte $FF  ; end
+
+screen_25_ascii:
+
+screen_25_flashlight_on:
+
+screen_25_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_25_flashlight_off:
+
+screen_25_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_25_enemy_probability:
+  .byte 0
+
+screen_25_is_secret_screen:
+  .byte 0  ; no
+
+screen_25_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 26: S04P03 ──────────────────────────
+screen_26_id:
+  .byte 26
+
+screen_26_name:
+  .ascii "S04P03"
+
+screen_26_action1:
+  .byte 45  ; S04P03-EXPLORARZONA
+
+screen_26_action2:
+  .byte 46  ; S04P03-USARSALIENTES
+
+screen_26_action3:
+  .byte 47  ; S04P03-NOUSARSALIENTES
+
+screen_26_action4:
+  .byte 15  ; DESCANSAR
+
+screen_26_description:
+  ;.ascii "Llegas a la saliente. Podes explorar la zona o seguir."
+
+screen_26_description_compressed:
+  .byte $70, $00, $02, $DC, $3B, $71, $02, $DD, $3C, $6E, $FF  ; Llegas | a | la | saliente. | Podes | explorar | la | zona | o | seguir. | end
+
+screen_26_ascii:
+
+screen_26_flashlight_on:
+
+screen_26_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_26_flashlight_off:
+
+screen_26_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_26_enemy_probability:
+  .byte 0
+
+screen_26_is_secret_screen:
+  .byte 0  ; no
+
+screen_26_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 27: S04P04 ──────────────────────────
+screen_27_id:
+  .byte 27
+
+screen_27_name:
+  .ascii "S04P04"
+
+screen_27_action1:
+  .byte 48  ; S04P04-EXPLORARZONA
+
+screen_27_action2:
+  .byte 49  ; S04P04-USARSALIENTES
+
+screen_27_action3:
+  .byte 50  ; S04P04-NOUSARSALIENTES
+
+screen_27_action4:
+  .byte 15  ; DESCANSAR
+
+screen_27_description:
+  ;.ascii "Llegas a la saliente. Podes explorar la zona o seguir.\n"
+  ;.ascii "\n"
+  ;.ascii "El fondo parece estar mas cerca"
+
+screen_27_description_compressed:
+  .byte $70, $00, $02, $DC, $3B, $71, $02, $DD, $3C, $6E, $FE, $FE  ; Llegas | a | la | saliente. | Podes | explorar | la | zona | o | seguir. | \n | \n
+  .byte $0C, $94, $22, $DE, $1E, $DF, $FF  ; El | fondo | parece | estar | mas | cerca | end
+
+screen_27_ascii:
+
+screen_27_flashlight_on:
+
+screen_27_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_27_flashlight_off:
+
+screen_27_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_27_enemy_probability:
+  .byte 0
+
+screen_27_is_secret_screen:
+  .byte 0  ; no
+
+screen_27_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 28: S04P05 ──────────────────────────
+screen_28_id:
+  .byte 28
+
+screen_28_name:
+  .ascii "S04P05"
+
+screen_28_action1:
+  .byte 51  ; S04P05-VOLVER
+
+screen_28_action2:
+  .byte 255  ; none
+
+screen_28_action3:
+  .byte 255  ; none
+
+screen_28_action4:
+  .byte 255  ; none
+
+screen_28_description:
+  ;.ascii "¡ENCONTRAS UN SECRETO!"
+
+screen_28_description_compressed:
+  .byte $39, $29, $3A, $FF  ; ¡ENCONTRAS | UN | SECRETO! | end
+
+screen_28_ascii:
+  .ascii "Secreto: Soga cortada al borde de una saliente.\n"
+  .ascii "\n"
+  .ascii "EL CORTE NO PARECE HABER SIDO HECHO DE MANERA NATURAL"
+
+screen_28_flashlight_on:
+
+screen_28_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_28_flashlight_off:
+
+screen_28_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_28_enemy_probability:
+  .byte 0
+
+screen_28_is_secret_screen:
+  .byte 1  ; yes
+
+screen_28_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 29: S05P01 ──────────────────────────
+screen_29_id:
+  .byte 29
+
+screen_29_name:
+  .ascii "S05P01"
+
+screen_29_action1:
+  .byte 52  ; S05P01-EXPLORARSALA
+
+screen_29_action2:
+  .byte 15  ; DESCANSAR
+
+screen_29_action3:
+  .byte 3  ; LINTERNACORAZON-TOGGLE
+
+screen_29_action4:
+  .byte 255  ; none
+
+screen_29_description:
+  ;.ascii "Sala invadida por raices gruesas. Tu linterna parpadea."
+
+screen_29_description_compressed:
+  .byte $E0, $FA, $69, $6E, $76, $61, $64, $69, $64, $61, $F9, $14  ; Sala | "invadida" | por
+  .byte $0A, $FA, $67, $72, $75, $65, $73, $61, $73, $2E, $F9, $6C  ; raices | "gruesas." | Tu
+  .byte $2F, $E1, $FF  ; linterna | parpadea. | end
+
+screen_29_ascii:
+
+screen_29_flashlight_on:
+  ;.ascii "Parece que estuvieras pisando algo."
+
+screen_29_flashlight_on_compressed:
+  .byte $56, $07, $FA, $65, $73, $74, $75, $76, $69, $65, $72, $61, $73, $F9  ; Parece | que | "estuvieras"
+  .byte $FA, $70, $69, $73, $61, $6E, $64, $6F, $F9, $FA, $61, $6C, $67, $6F, $2E, $F9  ; "pisando" | "algo."
+  .byte $FF  ; end
+
+screen_29_flashlight_off:
+  ;.ascii "La pared esta cubierta de raices de diferentes tamaños."
+
+screen_29_flashlight_off_compressed:
+  .byte $09, $5B, $5C, $98, $05, $0A, $05, $99, $9A, $FF  ; La | pared | esta | cubierta | de | raices | de | diferentes | tamaños. | end
+
+screen_29_enemy_probability:
+  .byte 0
+
+screen_29_is_secret_screen:
+  .byte 0  ; no
+
+screen_29_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 30: S05P02 ──────────────────────────
+screen_30_id:
+  .byte 30
+
+screen_30_name:
+  .ascii "S05P02"
+
+screen_30_action1:
+  .byte 53  ; S05P02-EXPLORARPARED
+
+screen_30_action2:
+  .byte 54  ; S05P02-EXPLORARSUELO
+
+screen_30_action3:
+  .byte 15  ; DESCANSAR
+
+screen_30_action4:
+  .byte 3  ; LINTERNACORAZON-TOGGLE
+
+screen_30_description:
+  ;.ascii "La sala parece estar llena de raices que responden a tu presencia."
+
+screen_30_description_compressed:
+  .byte $09, $23, $22, $DE, $FA, $6C, $6C, $65, $6E, $61, $F9, $05  ; La | sala | parece | estar | "llena" | de
+  .byte $0A, $07, $FA, $72, $65, $73, $70, $6F, $6E, $64, $65, $6E, $F9  ; raices | que | "responden"
+  .byte $00, $58, $FA, $70, $72, $65, $73, $65, $6E, $63, $69, $61, $2E, $F9  ; a | tu | "presencia."
+  .byte $FF  ; end
+
+screen_30_ascii:
+
+screen_30_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "Hay 2 concentraciones grandes de raices: en una pared y en el centro. La de la p"
+  ;.ascii "ared parece mas grande. Sentis que algo se mueve entre las raices"
+
+screen_30_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $45, $9B, $FA, $63, $6F, $6E, $63, $65, $6E, $74, $72, $61, $63, $69, $6F, $6E, $65, $73, $F9  ; [LINTERNA] | \n | \n | Hay | 2 | "concentraciones"
+  .byte $E2, $05, $FA, $72, $61, $69, $63, $65, $73, $3A, $F9, $0B  ; grandes | de | "raices:" | en
+  .byte $08, $5B, $06, $0B, $01, $FA, $63, $65, $6E, $74, $72, $6F, $2E, $F9  ; una | pared | y | en | el | "centro."
+  .byte $09, $05, $02, $5B, $22, $1E, $87, $6B, $07, $46, $0D, $FA, $6D, $75, $65, $76, $65, $F9  ; La | de | la | pared | parece | mas | grande. | Sentis | que | algo | se | "mueve"
+  .byte $E3, $13, $0A, $FF  ; entre | las | raices | end
+
+screen_30_flashlight_off:
+  ;.ascii "[OSCURIDAD]\n"
+  ;.ascii "\n"
+  ;.ascii "Tanteas que hay muchas raices en el suelo y en la pared."
+
+screen_30_flashlight_off_compressed:
+  .byte $3D, $FE, $FE, $FA, $54, $61, $6E, $74, $65, $61, $73, $F9  ; [OSCURIDAD] | \n | \n | "Tanteas"
+  .byte $07, $16, $FA, $6D, $75, $63, $68, $61, $73, $F9, $0A, $0B  ; que | hay | "muchas" | raices | en
+  .byte $01, $9C, $06, $0B, $02, $E4, $FF  ; el | suelo | y | en | la | pared. | end
+
+screen_30_enemy_probability:
+  .byte 50
+
+screen_30_is_secret_screen:
+  .byte 0  ; no
+
+screen_30_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 31: S05P03 ──────────────────────────
+screen_31_id:
+  .byte 31
+
+screen_31_name:
+  .ascii "S05P03"
+
+screen_31_action1:
+  .byte 55  ; S05P03-EXTRAEROBJETO
+
+screen_31_action2:
+  .byte 56  ; S05P035-VOLVER
+
+screen_31_action3:
+  .byte 255  ; none
+
+screen_31_action4:
+  .byte 255  ; none
+
+screen_31_description:
+
+screen_31_description_compressed:
+  .byte $FF  ; end (empty)
+
+screen_31_ascii:
+
+screen_31_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "Encontras algo oculto entre las raices"
+
+screen_31_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $D8, $46, $FA, $6F, $63, $75, $6C, $74, $6F, $F9  ; [LINTERNA] | \n | \n | Encontras | algo | "oculto"
+  .byte $E3, $13, $0A, $FF  ; entre | las | raices | end
+
+screen_31_flashlight_off:
+  ;.ascii "[OSCURIDAD]\n"
+  ;.ascii "\n"
+  ;.ascii "No encontras nada que te llame la atencion"
+
+screen_31_flashlight_off_compressed:
+  .byte $3D, $FE, $FE, $11, $44, $9D, $07, $03, $FA, $6C, $6C, $61, $6D, $65, $F9  ; [OSCURIDAD] | \n | \n | No | encontras | nada | que | te | "llame"
+  .byte $02, $D3, $FF  ; la | atencion | end
+
+screen_31_enemy_probability:
+  .byte 50
+
+screen_31_is_secret_screen:
+  .byte 0  ; no
+
+screen_31_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 32: S05P04 ──────────────────────────
+screen_32_id:
+  .byte 32
+
+screen_32_name:
+  .ascii "S05P04"
+
+screen_32_action1:
+  .byte 57  ; S05P04-VOLVER
+
+screen_32_action2:
+  .byte 255  ; none
+
+screen_32_action3:
+  .byte 255  ; none
+
+screen_32_action4:
+  .byte 255  ; none
+
+screen_32_description:
+  ;.ascii "¡ENCONTRAS UN SECRETO!"
+
+screen_32_description_compressed:
+  .byte $39, $29, $3A, $FF  ; ¡ENCONTRAS | UN | SECRETO! | end
+
+screen_32_ascii:
+  .ascii "Secreto: Anillo atrapado entre las raices.\n"
+  .ascii "\n"
+  .ascii "'SE LEE 'R.C - 1874-1928'"
+
+screen_32_flashlight_on:
+
+screen_32_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_32_flashlight_off:
+
+screen_32_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_32_enemy_probability:
+  .byte 0
+
+screen_32_is_secret_screen:
+  .byte 1  ; yes
+
+screen_32_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 33: S05P05 ──────────────────────────
+screen_33_id:
+  .byte 33
+
+screen_33_name:
+  .ascii "S05P05"
+
+screen_33_action1:
+  .byte 58  ; S05P05-ILUMINARRAICES
+
+screen_33_action2:
+  .byte 56  ; S05P035-VOLVER
+
+screen_33_action3:
+  .byte 15  ; DESCANSAR
+
+screen_33_action4:
+  .byte 3  ; LINTERNACORAZON-TOGGLE
+
+screen_33_description:
+
+screen_33_description_compressed:
+  .byte $FF  ; end (empty)
+
+screen_33_ascii:
+
+screen_33_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "La pared esta cubierta de raices de diferentes tamaños. Al iluminarlas con la li"
+  ;.ascii "nterna, reaccionan y se esconden. Hay raices grandes y pequeñas.\n"
+  ;.ascii "\n"
+  ;.ascii "Sentis una extraña presencia"
+
+screen_33_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $09, $5B, $5C, $98, $05, $0A, $05, $99, $9A  ; [LINTERNA] | \n | \n | La | pared | esta | cubierta | de | raices | de | diferentes | tamaños.
+  .byte $8A, $FA, $69, $6C, $75, $6D, $69, $6E, $61, $72, $6C, $61, $73, $F9  ; Al | "iluminarlas"
+  .byte $21, $02, $E5, $FA, $72, $65, $61, $63, $63, $69, $6F, $6E, $61, $6E, $F9  ; con | la | linterna, | "reaccionan"
+  .byte $06, $0D, $FA, $65, $73, $63, $6F, $6E, $64, $65, $6E, $2E, $F9  ; y | se | "esconden."
+  .byte $45, $0A, $E2, $06, $9E, $FE, $FE, $6B, $08, $FA, $65, $78, $74, $72, $61, $C3, $B1, $61, $F9  ; Hay | raices | grandes | y | pequeñas. | \n | \n | Sentis | una | "extraña"
+  .byte $E6, $FF  ; presencia | end
+
+screen_33_flashlight_off:
+  ;.ascii "[OSCURIDAD]\n"
+  ;.ascii "\n"
+  ;.ascii "La pared esta cubierta de raices de diferentes tamaños.\n"
+  ;.ascii "\n"
+
+screen_33_flashlight_off_compressed:
+  .byte $3D, $FE, $FE, $09, $5B, $5C, $98, $05, $0A, $05, $99, $9A  ; [OSCURIDAD] | \n | \n | La | pared | esta | cubierta | de | raices | de | diferentes | tamaños.
+  .byte $FE, $FE, $FF  ; \n | \n | end
+
+screen_33_enemy_probability:
+  .byte 0
+
+screen_33_is_secret_screen:
+  .byte 0  ; no
+
+screen_33_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 34: S05P06 ──────────────────────────
+screen_34_id:
+  .byte 34
+
+screen_34_name:
+  .ascii "S05P06"
+
+screen_34_action1:
+  .byte 59  ; S05P06-ILUMINARGRANDES
+
+screen_34_action2:
+  .byte 60  ; S05P067-ILUMINARCHICAS
+
+screen_34_action3:
+  .byte 61  ; S05P067-VOLVER
+
+screen_34_action4:
+  .byte 255  ; none
+
+screen_34_description:
+  ;.ascii "Decidis cuales iluminas\n"
+  ;.ascii "\n"
+  ;.ascii "Imagen de raices cerradas"
+
+screen_34_description_compressed:
+  .byte $E7, $E8, $E9, $FE, $FE, $EA, $05, $0A, $FA, $63, $65, $72, $72, $61, $64, $61, $73, $F9  ; Decidis | cuales | iluminas | \n | \n | Imagen | de | raices | "cerradas"
+  .byte $FF  ; end
+
+screen_34_ascii:
+
+screen_34_flashlight_on:
+
+screen_34_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_34_flashlight_off:
+
+screen_34_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_34_enemy_probability:
+  .byte 50
+
+screen_34_is_secret_screen:
+  .byte 0  ; no
+
+screen_34_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 35: S05P07 ──────────────────────────
+screen_35_id:
+  .byte 35
+
+screen_35_name:
+  .ascii "S05P07"
+
+screen_35_action1:
+  .byte 62  ; S05P07-ILUMINARGRANDES
+
+screen_35_action2:
+  .byte 60  ; S05P067-ILUMINARCHICAS
+
+screen_35_action3:
+  .byte 61  ; S05P067-VOLVER
+
+screen_35_action4:
+  .byte 255  ; none
+
+screen_35_description:
+  ;.ascii "Decidis cuales iluminas\n"
+  ;.ascii "\n"
+  ;.ascii "Imagen de raices abiertas mitad"
+
+screen_35_description_compressed:
+  .byte $E7, $E8, $E9, $FE, $FE, $EA, $05, $0A, $FA, $61, $62, $69, $65, $72, $74, $61, $73, $F9  ; Decidis | cuales | iluminas | \n | \n | Imagen | de | raices | "abiertas"
+  .byte $FA, $6D, $69, $74, $61, $64, $F9, $FF  ; "mitad" | end
+
+screen_35_ascii:
+
+screen_35_flashlight_on:
+
+screen_35_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_35_flashlight_off:
+
+screen_35_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_35_enemy_probability:
+  .byte 50
+
+screen_35_is_secret_screen:
+  .byte 0  ; no
+
+screen_35_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 36: S06P01 ──────────────────────────
+screen_36_id:
+  .byte 36
+
+screen_36_name:
+  .ascii "S06P01"
+
+screen_36_action1:
+  .byte 63  ; S06P01-NADAR
+
+screen_36_action2:
+  .byte 15  ; DESCANSAR
+
+screen_36_action3:
+  .byte 255  ; none
+
+screen_36_action4:
+  .byte 255  ; none
+
+screen_36_description:
+  ;.ascii "Al salir de la sala llegas a un tunel sumergido. Lamentablemente, la linterna no"
+  ;.ascii " funcionara debajo del agua.\n"
+  ;.ascii "\n"
+  ;.ascii "Tendras que nada, solo hay una direccion, el tiempo apremia."
+
+screen_36_description_compressed:
+  .byte $8A, $9F, $05, $02, $23, $FA, $6C, $6C, $65, $67, $61, $73, $F9  ; Al | salir | de | la | sala | "llegas"
+  .byte $00, $10, $A0, $FA, $73, $75, $6D, $65, $72, $67, $69, $64, $6F, $2E, $F9  ; a | un | tunel | "sumergido."
+  .byte $FA, $4C, $61, $6D, $65, $6E, $74, $61, $62, $6C, $65, $6D, $65, $6E, $74, $65, $2C, $F9  ; "Lamentablemente,"
+  .byte $02, $2F, $19, $FA, $66, $75, $6E, $63, $69, $6F, $6E, $61, $72, $61, $F9  ; la | linterna | no | "funcionara"
+  .byte $89, $30, $FA, $61, $67, $75, $61, $2E, $F9, $FE, $FE, $FA, $54, $65, $6E, $64, $72, $61, $73, $F9  ; debajo | del | "agua." | \n | \n | "Tendras"
+  .byte $07, $FA, $6E, $61, $64, $61, $2C, $F9, $5D, $16, $08, $FA, $64, $69, $72, $65, $63, $63, $69, $6F, $6E, $2C, $F9  ; que | "nada," | solo | hay | una | "direccion,"
+  .byte $01, $EB, $C8, $FF  ; el | tiempo | apremia. | end
+
+screen_36_ascii:
+
+screen_36_flashlight_on:
+
+screen_36_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_36_flashlight_off:
+
+screen_36_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_36_enemy_probability:
+  .byte 0
+
+screen_36_is_secret_screen:
+  .byte 0  ; no
+
+screen_36_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 37: S06P02 ──────────────────────────
+screen_37_id:
+  .byte 37
+
+screen_37_name:
+  .ascii "S06P02"
+
+screen_37_action1:
+  .byte 64  ; S06P02-NADARRAPIDO
+
+screen_37_action2:
+  .byte 65  ; S06P02-NADARLENTO
+
+screen_37_action3:
+  .byte 255  ; none
+
+screen_37_action4:
+  .byte 255  ; none
+
+screen_37_description:
+  ;.ascii "Antes de apagar la linterna, analizas la situacion. Podes atravesar el tunel en "
+  ;.ascii "2 esfuerzos, con una pausa para respirar en el medio. Podes intentar llegar a la"
+  ;.ascii " burbuja de aire a un ritmo rapido o lento. El tunel ya esta inundado, pero cree"
+  ;.ascii "s que en breve sera peor."
+
+screen_37_description_compressed:
+  .byte $FA, $41, $6E, $74, $65, $73, $F9, $05, $FA, $61, $70, $61, $67, $61, $72, $F9  ; "Antes" | de | "apagar"
+  .byte $02, $E5, $FA, $61, $6E, $61, $6C, $69, $7A, $61, $73, $F9  ; la | linterna, | "analizas"
+  .byte $02, $EC, $3B, $FA, $61, $74, $72, $61, $76, $65, $73, $61, $72, $F9  ; la | situacion. | Podes | "atravesar"
+  .byte $01, $A0, $0B, $9B, $FA, $65, $73, $66, $75, $65, $72, $7A, $6F, $73, $2C, $F9  ; el | tunel | en | 2 | "esfuerzos,"
+  .byte $21, $08, $FA, $70, $61, $75, $73, $61, $F9, $5E, $FA, $72, $65, $73, $70, $69, $72, $61, $72, $F9  ; con | una | "pausa" | para | "respirar"
+  .byte $0B, $01, $FA, $6D, $65, $64, $69, $6F, $2E, $F9, $3B, $FA, $69, $6E, $74, $65, $6E, $74, $61, $72, $F9  ; en | el | "medio." | Podes | "intentar"
+  .byte $2A, $00, $02, $ED, $05, $CA, $00, $10, $FA, $72, $69, $74, $6D, $6F, $F9  ; llegar | a | la | burbuja | de | aire | a | un | "ritmo"
+  .byte $DB, $3C, $5F, $0C, $A0, $FA, $79, $61, $F9, $5C, $FA, $69, $6E, $75, $6E, $64, $61, $64, $6F, $2C, $F9  ; rapido | o | lento. | El | tunel | "ya" | esta | "inundado,"
+  .byte $24, $FA, $63, $72, $65, $65, $73, $F9, $07, $0B, $FA, $62, $72, $65, $76, $65, $F9  ; pero | "crees" | que | en | "breve"
+  .byte $FA, $73, $65, $72, $61, $F9, $FA, $70, $65, $6F, $72, $2E, $F9  ; "sera" | "peor."
+  .byte $FF  ; end
+
+screen_37_ascii:
+
+screen_37_flashlight_on:
+
+screen_37_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_37_flashlight_off:
+
+screen_37_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_37_enemy_probability:
+  .byte 0
+
+screen_37_is_secret_screen:
+  .byte 0  ; no
+
+screen_37_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 38: S06P03 ──────────────────────────
+screen_38_id:
+  .byte 38
+
+screen_38_name:
+  .ascii "S06P03"
+
+screen_38_action1:
+  .byte 66  ; S06P03-NADARRAPIDO
+
+screen_38_action2:
+  .byte 67  ; S06P03-NADARLENTO
+
+screen_38_action3:
+  .byte 68  ; S06P03-EXPLORARBRILLO
+
+screen_38_action4:
+  .byte 255  ; none
+
+screen_38_description:
+  ;.ascii "Llegas a una burbuja de aire. Aun te falta un trecho para llegar al final del tu"
+  ;.ascii "nel. No tenes tiempo para descansar, tenes que mantenerte a flote."
+
+screen_38_description_compressed:
+  .byte $70, $00, $08, $ED, $05, $FA, $61, $69, $72, $65, $2E, $F9  ; Llegas | a | una | burbuja | de | "aire."
+  .byte $FA, $41, $75, $6E, $F9, $03, $FA, $66, $61, $6C, $74, $61, $F9  ; "Aun" | te | "falta"
+  .byte $10, $FA, $74, $72, $65, $63, $68, $6F, $F9, $5E, $2A, $2E  ; un | "trecho" | para | llegar | al
+  .byte $EE, $30, $FA, $74, $75, $6E, $65, $6C, $2E, $F9, $11, $EF  ; final | del | "tunel." | No | tenes
+  .byte $EB, $5E, $FA, $64, $65, $73, $63, $61, $6E, $73, $61, $72, $2C, $F9  ; tiempo | para | "descansar,"
+  .byte $EF, $07, $FA, $6D, $61, $6E, $74, $65, $6E, $65, $72, $74, $65, $F9  ; tenes | que | "mantenerte"
+  .byte $00, $FA, $66, $6C, $6F, $74, $65, $2E, $F9, $FF  ; a | "flote." | end
+
+screen_38_ascii:
+
+screen_38_flashlight_on:
+
+screen_38_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_38_flashlight_off:
+
+screen_38_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_38_enemy_probability:
+  .byte 0
+
+screen_38_is_secret_screen:
+  .byte 0  ; no
+
+screen_38_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 39: S06P04 ──────────────────────────
+screen_39_id:
+  .byte 39
+
+screen_39_name:
+  .ascii "S06P04"
+
+screen_39_action1:
+  .byte 69  ; S06P04-VOLVER
+
+screen_39_action2:
+  .byte 255  ; none
+
+screen_39_action3:
+  .byte 255  ; none
+
+screen_39_action4:
+  .byte 255  ; none
+
+screen_39_description:
+  ;.ascii "¡ENCONTRAS UN SECRETO!"
+
+screen_39_description_compressed:
+  .byte $39, $29, $3A, $FF  ; ¡ENCONTRAS | UN | SECRETO! | end
+
+screen_39_ascii:
+  .ascii "Secreto: Linterna similar a la tuya. Su luz apunta al fondo, ves a una persona s"
+  .ascii "imilar a ti en compañia de algo que no parece ser humano.\n"
+  .ascii "\n"
+  .ascii "ES ACASO ESTO UN SUEÑO"
+
+screen_39_flashlight_on:
+
+screen_39_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_39_flashlight_off:
+
+screen_39_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_39_enemy_probability:
+  .byte 0
+
+screen_39_is_secret_screen:
+  .byte 1  ; yes
+
+screen_39_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 40: S07P01 ──────────────────────────
+screen_40_id:
+  .byte 40
+
+screen_40_name:
+  .ascii "S07P01"
+
+screen_40_action1:
+  .byte 70  ; S07P01-CONTINUAR
+
+screen_40_action2:
+  .byte 255  ; none
+
+screen_40_action3:
+  .byte 255  ; none
+
+screen_40_action4:
+  .byte 255  ; none
+
+screen_40_description:
+  ;.ascii "Entras a una nueva sala. No parece tener una salida."
+
+screen_40_description_compressed:
+  .byte $FA, $45, $6E, $74, $72, $61, $73, $F9, $00, $08, $FA, $6E, $75, $65, $76, $61, $F9  ; "Entras" | a | una | "nueva"
+  .byte $72, $11, $22, $66, $08, $1B, $FF  ; sala. | No | parece | tener | una | salida. | end
+
+screen_40_ascii:
+
+screen_40_flashlight_on:
+
+screen_40_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_40_flashlight_off:
+
+screen_40_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_40_enemy_probability:
+  .byte 0
+
+screen_40_is_secret_screen:
+  .byte 0  ; no
+
+screen_40_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 41: S07P02 ──────────────────────────
+screen_41_id:
+  .byte 41
+
+screen_41_name:
+  .ascii "S07P02"
+
+screen_41_action1:
+  .byte 71  ; S07P02-ILUMINARPILAR
+
+screen_41_action2:
+  .byte 15  ; DESCANSAR
+
+screen_41_action3:
+  .byte 3  ; LINTERNACORAZON-TOGGLE
+
+screen_41_action4:
+  .byte 255  ; none
+
+screen_41_description:
+
+screen_41_description_compressed:
+  .byte $FF  ; end (empty)
+
+screen_41_ascii:
+
+screen_41_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "La sala tiene lo que parece ser un altar central. No hay salida visible. La luz "
+  ;.ascii "de la linterna parpadea."
+
+screen_41_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $09, $23, $95, $3E, $07, $22, $37, $10, $FA, $61, $6C, $74, $61, $72, $F9  ; [LINTERNA] | \n | \n | La | sala | tiene | lo | que | parece | ser | un | "altar"
+  .byte $FA, $63, $65, $6E, $74, $72, $61, $6C, $2E, $F9, $11, $16  ; "central." | No | hay
+  .byte $69, $D6, $09, $F0, $05, $02, $2F, $E1, $FF  ; salida | visible. | La | luz | de | la | linterna | parpadea. | end
+
+screen_41_flashlight_off:
+  ;.ascii "[OSCURIDAD]\n"
+  ;.ascii "\n"
+  ;.ascii "Las paredes de la sala no tienen relieve que marque una salida. Hay un pequeño p"
+  ;.ascii "ilar en el interior."
+
+screen_41_flashlight_off_compressed:
+  .byte $3D, $FE, $FE, $43, $FA, $70, $61, $72, $65, $64, $65, $73, $F9  ; [OSCURIDAD] | \n | \n | Las | "paredes"
+  .byte $05, $02, $23, $19, $FA, $74, $69, $65, $6E, $65, $6E, $F9  ; de | la | sala | no | "tienen"
+  .byte $FA, $72, $65, $6C, $69, $65, $76, $65, $F9, $07, $FA, $6D, $61, $72, $71, $75, $65, $F9  ; "relieve" | que | "marque"
+  .byte $08, $1B, $45, $10, $FA, $70, $65, $71, $75, $65, $C3, $B1, $6F, $F9  ; una | salida. | Hay | un | "pequeño"
+  .byte $F1, $0B, $01, $FA, $69, $6E, $74, $65, $72, $69, $6F, $72, $2E, $F9  ; pilar | en | el | "interior."
+  .byte $FF  ; end
+
+screen_41_enemy_probability:
+  .byte 0
+
+screen_41_is_secret_screen:
+  .byte 0  ; no
+
+screen_41_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 42: S07P03 ──────────────────────────
+screen_42_id:
+  .byte 42
+
+screen_42_name:
+  .ascii "S07P03"
+
+screen_42_action1:
+  .byte 72  ; S07P03-SIMBOLOS
+
+screen_42_action2:
+  .byte 73  ; S07P03-ESTRELLA
+
+screen_42_action3:
+  .byte 15  ; DESCANSAR
+
+screen_42_action4:
+  .byte 3  ; LINTERNACORAZON-TOGGLE
+
+screen_42_description:
+  ;.ascii "Dibujo de los 4 simbolos: triangulos, linea vertical, ondas. Un simbolo de Estre"
+  ;.ascii "lla se encuentra alejado del resto."
+
+screen_42_description_compressed:
+  .byte $91, $05, $FA, $6C, $6F, $73, $F9, $FA, $34, $F9, $FA, $73, $69, $6D, $62, $6F, $6C, $6F, $73, $3A, $F9  ; Dibujo | de | "los" | "4" | "simbolos:"
+  .byte $FA, $74, $72, $69, $61, $6E, $67, $75, $6C, $6F, $73, $2C, $F9  ; "triangulos,"
+  .byte $FA, $6C, $69, $6E, $65, $61, $F9, $FA, $76, $65, $72, $74, $69, $63, $61, $6C, $2C, $F9  ; "linea" | "vertical,"
+  .byte $FA, $6F, $6E, $64, $61, $73, $2E, $F9, $6F, $1C, $05, $FA, $45, $73, $74, $72, $65, $6C, $6C, $61, $F9  ; "ondas." | Un | simbolo | de | "Estrella"
+  .byte $0D, $96, $FA, $61, $6C, $65, $6A, $61, $64, $6F, $F9, $30  ; se | encuentra | "alejado" | del
+  .byte $FA, $72, $65, $73, $74, $6F, $2E, $F9, $FF  ; "resto." | end
+
+screen_42_ascii:
+
+screen_42_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "No estas solo en la habitacion"
+
+screen_42_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $11, $73, $5D, $0B, $02, $74, $FF  ; [LINTERNA] | \n | \n | No | estas | solo | en | la | habitacion | end
+
+screen_42_flashlight_off:
+
+screen_42_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_42_enemy_probability:
+  .byte 0
+
+screen_42_is_secret_screen:
+  .byte 0  ; no
+
+screen_42_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 43: S07P04 ──────────────────────────
+screen_43_id:
+  .byte 43
+
+screen_43_name:
+  .ascii "S07P04"
+
+screen_43_action1:
+  .byte 75  ; S07P04-LINEA
+
+screen_43_action2:
+  .byte 76  ; S07P04-ONDAS
+
+screen_43_action3:
+  .byte 74  ; S07P04-TRIANGULOS
+
+screen_43_action4:
+  .byte 77  ; S07P04567-VOLVER
+
+screen_43_description:
+
+screen_43_description_compressed:
+  .byte $FF  ; end (empty)
+
+screen_43_ascii:
+
+screen_43_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "No estas solo en la habitacion"
+
+screen_43_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $11, $73, $5D, $0B, $02, $74, $FF  ; [LINTERNA] | \n | \n | No | estas | solo | en | la | habitacion | end
+
+screen_43_flashlight_off:
+
+screen_43_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_43_enemy_probability:
+  .byte 0
+
+screen_43_is_secret_screen:
+  .byte 0  ; no
+
+screen_43_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 44: S07P05 ──────────────────────────
+screen_44_id:
+  .byte 44
+
+screen_44_name:
+  .ascii "S07P05"
+
+screen_44_action1:
+  .byte 78  ; S07P05-LINEA
+
+screen_44_action2:
+  .byte 79  ; S07P05-ONDAS
+
+screen_44_action3:
+  .byte 80  ; S07P05-TRIANGULOS
+
+screen_44_action4:
+  .byte 77  ; S07P04567-VOLVER
+
+screen_44_description:
+
+screen_44_description_compressed:
+  .byte $FF  ; end (empty)
+
+screen_44_ascii:
+
+screen_44_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "No estas solo en la habitacion"
+
+screen_44_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $11, $73, $5D, $0B, $02, $74, $FF  ; [LINTERNA] | \n | \n | No | estas | solo | en | la | habitacion | end
+
+screen_44_flashlight_off:
+
+screen_44_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_44_enemy_probability:
+  .byte 0
+
+screen_44_is_secret_screen:
+  .byte 0  ; no
+
+screen_44_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 45: S07P06 ──────────────────────────
+screen_45_id:
+  .byte 45
+
+screen_45_name:
+  .ascii "S07P06"
+
+screen_45_action1:
+  .byte 82  ; S07P06-LINEA
+
+screen_45_action2:
+  .byte 81  ; S07P06-ONDAS
+
+screen_45_action3:
+  .byte 83  ; S07P06-TRIANGULOS
+
+screen_45_action4:
+  .byte 77  ; S07P04567-VOLVER
+
+screen_45_description:
+
+screen_45_description_compressed:
+  .byte $FF  ; end (empty)
+
+screen_45_ascii:
+
+screen_45_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "No estas solo en la habitacion"
+
+screen_45_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $11, $73, $5D, $0B, $02, $74, $FF  ; [LINTERNA] | \n | \n | No | estas | solo | en | la | habitacion | end
+
+screen_45_flashlight_off:
+
+screen_45_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_45_enemy_probability:
+  .byte 0
+
+screen_45_is_secret_screen:
+  .byte 0  ; no
+
+screen_45_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 46: S07P07 ──────────────────────────
+screen_46_id:
+  .byte 46
+
+screen_46_name:
+  .ascii "S07P07"
+
+screen_46_action1:
+  .byte 77  ; S07P04567-VOLVER
+
+screen_46_action2:
+  .byte 255  ; none
+
+screen_46_action3:
+  .byte 255  ; none
+
+screen_46_action4:
+  .byte 255  ; none
+
+screen_46_description:
+  ;.ascii "¡ENCONTRAS UN SECRETO!\n"
+  ;.ascii "\n"
+
+screen_46_description_compressed:
+  .byte $39, $29, $3A, $FE, $FE, $FF  ; ¡ENCONTRAS | UN | SECRETO! | \n | \n | end
+
+screen_46_ascii:
+  .ascii "Secreto: En el centro de la estrella aparece un ojo. Te dice:\n"
+  .ascii "\n"
+  .ascii "'RECUERDA TU CAMINO, TU RECORRIDO ESTA POR TERMINAR'\n"
+  .ascii "\n"
+
+screen_46_flashlight_on:
+
+screen_46_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_46_flashlight_off:
+
+screen_46_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_46_enemy_probability:
+  .byte 0
+
+screen_46_is_secret_screen:
+  .byte 1  ; yes
+
+screen_46_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 47: S08P01 ──────────────────────────
+screen_47_id:
+  .byte 47
+
+screen_47_name:
+  .ascii "S08P01"
+
+screen_47_action1:
+  .byte 84  ; S08P01-CONTINUAR
+
+screen_47_action2:
+  .byte 255  ; none
+
+screen_47_action3:
+  .byte 255  ; none
+
+screen_47_action4:
+  .byte 255  ; none
+
+screen_47_description:
+  ;.ascii "Una grieta se ve al final del pasillo."
+
+screen_47_description_compressed:
+  .byte $F2, $FA, $67, $72, $69, $65, $74, $61, $F9, $0D, $D4, $2E  ; Una | "grieta" | se | ve | al
+  .byte $EE, $30, $FA, $70, $61, $73, $69, $6C, $6C, $6F, $2E, $F9  ; final | del | "pasillo."
+  .byte $FF  ; end
+
+screen_47_ascii:
+
+screen_47_flashlight_on:
+
+screen_47_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_47_flashlight_off:
+
+screen_47_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_47_enemy_probability:
+  .byte 0
+
+screen_47_is_secret_screen:
+  .byte 0  ; no
+
+screen_47_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 48: S08P02 ──────────────────────────
+screen_48_id:
+  .byte 48
+
+screen_48_name:
+  .ascii "S08P02"
+
+screen_48_action1:
+  .byte 85  ; S08P02-INSCRIPCION
+
+screen_48_action2:
+  .byte 86  ; S08P02-APERTURA
+
+screen_48_action3:
+  .byte 3  ; LINTERNACORAZON-TOGGLE
+
+screen_48_action4:
+  .byte 15  ; DESCANSAR
+
+screen_48_description:
+  ;.ascii "La apertura tiene afiladas rocas salientes y parece ser endeble. No obstante, po"
+  ;.ascii "des pasar por ahi."
+
+screen_48_description_compressed:
+  .byte $09, $F3, $95, $FA, $61, $66, $69, $6C, $61, $64, $61, $73, $F9  ; La | apertura | tiene | "afiladas"
+  .byte $FA, $72, $6F, $63, $61, $73, $F9, $D9, $06, $22, $37, $FA, $65, $6E, $64, $65, $62, $6C, $65, $2E, $F9  ; "rocas" | salientes | y | parece | ser | "endeble."
+  .byte $11, $FA, $6F, $62, $73, $74, $61, $6E, $74, $65, $2C, $F9  ; No | "obstante,"
+  .byte $D2, $FA, $70, $61, $73, $61, $72, $F9, $14, $FA, $61, $68, $69, $2E, $F9  ; podes | "pasar" | por | "ahi."
+  .byte $FF  ; end
+
+screen_48_ascii:
+
+screen_48_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "Una inscripcion se encuentra cerca de la grieta.\n"
+  ;.ascii "\n"
+  ;.ascii "La linterna parpadea intensamente."
+
+screen_48_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $F2, $FA, $69, $6E, $73, $63, $72, $69, $70, $63, $69, $6F, $6E, $F9  ; [LINTERNA] | \n | \n | Una | "inscripcion"
+  .byte $0D, $96, $DF, $05, $02, $FA, $67, $72, $69, $65, $74, $61, $2E, $F9  ; se | encuentra | cerca | de | la | "grieta."
+  .byte $FE, $FE, $09, $2F, $D0, $FA, $69, $6E, $74, $65, $6E, $73, $61, $6D, $65, $6E, $74, $65, $2E, $F9  ; \n | \n | La | linterna | parpadea | "intensamente."
+  .byte $FF  ; end
+
+screen_48_flashlight_off:
+
+screen_48_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_48_enemy_probability:
+  .byte 0
+
+screen_48_is_secret_screen:
+  .byte 0  ; no
+
+screen_48_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 49: S08P03 ──────────────────────────
+screen_49_id:
+  .byte 49
+
+screen_49_name:
+  .ascii "S08P03"
+
+screen_49_action1:
+  .byte 87  ; S08P03-CONTINUAR
+
+screen_49_action2:
+  .byte 255  ; none
+
+screen_49_action3:
+  .byte 255  ; none
+
+screen_49_action4:
+  .byte 255  ; none
+
+screen_49_description:
+  ;.ascii "¡ENCONTRAS UN SECRETO!\n"
+  ;.ascii "\n"
+
+screen_49_description_compressed:
+  .byte $39, $29, $3A, $FE, $FE, $FF  ; ¡ENCONTRAS | UN | SECRETO! | \n | \n | end
+
+screen_49_ascii:
+  .ascii "Secreto: La frase dice:\n"
+  .ascii "\n"
+  .ascii "'Y'bthnk...H 'ehye n'grkdl'lh...'\n"
+  .ascii "\n"
+  .ascii "\n"
+  .ascii "\n"
+  .ascii "LA LOCURA SE APODERA DE VOS. LA OSCURIDAD TE VUELVE LOCO."
+
+screen_49_flashlight_on:
+
+screen_49_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_49_flashlight_off:
+
+screen_49_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_49_enemy_probability:
+  .byte 75
+
+screen_49_is_secret_screen:
+  .byte 1  ; yes
+
+screen_49_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 50: S03P04 ──────────────────────────
+screen_50_id:
+  .byte 50
+
+screen_50_name:
+  .ascii "S03P04"
+
+screen_50_action1:
+  .byte 255  ; none
+
+screen_50_action2:
+  .byte 255  ; none
+
+screen_50_action3:
+  .byte 255  ; none
+
+screen_50_action4:
+  .byte 255  ; none
+
+screen_50_description:
+
+screen_50_description_compressed:
+  .byte $FF  ; end (empty)
+
+screen_50_ascii:
+
+screen_50_flashlight_on:
+
+screen_50_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_50_flashlight_off:
+
+screen_50_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_50_enemy_probability:
+  .byte 0
+
+screen_50_is_secret_screen:
+  .byte 0  ; no
+
+screen_50_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 51: S08P04 ──────────────────────────
+screen_51_id:
+  .byte 51
+
+screen_51_name:
+  .ascii "S08P04"
+
+screen_51_action1:
+  .byte 88  ; S08P04-SEGURA
+
+screen_51_action2:
+  .byte 89  ; S08P04-RAPIDA
+
+screen_51_action3:
+  .byte 255  ; none
+
+screen_51_action4:
+  .byte 255  ; none
+
+screen_51_description:
+  ;.ascii "Hay 2 maneras de salir: acomodar el cuerpo o empujar la salida."
+
+screen_51_description_compressed:
+  .byte $45, $9B, $FA, $6D, $61, $6E, $65, $72, $61, $73, $F9, $05  ; Hay | 2 | "maneras" | de
+  .byte $FA, $73, $61, $6C, $69, $72, $3A, $F9, $FA, $61, $63, $6F, $6D, $6F, $64, $61, $72, $F9  ; "salir:" | "acomodar"
+  .byte $01, $FA, $63, $75, $65, $72, $70, $6F, $F9, $3C, $FA, $65, $6D, $70, $75, $6A, $61, $72, $F9  ; el | "cuerpo" | o | "empujar"
+  .byte $02, $1B, $FF  ; la | salida. | end
+
+screen_51_ascii:
+
+screen_51_flashlight_on:
+  ;.ascii "[LINTERNA]\n"
+  ;.ascii "\n"
+  ;.ascii "Un ser inexplicable te persigue. La luz lo distingue, pero no lo ilumina. Cada v"
+  ;.ascii "ez esta mas cerca. Tenes que decidir rapidamente"
+
+screen_51_flashlight_on_compressed:
+  .byte $1A, $FE, $FE, $6F, $37, $FA, $69, $6E, $65, $78, $70, $6C, $69, $63, $61, $62, $6C, $65, $F9  ; [LINTERNA] | \n | \n | Un | ser | "inexplicable"
+  .byte $03, $FA, $70, $65, $72, $73, $69, $67, $75, $65, $2E, $F9  ; te | "persigue."
+  .byte $09, $F0, $3E, $FA, $64, $69, $73, $74, $69, $6E, $67, $75, $65, $2C, $F9  ; La | luz | lo | "distingue,"
+  .byte $24, $19, $3E, $FA, $69, $6C, $75, $6D, $69, $6E, $61, $2E, $F9  ; pero | no | lo | "ilumina."
+  .byte $FA, $43, $61, $64, $61, $F9, $FA, $76, $65, $7A, $F9, $5C  ; "Cada" | "vez" | esta
+  .byte $1E, $FA, $63, $65, $72, $63, $61, $2E, $F9, $F4, $07, $F5  ; mas | "cerca." | Tenes | que | decidir
+  .byte $3F, $FF  ; rapidamente | end
+
+screen_51_flashlight_off:
+  ;.ascii "[OSCURIDAD]\n"
+  ;.ascii "\n"
+  ;.ascii "Sentis una presencia detras tuyo. Tenes que decidir rapidamente"
+
+screen_51_flashlight_off_compressed:
+  .byte $3D, $FE, $FE, $6B, $08, $E6, $CD, $68, $F4, $07, $F5, $3F  ; [OSCURIDAD] | \n | \n | Sentis | una | presencia | detras | tuyo. | Tenes | que | decidir | rapidamente
+  .byte $FF  ; end
+
+screen_51_enemy_probability:
+  .byte 75
+
+screen_51_is_secret_screen:
+  .byte 0  ; no
+
+screen_51_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 52: FINAL ──────────────────────────
+screen_52_id:
+  .byte 52
+
+screen_52_name:
+  .ascii "FINAL"
+
+screen_52_action1:
+  .byte 255  ; none
+
+screen_52_action2:
+  .byte 255  ; none
+
+screen_52_action3:
+  .byte 255  ; none
+
+screen_52_action4:
+  .byte 255  ; none
+
+screen_52_description:
+  ;.ascii "Sales arrastrándote.\n"
+  ;.ascii "\n"
+  ;.ascii "El agua no te sigue.\n"
+  ;.ascii "\n"
+  ;.ascii "La caverna no se derrumba.\n"
+  ;.ascii "\n"
+  ;.ascii "\n"
+  ;.ascii "\n"
+  ;.ascii "Simplemente deja de importarte. Tu humanidad quedo enterrada alli."
+
+screen_52_description_compressed:
+  .byte $FA, $53, $61, $6C, $65, $73, $F9, $FA, $61, $72, $72, $61, $73, $74, $72, $C3, $A1, $6E, $64, $6F, $74, $65, $2E, $F9  ; "Sales" | "arrastrándote."
+  .byte $FE, $FE, $0C, $86, $19, $03, $FA, $73, $69, $67, $75, $65, $2E, $F9  ; \n | \n | El | agua | no | te | "sigue."
+  .byte $FE, $FE, $09, $59, $19, $0D, $FA, $64, $65, $72, $72, $75, $6D, $62, $61, $2E, $F9  ; \n | \n | La | caverna | no | se | "derrumba."
+  .byte $FE, $FE, $FE, $FE, $FA, $53, $69, $6D, $70, $6C, $65, $6D, $65, $6E, $74, $65, $F9  ; \n | \n | \n | \n | "Simplemente"
+  .byte $FA, $64, $65, $6A, $61, $F9, $05, $FA, $69, $6D, $70, $6F, $72, $74, $61, $72, $74, $65, $2E, $F9  ; "deja" | de | "importarte."
+  .byte $6C, $FA, $68, $75, $6D, $61, $6E, $69, $64, $61, $64, $F9  ; Tu | "humanidad"
+  .byte $FA, $71, $75, $65, $64, $6F, $F9, $FA, $65, $6E, $74, $65, $72, $72, $61, $64, $61, $F9  ; "quedo" | "enterrada"
+  .byte $97, $FF  ; alli. | end
+
+screen_52_ascii:
+
+screen_52_flashlight_on:
+
+screen_52_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_52_flashlight_off:
+
+screen_52_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_52_enemy_probability:
+  .byte 0
+
+screen_52_is_secret_screen:
+  .byte 0  ; no
+
+screen_52_is_end_screen:
+  .byte 0  ; no
+
+; ── Screen 53: EndScreenSimulationTimeisUp ──────────────────────────
+screen_53_id:
+  .byte 53
+
+screen_53_name:
+  .ascii "EndScreenSimulationTimeisUp"
+
+screen_53_action1:
+  .byte 90  ; TERMINAR EL JUEGO
+
+screen_53_action2:
+  .byte 255  ; none
+
+screen_53_action3:
+  .byte 255  ; none
+
+screen_53_action4:
+  .byte 255  ; none
+
+screen_53_description:
+  ;.ascii "Tardaste Muuuucho y te quedaste sin tiempo....."
+
+screen_53_description_compressed:
+  .byte $FA, $54, $61, $72, $64, $61, $73, $74, $65, $F9, $FA, $4D, $75, $75, $75, $75, $63, $68, $6F, $F9  ; "Tardaste" | "Muuuucho"
+  .byte $06, $03, $FA, $71, $75, $65, $64, $61, $73, $74, $65, $F9  ; y | te | "quedaste"
+  .byte $5A, $FA, $74, $69, $65, $6D, $70, $6F, $2E, $2E, $2E, $2E, $2E, $F9  ; sin | "tiempo....."
+  .byte $FF  ; end
+
+screen_53_ascii:
+
+screen_53_flashlight_on:
+
+screen_53_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_53_flashlight_off:
+
+screen_53_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_53_enemy_probability:
+  .byte 0
+
+screen_53_is_secret_screen:
+  .byte 0  ; no
+
+screen_53_is_end_screen:
+  .byte 1  ; yes
+
+; ── Screen 54: endScreenByEnemy ──────────────────────────
+screen_54_id:
+  .byte 54
+
+screen_54_name:
+  .ascii "endScreenByEnemy"
+
+screen_54_action1:
+  .byte 90  ; TERMINAR EL JUEGO
+
+screen_54_action2:
+  .byte 255  ; none
+
+screen_54_action3:
+  .byte 255  ; none
+
+screen_54_action4:
+  .byte 255  ; none
+
+screen_54_description:
+  ;.ascii "El enemigo que siempre acechaba te atrapó, este es tu fin"
+
+screen_54_description_compressed:
+  .byte $0C, $FA, $65, $6E, $65, $6D, $69, $67, $6F, $F9, $07, $F6  ; El | "enemigo" | que | siempre
+  .byte $FA, $61, $63, $65, $63, $68, $61, $62, $61, $F9, $03, $FA, $61, $74, $72, $61, $70, $C3, $B3, $2C, $F9  ; "acechaba" | te | "atrapó,"
+  .byte $FA, $65, $73, $74, $65, $F9, $48, $58, $F7, $FF  ; "este" | es | tu | fin | end
+
+screen_54_ascii:
+
+screen_54_flashlight_on:
+
+screen_54_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_54_flashlight_off:
+
+screen_54_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_54_enemy_probability:
+  .byte 0
+
+screen_54_is_secret_screen:
+  .byte 0  ; no
+
+screen_54_is_end_screen:
+  .byte 1  ; yes
+
+; ── Screen 55: endScreenByActionFailed ──────────────────────────
+screen_55_id:
+  .byte 55
+
+screen_55_name:
+  .ascii "endScreenByActionFailed"
+
+screen_55_action1:
+  .byte 90  ; TERMINAR EL JUEGO
+
+screen_55_action2:
+  .byte 255  ; none
+
+screen_55_action3:
+  .byte 255  ; none
+
+screen_55_action4:
+  .byte 255  ; none
+
+screen_55_description:
+  ;.ascii "Tu acción tenía una gran chance de fallar y falló. Este es tu fin"
+
+screen_55_description_compressed:
+  .byte $6C, $FA, $61, $63, $63, $69, $C3, $B3, $6E, $F9, $FA, $74, $65, $6E, $C3, $AD, $61, $F9  ; Tu | "acción" | "tenía"
+  .byte $08, $FA, $67, $72, $61, $6E, $F9, $FA, $63, $68, $61, $6E, $63, $65, $F9  ; una | "gran" | "chance"
+  .byte $05, $FA, $66, $61, $6C, $6C, $61, $72, $F9, $06, $FA, $66, $61, $6C, $6C, $C3, $B3, $2E, $F9  ; de | "fallar" | y | "falló."
+  .byte $FA, $45, $73, $74, $65, $F9, $48, $58, $F7, $FF  ; "Este" | es | tu | fin | end
+
+screen_55_ascii:
+
+screen_55_flashlight_on:
+
+screen_55_flashlight_on_compressed:
+  .byte $FF  ; end (empty)
+
+screen_55_flashlight_off:
+
+screen_55_flashlight_off_compressed:
+  .byte $FF  ; end (empty)
+
+screen_55_enemy_probability:
+  .byte 0
+
+screen_55_is_secret_screen:
+  .byte 0  ; no
+
+screen_55_is_end_screen:
+  .byte 1  ; yes
+
+screen_count:
+  .byte 56
+
+screens_with_secrets:
+  .byte 8
+
+; ── Compression stats (screens only, shared dict) ──────────
+;  Unique tokens in shared dictionary: 249
+;  Screen original string bytes: 5816
+;  Screen compressed bytes (1-byte IDs): 3264
+;  Dictionary overhead (shared, paid once): 1893
+;  Net: 5157 vs 5816
+;  Savings: 659 bytes (11.3%)
