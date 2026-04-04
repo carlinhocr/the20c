@@ -644,9 +644,9 @@ printClearRS232Screen:
 
 printTokenExample:
   ;print token 0
-  lda #< token_0
+  lda #< token_3
   sta tokenLowByte
-  lda #> token_0
+  lda #> token_3
   sta tokenHighByte
   jsr printToken
   rts
@@ -711,17 +711,14 @@ printToken:
   ldy #$ff
 printTokenLoop:
   iny
-  lda (tokenLowByte),Y 
+  lda (tokenLowByte),Y
   beq printTokenEnd 
   cmp #$0a
-  beq printTokenLFCR
-  jsr send_rs232_char
+  bne printTokenContinue
+  jsr send_rs232_CRLF
   jmp printTokenLoop
-printTokenLFCR:
-  lda #$0d
+printTokenContinue:  
   jsr send_rs232_char
-  lda #$0a
-  jsr send_rs232_char 
   jmp printTokenLoop
 printTokenEnd:
   ;save accumulator x and y registers
