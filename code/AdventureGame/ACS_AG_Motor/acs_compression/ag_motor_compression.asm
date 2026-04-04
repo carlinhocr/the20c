@@ -649,11 +649,46 @@ printTokenGroupExample:
   sta tokenGroupLowByte
   lda #> screen_0_description_compressed
   sta tokenGroupHighByte
-  jsr printToken
+  jsr printTokenGroup
   rts
 
 printTokenGroup:
-  
+    ;using tokenLowByte and tokenHighByte from zero page
+  sei ;disable interrupts to run
+  ;save accumulator x and y registers
+  pha
+  txa
+  pha
+  tya
+  pha
+  ;here print first line
+  ldy #$ff
+printGroupTokenLoop:
+  iny
+  lda (screen_0_description_compressed),Y
+  sta tokenGroupLowByte
+  iny
+  lda (screen_0_description_compressed),Y
+  sta tokenGroupHighByte
+  lda tokenGroupLowByte
+  cmp #$ff
+  bne printGroupTokenPrint
+  lda tokenGroupHighByte
+  cmp #$ff
+  bne printGroupTokenPrint
+  jmp printGroupTokenEnd
+printGroupTokenPrint:
+  jsr printToken
+  jmp printGroupTokenLoop
+printGroupTokenEnd:
+  ;save accumulator x and y registers
+  pla
+  tay
+  pla
+  tax
+  pla
+  ;cli let them be on when it is ok for them to be on
+  rts
 
 printToken:
   ;using tokenLowByte and tokenHighByte from zero page
