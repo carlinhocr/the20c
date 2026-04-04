@@ -673,10 +673,10 @@ printTokenGroup:
   ldx #$ff
 printGroupTokenLoop:
   inx
-  lda tokenGroupLowByte,x
+  lda (tokenGroupLowByte),y
   sta tokenLowByte
   inx
-  lda tokenGroupHighByte,x
+  lda (tokenGroupLowByte),y
   sta tokenHighByte
   lda tokenLowByte
   cmp #$ff
