@@ -1023,7 +1023,6 @@ load_dashboard_ram_end:
 ;-----------------------------------------------------------------------------------
 
 select_screen:
-  lda screenCurrentID
   ldx #$1
   lda #$1 ;select bank 1
   sta RS_PORTA
@@ -1033,6 +1032,7 @@ select_screen_loop_bank1:
   inx  
   jmp select_screen_loop_bank1  
 select_screen_continue_bank1:  
+  jsr delay_3_sec
   lda screenCurrentID
   jsr load_screen_ram
   ldx #$1
@@ -1043,7 +1043,8 @@ select_screen_loop_bank0:
   beq select_screen_continue_bank0
   inx  
   jmp select_screen_loop_bank0  
-select_screen_continue_bank0:    
+select_screen_continue_bank0:  
+  jsr delay_3_sec  
   rts
 
 load_screen_ram:
