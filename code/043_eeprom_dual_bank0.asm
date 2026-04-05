@@ -339,11 +339,13 @@ programStart:
   ;jsr viaSoundInit
   jsr uartSerialInit
   jsr screenInit
+  .org $9000  
 loopMessage:  
   jsr lcdDemoMessage
   jsr delay_3_sec
   lda #$1 ;select bank 1
-  sta RS_PORTA
+  ;sta RS_PORTA
+  jsr switch_bank
   jmp loopMessage
 
   ;jmp listeningMode
@@ -1159,7 +1161,10 @@ exit_irq:
   cli ;re enable interrupts
   rti 
 
-
+  .org $ff00
+switch_bank:
+  sta RS_PORTA
+  rts
 
 ;complete the file
   .org $fffa
