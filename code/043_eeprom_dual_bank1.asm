@@ -345,7 +345,7 @@ loopMessage:
   jsr delay_3_sec
   lda #$0 ;select bank 0
   ;sta RS_PORTA
-  jsr switch_bank
+  jmp switch_bank
   jmp loopMessage
 
   ;jmp listeningMode
@@ -1164,7 +1164,7 @@ exit_irq:
   .org $ff00
 switch_bank:
   sta RS_PORTA
-  rts
+  jmp loopMessage
 ;complete the file
   .org $fffa
   .word nmi ;a word is 16 bits or two bytes in this case $fffa and $fffb
