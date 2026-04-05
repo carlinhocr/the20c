@@ -346,7 +346,7 @@ loopMessage:
   sta serialDataVectorLow
   lda #> screen_0_ascii
   sta serialDataVectorHigh
-  jsr print_ascii_screen
+  jsr printAsciiDrawing
   ldx #$1
   lda #$1 ;select bank 1
   sta RS_PORTA
@@ -364,6 +364,66 @@ loopMessageWait:
 ;--------------------------------MAIN-----------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------  
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------PRINTASCIIDRAWING-------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+printAsciiDrawing:
+  sei ;disable interrupts to run
+  ;save accumulator x and y registers
+  pha
+  txa
+  pha
+  tya
+  pha
+  ;here print first line
+  ;initialize in cero serialCharperLines
+  lda #$0
+  sta serialCharperLines
+  jsr send_rs232_line
+  ldx #$0 ;the first line 0 we aleready printed
+printAsciiDrawing_lenghts_loop:
+  inx ;now going to line 1
+  ;here increment on additional lines
+  clc
+  lda serialDataVectorLow ;load marioascii low
+  adc serialCharperLines ; add the number of records of the last send_rs232_line
+  sta serialDataVectorLow ; store the new value
+  bcc printAsciiDrawing_lenghts_no_carry ;branch on carry clear or no carry
+  ;if there is a carry it is in the carry flag
+  ; clear the carry and add one to the high order byte
+  clc
+  inc serialDataVectorHigh
+printAsciiDrawing_lenghts_no_carry  
+  ldy #0
+  lda (serialDataVectorLow),y 
+  cmp #$65;"e"
+  beq printAsciiDrawing_end
+  jsr send_rs232_line
+  jmp printAsciiDrawing_lenghts_loop
+  ;cpx serialTotalLinesAscii ;check to see if 27 lines where printed from 1 to 26
+  ;bne printAsciiDrawing_lenghts_loop
+  ;return and increment according to the lenght of the mario screen
+  ;end by jumping to listening mode
+printAsciiDrawing_end:
+  ;save accumulator x and y registers
+  pla
+  tay
+  pla
+  tax
+  pla
+  ;cli let them be on when it is ok for them to be on
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------PRINTASCIIDRAWING-------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
