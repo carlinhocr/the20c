@@ -369,9 +369,13 @@ mainProgramLoop:
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
-  sta moveNextScreen ;reset the move next screen flag
+  sta moveNextScreen ;reset the move next screen flag  
+  ;switch bank to 1  
+  jsr bankswitch1  
   jsr select_screen
   jsr draw_current_screen_table
+  ;switch bank to 0   
+  jsr bankswitch0    
   jsr checkEndScreen
   ;we 
   ;here the games continue so we jump to the loop and continue
@@ -1254,8 +1258,11 @@ loadScreenActionOptions:
   sta actionDataVectorHigh
   ldy #$0
 loadScreenActionOptions_loop:
+  jsr bankswitch1
+  ;what is here is a value from the screens file  
   lda (actionDataVectorLow),y
   sta actionCurrentID
+  jsr bankswitch0
   ;check to see if action is hidden
   ;according to 
   ;fearLevel
