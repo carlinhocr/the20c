@@ -1033,6 +1033,7 @@ select_screen_loop_bank1:
   inx  
   jmp select_screen_loop_bank1  
 select_screen_continue_bank1:  
+  lda screenCurrentID
   jsr load_screen_ram
   ldx #$1
   lda #$0
