@@ -339,14 +339,17 @@ programStart:
   ;jsr viaSoundInit
   jsr uartSerialInit
   jsr screenInit
-  .org $9000  
+  .org $9000
 loopMessage:  
   jsr lcdDemoMessage
-  jsr delay_3_sec
+  ldx #$1
   lda #$1 ;select bank 1
-  ;sta RS_PORTA
-  jmp switch_bank
-  jmp loopMessage
+  sta RS_PORTA
+loopMessageWait:
+  txa
+  beq loopMessage
+  inx  
+  jmp loopMessageWait
 
   ;jmp listeningMode
   ;start MainProgran and I save stack space by not jumping to it
@@ -1164,8 +1167,7 @@ exit_irq:
   .org $ff00
 switch_bank:
   sta RS_PORTA
-  jmp loopMessage
-
+  jmp loopMessageWait
 ;complete the file
   .org $fffa
   .word nmi ;a word is 16 bits or two bytes in this case $fffa and $fffb
