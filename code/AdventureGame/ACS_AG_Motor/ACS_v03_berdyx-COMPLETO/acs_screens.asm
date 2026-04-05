@@ -1525,7 +1525,7 @@ screen_17_action4:
   .byte 255  ; none
 
 screen_17_description:
-  .ascii ""
+  .ascii "Iluminas el techo"
   .ascii "e"
 
 screen_17_ascii:
@@ -1619,13 +1619,11 @@ screen_19_action4:
   .byte 255  ; none
 
 screen_19_description:
-  .ascii ""
+  .ascii "ALGO O ALGUIEN PARECE HABER SIDO ARRASTRADO AQUI"
   .ascii "e"
 
 screen_19_ascii:
   .ascii "Tercer Secreto: Marcas que suben hasta perderse en el techo."
-  .ascii ""
-  .ascii "ALGO O ALGUIEN PARECE HABER SIDO ARRASTRADO"
   .ascii "e"
 
 screen_19_flashlight_on:
@@ -1666,11 +1664,17 @@ screen_20_action4:
   .byte 255  ; none
 
 screen_20_description:
-  .ascii "El camino se ve interrumpido por un agujero. Encendes la linterna. Es un pozo ve"
-  .ascii "rtical sin fondo visible. Hay una soga que sobresale y desciende."
-  .ascii "Encontras que el pozo tiene algunas salientes que pueden ayudarte. Un descenso s"
-  .ascii "eguro llevaria mas tiempo. Por otro lado, no sabes por que esa soga se encuentra"
-  .ascii " alli. Un descenso rapido puede ser riesgoso."
+  .ascii "El suelo se interrumpe de golpe. "
+  .ascii "Enciendes la linterna."
+  .ascii "Un pozo profundo se abre frente a ti, tan oscuro que no puedes estimar su profun"
+  .ascii "didad."
+  .ascii ""
+  .ascii "Una soga sobresale del pozo y desciende mas alla de tu vision. "
+  .ascii "Las paredes del pozo están marcadas con grietas y salientes irregulares. Las sal"
+  .ascii "ientes pueden ayudarte. "
+  .ascii "Un descenso seguro llevaria mas tiempo. Un descenso rapido puede ser riesgoso."
+  .ascii ""
+  .ascii "El agua sigue corriendo."
   .ascii "e"
 
 screen_20_ascii:
@@ -1760,8 +1764,8 @@ screen_22_action4:
   .byte 11  ; DESCANSAR
 
 screen_22_description:
-  .ascii "Llegas a otra gran saliente. Podes explorar la zona o seguir."
-  .ascii "El fondo parece estar mas cerca"
+  .ascii "Llegas a otra zona de descanzo. Puedes explorar la zona o seguir descendiendo."
+  .ascii "El fondo parece estar mas cerca."
   .ascii "e"
 
 screen_22_ascii:
@@ -1806,13 +1810,11 @@ screen_23_action4:
   .byte 255  ; none
 
 screen_23_description:
-  .ascii ""
+  .ascii "EL CORTE NO PARECE HABER SIDO HECHO DE MANERA NATURAL"
   .ascii "e"
 
 screen_23_ascii:
   .ascii "Cuarto Secreto: Soga cortada al borde de una saliente."
-  .ascii ""
-  .ascii "EL CORTE NO PARECE HABER SIDO HECHO DE MANERA NATURAL"
   .ascii "e"
 
 screen_23_flashlight_on:
@@ -1853,8 +1855,10 @@ screen_24_action4:
   .byte 255  ; none
 
 screen_24_description:
-  .ascii "Hay 2 concentraciones grandes de raices: en una pared y en el centro. La de la p"
-  .ascii "ared parece mas grande. Tu linterna parpadea."
+  .ascii "La caverna cambia de textura."
+  .ascii "El suelo está cubierto de tierra blanda mezclada con piedra. Cada paso se siente"
+  .ascii " amortiguado, como si el lugar absorbiera el peso."
+  .ascii "Raíces gruesas y finas atraviesan el suelo y las paredes."
   .ascii "e"
 
 screen_24_ascii:
@@ -1862,11 +1866,11 @@ screen_24_ascii:
   .ascii "e"
 
 screen_24_flashlight_on:
-  .ascii "Parece que estuvieras pisando algo. Sentis que algo se mueve entre las raices"
+  .ascii "Tu linterna parpadea."
   .ascii "e"
 
 screen_24_flashlight_off:
-  .ascii "La pared esta cubierta de raices de diferentes tamaños."
+  .ascii "Sientes que algo se mueve entre las raices."
   .ascii "e"
 
 screen_24_enemy_probability:
@@ -1899,8 +1903,7 @@ screen_25_action4:
   .byte 255  ; none
 
 screen_25_description:
-  .ascii "Exploras el suelo"
-  .ascii ""
+  .ascii "Exploras el suelo."
   .ascii "e"
 
 screen_25_ascii:
@@ -1908,11 +1911,11 @@ screen_25_ascii:
   .ascii "e"
 
 screen_25_flashlight_on:
-  .ascii "Encontras algo oculto entre las raices"
+  .ascii "Encuentras algo oculto entre las raices."
   .ascii "e"
 
 screen_25_flashlight_off:
-  .ascii "No encontras nada que te llame la atencion"
+  .ascii "No encuentras nada que llame tu atencion."
   .ascii "e"
 
 screen_25_enemy_probability:
@@ -1945,13 +1948,11 @@ screen_26_action4:
   .byte 255  ; none
 
 screen_26_description:
-  .ascii ""
+  .ascii "LA INSCRIPCION DICE \"R.C - 1874-1928\""
   .ascii "e"
 
 screen_26_ascii:
   .ascii "Quinto Secreto: Anillo atrapado entre las raices."
-  .ascii ""
-  .ascii "SE LEE \"\"R.C - 1874-1928"
   .ascii "e"
 
 screen_26_flashlight_on:
@@ -2000,14 +2001,14 @@ screen_27_ascii:
   .ascii "e"
 
 screen_27_flashlight_on:
-  .ascii "La pared esta cubierta de raices de diferentes tamaños. Al iluminarlas con la li"
-  .ascii "nterna, reaccionan y se esconden. Hay raices grandes y pequeñas."
-  .ascii "La linterna parpadea"
+  .ascii "La pared esta cubierta de raices grandes y pequeñas. Al iluminarlas con la linte"
+  .ascii "rna, reaccionan."
+  .ascii "Tu linterna parpadea."
   .ascii "e"
 
 screen_27_flashlight_off:
-  .ascii "La pared esta cubierta de raices de diferentes tamaños. Sentis una extraña prese"
-  .ascii "ncia"
+  .ascii "La pared esta cubierta de raices de diferentes tamaños. "
+  .ascii "Crees sentir un movimiento, que no viene ni de las raices ni de ti."
   .ascii "e"
 
 screen_27_enemy_probability:
@@ -2040,7 +2041,8 @@ screen_28_action4:
   .byte 255  ; none
 
 screen_28_description:
-  .ascii "Decidis cuales iluminas"
+  .ascii "Las raices se abren, pero aun no lo suficiente para que pases."
+  .ascii "Debes deecidir cuales iluminar."
   .ascii "e"
 
 screen_28_ascii:
@@ -2085,16 +2087,16 @@ screen_29_action4:
   .byte 255  ; none
 
 screen_29_description:
-  .ascii "Al salir de la sala llegas a un tunel sumergido. Lamentablemente, la linterna no"
-  .ascii " funcionara debajo del agua."
+  .ascii "Abandonas la sala."
+  .ascii "El pasaje desciende y se llena de agua oscura. No refleja, pero se mueve."
+  .ascii "Tendras que nadar, solo hay una direccion, el tiempo apremia."
   .ascii ""
-  .ascii "Tendras que nada, solo hay una direccion, el tiempo apremia."
+  .ascii "Calculas que podras atravesar el tunel en 2 esfuerzos, con una pausa para respir"
+  .ascii "ar en el medio. "
+  .ascii "Puedes intentar llegar a la burbuja de aire a un ritmo rapido o lento."
   .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii "Podes atravesar el tunel en 2 esfuerzos, con una pausa para respirar en el medio"
-  .ascii ". Podes intentar llegar a la burbuja de aire a un ritmo rapido o lento. El tunel"
-  .ascii " ya esta inundado, pero crees que en breve sera peor."
+  .ascii "La linterna no funcionara debajo del agua. El solo pensar en eso te genera incom"
+  .ascii "odidad."
   .ascii "e"
 
 screen_29_ascii:
@@ -2139,9 +2141,10 @@ screen_30_action4:
   .byte 255  ; none
 
 screen_30_description:
-  .ascii "Llegas a una burbuja de aire. Aun te falta un trecho para llegar al final del tu"
-  .ascii "nel. No tenes tiempo para descansar, tenes que mantenerte a flote. Algo te llama"
-  .ascii " la atencion debajo del agua"
+  .ascii "Llegas a una burbuja de aire. "
+  .ascii "Aun te falta un tramo para llegar al final del tunel. "
+  .ascii "No puedes descansar, no tienes donde. Mantenerte a flote es primordial."
+  .ascii "Algo llama tu atencion debajo del agua."
   .ascii "e"
 
 screen_30_ascii:
@@ -2186,17 +2189,12 @@ screen_31_action4:
   .byte 255  ; none
 
 screen_31_description:
-  .ascii ""
+  .ascii "¿ES ACASO ESTO UN SUEÑO?"
   .ascii "e"
 
 screen_31_ascii:
   .ascii "Sexto Secreto: Linterna similar a la tuya. Su luz apunta al fondo, ves a una per"
   .ascii "sona similar a ti en compañia de algo que no parece ser humano."
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii "ES ACASO ESTO UN SUEÑO"
-  .ascii ""
   .ascii "e"
 
 screen_31_flashlight_on:
@@ -2237,7 +2235,8 @@ screen_32_action4:
   .byte 255  ; none
 
 screen_32_description:
-  .ascii "Entras a una nueva sala. No parece tener una salida."
+  .ascii "Logras cruzar el tunel sumergido y llegas a una sala."
+  .ascii "No logras visualizar ninguna salida."
   .ascii "e"
 
 screen_32_ascii:
@@ -2245,17 +2244,16 @@ screen_32_ascii:
   .ascii "e"
 
 screen_32_flashlight_on:
-  .ascii "[LINTERNA]"
-  .ascii ""
-  .ascii "La sala tiene lo que parece ser un altar central. No hay salida visible. La luz "
-  .ascii "de la linterna parpadea."
+  .ascii "El espacio se abre en una sala circular, claramente distinta al resto de la cave"
+  .ascii "rna."
+  .ascii "Las paredes son más regulares. El suelo está nivelado. En el centro hay una estr"
+  .ascii "uctura de piedra baja, erosionada pero intencional, como un altar olvidado."
+  .ascii "Tu linterna parpadea."
   .ascii "e"
 
 screen_32_flashlight_off:
-  .ascii "[OSCURIDAD]"
-  .ascii ""
-  .ascii "Las paredes de la sala no tienen relieve que marque una salida. Hay un pequeño p"
-  .ascii "ilar en el interior."
+  .ascii "Las paredes de la sala no tienen relieve que marque una salida. "
+  .ascii "Hay un pequeño pilar en el interior."
   .ascii "e"
 
 screen_32_enemy_probability:
@@ -2288,19 +2286,19 @@ screen_33_action4:
   .byte 11  ; DESCANSAR
 
 screen_33_description:
-  .ascii "Dibujo de los 4 simbolos: triangulos, linea vertical, ondas. Un simbolo de Estre"
-  .ascii "lla se encuentra alejado del resto."
+  .ascii "Estar en el centro de la sala genera una sensación de exposición, como si el lug"
+  .ascii "ar hubiera sido diseñado para observar lo que ocurre ahí."
   .ascii "e"
 
 screen_33_ascii:
-  .ascii "DIBUJO DEL PILAR"
+  .ascii "Dibujo de los 4 simbolos: triangulos, linea vertical, ondas. Un simbolo de Estre"
+  .ascii "lla se encuentra alejado del resto."
+  .ascii ""
   .ascii "TEXTO: \"RECUERDA TU CAMINO, TU RECORRIDO ESTA POR TERMINAR\""
   .ascii "e"
 
 screen_33_flashlight_on:
-  .ascii "[LINTERNA]"
-  .ascii ""
-  .ascii "No estas solo en la habitacion"
+  .ascii "Tu linterna parpadea"
   .ascii "e"
 
 screen_33_flashlight_off:
@@ -2337,7 +2335,8 @@ screen_34_action4:
   .byte 60  ; S07P345-VOLVER
 
 screen_34_description:
-  .ascii "INTENTO 1 - SIMBOLOS"
+  .ascii "Estas frente a los simbolos."
+  .ascii "Debes elegir cuales presionar."
   .ascii "e"
 
 screen_34_ascii:
@@ -2345,9 +2344,7 @@ screen_34_ascii:
   .ascii "e"
 
 screen_34_flashlight_on:
-  .ascii "[LINTERNA]"
   .ascii ""
-  .ascii "No estas solo en la habitacion"
   .ascii "e"
 
 screen_34_flashlight_off:
@@ -2384,10 +2381,11 @@ screen_35_action4:
   .byte 60  ; S07P345-VOLVER
 
 screen_35_description:
-  .ascii "INTENTO 2 - SIMBOLOS"
+  .ascii "Se produjo un cambio en la sala."
+  .ascii "La pared se agrieta, dejando entrar una hendija de luz."
   .ascii ""
-  .ascii "La pared se agrieta, dejando entrar una hendija de luz"
-  .ascii ""
+  .ascii "Estas frente a los simbolos."
+  .ascii "Debes elegir cuales presionar."
   .ascii "e"
 
 screen_35_ascii:
@@ -2395,9 +2393,7 @@ screen_35_ascii:
   .ascii "e"
 
 screen_35_flashlight_on:
-  .ascii "[LINTERNA]"
   .ascii ""
-  .ascii "No estas solo en la habitacion"
   .ascii "e"
 
 screen_35_flashlight_off:
@@ -2434,10 +2430,12 @@ screen_36_action4:
   .byte 60  ; S07P345-VOLVER
 
 screen_36_description:
-  .ascii "INTENTO 3 - SIMBOLOS"
+  .ascii "Se produjo un nuevo cambio en la sala."
+  .ascii "La grieta comienza a crecer, aun no lo suficiente para que pases a traves de ell"
+  .ascii "a."
   .ascii ""
-  .ascii "La grieta va creciendo"
-  .ascii ""
+  .ascii "Estas frente a los simbolos."
+  .ascii "Debes elegir cuales presionar."
   .ascii "e"
 
 screen_36_ascii:
@@ -2445,9 +2443,7 @@ screen_36_ascii:
   .ascii "e"
 
 screen_36_flashlight_on:
-  .ascii "[LINTERNA]"
   .ascii ""
-  .ascii "No estas solo en la habitacion"
   .ascii "e"
 
 screen_36_flashlight_off:
@@ -2484,8 +2480,7 @@ screen_37_action4:
   .byte 255  ; none
 
 screen_37_description:
-  .ascii "¡ENCONTRAS UN SECRETO!"
-  .ascii ""
+  .ascii "EL MIEDO SE APODERA DE TI. LO QUE LEISTE FUE DEMASIADO PARA TU CORDURA."
   .ascii ""
   .ascii "e"
 
@@ -2495,7 +2490,7 @@ screen_37_ascii:
   .ascii ""
   .ascii "\"Y'bthnk...H 'ehye n'grkdl'lh...\""
   .ascii ""
-  .ascii "LA LOCURA SE APODERA DE VOS. LA OSCURIDAD TE VUELVE LOCO."
+  .ascii ""
   .ascii "e"
 
 screen_37_flashlight_on:
@@ -2536,19 +2531,21 @@ screen_38_action4:
   .byte 255  ; none
 
 screen_38_description:
-  .ascii "Sales arrastrándote."
+  .ascii "Pasas a traves de la grieta con mucho esfuerzo."
+  .ascii "Lo primero que notas es que respiras aire fresco. Luego, el abrazo de la luz sol"
+  .ascii "ar."
+  .ascii ""
+  .ascii "Con el resto de tus fuerzas, continuas arrastrandote hasta terminar de salir."
   .ascii ""
   .ascii "El agua no te sigue."
-  .ascii ""
   .ascii "La caverna no se derrumba."
+  .ascii "Simplemente deja de importarte..."
   .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii "Simplemente deja de importarte. Tu humanidad quedo enterrada alli."
+  .ascii "Tu humanidad quedo enterrada alli."
   .ascii "e"
 
 screen_38_ascii:
-  .ascii ""
+  .ascii "DIBUJO FINAL"
   .ascii "e"
 
 screen_38_flashlight_on:

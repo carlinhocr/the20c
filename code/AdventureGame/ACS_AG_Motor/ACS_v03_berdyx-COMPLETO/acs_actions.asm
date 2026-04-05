@@ -2702,13 +2702,12 @@ action_29_death_probability:
   .byte 1
 
 action_29_description:
-  .ascii "Pasaste sin problema. Avanzas en el pasillo y salis de la sala. Deseas nunca ten"
-  .ascii "er que volver por aca."
+  .ascii "(Rodeas el obstaculo sin problemas)"
   .ascii "e"
 
 action_29_desc_action_failed:
-  .ascii "El miedo te hizo hacer mas ruido. La caverna muestra que no todo es lo que parec"
-  .ascii "e"
+  .ascii "(El miedo provoco que hagas mas ruido del que deberias haber hecho. La estalacti"
+  .ascii "ta impacto directamente sobre ti)"
   .ascii ""
   .ascii "e"
 
@@ -2857,13 +2856,11 @@ action_32_death_probability:
   .byte 25
 
 action_32_description:
-  .ascii ""
+  .ascii "(Desciendes de manera segura)"
   .ascii "e"
 
 action_32_desc_action_failed:
-  .ascii "Accion Fallida: El miedo te jugo una mala pasada y te soltaste de la soga. Muert"
-  .ascii "e"
-  .ascii ""
+  .ascii "(El miedo te juega una mala pasada. La soga se resbala de tu mano)"
   .ascii "e"
 
 action_32_hide_water:
@@ -2909,11 +2906,11 @@ action_33_death_probability:
   .byte 85
 
 action_33_description:
-  .ascii ""
+  .ascii "(Desciendes de manera rapida)"
   .ascii "e"
 
 action_33_desc_action_failed:
-  .ascii "Accion Fallida: Se te corto la soga. Muerte"
+  .ascii "(La soga se corta por el esfuerzo)"
   .ascii "e"
 
 action_33_hide_water:
@@ -2959,12 +2956,11 @@ action_34_death_probability:
   .byte 25
 
 action_34_description:
-  .ascii ""
+  .ascii "(Desciendes de manera segura)"
   .ascii "e"
 
 action_34_desc_action_failed:
-  .ascii "Accion Fallida: El miedo te jugo una mala pasada y te soltaste de la soga. Muert"
-  .ascii "e"
+  .ascii "(El miedo te juega una mala pasada. La soga se resbala de tu mano)"
   .ascii "e"
 
 action_34_hide_water:
@@ -3010,11 +3006,11 @@ action_35_death_probability:
   .byte 85
 
 action_35_description:
-  .ascii ""
+  .ascii "(Desciendes de manera rapida)"
   .ascii "e"
 
 action_35_desc_action_failed:
-  .ascii "Accion Fallida: Se te corto la soga. Muerte"
+  .ascii "(La soga se corta por el esfuerzo)"
   .ascii "e"
 
 action_35_hide_water:
@@ -3060,12 +3056,11 @@ action_36_death_probability:
   .byte 25
 
 action_36_description:
-  .ascii ""
+  .ascii "(Procedes a explorar la zona. No encuentras nada de interes)"
   .ascii "e"
 
 action_36_desc_action_failed:
-  .ascii "Accion Fallida: El miedo te jugo una mala pasada y te soltaste de la soga. Muert"
-  .ascii "e"
+  .ascii "(El miedo te juega una mala pasada. La soga se resbala de tu mano)"
   .ascii "e"
 
 action_36_hide_water:
@@ -3111,12 +3106,11 @@ action_37_death_probability:
   .byte 25
 
 action_37_description:
-  .ascii ""
+  .ascii "(Desciendes de manera segura)"
   .ascii "e"
 
 action_37_desc_action_failed:
-  .ascii "Accion Fallida: El miedo te jugo una mala pasada y te soltaste de la soga. Muert"
-  .ascii "e"
+  .ascii "(El miedo te juega una mala pasada. La soga se resbala de tu mano)"
   .ascii "e"
 
 action_37_hide_water:
@@ -3162,11 +3156,12 @@ action_38_death_probability:
   .byte 85
 
 action_38_description:
-  .ascii ""
+  .ascii "(Desciendes de manera rapida)"
   .ascii "e"
 
 action_38_desc_action_failed:
-  .ascii "Accion Fallida: Se te corto la soga. Muerte"
+  .ascii "(La soga se corta por el esfuerzo)"
+  .ascii ""
   .ascii "e"
 
 action_38_hide_water:
@@ -3212,12 +3207,11 @@ action_39_death_probability:
   .byte 25
 
 action_39_description:
-  .ascii ""
+  .ascii "(Procedes a explorar la zona)"
   .ascii "e"
 
 action_39_desc_action_failed:
-  .ascii "Accion Fallida: El miedo te jugo una mala pasada y te soltaste de la soga. Muert"
-  .ascii "e"
+  .ascii "(El miedo te juega una mala pasada. La soga se resbala de tu mano)"
   .ascii ""
   .ascii "e"
 
@@ -3464,11 +3458,11 @@ action_44_death_probability:
   .byte 40
 
 action_44_description:
-  .ascii ""
+  .ascii "(Revisas el suelo)"
   .ascii "e"
 
 action_44_desc_action_failed:
-  .ascii "Accion Fallida: Las raices te atrapan y perdes"
+  .ascii "(Las raices te atrapan. Seras parte de la caverna por siempre)"
   .ascii "e"
 
 action_44_hide_water:
@@ -3514,11 +3508,11 @@ action_45_death_probability:
   .byte 1
 
 action_45_description:
-  .ascii ""
+  .ascii "(Iluminas las raices. Se abren)"
   .ascii "e"
 
 action_45_desc_action_failed:
-  .ascii "Accion Fallida: Las raices te atrapan. Muerte"
+  .ascii "(Las raices te atrapan. Seras parte de la caverna por siempre)"
   .ascii "e"
 
 action_45_hide_water:
@@ -3564,11 +3558,11 @@ action_46_death_probability:
   .byte 1
 
 action_46_description:
-  .ascii "Iluminas las raices . Se cierran."
+  .ascii "(Iluminas las raices. Se cierran)"
   .ascii "e"
 
 action_46_desc_action_failed:
-  .ascii "Accion Fallida: Las raices te atrapan. Muerte"
+  .ascii "(Las raices te atrapan. Seras parte de la caverna por siempre)"
   .ascii "e"
 
 action_46_hide_water:
@@ -3614,11 +3608,11 @@ action_47_death_probability:
   .byte 1
 
 action_47_description:
-  .ascii ""
+  .ascii "(Iluminas las raices. Se abren)"
   .ascii "e"
 
 action_47_desc_action_failed:
-  .ascii "Accion Fallida: Las raices te atrapan. Muerte"
+  .ascii "(Las raices te atrapan. Seras parte de la caverna por siempre)"
   .ascii "e"
 
 action_47_hide_water:
@@ -3664,11 +3658,12 @@ action_48_death_probability:
   .byte 50
 
 action_48_description:
-  .ascii ""
+  .ascii "(Procedes a nadar rapido)"
   .ascii "e"
 
 action_48_desc_action_failed:
-  .ascii "La corriente te arrastra. Muerte"
+  .ascii "(El esfuerzo fue demasiado. La corriente te arrastra hacia lo profundo de la cav"
+  .ascii "erna)"
   .ascii "e"
 
 action_48_hide_water:
@@ -3714,11 +3709,11 @@ action_49_death_probability:
   .byte 1
 
 action_49_description:
-  .ascii ""
+  .ascii "(Procedes a nadar lento)"
   .ascii "e"
 
 action_49_desc_action_failed:
-  .ascii "El miedo fue demasiado y te ahogas. Muerte"
+  .ascii "(El miedo te domino por completo. No puedes respirar. El esfuerzo es inutil)"
   .ascii "e"
 
 action_49_hide_water:
@@ -3764,12 +3759,12 @@ action_50_death_probability:
   .byte 50
 
 action_50_description:
-  .ascii ""
+  .ascii "(Procedes a nadar rapido)"
   .ascii "e"
 
 action_50_desc_action_failed:
-  .ascii "La corriente te arrastra. Muerte"
-  .ascii ""
+  .ascii "(El esfuerzo fue demasiado. La corriente te arrastra hacia lo profundo de la cav"
+  .ascii "erna)"
   .ascii "e"
 
 action_50_hide_water:
@@ -3815,11 +3810,11 @@ action_51_death_probability:
   .byte 1
 
 action_51_description:
-  .ascii ""
+  .ascii "(Procedes a nadar lento)"
   .ascii "e"
 
 action_51_desc_action_failed:
-  .ascii "El miedo fue demasiado y te ahogas. Muerte"
+  .ascii "(El miedo te domino por completo. No puedes respirar. El esfuerzo es inutil)"
   .ascii "e"
 
 action_51_hide_water:
@@ -4117,7 +4112,7 @@ action_57_death_probability:
   .byte 0
 
 action_57_description:
-  .ascii ""
+  .ascii "(Presionas el simbolo. Algo se mueve)"
   .ascii "e"
 
 action_57_desc_action_failed:
@@ -4167,8 +4162,8 @@ action_58_death_probability:
   .byte 0
 
 action_58_description:
-  .ascii "Presionas el simbolo"
-  .ascii "No hay feedback, pero te inquietas"
+  .ascii "(Presionas el simbolo"
+  .ascii "No hay cambios respecto al estado anterior. Pero te inquietas)"
   .ascii "e"
 
 action_58_desc_action_failed:
@@ -4219,7 +4214,7 @@ action_59_death_probability:
 
 action_59_description:
   .ascii "Presionas el simbolo"
-  .ascii "No hay feedback, pero te inquietas"
+  .ascii "No hay cambios respecto al estado anterior. Pero te inquietas)"
   .ascii "e"
 
 action_59_desc_action_failed:
@@ -4269,7 +4264,7 @@ action_60_death_probability:
   .byte 0
 
 action_60_description:
-  .ascii ""
+  .ascii "(Decides volver a intentar desde el comienzo)"
   .ascii "e"
 
 action_60_desc_action_failed:
@@ -4319,7 +4314,7 @@ action_61_death_probability:
   .byte 0
 
 action_61_description:
-  .ascii ""
+  .ascii "(Presionas el simbolo. Algo se mueve)"
   .ascii "e"
 
 action_61_desc_action_failed:
@@ -4369,8 +4364,8 @@ action_62_death_probability:
   .byte 0
 
 action_62_description:
-  .ascii "Presionas el simbolo"
-  .ascii "No hay feedback, pero te inquietas"
+  .ascii "(Presionas el simbolo"
+  .ascii "No hay cambios respecto al estado anterior. Pero te inquietas)"
   .ascii "e"
 
 action_62_desc_action_failed:
@@ -4420,8 +4415,8 @@ action_63_death_probability:
   .byte 0
 
 action_63_description:
-  .ascii "Presionas el simbolo"
-  .ascii "No hay feedback, pero te inquietas"
+  .ascii "(Presionas el simbolo"
+  .ascii "No hay cambios respecto al estado anterior. Pero te inquietas)"
   .ascii "e"
 
 action_63_desc_action_failed:
@@ -4471,8 +4466,8 @@ action_64_death_probability:
   .byte 0
 
 action_64_description:
-  .ascii "La grieta es lo suficientemente grande para que pases por ella. Corres hacia la "
-  .ascii "misma"
+  .ascii "(Presionas el simbolo. La grieta es lo suficientemente grande para que pases por"
+  .ascii " ella. Corres hacia la misma)"
   .ascii "e"
 
 action_64_desc_action_failed:
@@ -4522,8 +4517,8 @@ action_65_death_probability:
   .byte 0
 
 action_65_description:
-  .ascii "Presionas el simbolo"
-  .ascii "No hay feedback, pero te inquietas"
+  .ascii "(Presionas el simbolo"
+  .ascii "No hay cambios respecto al estado anterior. Pero te inquietas)"
   .ascii "e"
 
 action_65_desc_action_failed:
@@ -4573,8 +4568,8 @@ action_66_death_probability:
   .byte 0
 
 action_66_description:
-  .ascii "Presionas el simbolo"
-  .ascii "No hay feedback, pero te inquietas"
+  .ascii "(Presionas el simbolo"
+  .ascii "No hay cambios respecto al estado anterior. Pero te inquietas)"
   .ascii "e"
 
 action_66_desc_action_failed:
