@@ -350,8 +350,12 @@ mainProgram:
   ;initialize screen as screen zero
   jsr initilizationRoutines
   jsr select_dashboard
+  ;switch bank to 1  
+  jsr bankswitch1
   jsr select_screen
   jsr draw_current_screen_table
+  ;switch bank to 0   
+  jsr bankswitch0     
 mainProgramLoop:
   ;jsr simulationTimeWaterLevelCheck
   jsr printFlashlightStatus
@@ -378,6 +382,44 @@ mainProgramLoop:
 ;--------------------------------MAIN-----------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------  
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;------------------------------BANKSWITCHING ROUTINES-------------------------------
+;-----------------------------------------------------------------------------------
+;----------------------------------------------------------------------------------- 
+
+bankswitch0:
+  ldx #$1
+  lda #0 ;select bank 1
+  sta RS_PORTA
+bankswitch0_loop:
+  txa
+  beq bankswitch0_continue
+  inx  
+  jmp bankswitch0_loop  
+bankswitch0_continue:  
+  jsr delay_3_sec
+  rts  
+
+bankswitch1:
+  ldx #$1
+  lda #$1 ;select bank 1
+  sta RS_PORTA
+bankswitch1_loop:
+  txa
+  beq bankswitch1_continue
+  inx  
+  jmp bankswitch1_loop  
+bankswitch1_continue:  
+  jsr delay_3_sec
+  rts   
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;------------------------------BANKSWITCHING ROUTINES-------------------------------
+;-----------------------------------------------------------------------------------
+;----------------------------------------------------------------------------------- 
 
 
 ;BEGIN------------------------------------------------------------------------------
@@ -1023,28 +1065,8 @@ load_dashboard_ram_end:
 ;-----------------------------------------------------------------------------------
 
 select_screen:
-  ldx #$1
-  lda #$1 ;select bank 1
-  sta RS_PORTA
-select_screen_loop_bank1:
-  txa
-  beq select_screen_continue_bank1
-  inx  
-  jmp select_screen_loop_bank1  
-select_screen_continue_bank1:  
-  jsr delay_3_sec
   lda screenCurrentID
   jsr load_screen_ram
-  ldx #$1
-  lda #$0
-  sta RS_PORTA
-select_screen_loop_bank0:
-  txa
-  beq select_screen_continue_bank0
-  inx  
-  jmp select_screen_loop_bank0  
-select_screen_continue_bank0:  
-  jsr delay_3_sec  
   rts
 
 load_screen_ram:
