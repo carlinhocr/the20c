@@ -394,6 +394,11 @@ mainProgramLoop:
 ;----------------------------------------------------------------------------------- 
 
 bankswitch0:
+  pha
+  tya ;save Y because i am going to another process
+  pha ;save Y because i am going to another process
+  txa ;save X because i am going to another process
+  pha ;save X because i am going to another process
   ldx #$1
   lda #0 ;select bank 1
   sta RS_PORTA
@@ -403,10 +408,20 @@ bankswitch0_loop:
   inx  
   jmp bankswitch0_loop  
 bankswitch0_continue:  
-  jsr delay_3_sec
+  jsr delay_1_sec
+  pla
+  tax
+  pla
+  tay
+  pla  
   rts  
 
 bankswitch1:
+  pha
+  tya ;save Y because i am going to another process
+  pha ;save Y because i am going to another process
+  txa ;save X because i am going to another process
+  pha ;save X because i am going to another process
   ldx #$1
   lda #$1 ;select bank 1
   sta RS_PORTA
@@ -416,7 +431,12 @@ bankswitch1_loop:
   inx  
   jmp bankswitch1_loop  
 bankswitch1_continue:  
-  jsr delay_3_sec
+  jsr delay_1_sec
+  pla
+  tax
+  pla
+  tay
+  pla
   rts   
 
 ;END--------------------------------------------------------------------------------
@@ -1259,9 +1279,10 @@ loadScreenActionOptions:
   ldy #$0
 loadScreenActionOptions_loop:
   jsr bankswitch1
+  ;what is here is a value from the screens file
   lda (actionDataVectorLow),y
-  jsr bankswitch0
   sta actionCurrentID
+  jsr bankswitch0  
   ;check to see if action is hidden
   ;according to 
   ;fearLevel
@@ -3018,9 +3039,9 @@ print_char:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-; delay_1_sec:
-;   jsr DELAY_SEC
-;   rts
+delay_1_sec:
+  jsr DELAY_SEC
+  rts
 
 ; delay_2_sec:
 ;   jsr DELAY_SEC
