@@ -156,7 +156,7 @@ simulationTimeExpired=            $0230
 endScreenSimulationTimeisUp=      $0231
 timeRemainingLowByte=             $0232
 timeRemainingHighByte=            $0233
-;FREE               $0234  
+isEndScreenVariable=              $0234  
 flashlightToggleFlag=             $0235
 flashlightSecondsUsedLowByte=     $0236
 flashlightSecondsUsedHighByte=    $0237
@@ -607,8 +607,13 @@ checkEndScreen:
   inx
   lda screenPointersRAM,X
   sta sourceScreenVectorHigh
+  ;load the screen information from BANK1
+  jsr bankswitch1  
   ldy #$0
-  lda (sourceScreenVectorLow),Y
+  lda (sourceScreenVectorLow),Y  
+  sta isEndScreenVariable
+  jsr bankswitch0
+  lda isEndScreenVariable
   beq checkEndScreen_End
   lda #<msj_progressScreen1
   sta serialDataVectorLow  
