@@ -1184,7 +1184,6 @@ screen_actions_loop:
   lda (sourceScreenVectorLow),Y
   sta currentScreenAllActionsRAM,x ;is goes from 0 to 3 in max aciotns = 4
   iny
-  iny ;double the y because they are two bytes addresses
   inx
   cpx max_actions_per_screen
   bne screen_actions_loop
