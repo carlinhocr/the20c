@@ -156,7 +156,7 @@ simulationTimeExpired=            $0230
 endScreenSimulationTimeisUp=      $0231
 timeRemainingLowByte=             $0232
 timeRemainingHighByte=            $0233
-isEndScreenVariable=              $0234  
+isEndScreenVariable=              $0234
 flashlightToggleFlag=             $0235
 flashlightSecondsUsedLowByte=     $0236
 flashlightSecondsUsedHighByte=    $0237
@@ -358,7 +358,7 @@ mainProgram:
   jsr select_screen
   jsr draw_current_screen_table
   ;switch bank to 0   
-  jsr bankswitch0 
+  jsr bankswitch0
 mainProgramLoop:
   ;jsr simulationTimeWaterLevelCheck
   jsr printFlashlightStatus
@@ -373,13 +373,13 @@ mainProgramLoop:
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
   lda #$0
-  sta moveNextScreen ;reset the move next screen flag  
+  sta moveNextScreen ;reset the move next screen flag
   ;switch bank to 1  
   jsr bankswitch1  
   jsr select_screen
   jsr draw_current_screen_table
   ;switch bank to 0   
-  jsr bankswitch0    
+  jsr bankswitch0
   jsr checkEndScreen
   ;we 
   ;here the games continue so we jump to the loop and continue
@@ -417,7 +417,7 @@ bankswitch0_continue:
   tax
   pla
   tay
-  pla    
+  pla
   rts  
 
 bankswitch1:
@@ -440,7 +440,7 @@ bankswitch1_continue:
   tax
   pla
   tay
-  pla    
+  pla
   rts   
 
 ;END--------------------------------------------------------------------------------
@@ -612,18 +612,6 @@ checkSecretScreen_end:
   rts  
 
 checkEndScreen:
-;   ldx screen_is_end_screen_offset
-;   lda screenPointersRAM,X
-;   sta sourceScreenVectorLow
-;   inx
-;   lda screenPointersRAM,X
-;   sta sourceScreenVectorHigh
-;   ;load the screen information from BANK1
-;   jsr bankswitch1  
-;   ldy #$0
-;   lda (sourceScreenVectorLow),Y  
-;   sta isEndScreenVariable
-;   jsr bankswitch0
   lda isEndScreenVariable
   beq checkEndScreen_End
   lda #<msj_progressScreen1
@@ -759,6 +747,7 @@ initilizationRoutines:
   jsr loadConstants
   jsr initiatilizeActionsIDs
   jsr startTimerForRandom
+  jsr heartbeatOffSensor
   rts
 
 loadConstants:
@@ -1187,7 +1176,7 @@ screen_actions_loop:
   inx
   cpx max_actions_per_screen
   bne screen_actions_loop
-  rts  
+  rts
 
 draw_current_screen_table:
   jsr draw_screen_ascii
@@ -1337,20 +1326,10 @@ addActionCost_WaterLevel_End
 
 loadScreenActionOptions:
   jsr printActionsHeader
-;   ldx screen_action_offset  ;fist object byte offset
-;   lda screenPointersRAM,x 
-;   sta actionDataVectorLow  
-;   inx 
-;   lda screenPointersRAM,x 
-;   sta actionDataVectorHigh
   ldy #$0
 loadScreenActionOptions_loop:
-  ;jsr bankswitch1
-  ;what is here is a value from the screens file  
-  ;lda (actionDataVectorLow),y
   lda currentScreenAllActionsRAM,y
   sta actionCurrentID
-  ;jsr bankswitch0
   ;check to see if action is hidden
   ;according to 
   ;fearLevel
@@ -2255,15 +2234,6 @@ enemyProbabilityCalculation_FlashLightOff:
 enemyProbabilityCalculation_MultiplyScreenProb:
   ;multiply the enemy probability on the screen
   ;against the action cumullative and flashlight On prob
-;   ldx screen_enemy_probability_offset
-;   lda screenPointersRAM,X
-;   sta sourceScreenVectorLow
-;   inx
-;   lda screenPointersRAM,X
-;   sta sourceScreenVectorHigh
-;   ldy #$0
-;   lda (sourceScreenVectorLow),Y
-;   sta enemyProbCurrentScreen
   lda enemyProbActionCummPlusFlashlight
   sta multiFactor1
   lda enemyProbCurrentScreen
