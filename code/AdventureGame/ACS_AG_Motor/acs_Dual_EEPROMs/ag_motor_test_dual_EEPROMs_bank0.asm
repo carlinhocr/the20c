@@ -404,7 +404,7 @@ bankswitch0:
   txa ;save X because i am going to another process
   pha ;save X because i am going to another process
   ldx #$1
-  lda #0 ;select bank 1
+  lda #$0 ;select bank 1
   sta RS_PORTA
 bankswitch0_loop:
   txa
@@ -1172,7 +1172,6 @@ load_screen_variables:
   lda (sourceScreenVectorLow),Y
   sta enemyProbCurrentScreen
   ;screen actions
-  lda #$ff
   ldx screen_action_offset
   lda screenPointersRAM,X
   sta sourceScreenVectorLow
