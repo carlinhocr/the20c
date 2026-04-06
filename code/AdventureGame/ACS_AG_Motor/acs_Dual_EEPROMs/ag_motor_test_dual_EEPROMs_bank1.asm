@@ -1172,20 +1172,21 @@ load_screen_variables:
   lda (sourceScreenVectorLow),Y
   sta enemyProbCurrentScreen
   ;screen actions
-  lda #$ff
   ldx screen_action_offset
-  ldy #$0
-screen_actions_loop:
   lda screenPointersRAM,X
   sta sourceScreenVectorLow
   inx
   lda screenPointersRAM,X
   sta sourceScreenVectorHigh
+  ldy #$0
+  ldx #$0
+screen_actions_loop:
   lda (sourceScreenVectorLow),Y
   sta currentScreenAllActionsRAM,Y ;is goes from 0 to 3 in max aciotns = 4
-  inx
   iny
-  cpy max_actions_per_screen
+  iny ;double the y because they are two bytes addresses
+  inx
+  cpx max_actions_per_screen
   bne screen_actions_loop
   rts  
 
