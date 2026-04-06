@@ -221,8 +221,11 @@ dashboardEndScreenTimeUp=         $0271
 dashboardEndScreenActionFailed=   $0272
 dashboardHighFearLevel=           $0273
 dashboardHighWaterLevel=          $0274
+isSecretScreenVariable=           $0275
+secretsFound=                     $0276
 
 actionIDOptionsRAM=$0440 ;32 bytes but i only use 6
+currentScreenAllActionsRAM=$0460 ; i only use 6 bytes
 screenPointersRAM=$0500
 dashboardPointersRAM=$0600
 
@@ -361,6 +364,7 @@ mainProgramLoop:
   jsr printFlashlightStatus
   jsr action_selector
   jsr sensor_selector  
+  jsr checkSecretScreen
   lda gameEnded
   bne mainProgram
   ;jsr checkActionFailed
@@ -600,19 +604,26 @@ checkSimulationTimeisUp_End:
   ;jsr bin_2_ascii_waterLevel
   rts
 
+checkSecretScreen:
+  lda isSecretScreenVariable
+  beq checkSecretScreen_end
+  inc secretsFound
+checkSecretScreen_end:
+  rts  
+
 checkEndScreen:
-  ldx screen_is_end_screen_offset
-  lda screenPointersRAM,X
-  sta sourceScreenVectorLow
-  inx
-  lda screenPointersRAM,X
-  sta sourceScreenVectorHigh
-  ;load the screen information from BANK1
-  jsr bankswitch1  
-  ldy #$0
-  lda (sourceScreenVectorLow),Y  
-  sta isEndScreenVariable
-  jsr bankswitch0
+;   ldx screen_is_end_screen_offset
+;   lda screenPointersRAM,X
+;   sta sourceScreenVectorLow
+;   inx
+;   lda screenPointersRAM,X
+;   sta sourceScreenVectorHigh
+;   ;load the screen information from BANK1
+;   jsr bankswitch1  
+;   ldy #$0
+;   lda (sourceScreenVectorLow),Y  
+;   sta isEndScreenVariable
+;   jsr bankswitch0
   lda isEndScreenVariable
   beq checkEndScreen_End
   lda #<msj_progressScreen1
@@ -835,6 +846,7 @@ loadConstants:
   sta endByActionFailed
   sta endByDirectAction
   sta timerOn
+  sta secretsFound
   rts 
 
 
@@ -1096,6 +1108,7 @@ load_dashboard_ram_end:
 select_screen:
   lda screenCurrentID
   jsr load_screen_ram
+  jsr load_screen_variables
   rts
 
 load_screen_ram:
@@ -1126,6 +1139,55 @@ load_screen_ram_loop:
   jmp load_screen_ram_loop
 load_screen_ram_end:
   rts
+
+load_screen_variables:
+  ;end screen variable
+  ldx screen_is_end_screen_offset
+  lda screenPointersRAM,X
+  sta sourceScreenVectorLow
+  inx
+  lda screenPointersRAM,X
+  sta sourceScreenVectorHigh
+  ldy #$0
+  lda (sourceScreenVectorLow),Y  
+  sta isEndScreenVariable
+  ;secret screen variable
+  ldx screen_is_secret_screen_offset
+  lda screenPointersRAM,X
+  sta sourceScreenVectorLow
+  inx
+  lda screenPointersRAM,X
+  sta sourceScreenVectorHigh
+  ldy #$0
+  lda (sourceScreenVectorLow),Y  
+  sta isSecretScreenVariable
+  ;screen enemy probability
+  ldx screen_enemy_probability_offset
+  lda screenPointersRAM,X
+  sta sourceScreenVectorLow
+  inx
+  lda screenPointersRAM,X
+  sta sourceScreenVectorHigh
+  ldy #$0
+  lda (sourceScreenVectorLow),Y
+  sta enemyProbCurrentScreen
+  ;screen actions
+  lda #$ff
+  ldx screen_action_offset
+  ldy #$0
+screen_actions_loop:
+  lda screenPointersRAM,X
+  sta sourceScreenVectorLow
+  inx
+  lda screenPointersRAM,X
+  sta sourceScreenVectorHigh
+  lda (sourceScreenVectorLow),Y
+  sta currentScreenAllActionsRAM,Y ;is goes from 0 to 3 in max aciotns = 4
+  inx
+  iny
+  cpy max_actions_per_screen
+  bne screen_actions_loop
+  rts  
 
 draw_current_screen_table:
   jsr draw_screen_ascii
@@ -1275,19 +1337,20 @@ addActionCost_WaterLevel_End
 
 loadScreenActionOptions:
   jsr printActionsHeader
-  ldx screen_action_offset  ;fist object byte offset
-  lda screenPointersRAM,x 
-  sta actionDataVectorLow  
-  inx 
-  lda screenPointersRAM,x 
-  sta actionDataVectorHigh
+;   ldx screen_action_offset  ;fist object byte offset
+;   lda screenPointersRAM,x 
+;   sta actionDataVectorLow  
+;   inx 
+;   lda screenPointersRAM,x 
+;   sta actionDataVectorHigh
   ldy #$0
 loadScreenActionOptions_loop:
-  jsr bankswitch1
+  ;jsr bankswitch1
   ;what is here is a value from the screens file  
-  lda (actionDataVectorLow),y
+  ;lda (actionDataVectorLow),y
+  lda currentScreenAllActionsRAM,y
   sta actionCurrentID
-  jsr bankswitch0
+  ;jsr bankswitch0
   ;check to see if action is hidden
   ;according to 
   ;fearLevel
@@ -2192,15 +2255,15 @@ enemyProbabilityCalculation_FlashLightOff:
 enemyProbabilityCalculation_MultiplyScreenProb:
   ;multiply the enemy probability on the screen
   ;against the action cumullative and flashlight On prob
-  ldx screen_enemy_probability_offset
-  lda screenPointersRAM,X
-  sta sourceScreenVectorLow
-  inx
-  lda screenPointersRAM,X
-  sta sourceScreenVectorHigh
-  ldy #$0
-  lda (sourceScreenVectorLow),Y
-  sta enemyProbCurrentScreen
+;   ldx screen_enemy_probability_offset
+;   lda screenPointersRAM,X
+;   sta sourceScreenVectorLow
+;   inx
+;   lda screenPointersRAM,X
+;   sta sourceScreenVectorHigh
+;   ldy #$0
+;   lda (sourceScreenVectorLow),Y
+;   sta enemyProbCurrentScreen
   lda enemyProbActionCummPlusFlashlight
   sta multiFactor1
   lda enemyProbCurrentScreen
