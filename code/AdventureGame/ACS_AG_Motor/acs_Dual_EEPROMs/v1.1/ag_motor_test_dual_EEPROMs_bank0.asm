@@ -358,7 +358,7 @@ mainProgram:
   ;initialize screen as screen zero
   jsr initilizationRoutines
   jsr select_dashboard
-  jsr printerWelcomeMessage
+  ;jsr printerWelcomeMessage
   ;switch bank to 1  
   jsr bankswitch1
   jsr select_screen
