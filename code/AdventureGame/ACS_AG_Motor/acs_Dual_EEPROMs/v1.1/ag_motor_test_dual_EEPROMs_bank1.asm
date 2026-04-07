@@ -2781,9 +2781,11 @@ loopReceiveData:
   rts
 
 send_rs232_char:
+  pha ;store the character to print
   lda rs232Printer
   bne send_rs232_char_printer
 send_rs232_char_screen:
+  pla ;restore the character to print
   sta ACIA_DATA ;wrie whatever is on the accumulator to the transmit register
   ; preserve accumulator
   pha 
@@ -2818,6 +2820,7 @@ tx_delay_loop:
   rts
 
 send_rs232_char_printer:
+  pla ;restore the character to print
   sta ACIA_PRINTER_DATA ;wrie whatever is on the accumulator to the transmit register
   ; preserve accumulator
   pha 
