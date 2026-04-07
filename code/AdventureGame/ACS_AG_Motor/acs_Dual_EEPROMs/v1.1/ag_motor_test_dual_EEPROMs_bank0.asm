@@ -358,6 +358,7 @@ mainProgram:
   ;initialize screen as screen zero
   jsr initilizationRoutines
   jsr select_dashboard
+  jsr printerWelcomeMessage
   ;switch bank to 1  
   jsr bankswitch1
   jsr select_screen
@@ -2468,6 +2469,10 @@ msj_actionFailed:
 msj_actionSuceeded:  
   .ascii "La acción fue exitosa"
   .ascii "e"      
+
+msj_bienvenida:
+  .ascii "Bienvenido a la aventura"
+  .ascii "e"
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------SCREEN------------------------------------------
@@ -3260,6 +3265,19 @@ screen1_demo:
 
 initializePrinter:
   jsr printerReset
+  rts
+
+printerWelcomeMessage:
+  lda #<msj_bienvenida
+  sta serialDataVectorLow  
+  lda #>msj_bienvenida
+  sta serialDataVectorHigh
+  ;lets print on the printer
+  lda #$1
+  sta rs232Printer  
+  jsr initializePrinter
+  jsr printAsciiDrawing 
+  lda #$0
   rts
 
 testPrinter:  
