@@ -3276,8 +3276,10 @@ printerWelcomeMessage:
   lda #$1
   sta rs232Printer  
   jsr initializePrinter
+  jsr testPrinter  
   jsr printAsciiDrawing 
   lda #$0
+  sta rs232Printer  
   rts
 
 testPrinter:  
