@@ -355,35 +355,40 @@ programStart:
   jsr uartPrintSerialInit
   jsr screenInit
   jsr lcdDemoMessage
-  ;jmp listeningMode
-  ;start MainProgran and I save stack space by not jumping to it
-mainProgram:
-  ;initialize Variables 
-  ;initialize screen as screen zero
-  jsr initilizationRoutines
-  jsr select_dashboard
-  jsr select_screen
-  jsr draw_current_screen_table
-mainProgramLoop:
-  jsr printFlashlightStatus
-  jsr action_selector
-  jsr sensor_selector  
-  lda gameEnded
-  bne mainProgram
-  jsr checkActionFailed
-  jsr checkEnemyAppeared
-  jsr checkSimulationTimeisUp
-  lda moveNextScreen
-  beq mainProgramLoop;if zero do not move to next screen and ask for actions
-  lda #$0
-  sta moveNextScreen ;reset the move next screen flag
-  jsr select_screen
-  jsr draw_current_screen_table
-  jsr checkEndScreen
-  ;we 
-  ;here the games continue so we jump to the loop and continue
-  jmp mainProgramLoop   
-  rts
+  lda #$1 
+  sta rs232PrintFlag
+  jsr testPrinter
+loopMain:
+  jmp loopMain  
+;   ;jmp listeningMode
+;   ;start MainProgran and I save stack space by not jumping to it
+; mainProgram:
+;   ;initialize Variables 
+;   ;initialize screen as screen zero
+;   jsr initilizationRoutines
+;   jsr select_dashboard
+;   jsr select_screen
+;   jsr draw_current_screen_table
+; mainProgramLoop:
+;   jsr printFlashlightStatus
+;   jsr action_selector
+;   jsr sensor_selector  
+;   lda gameEnded
+;   bne mainProgram
+;   jsr checkActionFailed
+;   jsr checkEnemyAppeared
+;   jsr checkSimulationTimeisUp
+;   lda moveNextScreen
+;   beq mainProgramLoop;if zero do not move to next screen and ask for actions
+;   lda #$0
+;   sta moveNextScreen ;reset the move next screen flag
+;   jsr select_screen
+;   jsr draw_current_screen_table
+;   jsr checkEndScreen
+;   ;we 
+;   ;here the games continue so we jump to the loop and continue
+;   jmp mainProgramLoop   
+;   rts
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------MAIN-----------------------------------------------
@@ -2765,11 +2770,14 @@ loopReceiveData:
   rts
 
 send_rs232_char:
+  pha
   lda rs232PrintFlag
   beq send_rs232_char_screen
+  pla
   sta ACIA_PRINT_DATA
   jmp send_rs232_char_continue
 send_rs232_char_screen:  
+  pla
   sta ACIA_DATA ;wrie whatever is on the accumulator to the transmit register
 send_rs232_char_continue:
   ; preserve accumulator
@@ -2786,6 +2794,7 @@ tx_wait:
   lda rs232PrintFlag
   beq tx_wait_screen
   lda ACIA_PRINT_STATUS
+  jmp tx_wait_continue
 tx_wait_screen:  
   lda ACIA_STATUS
 tx_wait_continue:
