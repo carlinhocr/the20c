@@ -3285,7 +3285,7 @@ printerWelcomeMessage:
   rts
 
 testPrinter:
-  lda #$0
+  lda #$1
   sta rs232Printer
   jsr printerReset
   jsr probandoPrinter
