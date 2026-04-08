@@ -4232,7 +4232,7 @@ initialScreen:
 screens_index=$a100  ;  .include "acs_screens_bank1.asm" on bank 1 file
   .org $c000
   .include "acs_screens_headers_bank0.asm"
-  .org $d300  
+  .org $c300  
   .include "acs_actions_bank0.asm"
   .org $f900
   .include "acs_sensors.asm"

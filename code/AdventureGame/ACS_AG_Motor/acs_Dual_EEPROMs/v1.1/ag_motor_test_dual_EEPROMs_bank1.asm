@@ -4227,7 +4227,7 @@ initialScreen:
 ;---------------------------------------DATA----------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-actions_index=$d300  ;the same as   .include "acs_actions_bank0.asm" on bank0 file
+actions_index=$c300  ;the same as   .include "acs_actions_bank0.asm" on bank0 file
   .org $a100
   .include "acs_screens_bank1.asm"  
   .org $e000

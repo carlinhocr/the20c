@@ -1163,5 +1163,22 @@
         "ScreenID": 0,
         "Cost": 0,
         "Description": ""
+    },
+    "69": {
+        "ID": "69",
+        "Name": "MUERTE ACTION FAILED",
+        "Alias": "MUERTE ACTION FAILED",
+        "SensorID": 255,
+        "SensorActive": false,
+        "ScreenID": 255,
+        "Cost": 0,
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 255,
+        "Description": "Esta accion es muy peligrosa",
+        "DescriptionActionFailed": "La accion iba a fallar en un 100%",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     }
 }
