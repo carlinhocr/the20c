@@ -351,9 +351,9 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
-  jsr testPrinter
 loop:
-  jmp loop  
+  jsr testPrinter
+  jmp loop
   ;jmp listeningMode
   ;start MainProgran and I save stack space by not jumping to it
 mainProgram:
