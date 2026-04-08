@@ -351,6 +351,9 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr lcdDemoMessage
+  jsr testPrinter
+loop:
+  jmp loop  
   ;jmp listeningMode
   ;start MainProgran and I save stack space by not jumping to it
 mainProgram:
@@ -358,7 +361,6 @@ mainProgram:
   ;initialize screen as screen zero
   jsr initilizationRoutines
   jsr select_dashboard
-  ;jsr printerWelcomeMessage
   ;switch bank to 1  
   jsr bankswitch1
   jsr select_screen
@@ -3282,7 +3284,9 @@ printerWelcomeMessage:
   sta rs232Printer  
   rts
 
-testPrinter:  
+testPrinter:
+  lda #$1
+  sta rs232Printer
   jsr printerReset
   jsr probandoPrinter
   jsr printerBoldOn
