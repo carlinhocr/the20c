@@ -1158,11 +1158,19 @@
     "68": {
         "ID": "68",
         "Name": "TERMINAR EL JUEGO",
+        "Alias": "TERMINAR EL JUEGO",
         "SensorID": 4,
         "SensorActive": false,
         "ScreenID": 0,
         "Cost": 0,
-        "Description": ""
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 0,
+        "Description": "",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     },
     "69": {
         "ID": "69",

@@ -617,29 +617,29 @@ checkSecretScreen:
 checkSecretScreen_end:
   rts  
 
+checkEndScreen_End_Up:
+  ;here to avoid teh 127 byte distance for beq
+  rts  
+  
 checkEndScreen:
   lda isEndScreenVariable
-  beq checkEndScreen_End
+  beq checkEndScreen_End_Up
   lda #<msj_progressScreen1
   sta serialDataVectorLow  
   lda #>msj_progressScreen1
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
-  ;lets print on the printer
-  lda #$1
-  sta rs232Printer  
-  jsr initializePrinter
-  jsr printAsciiDrawing 
-  lda #$0
-  sta rs232Printer
+  jsr printAsciiDrawingPrinter 
   lda #<msj_progressScreen2
   sta serialDataVectorLow  
   lda #>msj_progressScreen2
   sta serialDataVectorHigh  
-  jsr send_rs232_line_noCRLF 
+  jsr send_rs232_line_noCRLF
+  jsr printAsciiDrawingPrinter  
   lda #$1
   sta gameEnded
   jsr setSimulationTimerBars
+  jsr printSimulationTimerBars
   jsr printSimulationTimerBars
   ;jsr bin_2_ascii_simulationTime
   lda #<msj_progressScreen3
@@ -647,6 +647,7 @@ checkEndScreen:
   lda #>msj_progressScreen3
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
+  jsr printAsciiDrawingPrinter 
   lda endByActionFailed
   beq checkEndScreen_TimeUp
   lda #<msj_progressScreen4
@@ -654,6 +655,7 @@ checkEndScreen:
   lda #>msj_progressScreen4
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
+  jsr printAsciiDrawingPrinter 
 checkEndScreen_TimeUp:
   lda endByTimeUp
   beq checkEndScreen_Enemy
@@ -662,6 +664,7 @@ checkEndScreen_TimeUp:
   lda #>msj_progressScreen5
   sta serialDataVectorHigh
   jsr printAsciiDrawing   
+  jsr printAsciiDrawingPrinter 
 checkEndScreen_Enemy:  
   lda endByEnemy
   beq checkEndScreen_ActionDirect
@@ -670,16 +673,37 @@ checkEndScreen_Enemy:
   lda #>msj_progressScreen6
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
+  jsr printAsciiDrawingPrinter 
 checkEndScreen_ActionDirect:
   lda endByDirectAction
-  beq checkEndScreen_End
+  beq checkEndScreen_Secrets
   lda #<msj_progressScreen7
   sta serialDataVectorLow  
   lda #>msj_progressScreen7
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
+  jsr printAsciiDrawingPrinter 
+checkEndScreen_Secrets:
+  lda #<msj_secretsFound
+  sta serialDataVectorLow  
+  lda #>msj_secretsFound
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing 
+  jsr printAsciiDrawingPrinter
 checkEndScreen_End:
-  rts  
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------ENDING---------------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;----------------------------PRINT RS232 ASCII--------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 
 delayClear:
   jsr delay_3_sec  
@@ -693,6 +717,26 @@ printClearRS232Screen:
   sta serialDataVectorHigh
   jsr printAsciiDrawing
   rts 
+
+printAsciiDrawingPrinter:  
+  ;lets print on the printer
+  lda #$1
+  sta rs232Printer  
+  jsr initializePrinter
+  jsr printAsciiDrawing 
+  lda #$0
+  sta rs232Printer
+  rts
+
+printSimulationTimerBarsPrinter:
+  ;lets print on the printer
+  lda #$1
+  sta rs232Printer  
+  jsr initializePrinter
+  jsr printSimulationTimerBars
+  lda #$0
+  sta rs232Printer
+  rts
 
 printAsciiDrawing:
   sei ;disable interrupts to run
@@ -743,7 +787,7 @@ printAsciiDrawing_end:
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;--------------------------------MAIN PROGRAM-------------------------------------
+;----------------------------PRINT RS232 ASCII--------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
@@ -2472,6 +2516,10 @@ msj_actionSuceeded:
 
 msj_bienvenida:
   .ascii "Bienvenido a la aventura"
+  .ascii "e"
+
+msj_secretsFound:
+  .ascii "Cantidad de Secretos que encontraste"
   .ascii "e"
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------

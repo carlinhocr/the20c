@@ -4661,7 +4661,7 @@ action_68_name:
   .ascii "e"
 
 action_68_alias:
-  .ascii ""
+  .ascii "TERMINAR EL JUEGO"
   .ascii "e"
 
 action_68_sensor_id:
