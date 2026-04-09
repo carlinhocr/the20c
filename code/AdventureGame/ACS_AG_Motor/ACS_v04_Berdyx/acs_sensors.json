@@ -1,0 +1,53 @@
+{
+    "0": {
+        "ID": "0",
+        "Name": "water",
+        "Active": false,
+        "DialogOn": "El agua cae siempre cae, nunca para.",
+        "DialogOff": ""
+    },
+    "1": {
+        "ID": "1",
+        "Name": "heart",
+        "Active": false,
+        "DialogOn": "Tu corazón late cada vez más rápido",
+        "DialogOff": "Estás mas calmado"
+    },
+    "2": {
+        "ID": "2",
+        "Name": "flashlight",
+        "Active": false,
+        "Toggle": 0,
+        "DialogOn": "Prendes la linterna",
+        "DialogOff": "Apagas la linterna"
+    },
+    "3": {
+        "ID": "3",
+        "Name": "timer1minuto",
+        "Active": false,
+        "DialogOn": "El tiempo empieza a correr no debes quedarte aqui mucho tiempo",
+        "DialogOff": "Aqui puedes tomartelo con calma, perono mucha"
+    },
+    "4": {
+        "ID": "4",
+        "Name": "gamePlaying",
+        "Active": false,
+        "DialogOn": "Comienza el Juego",
+        "DialogOff": "Terminó el Juego"
+    },
+    "5": {
+        "ID": "5",
+        "Name": "timer10minutos",
+        "Active": false,
+        "DialogOn": "Tenes 10 minutos para terminar el juego",
+        "DialogOff": "Se acabó tu tiempo"
+    },
+    "6": {
+        "ID": "6",
+        "Name": "flashlightheart",
+        "Active": false,
+        "Toggle": 1,
+        "DialogOn": "ACTIVAS LINTERNA, BAJAS CORAZON",
+        "DialogOff": "DESACTIVAS LINTERNA, AUMENTAS CORAZON"
+    }
+}
