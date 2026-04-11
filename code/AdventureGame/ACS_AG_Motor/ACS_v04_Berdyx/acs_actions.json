@@ -1171,5 +1171,22 @@
         "HideOnWaterLevelHigh": 0,
         "HideOnFearLevelHigh": 0,
         "HideWithFlashlightOff": 0
+    },
+    "69": {
+        "ID": "69",
+        "Name": "MUERTE DIRECTA",
+        "Alias": "MUERTE DIRECTA",
+        "SensorID": 255,
+        "SensorActive": false,
+        "ScreenID": 255,
+        "Cost": 0,
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 255,
+        "Description": "",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     }
 }

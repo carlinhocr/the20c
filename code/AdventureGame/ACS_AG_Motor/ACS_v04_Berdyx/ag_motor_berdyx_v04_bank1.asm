@@ -629,6 +629,10 @@ checkEndScreen:
   lda #>msj_progressScreen1
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
+  lda #<msj_progressScreen1
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen1
+  sta serialDataVectorHigh  
   jsr printAsciiDrawingPrinter 
   lda #<msj_progressScreen2
   sta serialDataVectorLow  
@@ -640,13 +644,17 @@ checkEndScreen:
   sta gameEnded
   jsr setSimulationTimerBars
   jsr printSimulationTimerBars
-  jsr printSimulationTimerBars
+  jsr printSimulationTimerBarsPrinter
   ;jsr bin_2_ascii_simulationTime
   lda #<msj_progressScreen3
   sta serialDataVectorLow  
   lda #>msj_progressScreen3
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
+  lda #<msj_progressScreen3
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen3
+  sta serialDataVectorHigh  
   jsr printAsciiDrawingPrinter 
   lda endByActionFailed
   beq checkEndScreen_TimeUp
@@ -664,6 +672,10 @@ checkEndScreen_TimeUp:
   lda #>msj_progressScreen5
   sta serialDataVectorHigh
   jsr printAsciiDrawing   
+  lda #<msj_progressScreen5
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen5
+  sta serialDataVectorHigh  
   jsr printAsciiDrawingPrinter 
 checkEndScreen_Enemy:  
   lda endByEnemy
@@ -673,6 +685,10 @@ checkEndScreen_Enemy:
   lda #>msj_progressScreen6
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
+  lda #<msj_progressScreen6
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen6
+  sta serialDataVectorHigh  
   jsr printAsciiDrawingPrinter 
 checkEndScreen_ActionDirect:
   lda endByDirectAction
@@ -682,6 +698,10 @@ checkEndScreen_ActionDirect:
   lda #>msj_progressScreen7
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
+  lda #<msj_progressScreen7
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen7
+  sta serialDataVectorHigh  
   jsr printAsciiDrawingPrinter 
 checkEndScreen_Secrets:
   lda #<msj_secretsFound
@@ -689,6 +709,10 @@ checkEndScreen_Secrets:
   lda #>msj_secretsFound
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
+  lda #<msj_secretsFound
+  sta serialDataVectorLow  
+  lda #>msj_secretsFound
+  sta serialDataVectorHigh  
   jsr printAsciiDrawingPrinter
 checkEndScreen_End:
   rts

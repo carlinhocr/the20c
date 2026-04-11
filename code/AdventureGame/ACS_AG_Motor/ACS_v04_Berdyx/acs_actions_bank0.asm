@@ -72,6 +72,7 @@ actions_index:
   .word action_pointer_66  ; S07P05-TRIANGULOS
   .word action_pointer_67  ; S07P06-CONTINUAR
   .word action_pointer_68  ; TERMINAR EL JUEGO
+  .word action_pointer_69  ; MUERTE DIRECTA
 actions_index_record_length:
   .byte 2  ; each actions_index entry is 1 .word (2 bytes)
 
@@ -1180,6 +1181,22 @@ action_pointer_68:
   .word action_68_hide_water         ; TERMINAR EL JUEGO hide_water         [2064,2065]
   .word action_68_hide_fear          ; TERMINAR EL JUEGO hide_fear          [2066,2067]
   .word action_68_hide_flashlight    ; TERMINAR EL JUEGO hide_flashlight    [2068,2069]
+action_pointer_69:
+  .word action_69_id            ; MUERTE DIRECTA id            [2070,2071]
+  .word action_69_name          ; MUERTE DIRECTA name          [2072,2073]
+  .word action_69_alias         ; MUERTE DIRECTA alias         [2074,2075]
+  .word action_69_sensor_id     ; MUERTE DIRECTA sensor_id     [2076,2077]
+  .word action_69_sensor_active ; MUERTE DIRECTA sensor_active [2078,2079]
+  .word action_69_screen        ; MUERTE DIRECTA screen        [2080,2081]
+  .word action_69_cost              ; MUERTE DIRECTA cost              [2082,2083]
+  .word action_69_enemy_probability ; MUERTE DIRECTA enemy_probability [2084,2085]
+  .word action_69_reset_enemy_prob  ; MUERTE DIRECTA reset_enemy_prob  [2086,2087]
+  .word action_69_death_probability ; MUERTE DIRECTA death_probability [2088,2089]
+  .word action_69_description       ; MUERTE DIRECTA description       [2090,2091]
+  .word action_69_desc_action_failed ; MUERTE DIRECTA desc_action_failed [2092,2093]
+  .word action_69_hide_water         ; MUERTE DIRECTA hide_water         [2094,2095]
+  .word action_69_hide_fear          ; MUERTE DIRECTA hide_fear          [2096,2097]
+  .word action_69_hide_flashlight    ; MUERTE DIRECTA hide_flashlight    [2098,2099]
 action_name_offset:
   .byte 2  ; (byte of action_0_name in actions_pointers)
 action_alias_offset:
@@ -4685,6 +4702,56 @@ action_68_hide_fear:
 action_68_hide_flashlight:
   .byte 0  ; off
 
+; ── Action 69: MUERTE DIRECTA ──────────────────────────
+action_69_id:
+  .byte 69
+
+action_69_name:
+  .ascii "MUERTE DIRECTA"
+  .ascii "e"
+
+action_69_alias:
+  .ascii "MUERTE DIRECTA"
+  .ascii "e"
+
+action_69_sensor_id:
+  .byte 255  ; none
+
+action_69_sensor_active:
+  .byte 0  ; off
+
+action_69_screen:
+  .byte 255  ; screen id
+
+action_69_cost:
+  .byte 0
+
+action_69_enemy_probability:
+  .byte 0
+
+action_69_reset_enemy_prob:
+  .byte 0  ; off
+
+action_69_death_probability:
+  .byte 255
+
+action_69_description:
+  .ascii ""
+  .ascii "e"
+
+action_69_desc_action_failed:
+  .ascii ""
+  .ascii "e"
+
+action_69_hide_water:
+  .byte 0  ; off
+
+action_69_hide_fear:
+  .byte 0  ; off
+
+action_69_hide_flashlight:
+  .byte 0  ; off
+
 ; ── Total action count ──────────────────────────────────────
 action_count:
-  .byte 69
+  .byte 70

@@ -3,7 +3,7 @@
         "ID": "0",
         "Name": "StartScreen",
         "Action1": "START-COMENZAR",
-        "Action2": "",
+        "Action2": "MUERTE DIRECTA",
         "Action3": "",
         "Action4": "",
         "Description": "LA CAVERNA TE LLAMA...",

@@ -668,7 +668,7 @@ screen_0_action1:
   .byte 0  ; START-COMENZAR
 
 screen_0_action2:
-  .byte 255  ; none
+  .byte 69  ; MUERTE DIRECTA
 
 screen_0_action3:
   .byte 255  ; none
