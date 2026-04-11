@@ -2241,6 +2241,7 @@ heartbeatSet:
   lda RS_PORTB ;load what is already on port B
   and #%10111110 ;keep bits 7,5,4,3,2,1 and reset bits 6, 1 and 0 of port b
   sta RS_PORTB
+  jsr DELAY_HALF_SEC
   ora heartRateSensor ;set bit 6 for sync and bit 0.
   sta RS_PORTB ;set the new value
   rts  
@@ -3234,12 +3235,12 @@ DELAY_SEC:
   sta delay_COUNT_B
   jmp DELAY_MAIN
 
-; DELAY_HALF_SEC:
-;   lda #$50
-;   sta delay_COUNT_A
-;   lda #$FF
-;   sta delay_COUNT_B
-;   jmp DELAY_MAIN
+DELAY_HALF_SEC:
+  lda #$50
+  sta delay_COUNT_A
+  lda #$FF
+  sta delay_COUNT_B
+  jmp DELAY_MAIN
 
 DELAY_MAIN:
     LDX delay_COUNT_A     ; Load outer loop count
