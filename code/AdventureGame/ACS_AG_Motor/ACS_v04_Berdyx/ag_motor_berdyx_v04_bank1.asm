@@ -2516,6 +2516,8 @@ msj_actionSuceeded:
 
 msj_bienvenida:
   .ascii "Bienvenido a la aventura"
+  .ascii ""
+  .ascii ""
   .ascii "e"
 
 msj_secretsFound:
@@ -4278,7 +4280,7 @@ initialScreen:
 actions_index=$c300  ;the same as   .include "acs_actions_bank0.asm" on bank0 file
   .org $a100
   .include "acs_screens_bank1.asm"  
-  .org $e000
+  .org $f500
   .include "acs_actions_headers_bank1.asm"
 ;   .org $d300  
 ;   .include "acs_actions.asm"

@@ -1715,7 +1715,16 @@ screen_20_description:
   .ascii "e"
 
 screen_20_ascii:
-  .ascii "DIBUJO DEL TOPE DEL POZO"
+  .ascii "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+  .ascii "░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▓▒▒▒▒▒▒▒▒▒▒▒▒░░░░░░░░"
+  .ascii "░░░░░░░░▒▒▒        ║          ▒▒▒░░░░░░░"
+  .ascii "░░░░░░▒▒           │   ≡≡≡≡      ▒▒░░░░░"
+  .ascii "░░░░░░▒     ≡≡≡≡   ║              ▒░░░░░"
+  .ascii "░░░░░░▒            │     ≡≡≡≡     ▒░░░░░"
+  .ascii "░░░░░░▒▒           ║             ▒▒░░░░░"
+  .ascii "░░░░░░░░▒▒▒    ≡≡≡≡│          ▒▒▒░░░░░░░"
+  .ascii "░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒░░░░░░░░"
+  .ascii "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
   .ascii "e"
 
 screen_20_flashlight_on:
@@ -1851,7 +1860,16 @@ screen_23_description:
   .ascii "e"
 
 screen_23_ascii:
-  .ascii "Cuarto Secreto: Soga cortada al borde de una saliente."
+  .ascii "░░░░║║░░░░"
+  .ascii "░░░░││░░░░"
+  .ascii "░░░░║║░░░░"
+  .ascii "░░░░││░░░░"
+  .ascii "░░░░║║░░░░"
+  .ascii "░░░░││░░░░"
+  .ascii "░░░░║║░░░░"
+  .ascii "░░░░│└░░░░"
+  .ascii "░░░░│░░░░░"
+  .ascii "░░░░░░░░░░"
   .ascii "e"
 
 screen_23_flashlight_on:
@@ -1989,7 +2007,13 @@ screen_26_description:
   .ascii "e"
 
 screen_26_ascii:
-  .ascii "Quinto Secreto: Anillo atrapado entre las raices."
+  .ascii "   ▄▄▀▀▀▀▀▀▀▀▀▄▄   "
+  .ascii " ▄▀ ░░░░R.C░░░░ ▀▄ "
+  .ascii "▄▀░             ░▀▄"
+  .ascii "█                 █"
+  .ascii "▀█▄▄           ▄▄█▀"
+  .ascii " ▀████▄▄▄▄▄▄▄████▀ "
+  .ascii "   ▀▀1874-1928▀▀   "
   .ascii "e"
 
 screen_26_flashlight_on:
@@ -2034,7 +2058,16 @@ screen_27_description:
   .ascii "e"
 
 screen_27_ascii:
-  .ascii ""
+  .ascii "▀▄░░░░▄▀▀▀▄▄░░░░░░░░░░▄▄▀▀░░░░░░░"
+  .ascii "░░▀▄▄▀░░░░░░▀▄░░░▄▄▀▀▀░░░░░░░░░░░"
+  .ascii "░░░░░░░░░░░░░▄▀▀▀▄░░░░░░░░▄▀▀▄░░░"
+  .ascii "░░░░▄▀▀▀▄░░▄▀░░░░░▀▀▄░░░░█░░░░▀▄░"
+  .ascii "▄ ▄▀░░░░░▀▄▀░░░░░░░░░▀▀▄▀▄░░░░░░░"
+  .ascii " ▀░░░░░░░▄█░░░░░░░░░▄▄▀░░█░░░░░░░"
+  .ascii "░░▄▀▀▄░░█░░▀▄░░░░░▄▀░░░░░░▀▄░░░░░"
+  .ascii "░▄▀░░░▀▀░░░░░▀▄▄░░░█░░░░░░░░█░░░░"
+  .ascii "█░░░░░░░░░░▄▄▀░░▀▄░░▀▄░░░░░░█░░░░"
+  .ascii "░░░░░░░░▄▀▀░░░░░░░▀▄░░█░░░░░░▀▄▀░"
   .ascii "e"
 
 screen_27_flashlight_on:
@@ -2137,7 +2170,16 @@ screen_29_description:
   .ascii "e"
 
 screen_29_ascii:
-  .ascii "DIBUJO DEL TUNEL INUNDADO"
+  .ascii "░░░░░░░░░░░░░▄▄▄▄▄▄▄▄▄▄▄▄▄░░░░░░░░░░░░░░"
+  .ascii "░░░░░░░░░░░████▀▀▀▀▀▀▀▀▀████░░░░░░░░░░░░"
+  .ascii "░░░░░░░░░░██▀             ▀██░░░░░░░░░░░"
+  .ascii "░░░░░░░░░██      ≈  ≈       ██░░░░░░░░░░"
+  .ascii "░░░░░░░░███                 ███░░░░░░░░░"
+  .ascii "░░░░░░░░██░   ≈    ≈     ≈  ░██░░░░░░░░░"
+  .ascii "▒▒▒▒▒▒▒▒░░                   ░░▒▒▒▒▒▒▒▒▒"
+  .ascii "▒▒▒▒▒▒▒░░                     ░░▒▒▒▒▒▒▒▒"
+  .ascii "▒▒▒▒▒▒░░      ≈       ≈        ░░▒▒▒▒▒▒▒"
+  .ascii "▒▒▒▒▒░░                         ░░▒▒▒▒▒▒"
   .ascii "e"
 
 screen_29_flashlight_on:
@@ -2226,12 +2268,23 @@ screen_31_action4:
   .byte 255  ; none
 
 screen_31_description:
+  .ascii "UNA LINTERNA SIMILAR A LA TUYA, ENCENDIDA BAJO EL AGUA. "
+  .ascii "OTRAS COSAS TAMBIEN BRILLAN AHI."
+  .ascii ""
   .ascii "¿ES ACASO ESTO UN SUEÑO?"
   .ascii "e"
 
 screen_31_ascii:
-  .ascii "Sexto Secreto: Linterna similar a la tuya. Su luz apunta al fondo, ves a una"
-  .ascii "persona similar a ti en compañia de algo que no parece ser humano."
+  .ascii "             ≈                   ≈      "
+  .ascii "                   ♦    ♦               "
+  .ascii "     ≈               ≈        ≈         "
+  .ascii "          ▄▀▀█▀▀▀▄                      "
+  .ascii "         █▓▓▓▓█   █▀▀▀▀▀▀▀▀▀▀▄      ≈   "
+  .ascii " ≈      █▓▓▓▓▓▓█              █         "
+  .ascii "         █▓▓▓▓█   █▄▄▄▄▄▄▄▄▄▄▀          "
+  .ascii "          ▀▄▄█▄▄▄▀                      "
+  .ascii "   ≈                 ≈           ≈      "
+  .ascii "                                        "
   .ascii "e"
 
 screen_31_flashlight_on:
@@ -2325,13 +2378,18 @@ screen_33_action4:
 screen_33_description:
   .ascii "Estar en el centro de la sala genera una sensación de exposición, como si el"
   .ascii "lugar hubiera sido diseñado para observar lo que ocurre ahí."
+  .ascii "El pilar contiene simbolos que pueden ser presionados."
   .ascii "e"
 
 screen_33_ascii:
-  .ascii "Dibujo de los 4 simbolos: triangulos, linea vertical, ondas. Un simbolo de"
-  .ascii "Estrella se encuentra alejado del resto."
-  .ascii ""
-  .ascii "TEXTO: \"RECUERDA TU CAMINO, TU RECORRIDO ESTA POR TERMINAR\""
+  .ascii "███████████████████████████████"
+  .ascii "██RECUERDA TU CAMINO.██████████"
+  .ascii "██EL FINAL SE ACERCA.███┌───┐██"
+  .ascii "████████████████████████│ ☼ │██"
+  .ascii "██┌────┐ ┌───┐ ┌───┐████└───┘██"
+  .ascii "██│ ▲▼ │ │ ║ │ │ ≈ │███████████"
+  .ascii "██└────┘ └───┘ └───┘███████████"
+  .ascii "███████████████████████████████"
   .ascii "e"
 
 screen_33_flashlight_on:
@@ -2517,17 +2575,22 @@ screen_37_action4:
   .byte 255  ; none
 
 screen_37_description:
+  .ascii "EN EL CENTRO DE LA ESTRELLA APARECE UN OJO Y UNA LEYENDA SE IMPRIME EN TU MENTE."
   .ascii "EL MIEDO SE APODERA DE TI. LO QUE LEISTE FUE DEMASIADO PARA TU CORDURA."
   .ascii ""
   .ascii "e"
 
 screen_37_ascii:
-  .ascii "Secreto: En el centro de la estrella aparece un ojo. Te dice:"
-  .ascii "Secreto: La frase dice:"
-  .ascii ""
-  .ascii "\"Y'bthnk...H 'ehye n'grkdl'lh...\""
-  .ascii ""
-  .ascii ""
+  .ascii "              ██               "
+  .ascii "             ████              "
+  .ascii "            ▄████▄             "
+  .ascii "        ████░░░░░░████         "
+  .ascii "         ▀█░░░0δ░░░█▀          "
+  .ascii "           █░░░░░░█            "
+  .ascii "          ██▀▀  ▀▀██           "
+  .ascii "         ██        ██          "
+  .ascii "                               "
+  .ascii "Y'bthnk...H 'ehye n'grkdl'lh..."
   .ascii "e"
 
 screen_37_flashlight_on:
@@ -2577,12 +2640,27 @@ screen_38_description:
   .ascii "El agua no te sigue."
   .ascii "La caverna no se derrumba."
   .ascii "Simplemente deja de importarte..."
-  .ascii ""
-  .ascii "Tu humanidad quedo enterrada alli."
   .ascii "e"
 
 screen_38_ascii:
-  .ascii "DIBUJO FINAL"
+  .ascii "    .     .     .   "
+  .ascii "  ◄    .            "
+  .ascii "     .     .  .  .  "
+  .ascii "  .     .           "
+  .ascii "    .       .  .    "
+  .ascii "       ░░░          "
+  .ascii "   ░░░░░░░░         "
+  .ascii " ░░░░░░░░░░░░       "
+  .ascii "░░░░░░░░░º░░░░  ¥ ¥ "
+  .ascii "▒▒▒▒▒▒▒▒▓▓▓▒▒▒▒▒▒▒▒▒"
+  .ascii "▒▒▒▒▒▒▒▒▒▓▓▓▒▒▒▒▒▒▒▒"
+  .ascii "▒▒▒▒▒▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒"
+  .ascii "                    "
+  .ascii " ESCAPASTE DE       "
+  .ascii " LA CAVERNA         "
+  .ascii "                    "
+  .ascii " TU HUMANIDAD QUEDO "
+  .ascii " ENTERRADA ALLI     "
   .ascii "e"
 
 screen_38_flashlight_on:
@@ -2623,11 +2701,25 @@ screen_39_action4:
   .byte 255  ; none
 
 screen_39_description:
-  .ascii "Tardaste Muuuucho y te quedaste sin tiempo....."
+  .ascii ""
   .ascii "e"
 
 screen_39_ascii:
-  .ascii ""
+  .ascii "█████████████"
+  .ascii "█▄▄▄▄▄▄▄▄▄▄▄█"
+  .ascii " █         █ "
+  .ascii "  ▀▄     ▄▀  "
+  .ascii "    ▀▄ ▄▀    "
+  .ascii "     █ █     "
+  .ascii "   ▄▀ ▄ ▀▄   "
+  .ascii " ▄▀ ▄ ▄ ▄ ▀▄ "
+  .ascii "▄█▄█▄█▄█▄█▄█▄"
+  .ascii "█▄▄▄▄▄▄▄▄▄▄▄█"
+  .ascii "▀▀▀▀▀▀▀▀▀▀▀▀▀"
+  .ascii "             "
+  .ascii "EL AGUA INUND"
+  .ascii "             "
+  .ascii " LA CAVERNA  "
   .ascii "e"
 
 screen_39_flashlight_on:
@@ -2668,11 +2760,22 @@ screen_40_action4:
   .byte 255  ; none
 
 screen_40_description:
-  .ascii "El enemigo que siempre acechaba te atrapó, este es tu fin"
+  .ascii ""
   .ascii "e"
 
 screen_40_ascii:
-  .ascii ""
+  .ascii "    ♦     ♦    "
+  .ascii "               "
+  .ascii "               "
+  .ascii "               "
+  .ascii "               "
+  .ascii "               "
+  .ascii "               "
+  .ascii "               "
+  .ascii "               "
+  .ascii "TIENES COMPAÑIA"
+  .ascii "               "
+  .ascii " EN LA CAVERNA "
   .ascii "e"
 
 screen_40_flashlight_on:
@@ -2713,11 +2816,26 @@ screen_41_action4:
   .byte 255  ; none
 
 screen_41_description:
-  .ascii "Tu acción tenía una gran chance de fallar y falló. Este es tu fin"
+  .ascii ""
   .ascii "e"
 
 screen_41_ascii:
-  .ascii ""
+  .ascii "  ▄▄▄▄▄▄▄▄▄  "
+  .ascii " ███████████ "
+  .ascii "█████████████"
+  .ascii "███  ███  ███"
+  .ascii "█████████████"
+  .ascii " █████ █████ "
+  .ascii "  █████████  "
+  .ascii "   █ █ █ █   "
+  .ascii "   ███████   "
+  .ascii "    ▀▀▀▀▀    "
+  .ascii "             "
+  .ascii " LA CAVERNA  "
+  .ascii "             "
+  .ascii "   DECIDIO   "
+  .ascii "             "
+  .ascii " TU DESTINO  "
   .ascii "e"
 
 screen_41_flashlight_on:

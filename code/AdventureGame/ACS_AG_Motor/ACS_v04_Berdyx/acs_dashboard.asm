@@ -184,16 +184,16 @@ dashboard_0_enemy_flash_on:
   .byte 2
 
 dashboard_0_end_screen_default:
-  .byte 255  ; screen id
+  .byte 39  ; screen id
 
 dashboard_0_end_screen_enemy:
-  .byte 255  ; screen id
+  .byte 40  ; screen id
 
 dashboard_0_end_screen_timeup:
-  .byte 255  ; screen id
+  .byte 39  ; screen id
 
 dashboard_0_end_screen_enemy_af:
-  .byte 255  ; screen id
+  .byte 41  ; screen id
 
 ; ── Total dashboard count ──────────────────────────────────────
 dashboard_count:
