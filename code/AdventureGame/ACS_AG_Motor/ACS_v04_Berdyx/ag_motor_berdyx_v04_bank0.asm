@@ -639,6 +639,10 @@ checkEndScreen:
   lda #>msj_progressScreen2
   sta serialDataVectorHigh  
   jsr send_rs232_line_noCRLF
+  lda #<msj_progressScreen2
+  sta serialDataVectorLow  
+  lda #>msj_progressScreen2
+  sta serialDataVectorHigh
   jsr printAsciiDrawingPrinter  
   lda #$1
   sta gameEnded
