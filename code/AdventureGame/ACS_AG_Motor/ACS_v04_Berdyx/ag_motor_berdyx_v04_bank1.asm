@@ -670,7 +670,7 @@ checkEndScreen:
   lda #<msj_progressScreen4
   sta serialDataVectorLow  
   lda #>msj_progressScreen4
-  sta serialDataVectorHigh  
+  sta serialDataVectorHigh
   jsr printAsciiDrawingPrinter 
 checkEndScreen_TimeUp:
   lda endByTimeUp
