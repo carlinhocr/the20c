@@ -25,14 +25,14 @@ void beatOff()
 
 void waterOn()
 {
-//0 is using the relay to turn on
-  digitalWrite(OUT1, 0);
+//0 is using the mosfet to turn on
+  digitalWrite(OUT1, 1);
 }
 
 void waterOff()
 {
-//1 is using the relay to turn off
-  digitalWrite(OUT1, 1);
+//1 is using the mosfet to turn off
+  digitalWrite(OUT1, 0);
 }
 
 void onSync()
@@ -90,7 +90,7 @@ void setup()
   pinMode(PB1, INPUT_PULLUP);
   pinMode(OUT1, OUTPUT);
   pinMode(OUT2, OUTPUT);
-
+  digitalWrite(OUT1, 0);
   // each time that on pin 2 (SYNC) i receive a HIGH on the rising edge run the onSync function
   attachInterrupt(digitalPinToInterrupt(SYNC), onSync, FALLING); 
   Serial.begin(115200);
