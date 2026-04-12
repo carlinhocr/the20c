@@ -667,9 +667,9 @@ checkEndScreen:
   lda #>msj_progressScreen4
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
-  lda #<msj_progressScreen4
+  lda #<msj_progressScreen4_printer
   sta serialDataVectorLow  
-  lda #>msj_progressScreen4
+  lda #>msj_progressScreen4_printer
   sta serialDataVectorHigh
   jsr printAsciiDrawingPrinter 
 checkEndScreen_TimeUp:
@@ -706,9 +706,9 @@ checkEndScreen_ActionDirect:
   lda #>msj_progressScreen7
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
-  lda #<msj_progressScreen7
+  lda #<msj_progressScreen7_printer
   sta serialDataVectorLow  
-  lda #>msj_progressScreen7
+  lda #>msj_progressScreen7_printer
   sta serialDataVectorHigh  
   jsr printAsciiDrawingPrinter 
 checkEndScreen_Secrets:
@@ -717,11 +717,13 @@ checkEndScreen_Secrets:
   lda #>msj_secretsFound
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
+  jsr bin_2_ascii_secrets
   lda #<msj_secretsFound
   sta serialDataVectorLow  
   lda #>msj_secretsFound
   sta serialDataVectorHigh  
   jsr printAsciiDrawingPrinter
+  jsr bin_2_ascii_secrets_printer
 checkEndScreen_End:
   rts
 
@@ -2500,16 +2502,23 @@ option_unknown:
 msj_progressScreen1:
   .ascii "Tu recorrido en el juego "
   .ascii "e"     
+
 msj_progressScreen2:  
   .ascii "Segundos Transcurridos: "
+  .ascii "e" 
 
 msj_progressScreen3:
   .ascii "Moriste porque.... "
   .ascii "e" 
 
 msj_progressScreen4:
-  .ascii "Tu acción tuve probabilidad de fallar y falló"
+  .ascii "Tu acción tuvo probabilidad de fallar y falló"
   .ascii "e"   
+
+msj_progressScreen4_printer:
+  .ascii "Tu accion tuvo probabilidad"
+  .ascii "de fallar y fallo"
+  .ascii "e"
 
 msj_progressScreen5:
   .ascii "Te quedaste sin tiempo"
@@ -2522,6 +2531,11 @@ msj_progressScreen6:
 msj_progressScreen7:
   .ascii "Tu acción fue super temeraria y nunca iba a funcionar"
   .ascii "e"    
+
+msj_progressScreen7_printer:
+  .ascii "Tu accion fue temeraria"
+  .ascii "nunca iba a funcionar"  
+  .ascii "e" 
 
 msj_flashlightOff:
   .ascii "Tu linterna no tiene más bateria"
@@ -2553,8 +2567,9 @@ msj_bienvenida:
   .ascii "e"
 
 msj_secretsFound:
-  .ascii "Cantidad de Secretos que encontraste"
+  .ascii "Cantidad de Secretos encontrados"
   .ascii "e"
+
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------SCREEN------------------------------------------
@@ -3738,6 +3753,34 @@ bin_2_ascii_actionFailedProbabilityTotal:
   jsr bin_2_ascii_print_message  
   rts     
 
+bin_2_ascii_secrets:
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda secretsFound
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  jsr bin_2_ascii_print_message  
+  rts 
+
+bin_2_ascii_secrets_printer:
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda secretsFound
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  lda #$1
+  sta rs232Printer  
+  jsr initializePrinter
+  jsr bin_2_ascii_print_message  
+  lda #$0
+  sta rs232Printer
+  rts 
 
 bin_2_ascii_print_message
   ldx #$0
@@ -3781,7 +3824,7 @@ divloop:
   rol mod10 + 1
 
   ;substract 1010, we will do it 8 bits at a time
-   sec ; set the carry bit
+  sec ; set the carry bit
   lda mod10
   sbc #10 ;substract with carry from 10
   tay ; save the low part of the 16 bits of the remainder to register y
