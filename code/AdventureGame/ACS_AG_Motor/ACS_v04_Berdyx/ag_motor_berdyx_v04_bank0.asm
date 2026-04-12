@@ -629,6 +629,11 @@ checkEndScreen:
   lda #>msj_progressScreen1
   sta serialDataVectorHigh
   jsr printAsciiDrawing 
+  lda #<msj_end_printer
+  sta serialDataVectorLow  
+  lda #>msj_end_printer
+  sta serialDataVectorHigh
+  jsr printAsciiDrawingPrinter
   lda #<msj_progressScreen1
   sta serialDataVectorLow  
   lda #>msj_progressScreen1
@@ -2568,6 +2573,26 @@ msj_bienvenida:
 
 msj_secretsFound:
   .ascii "Cantidad de Secretos encontrados"
+  .ascii "e"
+
+msj_end_printer:
+  .ascii "  _________  "
+  .ascii " ########### "
+  .ascii "#############"
+  .ascii "###  ###  ###"
+  .ascii "#############"
+  .ascii " ##### ##### "
+  .ascii "  #########  "
+  .ascii "   # # # #   "
+  .ascii "   #######   "
+  .ascii "    -----    "
+  .ascii "             "
+  .ascii " LA CAVERNA  "
+  .ascii "             "
+  .ascii "   DECIDIO   "
+  .ascii "             "
+  .ascii " TU DESTINO  "
+  .ascii " "
   .ascii "e"
 
 ;END--------------------------------------------------------------------------------
