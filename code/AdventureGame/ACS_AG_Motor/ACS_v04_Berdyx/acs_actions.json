@@ -1188,5 +1188,22 @@
         "HideOnWaterLevelHigh": 0,
         "HideOnFearLevelHigh": 0,
         "HideWithFlashlightOff": 0
+    },
+    "70": {
+        "ID": "70",
+        "Name": "LINTERNA SOLA",
+        "Alias": "LINTERNA SOLA",
+        "SensorID": 2,
+        "SensorActive": true,
+        "ScreenID": 255,
+        "Cost": 0,
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 0,
+        "Description": "",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     }
 }

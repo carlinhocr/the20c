@@ -138,7 +138,7 @@ sensor_2_dialog_off:
   .ascii "e"
 
 sensor_2_toggle:
-  .byte 0  ; normal
+  .byte 1  ; toggle
 
 ; ── Sensor 3: timer1minuto ──────────────────────────
 sensor_3_id:

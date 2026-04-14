@@ -73,6 +73,7 @@ actions_index:
   .word action_pointer_67  ; S07P06-CONTINUAR
   .word action_pointer_68  ; TERMINAR EL JUEGO
   .word action_pointer_69  ; MUERTE DIRECTA
+  .word action_pointer_70  ; LINTERNA SOLA
 actions_index_record_length:
   .byte 2  ; each actions_index entry is 1 .word (2 bytes)
 
@@ -1197,6 +1198,22 @@ action_pointer_69:
   .word action_69_hide_water         ; MUERTE DIRECTA hide_water         [2094,2095]
   .word action_69_hide_fear          ; MUERTE DIRECTA hide_fear          [2096,2097]
   .word action_69_hide_flashlight    ; MUERTE DIRECTA hide_flashlight    [2098,2099]
+action_pointer_70:
+  .word action_70_id            ; LINTERNA SOLA id            [2100,2101]
+  .word action_70_name          ; LINTERNA SOLA name          [2102,2103]
+  .word action_70_alias         ; LINTERNA SOLA alias         [2104,2105]
+  .word action_70_sensor_id     ; LINTERNA SOLA sensor_id     [2106,2107]
+  .word action_70_sensor_active ; LINTERNA SOLA sensor_active [2108,2109]
+  .word action_70_screen        ; LINTERNA SOLA screen        [2110,2111]
+  .word action_70_cost              ; LINTERNA SOLA cost              [2112,2113]
+  .word action_70_enemy_probability ; LINTERNA SOLA enemy_probability [2114,2115]
+  .word action_70_reset_enemy_prob  ; LINTERNA SOLA reset_enemy_prob  [2116,2117]
+  .word action_70_death_probability ; LINTERNA SOLA death_probability [2118,2119]
+  .word action_70_description       ; LINTERNA SOLA description       [2120,2121]
+  .word action_70_desc_action_failed ; LINTERNA SOLA desc_action_failed [2122,2123]
+  .word action_70_hide_water         ; LINTERNA SOLA hide_water         [2124,2125]
+  .word action_70_hide_fear          ; LINTERNA SOLA hide_fear          [2126,2127]
+  .word action_70_hide_flashlight    ; LINTERNA SOLA hide_flashlight    [2128,2129]
 action_name_offset:
   .byte 2  ; (byte of action_0_name in actions_pointers)
 action_alias_offset:
@@ -4752,6 +4769,56 @@ action_69_hide_fear:
 action_69_hide_flashlight:
   .byte 0  ; off
 
+; ── Action 70: LINTERNA SOLA ──────────────────────────
+action_70_id:
+  .byte 70
+
+action_70_name:
+  .ascii "LINTERNA SOLA"
+  .ascii "e"
+
+action_70_alias:
+  .ascii "LINTERNA SOLA"
+  .ascii "e"
+
+action_70_sensor_id:
+  .byte 2  ; none
+
+action_70_sensor_active:
+  .byte 1  ; on
+
+action_70_screen:
+  .byte 255  ; screen id
+
+action_70_cost:
+  .byte 0
+
+action_70_enemy_probability:
+  .byte 0
+
+action_70_reset_enemy_prob:
+  .byte 0  ; off
+
+action_70_death_probability:
+  .byte 0
+
+action_70_description:
+  .ascii ""
+  .ascii "e"
+
+action_70_desc_action_failed:
+  .ascii ""
+  .ascii "e"
+
+action_70_hide_water:
+  .byte 0  ; off
+
+action_70_hide_fear:
+  .byte 0  ; off
+
+action_70_hide_flashlight:
+  .byte 0  ; off
+
 ; ── Total action count ──────────────────────────────────────
 action_count:
-  .byte 70
+  .byte 71

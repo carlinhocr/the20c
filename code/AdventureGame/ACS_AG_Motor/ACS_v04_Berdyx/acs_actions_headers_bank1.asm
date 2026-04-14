@@ -36,4 +36,4 @@ action_record_length:
   .byte 30  ; (total .word bytes per action record)
 ; ── Total action count ──────────────────────────────────────
 action_count:
-  .byte 70
+  .byte 71

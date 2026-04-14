@@ -671,10 +671,10 @@ screen_0_action2:
   .byte 69  ; MUERTE DIRECTA
 
 screen_0_action3:
-  .byte 255  ; none
+  .byte 70  ; LINTERNA SOLA
 
 screen_0_action4:
-  .byte 255  ; none
+  .byte 3  ; LINTERNACORAZON-TOGGLE
 
 screen_0_description:
   .ascii "LA CAVERNA TE LLAMA..."
