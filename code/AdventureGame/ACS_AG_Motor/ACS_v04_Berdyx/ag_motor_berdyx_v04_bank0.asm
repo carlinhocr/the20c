@@ -2607,6 +2607,8 @@ msj_bienvenida:
   .ascii "Bienvenido a la aventura"
   .ascii ""
   .ascii ""
+  .ascii ""
+  .ascii ""
   .ascii "e"
 
 msj_secretsFound:
