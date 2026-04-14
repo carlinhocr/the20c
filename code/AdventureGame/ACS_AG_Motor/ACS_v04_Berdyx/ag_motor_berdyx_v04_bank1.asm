@@ -1620,6 +1620,8 @@ receiveUserOptionSelection_loop:
   lda userOptionSelection
   cmp #$ff   
   beq receiveUserOptionSelection_loop
+  cmp #$4 ; fire button is disabled
+  beq receiveUserOptionSelection_loop
   ;we have a valid user input 
   sei ;disable user action until we know if valid action if not ask again
   lda LCD_T2CL
