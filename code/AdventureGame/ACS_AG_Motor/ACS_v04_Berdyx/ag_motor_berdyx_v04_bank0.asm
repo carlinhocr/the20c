@@ -229,6 +229,7 @@ dashboardHighWaterLevel=          $0274
 isSecretScreenVariable=           $0275
 secretsFound=                     $0276
 rs232Printer=                     $0277
+flashLightSensor=                 $0278
 
 actionIDOptionsRAM=$0440 ;32 bytes but i only use 6
 currentScreenAllActionsRAM=$0460 ; i only use 6 bytes
@@ -933,6 +934,7 @@ loadConstants:
   sta timerOn
   sta secretsFound
   sta rs232Printer
+  sta flashLightSensor
   rts 
 
 
@@ -1974,6 +1976,7 @@ sensor_2_run:
   lda #>msj_flashlightOff
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  jsr flashLightOffSensor
   lda #$0
   sta flashlightStatus
   jmp sensor_2_run_End
@@ -2009,11 +2012,13 @@ sensor_2_run_flashlight_with_batteries:
   jsr send_rs232_char  
   lda flashlightStatus  
   beq sensor_2_toggle_one 
+  jsr flashLightOffSensor
   lda #$0
   sta flashlightStatus
   sta sensorCurrentStatus
   jmp sensor_2_run_not_toggle
 sensor_2_toggle_one:
+  jsr flashLightOnSensor
   lda #$1
   sta flashlightStatus
   sta sensorCurrentStatus
@@ -2055,6 +2060,7 @@ sensor_6_run:
   lda #>msj_flashlightOff
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  jsr flashLightOffSensor
   lda #$0
   sta flashlightStatus
   lda #$1
@@ -2093,6 +2099,7 @@ sensor_6_run_flashlight_with_batteries:
   jsr send_rs232_char  
   lda flashlightStatus  
   beq sensor_6_toggle_one 
+  jsr flashLightOffSensor
   lda #$0
   sta flashlightStatus
   sta sensorCurrentStatus
@@ -2101,6 +2108,7 @@ sensor_6_run_flashlight_with_batteries:
   jsr heartbeatOnSensor
   jmp sensor_6_run_not_toggle
 sensor_6_toggle_one:
+  jsr flashLightOnSensor
   lda #$1
   sta flashlightStatus
   sta sensorCurrentStatus  
@@ -2229,6 +2237,7 @@ printFlashlightStatus:
   jsr printFlashlightTimerBars_Reverse
 printFlashlightStatus_End:
   rts
+
 heartbeatOnSensor:
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   lda #%01000001 ;bit 0 on 1 turn on heartrate 
@@ -2243,6 +2252,33 @@ heartbeatOffSensor:
   jsr heartbeatSet
   rts
 
+flashLightOnSensor:
+  lda #$1
+  sta flashlightStatus
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
+  lda #%01000100 ;bit 0 on 1 turn on heartrate 
+  sta flashLightSensor
+  jsr flashLightSet
+  rts
+
+flashLightOffSensor:
+  lda #$0
+  sta flashlightStatus
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
+  lda #%01000000 ;bit 0 on 0 turn off heartrate
+  sta flashLightSensor
+  jsr flashLightSet
+  rts
+
+flashLightSet:
+  ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
+  ;we will modify port b bits PB1 and PB0
+  lda RS_PORTB ;load what is already on port B
+  and #%10111011 ;keep bits 7,5,4,3,2,1 and reset bits 6, 2 of port b
+  sta RS_PORTB
+  ora flashLightSensor ;set bit 6 for sync and bit 0.
+  sta RS_PORTB ;set the new value
+  rts  
 
 increaseWaterLevelSensor:
   jsr waterOnSensor
