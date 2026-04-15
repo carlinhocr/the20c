@@ -360,14 +360,21 @@ mainProgram:
   jsr initilizationRoutines
   jsr select_dashboard
   jsr printerWelcomeMessage
-  ;switch bank to 1  
-  jsr bankswitch1
+  ; ;switch bank to 1  
+  ; jsr bankswitch1
+  ; jsr select_screen
+  ; jsr draw_current_screen_table
+  ; ;switch bank to 0   
+  ; jsr bankswitch0
+mainProgramLoop:
+  lda #$0
+  sta moveNextScreen ;reset the move next screen flag
+  ;switch bank to 1    
+  jsr bankswitch1  
   jsr select_screen
   jsr draw_current_screen_table
   ;switch bank to 0   
   jsr bankswitch0
-mainProgramLoop:
-  ;jsr simulationTimeWaterLevelCheck
   jsr printFlashlightStatus
   jsr action_selector
   jsr sensor_selector  
@@ -379,19 +386,59 @@ mainProgramLoop:
   jsr checkSimulationTimeisUp
   lda moveNextScreen
   beq mainProgramLoop;if zero do not move to next screen and ask for actions
-  lda #$0
-  sta moveNextScreen ;reset the move next screen flag
-  ;switch bank to 1  
-  jsr bankswitch1  
-  jsr select_screen
-  jsr draw_current_screen_table
-  ;switch bank to 0   
-  jsr bankswitch0
+  ; lda #$0
+  ; sta moveNextScreen ;reset the move next screen flag
+  ; ;switch bank to 1  
+  ; jsr bankswitch1  
+  ; jsr select_screen
+  ; jsr draw_current_screen_table
+  ; ;switch bank to 0   
+  ; jsr bankswitch0
   jsr checkEndScreen
   ;we 
   ;here the games continue so we jump to the loop and continue
   jmp mainProgramLoop   
   rts
+
+; mainProgram:
+;   ;initialize Variables 
+;   ;initialize screen as screen zero
+;   jsr initilizationRoutines
+;   jsr select_dashboard
+;   jsr printerWelcomeMessage
+;   ;switch bank to 1  
+;   jsr bankswitch1
+;   jsr select_screen
+;   jsr draw_current_screen_table
+;   ;switch bank to 0   
+;   jsr bankswitch0
+; mainProgramLoop:
+;   ;jsr simulationTimeWaterLevelCheck
+;   jsr printFlashlightStatus
+;   jsr action_selector
+;   jsr sensor_selector  
+;   jsr checkSecretScreen
+;   lda gameEnded
+;   bne mainProgram
+;   jsr checkActionFailed
+;   jsr checkEnemyAppeared
+;   jsr checkSimulationTimeisUp
+;   lda moveNextScreen
+;   beq mainProgramLoop;if zero do not move to next screen and ask for actions
+;   lda #$0
+;   sta moveNextScreen ;reset the move next screen flag
+;   ;switch bank to 1  
+;   jsr bankswitch1  
+;   jsr select_screen
+;   jsr draw_current_screen_table
+;   ;switch bank to 0   
+;   jsr bankswitch0
+;   jsr checkEndScreen
+;   ;we 
+;   ;here the games continue so we jump to the loop and continue
+;   jmp mainProgramLoop   
+;   rts
+
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------MAIN-----------------------------------------------
@@ -2596,7 +2643,7 @@ msj_flashlightOff:
   .ascii "e"    
 
 msj_flashlighBateria:
-  .ascii "Bateria: "
+  .ascii "Bateria:       "
 
 msj_enemyCaught:  
   .ascii "Atrapado"
