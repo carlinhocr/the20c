@@ -1,5 +1,7 @@
 import json
 import os
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 JSON_FILE = "acs_sensors.json"
 ASM_FILE  = "acs_sensors.asm"

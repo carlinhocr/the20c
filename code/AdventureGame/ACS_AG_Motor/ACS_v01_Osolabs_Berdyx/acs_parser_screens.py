@@ -1,6 +1,8 @@
 import json
 import os
 import sys
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 JSON_FILE    = "acs_screens.json"
 PUZZLES_FILE = "acs_puzzles.json"

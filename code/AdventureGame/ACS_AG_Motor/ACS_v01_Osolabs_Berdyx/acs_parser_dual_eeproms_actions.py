@@ -1,5 +1,7 @@
 import json
 import os
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 JSON_FILE  = "acs_actions.json"
 ASM_BANK0  = "acs_actions_bank0.asm"
