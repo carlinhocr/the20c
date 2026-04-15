@@ -668,13 +668,13 @@ screen_0_action1:
   .byte 0  ; START-COMENZAR
 
 screen_0_action2:
-  .byte 69  ; MUERTE DIRECTA
+  .byte 255  ; none
 
 screen_0_action3:
-  .byte 70  ; LINTERNA SOLA
+  .byte 255  ; none
 
 screen_0_action4:
-  .byte 3  ; LINTERNACORAZON-TOGGLE
+  .byte 255  ; none
 
 screen_0_description:
   .ascii "LA CAVERNA TE LLAMA..."

@@ -17,7 +17,7 @@
         "ID": "2",
         "Name": "flashlight",
         "Active": false,
-        "Toggle": 1,
+        "Toggle": 0,
         "DialogOn": "Prendes la linterna",
         "DialogOff": "Apagas la linterna"
     },
