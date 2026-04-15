@@ -479,19 +479,19 @@ checkActionFailed:
   ;less than enemyProbabilityTotal
   bcc checkActionFailed_failed
   ;here you are free
-  lda #<msj_actionSuceeded
-  sta serialDataVectorLow
-  lda #>msj_actionSuceeded
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
+  ; lda #<msj_actionSuceeded
+  ; sta serialDataVectorLow
+  ; lda #>msj_actionSuceeded
+  ; sta serialDataVectorHigh
+  ; jsr printAsciiDrawing
   rts
 checkActionFailed_failed:  
   ;here you where caught
-  lda #<msj_actionFailed
-  sta serialDataVectorLow
-  lda #>msj_actionFailed
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing  
+  ; lda #<msj_actionFailed
+  ; sta serialDataVectorLow
+  ; lda #>msj_actionFailed
+  ; sta serialDataVectorHigh
+  ; jsr printAsciiDrawing  
   ;prints the description of the failed action
   lda action_desc_action_failed_offset
   tay
@@ -528,19 +528,19 @@ checkEnemyAppeared:
   ;less than enemyProbabilityTotal
   bcc checkEnemyAppeared_caught
   ;here you are free
-  lda #<msj_enemyEscape
-  sta serialDataVectorLow
-  lda #>msj_enemyEscape
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
+  ; lda #<msj_enemyEscape
+  ; sta serialDataVectorLow
+  ; lda #>msj_enemyEscape
+  ; sta serialDataVectorHigh
+  ; jsr printAsciiDrawing
   rts
 checkEnemyAppeared_caught:  
   ;here you where caught
-  lda #<msj_enemyCaught
-  sta serialDataVectorLow
-  lda #>msj_enemyCaught
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing  
+  ; lda #<msj_enemyCaught
+  ; sta serialDataVectorLow
+  ; lda #>msj_enemyCaught
+  ; sta serialDataVectorHigh
+  ; jsr printAsciiDrawing  
   lda #$1
   sta endByEnemy
   lda endScreenByEnemy
@@ -576,7 +576,12 @@ checkSimulationTimeisUp:
   sta simulationTimeExpired
   sta endByTimeUp
   jmp checkSimulationTimeisUp_End
-checkSimulationTimeisUp_WaterLevel:  
+checkSimulationTimeisUp_WaterLevel:
+  lda #<msj_waterTimer
+  sta serialDataVectorLow  
+  lda #>msj_waterTimer
+  sta serialDataVectorHigh 
+  jsr send_rs232_line_noCRLF
   jsr setSimulationTimerBars
   jsr printSimulationTimerBars
 ;   lda currentNumberOfBars
@@ -2040,6 +2045,9 @@ sensor_2_run_not_toggle:
   lda (pivotZpLow),Y
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  jsr flashLightOnSensor
+  lda #$1
+  sta flashlightStatus
   jmp sensor_2_run_End
 printOffStatus:  
   lda sensor_dialog_off_offset
@@ -2050,6 +2058,9 @@ printOffStatus:
   lda (pivotZpLow),Y
   sta serialDataVectorHigh
   jsr printAsciiDrawing
+  jsr flashLightOffSensor
+  lda #$0
+  sta flashlightStatus
 sensor_2_run_End:
   rts
 
@@ -2469,15 +2480,15 @@ increaseWaterLevel:
   cmp maximumWaterLevel
   beq increaseWaterLevelEnd
   inc waterLevel
-  lda waterLevel
-  clc 
-  adc #$30
-  jsr send_rs232_char
-  lda #< msj_waterOn
-  sta serialDataVectorLow  
-  lda #> msj_waterOn
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing  
+  ; lda waterLevel
+  ; clc 
+  ; adc #$30
+  ; jsr send_rs232_char
+  ; lda #< msj_waterOn
+  ; sta serialDataVectorLow  
+  ; lda #> msj_waterOn
+  ; sta serialDataVectorHigh
+  ; jsr printAsciiDrawing  
   lda #$1
   sta timerOn
   jsr increaseWaterLevelSensor
@@ -2602,6 +2613,10 @@ msj_actionFailed:
 msj_actionSuceeded:  
   .ascii "La acción fue exitosa"
   .ascii "e"      
+
+msj_waterTimer:  
+  .ascii "Nivel de Agua: "
+  .ascii "e"
 
 msj_bienvenida:
   .ascii "Bienvenido a la aventura"
