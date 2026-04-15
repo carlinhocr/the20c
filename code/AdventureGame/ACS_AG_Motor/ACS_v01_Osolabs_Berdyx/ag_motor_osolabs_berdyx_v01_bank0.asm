@@ -552,7 +552,7 @@ checkEnemyAppeared_caught:
   rts
 
 checkSimulationTimeisUp:
-  jsr bin_2_ascii_simulationTime
+  ;jsr bin_2_ascii_simulationTime
   ;substract current simulationTimePassed from maxSimulationTime
   lda timerOn
   beq checkSimulationTimeisUp_End
