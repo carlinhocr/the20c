@@ -650,6 +650,7 @@ checkSimulationTimeisUp_WaterLevel:
 ;   adc #$30
 ;   jsr send_rs232_char
   jsr setSimulationTimerBars
+  jsr calculateNumberOfBars
   sec
   lda currentNumberOfBars
   sbc waterLevel
@@ -657,7 +658,7 @@ checkSimulationTimeisUp_WaterLevel:
   bcc checkSimulationTimeisUp_End
   beq checkSimulationTimeisUp_End
   ;here increase the water level
-;   lda levelsToIncreaseWater
+;  lda levelsToIncreaseWater
 ;   clc 
 ;   adc #$30
 ;   jsr send_rs232_char
@@ -4302,6 +4303,58 @@ setBarSegmentSize_Loop:
   jmp setBarSegmentSize_Loop
 setBarSegmentSizeLoop_End:
   ;here we have the segment size on segmentBarSizeHigh and segmentBarSizeLow
+  rts
+
+calculateNumberOfBars:
+  ;check for maximum size fo segments
+  sec 
+  lda barMaximumTimerLow
+  sbc currentTimeBarLow
+  lda barMaximumTimerHigh
+  sbc currentTimeBarHigh
+  ;if there is no carry then result is negative
+  ;we are past simulation time
+  ;we should print only the maximum bar size and no more
+  bcs calculateNumberOfBars_CalculateBars 
+  ;if we are here it was negative
+  ldx barSegmentNumbers
+  jmp calculateNumberOfBars_Print
+calculateNumberOfBars_CalculateBars:  
+  ;if not lets calculate the bars
+  lda segmentBarSizeHigh
+  sta currentSegmentBarSizeHigh
+  lda segmentBarSizeLow
+  sta currentSegmentBarSizeLow
+  ldx #$00
+calculateNumberOfBars_Loop  
+  inx
+  ;we will get the segment size startign with the size in seconds
+  ;16 bit number for just one segment and substract it from the current time
+  ;we do not care about the resulting number only about the carry
+  ;to find who is less
+  sec 
+  lda currentSegmentBarSizeLow
+  sbc currentTimeBarLow
+  lda currentSegmentBarSizeHigh
+  sbc currentTimeBarHigh
+  ;if there is a carry the result was positive
+  ;and the current segment bar is greater than the current time
+  ;in the index register X we have our number of segments
+  bcs calculateNumberOfBars_Print
+  ;here it was negative we have to increase the segments so we add one segment more
+  clc ;clear the carry flag for rol so we can add 
+  lda currentSegmentBarSizeLow
+  adc segmentBarSizeLow 
+  sta currentSegmentBarSizeLow
+  ;we do not clear the carry so we can add a carry from Low to High
+  lda currentSegmentBarSizeHigh
+  adc segmentBarSizeHigh
+  sta currentSegmentBarSizeHigh
+  ;now we try again to find out if we have our correct segmente
+  jmp calculateNumberOfBars_Loop
+calculateNumberOfBars_Print:
+  txa
+  sta currentNumberOfBars
   rts
 
 printSegments:
