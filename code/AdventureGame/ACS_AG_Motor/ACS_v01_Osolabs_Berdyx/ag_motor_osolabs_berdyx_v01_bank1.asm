@@ -600,6 +600,8 @@ checkEnemyAppeared_caught:
   rts
 
 printSimulationTimeStatus:
+  lda waterLevel
+  beq printSimulationTimeStatus_end
   lda #<msj_waterTimer
   sta serialDataVectorLow  
   lda #>msj_waterTimer
@@ -607,6 +609,7 @@ printSimulationTimeStatus:
   jsr send_rs232_line_noCRLF
   jsr setSimulationTimerBars
   jsr printSimulationTimerBars
+printSimulationTimeStatus_end:
   rts
 
 checkSimulationTimeisUp:
@@ -670,8 +673,8 @@ checkSimulationTimeisUp_IncWaterLevel:
   dex
   jmp checkSimulationTimeisUp_IncWaterLevel
 checkSimulationTimeisUp_End:  
-  ;jsr bin_2_ascii_simulationTime
-  ;jsr bin_2_ascii_waterLevel
+  jsr bin_2_ascii_simulationTime
+  jsr bin_2_ascii_waterLevel
   rts
 
 checkSecretScreen:

@@ -146,7 +146,7 @@
         "EnemyProbability": 0,
         "ResetEnemyProbability": 0,
         "DeathProbability": 0,
-        "Description": "\n(Extraes la roca)",
+        "Description": "\n(Extraes la roca)\n",
         "DescriptionActionFailed": "",
         "HideOnWaterLevelHigh": 0,
         "HideOnFearLevelHigh": 0,
