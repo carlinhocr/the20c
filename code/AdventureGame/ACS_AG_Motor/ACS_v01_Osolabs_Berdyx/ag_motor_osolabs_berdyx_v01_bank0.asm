@@ -375,6 +375,7 @@ mainProgramLoop:
   jsr draw_current_screen_table
   ;switch bank to 0   
   jsr bankswitch0
+  jsr printSimulationTimeStatus
   jsr printFlashlightStatus
   jsr action_selector
   jsr sensor_selector  
@@ -598,6 +599,16 @@ checkEnemyAppeared_caught:
   sta gameEnded
   rts
 
+printSimulationTimeStatus:
+  lda #<msj_waterTimer
+  sta serialDataVectorLow  
+  lda #>msj_waterTimer
+  sta serialDataVectorHigh 
+  jsr send_rs232_line_noCRLF
+  jsr setSimulationTimerBars
+  jsr printSimulationTimerBars
+  rts
+
 checkSimulationTimeisUp:
   ;jsr bin_2_ascii_simulationTime
   ;substract current simulationTimePassed from maxSimulationTime
@@ -624,13 +635,13 @@ checkSimulationTimeisUp:
   sta endByTimeUp
   jmp checkSimulationTimeisUp_End
 checkSimulationTimeisUp_WaterLevel:
-  lda #<msj_waterTimer
-  sta serialDataVectorLow  
-  lda #>msj_waterTimer
-  sta serialDataVectorHigh 
-  jsr send_rs232_line_noCRLF
-  jsr setSimulationTimerBars
-  jsr printSimulationTimerBars
+  ; lda #<msj_waterTimer
+  ; sta serialDataVectorLow  
+  ; lda #>msj_waterTimer
+  ; sta serialDataVectorHigh 
+  ; jsr send_rs232_line_noCRLF
+  ; jsr setSimulationTimerBars
+  ; jsr printSimulationTimerBars
 ;   lda currentNumberOfBars
 ;   clc 
 ;   adc #$30
