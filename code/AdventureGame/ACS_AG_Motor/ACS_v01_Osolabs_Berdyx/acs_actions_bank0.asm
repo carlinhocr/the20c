@@ -1220,7 +1220,7 @@ action_0_name:
   .ascii "e"
 
 action_0_alias:
-  .ascii "COMENZAR"
+  .ascii "ENTRAR A LA CAVERNA"
   .ascii "e"
 
 action_0_sensor_id:
@@ -1648,6 +1648,7 @@ action_8_death_probability:
   .byte 0
 
 action_8_description:
+  .ascii ""
   .ascii "(Extraes la roca)"
   .ascii "e"
 
@@ -1798,7 +1799,7 @@ action_11_death_probability:
   .byte 0
 
 action_11_description:
-  .ascii ""
+  .ascii "Te tomas un breve descanso. Tu ritmo baja."
   .ascii "e"
 
 action_11_desc_action_failed:
@@ -4647,11 +4648,11 @@ action_68_name:
   .ascii "e"
 
 action_68_alias:
-  .ascii ""
+  .ascii "VOLVER A JUGAR"
   .ascii "e"
 
 action_68_sensor_id:
-  .byte 4  ; none
+  .byte 255  ; none
 
 action_68_sensor_active:
   .byte 0  ; off

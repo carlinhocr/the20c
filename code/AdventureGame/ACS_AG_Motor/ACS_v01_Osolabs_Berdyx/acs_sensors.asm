@@ -218,11 +218,11 @@ sensor_6_active:
   .byte 0  ; off
 
 sensor_6_dialog_on:
-  .ascii ""
+  .ascii "Apagas la linterna. Tu ritmo sube."
   .ascii "e"
 
 sensor_6_dialog_off:
-  .ascii ""
+  .ascii "Prendes la linterna. Tu ritmo baja."
   .ascii "e"
 
 sensor_6_toggle:

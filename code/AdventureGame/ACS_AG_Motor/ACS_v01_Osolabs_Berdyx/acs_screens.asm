@@ -677,7 +677,7 @@ screen_0_action4:
   .byte 255  ; none
 
 screen_0_description:
-  .ascii "LA CAVERNA TE LLAMA..."
+  .ascii ""
   .ascii "e"
 
 screen_0_ascii:
@@ -830,10 +830,8 @@ screen_3_description:
   .ascii "la suficiente para salir de aqui."
   .ascii ""
   .ascii "Gota, pausa, gota. "
-  .ascii "El ritmo del agua filtrandose marca que no tienes mucho tiempo. "
-  .ascii "Gota, pausa, gota. "
-  .ascii "El ritmo del agua filtrandose marca que no tienes mucho tiempo, mejor explorar"
-  .ascii "el lugar."
+  .ascii "El ritmo del agua filtrandose marca que no tienes mucho tiempo."
+  .ascii "Mejor explorar el lugar."
   .ascii "e"
 
 screen_3_ascii:
@@ -896,6 +894,7 @@ screen_4_ascii:
 
 screen_4_flashlight_on:
   .ascii "Iluminas una roca que te llama la atencion."
+  .ascii ""
   .ascii "e"
 
 screen_4_flashlight_off:
@@ -990,10 +989,12 @@ screen_6_action4:
   .byte 255  ; none
 
 screen_6_description:
+  .ascii ""
   .ascii "¿ESTE DIBUJO TE ES FAMILIAR?"
   .ascii "e"
 
 screen_6_ascii:
+  .ascii ""
   .ascii "  ██████        "
   .ascii "████  ████      "
   .ascii "██      ██      "
@@ -1148,6 +1149,7 @@ screen_9_description:
   .ascii " Salida derecha: escuchas ruidos, podria ser actividad"
   .ascii " Salida centro: notas una fuente de iluminacion"
   .ascii " Salida izquierda: sientes una leve correntada de aire"
+  .ascii ""
   .ascii "e"
 
 screen_9_ascii:
