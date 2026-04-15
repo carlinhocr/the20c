@@ -883,7 +883,7 @@ printAsciiDrawing_checkNull:
   lda (serialDataVectorLow),y 
   cmp #$00
   beq printAsciiDrawing_end
-printAsciiDrawing_keepgoing  
+printAsciiDrawing_keepgoing:  
   jsr send_rs232_line
   jmp printAsciiDrawing_lenghts_loop
   ;cpx serialTotalLinesAscii ;check to see if 27 lines where printed from 1 to 26
