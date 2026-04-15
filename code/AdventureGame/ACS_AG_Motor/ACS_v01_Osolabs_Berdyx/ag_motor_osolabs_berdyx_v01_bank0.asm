@@ -4307,6 +4307,12 @@ setBarSegmentSizeLoop_End:
 
 calculateNumberOfBars:
   ;check for maximum size fo segments
+  lda simulationSegments
+  sta barSegmentNumbers
+  lda simulationTimePassedLowDigits
+  sta currentTimeBarLow
+  lda simulationTimePassedHighDigits
+  sta currentTimeBarHigh
   sec 
   lda barMaximumTimerLow
   sbc currentTimeBarLow
