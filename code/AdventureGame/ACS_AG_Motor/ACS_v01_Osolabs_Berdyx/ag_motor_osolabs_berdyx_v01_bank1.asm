@@ -2005,18 +2005,18 @@ sensor_2_run_flashlight_with_batteries:
   ldy #$0
   lda (sensorDataVectorLow),y
   sta flashlightToggleFlag
-  clc
-  adc #$30
-  jsr send_rs232_char
+  ; clc
+  ; adc #$30
+  ; jsr send_rs232_char
   ;here we have in the acummulator the togle for the sensor
   lda flashlightToggleFlag
   beq sensor_2_run_not_toggle
   ;here the sensor is a toggle one
   ;we know it is the one for the flashlight per design
-  lda flashlightStatus
-  clc
-  adc #$30
-  jsr send_rs232_char  
+  ; lda flashlightStatus
+  ; clc
+  ; adc #$30
+  ; jsr send_rs232_char  
   lda flashlightStatus  
   beq sensor_2_toggle_one 
   jsr flashLightOffSensor
@@ -2030,10 +2030,10 @@ sensor_2_toggle_one:
   sta flashlightStatus
   sta sensorCurrentStatus
 sensor_2_run_not_toggle:  
-  lda flashlightStatus
-  clc
-  adc #$30
-  jsr send_rs232_char    
+  ; lda flashlightStatus
+  ; clc
+  ; adc #$30
+  ; jsr send_rs232_char    
   lda sensorCurrentStatus
   beq printOffStatus
   ;if here status is not zero so it is on 
@@ -2098,18 +2098,18 @@ sensor_6_run_flashlight_with_batteries:
   ldy #$0
   lda (sensorDataVectorLow),y
   sta flashlightToggleFlag
-  clc
-  adc #$30
-  jsr send_rs232_char
+  ; clc
+  ; adc #$30
+  ; jsr send_rs232_char
   ;here we have in the acummulator the togle for the sensor
   lda flashlightToggleFlag
   beq sensor_6_run_not_toggle
   ;here the sensor is a toggle one
   ;we know it is the one for the flashlight per design
-  lda flashlightStatus
-  clc
-  adc #$30
-  jsr send_rs232_char  
+  ; lda flashlightStatus
+  ; clc
+  ; adc #$30
+  ; jsr send_rs232_char  
   lda flashlightStatus  
   beq sensor_6_toggle_one 
   jsr flashLightOffSensor
@@ -2129,10 +2129,10 @@ sensor_6_toggle_one:
   sta heartRateLevel
   jsr heartbeatOffSensor
 sensor_6_run_not_toggle:  
-  lda flashlightStatus
-  clc
-  adc #$30
-  jsr send_rs232_char    
+  ; lda flashlightStatus
+  ; clc
+  ; adc #$30
+  ; jsr send_rs232_char    
   lda sensorCurrentStatus
   beq sensor_6_printOffStatus
   ;if here status is not zero so it is on 
@@ -2435,11 +2435,11 @@ checkHearRateLevel_greater:
   rts
 
 turnOnHearRate:
-  lda #< msj_heartOn
-  sta serialDataVectorLow  
-  lda #> msj_heartOn
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
+  ; lda #< msj_heartOn
+  ; sta serialDataVectorLow  
+  ; lda #> msj_heartOn
+  ; sta serialDataVectorHigh
+  ; jsr printAsciiDrawing
   jsr heartbeatOnSensor
   lda #$1
   sta heartRateLevel
@@ -2447,11 +2447,11 @@ turnOnHearRate:
   rts   
 
 turnOffHearRate:
-  lda #< msj_heartOff
-  sta serialDataVectorLow  
-  lda #> msj_heartOff
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
+  ; lda #< msj_heartOff
+  ; sta serialDataVectorLow  
+  ; lda #> msj_heartOff
+  ; sta serialDataVectorHigh
+  ; jsr printAsciiDrawing
   jsr heartbeatOffSensor
   lda #$0
   sta heartRateLevel  

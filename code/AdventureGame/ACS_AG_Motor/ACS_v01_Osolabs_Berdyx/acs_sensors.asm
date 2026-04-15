@@ -86,7 +86,7 @@ sensor_0_active:
   .byte 0  ; off
 
 sensor_0_dialog_on:
-  .ascii "El agua cae siempre cae, nunca para."
+  .ascii ""
   .ascii "e"
 
 sensor_0_dialog_off:
@@ -108,11 +108,11 @@ sensor_1_active:
   .byte 0  ; off
 
 sensor_1_dialog_on:
-  .ascii "Tu corazón late cada vez más rápido"
+  .ascii ""
   .ascii "e"
 
 sensor_1_dialog_off:
-  .ascii "Estás mas calmado"
+  .ascii ""
   .ascii "e"
 
 sensor_1_toggle:
@@ -218,11 +218,11 @@ sensor_6_active:
   .byte 0  ; off
 
 sensor_6_dialog_on:
-  .ascii "ACTIVAS LINTERNA, BAJAS CORAZON"
+  .ascii ""
   .ascii "e"
 
 sensor_6_dialog_off:
-  .ascii "DESACTIVAS LINTERNA, AUMENTAS CORAZON"
+  .ascii ""
   .ascii "e"
 
 sensor_6_toggle:

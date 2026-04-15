@@ -120,44 +120,44 @@ dashboard_0_total_flash_time:
   .byte $58  ; low byte
 
 dashboard_0_water_level0:
-  .byte $00  ; high byte  (decimal 55)
-  .byte $37  ; low byte
+  .byte $00  ; high byte  (decimal 0)
+  .byte $00  ; low byte
 
 dashboard_0_water_level1:
-  .byte $00  ; high byte  (decimal 110)
-  .byte $6E  ; low byte
-
-dashboard_0_water_level2:
-  .byte $00  ; high byte  (decimal 165)
-  .byte $A5  ; low byte
-
-dashboard_0_water_level3:
-  .byte $00  ; high byte  (decimal 220)
-  .byte $DC  ; low byte
-
-dashboard_0_water_level4:
-  .byte $01  ; high byte  (decimal 275)
-  .byte $13  ; low byte
-
-dashboard_0_water_level5:
-  .byte $01  ; high byte  (decimal 330)
+  .byte $00  ; high byte  (decimal 74)
   .byte $4A  ; low byte
 
+dashboard_0_water_level2:
+  .byte $00  ; high byte  (decimal 75)
+  .byte $4B  ; low byte
+
+dashboard_0_water_level3:
+  .byte $00  ; high byte  (decimal 150)
+  .byte $96  ; low byte
+
+dashboard_0_water_level4:
+  .byte $00  ; high byte  (decimal 225)
+  .byte $E1  ; low byte
+
+dashboard_0_water_level5:
+  .byte $01  ; high byte  (decimal 300)
+  .byte $2C  ; low byte
+
 dashboard_0_water_level6:
-  .byte $01  ; high byte  (decimal 385)
-  .byte $81  ; low byte
+  .byte $01  ; high byte  (decimal 375)
+  .byte $77  ; low byte
 
 dashboard_0_water_level7:
-  .byte $01  ; high byte  (decimal 440)
-  .byte $B8  ; low byte
+  .byte $01  ; high byte  (decimal 450)
+  .byte $C2  ; low byte
 
 dashboard_0_water_level8:
-  .byte $01  ; high byte  (decimal 495)
-  .byte $EF  ; low byte
+  .byte $02  ; high byte  (decimal 525)
+  .byte $0D  ; low byte
 
 dashboard_0_water_level9:
-  .byte $02  ; high byte  (decimal 550)
-  .byte $26  ; low byte
+  .byte $02  ; high byte  (decimal 600)
+  .byte $58  ; low byte
 
 dashboard_0_extra_water:
   .byte $00  ; high byte  (decimal 1)
@@ -168,11 +168,11 @@ dashboard_0_extra_heartrate:
   .byte $02  ; low byte
 
 dashboard_0_extra_flashlight:
-  .byte $00  ; high byte  (decimal 2)
-  .byte $02  ; low byte
+  .byte $00  ; high byte  (decimal 3)
+  .byte $03  ; low byte
 
 dashboard_0_death_water:
-  .byte 0
+  .byte 1
 
 dashboard_0_death_heartrate:
   .byte 1
@@ -181,10 +181,10 @@ dashboard_0_death_flashlight:
   .byte 1
 
 dashboard_0_enemy_flash_on:
-  .byte 2
+  .byte 1
 
 dashboard_0_end_screen_default:
-  .byte 39  ; screen id
+  .byte 255  ; screen id
 
 dashboard_0_end_screen_enemy:
   .byte 40  ; screen id

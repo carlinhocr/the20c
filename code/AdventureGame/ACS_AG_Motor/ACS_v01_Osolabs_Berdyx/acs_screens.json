@@ -66,7 +66,7 @@
         "Action2": "S01P04-ATRAVESAR",
         "Action3": "S01P04-EXTRAER",
         "Action4": "S01P04-ILUMINAR",
-        "Description": "Comienzas a recorrer la caverna. Mirar atrás genera una sensación incómoda, como si la entrada no hubiera estado siempre así.\nTe encuentras con un obstaculo. Parece ser una gran acumulacion de rocas.\nEntre las rocas hay rendijas por donde entra aire viciado, pero ninguna lo bastante grande para pasar.\n\nPuedes optar por remover lenta y seguramente las rocas para intentar pasar, o forzar tu paso empujando rocas en alguna de las rendijas.\nTal vez iluminar las rocas brinde mas informacion.",
+        "Description": "Comienzas a recorrer la caverna. Mirar atrás genera una sensación incómoda, como si la entrada no hubiera estado siempre así.\nTe encuentras con un obstaculo. Parece ser una gran acumulacion de rocas.\nEntre las rocas hay rendijas por donde entra aire viciado, pero ninguna lo bastante grande para pasar.\n\nPuedes optar por remover lenta y seguramente las rocas para intentar pasar, o forzar tu paso empujando rocas en alguna de las rendijas.\nTal vez iluminar las rocas brinde mas informacion.\n",
         "FlashlightOn": "Iluminas una roca que te llama la atencion.",
         "FlashlightOff": "",
         "AsciiDrawing": "",

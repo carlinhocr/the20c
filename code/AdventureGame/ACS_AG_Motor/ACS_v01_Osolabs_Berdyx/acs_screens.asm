@@ -887,6 +887,7 @@ screen_4_description:
   .ascii "Puedes optar por remover lenta y seguramente las rocas para intentar pasar, o"
   .ascii "forzar tu paso empujando rocas en alguna de las rendijas."
   .ascii "Tal vez iluminar las rocas brinde mas informacion."
+  .ascii ""
   .ascii "e"
 
 screen_4_ascii:

@@ -72,8 +72,6 @@ actions_index:
   .word action_pointer_66  ; S07P05-TRIANGULOS
   .word action_pointer_67  ; S07P06-CONTINUAR
   .word action_pointer_68  ; TERMINAR EL JUEGO
-  .word action_pointer_69  ; MUERTE DIRECTA
-  .word action_pointer_70  ; LINTERNA SOLA
 actions_index_record_length:
   .byte 2  ; each actions_index entry is 1 .word (2 bytes)
 
@@ -1182,38 +1180,6 @@ action_pointer_68:
   .word action_68_hide_water         ; TERMINAR EL JUEGO hide_water         [2064,2065]
   .word action_68_hide_fear          ; TERMINAR EL JUEGO hide_fear          [2066,2067]
   .word action_68_hide_flashlight    ; TERMINAR EL JUEGO hide_flashlight    [2068,2069]
-action_pointer_69:
-  .word action_69_id            ; MUERTE DIRECTA id            [2070,2071]
-  .word action_69_name          ; MUERTE DIRECTA name          [2072,2073]
-  .word action_69_alias         ; MUERTE DIRECTA alias         [2074,2075]
-  .word action_69_sensor_id     ; MUERTE DIRECTA sensor_id     [2076,2077]
-  .word action_69_sensor_active ; MUERTE DIRECTA sensor_active [2078,2079]
-  .word action_69_screen        ; MUERTE DIRECTA screen        [2080,2081]
-  .word action_69_cost              ; MUERTE DIRECTA cost              [2082,2083]
-  .word action_69_enemy_probability ; MUERTE DIRECTA enemy_probability [2084,2085]
-  .word action_69_reset_enemy_prob  ; MUERTE DIRECTA reset_enemy_prob  [2086,2087]
-  .word action_69_death_probability ; MUERTE DIRECTA death_probability [2088,2089]
-  .word action_69_description       ; MUERTE DIRECTA description       [2090,2091]
-  .word action_69_desc_action_failed ; MUERTE DIRECTA desc_action_failed [2092,2093]
-  .word action_69_hide_water         ; MUERTE DIRECTA hide_water         [2094,2095]
-  .word action_69_hide_fear          ; MUERTE DIRECTA hide_fear          [2096,2097]
-  .word action_69_hide_flashlight    ; MUERTE DIRECTA hide_flashlight    [2098,2099]
-action_pointer_70:
-  .word action_70_id            ; LINTERNA SOLA id            [2100,2101]
-  .word action_70_name          ; LINTERNA SOLA name          [2102,2103]
-  .word action_70_alias         ; LINTERNA SOLA alias         [2104,2105]
-  .word action_70_sensor_id     ; LINTERNA SOLA sensor_id     [2106,2107]
-  .word action_70_sensor_active ; LINTERNA SOLA sensor_active [2108,2109]
-  .word action_70_screen        ; LINTERNA SOLA screen        [2110,2111]
-  .word action_70_cost              ; LINTERNA SOLA cost              [2112,2113]
-  .word action_70_enemy_probability ; LINTERNA SOLA enemy_probability [2114,2115]
-  .word action_70_reset_enemy_prob  ; LINTERNA SOLA reset_enemy_prob  [2116,2117]
-  .word action_70_death_probability ; LINTERNA SOLA death_probability [2118,2119]
-  .word action_70_description       ; LINTERNA SOLA description       [2120,2121]
-  .word action_70_desc_action_failed ; LINTERNA SOLA desc_action_failed [2122,2123]
-  .word action_70_hide_water         ; LINTERNA SOLA hide_water         [2124,2125]
-  .word action_70_hide_fear          ; LINTERNA SOLA hide_fear          [2126,2127]
-  .word action_70_hide_flashlight    ; LINTERNA SOLA hide_flashlight    [2128,2129]
 action_name_offset:
   .byte 2  ; (byte of action_0_name in actions_pointers)
 action_alias_offset:
@@ -1429,7 +1395,7 @@ action_3_death_probability:
   .byte 0
 
 action_3_description:
-  .ascii "PRENDO O APAGO LA LINTERNA Y CORAZON"
+  .ascii ""
   .ascii "e"
 
 action_3_desc_action_failed:
@@ -1479,7 +1445,7 @@ action_4_death_probability:
   .byte 0
 
 action_4_description:
-  .ascii "EXPLORAS EL LUGAR. ESTAS ENCERRADO. PARECE HABER ROCAS BLOQUEANDO EL CAMINO."
+  .ascii ""
   .ascii "e"
 
 action_4_desc_action_failed:
@@ -1529,7 +1495,10 @@ action_5_death_probability:
   .byte 0
 
 action_5_description:
-  .ascii "(Remueves las rocas de manera ordenadas)"
+  .ascii ""
+  .ascii "(Remueves las rocas de manera ordenada)"
+  .ascii ""
+  .ascii ""
   .ascii "e"
 
 action_5_desc_action_failed:
@@ -1676,14 +1645,14 @@ action_8_reset_enemy_prob:
   .byte 0  ; off
 
 action_8_death_probability:
-  .byte 25
+  .byte 0
 
 action_8_description:
   .ascii "(Extraes la roca)"
   .ascii "e"
 
 action_8_desc_action_failed:
-  .ascii "(Provocaste un nuevo derrumbe. Pagaste un alto precio por tu curiosidad)"
+  .ascii ""
   .ascii "e"
 
 action_8_hide_water:
@@ -1829,7 +1798,7 @@ action_11_death_probability:
   .byte 0
 
 action_11_description:
-  .ascii "TE TOMAS UN PEQUEÑO MOMENTO PARA CALMARTE"
+  .ascii ""
   .ascii "e"
 
 action_11_desc_action_failed:
@@ -2887,7 +2856,7 @@ action_32_reset_enemy_prob:
   .byte 0  ; off
 
 action_32_death_probability:
-  .byte 25
+  .byte 1
 
 action_32_description:
   .ascii "(Desciendes de manera segura)"
@@ -2937,7 +2906,7 @@ action_33_reset_enemy_prob:
   .byte 0  ; off
 
 action_33_death_probability:
-  .byte 85
+  .byte 20
 
 action_33_description:
   .ascii "(Desciendes de manera rapida)"
@@ -2987,7 +2956,7 @@ action_34_reset_enemy_prob:
   .byte 0  ; off
 
 action_34_death_probability:
-  .byte 25
+  .byte 1
 
 action_34_description:
   .ascii "(Desciendes de manera segura)"
@@ -3037,7 +3006,7 @@ action_35_reset_enemy_prob:
   .byte 0  ; off
 
 action_35_death_probability:
-  .byte 85
+  .byte 20
 
 action_35_description:
   .ascii "(Desciendes de manera rapida)"
@@ -3087,7 +3056,7 @@ action_36_reset_enemy_prob:
   .byte 0  ; off
 
 action_36_death_probability:
-  .byte 25
+  .byte 10
 
 action_36_description:
   .ascii "(Procedes a explorar la zona. No encuentras nada de interes)"
@@ -3137,7 +3106,7 @@ action_37_reset_enemy_prob:
   .byte 0  ; off
 
 action_37_death_probability:
-  .byte 25
+  .byte 1
 
 action_37_description:
   .ascii "(Desciendes de manera segura)"
@@ -3187,7 +3156,7 @@ action_38_reset_enemy_prob:
   .byte 0  ; off
 
 action_38_death_probability:
-  .byte 85
+  .byte 20
 
 action_38_description:
   .ascii "(Desciendes de manera rapida)"
@@ -3238,7 +3207,7 @@ action_39_reset_enemy_prob:
   .byte 0  ; off
 
 action_39_death_probability:
-  .byte 25
+  .byte 10
 
 action_39_description:
   .ascii "(Procedes a explorar la zona)"
@@ -4678,7 +4647,7 @@ action_68_name:
   .ascii "e"
 
 action_68_alias:
-  .ascii "TERMINAR EL JUEGO"
+  .ascii ""
   .ascii "e"
 
 action_68_sensor_id:
@@ -4719,106 +4688,6 @@ action_68_hide_fear:
 action_68_hide_flashlight:
   .byte 0  ; off
 
-; ── Action 69: MUERTE DIRECTA ──────────────────────────
-action_69_id:
-  .byte 69
-
-action_69_name:
-  .ascii "MUERTE DIRECTA"
-  .ascii "e"
-
-action_69_alias:
-  .ascii "MUERTE DIRECTA"
-  .ascii "e"
-
-action_69_sensor_id:
-  .byte 255  ; none
-
-action_69_sensor_active:
-  .byte 0  ; off
-
-action_69_screen:
-  .byte 255  ; screen id
-
-action_69_cost:
-  .byte 0
-
-action_69_enemy_probability:
-  .byte 0
-
-action_69_reset_enemy_prob:
-  .byte 0  ; off
-
-action_69_death_probability:
-  .byte 255
-
-action_69_description:
-  .ascii ""
-  .ascii "e"
-
-action_69_desc_action_failed:
-  .ascii ""
-  .ascii "e"
-
-action_69_hide_water:
-  .byte 0  ; off
-
-action_69_hide_fear:
-  .byte 0  ; off
-
-action_69_hide_flashlight:
-  .byte 0  ; off
-
-; ── Action 70: LINTERNA SOLA ──────────────────────────
-action_70_id:
-  .byte 70
-
-action_70_name:
-  .ascii "LINTERNA SOLA"
-  .ascii "e"
-
-action_70_alias:
-  .ascii "LINTERNA SOLA"
-  .ascii "e"
-
-action_70_sensor_id:
-  .byte 2  ; none
-
-action_70_sensor_active:
-  .byte 1  ; on
-
-action_70_screen:
-  .byte 255  ; screen id
-
-action_70_cost:
-  .byte 0
-
-action_70_enemy_probability:
-  .byte 0
-
-action_70_reset_enemy_prob:
-  .byte 0  ; off
-
-action_70_death_probability:
-  .byte 0
-
-action_70_description:
-  .ascii ""
-  .ascii "e"
-
-action_70_desc_action_failed:
-  .ascii ""
-  .ascii "e"
-
-action_70_hide_water:
-  .byte 0  ; off
-
-action_70_hide_fear:
-  .byte 0  ; off
-
-action_70_hide_flashlight:
-  .byte 0  ; off
-
 ; ── Total action count ──────────────────────────────────────
 action_count:
-  .byte 71
+  .byte 69
