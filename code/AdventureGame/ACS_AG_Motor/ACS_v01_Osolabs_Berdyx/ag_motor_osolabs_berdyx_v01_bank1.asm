@@ -2567,6 +2567,7 @@ increaseWaterLevelEnd:
 ;Phrases
 ;=============================================================
 actions_header:
+  .ascii ""
   .ascii "Puedes realizar las siguientes acciones:"
   .ascii "e"  
 

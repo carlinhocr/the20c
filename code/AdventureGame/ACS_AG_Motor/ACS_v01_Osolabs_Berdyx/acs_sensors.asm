@@ -131,10 +131,12 @@ sensor_2_active:
 
 sensor_2_dialog_on:
   .ascii "Prendes la linterna"
+  .ascii ""
   .ascii "e"
 
 sensor_2_dialog_off:
   .ascii "Apagas la linterna"
+  .ascii ""
   .ascii "e"
 
 sensor_2_toggle:
@@ -218,11 +220,13 @@ sensor_6_active:
   .byte 0  ; off
 
 sensor_6_dialog_on:
-  .ascii "Apagas la linterna. Tu ritmo sube."
+  .ascii "Prendes la linterna. Tu ritmo baja."
+  .ascii ""
   .ascii "e"
 
 sensor_6_dialog_off:
-  .ascii "Prendes la linterna. Tu ritmo baja."
+  .ascii "Apagas la linterna. Tu ritmo sube."
+  .ascii ""
   .ascii "e"
 
 sensor_6_toggle:

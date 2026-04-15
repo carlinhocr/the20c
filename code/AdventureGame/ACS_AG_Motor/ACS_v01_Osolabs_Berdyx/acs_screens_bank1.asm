@@ -939,6 +939,7 @@ screen_5_description:
   .ascii "e"
 
 screen_5_ascii:
+  .ascii ""
   .ascii "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
   .ascii "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
   .ascii "░░░░░░░░░░░░░░░░░░ ▄▄▄▄ ░░░░░░░░░░░░░░░░"
@@ -949,6 +950,7 @@ screen_5_ascii:
   .ascii "░░░░░░▐███ █████▌▐███▀ ▐███ ████ ░░░░░░░"
   .ascii "░░░░ ▄▀▀ ▄▄▄▄▀▀▄▄▄▄▄ ▄█▄  ▄▄▄▄  ▄ ░░░░░░"
   .ascii "░░░░▐███▐████▌██████▌███▌█████▌█¥█ ░░░░░"
+  .ascii ""
   .ascii "e"
 
 screen_5_flashlight_on:
@@ -994,6 +996,7 @@ screen_6_description:
   .ascii "e"
 
 screen_6_ascii:
+  .ascii "¡ HAS ENCONTRADO UN SECRETO !"
   .ascii ""
   .ascii "  ██████        "
   .ascii "████  ████      "

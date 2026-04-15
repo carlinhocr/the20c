@@ -84,7 +84,7 @@
         "Description": "Iluminas las rocas. \nNo parece un derrumbe comun sino algo más inquietante: rocas antiguas, pesadas, acomodadas como si el colapso hubiera sido final, no accidental.\nHay marcas irregulares, como si alguien hubiera intentado mover las rocas y se hubiera detenido a mitad de camino.",
         "FlashlightOn": "",
         "FlashlightOff": "",
-        "AsciiDrawing": "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░ ▄▄▄▄ ░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░ ▄▄▄ █████▌▄▄ ░░░░░░░░░░░░░\n░░░░░░░░░░ ▄ ████  ▀▀▀ ▄███▄ ░░░░░░░░░░░\n░░░░░░░░░▐███ ▀█▀▄████ ▐███▀ ▄▄ ░░░░░░░░\n░░░░░░ ▄▄ ▀▄███▄ ██████ ▄▄▄▐███▌░░░░░░░░\n░░░░░░▐███ █████▌▐███▀ ▐███ ████ ░░░░░░░\n░░░░ ▄▀▀ ▄▄▄▄▀▀▄▄▄▄▄ ▄█▄  ▄▄▄▄  ▄ ░░░░░░\n░░░░▐███▐████▌██████▌███▌█████▌█¥█ ░░░░░",
+        "AsciiDrawing": "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░ ▄▄▄▄ ░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░ ▄▄▄ █████▌▄▄ ░░░░░░░░░░░░░\n░░░░░░░░░░ ▄ ████  ▀▀▀ ▄███▄ ░░░░░░░░░░░\n░░░░░░░░░▐███ ▀█▀▄████ ▐███▀ ▄▄ ░░░░░░░░\n░░░░░░ ▄▄ ▀▄███▄ ██████ ▄▄▄▐███▌░░░░░░░░\n░░░░░░▐███ █████▌▐███▀ ▐███ ████ ░░░░░░░\n░░░░ ▄▀▀ ▄▄▄▄▀▀▄▄▄▄▄ ▄█▄  ▄▄▄▄  ▄ ░░░░░░\n░░░░▐███▐████▌██████▌███▌█████▌█¥█ ░░░░░\n",
         "EnemyProbability": 0,
         "IsSecretScreen": 0,
         "IsEndScreen": 0
@@ -99,7 +99,7 @@
         "Description": "\n¿ESTE DIBUJO TE ES FAMILIAR?",
         "FlashlightOn": "",
         "FlashlightOff": "",
-        "AsciiDrawing": "\n  ██████        \n████  ████      \n██      ██      \n██    ██    ██  \n████      ████  \n  ████████      \n    ██████      \n    ████████  ██\n    █████   ██  \n███       ██  ██",
+        "AsciiDrawing": "¡ HAS ENCONTRADO UN SECRETO !\n\n  ██████        \n████  ████      \n██      ██      \n██    ██    ██  \n████      ████  \n  ████████      \n    ██████      \n    ████████  ██\n    █████   ██  \n███       ██  ██",
         "EnemyProbability": 1,
         "IsSecretScreen": 1,
         "IsEndScreen": 0
