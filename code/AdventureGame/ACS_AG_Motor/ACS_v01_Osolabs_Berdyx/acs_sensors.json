@@ -49,7 +49,7 @@
         "Name": "flashlightheart",
         "Active": false,
         "Toggle": 1,
-        "DialogOn": "",
-        "DialogOff": ""
+        "DialogOn": "Apagas la linterna. Tu ritmo sube.",
+        "DialogOff": "Prendes la linterna. Tu ritmo baja."
     }
 }

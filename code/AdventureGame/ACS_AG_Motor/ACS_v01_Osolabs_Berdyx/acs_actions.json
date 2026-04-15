@@ -146,7 +146,7 @@
         "EnemyProbability": 0,
         "ResetEnemyProbability": 0,
         "DeathProbability": 0,
-        "Description": "(Extraes la roca)",
+        "Description": "\n(Extraes la roca)",
         "DescriptionActionFailed": "",
         "HideOnWaterLevelHigh": 0,
         "HideOnFearLevelHigh": 0,
@@ -197,7 +197,7 @@
         "EnemyProbability": 0,
         "ResetEnemyProbability": 0,
         "DeathProbability": 0,
-        "Description": "",
+        "Description": "Te tomas un breve descanso. Tu ritmo baja.",
         "DescriptionActionFailed": "",
         "HideOnWaterLevelHigh": 0,
         "HideOnFearLevelHigh": 0,
@@ -1158,10 +1158,18 @@
     "68": {
         "ID": "68",
         "Name": "TERMINAR EL JUEGO",
-        "SensorID": 4,
+        "Alias": "VOLVER A JUGAR",
+        "SensorID": 255,
         "SensorActive": false,
         "ScreenID": 0,
         "Cost": 0,
-        "Description": ""
+        "EnemyProbability": 0,
+        "ResetEnemyProbability": 0,
+        "DeathProbability": 0,
+        "Description": "",
+        "DescriptionActionFailed": "",
+        "HideOnWaterLevelHigh": 0,
+        "HideOnFearLevelHigh": 0,
+        "HideWithFlashlightOff": 0
     }
 }
