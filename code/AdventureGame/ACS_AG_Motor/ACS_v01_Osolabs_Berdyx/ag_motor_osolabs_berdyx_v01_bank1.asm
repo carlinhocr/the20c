@@ -675,8 +675,8 @@ checkSimulationTimeisUp_IncWaterLevel:
   dex
   jmp checkSimulationTimeisUp_IncWaterLevel
 checkSimulationTimeisUp_End:  
-  jsr bin_2_ascii_simulationTime
-  jsr bin_2_ascii_waterLevel
+  ; jsr bin_2_ascii_simulationTime
+  ; jsr bin_2_ascii_waterLevel
   rts
 
 checkSecretScreen:
