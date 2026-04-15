@@ -648,7 +648,8 @@ checkSimulationTimeisUp_WaterLevel:
 ;   lda currentNumberOfBars
 ;   clc 
 ;   adc #$30
-;   jsr send_rs232_char  
+;   jsr send_rs232_char
+  jsr setSimulationTimerBars
   sec
   lda currentNumberOfBars
   sbc waterLevel
@@ -2681,7 +2682,7 @@ msj_waterTimer:
   .ascii "e"
 
 msj_bienvenida:
-  .ascii "Bienvenido a la aventura"
+  .ascii "Entraste En la Caverna"
   .ascii ""
   .ascii ""
   .ascii ""
