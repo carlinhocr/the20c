@@ -375,13 +375,14 @@ mainProgramLoop:
   jsr draw_current_screen_table
   ;switch bank to 0   
   jsr bankswitch0
+  jsr checkEndScreen  
+  lda gameEnded
+  bne mainProgram
   jsr printSimulationTimeStatus
   jsr printFlashlightStatus
   jsr action_selector
   jsr sensor_selector  
   jsr checkSecretScreen
-  lda gameEnded
-  bne mainProgram
   jsr checkActionFailed
   jsr checkEnemyAppeared
   jsr checkSimulationTimeisUp
@@ -395,7 +396,6 @@ mainProgramLoop:
   ; jsr draw_current_screen_table
   ; ;switch bank to 0   
   ; jsr bankswitch0
-  jsr checkEndScreen
   ;we 
   ;here the games continue so we jump to the loop and continue
   jmp mainProgramLoop   
