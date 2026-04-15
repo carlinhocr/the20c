@@ -2,7 +2,7 @@
     "0": {
         "ID": "0",
         "Name": "START-COMENZAR",
-        "Alias": "COMENZAR",
+        "Alias": "ENTRAR A LA CAVERNA",
         "SensorID": 255,
         "SensorActive": false,
         "ScreenID": 1,
