@@ -1,0 +1,32 @@
+{
+    "0": {
+        "ID": "0",
+        "Name": "dashBoardTest",
+        "TotalSimulationTime": 600,
+        "TotalFlashlightTime": 600,
+        "WaterLevel0": 0,
+        "WaterLevel1": 74,
+        "WaterLevel2": 75,
+        "WaterLevel3": 150,
+        "WaterLevel4": 225,
+        "WaterLevel5": 300,
+        "WaterLevel6": 375,
+        "WaterLevel7": 450,
+        "WaterLevel8": 525,
+        "WaterLevel9": 600,
+        "ExtraSecondsWaterLevel": 1,
+        "ExtraSecondsHighHeartRate": 2,
+        "ExtraSecondsFlashlightOff": 2,
+        "DeathProbWaterLevel": 1,
+        "DeathProbHighHeartRate": 1,
+        "DeathProbFlashlightOff": 1,
+        "EnemyProbFlashlightOn": 1,
+        "StartScreenID": 0,
+        "EndScreenDefaultID": 255,
+        "EndScreenEnemyID": 40,
+        "EndScreenTimeUpID": 39,
+        "EndScreenEnemyActionFailedID": 41,
+        "HighWaterLevel": 9,
+        "HighHeartRateLevel": 1
+    }
+}

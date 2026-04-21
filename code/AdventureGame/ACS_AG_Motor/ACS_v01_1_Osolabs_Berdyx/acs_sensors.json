@@ -1,0 +1,55 @@
+{
+    "0": {
+        "ID": "0",
+        "Name": "water",
+        "Active": false,
+        "Toggle": 0,
+        "DialogOn": "",
+        "DialogOff": ""
+    },
+    "1": {
+        "ID": "1",
+        "Name": "heart",
+        "Active": false,
+        "Toggle": 0,
+        "DialogOn": "",
+        "DialogOff": ""
+    },
+    "2": {
+        "ID": "2",
+        "Name": "flashlight",
+        "Active": false,
+        "Toggle": 0,
+        "DialogOn": "Prendes la linterna\n",
+        "DialogOff": "Apagas la linterna\n"
+    },
+    "3": {
+        "ID": "3",
+        "Name": "timer1minuto",
+        "Active": false,
+        "DialogOn": "El tiempo empieza a correr no debes quedarte aqui mucho tiempo",
+        "DialogOff": "Aqui puedes tomartelo con calma, perono mucha"
+    },
+    "4": {
+        "ID": "4",
+        "Name": "gamePlaying",
+        "Active": false,
+        "DialogOn": "Comienza el Juego",
+        "DialogOff": "Terminó el Juego"
+    },
+    "5": {
+        "ID": "5",
+        "Name": "timer10minutos",
+        "Active": false,
+        "DialogOn": "Tenes 10 minutos para terminar el juego",
+        "DialogOff": "Se acabó tu tiempo"
+    },
+    "6": {
+        "ID": "6",
+        "Name": "flashlightheart",
+        "Active": false,
+        "Toggle": 1,
+        "DialogOn": "Prendes la linterna. Tu ritmo baja.\n",
+        "DialogOff": "Apagas la linterna. Tu ritmo sube.\n"
+    }
+}
