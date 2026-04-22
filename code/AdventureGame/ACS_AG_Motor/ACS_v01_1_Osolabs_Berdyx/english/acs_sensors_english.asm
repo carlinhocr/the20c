@@ -1,0 +1,236 @@
+; ============================================================
+;  ACS Sensors — auto-generated
+; ============================================================
+
+sensors_index:
+  .word sensor_pointer_0  ; water
+  .word sensor_pointer_1  ; heart
+  .word sensor_pointer_2  ; flashlight
+  .word sensor_pointer_3  ; timer1minuto
+  .word sensor_pointer_4  ; gamePlaying
+  .word sensor_pointer_5  ; timer10minutos
+  .word sensor_pointer_6  ; flashlightheart
+sensors_index_record_length:
+  .byte 2
+
+sensors_pointers:
+sensor_pointer_0:
+  .word sensor_0_id        ; water id        [0,1]
+  .word sensor_0_name      ; water name      [2,3]
+  .word sensor_0_active    ; water active    [4,5]
+  .word sensor_0_dialog_on ; water dialog_on [6,7]
+  .word sensor_0_dialog_off; water dialog_off[8,9]
+  .word sensor_0_toggle   ; water toggle   [10,11]
+sensor_pointer_1:
+  .word sensor_1_id        ; heart id        [12,13]
+  .word sensor_1_name      ; heart name      [14,15]
+  .word sensor_1_active    ; heart active    [16,17]
+  .word sensor_1_dialog_on ; heart dialog_on [18,19]
+  .word sensor_1_dialog_off; heart dialog_off[20,21]
+  .word sensor_1_toggle   ; heart toggle   [22,23]
+sensor_pointer_2:
+  .word sensor_2_id        ; flashlight id        [24,25]
+  .word sensor_2_name      ; flashlight name      [26,27]
+  .word sensor_2_active    ; flashlight active    [28,29]
+  .word sensor_2_dialog_on ; flashlight dialog_on [30,31]
+  .word sensor_2_dialog_off; flashlight dialog_off[32,33]
+  .word sensor_2_toggle   ; flashlight toggle   [34,35]
+sensor_pointer_3:
+  .word sensor_3_id        ; timer1minuto id        [36,37]
+  .word sensor_3_name      ; timer1minuto name      [38,39]
+  .word sensor_3_active    ; timer1minuto active    [40,41]
+  .word sensor_3_dialog_on ; timer1minuto dialog_on [42,43]
+  .word sensor_3_dialog_off; timer1minuto dialog_off[44,45]
+  .word sensor_3_toggle   ; timer1minuto toggle   [46,47]
+sensor_pointer_4:
+  .word sensor_4_id        ; gamePlaying id        [48,49]
+  .word sensor_4_name      ; gamePlaying name      [50,51]
+  .word sensor_4_active    ; gamePlaying active    [52,53]
+  .word sensor_4_dialog_on ; gamePlaying dialog_on [54,55]
+  .word sensor_4_dialog_off; gamePlaying dialog_off[56,57]
+  .word sensor_4_toggle   ; gamePlaying toggle   [58,59]
+sensor_pointer_5:
+  .word sensor_5_id        ; timer10minutos id        [60,61]
+  .word sensor_5_name      ; timer10minutos name      [62,63]
+  .word sensor_5_active    ; timer10minutos active    [64,65]
+  .word sensor_5_dialog_on ; timer10minutos dialog_on [66,67]
+  .word sensor_5_dialog_off; timer10minutos dialog_off[68,69]
+  .word sensor_5_toggle   ; timer10minutos toggle   [70,71]
+sensor_pointer_6:
+  .word sensor_6_id        ; flashlightheart id        [72,73]
+  .word sensor_6_name      ; flashlightheart name      [74,75]
+  .word sensor_6_active    ; flashlightheart active    [76,77]
+  .word sensor_6_dialog_on ; flashlightheart dialog_on [78,79]
+  .word sensor_6_dialog_off; flashlightheart dialog_off[80,81]
+  .word sensor_6_toggle   ; flashlightheart toggle   [82,83]
+sensor_name_offset:
+  .byte 2
+sensor_dialog_on_offset:
+  .byte 6
+sensor_dialog_off_offset:
+  .byte 8
+sensor_toggle_offset:
+  .byte 10
+sensor_record_length:
+  .byte 12
+
+; ── Sensor 0: water ──────────────────────────
+sensor_0_id:
+  .byte 0
+
+sensor_0_name:
+  .ascii "water"
+  .ascii "e"
+
+sensor_0_active:
+  .byte 0  ; off
+
+sensor_0_dialog_on:
+  .ascii ""
+  .ascii "e"
+
+sensor_0_dialog_off:
+  .ascii ""
+  .ascii "e"
+
+sensor_0_toggle:
+  .byte 0  ; normal
+
+; ── Sensor 1: heart ──────────────────────────
+sensor_1_id:
+  .byte 1
+
+sensor_1_name:
+  .ascii "heart"
+  .ascii "e"
+
+sensor_1_active:
+  .byte 0  ; off
+
+sensor_1_dialog_on:
+  .ascii ""
+  .ascii "e"
+
+sensor_1_dialog_off:
+  .ascii ""
+  .ascii "e"
+
+sensor_1_toggle:
+  .byte 0  ; normal
+
+; ── Sensor 2: flashlight ──────────────────────────
+sensor_2_id:
+  .byte 2
+
+sensor_2_name:
+  .ascii "flashlight"
+  .ascii "e"
+
+sensor_2_active:
+  .byte 0  ; off
+
+sensor_2_dialog_on:
+  .ascii "You turn on the flashlight"
+  .ascii ""
+  .ascii "e"
+
+sensor_2_dialog_off:
+  .ascii "You turn off the flashlight"
+  .ascii ""
+  .ascii "e"
+
+sensor_2_toggle:
+  .byte 0  ; normal
+
+; ── Sensor 3: timer1minuto ──────────────────────────
+sensor_3_id:
+  .byte 3
+
+sensor_3_name:
+  .ascii "timer1minuto"
+  .ascii "e"
+
+sensor_3_active:
+  .byte 0  ; off
+
+sensor_3_dialog_on:
+  .ascii "The clock starts ticking, you shouldn't stay here for too long"
+  .ascii "e"
+
+sensor_3_dialog_off:
+  .ascii "Here you can take it easy, but not too easy"
+  .ascii "e"
+
+sensor_3_toggle:
+  .byte 0  ; normal
+
+; ── Sensor 4: gamePlaying ──────────────────────────
+sensor_4_id:
+  .byte 4
+
+sensor_4_name:
+  .ascii "gamePlaying"
+  .ascii "e"
+
+sensor_4_active:
+  .byte 0  ; off
+
+sensor_4_dialog_on:
+  .ascii "The Game begins"
+  .ascii "e"
+
+sensor_4_dialog_off:
+  .ascii "The Game is over"
+  .ascii "e"
+
+sensor_4_toggle:
+  .byte 0  ; normal
+
+; ── Sensor 5: timer10minutos ──────────────────────────
+sensor_5_id:
+  .byte 5
+
+sensor_5_name:
+  .ascii "timer10minutos"
+  .ascii "e"
+
+sensor_5_active:
+  .byte 0  ; off
+
+sensor_5_dialog_on:
+  .ascii "You have 10 minutes to finish the game"
+  .ascii "e"
+
+sensor_5_dialog_off:
+  .ascii "Your time is up"
+  .ascii "e"
+
+sensor_5_toggle:
+  .byte 0  ; normal
+
+; ── Sensor 6: flashlightheart ──────────────────────────
+sensor_6_id:
+  .byte 6
+
+sensor_6_name:
+  .ascii "flashlightheart"
+  .ascii "e"
+
+sensor_6_active:
+  .byte 0  ; off
+
+sensor_6_dialog_on:
+  .ascii "You turn on the flashlight. Your heart rate drops."
+  .ascii ""
+  .ascii "e"
+
+sensor_6_dialog_off:
+  .ascii "You turn off the flashlight. Your heart rate rises."
+  .ascii ""
+  .ascii "e"
+
+sensor_6_toggle:
+  .byte 1  ; toggle
+
+sensor_count:
+  .byte 7

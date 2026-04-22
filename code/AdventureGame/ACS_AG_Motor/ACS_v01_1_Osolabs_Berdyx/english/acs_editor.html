@@ -1,0 +1,2851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adventure Construction Set</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    width: 100%;
+    min-height: 100vh;
+    background: #1a1a2e;
+    font-family: 'Share Tech Mono', 'Courier New', monospace;
+    color: #BAE6FD;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* CRT scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(100, 200, 255, 0.012) 2px,
+      rgba(100, 200, 255, 0.012) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes slideIn { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:translateX(0)} }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 rgba(110,198,255,0)} 50%{box-shadow:0 0 12px rgba(110,198,255,0.15)} }
+
+  /* ── Header ── */
+  .app-header {
+    width: 100%;
+    background: linear-gradient(180deg, #16213e 0%, #1a1a2e 100%);
+    border-bottom: 2px solid #2a3a5c;
+    padding: 18px 24px 14px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .app-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(110,198,255,0.2), transparent);
+  }
+  .app-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    color: #6EC6FF;
+    text-shadow: 0 0 20px rgba(110,198,255,0.4), 2px 2px 0 #0f1629;
+    letter-spacing: 4px;
+  }
+  .app-subtitle {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    color: #4a5580;
+    letter-spacing: 3px;
+    margin-top: 6px;
+  }
+  .app-subtitle .blink { animation: blink 1.2s step-end infinite; }
+
+  /* ── Tab Bar ── */
+  .tab-bar {
+    width: 100%;
+    display: flex;
+    gap: 0;
+    padding: 0 12px;
+    background: #16213e;
+    border-bottom: 2px solid #2a3a5c;
+    overflow-x: auto;
+    z-index: 2;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab-bar::-webkit-scrollbar { height: 3px; }
+  .tab-bar::-webkit-scrollbar-track { background: transparent; }
+  .tab-bar::-webkit-scrollbar-thumb { background: #2a3a5c; border-radius: 2px; }
+
+  .tab-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #4a5580;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 12px 14px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    position: relative;
+  }
+  .tab-btn:hover {
+    color: #8888aa;
+  }
+  .tab-btn.active {
+    color: #6EC6FF;
+    border-bottom-color: #6EC6FF;
+    text-shadow: 0 0 10px rgba(110,198,255,0.3);
+  }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0; right: 0;
+    height: 2px;
+    background: #6EC6FF;
+    box-shadow: 0 0 8px rgba(110,198,255,0.5);
+  }
+
+  /* ── Tab Content ── */
+  .tab-content {
+    display: none;
+    width: 100%;
+    max-width: 960px;
+    padding: 20px 24px;
+    animation: fadeIn 0.25s ease;
+    z-index: 1;
+  }
+  .tab-content.active { display: block; }
+
+  /* ── Section Headers ── */
+  h2 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: #6EC6FF;
+    text-shadow: 0 0 12px rgba(110,198,255,0.3);
+    letter-spacing: 3px;
+    margin-bottom: 4px;
+  }
+  hr.accent {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, #2a3a5c, rgba(110,198,255,0.3), #2a3a5c);
+    margin: 8px 0 16px;
+  }
+
+  .form-section {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #4a5580;
+    letter-spacing: 2px;
+    margin: 18px 0 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #2a3a5c;
+  }
+
+  /* ── Forms ── */
+  .form-row { margin: 6px 0; animation: slideIn 0.2s ease; }
+  .form-row label {
+    display: block;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    color: #8888aa;
+    letter-spacing: 1px;
+    padding: 2px 0 4px;
+  }
+  .form-row input,
+  .form-row select,
+  .form-row textarea {
+    width: 100%;
+    padding: 8px 10px;
+    background: #1a2340;
+    color: #BAE6FD;
+    border: 1px solid #2a3a5c;
+    border-radius: 4px;
+    font: 12px 'Share Tech Mono', monospace;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .form-row input:focus,
+  .form-row select:focus,
+  .form-row textarea:focus {
+    border-color: #6EC6FF;
+    box-shadow: 0 0 8px rgba(110,198,255,0.15), inset 0 0 12px rgba(110,198,255,0.03);
+  }
+  .form-row textarea {
+    resize: vertical;
+    min-height: 60px;
+    line-height: 1.5;
+  }
+  .form-row select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a5580'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+  }
+  .form-row select option { background: #1a2340; color: #BAE6FD; }
+
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+
+  /* ── Checkboxes ── */
+  .checkbox-row {
+    display: flex; align-items: center; gap: 8px; padding: 5px 0;
+  }
+  .checkbox-row input[type="checkbox"] {
+    appearance: none;
+    width: 14px; height: 14px;
+    background: #1a2340;
+    border: 1px solid #2a3a5c;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .checkbox-row input[type="checkbox"]:checked {
+    background: #6EC6FF;
+    border-color: #6EC6FF;
+    box-shadow: 0 0 6px rgba(110,198,255,0.4);
+  }
+  .checkbox-row input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: -1px; left: 2px;
+    font-size: 11px;
+    color: #0f1629;
+    font-weight: bold;
+  }
+  .checkbox-row label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    color: #8888aa;
+    letter-spacing: 1px;
+    cursor: pointer;
+  }
+
+  /* ── Sliders ── */
+  .slider-row { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
+  .slider-row input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background: #2a3a5c;
+    border-radius: 2px;
+    outline: none;
+  }
+  .slider-row input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    background: #6EC6FF;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(110,198,255,0.4);
+    transition: transform 0.1s;
+  }
+  .slider-row input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+  .slider-val {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: #34D399;
+    min-width: 30px;
+    text-align: right;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #8888aa;
+    background: #16213e;
+    border: 1px solid #2a3a5c;
+    border-radius: 4px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 1px;
+  }
+  .btn:hover {
+    color: #6EC6FF;
+    border-color: #6EC6FF;
+    box-shadow: 0 0 10px rgba(110,198,255,0.2);
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-green { color: #34D399; border-color: #34D399; }
+  .btn-green:hover { color: #6EE7B7; border-color: #6EE7B7; box-shadow: 0 0 10px rgba(52,211,153,0.25); }
+  .btn-red { color: #ff6b6b; border-color: #ff6b6b; }
+  .btn-red:hover { color: #ffa0a0; border-color: #ffa0a0; box-shadow: 0 0 10px rgba(255,107,107,0.25); }
+  .btn-gold { color: #FBBF24; border-color: #FBBF24; }
+  .btn-gold:hover { color: #FDE68A; border-color: #FDE68A; box-shadow: 0 0 10px rgba(251,191,36,0.25); }
+  .btn-sm { font-size: 6px; padding: 7px 10px; }
+  .btn-row { display: flex; gap: 6px; padding: 8px 0; flex-wrap: wrap; }
+
+  /* ── Status Message ── */
+  .status-msg {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    color: #34D399;
+    letter-spacing: 1px;
+    min-height: 16px;
+    padding: 4px 0;
+  }
+  .status-msg.error { color: #ff6b6b; }
+
+  /* ── Parser Output ── */
+  .parser-output {
+    background: #0f1629;
+    color: #34D399;
+    padding: 16px;
+    font: 10px 'Share Tech Mono', monospace;
+    max-height: 500px;
+    overflow: auto;
+    border: 1px solid #2a3a5c;
+    border-radius: 6px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.6;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.3);
+  }
+  .parser-output::-webkit-scrollbar { width: 4px; }
+  .parser-output::-webkit-scrollbar-track { background: transparent; }
+  .parser-output::-webkit-scrollbar-thumb { background: #2a3a5c; border-radius: 2px; }
+
+  /* ── Play Window ── */
+  .play-status {
+    display: flex; gap: 12px; padding: 10px 12px;
+    background: #16213e;
+    border: 1px solid #2a3a5c;
+    border-radius: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+  .play-status span {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #34D399;
+    letter-spacing: 1px;
+  }
+
+  .play-text {
+    background: #0f1629;
+    color: #BAE6FD;
+    padding: 16px;
+    font: 12px 'Share Tech Mono', monospace;
+    min-height: 280px;
+    max-height: 480px;
+    overflow-y: auto;
+    border: 1px solid #2a3a5c;
+    border-radius: 6px;
+    line-height: 1.6;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.4);
+  }
+  .play-text::-webkit-scrollbar { width: 4px; }
+  .play-text::-webkit-scrollbar-track { background: transparent; }
+  .play-text::-webkit-scrollbar-thumb { background: #2a3a5c; border-radius: 2px; }
+  .play-text .title { color: #fff; font-weight: bold; font-size: 13px; }
+  .play-text .description { color: #8888aa; }
+  .play-text .ascii_art { color: #4a5580; font-size: 9px; line-height: 1.2; }
+  .play-text .sensor { color: #34D399; }
+  .play-text .warning { color: #ff6b6b; }
+  .play-text .success { color: #34D399; }
+  .play-text .enemy { color: #EF4444; font-weight: bold; }
+  .play-text .death { color: #EF4444; font-weight: bold; }
+  .play-text .info { color: #4a5580; font-size: 10px; }
+  .play-text .action_msg { color: #BAE6FD; }
+  .play-text .progress_hdr { color: #6EC6FF; font-weight: bold; }
+  .play-text .progress { color: #34D399; }
+
+  .play-actions {
+    display: flex; gap: 6px; padding: 10px 0; flex-wrap: wrap;
+  }
+
+  /* ── Stats Panel ── */
+  .stats-panel {
+    background: #0f1629;
+    color: #BAE6FD;
+    padding: 12px;
+    font: 10px 'Share Tech Mono', monospace;
+    max-height: 480px;
+    overflow-y: auto;
+    border: 1px solid #2a3a5c;
+    border-radius: 6px;
+    line-height: 1.5;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+  }
+  .stats-panel::-webkit-scrollbar { width: 4px; }
+  .stats-panel::-webkit-scrollbar-track { background: transparent; }
+  .stats-panel::-webkit-scrollbar-thumb { background: #2a3a5c; border-radius: 2px; }
+  .stats-panel .header { color: #FBBF24; font-weight: bold; font-size: 11px; }
+  .stats-panel .section { color: #6EC6FF; font-weight: bold; }
+  .stats-panel .value { color: #34D399; font-weight: bold; }
+  .stats-panel .roll { color: #ff6b6b; font-weight: bold; }
+  .stats-panel .result_ok { color: #34D399; font-weight: bold; }
+  .stats-panel .result_fail { color: #ff6b6b; font-weight: bold; }
+  .stats-panel .dimmed { color: #3a4560; }
+  .stats-panel .cost { color: #FBBF24; }
+  .stats-panel .divider { color: #2a3a5c; }
+  .stats-panel .label { color: #8888aa; }
+
+  .play-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 900px) { .play-layout { grid-template-columns: 1fr; } }
+
+  /* ── Map (canvas) ── */
+  .map-container {
+    position: relative;
+    background: #0f1629;
+    border: 1px solid #2a3a5c;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 600px;
+    box-shadow: inset 0 0 60px rgba(0,0,0,0.4);
+    cursor: grab;
+  }
+  .map-container:active { cursor: grabbing; }
+  .map-container canvas { display: block; }
+
+  /* ── File Ops ── */
+  .file-ops {
+    display: flex; gap: 8px; padding: 6px 0; flex-wrap: wrap; align-items: center;
+  }
+  .file-ops input[type="file"] {
+    font: 10px 'Share Tech Mono', monospace;
+    color: #4a5580;
+  }
+  .file-ops input[type="file"]::file-selector-button {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    color: #FBBF24;
+    background: #16213e;
+    border: 1px solid #FBBF24;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: all 0.15s;
+  }
+  .file-ops input[type="file"]::file-selector-button:hover {
+    color: #FDE68A;
+    border-color: #FDE68A;
+    box-shadow: 0 0 8px rgba(251,191,36,0.2);
+  }
+
+  /* ── Panel card style (for sections) ── */
+  .panel {
+    background: #16213e;
+    border: 1px solid #2a3a5c;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(110,198,255,0.03);
+  }
+  .panel-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #6EC6FF;
+    letter-spacing: 2px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #2a3a5c;
+    margin-bottom: 10px;
+  }
+
+  /* ── Legend dots ── */
+  .legend-row {
+    display: flex; gap: 12px; flex-wrap: wrap; margin: 6px 0 12px;
+  }
+  .legend-item {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    letter-spacing: 1px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .legend-dot {
+    width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+    box-shadow: 0 0 4px currentColor;
+  }
+
+  /* ── Number inputs ── */
+  .form-row input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  .form-row input[type="number"]::-webkit-inner-spin-button,
+  .form-row input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .tab-btn { padding: 10px 8px; font-size: 6px; }
+    .tab-content { padding: 12px; }
+    .form-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="app-title">ADVENTURE CONSTRUCTION SET</div>
+  <div class="app-subtitle">SCREENS · ACTIONS · SENSORS · PLAY <span class="blink">_</span></div>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="screens">SCREENS</button>
+  <button class="tab-btn" data-tab="actions">ACTIONS</button>
+  <button class="tab-btn" data-tab="sensors">SENSORS</button>
+  <button class="tab-btn" data-tab="puzzles">PUZZLES</button>
+  <button class="tab-btn" data-tab="dashboard">DASHBOARD</button>
+  <button class="tab-btn" data-tab="map">MAP</button>
+  <button class="tab-btn" data-tab="mapactions">MAP ACTIONS</button>
+  <button class="tab-btn" data-tab="parsers">PARSERS</button>
+  <button class="tab-btn" data-tab="play">PLAY</button>
+  <button class="tab-btn" data-tab="importexport">IMPORT/EXPORT</button>
+</div>
+
+<div class="tab-content active" id="tab-screens"></div>
+<div class="tab-content" id="tab-actions"></div>
+<div class="tab-content" id="tab-sensors"></div>
+<div class="tab-content" id="tab-puzzles"></div>
+<div class="tab-content" id="tab-dashboard"></div>
+<div class="tab-content" id="tab-map"></div>
+<div class="tab-content" id="tab-mapactions"></div>
+<div class="tab-content" id="tab-parsers"></div>
+<div class="tab-content" id="tab-play"></div>
+<div class="tab-content" id="tab-importexport"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  DATA STORE — replaces JSON files, stored in memory
+// ═══════════════════════════════════════════════════════════════
+const DB = {
+  screens: {},
+  actions: {},
+  sensors: {},
+  dashboard: {},
+  puzzles: {},
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  UTILITY FUNCTIONS
+// ═══════════════════════════════════════════════════════════════
+function nextId(collection) {
+  const ids = Object.values(collection).map(r => parseInt(r.ID || '0'));
+  return ids.length ? String(Math.max(...ids) + 1) : '0';
+}
+
+function sortedByID(collection) {
+  return Object.values(collection).sort((a, b) => parseInt(a.ID || 0) - parseInt(b.ID || 0));
+}
+
+function getScreenNames() {
+  return ['', ...sortedByID(DB.screens).map(r => r.Name || r.ID)];
+}
+function getActionNames() {
+  return ['', ...sortedByID(DB.actions).map(r => r.Name || r.ID)];
+}
+function getSensorNames() {
+  return ['', ...sortedByID(DB.sensors).map(r => r.Name || r.ID)];
+}
+
+function nameToId(collection, name) {
+  if (!name || !name.trim()) return 255;
+  for (const rec of Object.values(collection)) {
+    if ((rec.Name || '').trim() === name.trim()) return parseInt(rec.ID);
+  }
+  return 255;
+}
+function idToName(collection, id) {
+  id = parseInt(id);
+  if (isNaN(id) || id === 255) return '';
+  for (const rec of Object.values(collection)) {
+    if (parseInt(rec.ID) === id) return rec.Name || '';
+  }
+  return '';
+}
+
+function el(tag, attrs, ...children) {
+  const e = document.createElement(tag);
+  if (attrs) Object.entries(attrs).forEach(([k, v]) => {
+    if (k === 'className') e.className = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2).toLowerCase(), v);
+    else e.setAttribute(k, v);
+  });
+  children.flat().forEach(c => {
+    if (c == null) return;
+    e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+  });
+  return e;
+}
+
+function selectEl(options, attrs) {
+  const sel = el('select', attrs);
+  (options || []).forEach(o => {
+    const opt = el('option', { value: o }, o);
+    sel.appendChild(opt);
+  });
+  return sel;
+}
+
+function formRow(labelText, inputEl) {
+  const row = el('div', { className: 'form-row' });
+  if (labelText) row.appendChild(el('label', null, labelText));
+  row.appendChild(inputEl);
+  return row;
+}
+
+function sectionLabel(text) {
+  return el('div', { className: 'form-section' }, text);
+}
+
+function statusEl() {
+  return el('div', { className: 'status-msg' });
+}
+
+function setStatus(statusDiv, text, isError) {
+  statusDiv.textContent = text;
+  statusDiv.className = 'status-msg' + (isError ? ' error' : '');
+}
+
+function sliderRow(min, max, value, onChange) {
+  const row = el('div', { className: 'slider-row' });
+  const valSpan = el('span', { className: 'slider-val' }, String(value));
+  const slider = el('input', { type: 'range', min: String(min), max: String(max), value: String(value) });
+  slider.addEventListener('input', () => {
+    valSpan.textContent = slider.value;
+    if (onChange) onChange(parseInt(slider.value));
+  });
+  row.appendChild(slider);
+  row.appendChild(valSpan);
+  return { row, slider, valSpan };
+}
+
+function checkboxRow(text, checked, onChange) {
+  const id = 'cb_' + Math.random().toString(36).slice(2);
+  const row = el('div', { className: 'checkbox-row' });
+  const cb = el('input', { type: 'checkbox', id });
+  cb.checked = !!checked;
+  cb.addEventListener('change', () => { if (onChange) onChange(cb.checked); });
+  row.appendChild(cb);
+  row.appendChild(el('label', { for: id }, text));
+  return { row, checkbox: cb };
+}
+
+function downloadText(filename, text) {
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function downloadJSON(filename, data) {
+  downloadText(filename, JSON.stringify(data, null, 4));
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  TAB SWITCHING
+// ═══════════════════════════════════════════════════════════════
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    const tabId = 'tab-' + btn.dataset.tab;
+    document.getElementById(tabId).classList.add('active');
+    // Rebuild dynamic content
+    if (btn.dataset.tab === 'screens') buildScreensTab();
+    else if (btn.dataset.tab === 'actions') buildActionsTab();
+    else if (btn.dataset.tab === 'sensors') buildSensorsTab();
+    else if (btn.dataset.tab === 'puzzles') buildPuzzlesTab();
+    else if (btn.dataset.tab === 'dashboard') buildDashboardTab();
+    else if (btn.dataset.tab === 'map') buildMapTab();
+    else if (btn.dataset.tab === 'mapactions') buildMapActionsTab();
+    else if (btn.dataset.tab === 'parsers') buildParsersTab();
+    else if (btn.dataset.tab === 'play') buildPlayTab();
+    else if (btn.dataset.tab === 'importexport') buildImportExportTab();
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  SCREENS EDITOR
+// ═══════════════════════════════════════════════════════════════
+function buildScreensTab() {
+  const container = document.getElementById('tab-screens');
+  container.innerHTML = '';
+
+  const status = statusEl();
+  const fields = {};
+
+  // Load dropdown
+  const loadSel = selectEl(['-- select to load --', ...sortedByID(DB.screens).map(r => r.Name || r.ID)]);
+
+  function refreshLoadDD() {
+    loadSel.innerHTML = '';
+    loadSel.appendChild(el('option', { value: '' }, '-- select to load --'));
+    sortedByID(DB.screens).forEach(r => {
+      loadSel.appendChild(el('option', { value: r.Name || r.ID }, r.Name || r.ID));
+    });
+  }
+
+  // Identity
+  fields.ID = el('input', { type: 'text' });
+  fields.Name = el('input', { type: 'text' });
+
+  // Actions (4 combos)
+  const actionCombos = {};
+  for (let i = 1; i <= 4; i++) {
+    actionCombos['Action' + i] = selectEl(getActionNames());
+  }
+
+  // Description / FlashlightOn / FlashlightOff
+  fields.Description = el('textarea', { rows: '4' });
+  fields.FlashlightOn = el('textarea', { rows: '4' });
+  fields.FlashlightOff = el('textarea', { rows: '4' });
+
+  // AsciiDrawing
+  fields.AsciiDrawing = el('textarea', { rows: '7', style: 'color: var(--green); font-size: 10px;' });
+
+  // Enemy Probability slider
+  const enemyProb = sliderRow(0, 255, 0);
+
+  // Checkboxes
+  const isSecret = checkboxRow('IsSecretScreen', false);
+  const isEnd = checkboxRow('IsEndScreen', false);
+
+  function loadRecord(name) {
+    const rec = Object.values(DB.screens).find(r => (r.Name || r.ID) === name);
+    if (!rec) return;
+    fields.ID.value = rec.ID || '';
+    fields.Name.value = rec.Name || '';
+    for (let i = 1; i <= 4; i++) actionCombos['Action' + i].value = rec['Action' + i] || '';
+    fields.Description.value = rec.Description || '';
+    fields.FlashlightOn.value = rec.FlashlightOn || '';
+    fields.FlashlightOff.value = rec.FlashlightOff || '';
+    fields.AsciiDrawing.value = rec.AsciiDrawing || '';
+    enemyProb.slider.value = rec.EnemyProbability || 0;
+    enemyProb.valSpan.textContent = rec.EnemyProbability || 0;
+    isSecret.checkbox.checked = !!parseInt(rec.IsSecretScreen || 0);
+    isEnd.checkbox.checked = !!parseInt(rec.IsEndScreen || 0);
+    setStatus(status, `✔ Loaded '${name}'`);
+  }
+
+  loadSel.addEventListener('change', () => { if (loadSel.value) loadRecord(loadSel.value); });
+
+  function onNew() {
+    const newId = nextId(DB.screens);
+    fields.ID.value = newId;
+    fields.Name.value = '';
+    for (let i = 1; i <= 4; i++) actionCombos['Action' + i].value = '';
+    fields.Description.value = '';
+    fields.FlashlightOn.value = '';
+    fields.FlashlightOff.value = '';
+    fields.AsciiDrawing.value = '';
+    enemyProb.slider.value = 0; enemyProb.valSpan.textContent = '0';
+    isSecret.checkbox.checked = false;
+    isEnd.checkbox.checked = false;
+    setStatus(status, `✔ New screen (ID ${newId})`);
+  }
+
+  function onSave() {
+    const id = fields.ID.value.trim();
+    if (!id) { setStatus(status, '⚠ Please enter an ID', true); return; }
+    const data = {
+      ID: id,
+      Name: fields.Name.value,
+      Description: fields.Description.value,
+      FlashlightOn: fields.FlashlightOn.value,
+      FlashlightOff: fields.FlashlightOff.value,
+      AsciiDrawing: fields.AsciiDrawing.value,
+      EnemyProbability: parseInt(enemyProb.slider.value),
+      IsSecretScreen: isSecret.checkbox.checked ? 1 : 0,
+      IsEndScreen: isEnd.checkbox.checked ? 1 : 0,
+    };
+    for (let i = 1; i <= 4; i++) data['Action' + i] = actionCombos['Action' + i].value;
+    const existed = id in DB.screens;
+    DB.screens[id] = data;
+    refreshLoadDD();
+    setStatus(status, `✔ '${data.Name || id}' ${existed ? 'updated' : 'saved'} successfully!`);
+  }
+
+  function onDelete() {
+    const id = fields.ID.value.trim();
+    if (!id || !(id in DB.screens)) { setStatus(status, '⚠ Nothing to delete', true); return; }
+    delete DB.screens[id];
+    onNew();
+    refreshLoadDD();
+    setStatus(status, `✔ Deleted screen ${id}`);
+  }
+
+  // Build UI
+  container.appendChild(el('h2', null, '🖥️ Screens Editor'));
+  container.appendChild(el('hr', { className: 'accent' }));
+
+  container.appendChild(sectionLabel('— Load Existing Screen —'));
+  container.appendChild(formRow(null, loadSel));
+
+  const btnRow1 = el('div', { className: 'btn-row' });
+  btnRow1.appendChild(el('button', { className: 'btn btn-sm', onClick: onNew }, '✚ New Screen'));
+  btnRow1.appendChild(el('button', { className: 'btn btn-sm', onClick: onDelete, style: 'background:var(--red);border-color:var(--red)' }, '✕ Delete'));
+  container.appendChild(btnRow1);
+
+  container.appendChild(sectionLabel('— Identity —'));
+  container.appendChild(formRow('ID', fields.ID));
+  container.appendChild(formRow('Name', fields.Name));
+
+  container.appendChild(sectionLabel('— Actions in Screen —'));
+  const actGrid = el('div', { className: 'form-grid' });
+  for (let i = 1; i <= 4; i++) actGrid.appendChild(formRow('Action ' + i, actionCombos['Action' + i]));
+  container.appendChild(actGrid);
+
+  container.appendChild(sectionLabel('— Description —'));
+  container.appendChild(formRow('Description', fields.Description));
+  container.appendChild(formRow('FlashlightOn', fields.FlashlightOn));
+  container.appendChild(formRow('FlashlightOff', fields.FlashlightOff));
+
+  container.appendChild(sectionLabel('— Enemy Probability —'));
+  container.appendChild(enemyProb.row);
+
+  container.appendChild(sectionLabel('— Screen Flags —'));
+  container.appendChild(isSecret.row);
+  container.appendChild(isEnd.row);
+
+  container.appendChild(sectionLabel('— ASCII Drawing —'));
+  container.appendChild(formRow(null, fields.AsciiDrawing));
+
+  container.appendChild(el('hr', { className: 'accent' }));
+  container.appendChild(status);
+  container.appendChild(el('button', { className: 'btn', onClick: onSave }, '💾 Save Screen'));
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ACTIONS EDITOR
+// ═══════════════════════════════════════════════════════════════
+function buildActionsTab() {
+  const container = document.getElementById('tab-actions');
+  container.innerHTML = '';
+  const status = statusEl();
+  const fields = {};
+
+  const loadSel = selectEl(['-- select to load --', ...sortedByID(DB.actions).map(r => r.Name || r.ID)]);
+  function refreshLoadDD() {
+    loadSel.innerHTML = '';
+    loadSel.appendChild(el('option', { value: '' }, '-- select to load --'));
+    sortedByID(DB.actions).forEach(r => loadSel.appendChild(el('option', { value: r.Name || r.ID }, r.Name || r.ID)));
+  }
+
+  fields.ID = el('input', { type: 'text' });
+  fields.Name = el('input', { type: 'text' });
+  fields.Alias = el('input', { type: 'text' });
+
+  const sensorCombo = selectEl(getSensorNames());
+  const sensorIdSpan = el('span', { style: 'color:var(--green);font-size:11px' });
+  sensorCombo.addEventListener('change', () => {
+    const name = sensorCombo.value;
+    if (!name) { sensorIdSpan.textContent = ''; return; }
+    const rec = Object.values(DB.sensors).find(r => r.Name === name);
+    sensorIdSpan.textContent = rec ? `ID: ${rec.ID}` : '?';
+  });
+  const sensorActive = checkboxRow('Set Sensor Active (On)', false);
+
+  const screenCombo = selectEl(getScreenNames());
+  const screenIdSpan = el('span', { style: 'color:var(--green);font-size:11px' });
+  screenCombo.addEventListener('change', () => {
+    const name = screenCombo.value;
+    if (!name) { screenIdSpan.textContent = ''; return; }
+    const rec = Object.values(DB.screens).find(r => r.Name === name);
+    screenIdSpan.textContent = rec ? `ID: ${rec.ID}` : '?';
+  });
+
+  const costInput = el('input', { type: 'number', min: '0', max: '256', value: '0' });
+  const enemyProb = sliderRow(0, 255, 0);
+  const resetEnemyProb = checkboxRow('Reset Enemy Probability', false);
+  const deathProb = sliderRow(0, 255, 0);
+
+  const hideWater = checkboxRow('Hide on Water Level High', false);
+  const hideFear = checkboxRow('Hide on Fear Level High', false);
+  const hideFlash = checkboxRow('Hide with Flashlight Off', false);
+
+  fields.Description = el('textarea', { rows: '4' });
+  fields.DescriptionActionFailed = el('textarea', { rows: '4' });
+
+  function loadRecord(name) {
+    const rec = Object.values(DB.actions).find(r => (r.Name || r.ID) === name);
+    if (!rec) return;
+    fields.ID.value = rec.ID || '';
+    fields.Name.value = rec.Name || '';
+    fields.Alias.value = rec.Alias || '';
+    sensorCombo.value = idToName(DB.sensors, rec.SensorID);
+    sensorCombo.dispatchEvent(new Event('change'));
+    sensorActive.checkbox.checked = !!rec.SensorActive;
+    screenCombo.value = idToName(DB.screens, rec.ScreenID);
+    screenCombo.dispatchEvent(new Event('change'));
+    costInput.value = rec.Cost || 0;
+    enemyProb.slider.value = rec.EnemyProbability || 0; enemyProb.valSpan.textContent = rec.EnemyProbability || 0;
+    resetEnemyProb.checkbox.checked = !!parseInt(rec.ResetEnemyProbability || 0);
+    deathProb.slider.value = rec.DeathProbability || 0; deathProb.valSpan.textContent = rec.DeathProbability || 0;
+    fields.Description.value = rec.Description || '';
+    fields.DescriptionActionFailed.value = rec.DescriptionActionFailed || '';
+    hideWater.checkbox.checked = !!parseInt(rec.HideOnWaterLevelHigh || 0);
+    hideFear.checkbox.checked = !!parseInt(rec.HideOnFearLevelHigh || 0);
+    hideFlash.checkbox.checked = !!parseInt(rec.HideWithFlashlightOff || 0);
+    setStatus(status, `✔ Loaded '${name}'`);
+  }
+
+  loadSel.addEventListener('change', () => { if (loadSel.value && loadSel.value !== '-- select to load --') loadRecord(loadSel.value); });
+
+  function onNew() {
+    const newId = nextId(DB.actions);
+    fields.ID.value = newId; fields.Name.value = ''; fields.Alias.value = '';
+    sensorCombo.value = ''; sensorActive.checkbox.checked = false; sensorIdSpan.textContent = '';
+    screenCombo.value = ''; screenIdSpan.textContent = '';
+    costInput.value = 0;
+    enemyProb.slider.value = 0; enemyProb.valSpan.textContent = '0';
+    resetEnemyProb.checkbox.checked = false;
+    deathProb.slider.value = 0; deathProb.valSpan.textContent = '0';
+    fields.Description.value = ''; fields.DescriptionActionFailed.value = '';
+    hideWater.checkbox.checked = false; hideFear.checkbox.checked = false; hideFlash.checkbox.checked = false;
+    setStatus(status, `✔ New action (ID ${newId})`);
+  }
+
+  function onSave() {
+    const id = fields.ID.value.trim();
+    if (!id) { setStatus(status, '⚠ Please enter an ID', true); return; }
+    const data = {
+      ID: id, Name: fields.Name.value, Alias: fields.Alias.value,
+      SensorID: nameToId(DB.sensors, sensorCombo.value),
+      SensorActive: sensorActive.checkbox.checked,
+      ScreenID: nameToId(DB.screens, screenCombo.value),
+      Cost: Math.max(0, Math.min(256, parseInt(costInput.value) || 0)),
+      EnemyProbability: parseInt(enemyProb.slider.value),
+      ResetEnemyProbability: resetEnemyProb.checkbox.checked ? 1 : 0,
+      DeathProbability: parseInt(deathProb.slider.value),
+      Description: fields.Description.value,
+      DescriptionActionFailed: fields.DescriptionActionFailed.value,
+      HideOnWaterLevelHigh: hideWater.checkbox.checked ? 1 : 0,
+      HideOnFearLevelHigh: hideFear.checkbox.checked ? 1 : 0,
+      HideWithFlashlightOff: hideFlash.checkbox.checked ? 1 : 0,
+    };
+    const existed = id in DB.actions;
+    DB.actions[id] = data;
+    refreshLoadDD();
+    setStatus(status, `✔ '${data.Name || id}' ${existed ? 'updated' : 'saved'}!`);
+  }
+
+  function onDelete() {
+    const id = fields.ID.value.trim();
+    if (!id || !(id in DB.actions)) { setStatus(status, '⚠ Nothing to delete', true); return; }
+    delete DB.actions[id];
+    onNew(); refreshLoadDD();
+    setStatus(status, `✔ Deleted action ${id}`);
+  }
+
+  container.appendChild(el('h2', null, '⚡ Actions Editor'));
+  container.appendChild(el('hr', { className: 'accent' }));
+  container.appendChild(sectionLabel('— Load Existing Action —'));
+  container.appendChild(formRow(null, loadSel));
+  const btnRow1 = el('div', { className: 'btn-row' });
+  btnRow1.appendChild(el('button', { className: 'btn btn-sm', onClick: onNew }, '✚ New Action'));
+  btnRow1.appendChild(el('button', { className: 'btn btn-sm', onClick: onDelete, style: 'background:var(--red);border-color:var(--red)' }, '✕ Delete'));
+  container.appendChild(btnRow1);
+
+  container.appendChild(sectionLabel('— Identity —'));
+  container.appendChild(formRow('ID', fields.ID));
+  container.appendChild(formRow('Name', fields.Name));
+  container.appendChild(formRow('Alias', fields.Alias));
+
+  container.appendChild(sectionLabel('— Sensor —'));
+  container.appendChild(formRow('Sensor', sensorCombo));
+  container.appendChild(sensorIdSpan);
+  container.appendChild(sensorActive.row);
+
+  container.appendChild(sectionLabel('— Screen —'));
+  container.appendChild(formRow('Screen', screenCombo));
+  container.appendChild(screenIdSpan);
+
+  container.appendChild(sectionLabel('— Cost —'));
+  container.appendChild(formRow('Cost (0–256)', costInput));
+
+  container.appendChild(sectionLabel('— Enemy Probability —'));
+  container.appendChild(enemyProb.row);
+  container.appendChild(resetEnemyProb.row);
+
+  container.appendChild(sectionLabel('— Death Probability —'));
+  container.appendChild(deathProb.row);
+
+  container.appendChild(sectionLabel('— Visibility Conditions —'));
+  container.appendChild(hideWater.row);
+  container.appendChild(hideFear.row);
+  container.appendChild(hideFlash.row);
+
+  container.appendChild(sectionLabel('— Description —'));
+  container.appendChild(formRow('Description', fields.Description));
+  container.appendChild(formRow('Description Action Failed', fields.DescriptionActionFailed));
+
+  container.appendChild(el('hr', { className: 'accent' }));
+  container.appendChild(status);
+  container.appendChild(el('button', { className: 'btn', onClick: onSave }, '💾 Save Action'));
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SENSORS EDITOR
+// ═══════════════════════════════════════════════════════════════
+function buildSensorsTab() {
+  const container = document.getElementById('tab-sensors');
+  container.innerHTML = '';
+  const status = statusEl();
+  const fields = {};
+
+  const loadSel = selectEl(['-- select to load --', ...sortedByID(DB.sensors).map(r => r.Name || r.ID)]);
+  function refreshLoadDD() {
+    loadSel.innerHTML = '';
+    loadSel.appendChild(el('option', { value: '' }, '-- select to load --'));
+    sortedByID(DB.sensors).forEach(r => loadSel.appendChild(el('option', { value: r.Name || r.ID }, r.Name || r.ID)));
+  }
+
+  fields.ID = el('input', { type: 'text' });
+  fields.Name = el('input', { type: 'text' });
+  const activeVar = checkboxRow('Active (On)', false);
+  const toggleVar = checkboxRow('Toggle', false);
+  fields.DialogOn = el('textarea', { rows: '4' });
+  fields.DialogOff = el('textarea', { rows: '4' });
+
+  function loadRecord(name) {
+    const rec = Object.values(DB.sensors).find(r => (r.Name || r.ID) === name);
+    if (!rec) return;
+    fields.ID.value = rec.ID || '';
+    fields.Name.value = rec.Name || '';
+    activeVar.checkbox.checked = !!rec.Active;
+    toggleVar.checkbox.checked = !!parseInt(rec.Toggle || 0);
+    fields.DialogOn.value = rec.DialogOn || '';
+    fields.DialogOff.value = rec.DialogOff || '';
+    setStatus(status, `✔ Loaded '${name}'`);
+  }
+
+  loadSel.addEventListener('change', () => { if (loadSel.value && loadSel.value !== '-- select to load --') loadRecord(loadSel.value); });
+
+  function onNew() {
+    const newId = nextId(DB.sensors);
+    fields.ID.value = newId; fields.Name.value = '';
+    activeVar.checkbox.checked = false; toggleVar.checkbox.checked = false;
+    fields.DialogOn.value = ''; fields.DialogOff.value = '';
+    setStatus(status, `✔ New sensor (ID ${newId})`);
+  }
+
+  function onSave() {
+    const id = fields.ID.value.trim();
+    if (!id) { setStatus(status, '⚠ Please enter an ID', true); return; }
+    const data = {
+      ID: id, Name: fields.Name.value,
+      Active: activeVar.checkbox.checked,
+      Toggle: toggleVar.checkbox.checked ? 1 : 0,
+      DialogOn: fields.DialogOn.value,
+      DialogOff: fields.DialogOff.value,
+    };
+    const existed = id in DB.sensors;
+    DB.sensors[id] = data;
+    refreshLoadDD();
+    setStatus(status, `✔ '${data.Name || id}' ${existed ? 'updated' : 'saved'}!`);
+  }
+
+  function onDelete() {
+    const id = fields.ID.value.trim();
+    if (!id || !(id in DB.sensors)) { setStatus(status, '⚠ Nothing to delete', true); return; }
+    delete DB.sensors[id];
+    onNew(); refreshLoadDD();
+    setStatus(status, `✔ Deleted sensor ${id}`);
+  }
+
+  container.appendChild(el('h2', null, '📡 Sensors Editor'));
+  container.appendChild(el('hr', { className: 'accent' }));
+  container.appendChild(sectionLabel('— Load Existing Sensor —'));
+  container.appendChild(formRow(null, loadSel));
+  const btnRow = el('div', { className: 'btn-row' });
+  btnRow.appendChild(el('button', { className: 'btn btn-sm', onClick: onNew }, '✚ New Sensor'));
+  btnRow.appendChild(el('button', { className: 'btn btn-sm', onClick: onDelete, style: 'background:var(--red);border-color:var(--red)' }, '✕ Delete'));
+  container.appendChild(btnRow);
+
+  container.appendChild(sectionLabel('— Identity —'));
+  container.appendChild(formRow('ID', fields.ID));
+  container.appendChild(formRow('Name', fields.Name));
+  container.appendChild(sectionLabel('— State —'));
+  container.appendChild(activeVar.row);
+  container.appendChild(toggleVar.row);
+  container.appendChild(sectionLabel('— Dialogs —'));
+  container.appendChild(formRow('DialogOn (sensor is active)', fields.DialogOn));
+  container.appendChild(formRow('DialogOff (sensor is inactive)', fields.DialogOff));
+  container.appendChild(el('hr', { className: 'accent' }));
+  container.appendChild(status);
+  container.appendChild(el('button', { className: 'btn', onClick: onSave }, '💾 Save Sensor'));
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PUZZLES EDITOR
+// ═══════════════════════════════════════════════════════════════
+function buildPuzzlesTab() {
+  const container = document.getElementById('tab-puzzles');
+  container.innerHTML = '';
+  const status = statusEl();
+  const fields = {};
+
+  const loadSel = selectEl(['-- select to load --', ...sortedByID(DB.puzzles).map(r => r.Name || r.ID)]);
+  function refreshLoadDD() {
+    loadSel.innerHTML = '';
+    loadSel.appendChild(el('option', { value: '' }, '-- select to load --'));
+    sortedByID(DB.puzzles).forEach(r => loadSel.appendChild(el('option', { value: r.Name || r.ID }, r.Name || r.ID)));
+  }
+
+  fields.ID = el('input', { type: 'text' });
+  fields.Name = el('input', { type: 'text' });
+
+  const actionCombo = selectEl(getActionNames());
+  const screenCombo = selectEl(getScreenNames());
+  const screenIdSpan = el('span', { style: 'color:var(--green);font-size:11px' });
+  screenCombo.addEventListener('change', () => {
+    const name = screenCombo.value;
+    if (!name) { screenIdSpan.textContent = ''; return; }
+    const rec = Object.values(DB.screens).find(r => r.Name === name);
+    screenIdSpan.textContent = rec ? `ID: ${rec.ID}` : '?';
+  });
+
+  fields.DescriptionSolved = el('textarea', { rows: '3' });
+  fields.DescriptionNotSolved = el('textarea', { rows: '3' });
+  const solvedVar = checkboxRow('Solved', false);
+
+  function loadRecord(name) {
+    const rec = Object.values(DB.puzzles).find(r => (r.Name || r.ID) === name);
+    if (!rec) return;
+    fields.ID.value = rec.ID || '';
+    fields.Name.value = rec.Name || '';
+    actionCombo.value = rec.Action || '';
+    screenCombo.value = rec.Screen || '';
+    screenCombo.dispatchEvent(new Event('change'));
+    fields.DescriptionSolved.value = rec.DescriptionSolved || '';
+    fields.DescriptionNotSolved.value = rec.DescriptionNotSolved || '';
+    solvedVar.checkbox.checked = !!rec.Solved;
+    setStatus(status, `✔ Loaded '${name}'`);
+  }
+
+  loadSel.addEventListener('change', () => { if (loadSel.value && loadSel.value !== '-- select to load --') loadRecord(loadSel.value); });
+
+  function onNew() {
+    const newId = nextId(DB.puzzles);
+    fields.ID.value = newId; fields.Name.value = '';
+    actionCombo.value = ''; screenCombo.value = ''; screenIdSpan.textContent = '';
+    fields.DescriptionSolved.value = ''; fields.DescriptionNotSolved.value = '';
+    solvedVar.checkbox.checked = false;
+    setStatus(status, `✔ New puzzle (ID ${newId})`);
+  }
+
+  function onSave() {
+    const id = fields.ID.value.trim();
+    if (!id) { setStatus(status, '⚠ Please enter an ID', true); return; }
+    const data = {
+      ID: id, Name: fields.Name.value,
+      Action: actionCombo.value,
+      Screen: screenCombo.value,
+      ScreenID: screenIdSpan.textContent ? screenIdSpan.textContent.replace('ID: ', '') : '',
+      DescriptionSolved: fields.DescriptionSolved.value,
+      DescriptionNotSolved: fields.DescriptionNotSolved.value,
+      Solved: solvedVar.checkbox.checked,
+    };
+    const existed = id in DB.puzzles;
+    DB.puzzles[id] = data;
+    refreshLoadDD();
+    setStatus(status, `✔ '${data.Name || id}' ${existed ? 'updated' : 'saved'}!`);
+  }
+
+  function onDelete() {
+    const id = fields.ID.value.trim();
+    if (!id || !(id in DB.puzzles)) { setStatus(status, '⚠ Nothing to delete', true); return; }
+    delete DB.puzzles[id];
+    onNew(); refreshLoadDD();
+    setStatus(status, `✔ Deleted puzzle ${id}`);
+  }
+
+  container.appendChild(el('h2', null, '🧩 Puzzles Editor'));
+  container.appendChild(el('hr', { className: 'accent' }));
+  container.appendChild(sectionLabel('— Load Existing Puzzle —'));
+  container.appendChild(formRow(null, loadSel));
+  const btnRow = el('div', { className: 'btn-row' });
+  btnRow.appendChild(el('button', { className: 'btn btn-sm', onClick: onNew }, '✚ New Puzzle'));
+  btnRow.appendChild(el('button', { className: 'btn btn-sm', onClick: onDelete, style: 'background:var(--red);border-color:var(--red)' }, '✕ Delete'));
+  container.appendChild(btnRow);
+
+  container.appendChild(sectionLabel('— Identity —'));
+  container.appendChild(formRow('ID', fields.ID));
+  container.appendChild(formRow('Name', fields.Name));
+
+  container.appendChild(sectionLabel('— Action —'));
+  container.appendChild(formRow('Action', actionCombo));
+
+  container.appendChild(sectionLabel('— Screen —'));
+  container.appendChild(formRow('Screen', screenCombo));
+  container.appendChild(screenIdSpan);
+
+  container.appendChild(sectionLabel('— Descriptions —'));
+  container.appendChild(formRow('DescriptionSolved', fields.DescriptionSolved));
+  container.appendChild(formRow('DescriptionNotSolved', fields.DescriptionNotSolved));
+
+  container.appendChild(sectionLabel('— Status —'));
+  container.appendChild(solvedVar.row);
+
+  container.appendChild(el('hr', { className: 'accent' }));
+  container.appendChild(status);
+  container.appendChild(el('button', { className: 'btn', onClick: onSave }, '💾 Save Puzzle'));
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  DASHBOARD EDITOR
+// ═══════════════════════════════════════════════════════════════
+function buildDashboardTab() {
+  const container = document.getElementById('tab-dashboard');
+  container.innerHTML = '';
+  const status = statusEl();
+  const fields = {};
+
+  const loadSel = selectEl(['-- select to load --', ...sortedByID(DB.dashboard).map(r => r.Name || r.ID)]);
+  function refreshLoadDD() {
+    loadSel.innerHTML = '';
+    loadSel.appendChild(el('option', { value: '' }, '-- select to load --'));
+    sortedByID(DB.dashboard).forEach(r => loadSel.appendChild(el('option', { value: r.Name || r.ID }, r.Name || r.ID)));
+  }
+
+  fields.ID = el('input', { type: 'text' });
+  fields.Name = el('input', { type: 'text' });
+
+  const screenCombos = {};
+  ['StartScreen', 'EndScreenDefault', 'EndScreenEnemy', 'EndScreenTimeUp', 'EndScreenEnemyActionFailed'].forEach(k => {
+    screenCombos[k] = selectEl(getScreenNames());
+  });
+
+  const highWater = el('input', { type: 'number', min: '0', max: '9', value: '5' });
+  const highHeart = el('input', { type: 'number', min: '0', max: '1', value: '1' });
+  const totalSim = el('input', { type: 'number', min: '0', max: '1023', value: '0' });
+  const totalFlash = el('input', { type: 'number', min: '0', max: '1023', value: '0' });
+
+  const waterSpins = {};
+  for (let i = 0; i < 10; i++) {
+    waterSpins['WaterLevel' + i] = el('input', { type: 'number', min: '0', max: '1023', value: '0' });
+  }
+
+  const extraSpins = {};
+  ['ExtraSecondsWaterLevel', 'ExtraSecondsHighHeartRate', 'ExtraSecondsFlashlightOff'].forEach(k => {
+    extraSpins[k] = el('input', { type: 'number', min: '0', max: '1023', value: '0' });
+  });
+
+  const deathSliders = {};
+  ['DeathProbWaterLevel', 'DeathProbHighHeartRate', 'DeathProbFlashlightOff'].forEach(k => {
+    deathSliders[k] = sliderRow(0, 255, 0);
+  });
+
+  const enemySliders = {};
+  ['EnemyProbFlashlightOn'].forEach(k => {
+    enemySliders[k] = sliderRow(0, 255, 0);
+  });
+
+  function loadRecord(name) {
+    const rec = Object.values(DB.dashboard).find(r => (r.Name || r.ID) === name);
+    if (!rec) return;
+    fields.ID.value = rec.ID || '';
+    fields.Name.value = rec.Name || '';
+    screenCombos.StartScreen.value = idToName(DB.screens, rec.StartScreenID);
+    screenCombos.EndScreenDefault.value = idToName(DB.screens, rec.EndScreenDefaultID);
+    screenCombos.EndScreenEnemy.value = idToName(DB.screens, rec.EndScreenEnemyID);
+    screenCombos.EndScreenTimeUp.value = idToName(DB.screens, rec.EndScreenTimeUpID);
+    screenCombos.EndScreenEnemyActionFailed.value = idToName(DB.screens, rec.EndScreenEnemyActionFailedID);
+    highWater.value = rec.HighWaterLevel || 5;
+    highHeart.value = rec.HighHeartRateLevel || 1;
+    totalSim.value = rec.TotalSimulationTime || 0;
+    totalFlash.value = rec.TotalFlashlightTime || 0;
+    for (let i = 0; i < 10; i++) waterSpins['WaterLevel' + i].value = rec['WaterLevel' + i] || 0;
+    for (const k of Object.keys(extraSpins)) extraSpins[k].value = rec[k] || 0;
+    for (const k of Object.keys(deathSliders)) {
+      deathSliders[k].slider.value = rec[k] || 0;
+      deathSliders[k].valSpan.textContent = rec[k] || 0;
+    }
+    for (const k of Object.keys(enemySliders)) {
+      enemySliders[k].slider.value = rec[k] || 0;
+      enemySliders[k].valSpan.textContent = rec[k] || 0;
+    }
+    setStatus(status, `✔ Loaded '${name}'`);
+  }
+
+  loadSel.addEventListener('change', () => { if (loadSel.value && loadSel.value !== '-- select to load --') loadRecord(loadSel.value); });
+
+  function onNew() {
+    const newId = nextId(DB.dashboard);
+    fields.ID.value = newId; fields.Name.value = '';
+    Object.values(screenCombos).forEach(s => s.value = '');
+    highWater.value = 5; highHeart.value = 1; totalSim.value = 0; totalFlash.value = 0;
+    for (let i = 0; i < 10; i++) waterSpins['WaterLevel' + i].value = 0;
+    for (const k of Object.keys(extraSpins)) extraSpins[k].value = 0;
+    for (const k of Object.keys(deathSliders)) { deathSliders[k].slider.value = 0; deathSliders[k].valSpan.textContent = '0'; }
+    for (const k of Object.keys(enemySliders)) { enemySliders[k].slider.value = 0; enemySliders[k].valSpan.textContent = '0'; }
+    setStatus(status, `✔ New dashboard (ID ${newId})`);
+  }
+
+  function onSave() {
+    const id = fields.ID.value.trim();
+    if (!id) { setStatus(status, '⚠ Please enter an ID', true); return; }
+    const data = { ID: id, Name: fields.Name.value };
+    data.StartScreenID = nameToId(DB.screens, screenCombos.StartScreen.value);
+    data.EndScreenDefaultID = nameToId(DB.screens, screenCombos.EndScreenDefault.value);
+    data.EndScreenEnemyID = nameToId(DB.screens, screenCombos.EndScreenEnemy.value);
+    data.EndScreenTimeUpID = nameToId(DB.screens, screenCombos.EndScreenTimeUp.value);
+    data.EndScreenEnemyActionFailedID = nameToId(DB.screens, screenCombos.EndScreenEnemyActionFailed.value);
+    data.HighWaterLevel = Math.max(0, Math.min(9, parseInt(highWater.value) || 0));
+    data.HighHeartRateLevel = Math.max(0, Math.min(1, parseInt(highHeart.value) || 0));
+    data.TotalSimulationTime = Math.max(0, Math.min(1023, parseInt(totalSim.value) || 0));
+    data.TotalFlashlightTime = Math.max(0, Math.min(1023, parseInt(totalFlash.value) || 0));
+    for (let i = 0; i < 10; i++) data['WaterLevel' + i] = Math.max(0, Math.min(1023, parseInt(waterSpins['WaterLevel' + i].value) || 0));
+    for (const k of Object.keys(extraSpins)) data[k] = Math.max(0, Math.min(1023, parseInt(extraSpins[k].value) || 0));
+    for (const k of Object.keys(deathSliders)) data[k] = Math.max(0, Math.min(255, parseInt(deathSliders[k].slider.value) || 0));
+    for (const k of Object.keys(enemySliders)) data[k] = Math.max(0, Math.min(255, parseInt(enemySliders[k].slider.value) || 0));
+    const existed = id in DB.dashboard;
+    DB.dashboard[id] = data;
+    refreshLoadDD();
+    setStatus(status, `✔ '${data.Name || id}' ${existed ? 'updated' : 'saved'}!`);
+  }
+
+  container.appendChild(el('h2', null, '📊 Dashboard Editor'));
+  container.appendChild(el('hr', { className: 'accent' }));
+  container.appendChild(sectionLabel('— Load Existing Dashboard —'));
+  container.appendChild(formRow(null, loadSel));
+  const btnRow = el('div', { className: 'btn-row' });
+  btnRow.appendChild(el('button', { className: 'btn btn-sm', onClick: onNew }, '✚ New Dashboard'));
+  container.appendChild(btnRow);
+
+  container.appendChild(sectionLabel('— Identity —'));
+  container.appendChild(formRow('ID', fields.ID));
+  container.appendChild(formRow('Name', fields.Name));
+
+  container.appendChild(sectionLabel('— Start Screen —'));
+  container.appendChild(formRow('StartScreen', screenCombos.StartScreen));
+  container.appendChild(sectionLabel('— End Screen Default —'));
+  container.appendChild(formRow('EndScreenDefault', screenCombos.EndScreenDefault));
+  container.appendChild(sectionLabel('— End Screen Enemy —'));
+  container.appendChild(formRow('EndScreenEnemy', screenCombos.EndScreenEnemy));
+  container.appendChild(sectionLabel('— End Screen Time Up —'));
+  container.appendChild(formRow('EndScreenTimeUp', screenCombos.EndScreenTimeUp));
+  container.appendChild(sectionLabel('— End Screen Enemy Action Failed —'));
+  container.appendChild(formRow('EndScreenEnemyActionFailed', screenCombos.EndScreenEnemyActionFailed));
+
+  container.appendChild(sectionLabel('— Thresholds —'));
+  container.appendChild(formRow('High Water Level (0–9)', highWater));
+  container.appendChild(formRow('High HeartRate Level (0–1)', highHeart));
+
+  container.appendChild(sectionLabel('— Total Simulation Time —'));
+  container.appendChild(formRow('Total Simulation Time (seconds, max 1023)', totalSim));
+  container.appendChild(sectionLabel('— Total Flashlight Time —'));
+  container.appendChild(formRow('Total Flashlight Time (seconds)', totalFlash));
+
+  container.appendChild(sectionLabel('— Water Levels —'));
+  for (let i = 0; i < 10; i++) container.appendChild(formRow(`Water Level ${i} (seconds)`, waterSpins['WaterLevel' + i]));
+
+  container.appendChild(sectionLabel('— Extra Seconds —'));
+  container.appendChild(formRow('Seconds Extra for each Water Level', extraSpins.ExtraSecondsWaterLevel));
+  container.appendChild(formRow('Seconds Extra for High HeartRate', extraSpins.ExtraSecondsHighHeartRate));
+  container.appendChild(formRow('Seconds Extra for Flashlight Off', extraSpins.ExtraSecondsFlashlightOff));
+
+  container.appendChild(sectionLabel('— Death Probability on Action —'));
+  for (const [k, s] of Object.entries(deathSliders)) container.appendChild(formRow(k, s.row));
+  container.appendChild(sectionLabel('— Enemy Probability —'));
+  for (const [k, s] of Object.entries(enemySliders)) container.appendChild(formRow(k, s.row));
+
+  container.appendChild(el('hr', { className: 'accent' }));
+  container.appendChild(status);
+  container.appendChild(el('button', { className: 'btn', onClick: onSave }, '💾 Save Dashboard'));
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PARSERS
+// ═══════════════════════════════════════════════════════════════
+function asciiLines(text) {
+  const segments = text.split('\n');
+  const out = [];
+  for (let seg of segments) {
+    while (seg.length > 80) {
+      let cut = seg.lastIndexOf(' ', 80);
+      if (cut <= 0) cut = 80;
+      out.push(`  .ascii "${seg.slice(0, cut)}"`);
+      seg = seg.slice(cut).replace(/^ /, '');
+    }
+    out.push(`  .ascii "${seg}"`);
+  }
+  return out;
+}
+
+function boolToByte(v) {
+  if (typeof v === 'boolean') return v ? 1 : 0;
+  if (typeof v === 'string') return ['true','1','yes'].includes(v.toLowerCase()) ? 1 : 0;
+  return v ? 1 : 0;
+}
+
+function parseSensors() {
+  const sensors = sortedByID(DB.sensors);
+  if (!sensors.length) return '; No sensors\n';
+  const lines = [];
+  lines.push('; ============================================================');
+  lines.push(';  ACS Sensors — auto-generated');
+  lines.push('; ============================================================');
+  lines.push('');
+  lines.push('sensors_index:');
+  sensors.forEach(s => lines.push(`  .word sensor_pointer_${s.ID}  ; ${s.Name}`));
+  lines.push('sensors_index_record_length:');
+  lines.push('  .byte 2');
+  lines.push('');
+
+  lines.push('sensors_pointers:');
+  let offset = 0;
+  let s0 = {};
+  sensors.forEach((s, i) => {
+    const label = `sensor_${s.ID}`;
+    const start = offset;
+    lines.push(`sensor_pointer_${s.ID}:`);
+    lines.push(`  .word ${label}_id        ; ${s.Name} id        [${offset},${offset+1}]`); offset += 2;
+    lines.push(`  .word ${label}_name      ; ${s.Name} name      [${offset},${offset+1}]`); const _nam = offset; offset += 2;
+    lines.push(`  .word ${label}_active    ; ${s.Name} active    [${offset},${offset+1}]`); offset += 2;
+    lines.push(`  .word ${label}_dialog_on ; ${s.Name} dialog_on [${offset},${offset+1}]`); const _don = offset; offset += 2;
+    lines.push(`  .word ${label}_dialog_off; ${s.Name} dialog_off[${offset},${offset+1}]`); const _doff = offset; offset += 2;
+    lines.push(`  .word ${label}_toggle   ; ${s.Name} toggle   [${offset},${offset+1}]`); const _tog = offset; offset += 2;
+    if (i === 0) s0 = { _nam, _don, _doff, _tog, len: offset - start };
+  });
+  lines.push(`sensor_name_offset:`); lines.push(`  .byte ${s0._nam}`);
+  lines.push(`sensor_dialog_on_offset:`); lines.push(`  .byte ${s0._don}`);
+  lines.push(`sensor_dialog_off_offset:`); lines.push(`  .byte ${s0._doff}`);
+  lines.push(`sensor_toggle_offset:`); lines.push(`  .byte ${s0._tog}`);
+  lines.push(`sensor_record_length:`); lines.push(`  .byte ${s0.len}`);
+  lines.push('');
+
+  sensors.forEach(s => {
+    const label = `sensor_${s.ID}`;
+    lines.push(`; ── Sensor ${s.ID}: ${s.Name} ──────────────────────────`);
+    lines.push(`${label}_id:`); lines.push(`  .byte ${s.ID}`); lines.push('');
+    lines.push(`${label}_name:`); lines.push(...asciiLines((s.Name||'').replace(/"/g, '\\"'))); lines.push('  .ascii "e"'); lines.push('');
+    const active = boolToByte(s.Active);
+    lines.push(`${label}_active:`); lines.push(`  .byte ${active}  ; ${active ? 'on' : 'off'}`); lines.push('');
+    lines.push(`${label}_dialog_on:`); lines.push(...asciiLines((s.DialogOn||'').replace(/"/g, '\\"'))); lines.push('  .ascii "e"'); lines.push('');
+    lines.push(`${label}_dialog_off:`); lines.push(...asciiLines((s.DialogOff||'').replace(/"/g, '\\"'))); lines.push('  .ascii "e"'); lines.push('');
+    const toggle = parseInt(s.Toggle) ? 1 : 0;
+    lines.push(`${label}_toggle:`); lines.push(`  .byte ${toggle}  ; ${toggle ? 'toggle' : 'normal'}`); lines.push('');
+  });
+  lines.push('sensor_count:'); lines.push(`  .byte ${sensors.length}`); lines.push('');
+  return lines.join('\n');
+}
+
+function parseActions() {
+  const actions = sortedByID(DB.actions);
+  if (!actions.length) return '; No actions\n';
+  const lines = [];
+  lines.push('; ============================================================');
+  lines.push(';  ACS Actions — auto-generated');
+  lines.push('; ============================================================');
+  lines.push('');
+  lines.push('actions_index:');
+  actions.forEach(a => lines.push(`  .word action_pointer_${a.ID}  ; ${a.Name}`));
+  lines.push('actions_index_record_length:'); lines.push('  .byte 2'); lines.push('');
+
+  lines.push('actions_pointers:');
+  let offset = 0; let a0 = {};
+  actions.forEach((a, i) => {
+    const label = `action_${a.ID}`;
+    const start = offset;
+    lines.push(`action_pointer_${a.ID}:`);
+    const flds = ['id','name','alias','sensor_id','sensor_active','screen','cost','enemy_probability','reset_enemy_prob','death_probability','description','desc_action_failed','hide_water','hide_fear','hide_flashlight'];
+    const offsets = {};
+    flds.forEach(f => {
+      lines.push(`  .word ${label}_${f} ; ${a.Name} ${f} [${offset},${offset+1}]`);
+      offsets[f] = offset; offset += 2;
+    });
+    if (i === 0) { a0 = { ...offsets, len: offset - start }; }
+  });
+
+  for (const [f, lab] of [['name','action_name_offset'],['alias','action_alias_offset'],['sensor_id','action_sensor_id_offset'],['sensor_active','action_sensor_active_offset'],['screen','action_screen_offset'],['cost','action_cost_offset'],['enemy_probability','action_enemy_probability_offset'],['reset_enemy_prob','action_reset_enemy_prob_offset'],['death_probability','action_death_probability_offset'],['description','action_description_offset'],['desc_action_failed','action_desc_action_failed_offset'],['hide_water','action_hide_water_offset'],['hide_fear','action_hide_fear_offset'],['hide_flashlight','action_hide_flashlight_offset']]) {
+    lines.push(`${lab}:`); lines.push(`  .byte ${a0[f]}`);
+  }
+  lines.push('action_record_length:'); lines.push(`  .byte ${a0.len}`); lines.push('');
+
+  actions.forEach(a => {
+    const label = `action_${a.ID}`;
+    lines.push(`; ── Action ${a.ID}: ${a.Name} ──────────────────────────`);
+    lines.push(`${label}_id:`); lines.push(`  .byte ${a.ID}`); lines.push('');
+    lines.push(`${label}_name:`); lines.push(...asciiLines((a.Name||'').replace(/"/g, '\\"'))); lines.push('  .ascii "e"'); lines.push('');
+    lines.push(`${label}_alias:`); lines.push(...asciiLines((a.Alias||'').replace(/"/g, '\\"'))); lines.push('  .ascii "e"'); lines.push('');
+    let sid = parseInt(a.SensorID); if (isNaN(sid) || sid < 0 || sid > 254) sid = 255;
+    lines.push(`${label}_sensor_id:`); lines.push(`  .byte ${sid}`); lines.push('');
+    const sa = boolToByte(a.SensorActive);
+    lines.push(`${label}_sensor_active:`); lines.push(`  .byte ${sa}  ; ${sa ? 'on' : 'off'}`); lines.push('');
+    let scrId = parseInt(a.ScreenID); if (isNaN(scrId) || scrId < 0 || scrId > 254) scrId = 255;
+    lines.push(`${label}_screen:`); lines.push(`  .byte ${scrId}`); lines.push('');
+    const cost = Math.max(0, Math.min(256, parseInt(a.Cost) || 0));
+    lines.push(`${label}_cost:`); lines.push(`  .byte ${cost}`); lines.push('');
+    const ep = Math.max(0, Math.min(255, parseInt(a.EnemyProbability) || 0));
+    lines.push(`${label}_enemy_probability:`); lines.push(`  .byte ${ep}`); lines.push('');
+    const rep = parseInt(a.ResetEnemyProbability) ? 1 : 0;
+    lines.push(`${label}_reset_enemy_prob:`); lines.push(`  .byte ${rep}  ; ${rep ? 'on' : 'off'}`); lines.push('');
+    const dp = Math.max(0, Math.min(255, parseInt(a.DeathProbability) || 0));
+    lines.push(`${label}_death_probability:`); lines.push(`  .byte ${dp}`); lines.push('');
+    lines.push(`${label}_description:`); lines.push(...asciiLines((a.Description||'').replace(/"/g, '\\"'))); lines.push('  .ascii "e"'); lines.push('');
+    lines.push(`${label}_desc_action_failed:`); lines.push(...asciiLines((a.DescriptionActionFailed||'').replace(/"/g, '\\"'))); lines.push('  .ascii "e"'); lines.push('');
+    const hw = parseInt(a.HideOnWaterLevelHigh) ? 1 : 0;
+    lines.push(`${label}_hide_water:`); lines.push(`  .byte ${hw}  ; ${hw ? 'on' : 'off'}`); lines.push('');
+    const hf = parseInt(a.HideOnFearLevelHigh) ? 1 : 0;
+    lines.push(`${label}_hide_fear:`); lines.push(`  .byte ${hf}  ; ${hf ? 'on' : 'off'}`); lines.push('');
+    const hfl = parseInt(a.HideWithFlashlightOff) ? 1 : 0;
+    lines.push(`${label}_hide_flashlight:`); lines.push(`  .byte ${hfl}  ; ${hfl ? 'on' : 'off'}`); lines.push('');
+  });
+  lines.push('action_count:'); lines.push(`  .byte ${actions.length}`); lines.push('');
+  return lines.join('\n');
+}
+
+function parseScreens() {
+  const screens = sortedByID(DB.screens);
+  const actionMap = {};
+  Object.values(DB.actions).forEach(a => { if (a.Name) actionMap[a.Name.trim()] = parseInt(a.ID); });
+  if (!screens.length) return '; No screens\n';
+  const lines = [];
+  lines.push('; ============================================================');
+  lines.push(';  ACS Screens — auto-generated');
+  lines.push('; ============================================================');
+  lines.push('');
+  lines.push('screens_index:');
+  screens.forEach(s => lines.push(`  .word screen_pointers_${s.ID}  ; ${s.Name}`));
+  lines.push('screens_index_record_length:'); lines.push('  .byte 2'); lines.push('');
+
+  lines.push('screens_pointers:');
+  let offset = 0; let s0 = {};
+  screens.forEach((s, i) => {
+    const label = `screen_${s.ID}`;
+    const start = offset;
+    lines.push(`screen_pointers_${s.ID}:`);
+    const flds = ['id','name','action1','action2','action3','action4','description','ascii','flashlight_on','flashlight_off','enemy_probability','is_secret_screen','is_end_screen'];
+    const offsets = {};
+    flds.forEach(f => { lines.push(`  .word ${label}_${f} ; ${s.Name} ${f} [${offset},${offset+1}]`); offsets[f] = offset; offset += 2; });
+    if (i === 0) { s0 = { ...offsets, len: offset - start }; }
+  });
+  for (const [f, lab] of [['action1','screen_action_offset'],['description','screen_description_offset'],['ascii','screen_ascii_offset'],['flashlight_on','screen_flashlight_on_offset'],['flashlight_off','screen_flashlight_off_offset'],['enemy_probability','screen_enemy_probability_offset'],['is_secret_screen','screen_is_secret_screen_offset'],['is_end_screen','screen_is_end_screen_offset']]) {
+    lines.push(`${lab}:`); lines.push(`  .byte ${s0[f]}`);
+  }
+  lines.push('screen_record_length:'); lines.push(`  .byte ${s0.len}`); lines.push('');
+
+  screens.forEach(s => {
+    const label = `screen_${s.ID}`;
+    lines.push(`; ── Screen ${s.ID}: ${s.Name} ──────────────────────────`);
+    lines.push(`${label}_id:`); lines.push(`  .byte ${s.ID}`); lines.push('');
+    lines.push(`${label}_name:`); lines.push(...asciiLines((s.Name||'').replace(/"/g, '\\"'))); lines.push('  .ascii "e"'); lines.push('');
+    for (let i = 1; i <= 4; i++) {
+      const aName = (s['Action' + i] || '').trim();
+      const aid = aName && actionMap[aName] !== undefined ? actionMap[aName] : 255;
+      lines.push(`${label}_action${i}:`); lines.push(`  .byte ${aid}  ; ${aName || 'none'}`); lines.push('');
+    }
+    lines.push(`${label}_description:`); lines.push(...asciiLines((s.Description||'').replace(/"/g, '\\"'))); lines.push('  .ascii "e"'); lines.push('');
+    lines.push(`${label}_ascii:`); lines.push(...asciiLines((s.AsciiDrawing||'').replace(/"/g, '\\"'))); lines.push('  .ascii "e"'); lines.push('');
+    lines.push(`${label}_flashlight_on:`); lines.push(...asciiLines((s.FlashlightOn||'').replace(/"/g, '\\"'))); lines.push('  .ascii "e"'); lines.push('');
+    lines.push(`${label}_flashlight_off:`); lines.push(...asciiLines((s.FlashlightOff||'').replace(/"/g, '\\"'))); lines.push('  .ascii "e"'); lines.push('');
+    const ep = Math.max(0, Math.min(255, parseInt(s.EnemyProbability) || 0));
+    lines.push(`${label}_enemy_probability:`); lines.push(`  .byte ${ep}`); lines.push('');
+    const sec = parseInt(s.IsSecretScreen) ? 1 : 0;
+    lines.push(`${label}_is_secret_screen:`); lines.push(`  .byte ${sec}  ; ${sec ? 'yes' : 'no'}`); lines.push('');
+    const end = parseInt(s.IsEndScreen) ? 1 : 0;
+    lines.push(`${label}_is_end_screen:`); lines.push(`  .byte ${end}  ; ${end ? 'yes' : 'no'}`); lines.push('');
+  });
+  lines.push('screen_count:'); lines.push(`  .byte ${screens.length}`); lines.push('');
+  let secretCount = 0;
+  screens.forEach(s => { if (parseInt(s.IsSecretScreen)) secretCount++; });
+  lines.push('screens_with_secrets:'); lines.push(`  .byte ${secretCount}`); lines.push('');
+  return lines.join('\n');
+}
+
+function parseDashboard() {
+  const dashes = sortedByID(DB.dashboard);
+  if (!dashes.length) return '; No dashboard\n';
+  const lines = [];
+  lines.push('; ============================================================');
+  lines.push(';  ACS Dashboard — auto-generated');
+  lines.push('; ============================================================');
+  lines.push('');
+  lines.push('dashboard_index:');
+  dashes.forEach(d => lines.push(`  .word dashboard_pointer_${d.ID}  ; ${d.Name}`));
+  lines.push('dashboard_index_record_length:'); lines.push('  .byte 2'); lines.push('');
+
+  lines.push('dashboard_pointers:');
+  let offset = 0; let d0 = {};
+  dashes.forEach((d, i) => {
+    const label = `dashboard_${d.ID}`;
+    const start = offset;
+    lines.push(`dashboard_pointer_${d.ID}:`);
+    const flds = ['id','name','start_screen','high_water_level','high_heart_level','total_sim_time','total_flash_time'];
+    for (let w = 0; w < 10; w++) flds.push(`water_level${w}`);
+    flds.push('extra_water','extra_heartrate','extra_flashlight','death_water','death_heartrate','death_flashlight','enemy_flash_on','end_screen_default','end_screen_enemy','end_screen_timeup','end_screen_enemy_af');
+    const offsets = {};
+    flds.forEach(f => { lines.push(`  .word ${label}_${f} ; ${d.Name} ${f} [${offset},${offset+1}]`); offsets[f] = offset; offset += 2; });
+    if (i === 0) { d0 = { ...offsets, len: offset - start }; }
+  });
+
+  // Offset labels
+  const offsetLabels = [['name','dashboard_name_offset'],['start_screen','dashboard_start_screen_offset'],['high_water_level','dashboard_high_water_level_offset'],['high_heart_level','dashboard_high_heart_level_offset'],['total_sim_time','dashboard_total_sim_time_offset'],['total_flash_time','dashboard_total_flash_time_offset']];
+  for (let w = 0; w < 10; w++) offsetLabels.push([`water_level${w}`, `dashboard_water_level${w}_offset`]);
+  offsetLabels.push(['extra_water','dashboard_extra_water_offset'],['extra_heartrate','dashboard_extra_heartrate_offset'],['extra_flashlight','dashboard_extra_flashlight_offset'],['death_water','dashboard_death_water_offset'],['death_heartrate','dashboard_death_heartrate_offset'],['death_flashlight','dashboard_death_flashlight_offset'],['enemy_flash_on','dashboard_enemy_flash_on_offset'],['end_screen_default','dashboard_end_screen_default_offset'],['end_screen_enemy','dashboard_end_screen_enemy_offset'],['end_screen_timeup','dashboard_end_screen_timeup_offset'],['end_screen_enemy_af','dashboard_end_screen_enemy_af_offset']);
+  offsetLabels.forEach(([f, lab]) => { lines.push(`${lab}:`); lines.push(`  .byte ${d0[f]}`); });
+  lines.push('dashboard_record_length:'); lines.push(`  .byte ${d0.len}`); lines.push('');
+
+  dashes.forEach(d => {
+    const label = `dashboard_${d.ID}`;
+    lines.push(`; ── Dashboard ${d.ID}: ${d.Name} ──────────────────────────`);
+    lines.push(`${label}_id:`); lines.push(`  .byte ${d.ID}`); lines.push('');
+    lines.push(`${label}_name:`); lines.push(`  .ascii "${(d.Name||'').replace(/"/g, '\\"')}"`); lines.push('  .ascii "e"'); lines.push('');
+    let ss = parseInt(d.StartScreenID); if (isNaN(ss) || ss < 0 || ss > 254) ss = 255;
+    lines.push(`${label}_start_screen:`); lines.push(`  .byte ${ss}`); lines.push('');
+    lines.push(`${label}_high_water_level:`); lines.push(`  .byte ${Math.max(0,Math.min(9,parseInt(d.HighWaterLevel)||0))}`); lines.push('');
+    lines.push(`${label}_high_heart_level:`); lines.push(`  .byte ${Math.max(0,Math.min(1,parseInt(d.HighHeartRateLevel)||0))}`); lines.push('');
+    // 2-byte values
+    const twoByteFields = [['TotalSimulationTime','total_sim_time'],['TotalFlashlightTime','total_flash_time']];
+    for (let w = 0; w < 10; w++) twoByteFields.push([`WaterLevel${w}`, `water_level${w}`]);
+    twoByteFields.push(['ExtraSecondsWaterLevel','extra_water'],['ExtraSecondsHighHeartRate','extra_heartrate'],['ExtraSecondsFlashlightOff','extra_flashlight']);
+    twoByteFields.forEach(([key, asmLab]) => {
+      let v = Math.max(0, Math.min(1023, parseInt(d[key]) || 0));
+      const hi = (v >> 8) & 0xFF, lo = v & 0xFF;
+      lines.push(`${label}_${asmLab}:`);
+      lines.push(`  .byte $${hi.toString(16).padStart(2,'0').toUpperCase()}  ; high byte (decimal ${v})`);
+      lines.push(`  .byte $${lo.toString(16).padStart(2,'0').toUpperCase()}  ; low byte`);
+      lines.push('');
+    });
+    // Single byte death/enemy probs
+    [['DeathProbWaterLevel','death_water'],['DeathProbHighHeartRate','death_heartrate'],['DeathProbFlashlightOff','death_flashlight'],['EnemyProbFlashlightOn','enemy_flash_on']].forEach(([key, asmLab]) => {
+      const v = Math.max(0, Math.min(255, parseInt(d[key]) || 0));
+      lines.push(`${label}_${asmLab}:`); lines.push(`  .byte ${v}`); lines.push('');
+    });
+    // End screens
+    [['EndScreenDefaultID','end_screen_default'],['EndScreenEnemyID','end_screen_enemy'],['EndScreenTimeUpID','end_screen_timeup'],['EndScreenEnemyActionFailedID','end_screen_enemy_af']].forEach(([key, asmLab]) => {
+      let v = parseInt(d[key]); if (isNaN(v) || v < 0 || v > 254) v = 255;
+      lines.push(`${label}_${asmLab}:`); lines.push(`  .byte ${v}  ; screen id`); lines.push('');
+    });
+  });
+  lines.push('dashboard_count:'); lines.push(`  .byte ${dashes.length}`); lines.push('');
+  return lines.join('\n');
+}
+
+// Dual EEPROM parsers — generate bank-split files
+function parseDualEepromActions() {
+  const bank0 = parseActions(); // Full data = bank0
+  // Bank1 = headers only
+  const actions = sortedByID(DB.actions);
+  if (!actions.length) return { bank0: '; No actions\n', bank1: '; No actions\n' };
+
+  // Compute offsets same as main parser
+  let offset = 0; let a0 = {};
+  const flds = ['id','name','alias','sensor_id','sensor_active','screen','cost','enemy_probability','reset_enemy_prob','death_probability','description','desc_action_failed','hide_water','hide_fear','hide_flashlight'];
+  actions.forEach((a, i) => {
+    const start = offset;
+    const offsets = {};
+    flds.forEach(f => { offsets[f] = offset; offset += 2; });
+    if (i === 0) { a0 = { ...offsets, len: offset - start }; }
+  });
+
+  const hdr = [];
+  hdr.push('; ============================================================');
+  hdr.push(';  ACS Actions Headers — auto-generated (Bank 1)');
+  hdr.push('; ============================================================');
+  hdr.push('');
+  hdr.push('actions_index_record_length:'); hdr.push('  .byte 2');
+  for (const [f, lab] of [['name','action_name_offset'],['alias','action_alias_offset'],['sensor_id','action_sensor_id_offset'],['sensor_active','action_sensor_active_offset'],['screen','action_screen_offset'],['cost','action_cost_offset'],['enemy_probability','action_enemy_probability_offset'],['reset_enemy_prob','action_reset_enemy_prob_offset'],['death_probability','action_death_probability_offset'],['description','action_description_offset'],['desc_action_failed','action_desc_action_failed_offset'],['hide_water','action_hide_water_offset'],['hide_fear','action_hide_fear_offset'],['hide_flashlight','action_hide_flashlight_offset']]) {
+    hdr.push(`${lab}:`); hdr.push(`  .byte ${a0[f]}`);
+  }
+  hdr.push('action_record_length:'); hdr.push(`  .byte ${a0.len}`);
+  hdr.push('action_count:'); hdr.push(`  .byte ${actions.length}`); hdr.push('');
+  return { bank0, bank1: hdr.join('\n') };
+}
+
+function parseDualEepromScreens() {
+  const bank1 = parseScreens(); // Full data = bank1
+  const screens = sortedByID(DB.screens);
+  if (!screens.length) return { bank0: '; No screens\n', bank1: '; No screens\n' };
+
+  let offset = 0; let s0 = {};
+  const flds = ['id','name','action1','action2','action3','action4','description','ascii','flashlight_on','flashlight_off','enemy_probability','is_secret_screen','is_end_screen'];
+  screens.forEach((s, i) => {
+    const start = offset;
+    const offsets = {};
+    flds.forEach(f => { offsets[f] = offset; offset += 2; });
+    if (i === 0) { s0 = { ...offsets, len: offset - start }; }
+  });
+
+  let secretCount = 0;
+  screens.forEach(s => { if (parseInt(s.IsSecretScreen)) secretCount++; });
+
+  const hdr = [];
+  hdr.push('; ============================================================');
+  hdr.push(';  ACS Screens Headers — auto-generated (Bank 0)');
+  hdr.push('; ============================================================');
+  hdr.push('');
+  hdr.push('screens_index_record_length:'); hdr.push('  .byte 2');
+  for (const [f, lab] of [['action1','screen_action_offset'],['description','screen_description_offset'],['ascii','screen_ascii_offset'],['flashlight_on','screen_flashlight_on_offset'],['flashlight_off','screen_flashlight_off_offset'],['enemy_probability','screen_enemy_probability_offset'],['is_secret_screen','screen_is_secret_screen_offset'],['is_end_screen','screen_is_end_screen_offset']]) {
+    hdr.push(`${lab}:`); hdr.push(`  .byte ${s0[f]}`);
+  }
+  hdr.push('screen_record_length:'); hdr.push(`  .byte ${s0.len}`); hdr.push('');
+  hdr.push('screen_count:'); hdr.push(`  .byte ${screens.length}`); hdr.push('');
+  hdr.push('screens_with_secrets:'); hdr.push(`  .byte ${secretCount}`); hdr.push('');
+  return { bank0: hdr.join('\n'), bank1 };
+}
+
+function buildParsersTab() {
+  const container = document.getElementById('tab-parsers');
+  container.innerHTML = '';
+  container.appendChild(el('h2', null, '⚙ Run Parsers'));
+  container.appendChild(el('hr', { className: 'accent' }));
+
+  const outputDiv = el('div', { className: 'parser-output' });
+  const statusDiv = statusEl();
+
+  const parsers = [
+    { name: '📡 Sensors', fn: parseSensors, file: 'acs_sensors.asm' },
+    { name: '⚡ Actions', fn: parseActions, file: 'acs_actions.asm' },
+    { name: '🖥️ Screens', fn: parseScreens, file: 'acs_screens.asm' },
+    { name: '📊 Dashboard', fn: parseDashboard, file: 'acs_dashboard.asm' },
+  ];
+
+  const dualParsers = [
+    { name: '⚡ Dual EEPROM Actions', fn: parseDualEepromActions, files: ['acs_actions_bank0.asm', 'acs_actions_headers_bank1.asm'] },
+    { name: '🖥️ Dual EEPROM Screens', fn: parseDualEepromScreens, files: ['acs_screens_headers_bank0.asm', 'acs_screens_bank1.asm'] },
+  ];
+
+  function runAll() {
+    outputDiv.textContent = '';
+    let errors = [];
+    parsers.forEach(p => {
+      outputDiv.textContent += `\n${'─'.repeat(50)}\n▶  Running ${p.name} parser…\n${'─'.repeat(50)}\n`;
+      try {
+        const asm = p.fn();
+        outputDiv.textContent += `[OK] Generated '${p.file}'.\n`;
+        outputDiv.textContent += asm.slice(0, 500) + (asm.length > 500 ? '\n... (truncated for display)\n' : '\n');
+      } catch (e) {
+        outputDiv.textContent += `[ERROR] ${e.message}\n`;
+        errors.push(p.name);
+      }
+    });
+    // Dual EEPROM
+    dualParsers.forEach(dp => {
+      outputDiv.textContent += `\n${'─'.repeat(50)}\n▶  Running ${dp.name} parser…\n${'─'.repeat(50)}\n`;
+      try {
+        const result = dp.fn();
+        outputDiv.textContent += `[OK] Generated '${dp.files[0]}' and '${dp.files[1]}'.\n`;
+        outputDiv.textContent += result.bank0.slice(0, 300) + '\n...\n';
+      } catch (e) {
+        outputDiv.textContent += `[ERROR] ${e.message}\n`;
+        errors.push(dp.name);
+      }
+    });
+    if (errors.length) setStatus(statusDiv, `⚠ Errors in: ${errors.join(', ')}`, true);
+    else setStatus(statusDiv, '✔ All parsers completed successfully!');
+  }
+
+  function downloadAll() {
+    parsers.forEach(p => {
+      try {
+        downloadText(p.file, p.fn());
+      } catch(e) { alert(`Error generating ${p.file}: ${e.message}`); }
+    });
+    // Also download dual EEPROM files
+    dualParsers.forEach(dp => {
+      try {
+        const result = dp.fn();
+        downloadText(dp.files[0], result.bank0);
+        downloadText(dp.files[1], result.bank1);
+      } catch(e) { alert(`Error generating ${dp.name}: ${e.message}`); }
+    });
+  }
+
+  const btnRow = el('div', { className: 'btn-row' });
+  btnRow.appendChild(el('button', { className: 'btn', onClick: runAll }, '⚙ Run All Parsers'));
+  btnRow.appendChild(el('button', { className: 'btn btn-green', onClick: downloadAll }, '📥 Download All .asm Files'));
+  container.appendChild(btnRow);
+
+  // Individual downloads — standard parsers
+  container.appendChild(sectionLabel('— Standard Parsers —'));
+  parsers.forEach(p => {
+    container.appendChild(el('button', { className: 'btn btn-sm', style: 'margin: 4px;', onClick: () => {
+      try { downloadText(p.file, p.fn()); } catch(e) { alert(e.message); }
+    }}, `📥 ${p.name} → ${p.file}`));
+  });
+
+  // Dual EEPROM downloads
+  container.appendChild(sectionLabel('— Dual EEPROM Parsers —'));
+  dualParsers.forEach(dp => {
+    container.appendChild(el('button', { className: 'btn btn-sm', style: 'margin: 4px;', onClick: () => {
+      try {
+        const result = dp.fn();
+        downloadText(dp.files[0], result.bank0);
+        downloadText(dp.files[1], result.bank1);
+      } catch(e) { alert(e.message); }
+    }}, `📥 ${dp.name} → ${dp.files.join(' + ')}`));
+  });
+
+  container.appendChild(statusDiv);
+  container.appendChild(outputDiv);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PLAY GAME
+// ═══════════════════════════════════════════════════════════════
+function buildPlayTab() {
+  const container = document.getElementById('tab-play');
+  container.innerHTML = '';
+  container.appendChild(el('h2', null, '▶ Play Adventure'));
+  container.appendChild(el('hr', { className: 'accent' }));
+
+  if (!Object.keys(DB.screens).length || !Object.keys(DB.actions).length) {
+    container.appendChild(el('p', { style: 'color:var(--red)' }, 'Need at least screens and actions to play. Create some first!'));
+    return;
+  }
+
+  const screens = DB.screens;
+  const actions = DB.actions;
+  const sensors = DB.sensors;
+  const dashboard = DB.dashboard;
+
+  const screenById = {}; Object.values(screens).forEach(r => { screenById[String(r.ID)] = r; });
+  const actionByName = {}; Object.values(actions).forEach(r => { if (r.Name) actionByName[r.Name.trim()] = r; });
+  const sensorById = {}; Object.values(sensors).forEach(r => { sensorById[String(r.ID)] = r; });
+
+  const dash = Object.values(dashboard)[0] || {};
+  const D = (k, d) => parseInt(dash[k] || d);
+  const totalSimTime = D('TotalSimulationTime', 600);
+  const totalFlashTime = D('TotalFlashlightTime', 300);
+  const waterThresholds = Array.from({length:10}, (_,i) => D(`WaterLevel${i}`, 0));
+  const extraSecWater = D('ExtraSecondsWaterLevel', 5);
+  const extraSecHeart = D('ExtraSecondsHighHeartRate', 5);
+  const extraSecFlashOff = D('ExtraSecondsFlashlightOff', 5);
+  const deathProbWater = D('DeathProbWaterLevel', 10);
+  const deathProbHeart = D('DeathProbHighHeartRate', 10);
+  const deathProbFlash = D('DeathProbFlashlightOff', 50);
+  const enemyProbFlashOn = D('EnemyProbFlashlightOn', 10);
+  const highWaterMark = D('HighWaterLevel', 5);
+  const highHeartMark = D('HighHeartRateLevel', 1);
+  const endScreenDefaultId = D('EndScreenDefaultID', 255);
+  const endScreenEnemyId = D('EndScreenEnemyID', 255);
+  const endScreenTimeUpId = D('EndScreenTimeUpID', 255);
+  const endScreenEnemyAfId = D('EndScreenEnemyActionFailedID', 255);
+
+  const state = {
+    time_elapsed: 0, flash_time_used: 0, flashlight_on: false, flash_can_relight: true,
+    water_level: 0, heart_rate: 0, enemy_prob_accum: 0,
+    secrets_found: new Set(), screens_visited: new Set(),
+    game_over: false, game_over_reason: '', current_screen_id: null, sensor_states: {},
+  };
+
+  const totalSecrets = Object.values(screens).filter(s => parseInt(s.IsSecretScreen)).length;
+
+  Object.entries(sensorById).forEach(([sid, s]) => { state.sensor_states[sid] = !!s.Active; });
+
+  // Find start screen
+  let startScreen = null;
+  const dashStartId = D('StartScreenID', 255);
+  if (dashStartId !== 255) startScreen = screenById[String(dashStartId)];
+  if (!startScreen) startScreen = Object.values(screens).find(s => (s.Name||'').toLowerCase() === 'startscreen');
+  if (!startScreen) startScreen = screenById['3'] || Object.values(screens)[0];
+  state.current_screen_id = String(startScreen.ID);
+
+  // UI elements
+  const statusBar = el('div', { className: 'play-status' });
+  const textArea = el('div', { className: 'play-text' });
+  const actionBar = el('div', { className: 'play-actions' });
+  const statsPanel = el('div', { className: 'stats-panel' });
+
+  let godMode = false;
+  const godCb = checkboxRow('🛡 God Mode', false, (v) => { godMode = v; });
+  statusBar.appendChild(godCb.row);
+
+  const statusSpans = {};
+  ['Time', 'Water', 'Heart', 'Flashlight', 'Secrets'].forEach(k => {
+    const sp = el('span'); statusSpans[k] = sp; statusBar.appendChild(sp);
+  });
+
+  const layout = el('div', { className: 'play-layout' });
+  layout.appendChild(el('div', null, textArea, actionBar));
+  layout.appendChild(statsPanel);
+  container.appendChild(statusBar);
+  container.appendChild(layout);
+
+  function write(text, tag='description') {
+    const line = el('div', { className: tag }, text);
+    textArea.appendChild(line);
+    textArea.scrollTop = textArea.scrollHeight;
+  }
+  function clearText() { textArea.innerHTML = ''; }
+  function statsWrite(text, tag='label') {
+    const line = el('div', { className: tag || '' }, text);
+    statsPanel.appendChild(line);
+    statsPanel.scrollTop = statsPanel.scrollHeight;
+  }
+  function statsClear() { statsPanel.innerHTML = ''; }
+
+  function updateStatus() {
+    const t = state.time_elapsed, ft = state.flash_time_used, wl = state.water_level;
+    const hr = state.heart_rate;
+    let fl = state.flashlight_on ? 'ON' : 'OFF';
+    if (!state.flash_can_relight && !state.flashlight_on) fl = 'DEAD';
+    statusSpans.Time.textContent = `⏱ ${t}/${totalSimTime}s`;
+    const bars = '█'.repeat(wl) + '░'.repeat(9 - wl);
+    statusSpans.Water.textContent = `💧 ${bars} (${wl})`;
+    statusSpans.Heart.textContent = `❤ ${hr ? 'HIGH' : 'calm'}`;
+    statusSpans.Flashlight.textContent = `🔦 ${fl} (${ft}/${totalFlashTime}s)`;
+    statusSpans.Secrets.textContent = `🔑 ${state.secrets_found.size}/${totalSecrets}`;
+  }
+
+  function updateWaterLevel() {
+    const t = state.time_elapsed;
+    let newLevel = 0;
+    for (let i = 0; i < waterThresholds.length; i++) { if (t >= waterThresholds[i]) newLevel = i; }
+    if (newLevel > state.water_level) {
+      state.water_level = newLevel;
+      write(`⚠ El nivel de agua subió a ${newLevel}!`, 'warning');
+    }
+  }
+
+  function getRandom() { return godMode ? 255 : Math.floor(Math.random() * 256); }
+  function isHighWater() { return state.water_level >= highWaterMark; }
+  function isHighFear() { return state.heart_rate >= highHeartMark; }
+
+  function clearActions() { actionBar.innerHTML = ''; }
+
+  function drawScreen(rec) {
+    const scrId = String(rec.ID);
+    state.current_screen_id = scrId;
+    state.screens_visited.add(scrId);
+    if (parseInt(rec.IsSecretScreen) && !state.secrets_found.has(scrId)) {
+      state.secrets_found.add(scrId);
+      write('🔑 ¡Descubriste un secreto!', 'success');
+    }
+    clearText();
+    const ascii = (rec.AsciiDrawing || '').trim();
+    if (ascii) { write(ascii, 'ascii_art'); write('', 'description'); }
+    const desc = (rec.Description || '').trim();
+    if (desc) write(desc, 'description');
+    if (state.flashlight_on) {
+      const fl = (rec.FlashlightOn || '').trim();
+      if (fl) { write('', 'description'); write(fl, 'description'); }
+    } else {
+      const fl = (rec.FlashlightOff || '').trim();
+      if (fl) { write('', 'description'); write(fl, 'description'); }
+    }
+    write('', 'description');
+    updateStatus();
+  }
+
+  function showActions() {
+    clearActions();
+    const scr = screenById[state.current_screen_id];
+    if (!scr || state.game_over) return;
+    const available = [];
+    for (let slot = 1; slot <= 4; slot++) {
+      const aname = (scr['Action' + slot] || '').trim();
+      if (!aname) continue;
+      const arec = actionByName[aname];
+      if (!arec) continue;
+      if (parseInt(arec.HideOnWaterLevelHigh) && isHighWater()) continue;
+      if (parseInt(arec.HideOnFearLevelHigh) && isHighFear()) continue;
+      if (parseInt(arec.HideWithFlashlightOff) && !state.flashlight_on) continue;
+      available.push([aname, arec]);
+    }
+    if (!available.length) { write('No hay acciones disponibles...', 'warning'); return; }
+    available.forEach(([aname, arec]) => {
+      const display = (arec.Alias || '').trim() || aname;
+      actionBar.appendChild(el('button', { className: 'btn', onClick: () => executeAction(aname, arec) }, `▶ ${display}`));
+    });
+  }
+
+  function endGame(reason, endScreenRec) {
+    state.game_over = true;
+    state.game_over_reason = reason;
+    clearActions();
+    write('', 'description');
+    write('═'.repeat(50), 'death');
+    if (endScreenRec) {
+      const desc = (endScreenRec.Description || '').trim();
+      if (desc) write(desc, 'death');
+    } else {
+      write(reason, 'death');
+    }
+    write('═'.repeat(50), 'death');
+    write('', 'description');
+
+    actionBar.appendChild(el('button', { className: 'btn', onClick: () => {
+      clearActions(); write('', 'description');
+      write('═══ PROGRESO DEL JUEGO ═══', 'progress_hdr');
+      write(`  Tiempo Total Usado:        ${state.time_elapsed}/${totalSimTime} segundos`, 'progress');
+      write(`  Secretos Encontrados:      ${state.secrets_found.size}/${totalSecrets}`, 'progress');
+      write(`  Nivel Final de Agua:       ${state.water_level}`, 'progress');
+      write(`  Pantallas Recorridas:      ${state.screens_visited.size}`, 'progress');
+      write(`  Razón de Fin:              ${reason}`, 'progress');
+      write('═'.repeat(40), 'progress_hdr');
+    }}, '📊 Ver Progreso'));
+    actionBar.appendChild(el('button', { className: 'btn', onClick: () => buildPlayTab() }, '🔄 Reiniciar'));
+    updateStatus();
+  }
+
+  function executeAction(aname, arec) {
+    if (state.game_over) return;
+    if (aname.toUpperCase() === 'TERMINAR EL JUEGO') {
+      const desc = (arec.Description || '').trim();
+      if (desc) write(desc, 'action_msg');
+      endGame('Fin del juego');
+      return;
+    }
+
+    write(`\n${'─'.repeat(40)}`, 'info');
+    const display = (arec.Alias || '').trim() || aname;
+    write(`▶ ${display}`, 'title');
+    const desc = (arec.Description || '').trim();
+    if (desc) write(desc, 'action_msg');
+
+    let dstScreenId = parseInt(arec.ScreenID); if (isNaN(dstScreenId)) dstScreenId = 255;
+    const dstScreen = dstScreenId !== 255 ? screenById[String(dstScreenId)] : null;
+
+    if (dstScreen && (parseInt(dstScreen.IsEndScreen) || (dstScreen.Name||'').toLowerCase().startsWith('endscreen'))) {
+      drawScreen(dstScreen);
+      endGame('Muerte por acción directa', dstScreen);
+      return;
+    }
+
+    if (parseInt(arec.ResetEnemyProbability)) {
+      state.enemy_prob_accum = 0;
+      write('(Probabilidad de enemigo reseteada)', 'info');
+    }
+
+    statsClear();
+    statsWrite(`▶  ${display}`, 'header');
+    statsWrite('═'.repeat(48), 'divider');
+    statsWrite('GAME STATE', 'section');
+    statsWrite(`  Water: ${state.water_level}  Heart: ${state.heart_rate ? 'HIGH' : 'calm'}  Flash: ${state.flashlight_on ? 'ON' : 'OFF'}  God: ${godMode ? 'ON' : 'OFF'}`, 'label');
+
+    // Fail probability
+    const actionDeathVal = parseInt(arec.DeathProbability) || 0;
+    const waterMod = state.water_level * deathProbWater;
+    const flashMod = state.flashlight_on ? 0 : deathProbFlash;
+    const heartMod = state.heart_rate ? deathProbHeart : 0;
+    const modSum = waterMod + flashMod + heartMod;
+    const failProb = actionDeathVal * modSum;
+
+    statsWrite('', 'label');
+    statsWrite('ACTION FAILURE PROBABILITY', 'section');
+    statsWrite(`  DeathProb: ${actionDeathVal} × (water:${waterMod} + flash:${flashMod} + heart:${heartMod}) = ${failProb}`, 'value');
+
+    let failTriggered = false;
+    if (failProb > 0) {
+      const failRoll = getRandom();
+      write(`  [Falla: ${failProb}, dado=${failRoll}]`, 'info');
+      statsWrite(`  Roll: ${failRoll} < ${failProb}? ${failRoll < failProb ? 'FAILED!' : 'OK'}`, failRoll < failProb ? 'result_fail' : 'result_ok');
+      if (failRoll < failProb) failTriggered = true;
+    }
+
+    if (failTriggered) {
+      const fd = (arec.DescriptionActionFailed || '').trim();
+      if (fd) write(fd, 'warning');
+      let failScreen = endScreenEnemyAfId !== 255 ? screenById[String(endScreenEnemyAfId)] : null;
+      if (!failScreen && endScreenDefaultId !== 255) failScreen = screenById[String(endScreenDefaultId)];
+      if (failScreen) { drawScreen(failScreen); endGame('Muerte por acción fallida', failScreen); }
+      else endGame('Muerte por acción fallida');
+      return;
+    }
+
+    // Enemy probability
+    const actionEnemyProb = parseInt(arec.EnemyProbability) || 0;
+    state.enemy_prob_accum += actionEnemyProb;
+    const flashEnemyBonus = state.flashlight_on ? enemyProbFlashOn : 0;
+    const enemySum = actionEnemyProb + state.enemy_prob_accum + flashEnemyBonus;
+    const curScreen = screenById[state.current_screen_id] || {};
+    const screenEnemyProb = parseInt(curScreen.EnemyProbability) || 0;
+    const totalEnemyProb = enemySum * screenEnemyProb;
+
+    statsWrite('', 'label');
+    statsWrite('ENEMY PROBABILITY', 'section');
+    statsWrite(`  (${actionEnemyProb} + accum:${state.enemy_prob_accum} + flash:${flashEnemyBonus}) × screen:${screenEnemyProb} = ${totalEnemyProb}`, 'value');
+
+    let enemyTriggered = false;
+    if (totalEnemyProb > 0) {
+      const enemyRoll = getRandom();
+      write(`  [Enemigo: ${totalEnemyProb}, dado=${enemyRoll}]`, 'info');
+      statsWrite(`  Roll: ${totalEnemyProb} >= ${enemyRoll}? ${totalEnemyProb >= enemyRoll ? 'ENEMY!' : 'Safe'}`, totalEnemyProb >= enemyRoll ? 'result_fail' : 'result_ok');
+      if (totalEnemyProb >= enemyRoll) enemyTriggered = true;
+    }
+
+    if (enemyTriggered) {
+      write('¡El enemigo te encontró!', 'enemy');
+      let enemyScreen = endScreenEnemyId !== 255 ? screenById[String(endScreenEnemyId)] : null;
+      if (enemyScreen) { drawScreen(enemyScreen); endGame('Te atrapó el enemigo', enemyScreen); }
+      else endGame('Te atrapó el enemigo');
+      return;
+    }
+
+    // Time cost
+    const baseCost = parseInt(arec.Cost) || 0;
+    let timeCost = baseCost;
+    const wl = state.water_level;
+    if (wl > 0) timeCost += wl * extraSecWater;
+    if (state.heart_rate) timeCost += extraSecHeart;
+    if (!state.flashlight_on) timeCost += extraSecFlashOff;
+
+    statsWrite('', 'label');
+    statsWrite('TIME COST', 'section');
+    statsWrite(`  Base: ${baseCost} + water:${wl > 0 ? wl * extraSecWater : 0} + heart:${state.heart_rate ? extraSecHeart : 0} + flash:${!state.flashlight_on ? extraSecFlashOff : 0} = ${timeCost}s`, 'cost');
+
+    state.time_elapsed += timeCost;
+    if (timeCost > 0) write(`  [Costo: ${timeCost}s]`, 'info');
+
+    if (state.time_elapsed >= totalSimTime) {
+      write('⚠ ¡Se acabó el tiempo!', 'warning');
+      let timeUpScreen = endScreenTimeUpId !== 255 ? screenById[String(endScreenTimeUpId)] : null;
+      if (timeUpScreen) { drawScreen(timeUpScreen); endGame('Se terminó el tiempo', timeUpScreen); }
+      else endGame('Se terminó el tiempo');
+      return;
+    }
+
+    updateWaterLevel();
+    if (state.water_level >= 9 && state.time_elapsed >= waterThresholds[9]) {
+      write('⚠ ¡La caverna se llenó de agua!', 'warning');
+      endGame('Se llenó la caverna de agua');
+      return;
+    }
+
+    if (state.flashlight_on) {
+      state.flash_time_used += timeCost;
+      if (state.flash_time_used >= totalFlashTime) {
+        state.flashlight_on = false;
+        state.flash_can_relight = false;
+        write('🔦 ¡La linterna se apagó!', 'warning');
+      }
+    }
+
+    // Sensor processing
+    let sensorId = parseInt(arec.SensorID);
+    if (!isNaN(sensorId) && sensorId !== 255) {
+      const sensorRec = sensorById[String(sensorId)];
+      if (sensorRec) {
+        const sName = sensorRec.Name || '';
+        const sidStr = String(sensorId);
+        const isToggle = parseInt(sensorRec.Toggle);
+        let sensorActive;
+        if (isToggle) {
+          sensorActive = !state.sensor_states[sidStr];
+          state.sensor_states[sidStr] = sensorActive;
+        } else {
+          sensorActive = !!arec.SensorActive;
+          state.sensor_states[sidStr] = sensorActive;
+        }
+        const msg = sensorActive ? (sensorRec.DialogOn||'').trim() : (sensorRec.DialogOff||'').trim();
+        if (msg) write(`📡 [${sName}]: ${msg}`, 'sensor');
+
+        if (sName === 'flashlightheart') {
+          if (!state.flashlight_on) {
+            if (state.flash_can_relight) { state.flashlight_on = true; state.heart_rate = 0; write('🔦 La linterna se prende.', 'sensor'); }
+            else write('🔦 Sin batería.', 'warning');
+          } else { state.flashlight_on = false; state.heart_rate = 1; write('🔦 La linterna se apaga.', 'sensor'); }
+        } else if (sName === 'flashlight') {
+          if (sensorActive && state.flash_can_relight) state.flashlight_on = true;
+          else if (sensorActive) write('🔦 Sin batería.', 'warning');
+          else state.flashlight_on = false;
+        } else if (sName === 'heart') {
+          state.heart_rate = sensorActive ? 1 : 0;
+        }
+      }
+    }
+
+    if (dstScreen && dstScreenId !== 255) {
+      write('', 'description');
+      drawScreen(dstScreen);
+    } else {
+      updateStatus();
+    }
+    showActions();
+  }
+
+  // Start!
+  drawScreen(startScreen);
+  showActions();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  IMPORT / EXPORT
+// ═══════════════════════════════════════════════════════════════
+function buildImportExportTab() {
+  const container = document.getElementById('tab-importexport');
+  container.innerHTML = '';
+  container.appendChild(el('h2', null, '💾 Import / Export'));
+  container.appendChild(el('hr', { className: 'accent' }));
+
+  container.appendChild(sectionLabel('— Export All JSON Data —'));
+  container.appendChild(el('p', { style: 'font-size:10px;color:var(--accent-light);margin:4px 0' }, 'Downloads all data as individual JSON files (same format the Python version uses).'));
+
+  const btnRow = el('div', { className: 'btn-row' });
+  ['screens', 'actions', 'sensors', 'dashboard', 'puzzles'].forEach(key => {
+    btnRow.appendChild(el('button', { className: 'btn btn-sm', onClick: () => downloadJSON(`acs_${key}.json`, DB[key]) }, `📥 acs_${key}.json`));
+  });
+  btnRow.appendChild(el('button', { className: 'btn btn-green', onClick: () => {
+    downloadJSON('acs_all_data.json', DB);
+  }}, '📥 Export All (single file)'));
+  container.appendChild(btnRow);
+
+  container.appendChild(el('hr', { className: 'accent' }));
+  container.appendChild(sectionLabel('— Import JSON Data —'));
+  container.appendChild(el('p', { style: 'font-size:10px;color:var(--accent-light);margin:4px 0' }, 'Load existing JSON files from the Python version, or a previously exported "all data" file.'));
+
+  const importStatus = statusEl();
+
+  // Individual file imports
+  ['screens', 'actions', 'sensors', 'dashboard', 'puzzles'].forEach(key => {
+    const row = el('div', { className: 'file-ops' });
+    row.appendChild(el('span', { style: 'font-size:10px;min-width:120px' }, `acs_${key}.json:`));
+    const inp = el('input', { type: 'file', accept: '.json' });
+    inp.addEventListener('change', () => {
+      const file = inp.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          DB[key] = JSON.parse(reader.result);
+          setStatus(importStatus, `✔ Loaded ${key} (${Object.keys(DB[key]).length} records)`);
+        } catch(e) {
+          setStatus(importStatus, `⚠ Error parsing ${file.name}: ${e.message}`, true);
+        }
+      };
+      reader.readAsText(file);
+    });
+    row.appendChild(inp);
+    container.appendChild(row);
+  });
+
+  // All-in-one import
+  container.appendChild(el('hr', { className: 'accent' }));
+  const allRow = el('div', { className: 'file-ops' });
+  allRow.appendChild(el('span', { style: 'font-size:10px;min-width:120px' }, 'All data (single file):'));
+  const allInp = el('input', { type: 'file', accept: '.json' });
+  allInp.addEventListener('change', () => {
+    const file = allInp.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        for (const key of ['screens', 'actions', 'sensors', 'dashboard', 'puzzles']) {
+          if (data[key]) DB[key] = data[key];
+        }
+        setStatus(importStatus, '✔ Loaded all data successfully!');
+      } catch(e) {
+        setStatus(importStatus, `⚠ Error: ${e.message}`, true);
+      }
+    };
+    reader.readAsText(file);
+  });
+  allRow.appendChild(allInp);
+  container.appendChild(allRow);
+  container.appendChild(importStatus);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  MAP VIEW — screens as draggable nodes with directional arrows
+// ═══════════════════════════════════════════════════════════════
+function buildMapTab() {
+  const container = document.getElementById('tab-map');
+  container.innerHTML = '';
+  container.appendChild(el('h2', null, '🗺️ Adventure Map'));
+  container.appendChild(el('hr', { className: 'accent' }));
+
+  const screens = DB.screens;
+  if (!Object.keys(screens).length) {
+    container.appendChild(el('p', { style: 'color:var(--red)' }, 'No screens found. Create some screens first.'));
+    return;
+  }
+
+  container.appendChild(el('p', { style: 'font-size:10px;color:var(--accent-light);margin:4px 0' },
+    'Drag rooms to rearrange • Scroll to zoom • Shows screens with action connections'));
+
+  const resetBtn = el('button', { className: 'btn btn-sm', style: 'margin-bottom:8px' }, '⟳ Reset Layout');
+  container.appendChild(resetBtn);
+
+  const canvasWrap = el('div', { className: 'map-container', style: 'height:600px;position:relative;overflow:hidden;' });
+  const canvas = el('canvas', { width: '2000', height: '2000' });
+  canvasWrap.appendChild(canvas);
+  container.appendChild(canvasWrap);
+
+  const ctx = canvas.getContext('2d');
+
+  // Build data
+  const nameToRec = {};
+  Object.values(screens).forEach(r => { nameToRec[r.Name || r.ID] = r; });
+  const allNames = Object.values(screens).sort((a,b) => parseInt(a.ID)-parseInt(b.ID)).map(r => r.Name || r.ID);
+
+  const actionByName = {};
+  Object.values(DB.actions).forEach(a => { if (a.Name) actionByName[a.Name.trim()] = a; });
+
+  const idToScreenName = {};
+  Object.values(screens).forEach(r => { idToScreenName[String(r.ID)] = r.Name || r.ID; });
+
+  // Get action labels for a screen
+  function getActionLabels(rec) {
+    const labels = [];
+    for (let i = 1; i <= 4; i++) {
+      const aname = (rec['Action' + i] || '').trim();
+      if (aname) labels.push(aname);
+    }
+    return labels;
+  }
+
+  // Build edges from actions that have ScreenID set
+  function buildEdges() {
+    const edges = [];
+    for (const [nm, rec] of Object.entries(nameToRec)) {
+      for (let i = 1; i <= 4; i++) {
+        const aname = (rec['Action' + i] || '').trim();
+        if (!aname) continue;
+        const arec = actionByName[aname];
+        if (!arec) continue;
+        const dstId = parseInt(arec.ScreenID);
+        if (isNaN(dstId) || dstId === 255) continue;
+        const dstName = idToScreenName[String(dstId)];
+        if (dstName && dstName !== nm) {
+          edges.push({ src: nm, dst: dstName, action: aname });
+        }
+      }
+    }
+    return edges;
+  }
+
+  const BOX_W = 160, BOX_H = 50, GAP_X = 100, GAP_Y = 90;
+  const STEP_X = BOX_W + GAP_X, STEP_Y = BOX_H + GAP_Y;
+  const positions = {}; // name -> {x, y}
+
+  function autoLayout() {
+    const cols = Math.max(1, Math.ceil(Math.sqrt(allNames.length)));
+    allNames.forEach((nm, i) => {
+      const col = i % cols, row = Math.floor(i / cols);
+      positions[nm] = { x: 80 + col * STEP_X, y: 80 + row * STEP_Y };
+    });
+  }
+  autoLayout();
+
+  let scale = 1, panX = 0, panY = 0;
+
+  function draw() {
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(scale, 0, 0, scale, panX, panY);
+
+    const edges = buildEdges();
+
+    // Draw edges
+    const edgeGroups = {};
+    edges.forEach(e => {
+      const key = e.src + '→' + e.dst;
+      if (!edgeGroups[key]) edgeGroups[key] = [];
+      edgeGroups[key].push(e.action);
+    });
+
+    for (const [key, actions] of Object.entries(edgeGroups)) {
+      const [src, dst] = key.split('→');
+      if (!positions[src] || !positions[dst]) continue;
+      const sp = positions[src], dp = positions[dst];
+      const sx = sp.x + BOX_W / 2, sy = sp.y + BOX_H / 2;
+      const dx = dp.x + BOX_W / 2, dy = dp.y + BOX_H / 2;
+
+      // Check if bidirectional
+      const revKey = dst + '→' + src;
+      const isBidir = revKey in edgeGroups;
+      let offsetY = 0;
+      if (isBidir) offsetY = key < revKey ? -6 : 6;
+
+      ctx.beginPath();
+      ctx.moveTo(sx, sy + offsetY);
+      ctx.lineTo(dx, dy + offsetY);
+      ctx.strokeStyle = '#6EC6FF';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Arrow head
+      const angle = Math.atan2(dy + offsetY - sy - offsetY, dx - sx);
+      const hl = 12;
+      ctx.beginPath();
+      ctx.moveTo(dx - 4 * Math.cos(angle), dy + offsetY - 4 * Math.sin(angle));
+      ctx.lineTo(dx - hl * Math.cos(angle - 0.3), dy + offsetY - hl * Math.sin(angle - 0.3));
+      ctx.lineTo(dx - hl * Math.cos(angle + 0.3), dy + offsetY - hl * Math.sin(angle + 0.3));
+      ctx.closePath();
+      ctx.fillStyle = '#6EC6FF';
+      ctx.fill();
+
+      // Label at midpoint
+      const mx = (sx + dx) / 2, my = (sy + dy) / 2 + offsetY - 10;
+      ctx.font = '9px Share Tech Mono, Courier New, monospace';
+      ctx.fillStyle = '#FBBF24';
+      ctx.textAlign = 'center';
+      ctx.fillText(actions.join(' / ').slice(0, 30), mx, my);
+    }
+
+    // Draw boxes
+    allNames.forEach(nm => {
+      const p = positions[nm];
+      if (!p) return;
+      const rec = nameToRec[nm];
+      const actLabels = getActionLabels(rec);
+      const actAreaH = actLabels.length * 16 + 4;
+      const fullH = BOX_H + actAreaH;
+
+      // Box bg
+      ctx.fillStyle = '#16213e';
+      ctx.strokeStyle = '#2a3a5c';
+      ctx.lineWidth = 2;
+      ctx.fillRect(p.x, p.y, BOX_W, fullH);
+      ctx.strokeRect(p.x, p.y, BOX_W, fullH);
+
+      // Header
+      ctx.fillStyle = '#BAE6FD';
+      ctx.font = 'bold 11px Share Tech Mono, Courier New, monospace';
+      ctx.textAlign = 'center';
+      const display = nm.length <= 18 ? nm : nm.slice(0, 17) + '…';
+      ctx.fillText(display, p.x + BOX_W / 2, p.y + BOX_H / 2 + 4);
+
+      // ID badge
+      ctx.font = '8px Share Tech Mono, Courier New, monospace';
+      ctx.fillStyle = '#34D399';
+      ctx.textAlign = 'left';
+      ctx.fillText(`[${rec.ID}]`, p.x + 4, p.y + 14);
+
+      // Flags
+      let flags = '';
+      if (parseInt(rec.IsSecretScreen)) flags += '🔑';
+      if (parseInt(rec.IsEndScreen)) flags += '🏁';
+      if (flags) {
+        ctx.textAlign = 'right';
+        ctx.fillText(flags, p.x + BOX_W - 4, p.y + 14);
+      }
+
+      // Divider
+      if (actLabels.length) {
+        ctx.beginPath();
+        ctx.moveTo(p.x + 2, p.y + BOX_H);
+        ctx.lineTo(p.x + BOX_W - 2, p.y + BOX_H);
+        ctx.strokeStyle = '#2a3a5c';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      // Action labels
+      ctx.font = '9px Share Tech Mono, Courier New, monospace';
+      ctx.fillStyle = '#C084FC';
+      ctx.textAlign = 'center';
+      actLabels.forEach((lbl, i) => {
+        const y = p.y + BOX_H + 14 + i * 16;
+        const d = lbl.length <= 20 ? lbl : lbl.slice(0, 19) + '…';
+        ctx.fillText(d, p.x + BOX_W / 2, y);
+      });
+    });
+  }
+
+  draw();
+  resetBtn.addEventListener('click', () => { autoLayout(); scale = 1; panX = 0; panY = 0; draw(); });
+
+  // Drag
+  let dragName = null, dragOx = 0, dragOy = 0;
+  function canvasCoords(e) {
+    const r = canvas.getBoundingClientRect();
+    return { x: (e.clientX - r.left - panX) / scale, y: (e.clientY - r.top - panY) / scale };
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    const c = canvasCoords(e);
+    for (const nm of allNames) {
+      const p = positions[nm];
+      if (!p) continue;
+      const rec = nameToRec[nm];
+      const actLabels = getActionLabels(rec);
+      const fullH = BOX_H + actLabels.length * 16 + 4;
+      if (c.x >= p.x && c.x <= p.x + BOX_W && c.y >= p.y && c.y <= p.y + fullH) {
+        dragName = nm; dragOx = c.x; dragOy = c.y;
+        return;
+      }
+    }
+    // Pan mode
+    dragName = '__PAN__'; dragOx = e.clientX; dragOy = e.clientY;
+  });
+
+  canvas.addEventListener('mousemove', e => {
+    if (!dragName) return;
+    if (dragName === '__PAN__') {
+      panX += e.clientX - dragOx; panY += e.clientY - dragOy;
+      dragOx = e.clientX; dragOy = e.clientY;
+    } else {
+      const c = canvasCoords(e);
+      positions[dragName].x += c.x - dragOx;
+      positions[dragName].y += c.y - dragOy;
+      dragOx = c.x; dragOy = c.y;
+    }
+    draw();
+  });
+
+  canvas.addEventListener('mouseup', () => { dragName = null; });
+  canvas.addEventListener('mouseleave', () => { dragName = null; });
+
+  canvas.addEventListener('wheel', e => {
+    e.preventDefault();
+    const factor = e.deltaY < 0 ? 1.1 : 0.9;
+    const r = canvas.getBoundingClientRect();
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    panX = mx - (mx - panX) * factor;
+    panY = my - (my - panY) * factor;
+    scale *= factor;
+    draw();
+  }, { passive: false });
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+//  MAP ACTIONS VIEW — screens as nodes with action details,
+//  sensor badges, and transition arrows
+// ═══════════════════════════════════════════════════════════════
+function buildMapActionsTab() {
+  const container = document.getElementById('tab-mapactions');
+  container.innerHTML = '';
+  container.appendChild(el('h2', null, '🔀 Map Actions — Screens · Actions · Sensors'));
+  container.appendChild(el('hr', { className: 'accent' }));
+
+  const screens = DB.screens;
+  const actions = DB.actions;
+  const sensors = DB.sensors;
+
+  if (!Object.keys(screens).length) {
+    container.appendChild(el('p', { style: 'color:var(--red)' }, 'No screens found. Create some first.'));
+    return;
+  }
+
+  // Legend
+  const legend = el('div', { style: 'display:flex;gap:12px;flex-wrap:wrap;margin:4px 0 8px;font-size:9px;' });
+  [['#BAE6FD','Screen header'],['#6EC6FF','→ transition'],['#34D399','Sensor ON'],['#ff6b6b','Sensor OFF'],['#4a5580','No sensor'],['#FBBF24','→ Dest. screen']].forEach(([c,l]) => {
+    legend.appendChild(el('span', { className: 'legend-item', style: `color:${c}` }, [el('span', { className: 'legend-dot', style: `background:${c}` }), ` ${l}`]));
+  });
+  container.appendChild(legend);
+  container.appendChild(el('p', { style: 'font-size:10px;color:var(--accent-light);margin:0 0 8px' },
+    'Drag nodes • Scroll to zoom • Pan by dragging empty space'));
+
+  const resetBtn = el('button', { className: 'btn btn-sm', style: 'margin-bottom:8px' }, '⟳ Reset Layout');
+  container.appendChild(resetBtn);
+
+  const canvasWrap = el('div', { className: 'map-container', style: 'height:650px;position:relative;overflow:hidden;' });
+  const canvas = el('canvas', { width: '3000', height: '3000' });
+  canvasWrap.appendChild(canvas);
+  container.appendChild(canvasWrap);
+
+  const ctx = canvas.getContext('2d');
+
+  // Lookups
+  const idToScreenName = {};
+  Object.values(screens).forEach(r => { idToScreenName[String(r.ID)] = r.Name || r.ID; });
+  const screenNameToId = {};
+  Object.values(screens).forEach(r => { screenNameToId[r.Name || r.ID] = String(r.ID); });
+  const sensorById = {};
+  Object.values(sensors).forEach(r => { sensorById[String(r.ID)] = r; });
+  const actionByName = {};
+  Object.values(actions).forEach(a => { if (a.Name) actionByName[a.Name.trim()] = a; });
+
+  const allScreenNames = Object.values(screens).sort((a,b) => parseInt(a.ID)-parseInt(b.ID)).map(r => r.Name || r.ID);
+
+  // Per-screen action rows
+  const screenActionRows = {};
+  const edges = []; // {src, dst, action}
+
+  for (const rec of Object.values(screens)) {
+    const srcName = rec.Name || rec.ID;
+    const rows = [];
+    for (let i = 1; i <= 4; i++) {
+      const aname = (rec['Action' + i] || '').trim();
+      if (!aname) continue;
+      const arec = actionByName[aname] || {};
+      let dstId = parseInt(arec.ScreenID); if (isNaN(dstId)) dstId = 255;
+      const dstName = dstId !== 255 ? idToScreenName[String(dstId)] : null;
+      if (dstName && dstName !== srcName) edges.push({ src: srcName, dst: dstName, action: aname });
+
+      let sid = parseInt(arec.SensorID); if (isNaN(sid)) sid = 255;
+      const sensorRec = sid !== 255 ? sensorById[String(sid)] : null;
+      const sensorName = sensorRec ? (sensorRec.Name || `S${sid}`) : null;
+      const sensorActive = !!arec.SensorActive;
+
+      rows.push({ name: aname, dstName, sensorName, sensorActive });
+    }
+    screenActionRows[srcName] = rows;
+  }
+
+  // Layout
+  const BOX_W = 300, HDR_H = 36, ROW_H = 22, ROW_PAD = 6;
+  const GAP_X = 220, GAP_Y = 80;
+  const positions = {};
+
+  function nodeHeight(nm) {
+    return HDR_H + (screenActionRows[nm] || []).length * ROW_H + ROW_PAD;
+  }
+
+  function autoLayout() {
+    const cols = Math.max(1, Math.ceil(Math.sqrt(allScreenNames.length)));
+    const rowHeights = {};
+    allScreenNames.forEach((nm, i) => {
+      const row = Math.floor(i / cols);
+      rowHeights[row] = Math.max(rowHeights[row] || 0, nodeHeight(nm));
+    });
+    const colX = Array.from({length: cols}, (_, c) => 60 + c * (BOX_W + GAP_X));
+    const rowY = [];
+    let y = 60;
+    for (let r = 0; r <= Math.max(...Object.keys(rowHeights).map(Number)); r++) {
+      rowY.push(y);
+      y += (rowHeights[r] || 80) + GAP_Y;
+    }
+    allScreenNames.forEach((nm, i) => {
+      const col = i % cols, row = Math.floor(i / cols);
+      positions[nm] = { x: colX[col], y: rowY[row] || 60 };
+    });
+  }
+  autoLayout();
+
+  let scale = 1, panX = 0, panY = 0;
+
+  // Colors
+  const C = {
+    hdrBg: '#16213e', hdrOut: '#2a3a5c', hdrTxt: '#BAE6FD',
+    bodyBg: '#0f1629', div: '#2a3a5c',
+    actTxt: '#8888aa', dstTxt: '#FBBF24',
+    senOn: '#34D399', senOff: '#ff6b6b', senNone: '#4a5580',
+    arrow: '#6EC6FF', arrLbl: '#FBBF24',
+  };
+
+  function draw() {
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(scale, 0, 0, scale, panX, panY);
+
+    // Edges
+    const edgeGroups = {};
+    edges.forEach(e => {
+      const key = e.src + '|' + e.dst;
+      if (!edgeGroups[key]) edgeGroups[key] = [];
+      edgeGroups[key].push(e.action);
+    });
+
+    for (const [key, anames] of Object.entries(edgeGroups)) {
+      const [src, dst] = key.split('|');
+      if (!positions[src] || !positions[dst]) continue;
+      const sp = positions[src], dp = positions[dst];
+      const sh = nodeHeight(src), dh = nodeHeight(dst);
+
+      let ax1 = sp.x + BOX_W, ay1 = sp.y + sh / 2;
+      let ax2 = dp.x, ay2 = dp.y + dh / 2;
+
+      const revKey = dst + '|' + src;
+      const isBidir = revKey in edgeGroups;
+      if (isBidir) {
+        const off = key < revKey ? -8 : 8;
+        ay1 += off; ay2 += off;
+      }
+
+      // Bezier curve
+      const cx1 = ax1 + GAP_X * 0.4, cy1 = ay1;
+      const cx2 = ax2 - GAP_X * 0.4, cy2 = ay2;
+
+      ctx.beginPath();
+      ctx.moveTo(ax1, ay1);
+      ctx.bezierCurveTo(cx1, cy1, cx2, cy2, ax2, ay2);
+      ctx.strokeStyle = C.arrow;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Arrowhead
+      const t = 0.95;
+      const mt = 1 - t;
+      const tx = mt*mt*mt*ax1 + 3*mt*mt*t*cx1 + 3*mt*t*t*cx2 + t*t*t*ax2;
+      const ty = mt*mt*mt*ay1 + 3*mt*mt*t*cy1 + 3*mt*t*t*cy2 + t*t*t*ay2;
+      const angle = Math.atan2(ay2 - ty, ax2 - tx);
+      ctx.beginPath();
+      ctx.moveTo(ax2, ay2);
+      ctx.lineTo(ax2 - 12*Math.cos(angle-0.3), ay2 - 12*Math.sin(angle-0.3));
+      ctx.lineTo(ax2 - 12*Math.cos(angle+0.3), ay2 - 12*Math.sin(angle+0.3));
+      ctx.closePath();
+      ctx.fillStyle = C.arrow;
+      ctx.fill();
+
+      // Label
+      const mx = (ax1+ax2)/2, my = (ay1+ay2)/2 - 8;
+      ctx.font = '8px Share Tech Mono, Courier New, monospace';
+      ctx.fillStyle = C.arrLbl;
+      ctx.textAlign = 'center';
+      ctx.fillText(anames.join(' / ').slice(0, 40), mx, my);
+    }
+
+    // Nodes
+    allScreenNames.forEach(nm => {
+      const p = positions[nm];
+      if (!p) return;
+      const nh = nodeHeight(nm);
+      const rows = screenActionRows[nm] || [];
+      const sid = screenNameToId[nm] || '?';
+
+      // Header bg
+      ctx.fillStyle = C.hdrBg;
+      ctx.strokeStyle = C.hdrOut;
+      ctx.lineWidth = 2;
+      ctx.fillRect(p.x, p.y, BOX_W, HDR_H);
+      ctx.strokeRect(p.x, p.y, BOX_W, HDR_H);
+
+      // Header text
+      ctx.fillStyle = C.hdrTxt;
+      ctx.font = 'bold 11px Share Tech Mono, Courier New, monospace';
+      ctx.textAlign = 'left';
+      const disp = nm.length <= 24 ? nm : nm.slice(0, 23) + '…';
+      ctx.fillText(`[${sid}] ${disp}`, p.x + 8, p.y + HDR_H / 2 + 4);
+
+      // Body bg
+      ctx.fillStyle = C.bodyBg;
+      ctx.fillRect(p.x, p.y + HDR_H, BOX_W, nh - HDR_H);
+      ctx.strokeStyle = C.hdrOut;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(p.x, p.y + HDR_H, BOX_W, nh - HDR_H);
+
+      // Divider
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y + HDR_H);
+      ctx.lineTo(p.x + BOX_W, p.y + HDR_H);
+      ctx.strokeStyle = C.div;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Action rows
+      rows.forEach((row, i) => {
+        const ry = p.y + HDR_H + i * ROW_H + ROW_H / 2 + 3;
+
+        // Dot
+        const dotColor = row.dstName ? C.arrow : C.div;
+        ctx.beginPath();
+        ctx.arc(p.x + 10, ry, 4, 0, Math.PI * 2);
+        ctx.fillStyle = dotColor;
+        ctx.fill();
+
+        // Action name
+        ctx.font = 'bold 10px Share Tech Mono, Courier New, monospace';
+        ctx.fillStyle = C.actTxt;
+        ctx.textAlign = 'left';
+        const actDisp = row.name.length <= 16 ? row.name : row.name.slice(0, 15) + '…';
+        ctx.fillText(actDisp, p.x + 20, ry + 1);
+
+        // Destination
+        if (row.dstName) {
+          ctx.font = '9px Share Tech Mono, Courier New, monospace';
+          ctx.fillStyle = C.dstTxt;
+          const dDisp = row.dstName.length <= 12 ? row.dstName : row.dstName.slice(0, 11) + '…';
+          ctx.fillText(`→${dDisp}`, p.x + 140, ry + 1);
+        }
+
+        // Sensor badge
+        if (row.sensorName) {
+          const sColor = row.sensorActive ? C.senOn : C.senOff;
+          const sState = row.sensorActive ? 'ON' : 'OFF';
+          ctx.fillStyle = '#16213e';
+          ctx.fillRect(p.x + BOX_W - 80, ry - 8, 78, 16);
+          ctx.strokeStyle = sColor;
+          ctx.lineWidth = 1;
+          ctx.strokeRect(p.x + BOX_W - 80, ry - 8, 78, 16);
+          ctx.font = '8px Share Tech Mono, Courier New, monospace';
+          ctx.fillStyle = sColor;
+          ctx.textAlign = 'center';
+          const sDisp = row.sensorName.length <= 8 ? row.sensorName : row.sensorName.slice(0, 7) + '…';
+          ctx.fillText(`📡${sDisp}:${sState}`, p.x + BOX_W - 41, ry + 1);
+        } else {
+          ctx.font = 'italic 8px Share Tech Mono, Courier New, monospace';
+          ctx.fillStyle = C.senNone;
+          ctx.textAlign = 'center';
+          ctx.fillText('no sensor', p.x + BOX_W - 41, ry + 1);
+        }
+
+        // Row separator
+        if (i < rows.length - 1) {
+          ctx.beginPath();
+          ctx.moveTo(p.x + 2, p.y + HDR_H + (i + 1) * ROW_H);
+          ctx.lineTo(p.x + BOX_W - 2, p.y + HDR_H + (i + 1) * ROW_H);
+          ctx.strokeStyle = C.div;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      });
+    });
+  }
+
+  draw();
+  resetBtn.addEventListener('click', () => { autoLayout(); scale = 1; panX = 0; panY = 0; draw(); });
+
+  // Drag & pan
+  let dragName = null, dragOx = 0, dragOy = 0;
+  function canvasCoords(e) {
+    const r = canvas.getBoundingClientRect();
+    return { x: (e.clientX - r.left - panX) / scale, y: (e.clientY - r.top - panY) / scale };
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    const c = canvasCoords(e);
+    for (const nm of allScreenNames) {
+      const p = positions[nm];
+      if (!p) continue;
+      const nh = nodeHeight(nm);
+      if (c.x >= p.x && c.x <= p.x + BOX_W && c.y >= p.y && c.y <= p.y + nh) {
+        dragName = nm; dragOx = c.x; dragOy = c.y;
+        return;
+      }
+    }
+    dragName = '__PAN__'; dragOx = e.clientX; dragOy = e.clientY;
+  });
+
+  canvas.addEventListener('mousemove', e => {
+    if (!dragName) return;
+    if (dragName === '__PAN__') {
+      panX += e.clientX - dragOx; panY += e.clientY - dragOy;
+      dragOx = e.clientX; dragOy = e.clientY;
+    } else {
+      const c = canvasCoords(e);
+      positions[dragName].x += c.x - dragOx;
+      positions[dragName].y += c.y - dragOy;
+      dragOx = c.x; dragOy = c.y;
+    }
+    draw();
+  });
+
+  canvas.addEventListener('mouseup', () => { dragName = null; });
+  canvas.addEventListener('mouseleave', () => { dragName = null; });
+
+  canvas.addEventListener('wheel', e => {
+    e.preventDefault();
+    const factor = e.deltaY < 0 ? 1.1 : 0.9;
+    const r = canvas.getBoundingClientRect();
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    panX = mx - (mx - panX) * factor;
+    panY = my - (my - panY) * factor;
+    scale *= factor;
+    draw();
+  }, { passive: false });
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════
+buildScreensTab();
+</script>
+</body>
+</html>
