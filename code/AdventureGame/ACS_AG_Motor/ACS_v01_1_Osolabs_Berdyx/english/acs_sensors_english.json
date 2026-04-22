@@ -1,0 +1,55 @@
+{
+    "0": {
+        "ID": "0",
+        "Name": "water",
+        "Active": false,
+        "Toggle": 0,
+        "DialogOn": "",
+        "DialogOff": ""
+    },
+    "1": {
+        "ID": "1",
+        "Name": "heart",
+        "Active": false,
+        "Toggle": 0,
+        "DialogOn": "",
+        "DialogOff": ""
+    },
+    "2": {
+        "ID": "2",
+        "Name": "flashlight",
+        "Active": false,
+        "Toggle": 0,
+        "DialogOn": "You turn on the flashlight\n",
+        "DialogOff": "You turn off the flashlight\n"
+    },
+    "3": {
+        "ID": "3",
+        "Name": "timer1minuto",
+        "Active": false,
+        "DialogOn": "The clock starts ticking, you shouldn't stay here for too long",
+        "DialogOff": "Here you can take it easy, but not too easy"
+    },
+    "4": {
+        "ID": "4",
+        "Name": "gamePlaying",
+        "Active": false,
+        "DialogOn": "The Game begins",
+        "DialogOff": "The Game is over"
+    },
+    "5": {
+        "ID": "5",
+        "Name": "timer10minutos",
+        "Active": false,
+        "DialogOn": "You have 10 minutes to finish the game",
+        "DialogOff": "Your time is up"
+    },
+    "6": {
+        "ID": "6",
+        "Name": "flashlightheart",
+        "Active": false,
+        "Toggle": 1,
+        "DialogOn": "You turn on the flashlight. Your heart rate drops.\n",
+        "DialogOff": "You turn off the flashlight. Your heart rate rises.\n"
+    }
+}
