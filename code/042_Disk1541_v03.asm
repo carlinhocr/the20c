@@ -223,7 +223,7 @@ RESET:
             ; --- Release all IEC bus lines ---
             ; Writing 0 to all output bits releases DATA, CLK, and ATN.
             ; The external pull-up resistors will bring them HIGH.
-            LDA #ALL_RELEASE
+            LDA #ALL_RELEASE ;%00000000
             STA VIA_PORTB
 
             ; --- Clear status variables ---
@@ -1849,10 +1849,16 @@ MAIN:
 ;   "I0"              - Initialize (re-read BAM from disk)
 ;   "V0"              - Validate (collect garbage/fix BAM)
 
-FNAME_READ:
+FNAME_READ: ;OPEN <logical file>,<device>,<channel>,
+            ;"0:<filename>,<type>,<direction>"
+            ;0: = Drive number (0)
+            ;<filename> =  filename
+            ;<type> = P = PRG or S for Sequential File
+            ;<direction> = R = Read
             .byte "0:TESTFILE,P,R", $00  ; Open TESTFILE as PRG for reading
 
 FNAME_WRITE:
+            ;To replace an existing file prepend an @ to the filename:
             .byte "@0:OUTFILE,P,W", $00  ; Write OUTFILE as PRG (overwrite if exists)
 
 CMD_SCRATCH:
