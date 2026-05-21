@@ -604,11 +604,33 @@ IEC_SEND_BYTE:
             STA ZP_BYTE         ; Save byte to send
 
             ; --- Pull CLK LOW (talker holds the bus) ---
+            ; This tells the listener: "I am preparing the next byte."
+            ; The listener will release its ACK (DATA goes HIGH) in
+            ; response to seeing CLK go LOW.
             JSR CLK_ASSERT
-            JSR DATA_RELEASE    ; Make sure we're not holding DATA
+
+            ; --- Release our DATA output ---
+            ; We must stop driving DATA before polling, so we only read
+            ; the listener's state on the bus, not our own assertion.
+            ; The bus line may still be LOW because the listener is still
+            ; holding its ACK from the previous byte - that's expected.
+            ; The open-collector bus means our release has no effect while
+            ; the listener is still pulling DATA LOW.
+            JSR DATA_RELEASE
+
+            ; --- Give the listener time to see CLK LOW and react ---
+            ; The listener needs a few dozen microseconds to detect CLK
+            ; LOW and begin releasing its DATA ACK. Without this delay,
+            ; we could enter the polling loop before the listener has had
+            ; time to respond, which is fine (we'd just poll longer), but
+            ; a small delay here avoids a false "not ready" timeout on
+            ; slow devices.
+            LDA #100
+            JSR DELAY_US
 
             ; --- Wait for listener to release DATA ---
-            ; Listener releases DATA to say "I'm ready for the next byte"
+            ; Listener releases DATA (line goes HIGH) to say "I'm ready
+            ; for the next byte." We poll until DATA is HIGH or timeout.
             LDA #250
             STA ZP_TEMP
 .send_wait_ready:
