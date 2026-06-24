@@ -137,7 +137,7 @@ CHAN_CMD     = 15                ; Channel 15 = command/status channel
 ; Demo switches:
 ; DEMO 0 in MAIN formats a disk, which ERASES it. Off by default for safety.
 ; Set to 1 and re-assemble to run the format demo.
-ENABLE_FORMAT_DEMO = 1
+ENABLE_FORMAT_DEMO = 0
 
 
 ;===============================================================================
@@ -1778,12 +1778,6 @@ MAIN:
 .skip_format:
 
 
-;Stop at FORMAT for now
-.halt:
-            ; --- System halt ---
-            ; In a real system, you'd return to a command prompt or
-            ; monitor. Here we just loop forever.
-            JMP .halt
 
             ;===================================================================
             ; DEMO 1: READ A FILE FROM DISK INTO RAM
@@ -1870,6 +1864,12 @@ MAIN:
             ; Error string at BUFFER_START
             ; Fall through to halt
 
+;Stop at FORMAT for now
+.halt:
+            ; --- System halt ---
+            ; In a real system, you'd return to a command prompt or
+            ; monitor. Here we just loop forever.
+            JMP .halt
 
 
 
