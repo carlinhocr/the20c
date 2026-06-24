@@ -1,3 +1,6 @@
+delay_COUNT_A = $32        
+delay_COUNT_B = $33
+
 ;===============================================================================
 ;
 ;   IEC SERIAL BUS DRIVER FOR COMMODORE 1541 DISK DRIVE
@@ -1610,6 +1613,93 @@ IEC_FORMAT_DISK:
             RTS
 
 
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------TIME MANAGEMENT------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+delay_1_sec:
+  jsr DELAY_SEC
+  rts
+
+delay_2_sec:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  rts
+
+delay_3_sec:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  rts
+
+delay_4_sec:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  rts 
+
+delay_5_sec:
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  jsr DELAY_SEC
+  rts
+
+DELAY_onetenth_SEC:
+  lda #$10
+  sta delay_COUNT_A
+  lda #$FF
+  sta delay_COUNT_B
+  jmp DELAY_MAIN
+
+DELAY_two_tenth_SEC:
+  lda #$10
+  sta delay_COUNT_A
+  lda #$FF
+  sta delay_COUNT_B
+  jmp DELAY_MAIN   
+
+DELAY_SEC:
+  lda #$FF
+  sta delay_COUNT_A
+  lda #$FF
+  sta delay_COUNT_B
+  jmp DELAY_MAIN
+
+DELAY_HALF_SEC:
+  lda #$50
+  sta delay_COUNT_A
+  lda #$FF
+  sta delay_COUNT_B
+  jmp DELAY_MAIN
+
+DELAY_MAIN:
+    LDX delay_COUNT_A     ; Load outer loop count
+OUTER_LOOP:
+    LDY delay_COUNT_B     ; Load inner loop count
+INNER_LOOP:
+    NOP               ; No operation (takes 2 cycles)
+    NOP               ; No operation (takes 2 cycles)
+    NOP               ; No operation (takes 2 cycles)
+    NOP               ; No operation (takes 2 cycles)
+    NOP               ; No operation (takes 2 cycles)
+    DEY               ; Decrement inner loop counter
+    BNE INNER_LOOP    ; Branch if not zero
+    DEX               ; Decrement outer loop counter
+    BNE OUTER_LOOP    ; Branch if not zero
+    RTS               ; Return from subroutine
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;--------------------------------TIME MANAGEMENT------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+
 ;===============================================================================
 ;===============================================================================
 ;
@@ -1627,7 +1717,12 @@ IEC_FORMAT_DISK:
 ;===============================================================================
 ;===============================================================================
 
+
+
 MAIN:
+
+;Wait for 5 seconds before starting
+    jsr delay_5_sec
             ;===================================================================
             ; DEMO 0: FORMAT A DISK   (***  ERASES THE ENTIRE DISK  ***)
             ;===================================================================
