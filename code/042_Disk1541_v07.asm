@@ -212,7 +212,8 @@ RESET:
             ; --- Configure VIA Port B data direction ---
             ; PB0-PB2 are outputs (DATA_OUT, CLK_OUT, ATN_OUT)
             ; PB3-PB7 are inputs  (DATA_IN, CLK_IN, and unused)
-            LDA #ALL_OUTPUTS    ; = %00000111
+            lda %00000111
+            ;LDA #ALL_OUTPUTS    ; = %00000111
             STA VIA_DDRB        ; Set direction: bits 0-2 output, bits 3-7 input
 
             ; --- Configure VIA Timer 1 for one-shot mode ---
@@ -253,13 +254,13 @@ RESET:
             ; NOTE: DELAY_1MS is calibrated for ~1 MHz. If your board runs
             ; faster, the REAL wait is shorter than the nominal value, so if
             ; the drive still isn't ready, just raise this number.
-; STARTUP_WAIT_CHUNKS = 16
-;             LDX #STARTUP_WAIT_CHUNKS
-; .reset_wait:
-;             LDA #250                ; 250 ms per chunk (DELAY_LONG: A = ms)
-;             JSR DELAY_LONG
-;             DEX
-;             BNE .reset_wait
+STARTUP_WAIT_CHUNKS = 16
+            LDX #STARTUP_WAIT_CHUNKS
+.reset_wait:
+            LDA #250                ; 250 ms per chunk (DELAY_LONG: A = ms)
+            JSR DELAY_LONG
+            DEX
+            BNE .reset_wait
 
             ; Initialization complete. Fall through or jump to main program.
             JMP MAIN
@@ -1665,12 +1666,12 @@ MAIN:
             ;     JSR IEC_FORMAT_DISK
             ;
 
-            ;TEST
+            ; ;TEST
 
-            jsr ATN_ASSERT
-            jsr CLK_ASSERT
-            jsr DATA_ASSERT
-            JMP .halt
+            ; jsr ATN_ASSERT
+            ; jsr CLK_ASSERT
+            ; jsr DATA_ASSERT
+            ; JMP .halt
 
             LDA #ENABLE_FORMAT_DEMO
             BEQ .skip_format        ; switch is off -> go straight to DEMO 1
