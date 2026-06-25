@@ -253,13 +253,13 @@ RESET:
             ; NOTE: DELAY_1MS is calibrated for ~1 MHz. If your board runs
             ; faster, the REAL wait is shorter than the nominal value, so if
             ; the drive still isn't ready, just raise this number.
-STARTUP_WAIT_CHUNKS = 16
-            LDX #STARTUP_WAIT_CHUNKS
-.reset_wait:
-            LDA #250                ; 250 ms per chunk (DELAY_LONG: A = ms)
-            JSR DELAY_LONG
-            DEX
-            BNE .reset_wait
+; STARTUP_WAIT_CHUNKS = 16
+;             LDX #STARTUP_WAIT_CHUNKS
+; .reset_wait:
+;             LDA #250                ; 250 ms per chunk (DELAY_LONG: A = ms)
+;             JSR DELAY_LONG
+;             DEX
+;             BNE .reset_wait
 
             ; Initialization complete. Fall through or jump to main program.
             JMP MAIN
@@ -1664,6 +1664,14 @@ MAIN:
             ;     LDA #>FMT_COMMAND : STA ZP_PTR_HI
             ;     JSR IEC_FORMAT_DISK
             ;
+
+            ;TEST
+
+            jsr ATN_ASSERT
+            jsr CLK_ASSERT
+            jsr DATA_ASSERT
+            JMP .halt
+
             LDA #ENABLE_FORMAT_DEMO
             BEQ .skip_format        ; switch is off -> go straight to DEMO 1
 
