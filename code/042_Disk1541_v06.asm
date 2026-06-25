@@ -137,7 +137,7 @@ CHAN_CMD     = 15                ; Channel 15 = command/status channel
 ; Demo switches:
 ; DEMO 0 in MAIN formats a disk, which ERASES it. Off by default for safety.
 ; Set to 1 and re-assemble to run the format demo.
-ENABLE_FORMAT_DEMO = 0
+ENABLE_FORMAT_DEMO = 1
 
 
 ;===============================================================================
