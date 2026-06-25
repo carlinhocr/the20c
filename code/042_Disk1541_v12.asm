@@ -389,11 +389,11 @@ DATA_RELEASE:
 ;-----------------------------------------------------------------------
 READ_DATA:
             LDA VIA_PORTB       ; Read live Port B pins
-            ASL                 ; Shift bit 7 into Carry
-            ASL                 ; Shift bit 6 into Carry
-            ASL                 ; Shift bit 5 into Carry
-            ASL                 ; Shift bit 4 into Carry
-            ASL                 ; Shift bit 3 (DATA_IN) into Carry
+            ASL A               ; Shift bit 7 into Carry
+            ASL A               ; Shift bit 6 into Carry
+            ASL A               ; Shift bit 5 into Carry
+            ASL A               ; Shift bit 4 into Carry
+            ASL A               ; Shift bit 3 (DATA_IN) into Carry
             RTS                 ; Return with Carry directly matching PB3!
 ; ;-----------------------------------------------------------------------
 ; ; READ_CLK - Read the current state of the CLK line
@@ -418,10 +418,10 @@ READ_DATA:
 ;-----------------------------------------------------------------------
 READ_CLK:
             LDA VIA_PORTB       ; Read live Port B pins
-            ASL                 ; Shift bit 7 into Carry
-            ASL                 ; Shift bit 6 into Carry
-            ASL                 ; Shift bit 5 into Carry
-            ASL                 ; Shift bit 4 (CLK_IN) into Carry
+            ASL A               ; Shift bit 7 into Carry
+            ASL A               ; Shift bit 6 into Carry
+            ASL A               ; Shift bit 5 into Carry
+            ASL A               ; Shift bit 4 (CLK_IN) into Carry
             RTS                 ; Return with Carry directly matching PB4!
 
 ;===============================================================================
