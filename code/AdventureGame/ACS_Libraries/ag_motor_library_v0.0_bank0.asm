@@ -4,6 +4,8 @@
   .include "lib_acia_address.asm" ;define memory address for ACIA
   .include "lib_via_address.asm" ;define memory address for ACIA
   .include "lib_via_constants.asm" ;define constansts that are not memory addresses but literals
+  .include "lib_lcd_memory.asm" ;define memory address for ACIA
+  .include "lib_lcd_constants.asm" ;define constansts that are not memory addresses but literals
 ;zero page memory positions for Vectors and Data
 
 delay_COUNT_A = $32        
@@ -3824,7 +3826,7 @@ multiplyTwoNumbers8bitnumbers_no_add:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-  
+  .include "lib_lcd_code.asm"
   .include "lib_via_code.asm"
   .include "lib_acia_code.asm"
 ;BEGIN------------------------------------------------------------------------------
