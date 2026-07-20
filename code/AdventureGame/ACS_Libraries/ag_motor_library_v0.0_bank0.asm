@@ -10,21 +10,16 @@
 
 delay_COUNT_A = $32        
 delay_COUNT_B = $33
-screenMemoryLow=$34 ;80 bytes
-screenMemoryHigh=$35 
-lcdCharPositionsLowZeroPage =$36 
-lcdCharPositionsHighZeroPage =$37
-lcdROMPositionsLowZeroPage =$38 
-lcdROMPositionsHighZeroPage =$39
-initialScreenZeroPageLow=$3a
-initialScreenZeroPageHigh=$3b
+
+
+
 ;record_lenght=$3c ;it is a memory position
 serialDataVectorLow = $3d
 serialDataVectorHigh = $3e
 serialCharperLines = $3f
 serialTotalLinesAscii =$40
 serialDrawindEndChar=$41
-TIMER_ZP_SEC    = $42               ; loop counter for WAIT_ONE_SECOND  (1 byte)
+;TIMER_ZP_SEC    = $42               ; loop counter for WAIT_ONE_SECOND  (1 byte)
 TIMER_ZP_MIN    = $43               ; seconds counter for WAIT_ONE_MINUTE (1 byte)
 
 soundLowByte=$50

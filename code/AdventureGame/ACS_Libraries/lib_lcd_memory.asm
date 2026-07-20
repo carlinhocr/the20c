@@ -2,6 +2,14 @@
 record_lenght=$09
 charDataVectorLow = $30
 charDataVectorHigh = $31
+screenMemoryLow=$34 ;80 bytes
+screenMemoryHigh=$35 
+lcdCharPositionsLowZeroPage =$36 
+lcdCharPositionsHighZeroPage =$37
+lcdROMPositionsLowZeroPage =$38 
+lcdROMPositionsHighZeroPage =$39
+initialScreenZeroPageLow=$3a
+initialScreenZeroPageHigh=$3b
 ;RAM
 
 
