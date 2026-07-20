@@ -1,6 +1,7 @@
 ;Zero Page
 record_lenght=$09
-
+charDataVectorLow = $30
+charDataVectorHigh = $31
 ;RAM
 
 

@@ -6,9 +6,6 @@
   .include "lib_via_constants.asm" ;define constansts that are not memory addresses but literals
 ;zero page memory positions for Vectors and Data
 
-
-charDataVectorLow = $30
-charDataVectorHigh = $31
 delay_COUNT_A = $32        
 delay_COUNT_B = $33
 screenMemoryLow=$34 ;80 bytes
