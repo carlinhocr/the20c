@@ -1,9 +1,3 @@
-screen1_demo:
-  .asciiz "     Adventure      "
-  .asciiz "       Game         "  
-  .asciiz "        RLE         "
-  .asciiz "                    "
-
 pos_lcd_initial_line0=$80
 pos_lcd_initial_line1=$C0
 pos_lcd_initial_line2=$94
@@ -24,3 +18,9 @@ totalScreenLenght=$3c ;make it only 3 lines long 3c = 60 decimal
 totalLineLenght=$13 ;20 positions in hexadecimal is 13
 end_char=$ff
 cblank=$20
+
+screen1_demo:
+  .asciiz "     Adventure      "
+  .asciiz "       Game         "  
+  .asciiz "        RLE         "
+  .asciiz "                    "
