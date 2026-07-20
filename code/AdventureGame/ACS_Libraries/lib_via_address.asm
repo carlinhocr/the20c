@@ -1,4 +1,10 @@
+;Zero Page
+record_lenght=$09
 
+;RAM
+
+
+;Peripheral
 ;VIA Ports and Constant ds
 LCD_VIA_BASE  = $6000
 
@@ -30,3 +36,4 @@ RS_DDRA =  RS_VIA_BASE + $03
 RS_PCR =   RS_VIA_BASE + $04
 RS_IFR =   RS_VIA_BASE + $05
 RS_IER =   RS_VIA_BASE + $06
+

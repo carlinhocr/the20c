@@ -3,6 +3,7 @@
 ;define RS232 primitives for showing lights on KB_PORTA and KB_PORTB VIA1 or VIA2
   .include "lib_acia_address.asm" ;define memory address for ACIA
   .include "lib_via_address.asm" ;define memory address for ACIA
+  .include "lib_via_constants.asm" ;define constansts that are not memory addresses but literals
 ;zero page memory positions for Vectors and Data
 
 
@@ -187,28 +188,9 @@ currentScreenAllActionsRAM=$0460 ; i only use 6 bytes
 screenPointersRAM=$0500
 dashboardPointersRAM=$0600
 
-;constants
-fill=$43 ;letter C
-totalScreenLenght4Lines=$50
-totalScreenLenght=$3c ;make it only 3 lines long 3c = 60 decimal
-totalLineLenght=$13 ;20 positions in hexadecimal is 13
-end_char=$ff
-cblank=$20
 
-pos_line1=$8B
-pos_line2=$CB
-pos_line3=$9F
-pos_line4=$DF
 
-record_lenght=$09
 
-lenght_screen_lines=$04; 0 to 3
-lenght_ascii_line_characters=$20
-lenght_screen_characters=$50 ;80 in decimal
-pos_lcd_initial_line0=$80
-pos_lcd_initial_line1=$C0
-pos_lcd_initial_line2=$94
-pos_lcd_initial_line3=$D4
 
 ;Timer Constants
 ; ── Timer load values for 1 MHz clock ────────────────────
@@ -3281,14 +3263,6 @@ clearRS232Screen:
   .ascii ""
   .ascii "e" 
 
-screen1_demo:
-  .asciiz "     Adventure      "
-  .asciiz "       Game         "  
-  .asciiz "        RLE         "
-  .asciiz "                    "
-
-
-  
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -3853,74 +3827,6 @@ multiplyTwoNumbers8bitnumbers_no_add:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------LED_ASCII------------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-set_position_lcd_line0:
-  lda #pos_lcd_initial_line0
-  jsr lcd_send_instruction 
-  jmp print_ascii_screen_eeprom
-set_position_lcd_line1:
-  lda #pos_lcd_initial_line1
-  jsr lcd_send_instruction 
-  jmp print_ascii_screen_eeprom
-set_position_lcd_line2:
-  lda #pos_lcd_initial_line2
-  jsr lcd_send_instruction 
-  jmp print_ascii_screen_eeprom
-set_position_lcd_line3:
-  lda #pos_lcd_initial_line3
-  jsr lcd_send_instruction 
-  jmp print_ascii_screen_eeprom
-reset_screen_position:
-  lda #pos_lcd_initial_line0
-  jsr lcd_send_instruction 
-  jmp print_ascii_screen_end
-
-print_ascii_screen:  
-  ;BEGIN print_ascii_screen
-  jsr clear_display
-  ldx #$ff ; start as ff so when i add 1 it goes to zero
-  ldy #$ff ; jsut at the begginning so it would got all the 80 characters of the screen
-print_ascii_screen_line:  
-  inx
-  cpx #$00
-  beq set_position_lcd_line0
-  cpx #$01
-  beq set_position_lcd_line1
-  cpx #$02
-  beq set_position_lcd_line2
-  cpx #$03
-  beq set_position_lcd_line3
-  cpx #$04
-  beq reset_screen_position ; to reset the screen to initial position
-print_ascii_screen_eeprom:
-  iny ;so it would go out of a last byte equal 0 loop
-  lda (charDataVectorLow),y ;load letter from eeprom position indirect in the memory position charDataVector and indexed by Y
-  beq print_ascii_screen_line ; jump to loop if I load a 0 on lda a zero means the end  of a n .asciiz string
-  jsr print_char 
-  jmp print_ascii_screen_eeprom
-print_ascii_screen_end:
-  rts 
-  ;END print_ascii_screen
-
-lcdDemoMessage:
-  ;Draw Screen 1 Final Demo
-  lda #<screen1_demo
-  sta charDataVectorLow
-  lda #>screen1_demo
-  sta charDataVectorHigh
-  jsr print_ascii_screen
-  jsr delay_3_sec
-  rts 
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------LED_ASCII------------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
   
   .include "lib_via_code.asm"
   .include "lib_acia_code.asm"
