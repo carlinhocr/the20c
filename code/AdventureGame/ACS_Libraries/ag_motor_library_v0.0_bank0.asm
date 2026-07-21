@@ -1,7 +1,7 @@
 ;define ports and constansts VIA1 (6000) VIA2 (7000)
 ;define LCD primitives for showing one message VIA1 or VIA2
 ;define RS232 primitives for showing lights on KB_PORTA and KB_PORTB VIA1 or VIA2
-  .include "lib_acia_address.asm" ;define memory address for ACIA
+  .include "lib_acia_memory.asm" ;define memory address for ACIA
   .include "lib_rs_memory.asm" ;define memory address for ACIA
   .include "lib_rs_constants.asm" ;define constansts that are not memory addresses but literals
   .include "lib_lcd_memory.asm" ;define memory address for ACIA
