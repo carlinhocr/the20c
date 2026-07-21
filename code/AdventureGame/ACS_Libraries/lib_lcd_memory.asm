@@ -1,5 +1,6 @@
 ;Zero Page
 record_lenght=$09
+LCD_PORTSTATUS=$0a ;LCD buttons
 charDataVectorLow = $30
 charDataVectorHigh = $31
 screenMemoryLow=$34 ;80 bytes
@@ -12,6 +13,7 @@ initialScreenZeroPageLow=$3a
 initialScreenZeroPageHigh=$3b
 
 
+
 ;RAM
 
 ;Memory Mappings
@@ -22,6 +24,8 @@ screenBufferHigh =$30
 
 lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
 lcdCharPositionsHigh =$31
+
+pressedButton=$39FF
 
 ;Peripheral
 ;VIA Ports and Constant ds

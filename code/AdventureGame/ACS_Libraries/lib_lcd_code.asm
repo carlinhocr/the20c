@@ -1,3 +1,30 @@
+;ADD to Interrupts to use buttons
+
+; nmi:
+; irq:
+;   sei ; disable interrupts
+;   ;preserve Accumulator, X and Y so we can use them here
+;   pha ; store accumulator in the stack
+;   txa ; transfer X to Accumulator
+;   pha ; store the X register in the stack
+;   tya ; transfer Y to Accumulator
+;   pha ; store the Y register in the stack
+;------------ ADD THIS -----------------------------  
+;   jsr test_buttons ;test_buttons loads the message
+;  lda pressedButton
+;  sta userOptionSelection ;store where you want the button pressed
+;--------------------------------------------------- 
+; exit_irq:  
+;   ;reserve order of stacking to restore values
+;   pla ; retrieve the Y register from the stack
+;   tay ; transfer accumulator to Y register
+;   pla ; retrieve the X register from the stack
+;   tax ; transfer accumulator to X register
+;   pla ; restore the accumulator value
+;   cli ;re enable interrupts
+;   rti 
+
+
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------VIALCDINIT-----------------------------------------
@@ -372,6 +399,81 @@ print_char:
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------LCD COMMANDS---------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;------------------------------TEST BUTTONS-----------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+test_buttons:
+  ;sei ;disable interrupts to process user buton selection
+  lda LCD_PORTA
+  sta LCD_PORTSTATUS
+  ;move PA4 to PA7 and PA3 to PA6
+  rol LCD_PORTSTATUS
+  rol LCD_PORTSTATUS
+  rol LCD_PORTSTATUS
+  rol LCD_PORTSTATUS ; now we have PA4 on the carry and PA3 on the negative flag 
+  lda LCD_PORTSTATUS
+  bcc pressed_buttons_pa4 ;no carry  means that Pa4 was zero then it was pressed
+  bmi test_buttons_keep_testing; if one the pa3 was not pressed
+pressed_buttons_pa3:
+  ;here button pa3 was pressed
+  ;up button on LCD PCB
+  lda #$1 ;option 1 es B option
+  sta pressedButton  
+;   lda #$31 ;number 1 in ascii
+;   jsr send_rs232_char
+  rts
+pressed_buttons_pa4:  
+  ;fire button on LCD PCB
+  lda #$4 ;option 4 es e option
+  sta pressedButton
+;   lda #$34 ;number 4 in ascii
+;   jsr send_rs232_char
+  rts
+test_buttons_keep_testing:
+  rol LCD_PORTSTATUS
+  rol LCD_PORTSTATUS ; now we have PA2 on the carry and PA1 on the negative flag 
+  bcc pressed_buttons_pa2 ;no carry  means that Pa2 was zero then it was pressed
+  bmi test_buttons_keep_testing_again; if one the pa1 was not pressed
+pressed_buttons_pa1:
+  ;here button pa1 was pressed
+  ;down button on LCD PCB
+  lda #$3 ;option 1 es D option
+  sta pressedButton
+;   lda #$33 ;number 3 in ascii
+;   jsr send_rs232_char
+  rts
+pressed_buttons_pa2:  
+  ;right button on LCD PCB
+  lda #$2 ;option 2 es C option
+  sta pressedButton  
+;   lda #$32 ;number 2 in ascii
+;   jsr send_rs232_char
+  rts
+test_buttons_keep_testing_again:
+  rol LCD_PORTSTATUS
+  rol LCD_PORTSTATUS ; now we have PA0 on the carry 
+  bcc pressed_buttons_pa0
+  ;no button was pressed but we had an interrupt
+  rts
+pressed_buttons_pa0:
+  ;left button on LCD PCB
+  lda #$0 ;option 0 es A option
+  sta pressedButton
+;   lda #$30 ;number 0 in ascii
+;   jsr send_rs232_char
+  rts
+
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;------------------------------TEST BUTTONS-----------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 

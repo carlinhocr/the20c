@@ -11,9 +11,6 @@
 delay_COUNT_A = $32        
 delay_COUNT_B = $33
 
-
-
-;record_lenght=$3c ;it is a memory position
 serialDataVectorLow = $3d
 serialDataVectorHigh = $3e
 serialCharperLines = $3f
@@ -29,9 +26,6 @@ TIMER_ZP_MIN    = $43               ; seconds counter for WAIT_ONE_MINUTE (1 byt
 ;Vectors RLE
 rleVectorLow=$a0
 rleVectorHigh=$a1
-
-;LCD buttons
-LCD_PORTSTATUS=$a2
 
 ;Zero Page Vectors Screen
 ramScreenVectorLow=$b0
@@ -2474,100 +2468,6 @@ increaseWaterLevelEnd:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;------------------------------TEST BUTTONS-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-test_buttons:
-  ;sei ;disable interrupts to process user buton selection
-  lda LCD_PORTA
-  sta LCD_PORTSTATUS
-  ;move PA4 to PA7 and PA3 to PA6
-  rol LCD_PORTSTATUS
-  rol LCD_PORTSTATUS
-  rol LCD_PORTSTATUS
-  rol LCD_PORTSTATUS ; now we have PA4 on the carry and PA3 on the negative flag 
-  lda LCD_PORTSTATUS
-  bcc pressed_buttons_pa4 ;no carry  means that Pa4 was zero then it was pressed
-  bmi test_buttons_keep_testing; if one the pa3 was not pressed
-pressed_buttons_pa3:
-  ;here button pa3 was pressed
-  jsr pa3_button_action 
-  rts
-pressed_buttons_pa4:  
-  jsr pa4_button_action
-  rts
-test_buttons_keep_testing:
-  rol LCD_PORTSTATUS
-  rol LCD_PORTSTATUS ; now we have PA2 on the carry and PA1 on the negative flag 
-  bcc pressed_buttons_pa2 ;no carry  means that Pa2 was zero then it was pressed
-  bmi test_buttons_keep_testing_again; if one the pa1 was not pressed
-pressed_buttons_pa1:
-  ;here button pa1 was pressed
-  jsr pa1_button_action 
-  rts
-pressed_buttons_pa2:  
-  jsr pa2_button_action
-  rts
-test_buttons_keep_testing_again:
-  rol LCD_PORTSTATUS
-  rol LCD_PORTSTATUS ; now we have PA0 on the carry 
-  bcc pressed_buttons_pa0
-  ;no button was pressed but we had an interrupt
-  rts
-pressed_buttons_pa0:
-  jsr pa0_button_action
-  rts
-
-pa4_button_action:
-  ;fire button on LCD PCB
-  lda #$4 ;option 4 es e option
-  sta userOptionSelection
-;   lda #$34 ;number 4 in ascii
-;   jsr send_rs232_char
-  rts
-
-pa3_button_action:
-  ;up button on LCD PCB
-  lda #$1 ;option 1 es B option
-  sta userOptionSelection  
-;   lda #$31 ;number 1 in ascii
-;   jsr send_rs232_char
-  rts
-
-pa2_button_action:
-  ;right button on LCD PCB
-  lda #$2 ;option 2 es C option
-  sta userOptionSelection  
-;   lda #$32 ;number 2 in ascii
-;   jsr send_rs232_char
-  rts
-
-pa1_button_action:
-  ;down button on LCD PCB
-  lda #$3 ;option 1 es D option
-  sta userOptionSelection
-;   lda #$33 ;number 1 in ascii
-;   jsr send_rs232_char
-  rts
-
-pa0_button_action:
-  ;left button on LCD PCB
-  lda #$0 ;option 0 es A option
-  sta userOptionSelection
-;   lda #$30 ;number 0 in ascii
-;   jsr send_rs232_char
-  rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;------------------------------TEST BUTTONS-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -3790,58 +3690,6 @@ printFlashlight:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;---------------------------------------DATA----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-lcd_positions:
-lcd_positions_line0:
-  .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8E,$8F,$90,$91,$92,$93
-lcd_positions_line1:
-  .byte $C0,$C1,$C2,$C3,$C4,$C5,$C6,$C7,$C8,$C9,$CA,$CB,$CC,$CD,$CE,$CF,$D0,$D1,$D2,$D3
-lcd_positions_line2:
-  .byte $94,$95,$96,$97,$98,$99,$9A,$9B,$9C,$9D,$9E,$9F,$A0,$A1,$A2,$A3,$A4,$A5,$A6,$A7
-lcd_positions_line3:
-  .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$DD,$DE,$DF,$E0,$E1,$E2,$E3,$E4,$E5,$E6,$E7
-
-
-; 	01	02	03	04	05	06	07	08	09	10	11	12	13	14	15	16	17	18	19	20
-; 0	80	81	82	83	84	85	86	87	88	89	8A	8B	8C	8D	8F	8E	90	91	92	93
-; 1	C0	C1	C2	C3	C4	C5	C6	C7	C8	C9	CA	CB	CC	CD	CE	CF	D0	D1	D2	D3
-; 2	94	95	96	97	98	99	9a	9b	9c	9d	9e	9f	a0	a1	a2	a3	a4	a5	a6	a7
-; 3	D4	D5	D6	D7	D8	D9	DA	DB	DC	DD	DE	DF	E0	E1	E2	E3	E4	E5	E6	E7
-initialScreen:
-  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
-  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
-  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
-  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
-  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
-  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
-  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
-  .byte fill,fill,fill,fill,fill,fill,fill,fill,fill,fill
-
-; left_cursor_endings:
-;  ; .byte  $80,$c0,$94,$d4
-;   .byte  $88,$c8,$9c,$dc  
-
-; right_cursor_endings:
-;   .byte  $93,$d3,$a7,$e7
-
-; ; up_cursor_endings:
-; ;   .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8F,$8E,$90,$91,$92,$93
-; up_cursor_endings: ;so it is all in one line
-;   .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$DD,$DE,$DF,$E0,$E1,$E2,$E3,$E4,$E5,$E6,$E7
-  
-; down_cursor_endings:
-;   .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$DD,$DE,$DF,$E0,$E1,$E2,$E3,$E4,$E5,$E6,$E7
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;---------------------------------------DATA----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
   .include "acs_phrases.asm"
 screens_index=$a100  ;  .include "acs_screens_bank1.asm" on bank 1 file
   .org $c000
@@ -3886,6 +3734,8 @@ irqNextInterruptSource:
 ;   lda #$62
 ;   jsr send_rs232_char
   jsr test_buttons ;test_buttons loads the message
+  lda pressedButton
+  sta userOptionSelection
 exit_irq:  
   ;reserve order of stacking to restore values
   pla ; retrieve the Y register from the stack
