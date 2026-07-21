@@ -2,6 +2,7 @@
 ;define LCD primitives for showing one message VIA1 or VIA2
 ;define RS232 primitives for showing lights on KB_PORTA and KB_PORTB VIA1 or VIA2
   .include "lib_acia_memory.asm" ;define memory address for ACIA
+  .include "lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
   .include "lib_rs_memory.asm" ;define memory address for ACIA
   .include "lib_rs_constants.asm" ;define constansts that are not memory addresses but literals
   .include "lib_lcd_memory.asm" ;define memory address for ACIA
@@ -214,6 +215,9 @@ TIMER_LOOPS_10M  = 60                ; 60 × 10 seconds = 10 minute
   .org $8000
 
   .include "lib_init.asm" ;reset vector and stack initialization
+  .include "lib_lcd_code.asm"
+  .include "lib_rs_code.asm"
+  .include "lib_acia_code.asm"
 
 
 ;BEGIN------------------------------------------------------------------------------
@@ -3308,9 +3312,7 @@ multiplyTwoNumbers8bitnumbers_no_add:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-  .include "lib_lcd_code.asm"
-  .include "lib_rs_code.asm"
-  .include "lib_acia_code.asm"
+
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-------------------------------------BARRA-----------------------------------------
