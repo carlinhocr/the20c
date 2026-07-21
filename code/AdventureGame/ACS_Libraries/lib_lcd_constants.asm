@@ -1,3 +1,8 @@
+;define LCD signals
+E = %10000000 ;Enable Signal
+RW = %01000000 ; Read/Write Signal
+RS = %00100000 ; Register Select
+
 pos_lcd_initial_line0=$80
 pos_lcd_initial_line1=$C0
 pos_lcd_initial_line2=$94

@@ -22,9 +22,9 @@ serialDrawindEndChar=$41
 ;TIMER_ZP_SEC    = $42               ; loop counter for WAIT_ONE_SECOND  (1 byte)
 TIMER_ZP_MIN    = $43               ; seconds counter for WAIT_ONE_MINUTE (1 byte)
 
-soundLowByte=$50
-soundHighByte=$51
-soundDelay=$52
+; soundLowByte=$50
+; soundHighByte=$51
+; soundDelay=$52
 
 ;Vectors RLE
 rleVectorLow=$a0
@@ -214,26 +214,12 @@ TIMER_LOOPS_10S  = 200               ;10 seconds
 TIMER_LOOPS_1M  = 6                ; 6 × 10 seconds = 1 minute
 TIMER_LOOPS_10M  = 60                ; 60 × 10 seconds = 10 minute
 
-;Memory Mappings
-;these are constants where we reflect the number of the memory position
-
-screenBufferLow =$00 ;goes to $50 which is 80 decimal
-screenBufferHigh =$30
-
-lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
-lcdCharPositionsHigh =$31
-
 ;bin 2 ascii values
 ; value =$0200 ;2 bytes, Low 16 bit half
 ; mod10 =$0202 ;2 bytes, high 16 bit half and as it has the remainder of dividing by 10
 ;              ;it is the mod 10 of the division (the remainder)
 ; message = $0204 ; the result up to 6 bytes
 ; counter = $020a ; 2 bytes
-
-;define LCD signals
-E = %10000000 ;Enable Signal
-RW = %01000000 ; Read/Write Signal
-RS = %00100000 ; Register Select
 
   .org $8000
 

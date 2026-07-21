@@ -10,8 +10,18 @@ lcdROMPositionsLowZeroPage =$38
 lcdROMPositionsHighZeroPage =$39
 initialScreenZeroPageLow=$3a
 initialScreenZeroPageHigh=$3b
+
+
 ;RAM
 
+;Memory Mappings
+;these are constants where we reflect the number of the memory position
+
+screenBufferLow =$00 ;goes to $50 which is 80 decimal
+screenBufferHigh =$30
+
+lcdCharPositionsLow =$00 ;goes to $50 which is 80 decimal
+lcdCharPositionsHigh =$31
 
 ;Peripheral
 ;VIA Ports and Constant ds
@@ -36,3 +46,4 @@ LCD_IER  =  LCD_VIA_BASE + $0E   ; Interrupt Enable Register
 LCD_T1_FLAG   = %01000000         ; bit 6
 
 ;------------------------------------------------------------
+
