@@ -209,10 +209,6 @@ TIMER_LOOPS_10M  = 60                ; 60 × 10 seconds = 10 minute
   .org $8000
 
   .include "lib_init.asm" ;reset vector and stack initialization
-  .include "lib_lcd_code.asm"
-  .include "lib_sensor_code.asm"
-  .include "lib_acia_code.asm"
-
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -3078,6 +3074,9 @@ printerWelcomeMessage:
   sta rs232Printer  
   rts
 
+  .include "lib_lcd_code.asm"
+  .include "lib_sensor_code.asm"
+  .include "lib_acia_code.asm"
 
   .include "acs_phrases.asm"
 screens_index=$a100  ;  .include "acs_screens_bank1.asm" on bank 1 file
