@@ -12,11 +12,9 @@
 delay_COUNT_A = $32        
 delay_COUNT_B = $33
 
-serialDataVectorLow = $3d
-serialDataVectorHigh = $3e
-serialCharperLines = $3f
-serialTotalLinesAscii =$40
-serialDrawindEndChar=$41
+
+
+
 ;TIMER_ZP_SEC    = $42               ; loop counter for WAIT_ONE_SECOND  (1 byte)
 TIMER_ZP_MIN    = $43               ; seconds counter for WAIT_ONE_MINUTE (1 byte)
 
@@ -43,11 +41,7 @@ sensorDataVectorHigh=$bd
 pivotZpLow=$fe
 pivotZpHigh=$ff
 
-;Memory locations RLE
-rleChar=$0200
-rleTimes=$0201
-rleScreenLines=$0202
-
+;bin 2 ascii memory locations
 value=                  $0203
 value_1=                $0204
 mod10=                    $0205
@@ -701,105 +695,6 @@ checkEndScreen_End:
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------ENDING---------------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;----------------------------PRINT RS232 ASCII--------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-delayClear:
-  jsr delay_3_sec  
-  jsr printClearRS232Screen
-  rts
-
-printClearRS232Screen:
-  lda #< clearRS232Screen
-  sta serialDataVectorLow
-  lda #> clearRS232Screen 
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts 
-
-printAsciiDrawingPrinter:  
-  ;lets print on the printer
-  lda #$1
-  sta rs232Printer  
-  jsr initializePrinter
-  jsr printAsciiDrawing 
-  lda #$0
-  sta rs232Printer
-  rts
-
-printSimulationTimerBarsPrinter:
-  ;lets print on the printer
-  lda #$1
-  sta rs232Printer  
-  jsr initializePrinter
-  jsr printSimulationTimerBars
-  lda #$0
-  sta rs232Printer
-  rts
-
-printAsciiDrawing:
-  sei ;disable interrupts to run
-  ;save accumulator x and y registers
-  pha
-  txa
-  pha
-  tya
-  pha
-  ;here print first line
-  ;initialize in cero serialCharperLines
-  lda #$0
-  sta serialCharperLines
-  jsr send_rs232_line
-  ldx #$0 ;the first line 0 we aleready printed
-printAsciiDrawing_lenghts_loop:
-  inx ;now going to line 1
-  ;here increment on additional lines
-  clc
-  lda serialDataVectorLow ;load marioascii low
-  adc serialCharperLines ; add the number of records of the last send_rs232_line
-  sta serialDataVectorLow ; store the new value
-  bcc printAsciiDrawing_lenghts_no_carry ;branch on carry clear or no carry
-  ;if there is a carry it is in the carry flag
-  ; clear the carry and add one to the high order byte
-  clc
-  inc serialDataVectorHigh
-printAsciiDrawing_lenghts_no_carry  
-  ldy #0
-  lda (serialDataVectorLow),y 
-  cmp #$65;"e"
-  beq printAsciiDrawing_checkNull
-  jmp printAsciiDrawing_keepgoing
-printAsciiDrawing_checkNull:  
-  ldy #1
-  lda (serialDataVectorLow),y 
-  cmp #$00
-  beq printAsciiDrawing_end
-printAsciiDrawing_keepgoing:  
-  jsr send_rs232_line
-  jmp printAsciiDrawing_lenghts_loop
-  ;cpx serialTotalLinesAscii ;check to see if 27 lines where printed from 1 to 26
-  ;bne printAsciiDrawing_lenghts_loop
-  ;return and increment according to the lenght of the mario screen
-  ;end by jumping to listening mode
-printAsciiDrawing_end:
-  ;save accumulator x and y registers
-  pla
-  tay
-  pla
-  tax
-  pla
-  ;cli let them be on when it is ok for them to be on
-  rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;----------------------------PRINT RS232 ASCII--------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
@@ -2426,13 +2321,13 @@ turnOffHearRate:
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;-----------------------------------HEARTRATE------------------------------------------
+;-----------------------------------HEARTRATE---------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;-----------------------------------WATERLEVEL------------------------------------------
+;-----------------------------------WATERLEVEL--------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
@@ -2464,170 +2359,9 @@ increaseWaterLevelEnd:
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-;-----------------------------------WATERLEVEL------------------------------------------
+;-----------------------------------WATERLEVEL--------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
-
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------SERIALUART-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-serialUART:
-
-send_rs232_line:
-  ldy #$0
-send_rs232_line_loop:
-  tya 
-  clc
-  adc serialDataVectorLow
-  ;bcc send_rs232_line_loop_same_page
-  ;inc serialDataVectorHigh
-;send_rs232_line_loop_same_page:  
-  lda (serialDataVectorLow),y 
-  ;test for the NULL char that ends all ASCII strings
-  beq send_rs232_line_end
-  jsr send_rs232_char
-  iny
-  jmp send_rs232_line_loop 
-send_rs232_line_end:
-  ;add the number of characters printed + 1 for the null char
-  ;store in serialCharperLines
-  clc
-  tya
-  adc #1
-  sta serialCharperLines
-  jsr send_rs232_CRLF
-  rts  
-
-send_rs232_line_noCRLF:
-  ldy #$0
-send_rs232_line_noCRLF_loop:
-  lda (serialDataVectorLow),y 
-  ;test for the NULL char that ends all ASCII strings
-  beq send_rs232_line_noCRLF_end
-  jsr send_rs232_char
-  iny
-  jmp send_rs232_line_noCRLF_loop 
-send_rs232_line_noCRLF_end:
-  ;add the number of characters printed + 1 for the null char
-  ;store in serialCharperLines
-  clc
-  tya
-  adc #1
-  sta serialCharperLines
-  ;jsr send_rs232_CRLF
-  rts    
-
-send_rs232_CRLF:
-  lda #$0d
-  jsr send_rs232_char
-  lda #$0a
-  jsr send_rs232_char 
-  rts   
-
-listeningMode: 
-  jmp loopReceiveData ;go to listening mode
-  
-  
-  ;wait until the status register bit 3 receive data register is full =1, then 
-  ;read the data register
-loopReceiveData:
-   
-  lda ACIA_STATUS
-  and #%00001000; and it to see if bit 3 is one, delete all the other bits
-  beq loopReceiveData ; if zero we have not received anythinßg
-  ;if we are here we have a byte to read
-  lda ACIA_DATA ;read character
-  jsr print_char ;print the char on the local lcd of the 20 c
-  jsr send_rs232_char ;echo the character typed
-  jmp loopReceiveData ;go to wait for next character
-  rts
-
-send_rs232_char:
-  pha ;store the character to print
-  lda rs232Printer
-  bne send_rs232_char_printer
-send_rs232_char_screen:
-  pla ;restore the character to print
-  sta ACIA_DATA ;wrie whatever is on the accumulator to the transmit register
-  ; preserve accumulator
-  pha 
-  ; preserve Y register
-  tya  
-  pha
-  ; preserve X register
-  txa  
-  pha  
-  ;check to see if the transmit data register is empty bit 4 of the status register
-tx_wait:  
-  lda ACIA_STATUS
-  and #%00010000 ;leave vae only bit 4 on the accumulator
-  beq tx_wait ;if zero the transmit buffer is full so we wait
-  jsr tx_delay ; solve bit 4 hardware issue on the wdc issue
-  ;recover X register
-  pla
-  tax
-  ;recover y register
-  pla
-  tay
-  ; recover accumulator
-  pla 
-  rts
-tx_delay:
-  ;at 19200 bauds it is 1 bit every 52 clock cycles
-  ;so 8 bits + start and stop bit it is 10 bits or 520 cycles
-  ldy #102
-tx_delay_loop:  
-  dey ;2 cycles
-  bne tx_delay_loop ; 3 cycles
-  rts
-
-send_rs232_char_printer:
-  pla ;restore the character to print
-  sta ACIA_PRINTER_DATA ;wrie whatever is on the accumulator to the transmit register
-  ; preserve accumulator
-  pha 
-  ; preserve Y register
-  tya  
-  pha
-  ; preserve X register
-  txa  
-  pha  
-
-  ;check to see if the transmit data register is empty bit 4 of the status register
-tx_wait_printer:  
-  lda ACIA_PRINTER_STATUS
-  and #%00010000 ;leave vae only bit 4 on the accumulator
-  beq tx_wait_printer ;if zero the transmit buffer is full so we wait
-  jsr tx_delay_printer ; solve bit 4 hardware issue on the wdc issue
-  ;recover X register
-  pla
-  tax
-  ;recover y register
-  pla
-  tay
-  ; recover accumulator
-  pla 
-  rts
-
-tx_delay_printer:
-  ;at 19200 bauds it is 1 bit every 52 clock cycles
-  ;so 8 bits + start and stop bit it is 10 bits or 520 cycles
-  ldy #102
-tx_delay_printer_loop:  
-  dey ;2 cycles
-  bne tx_delay_printer_loop ; 3 cycles
-  rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------SERIALUART-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -2721,230 +2455,6 @@ INNER_LOOP:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------                                      
 
-clearRS232Screen:
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii ""
-  .ascii "e" 
-
-
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------PRINTER-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-initializePrinter:
-  jsr printerReset
-  rts
-
-printerWelcomeMessage:
-  lda #$1
-  sta rs232Printer  
-  lda #<msj_bienvenida
-  sta serialDataVectorLow  
-  lda #>msj_bienvenida
-  sta serialDataVectorHigh
-  ;lets print on the printer
-  jsr initializePrinter
-  jsr printAsciiDrawing 
-  lda #$0
-  sta rs232Printer  
-  rts
-
-testPrinter:
-  lda #$1
-  sta rs232Printer
-  jsr printerReset
-  jsr probandoPrinter
-  jsr printerBoldOn
-  jsr probandoPrinter
-  jsr printerBoldOff
-  jsr printerJustificationRight
-  jsr probandoPrinter
-  jsr printerJustificationCenter
-  jsr probandoPrinter
-  jsr printerJustificationLeft
-  jsr probandoPrinter
-;   jsr printerUnderlineOn
-;   jsr probandoPrinter
-;   jsr printerUnderlineOff
-  jsr printerLetterSizeBig
-  jsr probandoPrinter
-  jsr printerLetterSizeMedium
-  jsr probandoPrinter
-  jsr printerLetterSizeNormal
-  jsr probandoPrinter
-  jsr printerFeedManyLines
-  jsr printerCut
-  rts
-
-printerReset:
-  ;Initialization sequence ESC @
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$40 ;@
-  jsr send_rs232_char
-  rts
-
-printerCut:
-  ;Initialization sequence ESC @
-  lda #$1d 
-  jsr send_rs232_char
-  lda #$56
-  jsr send_rs232_char
-  lda #$00
-  jsr send_rs232_char  
-  rts
-
-printerBoldOn:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$45 ;E
-  jsr send_rs232_char
-  lda #$1 ;bold on
-  jsr send_rs232_char  
-  rts
-
-printerBoldOff:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$45 ;E
-  jsr send_rs232_char
-  lda #$0 ;bold off
-  jsr send_rs232_char  
-  rts  
-
-probandoPrinter:
-  lda #<msj_printer
-  sta serialDataVectorLow  
-  inx 
-  lda #>msj_printer
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  rts
-
-printerJustificationLeft:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$61 ;a
-  jsr send_rs232_char
-  lda #$0 ;left
-  jsr send_rs232_char  
-  rts      
-
-printerJustificationCenter:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$61 ;a
-  jsr send_rs232_char
-  lda #$1 ;Center
-  jsr send_rs232_char  
-  rts       
-
-printerJustificationRight:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$61 ;a
-  jsr send_rs232_char
-  lda #$2 ;right
-  jsr send_rs232_char  
-  rts       
-
-printerFeedOneLine:
-  lda #$0a ;LF
-  jsr send_rs232_char
-  rts
-
-printerFeedManyLines:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$64 ;a
-  jsr send_rs232_char
-  lda #$5 ;5 lines
-  jsr send_rs232_char  
-  rts    
-
-printerUnderlineOn:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$2d ;n
-  jsr send_rs232_char
-  lda #$1
-  jsr send_rs232_char  
-  rts    
-
-printerUnderlineOff:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$2d ;n
-  jsr send_rs232_char
-  lda #$0 
-  jsr send_rs232_char  
-  rts    
-  
-printerLetterSizeMedium:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$21 ;n
-  jsr send_rs232_char
-  ;bits 7 to 4 widht, bits 3 to 0 height 
-  ;00 normal size
-  lda #$11 ;medium size 
-  jsr send_rs232_char  
-  rts     
-
-printerLetterSizeBig:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$21 ;n
-  jsr send_rs232_char
-  ;bits 7 to 4 widht, bits 3 to 0 height 
-  ;00 normal size
-  lda #$33 ;big size 
-  jsr send_rs232_char  
-  rts   
-
-printerLetterSizeNormal:
-  lda #$1b ;ESC 
-  jsr send_rs232_char
-  lda #$21 ;n
-  jsr send_rs232_char
-  ;bits 7 to 4 widht, bits 3 to 0 height 
-  ;00 normal size
-  lda #$00 ;medium size 
-  jsr send_rs232_char  
-  rts     
-msj_printer:
-  .ascii "Probando Printer"
-  .ascii "e"   
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------PRINTER-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
@@ -3552,6 +3062,22 @@ printFlashlight:
 ;-------------------------------------BARRA-----------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+
+
+printerWelcomeMessage:
+  lda #$1
+  sta rs232Printer  
+  lda #<msj_bienvenida
+  sta serialDataVectorLow  
+  lda #>msj_bienvenida
+  sta serialDataVectorHigh
+  ;lets print on the printer
+  jsr initializePrinter
+  jsr printAsciiDrawing 
+  lda #$0
+  sta rs232Printer  
+  rts
+
 
   .include "acs_phrases.asm"
 screens_index=$a100  ;  .include "acs_screens_bank1.asm" on bank 1 file

@@ -1,3 +1,14 @@
+;Zero Page
+serialDataVectorLow = $3d
+serialDataVectorHigh = $3e
+serialCharperLines = $3f
+;serialTotalLinesAscii =$40
+;serialDrawindEndChar=$41
+
+;RAM
+
+
+
 ;ACIA/UART ports PRINTER
 ACIA_PRINTER_DATA = $4000
 ACIA_PRINTER_STATUS = $4001
