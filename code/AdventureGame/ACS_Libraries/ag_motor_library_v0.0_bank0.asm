@@ -3,8 +3,8 @@
 ;define RS232 primitives for showing lights on KB_PORTA and KB_PORTB VIA1 or VIA2
   .include "lib_acia_memory.asm" ;define memory address for ACIA
   .include "lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
-  .include "lib_rs_memory.asm" ;define memory address for ACIA
-  .include "lib_rs_constants.asm" ;define constansts that are not memory addresses but literals
+  .include "lib_sensor_memory.asm" ;define memory address for ACIA
+  .include "lib_sensor_constants.asm" ;define constansts that are not memory addresses but literals
   .include "lib_lcd_memory.asm" ;define memory address for ACIA
   .include "lib_lcd_constants.asm" ;define constansts that are not memory addresses but literals
 ;zero page memory positions for Vectors and Data
@@ -216,7 +216,7 @@ TIMER_LOOPS_10M  = 60                ; 60 × 10 seconds = 10 minute
 
   .include "lib_init.asm" ;reset vector and stack initialization
   .include "lib_lcd_code.asm"
-  .include "lib_rs_code.asm"
+  .include "lib_sensor_code.asm"
   .include "lib_acia_code.asm"
 
 
@@ -234,7 +234,7 @@ programStart:
   ;configure stack and enable interrupts DONE
   ;Initialize HARDWARE
   jsr viaLcdInit
-  jsr viaRsInit
+  jsr viaSensorInit
   ;jsr viaSoundInit
   jsr uartSerialInit
   jsr screenInit
@@ -347,7 +347,7 @@ bankswitch0:
   pha ;save X because i am going to another process
   ldx #$1
   lda #$0 ;select bank 1
-  sta RS_PORTA
+  sta SENSOR_PORTA
 bankswitch0_loop:
   txa
   beq bankswitch0_continue
@@ -370,7 +370,7 @@ bankswitch1:
   pha ;save X because i am going to another process
   ldx #$1
   lda #$1 ;select bank 1
-  sta RS_PORTA
+  sta SENSOR_PORTA
 bankswitch1_loop:
   txa
   beq bankswitch1_continue
@@ -2253,11 +2253,11 @@ flashLightOffSensor:
 flashLightSet:
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   ;we will modify port b bits PB1 and PB0
-  lda RS_PORTB ;load what is already on port B
+  lda SENSOR_PORTB ;load what is already on port B
   and #%10111011 ;keep bits 7,5,4,3,2,1 and reset bits 6, 2 of port b
-  sta RS_PORTB
+  sta SENSOR_PORTB
   ora flashLightSensor ;set bit 6 for sync and bit 0.
-  sta RS_PORTB ;set the new value
+  sta SENSOR_PORTB ;set the new value
   rts  
 
 increaseWaterLevelSensor:
@@ -2271,11 +2271,11 @@ increaseWaterLevelSensor:
 waterSet:
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   ;we will modify port b bits PB1 
-  lda RS_PORTB ;load what is already on port B
+  lda SENSOR_PORTB ;load what is already on port B
   and #%10111101 ;keep bits 7,5,4,3,2,0 and reset bits 6, 1 of port b
-  sta RS_PORTB
+  sta SENSOR_PORTB
   ora waterLevelSensor ;set bit 6 for sync and bit 0.
-  sta RS_PORTB ;set the new value
+  sta SENSOR_PORTB ;set the new value
   rts  
   
 waterOnSensor:
@@ -2293,11 +2293,11 @@ waterOffSensor:
 heartbeatSet:
   ;bit 6 activates SYNC and starts the reading on the Arduino of bit 0
   ;we will modify port b bits PB1 and PB0
-  lda RS_PORTB ;load what is already on port B
+  lda SENSOR_PORTB ;load what is already on port B
   and #%10111110 ;keep bits 7,5,4,3,2,1 and reset bits 6, 1 and 0 of port b
-  sta RS_PORTB
+  sta SENSOR_PORTB
   ora heartRateSensor ;set bit 6 for sync and bit 0.
-  sta RS_PORTB ;set the new value
+  sta SENSOR_PORTB ;set the new value
   rts  
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
