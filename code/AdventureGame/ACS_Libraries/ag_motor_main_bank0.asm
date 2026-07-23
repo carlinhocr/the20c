@@ -138,12 +138,6 @@ dashboardPointersRAM=$0600
 
   .include "lib_init.asm" ;reset vector and stack initialization
 
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------MAIN-----------------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
 ;in bank0
 ;screen base =0
 ;screen id = screen_base+screen_id
@@ -157,67 +151,6 @@ programStart:
   jsr uartSerialInit
   jsr screenInit
   jsr mainProgram
-  ;jmp listeningMode
-
-  
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;------------------------------BANKSWITCHING ROUTINES-------------------------------
-;-----------------------------------------------------------------------------------
-;----------------------------------------------------------------------------------- 
-
-bankswitch0:
-  pha
-  tya ;save Y because i am going to another process
-  pha ;save Y because i am going to another process
-  txa ;save X because i am going to another process
-  pha ;save X because i am going to another process
-  ldx #$1
-  lda #$0 ;select bank 1
-  sta SENSOR_PORTA
-bankswitch0_loop:
-  txa
-  beq bankswitch0_continue
-  inx  
-  jmp bankswitch0_loop  
-bankswitch0_continue:  
-  jsr delay_1_sec
-  pla
-  tax
-  pla
-  tay
-  pla
-  rts  
-
-bankswitch1:
-  pha
-  tya ;save Y because i am going to another process
-  pha ;save Y because i am going to another process
-  txa ;save X because i am going to another process
-  pha ;save X because i am going to another process
-  ldx #$1
-  lda #$1 ;select bank 1
-  sta SENSOR_PORTA
-bankswitch1_loop:
-  txa
-  beq bankswitch1_continue
-  inx  
-  jmp bankswitch1_loop  
-bankswitch1_continue:  
-  jsr delay_1_sec
-  pla
-  tax
-  pla
-  tay
-  pla
-  rts   
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;------------------------------BANKSWITCHING ROUTINES-------------------------------
-;-----------------------------------------------------------------------------------
-;----------------------------------------------------------------------------------- 
-
 
   .include "lib_lcd_code.asm"
   .include "lib_sensor_code.asm"
@@ -231,6 +164,7 @@ bankswitch1_continue:
   .include "ag_motor_dashboard.asm"
   .include "ag_motor_init.asm"
   .include "ag_motor_game_mechanics.asm"
+  .include "ag_motor_irq.asm"
   
 
   .include "acs_phrases.asm"
@@ -243,53 +177,6 @@ screens_index=$a100  ;  .include "acs_screens_bank1.asm" on bank 1 file
   .include "acs_sensors.asm"
   .org $fc00
   .include "acs_dashboard.asm"
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;--------------------------------INTERRUPT MANAGEMENT-------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-
-nmi:
-
-irq:
-  sei ; disable interrupts
-  ;preserve Accumulator, X and Y so we can use them here
-  pha ; store accumulator in the stack
-  txa ; transfer X to Accumulator
-  pha ; store the X register in the stack
-  tya ; transfer Y to Accumulator
-  pha ; store the Y register in the stack
-  ;bit command read the memory and compares just used to read the register
-  ;bit PORTA ; clear the interrupt flag I am doing it with an LDA on test_buttons
-  
-  ;check that the input is enabled first (so the program is waiting for user input)
-  ;or we can disable interruptions and only enable them before accepting input from the user;
-;   lda LCD_IFR
-;   and #%01000000;#LCD_T1_FLAG
-;   beq irqNextInterruptSource
-  ;jsr timerCheckSecondElapsed
-;   lda #$61
-;   jsr send_rs232_char
-  ;jsr timerCheck10SecondElapsed
-  ;jsr timerCheckMinuteElapsed
-  ;jsr timerCheckTimeIdleElapsed
-irqNextInterruptSource:
-;   lda #$62
-;   jsr send_rs232_char
-  jsr test_buttons ;test_buttons loads the message
-  lda pressedButton
-  sta userOptionSelection
-exit_irq:  
-  ;reserve order of stacking to restore values
-  pla ; retrieve the Y register from the stack
-  tay ; transfer accumulator to Y register
-  pla ; retrieve the X register from the stack
-  tax ; transfer accumulator to X register
-  pla ; restore the accumulator value
-  cli ;re enable interrupts
-  rti 
-
-
 
 ;complete the file
   .org $fffa

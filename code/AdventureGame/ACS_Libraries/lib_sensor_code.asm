@@ -40,3 +40,61 @@ viaSensorInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;------------------------------BANKSWITCHING ROUTINES-------------------------------
+;-----------------------------------------------------------------------------------
+;----------------------------------------------------------------------------------- 
+
+bankswitch0:
+  pha
+  tya ;save Y because i am going to another process
+  pha ;save Y because i am going to another process
+  txa ;save X because i am going to another process
+  pha ;save X because i am going to another process
+  ldx #$1
+  lda #$0 ;select bank 1
+  sta SENSOR_PORTA
+bankswitch0_loop:
+  txa
+  beq bankswitch0_continue
+  inx  
+  jmp bankswitch0_loop  
+bankswitch0_continue:  
+  jsr delay_1_sec
+  pla
+  tax
+  pla
+  tay
+  pla
+  rts  
+
+bankswitch1:
+  pha
+  tya ;save Y because i am going to another process
+  pha ;save Y because i am going to another process
+  txa ;save X because i am going to another process
+  pha ;save X because i am going to another process
+  ldx #$1
+  lda #$1 ;select bank 1
+  sta SENSOR_PORTA
+bankswitch1_loop:
+  txa
+  beq bankswitch1_continue
+  inx  
+  jmp bankswitch1_loop  
+bankswitch1_continue:  
+  jsr delay_1_sec
+  pla
+  tax
+  pla
+  tay
+  pla
+  rts   
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;------------------------------BANKSWITCHING ROUTINES-------------------------------
+;-----------------------------------------------------------------------------------
+;----------------------------------------------------------------------------------- 
