@@ -7,6 +7,18 @@ serialCharperLines = $3f
 
 ;RAM
 
+barMaximumTimerLow=               $0260
+barMaximumTimerHigh=              $0261
+segmentBarSizeHigh=               $0262
+segmentBarSizeLow=                $0263
+currentTimeBarHigh=               $0264
+currentTimeBarLow=                $0265
+currentSegmentBarSizeHigh=        $0266
+currentSegmentBarSizeLow=         $0267
+barSegmentNumbers=                $0268
+emptyBars=                        $0269
+currentNumberOfBars=              $026a
+rs232Printer=                     $0278
 
 
 ;ACIA/UART ports PRINTER

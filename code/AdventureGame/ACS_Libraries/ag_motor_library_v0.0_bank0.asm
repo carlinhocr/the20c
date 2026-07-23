@@ -114,17 +114,7 @@ simulationSegments=               $025c
 flashlightSegments=               $025d
 dashboardStartScreen=             $025e
 dashboardEndScreenDefault=        $025f
-barMaximumTimerLow=               $0260
-barMaximumTimerHigh=              $0261
-segmentBarSizeHigh=               $0262
-segmentBarSizeLow=                $0263
-currentTimeBarHigh=               $0264
-currentTimeBarLow=                $0265
-currentSegmentBarSizeHigh=        $0266
-currentSegmentBarSizeLow=         $0267
-barSegmentNumbers=                $0268
-emptyBars=                        $0269
-currentNumberOfBars=              $026a
+
 endByTimeUp=                      $026b
 endByEnemy=                       $026c
 endByActionFailed=                $026d
@@ -137,8 +127,7 @@ dashboardHighFearLevel=           $0273
 dashboardHighWaterLevel=          $0274
 isSecretScreenVariable=           $0275
 secretsFound=                     $0276
-rs232Printer=                     $0277
-flashLightSensor=                 $0278
+flashLightSensor=                 $0277
 
 actionIDOptionsRAM=$0440 ;32 bytes but i only use 6
 currentScreenAllActionsRAM=$0460 ; i only use 6 bytes
@@ -2307,182 +2296,7 @@ increaseWaterLevelEnd:
 
 
 
-;BEGIN------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;-------------------------------------BARRA-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
 
-setBarSegmentSize:
-  ;lets asume we use 8 as the division
-  lda barMaximumTimerHigh
-  sta segmentBarSizeHigh
-  lda barMaximumTimerLow
-  sta segmentBarSizeLow  
-  lda barSegmentNumbers
-  sta divisorBarSegment
-  beq setBarSegmentSizeLoop_End
-setBarSegmentSize_Loop:  
-  lda divisorBarSegment
-  clc ;clear the carry flag for ror so we can divide by two
-  ror ;with this i am diding by the sbarSEgmentSize
-  sta divisorBarSegment
-  beq setBarSegmentSizeLoop_End
-  ;example for 8 segments we do 3 shift example for 600 (600/8)
-  ;0000 1000
-  ;first ror
-  ;0000 0100 = 600/2 = 300
-  ;second ror
-  ;0000 0010 = 300/2 = 150
-  ;third ror
-  ;0000 0001 = 150/2 = 75 equal to 600/8  
-  ;the fourth ror is zero    
-  lda segmentBarSizeHigh
-  clc ;clear the carry flag for ror so we can divide by two
-  ror
-  sta segmentBarSizeHigh
-  ;here we keep the carry flag to have the 7 bit of the low segments
-  lda segmentBarSizeLow
-  ror
-  sta segmentBarSizeLow
-  jmp setBarSegmentSize_Loop
-setBarSegmentSizeLoop_End:
-  ;here we have the segment size on segmentBarSizeHigh and segmentBarSizeLow
-  rts
-
-calculateNumberOfBars:
-  ;check for maximum size fo segments
-  lda simulationSegments
-  sta barSegmentNumbers
-  lda simulationTimePassedLowDigits
-  sta currentTimeBarLow
-  lda simulationTimePassedHighDigits
-  sta currentTimeBarHigh
-  sec 
-  lda barMaximumTimerLow
-  sbc currentTimeBarLow
-  lda barMaximumTimerHigh
-  sbc currentTimeBarHigh
-  ;if there is no carry then result is negative
-  ;we are past simulation time
-  ;we should print only the maximum bar size and no more
-  bcs calculateNumberOfBars_CalculateBars 
-  ;if we are here it was negative
-  ldx barSegmentNumbers
-  jmp calculateNumberOfBars_Print
-calculateNumberOfBars_CalculateBars:  
-  ;if not lets calculate the bars
-  lda segmentBarSizeHigh
-  sta currentSegmentBarSizeHigh
-  lda segmentBarSizeLow
-  sta currentSegmentBarSizeLow
-  ldx #$00
-calculateNumberOfBars_Loop  
-  inx
-  ;we will get the segment size startign with the size in seconds
-  ;16 bit number for just one segment and substract it from the current time
-  ;we do not care about the resulting number only about the carry
-  ;to find who is less
-  sec 
-  lda currentSegmentBarSizeLow
-  sbc currentTimeBarLow
-  lda currentSegmentBarSizeHigh
-  sbc currentTimeBarHigh
-  ;if there is a carry the result was positive
-  ;and the current segment bar is greater than the current time
-  ;in the index register X we have our number of segments
-  bcs calculateNumberOfBars_Print
-  ;here it was negative we have to increase the segments so we add one segment more
-  clc ;clear the carry flag for rol so we can add 
-  lda currentSegmentBarSizeLow
-  adc segmentBarSizeLow 
-  sta currentSegmentBarSizeLow
-  ;we do not clear the carry so we can add a carry from Low to High
-  lda currentSegmentBarSizeHigh
-  adc segmentBarSizeHigh
-  sta currentSegmentBarSizeHigh
-  ;now we try again to find out if we have our correct segmente
-  jmp calculateNumberOfBars_Loop
-calculateNumberOfBars_Print:
-  txa
-  sta currentNumberOfBars
-  rts
-
-printSegments:
-  ;check for maximum size fo segments
-  sec 
-  lda barMaximumTimerLow
-  sbc currentTimeBarLow
-  lda barMaximumTimerHigh
-  sbc currentTimeBarHigh
-  ;if there is no carry then result is negative
-  ;we are past simulation time
-  ;we should print only the maximum bar size and no more
-  bcs printSegments_CalculateBars 
-  ;if we are here it was negative
-  ldx barSegmentNumbers
-  jmp printSegments_Print
-printSegments_CalculateBars:  
-  ;if not lets calculate the bars
-  lda segmentBarSizeHigh
-  sta currentSegmentBarSizeHigh
-  lda segmentBarSizeLow
-  sta currentSegmentBarSizeLow
-  ldx #$00
-printSegments_Loop  
-  inx
-  ;we will get the segment size startign with the size in seconds
-  ;16 bit number for just one segment and substract it from the current time
-  ;we do not care about the resulting number only about the carry
-  ;to find who is less
-  sec 
-  lda currentSegmentBarSizeLow
-  sbc currentTimeBarLow
-  lda currentSegmentBarSizeHigh
-  sbc currentTimeBarHigh
-  ;if there is a carry the result was positive
-  ;and the current segment bar is greater than the current time
-  ;in the index register X we have our number of segments
-  bcs printSegments_Print
-  ;here it was negative we have to increase the segments so we add one segment more
-  clc ;clear the carry flag for rol so we can add 
-  lda currentSegmentBarSizeLow
-  adc segmentBarSizeLow 
-  sta currentSegmentBarSizeLow
-  ;we do not clear the carry so we can add a carry from Low to High
-  lda currentSegmentBarSizeHigh
-  adc segmentBarSizeHigh
-  sta currentSegmentBarSizeHigh
-  ;now we try again to find out if we have our correct segmente
-  jmp printSegments_Loop
-
-printSegments_Print:
-  txa
-  sta currentNumberOfBars
-  sta printableNumberOfBars
-  lda barSegmentNumbers
-  sec
-  sbc printableNumberOfBars
-  sta emptyBars
-  lda #$5b;"["
-  jsr send_rs232_char  
-printSegments_Print_Bars_Loop:  
-  lda #$23 ;"#"
-  jsr send_rs232_char 
-  dec printableNumberOfBars
-  bne printSegments_Print_Bars_Loop  
-  lda emptyBars
-printSegments_Print_Empty_Loop:   
-  beq printSegments_End
-  lda #$5f ;"_"
-  jsr send_rs232_char 
-  dec emptyBars
-  jmp printSegments_Print_Empty_Loop
-printSegments_End:  
-  lda #$5d;"]"
-  jsr send_rs232_char  
-  jsr send_rs232_CRLF
-  rts  
 
 setSimulationTimerBars:
   lda simulationSegments
@@ -2540,12 +2354,6 @@ printFlashlightTimerBars_Reverse:
 
 printFlashlight:
   rts
-
-;END--------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
-;-------------------------------------BARRA-----------------------------------------
-;-----------------------------------------------------------------------------------
-;-----------------------------------------------------------------------------------
 
 
 printerWelcomeMessage:
