@@ -1,0 +1,26 @@
+[
+{
+  "directory": "/Users/carlosrienzi/Downloads/IECAnalyzer/build",
+  "command": "/usr/bin/c++ -DIECAnalyzer_EXPORTS -DLOGIC2 -isystem /Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-src/include -std=gnu++11 -mmacosx-version-min=10.14 -fPIC -o CMakeFiles/IECAnalyzer.dir/src/IECAnalyzer.cpp.o -c /Users/carlosrienzi/Downloads/IECAnalyzer/src/IECAnalyzer.cpp",
+  "file": "/Users/carlosrienzi/Downloads/IECAnalyzer/src/IECAnalyzer.cpp",
+  "output": "CMakeFiles/IECAnalyzer.dir/src/IECAnalyzer.cpp.o"
+},
+{
+  "directory": "/Users/carlosrienzi/Downloads/IECAnalyzer/build",
+  "command": "/usr/bin/c++ -DIECAnalyzer_EXPORTS -DLOGIC2 -isystem /Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-src/include -std=gnu++11 -mmacosx-version-min=10.14 -fPIC -o CMakeFiles/IECAnalyzer.dir/src/IECAnalyzerResults.cpp.o -c /Users/carlosrienzi/Downloads/IECAnalyzer/src/IECAnalyzerResults.cpp",
+  "file": "/Users/carlosrienzi/Downloads/IECAnalyzer/src/IECAnalyzerResults.cpp",
+  "output": "CMakeFiles/IECAnalyzer.dir/src/IECAnalyzerResults.cpp.o"
+},
+{
+  "directory": "/Users/carlosrienzi/Downloads/IECAnalyzer/build",
+  "command": "/usr/bin/c++ -DIECAnalyzer_EXPORTS -DLOGIC2 -isystem /Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-src/include -std=gnu++11 -mmacosx-version-min=10.14 -fPIC -o CMakeFiles/IECAnalyzer.dir/src/IECAnalyzerSettings.cpp.o -c /Users/carlosrienzi/Downloads/IECAnalyzer/src/IECAnalyzerSettings.cpp",
+  "file": "/Users/carlosrienzi/Downloads/IECAnalyzer/src/IECAnalyzerSettings.cpp",
+  "output": "CMakeFiles/IECAnalyzer.dir/src/IECAnalyzerSettings.cpp.o"
+},
+{
+  "directory": "/Users/carlosrienzi/Downloads/IECAnalyzer/build",
+  "command": "/usr/bin/c++ -DIECAnalyzer_EXPORTS -DLOGIC2 -isystem /Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-src/include -std=gnu++11 -mmacosx-version-min=10.14 -fPIC -o CMakeFiles/IECAnalyzer.dir/src/IECSimulationDataGenerator.cpp.o -c /Users/carlosrienzi/Downloads/IECAnalyzer/src/IECSimulationDataGenerator.cpp",
+  "file": "/Users/carlosrienzi/Downloads/IECAnalyzer/src/IECSimulationDataGenerator.cpp",
+  "output": "CMakeFiles/IECAnalyzer.dir/src/IECSimulationDataGenerator.cpp.o"
+}
+]

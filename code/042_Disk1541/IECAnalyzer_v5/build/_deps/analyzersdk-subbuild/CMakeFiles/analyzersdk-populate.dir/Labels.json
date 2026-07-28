@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-subbuild/CMakeFiles/analyzersdk-populate"
+		},
+		{
+			"file" : "/Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-subbuild/CMakeFiles/analyzersdk-populate.rule"
+		},
+		{
+			"file" : "/Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-subbuild/CMakeFiles/analyzersdk-populate-complete.rule"
+		},
+		{
+			"file" : "/Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-subbuild/analyzersdk-populate-prefix/src/analyzersdk-populate-stamp/analyzersdk-populate-build.rule"
+		},
+		{
+			"file" : "/Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-subbuild/analyzersdk-populate-prefix/src/analyzersdk-populate-stamp/analyzersdk-populate-configure.rule"
+		},
+		{
+			"file" : "/Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-subbuild/analyzersdk-populate-prefix/src/analyzersdk-populate-stamp/analyzersdk-populate-download.rule"
+		},
+		{
+			"file" : "/Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-subbuild/analyzersdk-populate-prefix/src/analyzersdk-populate-stamp/analyzersdk-populate-install.rule"
+		},
+		{
+			"file" : "/Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-subbuild/analyzersdk-populate-prefix/src/analyzersdk-populate-stamp/analyzersdk-populate-mkdir.rule"
+		},
+		{
+			"file" : "/Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-subbuild/analyzersdk-populate-prefix/src/analyzersdk-populate-stamp/analyzersdk-populate-patch.rule"
+		},
+		{
+			"file" : "/Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-subbuild/analyzersdk-populate-prefix/src/analyzersdk-populate-stamp/analyzersdk-populate-test.rule"
+		},
+		{
+			"file" : "/Users/carlosrienzi/Downloads/IECAnalyzer/build/_deps/analyzersdk-subbuild/analyzersdk-populate-prefix/src/analyzersdk-populate-stamp/analyzersdk-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"analyzersdk-populate"
+		],
+		"name" : "analyzersdk-populate"
+	}
+}
