@@ -114,7 +114,7 @@ loopReceiveData:
   beq loopReceiveData ; if zero we have not received anythinßg
   ;if we are here we have a byte to read
   lda ACIA_DATA ;read character
-  jsr print_char ;print the char on the local lcd of the 20 c
+  ;jsr print_char ;print the char on the local lcd of the 20 c
   jsr send_rs232_char ;echo the character typed
   jmp loopReceiveData ;go to wait for next character
   rts
@@ -241,6 +241,27 @@ printSimulationTimerBarsPrinter:
   lda #$0
   sta rs232Printer
   rts
+
+printSimulationTimerBars:
+  lda simulationSegments
+  sta barSegmentNumbers
+  lda simulationTimePassedLowDigits
+  sta currentTimeBarLow
+  lda simulationTimePassedHighDigits
+  sta currentTimeBarHigh
+  jsr printSegments
+  rts
+
+setSimulationTimerBars:
+  lda simulationSegments
+  sta barSegmentNumbers
+  lda maxSimulationTimeLowByte
+  sta barMaximumTimerLow
+  lda maxSimulationTimeHighByte
+  sta barMaximumTimerHigh
+  jsr setBarSegmentSize
+  ;jsr bin_2_ascii_segmentBarSizeLow
+  rts  
 
 printAsciiDrawing:
   sei ;disable interrupts to run

@@ -6,6 +6,16 @@ serialCharperLines = $3f
 ;serialDrawindEndChar=$41
 
 ;RAM
+simulationTimePassedLowDigits=    $0224
+simulationTimePassedHighDigits=   $0225
+
+maxSimulationTimeLowByte=         $022e
+maxSimulationTimeHighByte=        $022f
+
+divisorBarSegment=                $0257
+printableNumberOfBars=            $0258
+
+simulationSegments=               $025c
 
 barMaximumTimerLow=               $0260
 barMaximumTimerHigh=              $0261

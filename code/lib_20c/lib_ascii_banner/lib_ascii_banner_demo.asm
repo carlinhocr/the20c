@@ -1,6 +1,9 @@
   .include "../lib_acia/lib_acia_memory.asm" ;define memory address for ACIA
   .include "../lib_acia/lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
 
+  .include "../lib_utils/lib_utils_memory.asm" ;define memory address for ACIA
+  .include "../lib_utils/lib_utils_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
+
 
 
 
@@ -20,7 +23,11 @@
 
 
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  
+  .include "../lib_utils/lib_utils_code.asm" ;define code for ACIA t  
 
+nmi:
+irq:
+  rti
 
 ;complete the file
   .org $fffa
