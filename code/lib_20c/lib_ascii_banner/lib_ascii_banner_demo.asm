@@ -11,10 +11,9 @@
 
 
 
-
   .org $8000
   .include "../lib_init/lib_init.asm" ;reset vector and stack initialization
-
+  
 
 ;Plan to create an ASCII BANNER command
 
@@ -23,6 +22,12 @@
 ;function to read the encoded characters and copy them to RAM memory
 ;function to read several ascii characters in the same Line and copy them to RAM
 ;function to get ascii in RAM and print it to RS-232 (the ACIA module has this function)
+
+  jsr uartSerialInit
+  lda #'A';load the ascii character of the letter A
+  jsr drawOneLetterBanner
+loop:
+  jmp loop  
 
   .include "lib_ascii_banner_code.asm"
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  

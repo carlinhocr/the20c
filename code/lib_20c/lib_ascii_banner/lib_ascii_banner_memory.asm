@@ -9,3 +9,5 @@ asciiLetter = $300
 asciiBannerLineByte = $301
 charToAdd = $302
 indexByteLetter = $303
+
+charRAMforAscii=$500

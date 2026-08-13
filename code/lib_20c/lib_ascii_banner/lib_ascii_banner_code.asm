@@ -4,6 +4,12 @@
     ;make it byte values, the first is the ascii character code the next 8 are the byte components of the characters
 
 drawOneLetterBanner:
+  tya ;preserve the Y index
+  pha ;preserve the Y index
+  lda #<charRAMforAscii 
+  sta asciiPointer_low
+  lda #>charRAMforAscii
+  sta asciiPointer_High
   ;load letter from text
   lda asciiLetter
   ;find letter in the Banner Alphabet
@@ -37,7 +43,7 @@ drawOneLetterBanner_nextCharInLine:
   inc indexByteLetter ;it goes from 0 to 7 to process 8 bytes
   lda indexByteLetter
   cmp #$8
-  beq drawOneLetterBanner_End
+  beq drawOneLetterBanner_PrintLetter
   lda indexByteLetter
   sty indexByteLetter
   lda (asciiPointer_low),Y
@@ -46,17 +52,23 @@ drawOneLetterBanner_nextCharInLine:
   ; ;process each line
   jsr processBits
   jmp drawOneLetterBanner_nextCharInLine 
+drawOneLetterBanner_PrintLetter:
+  jsr printOneLetter
 drawOneLetterBanner_End:
+  pla ;restore the Y index
+  tay ;restore the Y index
   rts
 
 
 
 ;for each line copy to memory the form of the banner letter per line  
 processBits:  
+  tya ;preserve the Y index
+  pha ;preserve the Y index
   ldx #$FF
 processBits_Loop:  
-  inx
-  cpx #$8
+  iny
+  cpy #$8
   beq processBits_End
   clc 
   asl asciiBannerLineByte
@@ -69,22 +81,53 @@ processBits_addBlock:
   lda #$23
   sta charToAdd
 processBits_StoreRAM:
-  ldy #$0
   lda charToAdd
-  sta (asciiRAMPointer_low),Y 
+  sta (asciiRAMPointer_low),Y ;podria usar un jmp indirect sin índice en este caso
+  jmp processBits_Loop
+processBits_End  
+  ;keep the ram pointer to the next free byte to add more line characters
+  ;add null character to finish the line and be able to use send_rs232_line
+  lda #$00
+  sta (asciiRAMPointer_low),Y ;y is now 8
+  ;lets first icrement y to the 9 position
+  iny
+  tya
   clc
-  lda #$1
   adc asciiRAMPointer_low
   sta asciiRAMPointer_low
   lda asciiRAMPointer_High
-  adc #$0 ;only here to add the carry
-  sta asciiRAMPointer_High
-processBits_End  
+  adc #$0 ;just to add the carry
+  pla ;restore the Y index
+  tay ;restore the Y index
   rts
 
   ;print lettert from memoty to the screen
-
-
+printOneLetter:
+  tya ;preserve the Y index
+  pha ;preserve the Y index
+  ;letters are always 8 lines by 5 columns maybe 8 colums to make it easier now
+  lda #<charRAMforAscii 
+  sta asciiPointer_low
+  lda #>charRAMforAscii
+  sta asciiPointer_High
+  ldy #$00
+printOneLetterLine_Loop:  
+  cpy #72 ;decimal 72
+  beq printOneLetter_End
+  lda (asciiPointer_low),Y
+  sta serialDataVectorLow ;to use the send_rs232_line function
+  jsr send_rs232_line
+  ;now add 9 bytes to the y index (the 8 chars + the null byte) it ends on 72 chars
+  ;0,9,18,27,36,45,54,63,72
+  tya
+  clc
+  adc #$9
+  tay
+printOneLetter_End:
+  pla ;restore the Y index
+  tay ;restore the Y index
+  rts
+  
 
 ;fucntion to read an ASCII character code and find the ASCII Letter block
 ;function to read the encoded characters and copy them to RAM memory

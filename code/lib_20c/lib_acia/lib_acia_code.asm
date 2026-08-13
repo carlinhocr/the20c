@@ -51,6 +51,8 @@ uartSerialInit:
 serialUART:
 
 send_rs232_line:
+  tya ;preserve the Y index
+  pha ;preserve the Y index
   ldy #$0
 send_rs232_line_loop:
   tya 
@@ -73,9 +75,13 @@ send_rs232_line_end:
   adc #1
   sta serialCharperLines
   jsr send_rs232_CRLF
+  pla ;restore the Y index
+  tay ;restore the Y index
   rts  
 
 send_rs232_line_noCRLF:
+  tya ;preserve the Y index
+  pha ;preserve the Y index
   ldy #$0
 send_rs232_line_noCRLF_loop:
   lda (serialDataVectorLow),y 
@@ -92,6 +98,8 @@ send_rs232_line_noCRLF_end:
   adc #1
   sta serialCharperLines
   ;jsr send_rs232_CRLF
+  pla ;restore the Y index
+  tay ;restore the Y index  
   rts    
 
 send_rs232_CRLF:
