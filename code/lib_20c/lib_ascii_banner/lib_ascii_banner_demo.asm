@@ -1,3 +1,6 @@
+  .include "lib_ascii_banner_memory.asm"
+  .include "lib_ascii_banner_constants.asm"
+
   .include "../lib_acia/lib_acia_memory.asm" ;define memory address for ACIA
   .include "../lib_acia/lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
 
@@ -21,7 +24,7 @@
 ;function to read several ascii characters in the same Line and copy them to RAM
 ;function to get ascii in RAM and print it to RS-232 (the ACIA module has this function)
 
-
+  .include "lib_ascii_banner_code.asm"
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  
   .include "../lib_utils/lib_utils_code.asm" ;define code for ACIA t  
 
