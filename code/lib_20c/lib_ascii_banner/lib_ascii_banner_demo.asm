@@ -26,6 +26,7 @@
   lda #'h'
   jsr send_rs232_char
   lda #'A';load the ascii character of the letter A
+  sta asciiLetter ;save the ascii letter to find
   jsr drawOneLetterBanner
 loop:
   jmp loop  
