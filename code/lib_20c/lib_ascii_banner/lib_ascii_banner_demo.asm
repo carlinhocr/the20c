@@ -1,12 +1,9 @@
   .include "lib_ascii_banner_memory.asm"
-  .include "lib_ascii_banner_constants.asm"
 
   .include "../lib_acia/lib_acia_memory.asm" ;define memory address for ACIA
-  .include "../lib_acia/lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
-
+ 
   .include "../lib_utils/lib_utils_memory.asm" ;define memory address for ACIA
-  .include "../lib_utils/lib_utils_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
-
+ 
 
 
 
@@ -32,6 +29,9 @@ loop:
   .include "lib_ascii_banner_code.asm"
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  
   .include "../lib_utils/lib_utils_code.asm" ;define code for ACIA t  
+  .include "lib_ascii_banner_constants.asm"
+  .include "../lib_acia/lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
+  .include "../lib_utils/lib_utils_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
 
 nmi:
 irq:

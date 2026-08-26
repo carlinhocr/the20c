@@ -119,7 +119,6 @@ asciiBannerAlphabet:
     .byte $10,$10,$10,$10,$10,$10,$10,$00 ; | (ancho 1)        off $02E0
     .byte $10,$08,$08,$04,$08,$08,$10,$00 ; } (ancho 3)        off $02E8
     .byte $00,$00,$00,$0D,$12,$00,$00,$00 ; ~                  off $02F0
-  FONT_END:
   
   ; ---------------------------------------------------------------
   ; Ejemplo: dejar PTR apuntando a la primera fila del glifo
