@@ -23,10 +23,10 @@
   jsr uartSerialInit
   lda #$0
   sta rs232Printer ;so we will go to screen and not printer
-  lda #'h'
-  jsr send_rs232_char
   lda #'A';load the ascii character of the letter A
   sta asciiLetter ;save the ascii letter to find
+  lda asciiLetter
+  jsr send_rs232_char
   jsr drawOneLetterBanner
 loop:
   jmp loop  
