@@ -39,12 +39,20 @@ printBannerLine_Loop:
                           ;or a zero print space
   bcc printBannerLine_Space
   ;here i have to print a block
+  txa 
+  pha 
   lda #$23
   jsr send_rs232_char
+  pla
+  tax
   jmp printBannerLine_Loop
 printBannerLine_Space:
+  txa 
+  pha 
   lda #$20
   jsr send_rs232_char
+  pla
+  tax
   jmp printBannerLine_Loop
 printBannerLine_End: 
   ;print a next line
