@@ -17,13 +17,12 @@ drawLetterA:
 drawLetterA_Loop:  
   iny
   cpy #8
-  beq drawOneLetterA_End
+  beq drawLetterA_End
   lda (asciiPointer_low),Y
   sta asciiBannerLineByte
   jsr printBannerLine
   jmp drawLetterA_Loop
-
-drawOneLetterA_End:
+drawLetterA_End:
   pla ;restore the Y index
   tay ;restore the Y index
   rts

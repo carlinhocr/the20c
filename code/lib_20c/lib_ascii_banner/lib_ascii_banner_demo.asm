@@ -27,7 +27,7 @@
   sta asciiLetter ;save the ascii letter to find
   lda asciiLetter
   jsr send_rs232_char
-  jsr drawLetterA
+  ;jsr drawLetterA
 loop:
   jmp loop  
 
