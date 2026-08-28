@@ -5,6 +5,26 @@
 
 ;THERE IS NOTHING IN THE charRAMforASCII, still have to copy it to RAM
 
+drawLetterA:
+  tya ;preserve the Y index
+  pha ;preserve the Y index
+;process the 8 bytes from the letter A of the ASCII Alphabet
+  lda #<asciiLetterA 
+  sta asciiPointer_low
+  lda #>asciiLetterA
+  sta asciiPointer_High
+  ldy #$ff
+drawLetterA_Loop:  
+  iny
+  cpy #8
+  beq drawOneLetterA_End
+  lda (asciiPointer_low),Y
+
+drawOneLetterA_End:
+  pla ;restore the Y index
+  tay ;restore the Y index
+  rts
+
 drawOneLetterBanner:
   tya ;preserve the Y index
   pha ;preserve the Y index
@@ -67,7 +87,7 @@ drawOneLetterBanner_End:
 processBits:  
   tya ;preserve the Y index
   pha ;preserve the Y index
-  ldx #$FF
+  ldy #$FF
 processBits_Loop:  
   iny
   cpy #$8
