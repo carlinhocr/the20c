@@ -19,10 +19,39 @@ drawLetterA_Loop:
   cpy #8
   beq drawOneLetterA_End
   lda (asciiPointer_low),Y
+  sta asciiBannerLineByte
+  jsr printBannerLine
+  jmp drawLetterA_Loop
 
 drawOneLetterA_End:
   pla ;restore the Y index
   tay ;restore the Y index
+  rts
+
+printBannerLine:
+  txa 
+  pha 
+  ldx #$FF 
+printBannerLine_Loop:  
+  inx 
+  cpx #8
+  beq printBannerLine_End
+  asl asciiBannerLineByte ;now i have on the carry if it is a 1 then print a block 
+                          ;or a zero print space
+  bcc printBannerLine_Space
+  ;here i have to print a block
+  lda #$23
+  jsr send_rs232_char
+  jmp printBannerLine_Loop
+printBannerLine_Space:
+  lda #$20
+  jsr send_rs232_char
+  jmp printBannerLine_Loop
+printBannerLine_End: 
+  ;print a next line
+  jsr send_rs232_CRLF
+  pla
+  tax
   rts
 
 drawOneLetterBanner:

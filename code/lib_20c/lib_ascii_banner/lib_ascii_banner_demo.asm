@@ -27,9 +27,10 @@
   sta asciiLetter ;save the ascii letter to find
   lda asciiLetter
   jsr send_rs232_char
-  jsr drawOneLetterBanner
+  jsr drawLetterA
 loop:
   jmp loop  
+
 
   .include "lib_ascii_banner_code.asm"
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  
