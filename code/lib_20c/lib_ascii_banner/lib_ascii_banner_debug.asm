@@ -87,6 +87,6 @@ drawLetterA_Loop:
   jmp drawLetterA_Loop
 drawLetterA_End:
   pla ;restore the Y index
-  tay ;restore the Y index
+  tay  ;restore the Y index
   rts
 
