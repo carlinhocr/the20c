@@ -5,61 +5,6 @@
 
 ;THERE IS NOTHING IN THE charRAMforASCII, still have to copy it to RAM
 
-drawLetterA:
-  tya ;preserve the Y index
-  pha ;preserve the Y index
-;process the 8 bytes from the letter A of the ASCII Alphabet
-  lda #<asciiLetterA 
-  sta asciiPointer_low
-  lda #>asciiLetterA
-  sta asciiPointer_High
-  ldy #$ff
-drawLetterA_Loop:  
-  iny
-  cpy #8
-  beq drawLetterA_End
-  lda (asciiPointer_low),Y
-  sta asciiBannerLineByte
-  jsr printBannerLine
-  jmp drawLetterA_Loop
-drawLetterA_End:
-  pla ;restore the Y index
-  tay ;restore the Y index
-  rts
-
-printBannerLine:
-  txa 
-  pha 
-  ldx #$FF 
-printBannerLine_Loop:  
-  inx 
-  cpx #8
-  beq printBannerLine_End
-  asl asciiBannerLineByte ;now i have on the carry if it is a 1 then print a block 
-                          ;or a zero print space
-  bcc printBannerLine_Space
-  ;here i have to print a block
-  txa 
-  pha 
-  lda #$23
-  jsr send_rs232_char
-  pla
-  tax
-  jmp printBannerLine_Loop
-printBannerLine_Space:
-  txa 
-  pha 
-  lda #$20
-  jsr send_rs232_char
-  pla
-  tax
-  jmp printBannerLine_Loop
-printBannerLine_End: 
-  ;print a next line
-  jsr send_rs232_CRLF
-  pla
-  tax
-  rts
 
 drawOneLetterBanner:
   tya ;preserve the Y index
