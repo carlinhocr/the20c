@@ -4,8 +4,8 @@
 ;constants that have the ASCII letter as if they where blocks on a 5x8 character block
     ;make it byte values, the first is the ascii character code the next 8 are the byte components of the characters
 
-asciiCharBlank = 'B'
-asciiCharBlock = 'A'
+asciiCharBlank = ' '
+asciiCharBlock = '#'
 
 asciiLetterA:    
   .byte $0E,$11,$11,$1F,$11,$11,$11,$00 ; A                  off $0108

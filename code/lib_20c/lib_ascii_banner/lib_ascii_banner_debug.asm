@@ -64,6 +64,7 @@ printBannerLine_Space:
 printBannerLine_End: 
   ;print a next line
   jsr send_rs232_CRLF
+  jsr delay_1_sec
   pla
   tay
   rts
