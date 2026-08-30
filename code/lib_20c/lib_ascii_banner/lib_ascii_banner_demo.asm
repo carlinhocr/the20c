@@ -31,7 +31,7 @@
   ; jsr send_rs232_char
   ; lda #asciiCharBlock
   ; jsr send_rs232_char
-  ;jsr drawLetterABasic
+  jsr drawLetterABasic
 loop:
   jmp loop  
 
