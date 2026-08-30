@@ -21,11 +21,13 @@
 ;function to get ascii in RAM and print it to RS-232 (the ACIA module has this function)
 
   jsr uartSerialInit
-  lda #$0
+  lda #$0 ;if zero got to screen and not printer
   sta rs232Printer ;so we will go to screen and not printer
   lda #'A';load the ascii character of the letter A
   sta asciiLetter ;save the ascii letter to find
   lda asciiLetter
+  jsr send_rs232_char
+  lda #asciiCharBlock
   jsr send_rs232_char
   ;jsr drawLetterABasic
 loop:
