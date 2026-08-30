@@ -208,6 +208,11 @@ delay_3_sec:
 ;   jmp DELAY_MAIN   
 
 DELAY_SEC:
+  pha
+  tya
+  pha
+  txa
+  pha
   lda #$FF
   sta delay_COUNT_A
   lda #$FF
@@ -235,6 +240,11 @@ INNER_LOOP:
     BNE INNER_LOOP    ; Branch if not zero
     DEX               ; Decrement outer loop counter
     BNE OUTER_LOOP    ; Branch if not zero
+    pla
+    tax
+    pla
+    tay
+    pla
     RTS               ; Return from subroutine
 
 ;END--------------------------------------------------------------------------------
