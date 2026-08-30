@@ -64,6 +64,11 @@ printBannerLine_Space:
 printBannerLine_End: 
   ;print a next line
   jsr send_rs232_CRLF
+  lda #$0d ;CR
+  jsr send_rs232_char
+  jsr delay_1_sec
+  lda #$0a ;LF
+  jsr send_rs232_char
   jsr delay_1_sec
   pla
   tay
