@@ -27,7 +27,7 @@
   ;sta asciiLetter ;save the ascii letter to find
   ;lda asciiLetter
   jsr send_rs232_char
-  jsr delay_3_sec
+  jsr delay_1_sec
   ; lda #'.'
   ; jsr send_rs232_char
   ; lda #asciiCharBlock
