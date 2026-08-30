@@ -54,10 +54,12 @@ printBannerLine_Loop:
   ;here i have to print a block the carry is set
   lda #asciiCharBlock
   jsr send_rs232_char
+  jsr delay_3_sec
   jmp printBannerLine_Loop
 printBannerLine_Space:
   lda #asciiCharBlank
   jsr send_rs232_char
+  jsr delay_3_sec  
   jmp printBannerLine_Loop
 printBannerLine_End: 
   ;print a next line
