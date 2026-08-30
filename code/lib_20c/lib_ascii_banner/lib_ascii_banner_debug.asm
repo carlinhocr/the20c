@@ -63,7 +63,7 @@ printBannerLine_Space:
   jmp printBannerLine_Loop
 printBannerLine_End: 
   ;print a next line
-  jsr send_rs232_CRLF
+  ;jsr send_rs232_CRLF
   lda #$0d ;CR
   jsr send_rs232_char
   jsr delay_1_sec
