@@ -130,31 +130,26 @@ drawLetterARAM_End:
   rts
 
 printBanner:
+  txa
+  pha
   lda #<charRAMforAscii
   sta serialDataVectorLow
   lda #>charRAMforAscii
   sta serialDataVectorHigh
   jsr send_rs232_line  
+  ldx #$00 ;line zero already printed
+printBanner_Loop:
+  inx
+  cpx #$8
+  beq printBanner_End
   clc
   lda #$9
   adc serialDataVectorLow
   sta serialDataVectorLow
   jsr send_rs232_line 
-  clc
-  lda #$9
-  adc serialDataVectorLow
-  sta serialDataVectorLow  
-  jsr send_rs232_line   
-  clc
-  lda #$9
-  adc serialDataVectorLow
-  sta serialDataVectorLow  
-  jsr send_rs232_line 
-  clc
-  lda #$9
-  adc serialDataVectorLow
-  sta serialDataVectorLow  
-  jsr send_rs232_line     
+printBanner_End:  
+  pla
+  tax  
   rts 
 
 
