@@ -136,12 +136,12 @@ printBanner:
   sta serialDataVectorHigh
   jsr send_rs232_line  
   clc
-  lda #$8
+  lda #$9
   adc serialDataVectorLow
   sta serialDataVectorLow
   jsr send_rs232_line 
   clc
-  lda #$8
+  lda #$9
   adc serialDataVectorLow
   sta serialDataVectorLow  
   jsr send_rs232_line   
@@ -178,7 +178,7 @@ memoryBannerOneLetter_End:
   ;print a next line
   lda #$00
   sta (asciiRAMPointer_low),Y
-  inc indexByteChar ;store 8 bytes per line + a null character
+  ;inc indexByteChar ;store 8 bytes per line + a null character
   ;jsr send_rs232_CRLF
   pla
   tax
