@@ -147,6 +147,7 @@ printBanner_Loop:
   adc serialDataVectorLow
   sta serialDataVectorLow
   jsr send_rs232_line 
+  jmp printBanner_Loop
 printBanner_End:  
   pla
   tax  
