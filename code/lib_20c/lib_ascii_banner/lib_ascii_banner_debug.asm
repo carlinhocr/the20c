@@ -115,14 +115,29 @@ drawLetterARAM_Loop:
   jsr memoryBannerOneLetter
   jmp drawLetterARAM_Loop
 drawLetterARAM_End:
+  lda indexByteChar
+  tay
+  lda 'e'
+  sta (asciiRAMPointer_low),Y
   lda #<charRAMforAscii
   sta serialDataVectorLow
   lda #>charRAMforAscii
   sta serialDataVectorHigh
-  jsr send_rs232_line  
+  jsr printAsciiDrawing
   pla ;restore the Y index
   tay  ;restore the Y index
   rts
+
+; printBanner:
+;   lda #<charRAMforAscii
+;   sta serialDataVectorLow
+;   lda #>charRAMforAscii
+;   sta serialDataVectorHigh
+;   jsr send_rs232_line  
+; printBanner_Loop:
+;   clc
+;   lda   
+
 
 memoryBannerOneLetter:
   tya 
