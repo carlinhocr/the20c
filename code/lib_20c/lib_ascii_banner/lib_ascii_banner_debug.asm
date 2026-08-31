@@ -130,7 +130,7 @@ drawLetterARAM_End:
   rts
 
 printBanner:
-  txa
+  tya
   pha
   lda #<charRAMforAscii
   sta serialDataVectorLow
@@ -139,8 +139,8 @@ printBanner:
   jsr send_rs232_line  
   ldx #$00 ;line zero already printed
 printBanner_Loop:
-  inx
-  cpx #$8
+  iny
+  cpy #$8
   beq printBanner_End
   clc
   lda #$9
@@ -150,7 +150,7 @@ printBanner_Loop:
   jmp printBanner_Loop
 printBanner_End:  
   pla
-  tax  
+  tay  
   rts 
 
 
