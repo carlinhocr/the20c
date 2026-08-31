@@ -136,12 +136,12 @@ printBanner:
   sta serialDataVectorHigh
   jsr send_rs232_line  
   clc
-  lda #$9
+  lda #$8
   adc serialDataVectorLow
   sta serialDataVectorLow
   jsr send_rs232_line 
   clc
-  lda #$9
+  lda #$8
   adc serialDataVectorLow
   sta serialDataVectorLow  
   jsr send_rs232_line   
