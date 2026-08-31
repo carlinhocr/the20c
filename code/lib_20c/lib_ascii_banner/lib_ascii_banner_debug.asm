@@ -117,7 +117,7 @@ drawLetterARAM_Loop:
 drawLetterARAM_End:
   lda #<charRAMforAscii
   sta serialDataVectorLow
-  lda #<charRAMforAscii
+  lda #>charRAMforAscii
   sta serialDataVectorHigh
   jsr send_rs232_line  
   pla ;restore the Y index
