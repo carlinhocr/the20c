@@ -34,7 +34,7 @@
   ; jsr send_rs232_char
   ;jsr drawLetterABasic
   jsr drawLetterA
-  jsr drawOneLetterBanner
+  jsr drawLetterARAM
 loop:
   jmp loop  
 

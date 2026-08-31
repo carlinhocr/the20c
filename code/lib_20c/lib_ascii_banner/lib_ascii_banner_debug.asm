@@ -90,3 +90,74 @@ drawLetterA_End:
   tay  ;restore the Y index
   rts
 
+drawLetterARAM:
+  tya ;preserve the Y index
+  pha ;preserve the Y index
+  lda #<charRAMforAscii 
+  sta asciiRAMPointer_low
+  lda #>charRAMforAscii
+  sta asciiRAMPointer_High
+  lda #$FF
+  sta indexByteChar
+
+;process the 8 bytes from the letter A of the ASCII Alphabet
+  lda #<asciiLetterA 
+  sta asciiPointer_low
+  lda #>asciiLetterA
+  sta asciiPointer_High
+  ldy #$ff
+drawLetterARAM_Loop:  
+  iny
+  cpy #8
+  beq drawLetterARAM_End
+  lda (asciiPointer_low),Y
+  sta asciiBannerLineByte
+  jsr memoryBannerOneLetter
+  jmp drawLetterARAM_Loop
+drawLetterARAM_End:
+  lda #<charRAMforAscii
+  sta serialDataVectorLow
+  lda #<charRAMforAscii
+  sta serialDataVectorHigh
+  jsr send_rs232_line  
+  pla ;restore the Y index
+  tay  ;restore the Y index
+  rts
+
+memoryBannerOneLetter:
+  tya 
+  pha 
+  txa
+  pha
+  ldx #$FF 
+memoryBannerOneLetter_Loop:  
+  inc indexByteChar
+  lda indexByteChar
+  tay  
+  inx 
+  cpx #8
+  beq memoryBannerOneLetter_End
+  asl asciiBannerLineByte ;now i have on the carry if it is a 1 then print a block 
+                          ;or a zero print space
+
+
+  bcc memoryBannerOneLetter_Space
+  ;here i have to print a block the carry is set
+  lda #asciiCharBlock
+  sta (asciiRAMPointer_low),Y
+  jmp memoryBannerOneLetter_Loop
+memoryBannerOneLetter_Space:
+  lda #asciiCharBlank
+  sta (asciiRAMPointer_low),Y
+  jmp memoryBannerOneLetter_Loop
+memoryBannerOneLetter_End: 
+  ;print a next line
+  lda #$00
+  sta (asciiRAMPointer_low),Y
+  inc indexByteChar ;store 8 bytes per line + a null character
+  ;jsr send_rs232_CRLF
+  pla
+  tax
+  pla
+  tay
+  rts
