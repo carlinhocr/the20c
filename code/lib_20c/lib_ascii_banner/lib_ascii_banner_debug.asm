@@ -137,7 +137,7 @@ printBanner:
   lda #>charRAMforAscii
   sta serialDataVectorHigh
   jsr send_rs232_line  
-  ldx #$00 ;line zero already printed
+  ldy #$00 ;line zero already printed
 printBanner_Loop:
   iny
   cpy #$8
