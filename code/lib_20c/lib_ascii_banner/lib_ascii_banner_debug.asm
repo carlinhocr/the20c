@@ -145,6 +145,16 @@ printBanner:
   adc serialDataVectorLow
   sta serialDataVectorLow  
   jsr send_rs232_line   
+  clc
+  lda #$9
+  adc serialDataVectorLow
+  sta serialDataVectorLow  
+  jsr send_rs232_line 
+  clc
+  lda #$9
+  adc serialDataVectorLow
+  sta serialDataVectorLow  
+  jsr send_rs232_line     
   rts 
 
 
