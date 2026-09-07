@@ -67,6 +67,34 @@ drawLetter_End:
   rts
 
 
+fillLineRAM:
+  ;process all letters on the string to print in a line
+
+  ;initialize RAM with all spaces
+
+  ;get the string and process for each letter changing the letter position
+  ;as we progress on the string
+
+  ;according to letter position call a function that writes the blocks on RAM
+  ;the position of the letter 0,1,2,3,4,5,6,7,8 adds 8 to the offset of characters
+  ;"HOLA"
+  ;letter position for H is 0, letter position for O is 8, etc
+  ;when i add as block the second line of a letter i have to add decimal 80 
+  ;example 
+  ;_ _ _ # _ _ # _     starts in 0 line goes from 0 to 79
+  ;_ _ _ # _ _ # _     starts in 80
+  ;_ _ _ # _ _ # _     starts in 160
+  ;_ _ _ # # # # _     starts in 240
+  ;_ _ _ # _ _ # _     starts in 320
+  ;_ _ _ # _ _ # _     starts in 400
+  ;_ _ _ # _ _ # _     starts in 480
+  ;_ _ _ _ _ _ _ _     starts in 560
+  ;this offsets adds to the beginning of the memory position of the RAM
+  ;update low and high byte and remember the carrys
+  
+printLineRAM:
+  ;get the starting position in line of the RAM and print the line using printAsciiDrawing
+
 drawOneLetterBanner:
   tya ;preserve the Y index
   pha ;preserve the Y index
