@@ -41,6 +41,8 @@ drawLetterABasic_End:
   rts
 
 printBannerLine:
+  txa
+  pha
   tya 
   pha 
   ldy #$FF 
@@ -64,7 +66,29 @@ printBannerLine_End:
   jsr send_rs232_CRLF
   pla
   tay
+  pla
+  tax
   rts
+
+
+
+drawLetter:
+  tya ;preserve the Y index
+  pha ;preserve the Y index
+  ldy #$ff
+drawLetter_Loop:  
+  iny
+  cpy #8
+  beq drawLetter_End
+  lda (asciiPointer_low),Y
+  sta asciiBannerLineByte
+  jsr printBannerLine
+  jmp drawLetter_Loop
+drawLetter_End:
+  pla ;restore the Y index
+  tay  ;restore the Y index
+  rts
+
 
 
 
