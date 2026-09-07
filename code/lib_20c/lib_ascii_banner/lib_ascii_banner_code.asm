@@ -141,6 +141,13 @@ clearLineRAM_CharactersLoop_EndLine:
   sta asciiRAMPointer_high
   jmp clearLineRAM_LineLoop
 clearLineRAM_end:
+  ;add the letter 'e' + the null byte to signal end for printAsciiDrawing
+  ldy #$00
+  lda #'e'
+  sta (asciiRAMPointer_low),y
+  iny
+  lda #$00
+  sta (asciiRAMPointer_low),y
   pla
   tay
   pla
