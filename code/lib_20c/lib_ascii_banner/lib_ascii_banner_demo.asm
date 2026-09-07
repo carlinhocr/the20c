@@ -25,6 +25,12 @@
   sta rs232Printer ;so we will go to screen and not printer
   lda #'B';load the ascii character of the letter A
   sta asciiLetter ;save the ascii letter to find
+  jsr findLetterAscii
+  jsr drawLetter
+  lda #'X';load the ascii character of the letter A
+  sta asciiLetter ;save the ascii letter to find
+  jsr findLetterAscii
+  jsr drawLetter
   ;lda asciiLetter
   ; jsr send_rs232_char
   ; jsr delay_1_sec
@@ -34,7 +40,7 @@
   ; jsr send_rs232_char
   ;jsr drawLetterABasic
   ;jsr drawLetterA
-  jsr drawLetterARAM
+
 loop:
   jmp loop  
 

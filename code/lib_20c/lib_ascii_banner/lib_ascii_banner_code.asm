@@ -5,6 +5,67 @@
 
 ;THERE IS NOTHING IN THE charRAMforASCII, still have to copy it to RAM
 
+findLetterAscii:
+;given the code of one ascii character in variable asciiLetter
+;output the address where it begins on  asciiBannerAlphabet
+;on variables asciiPointer_low asciiPointer_high
+;example letter A is ascii $41
+;the offset should be $0108 to add to the beginning of asciiBannerAlphabet
+;so ascii $41 - $20 = $21 
+;now i have to multiply the value for 8 because each line is 8 bytes long
+;$21 * 8 = $108
+  lda asciiLetter ;the number stored in variable asciiletter
+  sec  
+  sbc #$20 ;go through the ASCII index 0...94
+  ;move the pointer to the beginning of the letter (ascii value - $20) * 8 
+  sta asciiPointer_low
+  lda #$00
+  sta asciiPointer_High
+  ;now i have to multiply by 8 or shift 3 times to the left
+  clc ;clear the carry
+  asl asciiPointer_low  ;C <- [76543210] <- 0
+  rol asciiPointer_High ;C <- [76543210] <- C
+  clc ;clear the carry
+  asl asciiPointer_low  ;C <- [76543210] <- 0
+  rol asciiPointer_High ;C <- [76543210] <- C
+  clc ;clear the carry
+  asl asciiPointer_low  ;C <- [76543210] <- 0
+  rol asciiPointer_High ;C <- [76543210] <- C
+  ;now I should have the address shifted 8 times
+  ;add the low address to the low address of where the Alphabet begins
+  clc
+  lda #<asciiBannerAlphabet
+  adc asciiPointer_low
+  sta asciiPointer_low
+  ;do not clear the flag keep it
+  lda #>asciiBannerAlphabet
+  adc asciiPointer_High
+  sta asciiPointer_High
+  ;and now I have in asciiPointer_low and asciiPointer_High the position of asciiBannerAlphabet
+  ;that correspond to the ascii code in asciiLetter
+  rts
+
+drawLetter:
+  tya ;preserve the Y index
+  pha ;preserve the Y index
+;process the 8 bytes from the letter the ASCII Alphabet
+;already the position is in asciiPointer_low and asciiPointer_High
+;from the procedure findLetterAscii
+  ldy #$ff
+drawLetter_Loop:  
+  iny
+  cpy #8
+  beq drawLetter_End
+  lda (asciiPointer_low),Y
+  sta asciiBannerLineByte
+  jsr memoryBannerOneLetter
+  jmp drawLetter_Loop
+drawLetter_End:
+  jsr printBanner
+  pla ;restore the Y index
+  tay  ;restore the Y index
+  rts
+
 
 drawOneLetterBanner:
   tya ;preserve the Y index
