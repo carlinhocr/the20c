@@ -91,6 +91,7 @@ fillLineRAM:
   ;_ _ _ _ _ _ _ _     starts in 560
   ;this offsets adds to the beginning of the memory position of the RAM
   ;update low and high byte and remember the carrys
+  rts
   
 printLineRAM:
   ;get the starting position in line of the RAM and print the line using printAsciiDrawing
