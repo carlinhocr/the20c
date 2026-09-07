@@ -71,7 +71,7 @@ fillLineRAM:
   ;process all letters on the string to print in a line
 
   ;initialize RAM with all spaces
-
+  jsr clearLineRAM
   ;get the string and process for each letter changing the letter position
   ;as we progress on the string
 
@@ -94,6 +94,60 @@ fillLineRAM:
   
 printLineRAM:
   ;get the starting position in line of the RAM and print the line using printAsciiDrawing
+  lda #<charRAMforAscii
+  sta serialDataVectorLow
+  lda #>charRAMforAscii
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing
+  rts
+
+clearLineRAM:
+  ;Starting at position charRAMforAscii=$500
+  ;clear 8 lines of 80 characters using zero page variables asciiRAMPointer_low and asciiRAMPointer_high
+  ;using to fill the RAM asciiCharDot or asciiCharBlank
+  lda #<charRAMforAscii
+  sta asciiRAMPointer_low
+  lda #>charRAMforAscii
+  sta asciiRAMPointer_high
+  ;save the X and Y register
+  txa
+  pha
+  tya
+  pha
+  ;do this 8 times from 0 to 7
+  ldx #$ff
+clearLineRAM_LineLoop:
+  inx
+  cmp #$8
+  beq clearLineRAM_end
+  ;inner character loop
+  ldy #$ff
+  lda asciiCharDot
+clearLineRAM_CharactersLoop:
+  iny
+  cpy #80 ;80 decimal for the lenght of the line
+  beq clearLineRAM_CharactersLoop_EndLine
+  sta (asciiRAMPointer_low),y
+  jmp clearLineRAM_CharactersLoop
+clearLineRAM_CharactersLoop_EndLine:
+  ;add 80 to the asciiRAMPointer_low and asciiRAMPointer_high
+  ;so I prepare it for the next line
+  clc
+  lda asciiRAMPointer_low
+  adc #80
+  sta asciiRAMPointer_low
+  lda asciiRAMPointer_high
+  adc #0 ;only adding the carry
+  sta asciiRAMPointer_high
+  jmp clearLineRAM_LineLoop
+clearLineRAM_end:
+  pla
+  tay
+  pla
+  tax
+  rts
+
+
 
 drawOneLetterBanner:
   tya ;preserve the Y index
@@ -187,7 +241,7 @@ processBits_End
   clc
   adc asciiRAMPointer_low
   sta asciiRAMPointer_low
-  lda asciiRAMPointer_High
+  lda asciiRAMPointer_high
   adc #$0 ;just to add the carry
   pla ;restore the Y index
   tay ;restore the Y index

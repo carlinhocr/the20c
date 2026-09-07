@@ -4,6 +4,7 @@
 ;constants that have the ASCII letter as if they where blocks on a 5x8 character block
     ;make it byte values, the first is the ascii character code the next 8 are the byte components of the characters
 
+asciiCharDot   = '.'
 asciiCharBlank = ' '
 asciiCharBlock = '#'
 

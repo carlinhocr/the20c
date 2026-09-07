@@ -96,7 +96,7 @@ drawLetterARAM:
   lda #<charRAMforAscii 
   sta asciiRAMPointer_low
   lda #>charRAMforAscii
-  sta asciiRAMPointer_High
+  sta asciiRAMPointer_high
   lda #$FF
   sta indexByteChar
 

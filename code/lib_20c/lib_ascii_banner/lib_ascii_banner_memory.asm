@@ -3,7 +3,7 @@ asciiPointer_low = $c0
 asciiPointer_High= $c1
 
 asciiRAMPointer_low = $c2
-asciiRAMPointer_High =$c3
+asciiRAMPointer_high =$c3
 
 asciiLetter = $300
 asciiBannerLineByte = $301
