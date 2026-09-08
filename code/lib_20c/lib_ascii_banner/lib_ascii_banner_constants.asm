@@ -7,6 +7,12 @@
 asciiCharDot   = '.'
 asciiCharBlank = ' '
 asciiCharBlock = '#'
+lineLenght = 80 ; 80 characters long from 0 to 79 and in byte 80 a null char $00 ends the string
+numberOfLinesPerChar= 8
+numberOfSymbolsPerLinePerChar= 8
+
+asciiStringTest:
+  .ascii 'Hola'
 
 asciiLetterA:    
   .byte $0E,$11,$11,$1F,$11,$11,$11,$00 ; A                  off $0108

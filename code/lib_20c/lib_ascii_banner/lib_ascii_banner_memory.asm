@@ -5,9 +5,17 @@ asciiPointer_High= $c1
 asciiRAMPointer_low = $c2
 asciiRAMPointer_high =$c3
 
+asciiStringZp_low=$c4
+asciiStringZp_high=$c5
+
 asciiLetter = $300
 asciiBannerLineByte = $301
 charToAdd = $302
 indexByteLetter = $303
 indexByteChar= $304
+lineLetterPosition=$305
+charStarPosition=$306
+ordinalLetterPosition=$307
+
+
 charRAMforAscii=$500

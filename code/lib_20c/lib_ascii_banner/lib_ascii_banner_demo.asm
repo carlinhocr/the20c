@@ -38,7 +38,11 @@
   ; jsr findLetterAscii
   ; jsr drawLetter
 
-
+  ;load the asciiString that will be processed
+  lda #<asciiStringTest
+  sta asciiStringZp_low
+  lda #>asciiStringTest
+  sta asciiStringZp_high
   jsr fillLineRAM
   jsr printLineRAM
 
