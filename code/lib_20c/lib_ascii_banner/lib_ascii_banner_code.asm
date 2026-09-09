@@ -84,6 +84,13 @@ fillLineRAM_End:
   rts
   
 findLineLetterPosition:
+  ;it give us the relative number in the line for the first line according to the ordinal position
+  ;for String 'Hola'
+  ;H position 0
+  ;o position 8
+  ;l position 16
+  ;a position 24
+  ;store the result on variable lineLetterPosition
   txa
   pha
   lda ordinalLetterPosition
@@ -94,8 +101,9 @@ findLineLetterPosition_Loop:
   beq findLineLetterPosition_End
   clc
   lda lineLetterPosition
-  adc #numberOfSymbolsPerLinePerChar ;it is a number
-  sta lineLetterPosition ;if line 1 then the position to start is 9
+  adc #numberOfSymbolsPerLinePerChar ;it is a number #8
+  sta lineLetterPosition ;if line 1 then the position to start is 8 
+                         ;as we added #numberOfSymbolsPerLinePerChar that is number 8
   dex 
   jmp findLineLetterPosition_Loop
 findLineLetterPosition_End:
@@ -186,8 +194,6 @@ drawLetterRAM:
   ;_ _ _ _ _ _ _ _     starts in 560
   ;this offsets adds to the beginning of the memory position of the RAM
   ;update low and high byte and remember the carrys
-  txa
-  pha
   tya ;preserve the Y index
   pha ;preserve the Y index
   ;position at the beginning of the line and correct starting position
@@ -196,16 +202,17 @@ drawLetterRAM:
   sta asciiRAMPointer_low
   lda #>charRAMforAscii
   sta asciiRAMPointer_high
-  ldx #$ff
+  ldy #$ff
 drawLetterRAM_Loop:  
-  inx
-  cpx #numberOfLinesPerChar ;#$8
+  iny
+  cpy #numberOfLinesPerChar ;#$8 
   beq drawLetterRAM_End
   ;calculate for each line the correct character start acording to ordinal position
   ;of the character in the screen
   ;line 1
-  cpx #00
+  cpy #00
   bne drawLetterRAM_adding_line_lenght
+  ;here we are on the special case of line zero do not add #lineLenght
   clc 
   lda lineLetterPosition ;0,8,16, etc
   sta charStarPosition
@@ -214,7 +221,7 @@ drawLetterRAM_adding_line_lenght:
   clc
   lda lineLetterPosition ;0,8,16, etc
   adc #lineLenght
-  sta charStarPosition
+  sta charStarPosition 
 drawLetterRAM_defineRAMPosition:
   clc
   lda charStarPosition
@@ -222,24 +229,44 @@ drawLetterRAM_defineRAMPosition:
   sta asciiRAMPointer_low
   lda #$00
   adc asciiRAMPointer_high
-  sta asciiRAMPointer_high
-  ldy #$ff
-drawLetterBlocks_Loop:  
+  sta asciiRAMPointer_high 
   ;add the 8 blocks and spaces that correspond to a line
-  iny
-  cpy #8 ;number of blocks+spaces pero line of each character
-  beq drawLetterRAM_Loop
-  lda (asciiPointer_low),Y
-;Here i Have to process the byte from (asciiPointer_Low) and store 8 different blocks and spaces
-;in asciiRAMPointer_low
-  sta (asciiRAMPointer_low),Y
-  jmp drawLetterBlocks_Loop
+  ;the line is in the register Y
+  ;Here i Have to process the byte from (asciiPointer_Low) and store 8 different blocks and spaces
+  ;in asciiRAMPointer_low, this variable is already in the position and line to start filling
+  lda (asciiPointer_low),Y ;load the byte of the correct line for the letter
+  sta asciiBannerLineByte
+  jsr writeLetterBannerLineinRAM
+  jmp drawLetterRAM_Loop
 drawLetterRAM_End:
   pla ;restore the Y index
   tay  ;restore the Y index
-  pla
-  tax
   rts  
+
+
+writeLetterBannerLineinRAM:
+  tya 
+  pha 
+  ldy #$FF 
+writeLetterBannerLineinRAM_Loop:  
+  iny
+  cpy #numberOfSymbolsPerLinePerChar ;#8
+  beq writeLetterBannerLineinRAM_End
+  asl asciiBannerLineByte ;now i have on the carry if it is a 1 then print a block 
+                          ;or a 0 print space
+  bcc writeLetterBannerLineinRAM_Space
+  ;here i have to print a block the carry is set
+  lda #asciiCharBlock
+  sta (asciiRAMPointer_low),Y
+  jmp writeLetterBannerLineinRAM_Loop
+writeLetterBannerLineinRAM_Space:
+  lda #asciiCharBlank
+  sta (asciiRAMPointer_low),Y
+  jmp writeLetterBannerLineinRAM_Loop
+writeLetterBannerLineinRAM_End: 
+  pla
+  tay
+  rts
 
 
 ; drawOneLetterBanner:
