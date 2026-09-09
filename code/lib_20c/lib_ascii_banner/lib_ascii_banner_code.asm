@@ -59,10 +59,11 @@ fillLineRAM:
   ;we will iterate on the pointer
   ;LOOP FOR ALL THE STRING----------------------------------------------
   ;testing with a string of lenght 4
+  ;jsr printLineRAM
   ldy #$ff
 fillLineRAM_Loop:
   iny
-  cpy #4 ; for string of lenght 4 chars 0 to 3
+  cpy #1 ; for string of lenght 4 chars 0 to 3
   beq fillLineRAM_End
   tya
   sta ordinalLetterPosition
@@ -70,9 +71,11 @@ fillLineRAM_Loop:
   sta asciiLetter
   ;lets find the ascii letter drawing and it will be stored on asciiPointer_low, asciiPointer_high
   jsr findLetterAscii
-  jsr findLineLetterPosition
+  ;jsr findLineLetterPosition
+  lda #$0
+  sta lineLetterPosition ;just hardcode letter position
   jsr drawLetterRAM
-  jmp fillLineRAM_Loop
+  ;jmp fillLineRAM_Loop just fill for one letter
 fillLineRAM_End:  
   pla
   tay
@@ -84,15 +87,15 @@ findLineLetterPosition:
   txa
   pha
   lda ordinalLetterPosition
-  tax 
+  tax ;load X with the position of the letter in the strind for 'Hola'the o is position 1
   sta lineLetterPosition
 findLineLetterPosition_Loop:
   cpx #$00 
   beq findLineLetterPosition_End
   clc
   lda lineLetterPosition
-  adc numberOfSymbolsPerLinePerChar
-  sta lineLetterPosition
+  adc #numberOfSymbolsPerLinePerChar ;it is a number
+  sta lineLetterPosition ;if line 1 then the position to start is 9
   dex 
   jmp findLineLetterPosition_Loop
 findLineLetterPosition_End:
@@ -126,7 +129,7 @@ clearLineRAM:
   ldx #$ff
 clearLineRAM_LineLoop:
   inx
-  cpx numberOfLinesPerChar ;#$9
+  cpx #numberOfLinesPerChar ;#$8
   beq clearLineRAM_end
   ;inner character loop
   ldy #$ff
@@ -196,7 +199,7 @@ drawLetterRAM:
   ldx #$ff
 drawLetterRAM_Loop:  
   inx
-  cpx numberOfLinesPerChar ;#$8
+  cpx #numberOfLinesPerChar ;#$8
   beq drawLetterRAM_End
   ;calculate for each line the correct character start acording to ordinal position
   ;of the character in the screen
@@ -210,7 +213,7 @@ drawLetterRAM_Loop:
 drawLetterRAM_adding_line_lenght:  
   clc
   lda lineLetterPosition ;0,8,16, etc
-  adc lineLenght
+  adc #lineLenght
   sta charStarPosition
 drawLetterRAM_defineRAMPosition:
   clc
@@ -227,6 +230,8 @@ drawLetterBlocks_Loop:
   cpy #8 ;number of blocks+spaces pero line of each character
   beq drawLetterRAM_Loop
   lda (asciiPointer_low),Y
+;Here i Have to process the byte from (asciiPointer_Low) and store 8 different blocks and spaces
+;in asciiRAMPointer_low
   sta (asciiRAMPointer_low),Y
   jmp drawLetterBlocks_Loop
 drawLetterRAM_End:
