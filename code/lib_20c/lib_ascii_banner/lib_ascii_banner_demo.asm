@@ -43,15 +43,44 @@
   sta asciiStringZp_low
   lda #>asciiStringTest
   sta asciiStringZp_high
+  ;load the alphabet
+  lda #<asciiBannerAlphabet_c64
+  sta asciiBannerAlphabet_low
+  lda #>asciiBannerAlphabet_c64  
+  sta asciiBannerAlphabet_high
+
   jsr fillLineRAM
   jsr printLineRAM
+  jsr delay_1_sec
 
-  ; lda #'.'
-  ; jsr send_rs232_char
-  ; lda #asciiCharBlock
-  ; jsr send_rs232_char
-  ;jsr drawLetterABasic
+  ;load a new alphabet
+  lda #<asciiBannerAlphabet_neo
+  sta asciiBannerAlphabet_low
+  lda #>asciiBannerAlphabet_neo
+  sta asciiBannerAlphabet_high
 
+  jsr fillLineRAM
+  jsr printLineRAM
+  jsr delay_1_sec
+
+  ;load the asciiString that will be processed
+  lda #<asciiStringTestDings
+  sta asciiStringZp_low
+  lda #>asciiStringTestDings
+  sta asciiStringZp_high
+
+  ;load a new alphabet
+  lda #<asciiBannerAlphabet_dings
+  sta asciiBannerAlphabet_low
+  lda #>asciiBannerAlphabet_dings
+  sta asciiBannerAlphabet_high
+
+  jsr fillLineRAM
+  jsr printLineRAM
+  jsr delay_1_sec
+
+
+ 
 
 loop:
   jmp loop  
