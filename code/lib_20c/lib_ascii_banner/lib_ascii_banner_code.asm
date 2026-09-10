@@ -63,12 +63,13 @@ fillLineRAM:
   ldy #$ff
 fillLineRAM_Loop:
   iny
-  cpy #4 ; for string of lenght 4 chars 0 to 3
+  ;cpy #4 ; for string of lenght 4 chars 0 to 3
+  ;beq fillLineRAM_End
+  lda (asciiStringZp_low),Y ;just load the first letter and do not iterate for now
+  sta asciiLetter
   beq fillLineRAM_End
   tya
   sta ordinalLetterPosition
-  lda (asciiStringZp_low),Y ;just load the first letter and do not iterate for now
-  sta asciiLetter
   ;jsr send_rs232_char 
   ;lets find the ascii letter drawing and it will be stored on asciiPointer_low, asciiPointer_high
   jsr findLetterAscii

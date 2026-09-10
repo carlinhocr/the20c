@@ -12,7 +12,7 @@ numberOfLinesPerChar= 8
 numberOfSymbolsPerLinePerChar= 8
 
 asciiStringTest:
-  .ascii 'Hola'
+  .ascii 'Hola Oso'
 
 asciiLetterA:    
   .byte $0E,$11,$11,$1F,$11,$11,$11,$00 ; A                  off $0108
