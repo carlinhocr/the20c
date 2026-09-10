@@ -46,6 +46,33 @@ findLetterAscii:
   ;test the address of the ascii letter
   rts
 
+sliceAsciiStrings:
+  ;get a string and pad it if it is below the asciiPrintLenght (10)
+  ;if it is longer slice it separating it in spaces
+  ;for each slice send the fillLineRAM and then printLineRAM
+  txa
+  pha
+  tya
+  pha
+  
+  ;FIRST
+  ;count the string until the null byte, if it is below 
+  ;asciiPrintLenght pad it with spaces $20
+
+  ;SECOND
+  ;count the number of chars and slice it and pad it under asciiPrintLenght (10)
+
+  ;THIRD
+  ;send the string to fillLineRAM and printLineRAM
+
+sliceAsciiStrings_End:  
+  pla  
+  tay
+  pla
+  tax
+  rts
+
+
 fillLineRAM:
   ;process all letters on the string to print in a line
   txa
