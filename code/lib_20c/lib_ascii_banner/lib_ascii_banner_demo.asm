@@ -3,10 +3,6 @@
   .include "../lib_acia/lib_acia_memory.asm" ;define memory address for ACIA
  
   .include "../lib_utils/lib_utils_memory.asm" ;define memory address for ACIA
- 
-
-
-
 
   .org $8000
   .include "../lib_init/lib_init.asm" ;reset vector and stack initialization
@@ -23,20 +19,6 @@
   jsr uartSerialInit
   lda #$0 ;if zero got to screen and not printer
   sta rs232Printer ;so we will go to screen and not printer
-  lda #'B';load the ascii character of the letter A
-  sta asciiLetter ;save the ascii letter to find
-  lda asciiLetter
-  jsr send_rs232_char
-  jsr delay_1_sec
-  jsr drawLetterA
-
-  jsr findLetterAscii
-  jsr drawLetter
-
-  ; lda #'X';load the ascii character of the letter A
-  ; sta asciiLetter ;save the ascii letter to find
-  ; jsr findLetterAscii
-  ; jsr drawLetter
 
   ;load the asciiString that will be processed
   lda #<asciiStringTest
@@ -87,7 +69,7 @@ loop:
 
 
   .include "lib_ascii_banner_code.asm"
-  .include "lib_ascii_banner_debug.asm"
+  ;.include "lib_ascii_banner_debug.asm"
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  
   .include "../lib_utils/lib_utils_code.asm" ;define code for ACIA t  
   .include "lib_ascii_banner_constants.asm"
