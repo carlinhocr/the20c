@@ -7,15 +7,6 @@
   .org $8000
   .include "../lib_init/lib_init.asm" ;reset vector and stack initialization
   
-
-;Plan to create an ASCII BANNER command
-
-;constants that have the ASCII letter as if they where blocks on a 5x8 character block
-;fucntion to read an ASCII character code and find the ASCII Letter block
-;function to read the encoded characters and copy them to RAM memory
-;function to read several ascii characters in the same Line and copy them to RAM
-;function to get ascii in RAM and print it to RS-232 (the ACIA module has this function)
-
   jsr uartSerialInit
   lda #$0 ;if zero got to screen and not printer
   sta rs232Printer ;so we will go to screen and not printer

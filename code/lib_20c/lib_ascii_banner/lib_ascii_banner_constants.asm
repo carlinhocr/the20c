@@ -12,7 +12,7 @@ numberOfLinesPerChar= 8
 numberOfSymbolsPerLinePerChar= 8
 
 asciiStringTest:
-  .asciiz 'Hola Oso'
+  .asciiz 'Hola Oso  '
 
 asciiStringTestDings:
   .byte $20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$00
