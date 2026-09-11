@@ -58,7 +58,36 @@ sliceAsciiStrings:
   ;FIRST
   ;count the string until the null byte, if it is below 
   ;asciiPrintLenght pad it with spaces $20
+  ldy #$ff
+sliceAsciiStrings_LoopString:
+  iny
+  cpy #asciiPrintLenght + 1
+  beq sliceAsciiStrings_LongString
+  lda (asciiLongStringZp_low),Y 
+  cmp #$00
+  beq sliceAsciiStrings_PadString
+sliceAsciiStrings_LongString:
+  ;Y is #asciiPrintLenght + 1, so check if it is just asciiPrintLenght lenght 
+  ;by checking the NULL byte
+  lda (asciiLongStringZp_low),Y 
+  cmp #$00
+  beq sliceAsciiStrings_NoPadString
+  jmp sliceAsciiStrings_KeepProcessing
+sliceAsciiStrings_PadString:    
+  ;pad the string then print
+  jsr printSliceAsciiStrings_Print
+  jmp sliceAsciiStrings_End
 
+sliceAsciiStrings_NoPadString:
+  ;right sized pad the string
+  jsr printSliceAsciiStrings_Print
+  jmp sliceAsciiStrings_End
+
+sliceAsciiStrings_KeepProcessing:
+  ;load #asciiPrintLenght to send to print
+  jsr printSliceAsciiStrings_Print
+  ;keep processing the next slide of the string
+  jmp sliceAsciiStrings_LoopString
   ;SECOND
   ;count the number of chars and slice it and pad it under asciiPrintLenght (10)
 
@@ -70,6 +99,15 @@ sliceAsciiStrings_End:
   tay
   pla
   tax
+  rts
+
+printSliceAsciiStrings_Print
+  lda asciiLongStringZp_low
+  sta asciiStringZp_low
+  lda asciiLongStringZp_high
+  sta asciiStringZp_low
+  jsr fillLineRAM
+  jsr printLineRAM
   rts
 
 

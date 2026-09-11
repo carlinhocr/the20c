@@ -11,6 +11,9 @@ asciiStringZp_high=$c5
 asciiBannerAlphabet_low=$c6
 asciiBannerAlphabet_high=$c7
 
+asciiLongStringZp_low=$c8
+asciiLongStringZp_high=$c9
+
 asciiLetter = $300
 asciiBannerLineByte = $301
 charToAdd = $302

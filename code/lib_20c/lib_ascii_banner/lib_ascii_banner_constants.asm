@@ -10,6 +10,7 @@ asciiCharBlock = '#'
 lineLenght = 80 ; 80 characters long from 0 to 79 and in byte 80 a null char $00 ends the string
 numberOfLinesPerChar= 8
 numberOfSymbolsPerLinePerChar= 8
+asciiPrintLenght = 10
 
 asciiStringTest:
   .asciiz 'Hola Oso  '
@@ -17,6 +18,11 @@ asciiStringTest:
 asciiStringTestDings:
   .byte $20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$00
 
+asciiStringLong:
+  .asciiz "Hola Oso, Como va? Todo bien?  que bueno" 
+
+asciiStringShort:
+  .asciiz "Olis" 
 
 asciiLetterA:    
   .byte $0E,$11,$11,$1F,$11,$11,$11,$00 ; A                  off $0108
