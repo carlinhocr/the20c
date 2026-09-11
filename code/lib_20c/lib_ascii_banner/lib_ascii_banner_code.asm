@@ -73,13 +73,14 @@ sliceAsciiStrings_LongString:
   cmp #$00
   beq sliceAsciiStrings_NoPadString
   jmp sliceAsciiStrings_KeepProcessing
+
 sliceAsciiStrings_PadString:    
   ;pad the string then print
   jsr printSliceAsciiStrings_Print
   jmp sliceAsciiStrings_End
 
 sliceAsciiStrings_NoPadString:
-  ;right sized pad the string
+  ;right sized just print
   jsr printSliceAsciiStrings_Print
   jmp sliceAsciiStrings_End
 
@@ -87,12 +88,14 @@ sliceAsciiStrings_KeepProcessing:
   ;load #asciiPrintLenght to send to print
   jsr printSliceAsciiStrings_Print
   ;keep processing the next slide of the string
+  clc
+  lda asciiLongStringZp_low
+  adc #asciiPrintLenght
+  sta asciiLongStringZp_low
+  lda asciiLongStringZp_high
+  adc #$00 ;just add for the carry
+  sta asciiLongStringZp_high
   jmp sliceAsciiStrings_LoopString
-  ;SECOND
-  ;count the number of chars and slice it and pad it under asciiPrintLenght (10)
-
-  ;THIRD
-  ;send the string to fillLineRAM and printLineRAM
 
 sliceAsciiStrings_End:  
   pla  
