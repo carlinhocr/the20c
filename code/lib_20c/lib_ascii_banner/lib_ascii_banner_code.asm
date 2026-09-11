@@ -76,6 +76,8 @@ sliceAsciiStrings_LongString:
 
 sliceAsciiStrings_PadString:    
   ;pad the string then print
+  ;MAY BE do not need to pad the string just 
+  ;clean with spaces instead of dots
   jsr printSliceAsciiStrings_Print
   jmp sliceAsciiStrings_End
 
