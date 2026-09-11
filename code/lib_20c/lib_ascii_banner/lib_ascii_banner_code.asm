@@ -6,14 +6,14 @@
 ;THERE IS NOTHING IN THE charRAMforASCII, still have to copy it to RAM
 
 findLetterAscii:
-;given the code of one ascii character in variable asciiLetter
-;output the address where it begins on  asciiBannerAlphabet
-;on variables asciiPointer_low asciiPointer_high
-;example letter A is ascii $41
-;the offset should be $0108 to add to the beginning of asciiBannerAlphabet
-;so ascii $41 - $20 = $21 
-;now i have to multiply the value for 8 because each line is 8 bytes long
-;$21 * 8 = $108
+  ;given the code of one ascii character in variable asciiLetter
+  ;output the address where it begins on  asciiBannerAlphabet
+  ;on variables asciiPointer_low asciiPointer_high
+  ;example letter A is ascii $41
+  ;the offset should be $0108 to add to the beginning of asciiBannerAlphabet
+  ;so ascii $41 - $20 = $21 
+  ;now i have to multiply the value for 8 because each line is 8 bytes long
+  ;$21 * 8 = $108
   lda asciiLetter ;the number stored in variable asciiletter
   sec  
   sbc #$20 ;go through the ASCII index 0...94
