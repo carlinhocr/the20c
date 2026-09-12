@@ -58,6 +58,7 @@ sliceAsciiStrings:
   ;FIRST
   ;count the string until the null byte, if it is below 
   ;asciiPrintLenght pad it with spaces $20
+sliceAsciiStrings_LongLoopString:  
   ldy #$ff
 sliceAsciiStrings_LoopString:
   iny
@@ -102,7 +103,9 @@ sliceAsciiStrings_KeepProcessing:
   lda asciiLongStringZp_high
   adc #$00 ;just add for the carry
   sta asciiLongStringZp_high
-  jmp sliceAsciiStrings_LoopString
+  ;so i always count up to asciiPrintLenght
+  ;I sent the loop to where Y is initialized
+  jmp sliceAsciiStrings_LongLoopString
 
 sliceAsciiStrings_End:  
   pla  
