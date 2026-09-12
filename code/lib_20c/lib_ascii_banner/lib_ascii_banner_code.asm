@@ -65,7 +65,8 @@ sliceAsciiStrings_LoopString:
   beq sliceAsciiStrings_LongString
   lda (asciiLongStringZp_low),Y 
   cmp #$00
-  beq sliceAsciiStrings_PadString
+  beq sliceAsciiStrings_End
+  ;beq sliceAsciiStrings_PadString
 sliceAsciiStrings_LongString:
   ;Y is #asciiPrintLenght, so check if it is just asciiPrintLenght lenght 
   ;by checking the NULL byte
@@ -73,7 +74,8 @@ sliceAsciiStrings_LongString:
   lda (asciiLongStringZp_low),Y 
   cmp #$00
   beq sliceAsciiStrings_NoPadString
-  jmp sliceAsciiStrings_KeepProcessing
+  jmp sliceAsciiStrings_End
+  ;jmp sliceAsciiStrings_KeepProcessing
 
 sliceAsciiStrings_PadString:    
   ;pad the string then print
