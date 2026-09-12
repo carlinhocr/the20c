@@ -113,6 +113,7 @@ printSliceAsciiStrings_Print
   sta asciiStringZp_low
   jsr fillLineRAM
   jsr printLineRAM
+  jsr delay_1_sec
   rts
 
 
