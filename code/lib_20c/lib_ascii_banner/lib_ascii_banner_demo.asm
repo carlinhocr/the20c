@@ -64,6 +64,9 @@
   sta asciiLongStringZp_high
   ;slice and print the string of lenght asciiPrintLenght
   jsr sliceAsciiStrings
+  jsr delay_1_sec
+  jsr delay_1_sec
+  jsr delay_1_sec
 
   ;load the alphabet
   lda #<asciiBannerAlphabet_c64
@@ -77,6 +80,10 @@
   sta asciiLongStringZp_high
   ;slice and print the string of lenght asciiPrintLenght
   jsr sliceAsciiStrings  
+  jsr delay_1_sec
+  jsr delay_1_sec
+  jsr delay_1_sec
+
 
   ;load the alphabet
   lda #<asciiBannerAlphabet_c64
