@@ -76,8 +76,8 @@ sliceAsciiStrings_LongString:
   lda (asciiLongStringZp_low),Y 
   cmp #$00
   beq sliceAsciiStrings_NoPadString
-  jmp sliceAsciiStrings_End
-  ;jmp sliceAsciiStrings_KeepProcessing
+  ;jmp sliceAsciiStrings_End
+  jmp sliceAsciiStrings_KeepProcessing
 
 sliceAsciiStrings_PadString:    
   ;pad the string then print
