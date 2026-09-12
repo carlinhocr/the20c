@@ -10,7 +10,7 @@ asciiCharBlock = '#'
 lineLenght = 80 ; 80 characters long from 0 to 79 and in byte 80 a null char $00 ends the string
 numberOfLinesPerChar= 8
 numberOfSymbolsPerLinePerChar= 8
-asciiPrintLenght = 10
+asciiPrintLenght = 10 ;if it is 10 then the char !0 is the null byte and the string 0-9
 
 asciiStringTest:
   .asciiz 'Hola Oso  '

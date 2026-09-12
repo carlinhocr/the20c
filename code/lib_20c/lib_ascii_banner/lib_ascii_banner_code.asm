@@ -61,14 +61,15 @@ sliceAsciiStrings:
   ldy #$ff
 sliceAsciiStrings_LoopString:
   iny
-  cpy #asciiPrintLenght + 1
+  cpy #asciiPrintLenght ;if it is 10 then the char 10 is the null byte and the string 0-9
   beq sliceAsciiStrings_LongString
   lda (asciiLongStringZp_low),Y 
   cmp #$00
   beq sliceAsciiStrings_PadString
 sliceAsciiStrings_LongString:
-  ;Y is #asciiPrintLenght + 1, so check if it is just asciiPrintLenght lenght 
+  ;Y is #asciiPrintLenght, so check if it is just asciiPrintLenght lenght 
   ;by checking the NULL byte
+  ;if it is 10 then the char 10 is the null byte and the string 0-9
   lda (asciiLongStringZp_low),Y 
   cmp #$00
   beq sliceAsciiStrings_NoPadString
@@ -110,7 +111,7 @@ printSliceAsciiStrings_Print
   lda asciiLongStringZp_low
   sta asciiStringZp_low
   lda asciiLongStringZp_high
-  sta asciiStringZp_low
+  sta asciiStringZp_high
   jsr fillLineRAM
   jsr printLineRAM
   jsr delay_1_sec
