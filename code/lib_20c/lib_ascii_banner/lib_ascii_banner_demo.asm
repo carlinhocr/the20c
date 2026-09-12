@@ -65,6 +65,18 @@
   ;slice and print the string of lenght asciiPrintLenght
   jsr sliceAsciiStrings
 
+  ;load the alphabet
+  lda #<asciiBannerAlphabet_c64
+  sta asciiBannerAlphabet_low
+  lda #>asciiBannerAlphabet_c64  
+  sta asciiBannerAlphabet_high
+  ;load the string
+  lda #<asciiStringRight
+  sta asciiLongStringZp_low
+  lda #>asciiStringRight
+  sta asciiLongStringZp_high
+  ;slice and print the string of lenght asciiPrintLenght
+  jsr sliceAsciiStrings  
 
   ;load the alphabet
   lda #<asciiBannerAlphabet_c64

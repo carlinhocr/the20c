@@ -24,6 +24,9 @@ asciiStringLong:
 asciiStringShort:
   .asciiz "Olis" 
 
+asciiStringRight:
+  .asciiz "Oso, Hola!"
+
 asciiLetterA:    
   .byte $0E,$11,$11,$1F,$11,$11,$11,$00 ; A                  off $0108
 
