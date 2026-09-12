@@ -67,7 +67,8 @@
   jsr delay_1_sec
   jsr delay_1_sec
   jsr delay_1_sec
-
+  jsr delay_1_sec
+  
   ;load the alphabet
   lda #<asciiBannerAlphabet_c64
   sta asciiBannerAlphabet_low
