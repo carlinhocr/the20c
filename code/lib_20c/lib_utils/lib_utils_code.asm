@@ -38,12 +38,39 @@ memoryTransfer:
   pha
   lda utilMemoryTransfer_HighByte
   tax
-memoryTransfer_LoopPage:
+memoryTransfer_LoopProcessPages:
   cpx #$FF ;we consumed all the pages lets end
   beq memoryTransfer_End
   cpx #$00 ;we are at page zero lets tranfer utilMemoryTransfer_LowByte amount of bytes
   beq memoryTransfer_TransferPartPage
   ;if we are here transfer a full page cpx is 1 or more, lets transfer a full page
+  jsr memoryTransfer_TransferFullPage
+  ;go back to process the next page
+  dex ;we processed the page
+  jmp memoryTransfer_LoopProcessPages
+
+memoryTransfer_TransferPartPage:
+  lda utilMemoryTransfer_LowByte
+  cmp #$00
+  beq memoryTransfer_End
+  ldy #$FF
+memoryTransfer_TransferPartPageLoop:
+  iny ; Y starts in zero
+  tya
+  cmp utilMemoryTransfer_LowByte ;I copied all the bytes
+  beq memoryTransfer_End
+  ;here i copy the bytes
+  lda (utilPivot_01_ZP_low),Y 
+  sta (utilPivot_02_ZP_low),Y 
+  jmp memoryTransfer_TransferPartPageLoop
+
+memoryTransfer_End:
+  pla
+  tay
+  pla
+  tax
+  rts
+
 memoryTransfer_TransferFullPage: 
   ldy #$ff
 memoryTransfer_TransferFullPage_Loop:
@@ -71,29 +98,8 @@ memoryTransfer_FullPageTransferred:
   lda utilPivot_01_ZP_high
   adc #$00 ;do it for the carry
   sta utilPivot_01_ZP_high
-  ;go back to process the next page
-  dex ;we processed the page
-  jmp memoryTransfer_LoopPage
-memoryTransfer_TransferPartPage:
-  lda utilMemoryTransfer_LowByte
-  cmp #$00
-  beq memoryTransfer_End
-  ldy #$FF
-memoryTransfer_TransferPartPageLoop:
-  iny
-  tya
-  cmp utilMemoryTransfer_LowByte
-  beq memoryTransfer_End
-  ;her i copy the bytes
-  lda (utilPivot_01_ZP_low),Y 
-  sta (utilPivot_02_ZP_low),Y 
-  jmp memoryTransfer_TransferFullPage_Loop
-memoryTransfer_End:
-  pla
-  tay
-  pla
-  tax
   rts
+
 
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
