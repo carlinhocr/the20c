@@ -4,6 +4,12 @@
 
 delay_COUNT_A = $32        
 delay_COUNT_B = $33
+utilPivot_01_ZP_low=$34
+utilPivot_01_ZP_high=$35
+utilPivot_02_ZP_low=$36
+utilPivot_02_ZP_high=$37
+
+
 
 ;RAM
 ;bin 2 ascii memory locations
@@ -21,3 +27,5 @@ multiFactor1=                     $020c
 multiFactor2=                     $020d
 multiResultLow=                   $020e
 multiResultHigh=                  $020f
+utilMemoryTransfer_LowByte= $0210
+utilMemoryTransfer_HighByte= $0211

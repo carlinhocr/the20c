@@ -3,6 +3,106 @@
 
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
+;------------------------------MEMORY TRANSFER--------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;transfer any amount of bytes from one memory area to another
+;load how many bytes to transfer
+;example for 4 bytes
+;lda #$4
+;sta utilMemoryTransfer_LowByte
+;lda #$0
+;sta utilMemoryTransfer_HighByte
+;
+;example for 500 bytes = $01F4
+;lda #$F4
+;sta utilMemoryTransfer_LowByte
+;lda #$01
+;sta utilMemoryTransfer_HighByte
+;
+;now load the memory FROM, for example to copy from ROM $9000
+;lda #$00
+;sta utilPivot_01_ZP_low
+;lda #$90
+;sta utilPivot_01_ZP_high
+;now load the memory TO, for example to copy to RAM $1000
+;lda #$00
+;sta utilPivot_02_ZP_low
+;lda #$10
+;sta utilPivot_02_ZP_high
+;now the code
+memoryTransfer:
+  txa
+  pha
+  tya
+  pha
+  lda utilMemoryTransfer_HighByte
+  tax
+memoryTransfer_LoopPage:
+  cpx #$FF ;we consumed all the pages lets end
+  beq memoryTransfer_End
+  cpx #$00 ;we are at page zero lets tranfer utilMemoryTransfer_LowByte amount of bytes
+  beq memoryTransfer_TransferPartPage
+  ;if we are here transfer a full page cpx is 1 or more, lets transfer a full page
+memoryTransfer_TransferFullPage: 
+  ldy #$ff
+memoryTransfer_TransferFullPage_Loop:
+  cpy #$00 ;here i did the full rotation
+  beq memoryTransfer_FullPageTransferred
+  iny ;the first one iz #$00  
+  lda (utilPivot_01_ZP_low),Y 
+  sta (utilPivot_02_ZP_low),Y 
+  jmp memoryTransfer_TransferFullPage_Loop
+memoryTransfer_FullPageTransferred:
+  ;update the memory addresses of the sources and destinations
+  ;For the SOURCE
+  clc
+  lda #$ff
+  adc utilPivot_01_ZP_low
+  sta utilPivot_01_ZP_low
+  lda utilPivot_01_ZP_high
+  adc #$00 ;do it for the carry
+  sta utilPivot_01_ZP_high
+  ;For the DESTINATION
+  clc
+  lda #$ff
+  adc utilPivot_01_ZP_low
+  sta utilPivot_01_ZP_low
+  lda utilPivot_01_ZP_high
+  adc #$00 ;do it for the carry
+  sta utilPivot_01_ZP_high
+  ;go back to process the next page
+  dex ;we processed the page
+  jmp memoryTransfer_LoopPage
+memoryTransfer_TransferPartPage:
+  lda utilMemoryTransfer_LowByte
+  cmp #$00
+  beq memoryTransfer_End
+  ldy #$FF
+memoryTransfer_TransferPartPageLoop:
+  iny
+  tya
+  cmp utilMemoryTransfer_LowByte
+  beq memoryTransfer_End
+  ;her i copy the bytes
+  lda (utilPivot_01_ZP_low),Y 
+  sta (utilPivot_02_ZP_low),Y 
+  jmp memoryTransfer_TransferFullPage_Loop
+memoryTransfer_End:
+  pla
+  tay
+  pla
+  tax
+  rts
+
+;END--------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+;------------------------------MEMORY TRANSFER--------------------------------------
+;-----------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
+
+;BEGIN------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------------
 ;----------------------------------UTILITY------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
