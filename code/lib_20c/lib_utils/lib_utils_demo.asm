@@ -4,11 +4,17 @@
 
   .org $8000
   .include "../lib_init/lib_init.asm" ;reset vector and stack initialization
-  
+ 
+  jsr uartSerialInit
+  lda #$0 ;if zero got to screen and not printer
+  sta rs232Printer ;so we will go to screen and not printer
+
+
+
   ;transfer any amount of bytes from one memory area to another
   ;load how many bytes to transfer
-  ;example for 4 bytes
-  lda #$4
+  ;example for 256 bytes
+  lda #$ff
   sta utilMemoryTransfer_LowByte
   lda #$0
   sta utilMemoryTransfer_HighByte
@@ -20,9 +26,10 @@
 ;sta utilMemoryTransfer_HighByte
 ;
 ;now load the memory FROM, for example to copy from ROM $9000
-  lda #$00
+;or modify it for string example
+  lda #<memoryTransferExample
   sta utilPivot_01_ZP_low
-  lda #$90
+  lda #>memoryTransferExample
   sta utilPivot_01_ZP_high
 ;now load the memory TO, for example to copy to RAM $1000
   lda #$00
@@ -31,6 +38,13 @@
   sta utilPivot_02_ZP_high
 ;now run the transfer function
   jsr memoryTransfer  
+
+;lets print from the new copied memory
+  lda #$00
+  sta serialDataVectorLow
+  lda #$10
+  sta serialDataVectorHigh
+  jsr send_rs232_line  
 
 loop:
   jmp loop

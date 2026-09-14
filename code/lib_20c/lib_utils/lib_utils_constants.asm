@@ -1,4 +1,9 @@
 
+;String
+
+memoryTransferExample:
+  .asciiz "Este es un string de ejemplo"
+
 ;Timer Constants
 ; ── Timer load values for 1 MHz clock ────────────────────
 ;
