@@ -2019,6 +2019,8 @@ mainIECDemo:
 mainEndLoop:
   jsr IEC_BUS_IDLE      ; leave the bus idle (all three lines HIGH) so a
                         ; capture taken after the run shows a clean bus
+
+  rts
 mainEndSpin:
   jmp mainEndSpin
 

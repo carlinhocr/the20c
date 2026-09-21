@@ -122,7 +122,7 @@ FNAME_WRITE_RAM:
             .byte "@0:WRITEFILE,P,W", $00  ; Write WRITEFILE as PRG (overwrite if exists)
 
 FNAME_WRITE_ROM_ASCII:
-            .byte "@0:WRITEFILEROM,P,W", $00  ; Write WRITEFILE as PRG (overwrite if exists)            
+            .byte "@0:WRITEROM,P,W", $00  ; Write WRITEFILE as PRG (overwrite if exists)            
 
 ;-------------------------------------------------------------------------------
 ; DOS COMMAND STRINGS (sent to the command channel, #15)
