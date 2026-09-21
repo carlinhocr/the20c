@@ -216,7 +216,7 @@
 ; The 6522 Versatile Interface Adapter has 16 registers mapped starting
 ; at the base address. We only use a subset for IEC communication.
 
-VIA_BASE    = $6000             ; Base address of the 6522 VIA
+VIA_BASE    = $7200             ; Base address of the 6522 VIA
 
 VIA_PORTB   = VIA_BASE + $00   ; Port B data register (accent accent accent accent read/write bus lines accent accent accent accent)
 VIA_PORTA   = VIA_BASE + $01   ; Port A data register (not used here)
