@@ -149,10 +149,13 @@ CMD_INIT:
 
 
 messageIECStart:
-  .asciiz "Inicializando Rutinas IEC"
+  .asciiz "Inicializando Rutinas IEC"  
 
 messageRunningMainDemo:
   .asciiz "Empezando Demo"  
+
+messageEndMainDemo:
+  .asciiz "Terminando Demo" 
 
 messageRunningAsciiDemo:
   .asciiz "Empezando ASCII Demo"  

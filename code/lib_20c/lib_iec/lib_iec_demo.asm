@@ -33,13 +33,13 @@
   jsr iecInit
 
 
-;   lda #<messageRunningMainDemo
-;   sta serialDataVectorLow
-;   lda #>messageRunningMainDemo
-;   sta serialDataVectorHigh
-;   jsr send_rs232_line  
+  lda #<messageRunningMainDemo
+  sta serialDataVectorLow
+  lda #>messageRunningMainDemo
+  sta serialDataVectorHigh
+  jsr send_rs232_line  
 
-;   jsr mainIECDemo
+  jsr mainIECDemo
 
   lda #<messageRunningAsciiDemo
   sta serialDataVectorLow
@@ -49,6 +49,12 @@
  
   jsr writeAsciiFromROM
    
+  lda #<messageEndMainDemo
+  sta serialDataVectorLow
+  lda #>messageEndMainDemo
+  sta serialDataVectorHigh
+  jsr send_rs232_line  
+
 loop:
   jmp loop  
 
@@ -85,7 +91,32 @@ writeAsciiFromROM:
   sta utilPivot_02_ZP_high
 ;now run the transfer function
   jsr memoryTransfer  
-  jsr writeFileFromRAM
+
+;we have the data already at BUFFER_START
+;we have already the file size at FILE_SIZE_LO and FILE_SIZE_HI 
+; Point to the output filename
+  lda #<FNAME_WRITE_ROM_ASCII
+  sta ZP_PTR_LO
+  lda #>FNAME_WRITE_ROM_ASCII
+  sta ZP_PTR_HI
+;write the file
+  jsr IEC_WRITE_FILE
+; Check result
+  lda IEC_STATUS
+  bne writeFileFromROM_Failed
+;it worked return
+  rts  
+writeFileFromROM_Failed:
+;it failed
+  jsr IEC_READ_STATUS
+; Error string at BUFFER_START
+;
+; v25: this used to fall straight through into writeFile256bytes, so a FAILED
+; write immediately kicked off a second, unrequested 256-byte write of test
+; data to OUTFILE. Stop here instead.
+  jsr IEC_BUS_IDLE
+writeFileFromROM_Halt:
+  jmp writeFileFromROM_Halt
   rts
 
 
