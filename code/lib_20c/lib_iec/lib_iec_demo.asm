@@ -74,7 +74,7 @@ writeAsciiFromROM:
   ;example for 256 bytes
   lda #$ff
   sta utilMemoryTransfer_LowByte
-  lda #$0
+  lda #$3
   sta utilMemoryTransfer_HighByte
   ;now load the memory FROM, for example to copy from ROM $9000
   ;or modify it for string example
@@ -94,7 +94,7 @@ writeAsciiFromROM:
   ;Lets save One byte the file size at FILE_SIZE_LO and FILE_SIZE_HI 
   LDA #$FF
   STA FILE_SIZE_LO
-  lda #$00
+  lda #$03
   STA FILE_SIZE_HI
   ; Point to the output filename
   lda #<FNAME_WRITE_ROM_ASCII
