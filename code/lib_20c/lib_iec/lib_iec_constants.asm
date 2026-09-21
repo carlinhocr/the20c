@@ -104,3 +104,41 @@ messageIECStart:
 
 messageRunningMainDemo:
   .asciiz "Empezando Demo"  
+
+messageRunningAsciiDemo:
+  .asciiz "Empezando ASCII Demo"  
+
+
+
+la20cAscii:
+  .ascii "                                    LA 20c               "
+  .ascii ""  
+  .ascii "                                 OSOLABS.TECH            "
+  .ascii ""  
+  .ascii "                    ┌─┴─┴─┴─┴─┴─┬─┴─┴─┴─┴─┴─┬─┴─┴─┴─┴─┴─┐"
+  .ascii "                    │  4F53 4F  │    RAM    │    RAM    ├"
+  .ascii "                    │  ■■■■ ■■  │           │           ├"
+  .ascii "                    │  Address  │    ▐░▌    │    ▐▒▌    ├"
+  .ascii "                    │   Data    │           │           ├"
+  .ascii "                    │  Display  │    ROM    │    ROM    ├"
+  .ascii "                    ├───────────├───────────├───────────┤───────┐"
+  .ascii "                    │    BUS    ▌    BUS    ▌    BUS    │ D P A │"
+  .ascii "                    │           ▌           ▌           │ U R N │"
+  .ascii "                    │  Address  ▌  Address  ▌  Address  │ I O L │"
+  .ascii "                    │   Data    ▌   Data    ▌   Data    │ N T Y │"
+  .ascii "                    │ Expansion ▌ Expansion ▌ Expansion │ O . Z │"
+  .ascii "                    ├───────────┬───────────┬───────────┤───────┘"
+  .ascii "                    │ VIA 6522  │   GLUE    │  CPU 6502 ├"
+  .ascii "                    │           │   LOGIC   │   .....   ├"
+  .ascii "                    │   ....    │....  .... │   ▓▓▓▓▓   ├"
+  .ascii "                    │   ░░░░    │))))  (((( │   ·····   ├"
+  .ascii "                    │   ····    │····  ···· │           ├"
+  .ascii "                    ├───────────┬───────────┬───────────┤"
+  .ascii "                    │  I/0 LCD  │   POWER   │   CLOCK   ├"
+  .ascii "                    │           │   module  │    OSO    ├"
+  .ascii "                    │ ▄▄▄▄▄▄▄▄  │  5v  ♥    │           ├"
+  .ascii "                    │ █berdyx█  │  9v  ♦    │           ├"
+  .ascii "                    │ ▀▀▀▀▀▀▀▀  │ 12v  ♣    │        ☻  ├"
+  .ascii "                    └───────────┴───────────┴───────────┘"
+  .ascii ""
+  .ascii "e" 
