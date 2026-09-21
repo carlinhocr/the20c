@@ -99,3 +99,8 @@ EOI_WINDOW     = 256            ; T2 count = ~256 us at 1 MHz. THE protocol
 ; takes longer than the 1.2353 s measured here; raise RFD_TIMEOUT_MS rather
 ; than trying to shave it.
 
+messageIECStart:
+  .asciiz "Inicializando Rutinas IEC"
+
+messageRunningMainDemo:
+  .asciiz "Empezando Demo"  

@@ -24,6 +24,22 @@
   lda #$0 ;if zero got to screen and not printer
   sta rs232Printer ;so we will go to screen and not printer
 
+  lda #<messageIECStart
+  sta serialDataVectorLow
+  lda #>messageIECStart
+  sta serialDataVectorHigh
+  jsr send_rs232_line
+
+  jsr iecInit
+
+
+  lda #<messageRunningMainDemo
+  sta serialDataVectorLow
+  lda #>messageRunningMainDemo
+  sta serialDataVectorHigh
+  jsr send_rs232_line  
+
+  jsr mainIECDemo
 
 
 loop:

@@ -233,22 +233,23 @@
 ;===============================================================================
 ;===============================================================================
 
-RESET:
+; RESET:
 ;-----------------------------------------------------------------------
-; RESET - Entry point after power-on (jumped to via reset vector at $FFFC)
-;
-; We must:
-;   1. Initialize the 6502 CPU state
-;   2. Configure the VIA for IEC communication
-;   3. Release all IEC bus lines
-;   4. Clear status variables
-;-----------------------------------------------------------------------
+; ; RESET - Entry point after power-on (jumped to via reset vector at $FFFC)
+; ;
+; ; We must:
+; ;   1. Initialize the 6502 CPU state
+; ;   2. Configure the VIA for IEC communication
+; ;   3. Release all IEC bus lines
+; ;   4. Clear status variables
+; ;-----------------------------------------------------------------------
 
-            SEI                 ; Disable interrupts - we do everything in polling
-            CLD                 ; Clear decimal mode (safety: ensure binary arithmetic)
-            LDX #$FF
-            TXS                 ; Initialize stack pointer to $01FF
+;             SEI                 ; Disable interrupts - we do everything in polling
+;             CLD                 ; Clear decimal mode (safety: ensure binary arithmetic)
+;             LDX #$FF
+;             TXS                 ; Initialize stack pointer to $01FF
 
+iecInit:
             ; --- Configure VIA Port B data direction ---
             ; PB0-PB2 are outputs (DATA_OUT, CLK_OUT, ATN_OUT)
             ; PB3-PB7 are inputs  (DATA_IN, CLK_IN, and unused)
@@ -316,8 +317,9 @@ STARTUP_WAIT_CHUNKS = 16
             DEX
             BNE .reset_wait
 
-            ; Initialization complete. Fall through or jump to main program.
-            JMP MAIN
+; Initialization complete. Fall through or jump to main program.
+            ;JMP MAIN
+  rts
 
 
 ;===============================================================================
@@ -1993,7 +1995,7 @@ IEC_FORMAT_DISK:
 ;===============================================================================
 
 MAIN:
-
+mainIECDemo:
 ;Read File READFILE contents from Disk and store it to RAM
 
 
@@ -2258,56 +2260,56 @@ CMD_INIT:
             .byte "I0", $00              ; initialize (re-read BAM after disk swap)
 
 
-;===============================================================================
-;===============================================================================
-;
-;   SECTION 11: 6502 INTERRUPT AND RESET VECTORS
-;
-;   The 6502 reads three 16-bit vectors from the top of the address
-;   space upon specific events:
-;
-;   $FFFA-$FFFB = NMI vector   (Non-Maskable Interrupt)
-;   $FFFC-$FFFD = RESET vector (Power-on / Reset button)
-;   $FFFE-$FFFF = IRQ vector   (Maskable Interrupt / BRK instruction)
-;
-;   Since we don't use interrupts, NMI and IRQ just return immediately
-;   with RTI (Return from Interrupt). The RESET vector points to our
-;   RESET initialization code.
-;
-;===============================================================================
-;===============================================================================
+; ;===============================================================================
+; ;===============================================================================
+; ;
+; ;   SECTION 11: 6502 INTERRUPT AND RESET VECTORS
+; ;
+; ;   The 6502 reads three 16-bit vectors from the top of the address
+; ;   space upon specific events:
+; ;
+; ;   $FFFA-$FFFB = NMI vector   (Non-Maskable Interrupt)
+; ;   $FFFC-$FFFD = RESET vector (Power-on / Reset button)
+; ;   $FFFE-$FFFF = IRQ vector   (Maskable Interrupt / BRK instruction)
+; ;
+; ;   Since we don't use interrupts, NMI and IRQ just return immediately
+; ;   with RTI (Return from Interrupt). The RESET vector points to our
+; ;   RESET initialization code.
+; ;
+; ;===============================================================================
+; ;===============================================================================
 
-;-----------------------------------------------------------------------
-; NMI_HANDLER - Non-Maskable Interrupt handler
-;
-; NMI is edge-triggered and cannot be disabled. In our system we don't
-; use it, so we just return immediately. In a real system, this could
-; be used for a RESTORE key or critical hardware event.
-;-----------------------------------------------------------------------
-NMI_HANDLER:
-            RTI                 ; Return from interrupt (do nothing)
+; ;-----------------------------------------------------------------------
+; ; NMI_HANDLER - Non-Maskable Interrupt handler
+; ;
+; ; NMI is edge-triggered and cannot be disabled. In our system we don't
+; ; use it, so we just return immediately. In a real system, this could
+; ; be used for a RESTORE key or critical hardware event.
+; ;-----------------------------------------------------------------------
+; NMI_HANDLER:
+;             RTI                 ; Return from interrupt (do nothing)
 
-;-----------------------------------------------------------------------
-; IRQ_HANDLER - Maskable Interrupt / BRK handler
-;
-; IRQ is level-triggered and can be disabled with SEI. Since we called
-; SEI at startup, this should never fire. But just in case:
-;-----------------------------------------------------------------------
-IRQ_HANDLER:
-            RTI                 ; Return from interrupt (do nothing)
+; ;-----------------------------------------------------------------------
+; ; IRQ_HANDLER - Maskable Interrupt / BRK handler
+; ;
+; ; IRQ is level-triggered and can be disabled with SEI. Since we called
+; ; SEI at startup, this should never fire. But just in case:
+; ;-----------------------------------------------------------------------
+; IRQ_HANDLER:
+;             RTI                 ; Return from interrupt (do nothing)
 
 
-;===============================================================================
-; VECTOR TABLE - Must be at $FFFA-$FFFF
-;===============================================================================
-; The 6502 CPU hardware reads these addresses automatically.
-; We use .org to force placement at the correct location.
+; ;===============================================================================
+; ; VECTOR TABLE - Must be at $FFFA-$FFFF
+; ;===============================================================================
+; ; The 6502 CPU hardware reads these addresses automatically.
+; ; We use .org to force placement at the correct location.
 
-            .org $FFFA
+;             .org $FFFA
 
-            .word NMI_HANDLER   ; $FFFA-$FFFB: NMI vector
-            .word RESET         ; $FFFC-$FFFD: RESET vector -> our init code
-            .word IRQ_HANDLER   ; $FFFE-$FFFF: IRQ/BRK vector
+;             .word NMI_HANDLER   ; $FFFA-$FFFB: NMI vector
+;             .word RESET         ; $FFFC-$FFFD: RESET vector -> our init code
+;             .word IRQ_HANDLER   ; $FFFE-$FFFF: IRQ/BRK vector
 
 
 ;===============================================================================
