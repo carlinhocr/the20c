@@ -47,7 +47,7 @@
   sta serialDataVectorHigh
   jsr send_rs232_line   
  
-  jsr writeAsciiFromROM
+ ; jsr writeAsciiFromROM
    
   lda #<messageEndMainDemo
   sta serialDataVectorLow
