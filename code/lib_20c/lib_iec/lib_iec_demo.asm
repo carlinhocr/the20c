@@ -68,7 +68,7 @@ writeAsciiFromROM:
   ;example for 256 bytes
   lda #$ff
   sta utilMemoryTransfer_LowByte
-  lda #$A
+  lda #$0A
   sta utilMemoryTransfer_HighByte
 
 

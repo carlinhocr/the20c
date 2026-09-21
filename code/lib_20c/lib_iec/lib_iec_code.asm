@@ -2215,50 +2215,6 @@ writeFile256bytes:
 .halt_loop:
             JMP .halt_loop
 
-;===============================================================================
-; FILENAME STRINGS
-;===============================================================================
-; These are null-terminated filename strings used by the demo.
-;
-; Format: "drivenumber:filename,type,mode"
-;   Drive number: 0 (only option on single-drive 1541)
-;   Type: P = Program (PRG), S = Sequential (SEQ), U = User (USR)
-;   Mode: R = Read, W = Write
-;
-; The "@" prefix means "save with replace" (overwrite existing file).
-
-FNAME_READ:
-            .byte "0:READFILE,P,R", $00  ; Open TESTFILE as PRG for reading
-
-FNAME_WRITE:
-            .byte "@0:OUTFILE,P,W", $00  ; Write OUTFILE as PRG (overwrite if exists)
-
-FNAME_WRITE_RAM:
-            .byte "@0:WRITEFILE,P,W", $00  ; Write WRITEFILE as PRG (overwrite if exists)
-
-
-;-------------------------------------------------------------------------------
-; DOS COMMAND STRINGS (sent to the command channel, #15)
-;-------------------------------------------------------------------------------
-; Format ("NEW") command. Syntax: N<drive>:<disk name>,<2-char id>
-;   - With an ID  -> full format (writes all sector headers; slow, ~80s).
-;   - Without ID  -> quick directory clear (only on an already-formatted disk).
-; This one does a full format, naming the disk "NEWDISK" with ID "01".
-
-FMT_COMMAND:
-            .byte "N0:NEWDISK,01", $00   ; full format, disk name NEWDISK, id 01
-
-; A few other ready-to-use DOS command strings (not used by the demo, shown
-; as examples - point ZP_PTR at one and call IEC_SEND_COMMAND):
-FMT_QUICK:
-            .byte "N0:NEWDISK", $00      ; quick "new" (no id) - clears directory
-CMD_SCRATCH:
-            .byte "S0:OLDFILE", $00      ; delete the file OLDFILE
-CMD_VALIDATE:
-            .byte "V0", $00              ; validate (rebuild block-availability map)
-CMD_INIT:
-            .byte "I0", $00              ; initialize (re-read BAM after disk swap)
-
 
 ; ;===============================================================================
 ; ;===============================================================================
