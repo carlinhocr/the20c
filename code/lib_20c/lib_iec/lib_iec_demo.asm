@@ -74,40 +74,42 @@ writeAsciiFromROM:
   ;example for 256 bytes
   lda #$ff
   sta utilMemoryTransfer_LowByte
-  lda #$0A
+  lda #$0
   sta utilMemoryTransfer_HighByte
-
-
-;now load the memory FROM, for example to copy from ROM $9000
-;or modify it for string example
+  ;now load the memory FROM, for example to copy from ROM $9000
+  ;or modify it for string example
   lda #<la20cAscii
   sta utilPivot_01_ZP_low
   lda #>la20cAscii
   sta utilPivot_01_ZP_high
-;now load the memory TO, for example to copy to RAM $1000
+  ;now load the memory TO, for example to copy to RAM $1000
   lda #<BUFFER_START
   sta utilPivot_02_ZP_low
   lda #>BUFFER_START
   sta utilPivot_02_ZP_high
-;now run the transfer function
+  ;now run the transfer function
   jsr memoryTransfer  
 
-;we have the data already at BUFFER_START
-;we have already the file size at FILE_SIZE_LO and FILE_SIZE_HI 
-; Point to the output filename
+  ;we have the data already at BUFFER_START
+  ;Lets save One byte the file size at FILE_SIZE_LO and FILE_SIZE_HI 
+  LDA #$FF
+  STA FILE_SIZE_LO
+  lda #$00
+  STA FILE_SIZE_HI
+  ; Point to the output filename
   lda #<FNAME_WRITE_ROM_ASCII
   sta ZP_PTR_LO
   lda #>FNAME_WRITE_ROM_ASCII
   sta ZP_PTR_HI
-;write the file
+  ;write the file
   jsr IEC_WRITE_FILE
-; Check result
+  ; Check result
   lda IEC_STATUS
   bne writeFileFromROM_Failed
-;it worked return
+  ;it worked return
   rts  
 writeFileFromROM_Failed:
-;it failed
+  ;it failed
   jsr IEC_READ_STATUS
 ; Error string at BUFFER_START
 ;
