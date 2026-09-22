@@ -2218,6 +2218,51 @@ writeFile256bytes:
             JMP .halt_loop
 
 
+readFilenameToBuffer:
+            ;===================================================================
+            ; DEMO 1: READ A FILE FROM DISK INTO RAM
+            ;===================================================================
+            ;
+            ; To read a file, we:
+            ;   1. Point ZP_PTR to the filename string
+            ;   2. Call IEC_READ_FILE
+            ;   3. Check IEC_STATUS for errors
+            ;   4. The data is now at BUFFER_START, size in FILE_SIZE
+            ;
+            ;----------------- IMPORTANT!!!!!
+            ; Set up filename pointer
+            ;we assume we already have the filename LOADED
+            ;LDA #<FNAME_READ    ; Low byte of filename string address
+            ;STA ZP_PTR_LO
+            ;LDA #>FNAME_READ    ; High byte of filename string address
+            ;STA ZP_PTR_HI
+
+            ; Read the file!
+            JSR IEC_READ_FILE
+
+            ; Check result
+            LDA IEC_STATUS
+            BNE .read_failed    ; Nonzero = error occurred
+
+            ; Success! Data is now in RAM at BUFFER_START.
+            ; FILE_SIZE_LO/HI contains the number of bytes read.
+            ; Your application can now process the data.
+            ;if it worked return
+            rts
+            ;JMP .demo_write     ; Continue to demo 2
+
+.read_failed:
+            ; Handle error - read the drive status to find out what happened
+            JSR IEC_READ_STATUS
+            ; The error string is now at BUFFER_START
+            ; In a real system, you'd display this to the user.
+            JMP .halt           ; Stop on error
+.halt: ;local label
+            JSR IEC_BUS_IDLE    ; release the bus before stopping - see above
+.halt_loop:
+            jmp .halt_loop ; loop on error and stop
+
+
 ; ;===============================================================================
 ; ;===============================================================================
 ; ;
