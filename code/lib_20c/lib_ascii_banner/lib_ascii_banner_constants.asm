@@ -30,9 +30,9 @@ asciiStringRight:
 asciiLetterA:    
   .byte $0E,$11,$11,$1F,$11,$11,$11,$00 ; A                  off $0108
 
-  .include "lib_ascii_banner_alphabet_c64.asm"
-  .include "lib_ascii_banner_alphabet_neo.asm"
-  .include "lib_ascii_banner_alphabet_dings.asm"
+  .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_alphabet_c64.asm"
+  .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_alphabet_neo.asm"
+  .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_alphabet_dings.asm"
   
 ; asciiBannerAlphabet:
 ;   ; ---------------------------------------------------------------
