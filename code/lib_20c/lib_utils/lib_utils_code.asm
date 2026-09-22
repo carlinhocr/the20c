@@ -56,8 +56,7 @@ memoryTransfer_TransferPartPage:
   ldy #$FF
 memoryTransfer_TransferPartPageLoop:
   iny ; Y starts in zero
-  tya
-  cmp utilMemoryTransfer_LowByte ;I copied all the bytes
+  cpy utilMemoryTransfer_LowByte ;I copied all the bytes
   beq memoryTransfer_End
   ;here i copy the bytes
   lda (utilPivot_01_ZP_low),Y 
@@ -86,20 +85,14 @@ memoryTransfer_FullPageTransferred:
   ;update the memory addresses of the sources and destinations
   ;For the SOURCE
   clc
-  lda #$ff
-  adc utilPivot_01_ZP_low
-  sta utilPivot_01_ZP_low
   lda utilPivot_01_ZP_high
-  adc #$00 ;do it for the carry
+  adc #$01 ;add one more page
   sta utilPivot_01_ZP_high
   ;For the DESTINATION
   clc
-  lda #$ff
-  adc utilPivot_01_ZP_low
-  sta utilPivot_01_ZP_low
-  lda utilPivot_01_ZP_high
-  adc #$00 ;do it for the carry
-  sta utilPivot_01_ZP_high
+  lda utilPivot_02_ZP_high
+  adc #$01 ;add one more page
+  sta utilPivot_02_ZP_high
   rts
 
 
