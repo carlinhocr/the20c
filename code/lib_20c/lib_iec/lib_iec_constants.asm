@@ -164,15 +164,16 @@ messageRunningAsciiDemo:
 
 la20cAscii:
   .ascii "                                    LA 20c               " ; 58 bytes (57+null char)
-  .ascii ""  
-  .ascii "                                 OSOLABS.TECH            "
-  .ascii ""  
-  .ascii "                    ┌─┴─┴─┴─┴─┴─┬─┴─┴─┴─┴─┴─┬─┴─┴─┴─┴─┴─┐"
-  .ascii "                    │  4F53 4F  │    RAM    │    RAM    ├"
-  .ascii "                    │  ■■■■ ■■  │           │           ├"
-  .ascii "                    │  Address  │    ▐░▌    │    ▐▒▌    ├"
-  .ascii "                    │   Data    │           │           ├"
-  .ascii "                    │  Display  │    ROM    │    ROM    ├"
+  .ascii "" ;1 byte  
+  .ascii "                                 OSOLABS.TECH            " ;58
+  .ascii "" ;1 byte  
+  .ascii "                    ┌─┴─┴─┴─┴─┴─┬─┴─┴─┴─┴─┴─┬─┴─┴─┴─┴─┴─┐" ;58
+  .ascii "                    │  4F53 4F  │    RAM    │    RAM    ├" ;58
+  .ascii "                    │  ■■■■ ■■  │           │           ├" ;58
+  .ascii "                    │  Address  │    ▐░▌    │    ▐▒▌    ├" ;58
+  .ascii "                    │   Data    │           │           ├" ;58
+  .ascii "                    │  Display  │    ROM    │    ROM    ├" ;58
+  .ascii "e";2bytes (468 bytes)
   .ascii "                    ├───────────├───────────├───────────┤───────┐"
   .ascii "                    │    BUS    ▌    BUS    ▌    BUS    │ D P A │"
   .ascii "                    │           ▌           ▌           │ U R N │"
