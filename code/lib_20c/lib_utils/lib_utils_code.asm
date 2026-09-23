@@ -56,6 +56,7 @@ memoryTransferFullPagesOnly_end:
 memoryTransfer_UpdatePivotHighByte:
   ;update the memory addresses of the sources and destinations
   ;For the SOURCE
+  clc
   lda utilPivot_01_ZP_high
   adc #$01 ;add one more page
   sta utilPivot_01_ZP_high
