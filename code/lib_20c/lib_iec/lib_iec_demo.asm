@@ -30,7 +30,7 @@
   sta serialDataVectorHigh
   jsr send_rs232_line
 
-  jsr iecInit
+  ;jsr iecInit
 
   jsr debugIEC_printROM
 ;   lda #<messageRunningMainDemo
