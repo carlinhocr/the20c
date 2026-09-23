@@ -31,20 +31,63 @@
 ;lda #$10
 ;sta utilPivot_02_ZP_high
 ;now the code
+
+memoryTransferFullPagesOnly:
+  txa
+  pha
+  tya
+  pha
+  ldx utilMemoryTransfer_HighByte
+memoryTransferFullPagesOnly_Loop:
+  jsr memoryTransfer_256bytes
+  cpx #$00
+  beq memoryTransferFullPagesOnly_end
+  dex 
+  clc
+  lda utilPivot_01_ZP_high
+  adc #$01 ;add one more page
+  sta utilPivot_01_ZP_high
+  ;For the DESTINATION
+  clc
+  lda utilPivot_02_ZP_high
+  adc #$01 ;add one more page
+  sta utilPivot_02_ZP_high  
+  jmp memoryTransferFullPagesOnly_Loop
+
+memoryTransferFullPagesOnly_end:  
+  pla
+  tay
+  pla
+  tax
+  rts
+  ;update the memory addresses of the sources and destinations
+  ;For the SOURCE
+
+memoryTransfer_256bytes: 
+  ldy #$ff
+memoryTransfer_256bytes_Loop:
+  cpy #$00 ;here i did the full rotation
+  beq memoryTransfer_256bytes_Transferred
+  iny ;the first one iz #$00  
+  lda (utilPivot_01_ZP_low),Y 
+  sta (utilPivot_02_ZP_low),Y 
+  jmp memoryTransfer_256bytes_Loop
+memoryTransfer_256bytes_Transferred:
+  rts  
+
 memoryTransfer:
   txa
   pha
   tya
   pha
-  lda utilMemoryTransfer_HighByte
-  tax
+  ldx utilMemoryTransfer_HighByte
 memoryTransfer_LoopProcessPages:
   cpx #$FF ;we consumed all the pages lets end
   beq memoryTransfer_End
   cpx #$00 ;we are at page zero lets tranfer utilMemoryTransfer_LowByte amount of bytes
   beq memoryTransfer_TransferPartPage
   ;if we are here transfer a full page cpx is 1 or more, lets transfer a full page
-  jsr memoryTransfer_TransferFullPage
+  jsr memoryTransfer_256bytes
   ;go back to process the next page
   dex ;we processed the page
   jmp memoryTransfer_LoopProcessPages
@@ -72,28 +115,7 @@ memoryTransfer_End:
 
 
 
-memoryTransfer_TransferFullPage: 
-  ldy #$ff
-memoryTransfer_TransferFullPage_Loop:
-  cpy #$00 ;here i did the full rotation
-  beq memoryTransfer_FullPageTransferred
-  iny ;the first one iz #$00  
-  lda (utilPivot_01_ZP_low),Y 
-  sta (utilPivot_02_ZP_low),Y 
-  jmp memoryTransfer_TransferFullPage_Loop
-memoryTransfer_FullPageTransferred:
-  ;update the memory addresses of the sources and destinations
-  ;For the SOURCE
-  clc
-  lda utilPivot_01_ZP_high
-  adc #$01 ;add one more page
-  sta utilPivot_01_ZP_high
-  ;For the DESTINATION
-  clc
-  lda utilPivot_02_ZP_high
-  adc #$01 ;add one more page
-  sta utilPivot_02_ZP_high
-  rts
+
 
 
 ;END--------------------------------------------------------------------------------
