@@ -12,9 +12,9 @@ debugIEC_transferToBuffer:
 ;transfer any amount of bytes from one memory area to another
   ;load how many bytes to transfer
   ;example for 256 bytes
-  lda #$ff
+  lda #58
   sta utilMemoryTransfer_LowByte
-  lda #$2
+  lda #0
   sta utilMemoryTransfer_HighByte
   ;now load the memory FROM, for example to copy from ROM $9000
   ;or modify it for string example
@@ -29,13 +29,13 @@ debugIEC_transferToBuffer:
   sta utilPivot_02_ZP_high
   ;now run the transfer function
   ;jsr memoryTransferFullPagesOnly  
-  jsr memoryTransfer_256bytes
+  jsr memoryTransfer_Nbytes
   lda #<BUFFER_START
   sta serialDataVectorLow
   lda #>BUFFER_START
   sta serialDataVectorHigh
   ;jsr delay_3_sec
-  jsr printAsciiDrawing
+  jsr send_rs232_line
   rts
 
 

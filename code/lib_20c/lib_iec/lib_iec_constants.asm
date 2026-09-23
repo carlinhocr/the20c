@@ -163,7 +163,7 @@ messageRunningAsciiDemo:
 
 
 la20cAscii:
-  .ascii "                                    LA 20c               "
+  .ascii "                                    LA 20c               " ; 58 bytes (57+null char)
   .ascii ""  
   .ascii "                                 OSOLABS.TECH            "
   .ascii ""  
