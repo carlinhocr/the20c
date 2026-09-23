@@ -88,7 +88,7 @@ writeAsciiFromROM:
   lda #>BUFFER_START
   sta utilPivot_02_ZP_high
   ;now run the transfer function
-  jsr memoryTransfer  
+  jsr memoryTransferFullPagesOnly  
 
   ;we have the data already at BUFFER_START
   ;Lets save One byte the file size at FILE_SIZE_LO and FILE_SIZE_HI 
@@ -119,7 +119,6 @@ writeFileFromROM_Failed:
   jsr IEC_BUS_IDLE
 writeFileFromROM_Halt:
   jmp writeFileFromROM_Halt
-  rts
 
 
   .include "lib_iec_code.asm"
