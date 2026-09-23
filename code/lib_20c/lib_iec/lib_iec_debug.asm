@@ -14,7 +14,7 @@ debugIEC_transferToBuffer:
   ;example for 256 bytes
   lda #58
   sta utilMemoryTransfer_LowByte
-  lda #0
+  lda #1
   sta utilMemoryTransfer_HighByte
   ;now load the memory FROM, for example to copy from ROM $9000
   ;or modify it for string example
@@ -29,7 +29,7 @@ debugIEC_transferToBuffer:
   sta utilPivot_02_ZP_high
   ;now run the transfer function
   ;jsr memoryTransferFullPagesOnly  
-  jsr memoryTransfer_256bytes 
+  jsr memoryTransfer 
   lda #<BUFFER_START
   sta serialDataVectorLow
   lda #>BUFFER_START
