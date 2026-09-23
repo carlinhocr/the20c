@@ -35,29 +35,29 @@
   jsr iecInit
 
   ;jsr delay_3_sec
-  jsr debugIEC_printROM
-  jsr debugIEC_transferToBuffer
-;   lda #<messageRunningMainDemo
-;   sta serialDataVectorLow
-;   lda #>messageRunningMainDemo
-;   sta serialDataVectorHigh
-;   jsr send_rs232_line  
+  ;jsr debugIEC_printROM
+  ;jsr debugIEC_transferToBuffer
+  lda #<messageRunningMainDemo
+  sta serialDataVectorLow
+  lda #>messageRunningMainDemo
+  sta serialDataVectorHigh
+  jsr send_rs232_line  
 
-;   jsr mainIECDemo
+  jsr mainIECDemo
 
-;   lda #<messageRunningAsciiDemo
-;   sta serialDataVectorLow
-;   lda #>messageRunningAsciiDemo
-;   sta serialDataVectorHigh
-;   jsr send_rs232_line   
+  lda #<messageRunningAsciiDemo
+  sta serialDataVectorLow
+  lda #>messageRunningAsciiDemo
+  sta serialDataVectorHigh
+  jsr send_rs232_line   
  
-;   jsr writeAsciiFromROM
+  jsr writeAsciiFromROM
    
-;   lda #<messageEndMainDemo
-;   sta serialDataVectorLow
-;   lda #>messageEndMainDemo
-;   sta serialDataVectorHigh
-;   jsr send_rs232_line  
+  lda #<messageEndMainDemo
+  sta serialDataVectorLow
+  lda #>messageEndMainDemo
+  sta serialDataVectorHigh
+  jsr send_rs232_line  
 
 loop:
   jmp loop  
@@ -76,9 +76,9 @@ writeAsciiFromROM:
   ;transfer any amount of bytes from one memory area to another
   ;load how many bytes to transfer
   ;example for 256 bytes
-  lda #$ff
+  lda #212
   sta utilMemoryTransfer_LowByte
-  lda #$0
+  lda #10
   sta utilMemoryTransfer_HighByte
   ;now load the memory FROM, for example to copy from ROM $9000
   ;or modify it for string example
@@ -93,13 +93,12 @@ writeAsciiFromROM:
   sta utilPivot_02_ZP_high
   ;now run the transfer function
   ;jsr memoryTransferFullPagesOnly  
-  jsr memoryTransfer_256bytes
-  jsr delay_3_sec
+  jsr memoryTransfer
   ;we have the data already at BUFFER_START
   ;Lets save One byte the file size at FILE_SIZE_LO and FILE_SIZE_HI 
-  LDA #$FF
+  LDA #212
   STA FILE_SIZE_LO
-  lda #$0
+  lda #10
   STA FILE_SIZE_HI
   ; Point to the output filename
   lda #<FNAME_WRITE_ROM_ASCII
