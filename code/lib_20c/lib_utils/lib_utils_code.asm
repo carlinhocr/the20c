@@ -101,6 +101,7 @@ memoryTransfer_LoopProcessPages:
   beq memoryTransfer_TransferPartPage
   dex
   jsr memoryTransfer_256bytes
+  jsr memoryTransfer_UpdatePivotHighByte
   jmp memoryTransfer_LoopProcessPages
 memoryTransfer_TransferPartPage:
   jsr memoryTransfer_Nbytes
