@@ -29,12 +29,12 @@ debugIEC_transferToBuffer:
   sta utilPivot_02_ZP_high
   ;now run the transfer function
   ;jsr memoryTransferFullPagesOnly  
-  jsr memoryTransferFullPagesOnly
+  jsr memoryTransfer_256bytes
   lda #<BUFFER_START
   sta serialDataVectorLow
   lda #>BUFFER_START
   sta serialDataVectorHigh
-  jsr delay_3_sec
+  ;jsr delay_3_sec
   jsr printAsciiDrawing
   rts
 
