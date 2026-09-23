@@ -172,8 +172,7 @@ la20cAscii:
   .ascii "                    │  ■■■■ ■■  │           │           ├" ;58
   .ascii "                    │  Address  │    ▐░▌    │    ▐▒▌    ├" ;58
   .ascii "                    │   Data    │           │           ├" ;58
-  .ascii "                    │  Display  │    ROM    │    ROM    ├" ;58
-  .ascii "e";2bytes (468 bytes)
+  .ascii "                    │  Display  │    ROM    │    ROM    ├" ;58 ;466 bytes
   .ascii "                    ├───────────├───────────├───────────┤───────┐"
   .ascii "                    │    BUS    ▌    BUS    ▌    BUS    │ D P A │"
   .ascii "                    │           ▌           ▌           │ U R N │"

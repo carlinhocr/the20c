@@ -14,7 +14,7 @@ debugIEC_transferToBuffer:
   ;example for 256 bytes
   lda #212
   sta utilMemoryTransfer_LowByte
-  lda #2
+  lda #10
   sta utilMemoryTransfer_HighByte
   ;now load the memory FROM, for example to copy from ROM $9000
   ;or modify it for string example
