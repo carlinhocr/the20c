@@ -94,7 +94,7 @@ writeAsciiFromROM:
   ;Lets save One byte the file size at FILE_SIZE_LO and FILE_SIZE_HI 
   LDA #$FF
   STA FILE_SIZE_LO
-  lda #$1
+  lda #$0
   STA FILE_SIZE_HI
   ; Point to the output filename
   lda #<FNAME_WRITE_ROM_ASCII
