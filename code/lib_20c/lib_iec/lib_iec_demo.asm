@@ -76,9 +76,9 @@ writeAsciiFromROM:
   ;transfer any amount of bytes from one memory area to another
   ;load how many bytes to transfer
   ;example for 256 bytes
-  lda #212
+  lda #254
   sta utilMemoryTransfer_LowByte
-  lda #10
+  lda #8
   sta utilMemoryTransfer_HighByte
   ;now load the memory FROM, for example to copy from ROM $9000
   ;or modify it for string example
@@ -96,9 +96,9 @@ writeAsciiFromROM:
   jsr memoryTransfer
   ;we have the data already at BUFFER_START
   ;Lets save One byte the file size at FILE_SIZE_LO and FILE_SIZE_HI 
-  LDA #212
+  LDA #254
   STA FILE_SIZE_LO
-  lda #10
+  lda #8
   STA FILE_SIZE_HI
   ; Point to the output filename
   lda #<FNAME_WRITE_ROM_ASCII
