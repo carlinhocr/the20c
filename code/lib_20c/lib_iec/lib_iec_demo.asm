@@ -32,28 +32,28 @@
 
   jsr iecInit
 
+  jsr debugIEC_printROM
+;   lda #<messageRunningMainDemo
+;   sta serialDataVectorLow
+;   lda #>messageRunningMainDemo
+;   sta serialDataVectorHigh
+;   jsr send_rs232_line  
 
-  lda #<messageRunningMainDemo
-  sta serialDataVectorLow
-  lda #>messageRunningMainDemo
-  sta serialDataVectorHigh
-  jsr send_rs232_line  
+;   jsr mainIECDemo
 
-  jsr mainIECDemo
-
-  lda #<messageRunningAsciiDemo
-  sta serialDataVectorLow
-  lda #>messageRunningAsciiDemo
-  sta serialDataVectorHigh
-  jsr send_rs232_line   
+;   lda #<messageRunningAsciiDemo
+;   sta serialDataVectorLow
+;   lda #>messageRunningAsciiDemo
+;   sta serialDataVectorHigh
+;   jsr send_rs232_line   
  
-  jsr writeAsciiFromROM
+;   jsr writeAsciiFromROM
    
-  lda #<messageEndMainDemo
-  sta serialDataVectorLow
-  lda #>messageEndMainDemo
-  sta serialDataVectorHigh
-  jsr send_rs232_line  
+;   lda #<messageEndMainDemo
+;   sta serialDataVectorLow
+;   lda #>messageEndMainDemo
+;   sta serialDataVectorHigh
+;   jsr send_rs232_line  
 
 loop:
   jmp loop  
@@ -123,6 +123,7 @@ writeFileFromROM_Halt:
 
 
   .include "lib_iec_code.asm"
+  .include "lib_iec_debug.asm"
   ;.include "lib_ascii_banner_debug.asm"
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  
   .include "../lib_utils/lib_utils_code.asm" ;define code for ACIA t  
