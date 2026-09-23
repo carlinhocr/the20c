@@ -37,21 +37,21 @@
   ;jsr delay_3_sec
   ;jsr debugIEC_printROM
   ;jsr debugIEC_transferToBuffer
-  lda #<messageRunningMainDemo
-  sta serialDataVectorLow
-  lda #>messageRunningMainDemo
-  sta serialDataVectorHigh
-  jsr send_rs232_line  
+;   lda #<messageRunningMainDemo
+;   sta serialDataVectorLow
+;   lda #>messageRunningMainDemo
+;   sta serialDataVectorHigh
+;   jsr send_rs232_line  
 
-  jsr mainIECDemo
+;   jsr mainIECDemo
 
-  lda #<messageRunningAsciiDemo
-  sta serialDataVectorLow
-  lda #>messageRunningAsciiDemo
-  sta serialDataVectorHigh
-  jsr send_rs232_line   
+;   lda #<messageRunningAsciiDemo
+;   sta serialDataVectorLow
+;   lda #>messageRunningAsciiDemo
+;   sta serialDataVectorHigh
+;   jsr send_rs232_line   
  
-  jsr writeAsciiFromROM
+;   jsr writeAsciiFromROM
    
   lda #<messageReadingAsciiDemo
   sta serialDataVectorLow
