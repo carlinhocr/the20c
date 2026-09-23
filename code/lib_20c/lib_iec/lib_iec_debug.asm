@@ -35,7 +35,8 @@ debugIEC_transferToBuffer:
   lda #>BUFFER_START
   sta serialDataVectorHigh
   ;jsr delay_3_sec
-  jsr send_rs232_line
+  jsr printAsciiDrawing
+  ;jsr send_rs232_line
   rts
 
 

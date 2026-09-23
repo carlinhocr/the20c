@@ -167,6 +167,7 @@ la20cAscii:
   .ascii ""  
   .ascii "                                 OSOLABS.TECH            "
   .ascii ""  
+  .ascii "e"   
   .ascii "                    ┌─┴─┴─┴─┴─┴─┬─┴─┴─┴─┴─┴─┬─┴─┴─┴─┴─┴─┐"
   .ascii "                    │  4F53 4F  │    RAM    │    RAM    ├"
   .ascii "                    │  ■■■■ ■■  │           │           ├"
