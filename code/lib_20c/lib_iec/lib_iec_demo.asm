@@ -36,6 +36,7 @@
 
   ;jsr delay_3_sec
   jsr debugIEC_printROM
+  jsr debugIEC_transferToBuffer
 ;   lda #<messageRunningMainDemo
 ;   sta serialDataVectorLow
 ;   lda #>messageRunningMainDemo
