@@ -124,6 +124,10 @@ FNAME_WRITE_RAM:
 FNAME_WRITE_ROM_ASCII:
             .byte "@0:WRITEROM,P,W", $00  ; Write WRITEFILE as PRG (overwrite if exists)            
 
+FNAME_ASCII20C:
+  .byte "0:ASCII20C,P,R", $00  ; Open TESTFILE as PRG for reading
+
+
 ;-------------------------------------------------------------------------------
 ; DOS COMMAND STRINGS (sent to the command channel, #15)
 ;-------------------------------------------------------------------------------
@@ -160,7 +164,8 @@ messageEndMainDemo:
 messageRunningAsciiDemo:
   .asciiz "Empezando ASCII Demo"  
 
-
+messageReadingAsciiDemo:
+  .asciiz "Reading ASCII File"  
 
 la20cAscii:
   .ascii "                                    LA 20c               " ; 58 bytes (57+null char)

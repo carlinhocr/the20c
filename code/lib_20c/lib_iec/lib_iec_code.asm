@@ -2004,6 +2004,10 @@ mainIECDemo:
 ;   2. Call IEC_READ_FILE
 ;   3. Check IEC_STATUS for errors
 ;   4. The data is now at BUFFER_START, size in FILE_SIZE LO/HI
+  lda #<FNAME_READ
+  sta fileName_LB
+  lda #>FNAME_READ
+  sta fileName_HB
   jsr readFileToRAM
 
 ;Write the contents to file WRITEFILE on Disk
@@ -2100,9 +2104,11 @@ readFileToRAM:
             ;
 
             ; Set up filename pointer
-            LDA #<FNAME_READ    ; Low byte of filename string address
+            ;LDA #<FNAME_READ    ; Low byte of filename string address
+            lda fileName_LB
             STA ZP_PTR_LO
-            LDA #>FNAME_READ    ; High byte of filename string address
+            ;LDA #>FNAME_READ    ; High byte of filename string address
+            lda fileName_HB
             STA ZP_PTR_HI
 
             ; Read the file!

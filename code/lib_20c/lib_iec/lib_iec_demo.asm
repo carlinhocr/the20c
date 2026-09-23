@@ -53,6 +53,15 @@
  
   jsr writeAsciiFromROM
    
+  lda #<messageReadingAsciiDemo
+  sta serialDataVectorLow
+  lda #>messageReadingAsciiDemo
+  sta serialDataVectorHigh
+  jsr send_rs232_line   
+
+  jsr read20cAsciiFile 
+  jsr printFromFileBuffer
+
   lda #<messageEndMainDemo
   sta serialDataVectorLow
   lda #>messageEndMainDemo
@@ -61,6 +70,24 @@
 
 loop:
   jmp loop  
+
+read20cAsciiFile:
+  lda #<FNAME_ASCII20C
+  sta fileName_LB
+  lda #>FNAME_ASCII20C
+  sta fileName_HB
+  jsr readFileToRAM
+  rts
+
+printFromFileBuffer:
+  lda #<BUFFER_START
+  sta serialDataVectorLow
+  lda #>BUFFER_START
+  sta serialDataVectorHigh
+  jsr printAsciiDrawing    
+  rts
+
+
 
 writeAsciiFromROM:
 

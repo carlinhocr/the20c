@@ -86,3 +86,5 @@ BUFFER_START = $3000            ; Start of file data buffer
 BUFFER_END   = $6FFF            ; End of available RAM
 BUFFER_SIZE  = BUFFER_END - BUFFER_START + 1  ; = 15,872 bytes max
 
+fileName_LB = $0280
+fileName_HB = $0281
