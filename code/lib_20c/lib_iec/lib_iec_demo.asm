@@ -32,9 +32,9 @@
 
   ;jsr debugIEC_printROM
 
-  ;jsr iecInit
+  jsr iecInit
 
-  jsr delay_3_sec
+  ;jsr delay_3_sec
   jsr debugIEC_printROM
 ;   lda #<messageRunningMainDemo
 ;   sta serialDataVectorLow
