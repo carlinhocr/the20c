@@ -215,7 +215,7 @@ mainProgram:
   rts
 
 delayClear:
-  jsr delay_3_sec  
+  jsr delay_5_sec  
   jsr printClearRS232Screen
   rts
 
