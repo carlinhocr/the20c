@@ -4,10 +4,10 @@
 
 
 ;ACIA/UART ports
-ACIA_DATA = $7100
-ACIA_STATUS = $7101
-ACIA_CMD = $7102
-ACIA_CTRL = $7103
+ACIA_DATA = $7000
+ACIA_STATUS = $7001
+ACIA_CMD = $7002
+ACIA_CTRL = $7003
 
 ;zero page memory positions for Vectors and Data
 
