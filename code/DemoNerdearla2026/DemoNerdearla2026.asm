@@ -173,7 +173,7 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 mainProgram:
-  jsr printClearRS232Screen
+
   jsr printMessage01
   jsr delay_3_sec
   jsr printMessage02
@@ -211,11 +211,13 @@ mainProgram:
   jsr printMessage09
   jsr delayClear  
   jsr print20cAscii
+  jsr delayClear  
   jmp mainProgram
   rts
 
 delayClear:
   jsr delay_5_sec  
+  jsr delay_5_sec
   jsr printClearRS232Screen
   rts
 
