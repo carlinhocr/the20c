@@ -131,41 +131,41 @@ memoryTransfer_End:
 ;-----------------------------------------------------------------------------------
 
 
-bin_2_ascii_print_message
-  ldx #$0
-bin_2_ascii_printMessageLoop:
-  lda message,x  
-  beq bin_2_ascii_printMessageLoopEnd ;on null character stop printing
-  jsr send_rs232_char
-  inx
-  jmp bin_2_ascii_printMessageLoop
-bin_2_ascii_printMessageLoopEnd:  
-  jsr send_rs232_CRLF
-  rts
+; bin_2_ascii_print_message
+;   ldx #$0
+; bin_2_ascii_printMessageLoop:
+;   lda message,x  
+;   beq bin_2_ascii_printMessageLoopEnd ;on null character stop printing
+;   jsr send_rs232_char
+;   inx
+;   jmp bin_2_ascii_printMessageLoop
+; bin_2_ascii_printMessageLoopEnd:  
+;   jsr send_rs232_CRLF
+;   rts
 
-bin_2_ascii_segmentBarSizeLow:
-  lda #$0
-  sta message ;string with nul character
-  sei
-  lda segmentBarSizeLow
-  sta value
-  lda segmentBarSizeHigh
-  sta value + 1
-  jsr bin_2_ascii
-  jsr bin_2_ascii_print_message  
-  rts   
+; bin_2_ascii_segmentBarSizeLow:
+;   lda #$0
+;   sta message ;string with nul character
+;   sei
+;   lda segmentBarSizeLow
+;   sta value
+;   lda segmentBarSizeHigh
+;   sta value + 1
+;   jsr bin_2_ascii
+;   jsr bin_2_ascii_print_message  
+;   rts   
 
-bin_2_ascii_multiply:
-  lda #$0
-  sta message ;string with nul character
-  sei
-  lda multiResultLow
-  sta value
-  lda #$0
-  sta value + 1
-  jsr bin_2_ascii
-  jsr bin_2_ascii_print_message  
-  rts
+; bin_2_ascii_multiply:
+;   lda #$0
+;   sta message ;string with nul character
+;   sei
+;   lda multiResultLow
+;   sta value
+;   lda #$0
+;   sta value + 1
+;   jsr bin_2_ascii
+;   jsr bin_2_ascii_print_message  
+;   rts
 
 bin_2_ascii:
 divide:
@@ -240,14 +240,14 @@ char_loop:
   sta message,y ; store the null terminator again
   rts
 
-multiplyTest:
-  lda #2
-  sta multiFactor1
-  lda #125
-  sta multiFactor2
-  jsr multiplyTwoNumbers8bitnumbers
-  jsr bin_2_ascii_multiply
-  rts 
+; multiplyTest:
+;   lda #2
+;   sta multiFactor1
+;   lda #125
+;   sta multiFactor2
+;   jsr multiplyTwoNumbers8bitnumbers
+;   jsr bin_2_ascii_multiply
+;   rts 
 
 multiplyTwoNumbers8bitnumbers:
   lda #$0
