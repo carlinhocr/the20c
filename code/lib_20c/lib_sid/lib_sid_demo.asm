@@ -9,7 +9,7 @@
 
 programStart:
   ;jsr sidTest
-  jsr parseNotes
+  jsr parseSong
   jsr sidNotesExamplePlay
   jmp programStart
 
