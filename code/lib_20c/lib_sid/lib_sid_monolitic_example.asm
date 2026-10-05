@@ -176,8 +176,8 @@ programStart:
   ;jsr screenInit
   ;jsr sidPlayerMessage  
   ;jsr squareTest
-  ;jsr sidTest
-  jsr sidNotesExamplePlay
+  jsr sidTest
+  ;jsr sidNotesExamplePlay
 loop:
   jmp loop
 
