@@ -359,14 +359,16 @@ parserNotes:
   ldx #$FF
 parserNotesLoop:
   inx
-  lda songExampleNotes,x ;here I load note
+  ;lda songExampleNotes,x ;here I load note
+  lda songExampleNotesSwitchChildOfMine,x  
   cmp #$7a;"z"
   beq parserNotesEnd
   sec
   sbc #$61
   sta musicNote ;0=a,1=b,etc ...8=b#7 9=b#7
   inx  ;the X is for the octave or #
-  lda songExampleNotes,x ;here i load octave or #
+  ;lda songExampleNotes,x ;here i load octave or #
+  lda songExampleNotesSwitchChildOfMine,x  
   cmp #$23;"#"
   bne parseOctave ;jumping with the octave on the accumulator and x index
   lda #$7
@@ -391,7 +393,7 @@ parseOctave:
   pha 
   lda noteIndex
   tax 
-  lda songExampleDuration,x
+  ;lda songExampleDuration,x
   lda #125
   sta noteDuration
   inc noteIndex
