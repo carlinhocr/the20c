@@ -377,7 +377,8 @@ parserNotesLoop:
   ;finding its place in frequenciesSid_1Mhz_alphabetic
   inx ; get X index to the octave after #
 parseOctave:
-  lda songExampleNotes,x
+  ;lda songExampleNotes,x
+  lda songExampleNotesSwitchChildOfMine,x
   sec ;lets substract 30 to obtain the number instead of ascii code
   sbc #$30
   sta musicOctave
@@ -391,6 +392,7 @@ parseOctave:
   lda noteIndex
   tax 
   lda songExampleDuration,x
+  lda #125
   sta noteDuration
   inc noteIndex
   pla
@@ -400,7 +402,8 @@ parseOctave:
   jsr playOneNote
   ;keep reading
   inx
-  lda songExampleNotes,x
+  ;lda songExampleNotes,x
+  lda songExampleNotesSwitchChildOfMine,x
   cmp #$2C ;" ,  "
   beq parserNotesLoop
   
