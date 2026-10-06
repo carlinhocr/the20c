@@ -397,7 +397,7 @@ parseOctave:
   ;tay 
   ;lda songExampleDuration,x
   lda (musicalDurationLow),y 
-  lda #125
+  ;lda #125
   sta noteDuration
   inc noteIndex
   pla
