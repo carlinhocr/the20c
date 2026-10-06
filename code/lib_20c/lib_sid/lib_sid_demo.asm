@@ -18,7 +18,7 @@ programStart:
   lda #>songParaElisaDurations
   sta musicalDurationHigh  
   jsr parseSong
-  ;jsr sidNotesExamplePlay
+  jsr sidNotesExamplePlay
   jmp programStart
 
   .include "lib_sid_code.asm"
