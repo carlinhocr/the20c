@@ -368,7 +368,7 @@ parserNotesLoop:
   sec
   sbc #$61
   sta musicNote ;0=a,1=b,etc ...8=b#7 9=b#7
-  inx  ;the X is for the octave or #
+  iny  ;the X is for the octave or #
   ;lda songExampleNotes,x ;here i load octave or #
   lda (musicalNotesLow),y 
   cmp #$23;"#"
@@ -379,7 +379,7 @@ parserNotesLoop:
   ;if musicNote was a then its value was 0
   ;if I find de # the value is 0+7
   ;finding its place in frequenciesSid_1Mhz_alphabetic
-  inx ; get X index to the octave after #
+  iny ; get X index to the octave after #
 parseOctave:
   ;lda songExampleNotes,x
   lda (musicalNotesLow),y 
@@ -400,7 +400,7 @@ parseOctave:
   sta noteDuration
   inc noteIndex
   pla
-  tax ;return old x index
+  tay ;return old x index
   ;ready to play at the SID
   ; lets play the note at the SID
   jsr playOneNote
