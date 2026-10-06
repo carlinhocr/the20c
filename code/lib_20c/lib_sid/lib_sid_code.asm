@@ -393,10 +393,11 @@ parseOctave:
   ; function to load duration
   tya ;store x index
   pha 
-  lda noteIndex
-  tay 
+  ldy noteIndex
+  ;tay 
   ;lda songExampleDuration,x
   lda (musicalDurationLow),y 
+  lda #125
   sta noteDuration
   inc noteIndex
   pla
