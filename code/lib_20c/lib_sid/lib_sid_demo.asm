@@ -9,6 +9,14 @@
 
 programStart:
   ;jsr sidTest
+  lda #<songExampleNotes01
+  sta musicalNotesLow
+  lda #>songExampleNotes01
+  sta musicalNotesHigh  
+  lda #<songExampleDuration01
+  sta musicalDurationLow
+  lda #>songExampleDuration01
+  sta musicalDurationHigh  
   jsr parseSong
   jsr sidNotesExamplePlay
   jmp programStart

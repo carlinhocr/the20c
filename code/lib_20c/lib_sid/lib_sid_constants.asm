@@ -31,7 +31,13 @@ songExampleDuration:
 songExampleNotesSwitchChildOfMine:
   .asciiz "c5,c6,g5,f5,f6,g5,e6,g5,c5,c6,g5,f5,f6,g5,e6,g5,d5,c6,g5,f5,f6,g5,e6,g5,d5,c6,g5,f5,f6,g5,e6,g5,f5,c6,g5,f5,f6,g5,e6,g5,f5,c6,g5,f5,f6,g5,e6,g5,c5,c6,g5,f5,f6,g5,e6,g5,c6,g5,f5,f6,g5,e6,g5,z"  
 
+songExampleNotes01; notas
+  .asciiz "d5,a5,d6,f6,e6,d6,a5,c6,d6,e6,a5,g5,f5,e5,d5,a5,z"
 
+songExampleDuration01;
+  .byte 62,62,62,62,125,62,62,125,62,62,125,62,62,62,62,250
+
+  
 sidNotesExample:
 ;all in decimal high byte, low byte, duration
 ;example from the programmers reference guide

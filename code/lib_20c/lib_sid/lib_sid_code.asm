@@ -356,11 +356,13 @@ parserNotes:
   pha ;save accumulator
   txa
   pha
-  ldx #$FF
+  tya
+  pha
+  ldy #$FF
 parserNotesLoop:
-  inx
+  iny
   ;lda songExampleNotes,x ;here I load note
-  lda songExampleNotesSwitchChildOfMine,x  
+  lda (musicalNotesLow),y 
   cmp #$7a;"z"
   beq parserNotesEnd
   sec
@@ -368,7 +370,7 @@ parserNotesLoop:
   sta musicNote ;0=a,1=b,etc ...8=b#7 9=b#7
   inx  ;the X is for the octave or #
   ;lda songExampleNotes,x ;here i load octave or #
-  lda songExampleNotesSwitchChildOfMine,x  
+  lda (musicalNotesLow),y 
   cmp #$23;"#"
   bne parseOctave ;jumping with the octave on the accumulator and x index
   lda #$7
@@ -380,7 +382,7 @@ parserNotesLoop:
   inx ; get X index to the octave after #
 parseOctave:
   ;lda songExampleNotes,x
-  lda songExampleNotesSwitchChildOfMine,x
+  lda (musicalNotesLow),y 
   sec ;lets substract 30 to obtain the number instead of ascii code
   sbc #$30
   sta musicOctave
@@ -389,12 +391,12 @@ parseOctave:
   ;now we have the right frequency note and octave on the variables noteFreqHigh and noteFreqLow
   ;load duration of the note
   ; function to load duration
-  txa ;store x index
+  tya ;store x index
   pha 
   lda noteIndex
-  tax 
+  tay 
   ;lda songExampleDuration,x
-  lda #125
+  lda (musicalDurationLow),y 
   sta noteDuration
   inc noteIndex
   pla
@@ -403,13 +405,15 @@ parseOctave:
   ; lets play the note at the SID
   jsr playOneNote
   ;keep reading
-  inx
+  iny
   ;lda songExampleNotes,x
-  lda songExampleNotesSwitchChildOfMine,x
+  lda (musicalNotesLow),y 
   cmp #$2C ;" ,  "
   beq parserNotesLoop
   
 parserNotesEnd:
+  pla
+  tay 
   pla
   tax
   pla ;retreive accumulator
