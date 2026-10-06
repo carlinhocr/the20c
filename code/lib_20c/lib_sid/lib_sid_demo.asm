@@ -9,13 +9,13 @@
 
 programStart:
   ;jsr sidTest
-  lda #<songExampleNotes01
+  lda #<songParaElisaNotes
   sta musicalNotesLow
-  lda #>songExampleNotes01
+  lda #>songParaElisaNotes
   sta musicalNotesHigh  
-  lda #<songExampleDuration01
+  lda #<songParaElisaDurations
   sta musicalDurationLow
-  lda #>songExampleDuration01
+  lda #>songParaElisaDurations
   sta musicalDurationHigh  
   jsr parseSong
   ;jsr sidNotesExamplePlay

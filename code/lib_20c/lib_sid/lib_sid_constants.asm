@@ -26,6 +26,13 @@ songPRGp1Duration:
 songExampleDuration:
   .byte 125,125,125,125,125,64,125,125,125,125,125,125,32,32,125,64,125
   ;.byte 250,250,250,250,250,125,250,250,250,250,250,250,63,63,250,125,250
+songParaElisaNotes: 
+; notas
+  .asciiz "e5,d#5,e5,d#5,e5,b4,d5,c5,a4,c4,e4,a4,b4,e4,g#4,b4,c5,e4,e5,d#5,e5,d#5,e5,b4,d5,c5,a4,c4,e4,a4,b4,e4,c5,b4,a4,z"
+
+songParaElisaDurations:
+; duraciones
+  .asciiz 16,16,16,16,16,16,16,16,47,16,16,16,47,16,16,16,47,16,16,16,16,16,16,16,16,16,47,16,16,16,47,16,16,16,62
 
 
 songExampleNotesSwitchChildOfMine:
@@ -37,7 +44,7 @@ songExampleNotes01; notas
 songExampleDuration01;
   .byte 62,62,62,62,125,62,62,125,62,62,125,62,62,62,62,250
 
-  
+
 sidNotesExample:
 ;all in decimal high byte, low byte, duration
 ;example from the programmers reference guide
