@@ -39,8 +39,8 @@
 ; ============================================================================
 
 ; ---------------------------------------------------------------- CONFIG ----
-SIDFILE     = $9000                 ; where the .sid image sits
-SIDFILE_END = $9000 + $0d8f ;3471          ; <-- SET THIS: start + actual file size!
+SIDFILE     = $8500                 ; where the .sid image sits
+SIDFILE_END = $8500 + $0d8f ;3471          ; <-- SET THIS: start + actual file size!
 
 SID         = $7300                 ; real 6581 base on the 20c
 SIDPAGE     = $D4                   ; page the tune writes ( >$D400 ); patched
