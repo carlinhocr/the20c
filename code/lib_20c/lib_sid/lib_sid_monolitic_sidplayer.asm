@@ -1,46 +1,23 @@
 ; ============================================================================
 ;  SIDPLAYER.ASM  -  PSID player for the "20c" (6502 + SID 6581 @ $7300)
+;  Monolithic ROM build: player + one .sid song, assembled into $8000-$FFFF.
 ; ----------------------------------------------------------------------------
-;  Plays tunes exported by SID Wizard (.sid / PSID format).
-;  Assumes the WHOLE .sid file (header + C64 data) is already in RAM at $1000.
+;  Syntax: vasm6502_oldstyle
 ;
-;  Syntax: vasm6502_oldstyle - one statement per line, no colon separators,
-;  named local labels, no anonymous +/- labels.
-;  Assemble e.g.:  vasm6502_oldstyle -Fbin -o sidplayer.bin sidplayer.asm
-;
-;  --------------------------------------------------------------------------
-;  WHY THIS VERSION HAS NO VALUE > 16 BITS  (vasm warning 22 fix)
-;  --------------------------------------------------------------------------
-;  "warning 22: target data type overflow (16 bits)" means a value did not fit
-;  a 16-bit field. The old file had ONE >16-bit literal: CPUCLK = 1000000
-;  ($F4240). If vasm evaluates the CPUCLK/50 expression at 16-bit width it
-;  overflows -> the warning, AND a wrong timer latch. We now take the clock in
-;  kHz so no literal or intermediate ever exceeds $FFFF. See TIMEBASE below.
-;  Byte-selects are parenthesised and all variables are defined before first
-;  use, so there are no operator-precedence or forward-reference surprises.
-;
-;  --------------------------------------------------------------------------
-;  THE $7300 PROBLEM  (this machine has ROM at $D400, not RAM)
-;  --------------------------------------------------------------------------
-;  The tune's exported code hardcodes writes to $D400 - it thinks it is on a
-;  C64. Your SID is at $7300, and $D400 is ROM, so those writes just vanish.
-;  FIX: one-time in-place code patch (PATCH_SID_ADDR). After relocation we scan
-;  the tune for absolute / abs,X / abs,Y store & load opcodes whose operand
-;  high byte is $D4 (and low byte is a valid SID register, <= $1C) and rewrite
-;  that high byte to $73. The tune then writes the real SID at $7300 directly.
-;  Heuristic: handles the normal SID Wizard driver (direct absolute addressing),
-;  not a driver that self-modifies / computes its SID base. Bulletproof route:
-;  reassemble the driver with its SID base equate = $7300, or use SIDreloc.
-;
-;  Also note: the PSID header has no file length, so set SIDFILE_END yourself.
-;
-;  Call once : SID_INIT    (parse header, relocate, patch $D4->$73, call init)
-;  Call 50x/s: PLAY_FRAME  (call the tune's play routine)
+;  TWO BUGS FIXED vs the previous build:
+;   1) SIDFILE must equal the address where the song is .incbin'd. The song is
+;      incbin'd at $8500, so SIDFILE = $8500 (was $9000 -> all zeros -> the
+;      magic test failed -> carry set -> you landed in bad_file at $801C).
+;   2) The image at $8000-$FFFF is ROM (it carries the reset/IRQ/NMI vectors),
+;      so player variables CANNOT live in the image - every "sta init_vec"
+;      would be a no-op and "jmp (init_vec)" would jump to $0000. The five
+;      variables now live in RAM (page 2) as equates, not as .word/.byte in
+;      the image.
 ; ============================================================================
 
 ; ---------------------------------------------------------------- CONFIG ----
-SIDFILE     = $8500                 ; where the .sid image sits
-SIDFILE_END = $8500 + $0d8f ;3471          ; <-- SET THIS: start + actual file size!
+SIDFILE     = $8500                 ; MUST match the .incbin .org below
+SIDFILE_END = $8500 + $0d8f         ; start + file size (3471 = $0d8f bytes)
 
 SID         = $7300                 ; real 6581 base on the 20c
 SIDPAGE     = $D4                   ; page the tune writes ( >$D400 ); patched
@@ -51,6 +28,16 @@ zp_src      = $02                   ; 16-bit source / scan pointer
 zp_dst      = $04                   ; 16-bit dest pointer
 zp_len      = $06                   ; 16-bit byte count
 
+; ---- player variables: MUST be in RAM (the $8000-$FFFF image is ROM) --------
+;      Page 2 is a classic safe scratch area. If your tune happens to use
+;      $0200-$0208, move VARS to another free RAM page.
+VARS        = $0200
+init_vec    = VARS+0                ; tune init entry (from PSID header)
+play_vec    = VARS+2                ; tune play entry (from PSID header)
+tune_addr   = VARS+4                ; relocated tune start (for the patcher)
+tune_len    = VARS+6                ; relocated tune length
+song_no     = VARS+8                ; 0-based song index
+
 ; ---- PSID header field addresses (multi-byte fields are BIG-ENDIAN) --------
 H_MAGIC     = SIDFILE+$00           ; "PSID" or "RSID"
 H_DATAOFF   = SIDFILE+$06           ; offset from file start to C64 data
@@ -59,35 +46,20 @@ H_INITADDR  = SIDFILE+$0A
 H_PLAYADDR  = SIDFILE+$0C
 H_STARTSONG = SIDFILE+$10           ; 1-based
 
-
-
   .org $8000
-  .include "../lib_init/lib_init.asm" ;reset vector and stack initialization=================================================================
+  .include "../lib_init/lib_init.asm" ; reset vector + stack init ============
 
 start:
-    jmp main                        ; entry; jump over the variable block below
+    jmp main
 
-; ---- player variables, defined BEFORE first use (no forward references) ----
-;      they live in the loaded image as RAM, writable at run time
-init_vec:
-    .word 0
-play_vec:
-    .word 0
-tune_addr:
-    .word 0
-tune_len:
-    .word 0
-song_no:
-    .byte 0
-
-; ------------------------------------------------------------ EXAMPLE MAIN --
+; ------------------------------------------------------------ MAIN ----------
 main:
     sei
     jsr SID_INIT                    ; carry set on return = bad magic
     bcs bad_file
-    jsr INSTALL_TIMER               ; wire PLAY_FRAME to a 50 Hz source (cli's)
+    jsr INSTALL_TIMER               ; 50 Hz IRQ source -> PLAY_FRAME
 hang:
-    jmp hang
+    jmp hang                        ; music now runs from the IRQ (expected!)
 bad_file:
     jmp bad_file
 
@@ -95,8 +67,6 @@ bad_file:
 ;  SID_INIT  -  parse header, relocate C64 data, patch SID address, run init
 ;  Returns: carry clear = OK, carry set = not a PSID/RSID file
 ; ============================================================================
-
-
 badmagic:
     sec
     rts
@@ -220,15 +190,12 @@ SID_INIT:
     clc
     rts
 
-
 ; ============================================================================
 ;  PATCH_SID_ADDR  -  scan the relocated tune and repoint SID accesses to $7300
 ; ----------------------------------------------------------------------------
 ;  Match pattern per byte position:
 ;     <abs store/load opcode>  <lo <= $1C>  <hi == $D4>
-;  then rewrite the high byte to >SID ($73). The three constraints together
-;  make a false hit on data very unlikely - but not impossible. Byte-granular
-;  scan is position-independent, so embedded data can't desync it.
+;  then rewrite the high byte to >SID ($73).
 ; ============================================================================
 PATCH_SID_ADDR:
     lda tune_addr+0
@@ -300,29 +267,21 @@ is_abs_opcode:
     rts
 
 ; ============================================================================
-;  PLAY_FRAME  -  call once per frame (50 Hz). No mirror: the tune now writes
-;  $7300 directly thanks to the patch above.
+;  PLAY_FRAME  -  call once per frame (50 Hz). The tune now writes $7300.
 ; ============================================================================
 PLAY_FRAME:
     jmp call_play                   ; tail call: play's rts returns to our caller
 
-; ---- indirect-call trampolines (vectors are the variables defined up top) --
+; ---- indirect-call trampolines (vectors are the RAM variables up top) ------
 call_init:
     jmp (init_vec)
 call_play:
     jmp (play_vec)
 
 ; ============================================================================
-;  50 Hz TIMEBASE  -  OPTIONAL 6522 VIA example. Replace with whatever the 20c
-;  actually has; just call PLAY_FRAME ~50x/second.
-; ----------------------------------------------------------------------------
-;  Give the CPU clock in kHz. T1_LATCH = CPUCLK/50 - 2 = (kHz * 1000)/50 - 2
-;  = kHz * 20 - 2, so nothing here ever exceeds 16 bits (no warning 22).
-;  For a non-round clock, or if you prefer, just set T1_LATCH directly.
-;  (If kHz*20-2 itself exceeds $FFFF, 50 Hz does not fit one 16-bit T1 period
-;   at that clock - that overflow would be real, not spurious.)
+;  50 Hz TIMEBASE  -  6522 VIA. Call PLAY_FRAME ~50x/second.
 ; ============================================================================
-VIA         = $7100                 ; <-- SET to the 20c's VIA base (unknown!)
+VIA         = $7100
 VIA_DDRB    = VIA+$02
 VIA_DDRA    = VIA+$03
 VIA_T1CL    = VIA+$04
@@ -334,33 +293,32 @@ CPUCLK_KHZ  = 1000                  ; <-- SET your CPU clock in kHz (1000 = 1 MH
 T1_LATCH    = (CPUCLK_KHZ * 20) - 2 ; free-run period for ~50 Hz
 
 INSTALL_TIMER:
-;add to control the ports
-  lda #%11111111  ;load all ones equivalent to $FF
-  sta VIA_DDRB ;store the accumulator in the data direction register for Port B
+    lda #%11111111                  ; (your port setup)
+    sta VIA_DDRB
+    lda #%11111111
+    sta VIA_DDRA
 
-  lda #%11111111  ;set all output
-  sta VIA_DDRA ;store the accumulator in the data direction register for Port A
-  ;END Initialize LCD Display
-
-    lda #%01000000                  ; T1 free-run, PB7 off
+    lda #%01000000                  ; ACR: T1 free-run, PB7 off
     sta VIA_ACR
     lda #<(T1_LATCH)
     sta VIA_T1CL
     lda #>(T1_LATCH)                 ; load + start + clear flag
     sta VIA_T1CH
-    lda #%11000000                  ; enable T1 interrupt
+    lda #%11000000                  ; IER: enable T1 interrupt
     sta VIA_IER
     cli
     rts
 
-; Point the 6502 IRQ vector ($FFFE/F or your RAM vector) at this:
+; ============================================================================
+;  IRQ / NMI
+; ============================================================================
 IRQ_HANDLER:
     pha
     txa
     pha
     tya
     pha
-    lda VIA_T1CL                    ; ack T1
+    lda VIA_T1CL                    ; ack T1 (clears the interrupt flag)
     jsr PLAY_FRAME
     pla
     tay
@@ -369,14 +327,16 @@ IRQ_HANDLER:
     pla
     rti
 nmi:
-  rti
+    rti
+
+; ---- the song, assembled into the image; SIDFILE above must equal this org -
   .org $8500
-  .incbin "lib_sid_song_example.sid"   
-    
-    ;complete the file
+  .incbin "lib_sid_song_example.sid"
+
+; ---- CPU vectors ----
   .org $fffa
-  .word nmi ;a word is 16 bits or two bytes in this case $fffa and $fffb
-  .org $fffc ;go to memory address $fffc of the reset vector
-  .word RESET ;store in $FFFC & $FFFD the memory address of the RESET: label  00 80 ($8000 in little endian)
+  .word nmi
+  .org $fffc
+  .word RESET                       ; from lib_init.asm
   .org $fffe
-  .word IRQ_HANDLER ;a word is 16 bits or two bytes in this case $fffe and $ffff  
+  .word IRQ_HANDLER
