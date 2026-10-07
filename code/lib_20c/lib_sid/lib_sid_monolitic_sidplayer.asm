@@ -59,9 +59,11 @@ H_INITADDR  = SIDFILE+$0A
 H_PLAYADDR  = SIDFILE+$0C
 H_STARTSONG = SIDFILE+$10           ; 1-based
 
-; ============================================================================
-  .org $8000                       ; load/entry address (clear of $1000 image)
-; ============================================================================
+
+
+  .org $8000
+  .include "../lib_init/lib_init.asm" ;reset vector and stack initialization=================================================================
+
 start:
     jmp main                        ; entry; jump over the variable block below
 
@@ -356,6 +358,15 @@ IRQ_HANDLER:
     tax
     pla
     rti
-
-    .org $8500
-    .incbin "lib_sid_song_example.sid"    
+nmi:
+  rti
+  .org $8500
+  .incbin "lib_sid_song_example.sid"   
+    
+    ;complete the file
+  .org $fffa
+  .word nmi ;a word is 16 bits or two bytes in this case $fffa and $fffb
+  .org $fffc ;go to memory address $fffc of the reset vector
+  .word RESET ;store in $FFFC & $FFFD the memory address of the RESET: label  00 80 ($8000 in little endian)
+  .org $fffe
+  .word IRQ_HANDLER ;a word is 16 bits or two bytes in this case $fffe and $ffff  
