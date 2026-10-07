@@ -323,6 +323,8 @@ call_play:
 ;   at that clock - that overflow would be real, not spurious.)
 ; ============================================================================
 VIA         = $7100                 ; <-- SET to the 20c's VIA base (unknown!)
+VIA_DDRB    = VIA+$02
+VIA_DDRA    = VIA+$03
 VIA_T1CL    = VIA+$04
 VIA_T1CH    = VIA+$05
 VIA_ACR     = VIA+$0B
@@ -332,6 +334,14 @@ CPUCLK_KHZ  = 1000                  ; <-- SET your CPU clock in kHz (1000 = 1 MH
 T1_LATCH    = (CPUCLK_KHZ * 20) - 2 ; free-run period for ~50 Hz
 
 INSTALL_TIMER:
+;add to control the ports
+  lda #%11111111  ;load all ones equivalent to $FF
+  sta VIA_DDRB ;store the accumulator in the data direction register for Port B
+
+  lda #%11111111  ;set all output
+  sta VIA_DDRA ;store the accumulator in the data direction register for Port A
+  ;END Initialize LCD Display
+
     lda #%01000000                  ; T1 free-run, PB7 off
     sta VIA_ACR
     lda #<(T1_LATCH)
