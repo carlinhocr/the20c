@@ -29,9 +29,12 @@ zp_dst      = $04                   ; 16-bit dest pointer
 zp_len      = $06                   ; 16-bit byte count
 
 ; ---- player variables: MUST be in RAM (the $8000-$FFFF image is ROM) --------
-;      Page 2 is a classic safe scratch area. If your tune happens to use
-;      $0200-$0208, move VARS to another free RAM page.
-VARS        = $0200
+;      Put them in ZERO PAGE: it is provably RAM (the scratch above uses
+;      $02-$07) and this tune only touches ZP $70-$77, so nothing collides.
+;      $0200 was used before but failed in hardware (either not decoded as RAM,
+;      or the vars were left in the ROM image) -> jmp (init_vec) read garbage
+;      and the CPU ran off to $FFFF. Zero page removes that dependency.
+VARS        = $0008                 ; $08..$10, between scratch ($02-07) & tune ($70-77)
 init_vec    = VARS+0                ; tune init entry (from PSID header)
 play_vec    = VARS+2                ; tune play entry (from PSID header)
 tune_addr   = VARS+4                ; relocated tune start (for the patcher)
