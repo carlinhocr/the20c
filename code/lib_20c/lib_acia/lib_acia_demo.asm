@@ -20,9 +20,11 @@ main:
   jsr send_red
   jsr delay_1_sec    
   jsr send_rs232_line
-  jsr delay_1_sec  
-  jsr send_blue
-  jsr delay_1_sec    
+  lda #<demoConstantString
+  sta serialDataVectorLow
+  lda #>demoConstantString
+  sta serialDataVectorHigh
+  jsr send_blue   
   jsr send_rs232_line
   jsr delay_1_sec
   jmp main
