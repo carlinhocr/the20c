@@ -45,6 +45,8 @@ demoAllColors_loop:
   ora #$30 ;to pass the value to ASCII
   sta colorStyleOffset
   jsr send_ansi_generic
+  jsr send_rs232_line  
+  jmp demoAllColors_loop
 demoAllColors_end:  
   rts
 
