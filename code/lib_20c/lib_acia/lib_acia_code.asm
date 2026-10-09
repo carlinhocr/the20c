@@ -84,7 +84,7 @@ send_rs232_line_noCRLF:
   pha ;preserve the Y index
   ldy #$0
 send_rs232_line_noCRLF_loop:
-  lda (serialDataVectorLow),y 
+  lda (serialDataVectorLow2),y 
   ;test for the NULL char that ends all ASCII strings
   beq send_rs232_line_noCRLF_end
   jsr send_rs232_char
@@ -230,23 +230,23 @@ restoreSerialDataVector:
   rts
 
 send_red:
-  jsr preserveSerialDataVector
+  ;jsr preserveSerialDataVector
   lda #<ansi_red
-  sta serialDataVectorLow
+  sta serialDataVectorLow2
   lda #>ansi_red
-  sta serialDataVectorHigh  
+  sta serialDataVectorHigh2 
   jsr send_rs232_line_noCRLF
-  jsr restoreSerialDataVector
+  ;jsr restoreSerialDataVector
   rts
 
 send_blue:
-  jsr preserveSerialDataVector
+  ;jsr preserveSerialDataVector
   lda #<ansi_blue
-  sta serialDataVectorLow
+  sta serialDataVectorLow2
   lda #>ansi_blue
-  sta serialDataVectorHigh  
+  sta serialDataVectorHigh2  
   jsr send_rs232_line_noCRLF
-  jsr restoreSerialDataVector
+  ;jsr restoreSerialDataVector
   rts
 
 send_ansi_red:

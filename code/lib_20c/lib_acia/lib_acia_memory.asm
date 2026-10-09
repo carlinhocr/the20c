@@ -1,4 +1,6 @@
 ;Zero Page
+serialDataVectorLow2 = $3b
+serialDataVectorHigh2 = $3c
 serialDataVectorLow = $3d
 serialDataVectorHigh = $3e
 serialCharperLines = $3f
