@@ -18,16 +18,34 @@ mainAciaDemo:
   lda #>demoConstantString
   sta serialDataVectorHigh
   jsr send_ansi_reset
-  jsr send_rs232_line_simple   
+  jsr send_rs232_line
   jsr send_ansi_red
-  jsr send_rs232_line_simple
+  jsr send_rs232_line
   jsr send_ansi_blue   
-  jsr send_rs232_line_simple
+  jsr send_rs232_line
   jsr delay_1_sec
+  jsr demoAllColors
   jmp mainAciaDemo
  
 
 demoAllColors:
+  lda #<demoConstantString
+  sta serialDataVectorLow
+  lda #>demoConstantString
+  sta serialDataVectorHigh
+  jsr send_ansi_reset
+  lda #"3"
+  sta colorStyleType  
+  ldx #$ff
+demoAllColors_loop:  
+  inx
+  cpx #8
+  beq demoAllColors_end
+  txa 
+  ora #$30 ;to pass the value to ASCII
+  sta colorStyleOffset
+  jsr send_ansi_generic
+demoAllColors_end:  
   rts
 
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  

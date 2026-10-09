@@ -57,9 +57,9 @@ send_rs232_line:
   pha ;preserve the Y index
   ldy #$0
 send_rs232_line_loop:
-  tya 
-  clc
-  adc serialDataVectorLow
+  ; tya 
+  ; clc
+  ; adc serialDataVectorLow
   ;bcc send_rs232_line_loop_same_page
   ;inc serialDataVectorHigh
 ;send_rs232_line_loop_same_page:  
@@ -262,26 +262,6 @@ restoreSerialDataVector:
   sta serialDataVectorLow
   lda preserveSerialDataVectorHigh
   sta serialDataVectorHigh
-  rts
-
-send_red:
-  jsr preserveSerialDataVector
-  lda #<ansi_red
-  sta serialDataVectorLow
-  lda #>ansi_red
-  sta serialDataVectorHigh
-  jsr send_rs232_line_noCRLF
-  jsr restoreSerialDataVector
-  rts
-
-send_blue:
-  jsr preserveSerialDataVector
-  lda #<ansi_blue
-  sta serialDataVectorLow
-  lda #>ansi_blue
-  sta serialDataVectorHigh  
-  jsr send_rs232_line_noCRLF
-  jsr restoreSerialDataVector
   rts
 
 send_ansi_red:
