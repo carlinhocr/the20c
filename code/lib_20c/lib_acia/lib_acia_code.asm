@@ -257,13 +257,13 @@ send_ansi_generic:
   sta serialDataVectorHigh  
   lda #27
   sta ansi_string
-  lda "["
+  lda #"["
   sta ansi_string + 1
   lda colorStyleType
   sta ansi_string + 2
   lda colorStyleOffset
   sta ansi_string + 3
-  lda "m"  
+  lda #"m"  
   sta ansi_string + 4
   lda #0
   sta ansi_string + 5
