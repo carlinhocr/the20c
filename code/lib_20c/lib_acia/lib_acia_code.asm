@@ -349,19 +349,13 @@ send_ansi_color:
   rts
 
 send_ansi_reset:
-  lda serialDataVectorLow
-  sta preserveSerialDataVectorLow
-  lda serialDataVectorHigh
-  sta preserveSerialDataVectorHigh
-  lda #<ansi_red
+  jsr preserveSerialDataVector
+  lda #<ansi_reset
   sta serialDataVectorLow
-  lda #>ansi_red
+  lda #>ansi_reset
   sta serialDataVectorHigh
-  jsr send_rs232_line_noCRLF
-  lda preserveSerialDataVectorLow
-  sta serialDataVectorLow
-  lda preserveSerialDataVectorHigh
-  sta serialDataVectorHigh
+  jsr send_rs232_line_simple_NO_CRLF
+  jsr restoreSerialDataVector
   rts
 
 
