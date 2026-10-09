@@ -215,20 +215,53 @@ tx_delay_printer_loop:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-send_ansi_red:
+preserveSerialDataVector:
   lda serialDataVectorLow
   sta preserveSerialDataVectorLow
   lda serialDataVectorHigh
   sta preserveSerialDataVectorHigh
-  lda #<ansi_red
-  sta serialDataVectorLow
-  lda #>ansi_red
-  sta serialDataVectorHigh
-  jsr send_rs232_line_noCRLF
+  rts  
+
+restoreSerialDataVector:  
   lda preserveSerialDataVectorLow
   sta serialDataVectorLow
   lda preserveSerialDataVectorHigh
   sta serialDataVectorHigh
+  rts
+
+send_ansi_red:
+  ;.byte 27,"[34m",0
+  ;34 = 4*7 = 28 bytes from zero
+  lda "1"
+  sta colorStyleOffset
+  jsr send_ansi_color
+  rts
+
+send_ansi_blue:
+  ;.byte 27,"[34m",0
+  ;34 = 4*7 = 28 bytes from zero
+  lda "4"
+  sta colorStyleOffset
+  jsr send_ansi_color
+  rts
+
+send_ansi_color:  
+  jsr preserveSerialDataVector
+  ;prepare the numbers for Black on serialDataVector
+  lda #<ansi_color_base
+  sta serialDataVectorLow
+  lda #>ansi_color_base
+  sta serialDataVectorHigh
+  ;add the number for the correct color
+  clc
+  lda serialDataVectorLow
+  adc colorStyleOffset 
+  sta serialDataVectorLow
+  lda serialDataVectorHigh
+  adc #0 ;just to store the carry if it happened
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  jsr restoreSerialDataVector
   rts
 
 send_ansi_reset:

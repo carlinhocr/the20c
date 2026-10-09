@@ -11,6 +11,7 @@
   lda #$0 ;if zero got to screen and not printer
   sta rs232Printer ;so we will go to screen and not printer
 
+main:  
   lda #<demoConstantString
   sta serialDataVectorLow
   lda #>demoConstantString
@@ -18,9 +19,12 @@
   jsr send_rs232_line
   jsr send_ansi_red
   jsr send_rs232_line
-
-loop:
-  jmp loop  
+  jsr send_ansi_blue
+  jsr send_rs232_line
+  jsr send_ansi_reset
+  jsr delay_3_sec
+  jmp main
+ 
 
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  
   .include "../lib_utils/lib_utils_code.asm" ;define code for ACIA t  
