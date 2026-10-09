@@ -118,6 +118,38 @@ send_rs232_line_noCRLF_end_color:
   tay ;restore the Y index  
   rts    
 
+send_rs232_line_simple:
+  tya ;preserve the Y index
+  pha ;preserve the Y index
+  ldy #$0
+send_rs232_line_simple_loop: 
+  lda (serialDataVectorLow),y 
+  ;test for the NULL char that ends all ASCII strings
+  beq send_rs232_line_simple_end
+  jsr send_rs232_char
+  iny
+  jmp send_rs232_line_simple_loop 
+send_rs232_line_simple_end:
+  jsr send_rs232_CRLF
+  pla ;restore the Y index
+  tay ;restore the Y index
+  rts    
+
+send_rs232_line_simple_NO_CRLF:
+  tya ;preserve the Y index
+  pha ;preserve the Y index
+  ldy #$0
+send_rs232_line_simple_NO_CRLF_loop: 
+  lda (serialDataVectorLow),y 
+  ;test for the NULL char that ends all ASCII strings
+  beq send_rs232_line_simple_NO_CRLF_end
+  jsr send_rs232_char
+  iny
+  jmp send_rs232_line_simple_NO_CRLF_loop 
+send_rs232_line_simple_NO_CRLF_end:
+  pla ;restore the Y index
+  tay ;restore the Y index
+  rts 
 
 send_rs232_CRLF:
   lda #$0d
