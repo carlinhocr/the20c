@@ -84,7 +84,7 @@ send_rs232_line_noCRLF:
   pha ;preserve the Y index
   ldy #$0
 send_rs232_line_noCRLF_loop:
-  lda (serialDataVectorLow2),y 
+  lda (serialDataVectorLow),y 
   ;test for the NULL char that ends all ASCII strings
   beq send_rs232_line_noCRLF_end
   jsr send_rs232_char
@@ -101,6 +101,23 @@ send_rs232_line_noCRLF_end:
   pla ;restore the Y index
   tay ;restore the Y index  
   rts    
+
+send_rs232_line_noCRLF_color:
+  tya ;preserve the Y index
+  pha ;preserve the Y index
+  ldy #$0
+send_rs232_line_noCRLF_loop_color:
+  lda (serialDataVectorLow2),y 
+  ;test for the NULL char that ends all ASCII strings
+  beq send_rs232_line_noCRLF_end_color
+  jsr send_rs232_char
+  iny
+  jmp send_rs232_line_noCRLF_loop_color 
+send_rs232_line_noCRLF_end_color:
+  pla ;restore the Y index
+  tay ;restore the Y index  
+  rts    
+
 
 send_rs232_CRLF:
   lda #$0d
