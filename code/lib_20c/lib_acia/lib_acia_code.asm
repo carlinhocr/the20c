@@ -251,9 +251,11 @@ send_ansi_blue:
 
 send_ansi_generic:
   jsr preserveSerialDataVector
-  lda #<ansi_string
+  ;lda #<ansi_string
+  lda #$80
   sta serialDataVectorLow
-  lda #>ansi_string
+  ;lda #>ansi_string
+  lda #$02
   sta serialDataVectorHigh  
   lda #27
   sta ansi_string
