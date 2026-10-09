@@ -18,12 +18,12 @@ main:
   lda #>demoConstantString
   sta serialDataVectorHigh
   jsr send_rs232_line
-  jsr send_ansi_red
+  jsr send_red
   jsr send_rs232_line
-  jsr send_ansi_blue
+  jsr send_blue
   jsr send_rs232_line
   ;jsr send_ansi_reset
-  jsr delay_3_sec
+  jsr delay_1_sec
   jmp main
  
 

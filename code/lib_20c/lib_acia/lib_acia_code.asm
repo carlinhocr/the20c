@@ -229,6 +229,26 @@ restoreSerialDataVector:
   sta serialDataVectorHigh
   rts
 
+send_red:
+  jsr preserveSerialDataVector
+  lda #<ansi_red
+  sta serialDataVectorLow
+  lda #>ansi_red
+  sta serialDataVectorHigh  
+  jsr send_rs232_line_noCRLF
+  jsr restoreSerialDataVector
+  rts
+
+send_blue:
+  jsr preserveSerialDataVector
+  lda #<ansi_blue
+  sta serialDataVectorLow
+  lda #>ansi_blue
+  sta serialDataVectorHigh  
+  jsr send_rs232_line_noCRLF
+  jsr restoreSerialDataVector
+  rts
+
 send_ansi_red:
   ;.byte 27,"[34m",0
   ;31 = 4*7 = 28 bytes from zero
