@@ -12,6 +12,7 @@
   sta rs232Printer ;so we will go to screen and not printer
 
 main:  
+  ;jsr send_ansi_reset
   lda #<demoConstantString
   sta serialDataVectorLow
   lda #>demoConstantString
@@ -21,7 +22,7 @@ main:
   jsr send_rs232_line
   jsr send_ansi_blue
   jsr send_rs232_line
-  jsr send_ansi_reset
+  ;jsr send_ansi_reset
   jsr delay_3_sec
   jmp main
  
