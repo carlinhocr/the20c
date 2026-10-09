@@ -17,18 +17,18 @@ mainAciaDemo:
   sta serialDataVectorLow
   lda #>demoConstantString
   sta serialDataVectorHigh
-  jsr send_red
-  ;jsr send_rs232_line
+  jsr send_ansi_reset
+  jsr send_rs232_line_simple   
+  jsr send_ansi_red
   jsr send_rs232_line_simple
-;   lda #<demoConstantString
-;   sta serialDataVectorLow
-;   lda #>demoConstantString
-;   sta serialDataVectorHigh
-  jsr send_blue   
+  jsr send_ansi_blue   
   jsr send_rs232_line_simple
   jsr delay_1_sec
   jmp mainAciaDemo
  
+
+demoAllColors:
+  rts
 
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  
   .include "../lib_utils/lib_utils_code.asm" ;define code for ACIA t  
