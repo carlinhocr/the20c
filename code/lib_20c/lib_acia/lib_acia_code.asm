@@ -231,6 +231,23 @@ send_ansi_red:
   sta serialDataVectorHigh
   rts
 
+send_ansi_reset:
+  lda serialDataVectorLow
+  sta preserveSerialDataVectorLow
+  lda serialDataVectorHigh
+  sta preserveSerialDataVectorHigh
+  lda #<ansi_red
+  sta serialDataVectorLow
+  lda #>ansi_red
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  lda preserveSerialDataVectorLow
+  sta serialDataVectorLow
+  lda preserveSerialDataVectorHigh
+  sta serialDataVectorHigh
+  rts
+
+
 ; foreground_Red:
 ;   ;Red Color ESC[31
 ;   lda #27 ;ESC 
