@@ -32,6 +32,8 @@ rs232Printer=                     $0278
 preserveSerialDataVectorLow=      $0279
 preserveSerialDataVectorHigh=     $027a 
 colorStyleOffset=                 $027b
+colorStyleType=                   $027c
+ansi_string=                      $0280 ;to $0290  
 
 ;ACIA/UART ports PRINTER
 ACIA_BASE_PRINTER    = $7900 

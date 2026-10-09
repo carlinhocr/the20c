@@ -231,19 +231,46 @@ restoreSerialDataVector:
 
 send_ansi_red:
   ;.byte 27,"[34m",0
-  ;34 = 4*7 = 28 bytes from zero
+  ;31 = 4*7 = 28 bytes from zero
+  lda "3"
+  sta colorStyleType  
   lda "1"
   sta colorStyleOffset
-  jsr send_ansi_color
+  jsr send_ansi_generic
   rts
 
 send_ansi_blue:
   ;.byte 27,"[34m",0
   ;34 = 4*7 = 28 bytes from zero
+  lda "3"
+  sta colorStyleType
   lda "4"
   sta colorStyleOffset
-  jsr send_ansi_color
+  jsr send_ansi_generic
   rts
+
+send_ansi_generic:
+  jsr preserveSerialDataVector
+  lda #<ansi_string
+  sta serialDataVectorLow
+  lda #>ansi_string
+  sta serialDataVectorHigh  
+  lda #27
+  sta ansi_string
+  lda "["
+  sta ansi_string + 1
+  lda colorStyleType
+  sta ansi_string + 2
+  lda colorStyleOffset
+  sta ansi_string + 3
+  lda "m"  
+  sta ansi_string + 4
+  lda #0
+  sta ansi_string + 5
+  jsr send_rs232_line_noCRLF
+  jsr restoreSerialDataVector
+  rts
+
 
 send_ansi_color:  
   jsr preserveSerialDataVector
