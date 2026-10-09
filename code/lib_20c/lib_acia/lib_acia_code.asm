@@ -10,6 +10,8 @@ uartSerialInit:
   lda #$00
   sta ACIA_STATUS
   sta ACIA_PRINTER_STATUS
+  lda ACIA_STATUS     ; leer limpia flags pendientes
+  lda ACIA_DATA       ; vacía el receptor (limpia overrun)
 
   ;configure the control register
   ;bit 7 = 0 -> 1 Stop Bit
@@ -102,22 +104,6 @@ send_rs232_line_noCRLF_end:
   tay ;restore the Y index  
   rts    
 
-send_rs232_line_noCRLF_color:
-  tya ;preserve the Y index
-  pha ;preserve the Y index
-  ldy #$0
-send_rs232_line_noCRLF_loop_color:
-  lda (serialDataVectorLow2),y 
-  ;test for the NULL char that ends all ASCII strings
-  beq send_rs232_line_noCRLF_end_color
-  jsr send_rs232_char
-  iny
-  jmp send_rs232_line_noCRLF_loop_color 
-send_rs232_line_noCRLF_end_color:
-  pla ;restore the Y index
-  tay ;restore the Y index  
-  rts    
-
 send_rs232_line_simple:
   tya ;preserve the Y index
   pha ;preserve the Y index
@@ -140,7 +126,7 @@ send_rs232_line_simple_NO_CRLF:
   pha ;preserve the Y index
   ldy #$0
 send_rs232_line_simple_NO_CRLF_loop: 
-  lda (serialDataVectorLow),y 
+  lda (serialDataVectorLow2),y 
   ;test for the NULL char that ends all ASCII strings
   beq send_rs232_line_simple_NO_CRLF_end
   jsr send_rs232_char
@@ -284,7 +270,7 @@ send_red:
   sta serialDataVectorLow2
   lda #>ansi_red
   sta serialDataVectorHigh2 
-  jsr send_rs232_line_noCRLF_color
+  jsr send_rs232_line_simple_NO_CRLF
   ;jsr restoreSerialDataVector
   rts
 
@@ -294,7 +280,7 @@ send_blue:
   sta serialDataVectorLow2
   lda #>ansi_blue
   sta serialDataVectorHigh2  
-  jsr send_rs232_line_noCRLF_color
+  jsr send_rs232_line_simple_NO_CRLF
   ;jsr restoreSerialDataVector
   rts
 
