@@ -26,7 +26,7 @@ mainAciaDemo:
 ;   sta serialDataVectorHigh
 ;   jsr send_blue   
 ;   jsr send_rs232_line_simple
-  ;jsr delay_1_sec
+  jsr delay_1_sec
   jmp mainAciaDemo
  
 
