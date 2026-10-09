@@ -16,12 +16,7 @@
   lda #>demoConstantString
   sta serialDataVectorHigh
   jsr send_rs232_line
-
-  jsr foreground_Red
-  lda #<demoConstantString
-  sta serialDataVectorLow
-  lda #>demoConstantString
-  sta serialDataVectorHigh
+  jsr send_ansi_red
   jsr send_rs232_line
 
 loop:

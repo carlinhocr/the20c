@@ -25,3 +25,6 @@ clearRS232Screen:
   .ascii ""
   .ascii ""
   .ascii "e" 
+
+ansi_red:   
+  .byte 27,"[31m",0

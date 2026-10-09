@@ -215,13 +215,50 @@ tx_delay_printer_loop:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
+send_ansi_red:
+  lda serialDataVectorLow
+  sta preserveSerialDataVectorLow
+  lda serialDataVectorHigh
+  sta preserveSerialDataVectorHigh
+  lda #<ansi_red
+  sta serialDataVectorLow
+  lda #>ansi_red
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  lda preserveSerialDataVectorLow
+  sta serialDataVectorLow
+  lda preserveSerialDataVectorHigh
+  sta serialDataVectorHigh
+  rts
+
+; foreground_Red:
+;   ;Red Color ESC[31
+;   lda #27 ;ESC 
+;   jsr send_rs232_char
+;   lda #91 ;[ 
+;   jsr send_rs232_char  
+;   ; Foregorund Text Red
+;   lda #'3'     ; 51
+;   jsr send_rs232_char
+;   lda #'1'     ; 49
+;   jsr send_rs232_char
+;   jsr send_rs232_char  
+;   lda #109 ; m
+;   jsr send_rs232_char  
+;   rts
+
+colorStyleReset:
 foreground_Red:
   ;Red Color ESC[31
   lda #27 ;ESC 
   jsr send_rs232_char
   lda #91 ;[ 
   jsr send_rs232_char  
-  lda #31 ; Foregorund Text Red
+  ; Foregorund Text Red
+  lda #'4'     ; 51
+  jsr send_rs232_char
+  lda #'8'     ; 49
+  jsr send_rs232_char
   jsr send_rs232_char  
   lda #109 ; m
   jsr send_rs232_char  

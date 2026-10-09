@@ -29,7 +29,8 @@ barSegmentNumbers=                $0268
 emptyBars=                        $0269
 currentNumberOfBars=              $026a
 rs232Printer=                     $0278
-
+preserveSerialDataVectorLow=      $0279
+preserveSerialDataVectorHigh=     $027a 
 
 ;ACIA/UART ports PRINTER
 ACIA_BASE_PRINTER    = $7900 
