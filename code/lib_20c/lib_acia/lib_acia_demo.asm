@@ -17,15 +17,15 @@ mainAciaDemo:
   sta serialDataVectorLow
   lda #>demoConstantString
   sta serialDataVectorHigh
-  ;jsr send_red
-  jsr send_rs232_line
-  ;jsr send_rs232_line_simple
+  jsr send_red
+  ;jsr send_rs232_line
+  jsr send_rs232_line_simple
 ;   lda #<demoConstantString
 ;   sta serialDataVectorLow
 ;   lda #>demoConstantString
 ;   sta serialDataVectorHigh
-;   jsr send_blue   
-;   jsr send_rs232_line_simple
+  jsr send_blue   
+  jsr send_rs232_line_simple
   jsr delay_1_sec
   jmp mainAciaDemo
  
