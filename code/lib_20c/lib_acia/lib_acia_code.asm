@@ -265,31 +265,31 @@ restoreSerialDataVector:
   rts
 
 send_red:
-  ;jsr preserveSerialDataVector
+  jsr preserveSerialDataVector
   lda #<ansi_red
-  sta serialDataVectorLow2
+  sta serialDataVectorLow
   lda #>ansi_red
-  sta serialDataVectorHigh2 
-  jsr send_rs232_line_simple_NO_CRLF
-  ;jsr restoreSerialDataVector
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  jsr restoreSerialDataVector
   rts
 
 send_blue:
-  ;jsr preserveSerialDataVector
+  jsr preserveSerialDataVector
   lda #<ansi_blue
-  sta serialDataVectorLow2
+  sta serialDataVectorLow
   lda #>ansi_blue
-  sta serialDataVectorHigh2  
-  jsr send_rs232_line_simple_NO_CRLF
-  ;jsr restoreSerialDataVector
+  sta serialDataVectorHigh  
+  jsr send_rs232_line_noCRLF
+  jsr restoreSerialDataVector
   rts
 
 send_ansi_red:
   ;.byte 27,"[34m",0
   ;31 = 4*7 = 28 bytes from zero
-  lda "3"
+  lda #"3"
   sta colorStyleType  
-  lda "1"
+  lda #"1"
   sta colorStyleOffset
   jsr send_ansi_generic
   rts
@@ -297,9 +297,9 @@ send_ansi_red:
 send_ansi_blue:
   ;.byte 27,"[34m",0
   ;34 = 4*7 = 28 bytes from zero
-  lda "3"
+  lda #"3"
   sta colorStyleType
-  lda "4"
+  lda #"4"
   sta colorStyleOffset
   jsr send_ansi_generic
   rts
@@ -354,7 +354,7 @@ send_ansi_reset:
   sta serialDataVectorLow
   lda #>ansi_reset
   sta serialDataVectorHigh
-  jsr send_rs232_line_simple_NO_CRLF
+  jsr send_rs232_line_simple
   jsr restoreSerialDataVector
   rts
 
