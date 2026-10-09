@@ -252,7 +252,7 @@ send_red:
   sta serialDataVectorLow2
   lda #>ansi_red
   sta serialDataVectorHigh2 
-  jsr send_rs232_line_noCRLF
+  jsr send_rs232_line_noCRLF_color
   ;jsr restoreSerialDataVector
   rts
 
@@ -262,7 +262,7 @@ send_blue:
   sta serialDataVectorLow2
   lda #>ansi_blue
   sta serialDataVectorHigh2  
-  jsr send_rs232_line_noCRLF
+  jsr send_rs232_line_noCRLF_color
   ;jsr restoreSerialDataVector
   rts
 
