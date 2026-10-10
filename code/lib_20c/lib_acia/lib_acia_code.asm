@@ -295,6 +295,22 @@ send_ansi_bold_off:
   jsr send_ansi_string
   rts
 
+send_ansi_italic:
+  lda #<ansi_italic
+  sta ansiStringMemoryConstantLow
+  lda #>ansi_italic
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string
+  rts
+
+send_ansi_italic_off:
+  lda #<ansi_italic_off
+  sta ansiStringMemoryConstantLow
+  lda #<ansi_italic_off
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string
+  rts  
+
 send_ansi_red:
   ;.byte 27,"[34m",0
   ;31 = 4*7 = 28 bytes from zero

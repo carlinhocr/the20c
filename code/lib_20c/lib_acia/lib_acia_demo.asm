@@ -46,6 +46,13 @@ demoAllColorStyles:
   jsr demoAllColors
   jsr send_ansi_bold_off
   jsr delay_1_sec
+  ;italics
+  jsr send_ansi_reset
+  jsr send_ansi_italic
+  jsr demoAllColors
+  jsr send_ansi_italic_off
+  jsr delay_1_sec
+
   rts 
 
 demoAllColors:
