@@ -25,6 +25,7 @@ mainAciaDemo:
   jsr send_rs232_line
   jsr delay_1_sec
   jsr demoAllColors
+  jsr delay_1_sec
   jsr demoAllColorStyles
   jmp mainAciaDemo
  
@@ -48,11 +49,15 @@ demoAllColors:
   lda #0 ; to nullify the variable unless it is used
   sta colorStyleHundred
   jsr demoAllForegroundColors
+  jsr delay_1_sec
   jsr demoAllForegroundBrightColors
+  jsr delay_1_sec
   jsr demoAllBackgroundColors
   lda #"1"
   sta colorStyleHundred
+  jsr delay_1_sec
   jsr demoAllBackgroundBrightColors
+  jsr delay_1_sec
   rts
 
 demoAllForegroundColors:
