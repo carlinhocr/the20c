@@ -37,7 +37,11 @@ colorStyleOffset=                 $027b
 colorStyleType=                   $027c
 colorStyleHundred=                $027d
 lastColorStyleItem=               $027e
+
 ansi_string=                      $0280 ;to $0290  
+ansiStringMemoryConstantLow=$80
+ansiStringMemoryConstantHigh=$02
+
 
 ;ACIA/UART ports PRINTER
 ACIA_BASE_PRINTER    = $7900 

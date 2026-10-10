@@ -105,6 +105,41 @@ ansi_bg_br_cyan:
 ansi_bg_br_white:  
   .byte 27,"[107m",0
 
+
+; ---------- Estilos ----------
+ansi_bold:         
+  .byte 27,"[1m",0
+ansi_dim:          
+  .byte 27,"[2m",0
+ansi_italic:       
+  .byte 27,"[3m",0
+ansi_underline:    
+  .byte 27,"[4m",0
+ansi_blink:        
+  .byte 27,"[5m",0
+ansi_reverse:      
+  .byte 27,"[7m",0
+ansi_hidden:       
+  .byte 27,"[8m",0
+ansi_strike:       
+  .byte 27,"[9m",0
+
+; ---------- Apagar estilos individuales ----------
+ansi_bold_off:     
+  .byte 27,"[22m",0   ; apaga bold y dim
+ansi_italic_off:   
+  .byte 27,"[23m",0
+ansi_underline_off:
+  .byte 27,"[24m",0
+ansi_blink_off:    
+  .byte 27,"[25m",0
+ansi_reverse_off:  
+  .byte 27,"[27m",0
+ansi_hidden_off:   
+  .byte 27,"[28m",0
+ansi_strike_off:   
+  .byte 27,"[29m",0
+
 ansi_reset: 
   .byte 27,"[0m",0  
 

@@ -264,6 +264,37 @@ restoreSerialDataVector:
   sta serialDataVectorHigh
   rts
 
+send_ansi_blink:
+  lda #<ansi_blink
+  sta ansiStringMemoryConstantLow
+  lda #<ansi_blink
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string
+  rts
+
+send_ansi_blink_off:
+  lda #<ansi_blink_off
+  sta ansiStringMemoryConstantLow
+  lda #<ansi_blink_off
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string
+  rts
+send_ansi_bold:
+  lda #<ansi_bold
+  sta ansiStringMemoryConstantLow
+  lda #<ansi_bold
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string
+  rts
+
+send_ansi_bold_off:
+  lda #<ansi_bold_off
+  sta ansiStringMemoryConstantLow
+  lda #<ansi_bold_off
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string
+  rts
+
 send_ansi_red:
   ;.byte 27,"[34m",0
   ;31 = 4*7 = 28 bytes from zero
@@ -334,20 +365,12 @@ send_ansi_generic2forColorStyle:
   jsr restoreSerialDataVector
   rts
 
-send_ansi_color:  
+send_ansi_string:  
   jsr preserveSerialDataVector
   ;prepare the numbers for Black on serialDataVector
-  lda #<ansi_color_base
+  lda ansiStringMemoryConstantLow
   sta serialDataVectorLow
-  lda #>ansi_color_base
-  sta serialDataVectorHigh
-  ;add the number for the correct color
-  clc
-  lda serialDataVectorLow
-  adc colorStyleOffset 
-  sta serialDataVectorLow
-  lda serialDataVectorHigh
-  adc #0 ;just to store the carry if it happened
+  lda ansiStringMemoryConstantHigh
   sta serialDataVectorHigh
   jsr send_rs232_line_noCRLF
   jsr restoreSerialDataVector
