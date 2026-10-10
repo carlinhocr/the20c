@@ -31,14 +31,17 @@ mainAciaDemo:
  
 demoAllColorStyles:
   ;normal
+  jsr send_ansi_reset
   jsr demoAllColors
   jsr delay_1_sec
   ;blink
+  jsr send_ansi_reset
   jsr send_ansi_blink
   jsr demoAllColors
   jsr send_ansi_blink_off
   jsr delay_1_sec
   ;bold
+  jsr send_ansi_reset
   jsr send_ansi_bold
   jsr demoAllColors
   jsr send_ansi_bold_off
@@ -103,7 +106,6 @@ demoAllStyles:
   sta serialDataVectorLow
   lda #>demoConstantString
   sta serialDataVectorHigh
-  jsr send_ansi_reset
   ldx #$ff
 demoAllColors_loop:  
   inx
