@@ -46,8 +46,6 @@ demoAllColorStyles:
   rts 
 
 demoAllColors:
-  lda #0 ; to nullify the variable unless it is used
-  sta colorStyleHundred
   jsr demoAllForegroundColors
   jsr delay_3_sec
 ;   jsr demoAllForegroundBrightColors
@@ -61,6 +59,8 @@ demoAllColors:
   rts
 
 demoAllForegroundColors:
+  lda #"0" ; to nullify the variable unless it is used
+  sta colorStyleHundred
   lda #"3"
   sta colorStyleType 
   lda #7 ;last color
@@ -112,14 +112,14 @@ demoAllColors_loop:
   txa 
   ora #$30 ;to pass the value to ASCII
   sta colorStyleOffset
-  lda colorStyleHundred
-  cmp #"1"
-  beq demoAllColors_hundred
+;   lda colorStyleHundred
+;   cmp #"1"
+;   beq demoAllColors_hundred
   jsr send_ansi_generic
-  jmp demoAllColors_send
-demoAllColors_hundred: 
-  jsr send_ansi_generic2forColorStyle
-demoAllColors_send: 
+;   jmp demoAllColors_send
+; demoAllColors_hundred: 
+;   jsr send_ansi_generic2forColorStyle
+; demoAllColors_send: 
   jsr send_rs232_line  
   jmp demoAllColors_loop
 demoAllColors_end:  
