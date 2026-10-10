@@ -275,14 +275,14 @@ send_ansi_blink:
 send_ansi_blink_off:
   lda #<ansi_blink_off
   sta ansiStringMemoryConstantLow
-  lda #<ansi_blink_off
+  lda #>ansi_blink_off
   sta ansiStringMemoryConstantHigh
   jsr send_ansi_string
   rts
 send_ansi_bold:
   lda #<ansi_bold
   sta ansiStringMemoryConstantLow
-  lda #<ansi_bold
+  lda #>ansi_bold
   sta ansiStringMemoryConstantHigh
   jsr send_ansi_string
   rts
