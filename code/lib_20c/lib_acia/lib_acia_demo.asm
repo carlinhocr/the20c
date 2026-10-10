@@ -50,14 +50,14 @@ demoAllColors:
   sta colorStyleHundred
   jsr demoAllForegroundColors
   jsr delay_3_sec
-  jsr demoAllForegroundBrightColors
-  jsr delay_3_sec
-  jsr demoAllBackgroundColors
-  lda #"1"
-  sta colorStyleHundred
-  jsr delay_3_sec
-  jsr demoAllBackgroundBrightColors
-  jsr delay_3_sec
+;   jsr demoAllForegroundBrightColors
+;   jsr delay_3_sec
+;   jsr demoAllBackgroundColors
+;   lda #"1"
+;   sta colorStyleHundred
+;   jsr delay_3_sec
+;   jsr demoAllBackgroundBrightColors
+;   jsr delay_3_sec
   rts
 
 demoAllForegroundColors:
