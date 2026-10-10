@@ -27,24 +27,77 @@ mainAciaDemo:
   jsr demoAllColors
   jmp mainAciaDemo
  
-
 demoAllColors:
+  lda #0 ; to nullify the variable unless it is used
+  sta colorStyleHundred
+  jsr demoAllForegroundColors
+  jsr demoAllForegroundBrightColors
+  jsr demoAllBackgroundColors
+  lda #"1"
+  sta colorStyleHundred
+  jsr demoAllBackgroundBrightColors
+  rts
+
+demoAllForegroundColors:
+  lda #"3"
+  sta colorStyleType 
+  lda #7 ;last color
+  sta lastColorStyleItem
+  jsr demoAllStyles
+  rts
+
+demoAllForegroundBrightColors:
+  lda #"9"
+  sta colorStyleType 
+  lda #7 ;last color
+  sta lastColorStyleItem
+  jsr demoAllStyles
+  rts
+
+demoAllBackgroundColors:
+  lda #"4"
+  sta colorStyleType 
+  lda #7 ;last color
+  sta lastColorStyleItem
+  jsr demoAllStyles
+  rts
+
+demoAllBackgroundBrightColors:
+  lda #"1"
+  sta colorStyleHundred
+  lda #"0"
+  sta colorStyleType 
+  lda #7 ;last color
+  sta lastColorStyleItem
+  jsr demoAllStyles
+  lda #0 ;to nullify the variable unless it is used
+  sta colorStyleHundred
+  rts
+
+demoAllStyles:
+  ;style code for color is 3
+  ;colors go from 0 to 7
   lda #<demoConstantString
   sta serialDataVectorLow
   lda #>demoConstantString
   sta serialDataVectorHigh
   jsr send_ansi_reset
-  lda #"3"
-  sta colorStyleType  
   ldx #$ff
 demoAllColors_loop:  
   inx
-  cpx #8
+  cpx lastColorStyleItem + 1
   beq demoAllColors_end
   txa 
   ora #$30 ;to pass the value to ASCII
   sta colorStyleOffset
+  lda colorStyleHundred
+  cmp #"1"
+  beq demoAllColors_hundred
   jsr send_ansi_generic
+  jmp demoAllColors_send
+demoAllColors_hundred: 
+  jsr send_ansi_generic2forColorStyle
+demoAllColors_send: 
   jsr send_rs232_line  
   jmp demoAllColors_loop
 demoAllColors_end:  

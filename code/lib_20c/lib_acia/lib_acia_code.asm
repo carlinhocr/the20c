@@ -308,6 +308,31 @@ send_ansi_generic:
   jsr restoreSerialDataVector
   rts
 
+send_ansi_generic2forColorStyle:
+  jsr preserveSerialDataVector
+  ;lda #<ansi_string
+  lda #$80
+  sta serialDataVectorLow
+  ;lda #>ansi_string
+  lda #$02
+  sta serialDataVectorHigh  
+  lda #27
+  sta ansi_string
+  lda #"["
+  sta ansi_string + 1
+  lda colorStyleHundred
+  sta ansi_string + 2
+  lda colorStyleType
+  sta ansi_string + 3
+  lda colorStyleOffset
+  sta ansi_string + 4
+  lda #"m"  
+  sta ansi_string + 5
+  lda #0
+  sta ansi_string + 6
+  jsr send_rs232_line_noCRLF
+  jsr restoreSerialDataVector
+  rts
 
 send_ansi_color:  
   jsr preserveSerialDataVector

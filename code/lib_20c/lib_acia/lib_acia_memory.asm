@@ -35,6 +35,8 @@ preserveSerialDataVectorLow=      $0279
 preserveSerialDataVectorHigh=     $027a 
 colorStyleOffset=                 $027b
 colorStyleType=                   $027c
+colorStyleHundred=                $027d
+lastColorStyleItem=               $027e
 ansi_string=                      $0280 ;to $0290  
 
 ;ACIA/UART ports PRINTER
