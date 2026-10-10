@@ -316,6 +316,8 @@ send_ansi_blue:
   rts
 
 send_ansi_generic:
+  txa
+  pha
   jsr preserveSerialDataVector
   ;lda #<ansi_string
   lda #$80
@@ -337,9 +339,13 @@ send_ansi_generic:
   sta ansi_string + 5
   jsr send_rs232_line_noCRLF
   jsr restoreSerialDataVector
+  pla
+  tax
   rts
 
 send_ansi_generic2forColorStyle:
+  txa
+  pha
   jsr preserveSerialDataVector
   ;lda #<ansi_string
   lda #$80
@@ -363,6 +369,8 @@ send_ansi_generic2forColorStyle:
   sta ansi_string + 6
   jsr send_rs232_line_noCRLF
   jsr restoreSerialDataVector
+  pla
+  tax  
   rts
 
 send_ansi_string:  
