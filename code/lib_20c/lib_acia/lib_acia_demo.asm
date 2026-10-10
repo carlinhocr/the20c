@@ -63,7 +63,7 @@ demoAllForegroundColors:
   sta colorStyleHundred
   lda #"3"
   sta colorStyleType 
-  lda #7 ;last color
+  lda #8 ;last color
   sta lastColorStyleItem
   jsr demoAllStyles
   rts
@@ -71,7 +71,7 @@ demoAllForegroundColors:
 demoAllForegroundBrightColors:
   lda #"9"
   sta colorStyleType 
-  lda #7 ;last color
+  lda #8 ;last color
   sta lastColorStyleItem
   jsr demoAllStyles
   rts
@@ -79,7 +79,7 @@ demoAllForegroundBrightColors:
 demoAllBackgroundColors:
   lda #"4"
   sta colorStyleType 
-  lda #7 ;last color
+  lda #8 ;last color
   sta lastColorStyleItem
   jsr demoAllStyles
   rts
@@ -89,7 +89,7 @@ demoAllBackgroundBrightColors:
   sta colorStyleHundred
   lda #"0"
   sta colorStyleType 
-  lda #7 ;last color
+  lda #8 ;last color
   sta lastColorStyleItem
   jsr demoAllStyles
   lda #0 ;to nullify the variable unless it is used
@@ -107,7 +107,7 @@ demoAllStyles:
   ldx #$ff
 demoAllColors_loop:  
   inx
-  cpx lastColorStyleItem + 1
+  cpx lastColorStyleItem
   beq demoAllColors_end
   txa 
   ora #$30 ;to pass the value to ASCII
