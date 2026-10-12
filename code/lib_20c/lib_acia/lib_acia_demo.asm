@@ -45,16 +45,11 @@ demoScreen:
   sta ansiStringMemoryConstantHigh
   jsr send_ansi_string
   ;position the cursor col 20, row 10
-  lda #<cur_row_10
+  lda #<cur_10_20
   sta ansiStringMemoryConstantLow
-  lda #>cur_row_10
+  lda #>cur_10_20
   sta ansiStringMemoryConstantHigh
   jsr send_ansi_string
-  lda #<cur_col_20
-  sta ansiStringMemoryConstantLow
-  lda #>cur_col_20
-  sta ansiStringMemoryConstantHigh
-  jsr send_ansi_string  
   ;print the regular demo message
   jsr send_rs232_line
 ;   lda #2
