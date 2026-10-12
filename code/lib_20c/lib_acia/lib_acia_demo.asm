@@ -28,7 +28,8 @@ mainAciaDemo:
 ;   jsr delay_1_sec
 ;  jsr demoAllColorStyles
   ;jsr demoScreen
-  jsr demoCharMovHorizontal
+  ;jsr demoCharMovHorizontal
+  jsr demoSpriteMovHorizontal
 ;   jmp mainAciaDemo
 loop:
   jmp loop
@@ -102,6 +103,39 @@ demoCharMovHorizontal_loop:
   jmp demoCharMovHorizontal_loop  
 demoCharMovHorizontal_end:
   rts
+
+
+
+demoSpriteMovHorizontal:
+  jsr send_ansi_reset
+  jsr send_ansi_cur_hide
+  ;set foregound color  
+  jsr send_ansi_br_white 
+  ;clear the screen background blue
+  lda #<screen_blue
+  sta ansiStringMemoryConstantLow
+  lda #>screen_blue
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string  
+  lda #<demoCharShip
+  sta serialDataVectorLow
+  lda #>demoCharShip
+  sta serialDataVectorHigh
+  lda #10
+  sta screenRow
+  ldx #$00 ;because columns start in 1  
+demoSpriteMovHorizontal_loop:
+  inx
+  cpx #40
+  beq demoSpriteMovHorizontal_end
+  txa
+  sta screenCol
+  jsr positionScreenRowCol
+  jsr printAsciiDrawing 
+  jsr delay_1_sec
+  jmp demoSpriteMovHorizontal_loop  
+demoSpriteMovHorizontal_end:
+  rts  
 
 demoAllColorStyles:
   ;normal
@@ -216,9 +250,17 @@ demoAllColors_end:
 
 demoConstantString:
   .asciiz "Hola a todos"
-
 demoCharTrain:
   .asciiz " **" 
+
+demoCharShip:
+  .asciiz " ***" 
+  .asciiz "  *" 
+  .asciiz " *********" 
+  .asciiz " *********" 
+  .asciiz "  *" 
+  .asciiz " ***"   
+  .asciiz "e"
 
 nmi:
 irq:
