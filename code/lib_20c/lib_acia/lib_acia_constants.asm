@@ -166,8 +166,9 @@ cur_prev_line:
 ; ---------- Posición absoluta ----------
 cur_home:
   .byte 27,"[H",0      ; fila 1, columna 1
-cur_10_20:
-  .byte 27,"[10"
+cur_row_10:
+  .byte 27,"[10",0
+cur_col_20:  
   .byte 27,"[20H",0 ; fila 10, columna 20 (ESC[fila;colH)
 
 ansi_open_command:  
