@@ -37,8 +37,10 @@ colorStyleOffset=                 $027b
 colorStyleType=                   $027c
 colorStyleHundred=                $027d
 lastColorStyleItem=               $027e
+screenCol=                        $027f
+screenRow=                        $0280
 
-ansi_string=                      $0280 ;to $0290  
+ansi_string=                      $0290 ;to $0300  
 ansiStringMemoryConstantLow=$80
 ansiStringMemoryConstantHigh=$02
 

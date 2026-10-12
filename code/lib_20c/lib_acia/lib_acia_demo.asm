@@ -52,6 +52,12 @@ demoScreen:
   jsr send_ansi_string
   ;print the regular demo message
   jsr send_rs232_line
+  lda #2
+  sta screenRow
+  lda #4
+  sta screenCol
+  jsr positionScreenRowCol
+  jsr send_rs232_line  
   rts
 
 demoAllColorStyles:

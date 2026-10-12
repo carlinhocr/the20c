@@ -427,6 +427,50 @@ foreground_Red:
   jsr send_rs232_char  
   rts
 
+positionScreenRowCol:
+  ;print the ESC[ of the command for the row
+  lda #<ansi_open_command
+  sta ansiStringMemoryConstantLow
+  lda #>ansi_open_command
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string
+  ;run bin2ascii and print the row in ascii
+  jsr bin_2_ascii_screen_row
+  ;print the ESC[ of the command for the column
+  jsr send_ansi_string
+  ;run bin2ascii and print the column in ascii
+  jsr bin_2_ascii_screen_col
+  lda #<cur_column_close_command
+  sta ansiStringMemoryConstantLow
+  lda #>cur_column_close_command
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string  
+  rts
+  
+bin_2_ascii_screen_row:
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda screenRow
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  jsr bin_2_ascii_print_message_NOCRLF  
+  rts 
+
+bin_2_ascii_screen_col:
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda screenCol
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  jsr bin_2_ascii_print_message_NOCRLF  
+  rts   
+
 ;END--------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;--------------------------------COLOR & STYLE--------------------------------------
