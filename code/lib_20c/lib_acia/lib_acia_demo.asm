@@ -131,7 +131,9 @@ demoSpriteMovHorizontal_loop:
   txa
   sta screenCol
   jsr positionScreenRowCol
+  jsr preserveSerialDataVector  
   jsr printAsciiDrawing 
+  jsr restoreSerialDataVector
   jsr delay_1_sec
   jmp demoSpriteMovHorizontal_loop  
 demoSpriteMovHorizontal_end:
