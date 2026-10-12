@@ -133,7 +133,7 @@ memoryTransfer_End:
 
 bin_2_ascii_print_message
   txa
-  pla
+  pha
   ldx #$0
 bin_2_ascii_printMessageLoop:
   lda message,x  
@@ -143,13 +143,13 @@ bin_2_ascii_printMessageLoop:
   jmp bin_2_ascii_printMessageLoop
 bin_2_ascii_printMessageLoopEnd:  
   jsr send_rs232_CRLF
-  pha
+  pla
   tax 
   rts
 
 bin_2_ascii_print_message_NOCRLF:
   txa
-  pla
+  pha
   ldx #$0
 bin_2_ascii_printMessageLoop_NOCRLF:
   lda message,x  
@@ -160,7 +160,7 @@ bin_2_ascii_printMessageLoop_NOCRLF:
 bin_2_ascii_printMessageLoopEnd_NOCRLF:  
   ;jsr send_rs232_CRLF
   pha
-  tax 
+  pla 
   rts
 
 ; bin_2_ascii_segmentBarSizeLow:
