@@ -129,10 +129,10 @@ demoSpriteMovHorizontal_loop:
   cmp #40
   beq demoSpriteMovHorizontal_end
   jsr preserveSerialDataVector  
-  jsr printAsciiDrawing 
+  jsr printAsciiSprite 
   jsr restoreSerialDataVector
   jsr delay_1_sec
-  ;jmp demoSpriteMovHorizontal_loop  
+  jmp demoSpriteMovHorizontal_loop  
 demoSpriteMovHorizontal_end:
   rts  
 
