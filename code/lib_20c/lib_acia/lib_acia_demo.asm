@@ -134,7 +134,7 @@ demoSpriteMovHorizontal_loop:
   jsr printAsciiSpriteOneOnOne 
   ;jsr restoreSerialDataVector
   jsr DELAY_HALF_SEC
-  jsr delay_1_sec
+  ;jsr delay_1_sec
   jmp demoSpriteMovHorizontal_loop  
 demoSpriteMovHorizontal_end:
   rts  
