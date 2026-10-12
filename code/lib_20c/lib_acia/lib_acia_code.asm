@@ -580,6 +580,7 @@ printAsciiSprite_end:
   tax
   pla
   ;cli let them be on when it is ok for them to be on
+  inc screenRow
   rts
 
 
