@@ -523,6 +523,72 @@ bin_2_ascii_screen_col:
 ;-----------------------------------------------------------------------------------
 
 
+
+printAsciiSprite:
+  sei ;disable interrupts to run
+  ;save accumulator x and y registers
+  pha
+  txa
+  pha
+  tya
+  pha
+  ;here print first line
+  ;initialize in cero serialCharperLines
+  lda #$0
+  sta serialCharperLines
+  jsr positionScreenRowCol  
+  jsr send_rs232_line
+  ldx #$0 ;the first line 0 we aleready printed
+printAsciiSprite_lenghts_loop:
+  inx ;now going to line 1
+  ;here increment on additional lines
+  clc
+  lda serialDataVectorLow ;load marioascii low
+  adc serialCharperLines ; add the number of records of the last send_rs232_line
+  sta serialDataVectorLow ; store the new value
+  bcc printAsciiSprite_lenghts_no_carry ;branch on carry clear or no carry
+  ;if there is a carry it is in the carry flag
+  ; clear the carry and add one to the high order byte
+  clc
+  inc serialDataVectorHigh
+printAsciiSprite_lenghts_no_carry  
+  ldy #0
+  lda (serialDataVectorLow),y 
+  cmp #$65;"e"
+  beq printAsciiSprite_checkNull
+  jmp printAsciiSprite_keepgoing
+printAsciiSprite_checkNull:  
+  ldy #1
+  lda (serialDataVectorLow),y 
+  cmp #$00
+  beq printAsciiSprite_decreaseRow
+printAsciiSprite_keepgoing:  
+  inc screenRow
+  jsr positionScreenRowCol  
+  jsr send_rs232_line
+  jmp printAsciiSprite_lenghts_loop
+printAsciiSprite_decreaseRow:
+  ;decrease the rows increase to print the whole sprite
+printAsciiSprite_decreaseRowLoop:
+  dec screenRow
+  dex
+  cpx #$00
+  beq printAsciiSprite_end 
+  jmp printAsciiSprite_decreaseRowLoop
+printAsciiSprite_end:  
+  ;save accumulator x and y registers
+  pla
+  tay
+  pla
+  tax
+  pla
+  ;cli let them be on when it is ok for them to be on
+  rts
+
+
+
+
+
 ;BEGIN------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 ;----------------------------PRINT RS232 ASCII--------------------------------------

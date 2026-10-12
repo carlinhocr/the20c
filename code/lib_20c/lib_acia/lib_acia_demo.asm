@@ -130,7 +130,6 @@ demoSpriteMovHorizontal_loop:
   beq demoSpriteMovHorizontal_end
   txa
   sta screenCol
-  jsr positionScreenRowCol
   jsr preserveSerialDataVector  
   jsr printAsciiDrawing 
   jsr restoreSerialDataVector
