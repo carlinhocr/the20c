@@ -354,12 +354,12 @@ DELAY_SEC:
   sta delay_COUNT_B
   jmp DELAY_MAIN
 
-; DELAY_HALF_SEC:
-;   lda #$50
-;   sta delay_COUNT_A
-;   lda #$FF
-;   sta delay_COUNT_B
-;   jmp DELAY_MAIN
+DELAY_HALF_SEC:
+  lda #$50
+  sta delay_COUNT_A
+  lda #$FF
+  sta delay_COUNT_B
+  jmp DELAY_MAIN
 
 DELAY_MAIN:
     LDX delay_COUNT_A     ; Load outer loop count
