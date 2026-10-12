@@ -146,10 +146,14 @@ send_rs232_line_simple_NO_CRLF_end:
   rts 
 
 send_rs232_CRLF:
+  txa
+  pla
   lda #$0d
   jsr send_rs232_char
   lda #$0a
   jsr send_rs232_char 
+  pha
+  tax
   rts   
 
 listeningMode: 
