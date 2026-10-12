@@ -163,7 +163,6 @@ demoAllColorStyles:
   jsr demoAllColors
   jsr send_ansi_italic_off
   jsr delay_1_sec
-
   rts 
 
 demo256Colors:

@@ -502,6 +502,8 @@ positionScreenRowCol:
 
 
 bin_2_ascii_bgcolor:
+  txa
+  pla
   lda #$0
   sta message ;string with nul character
   sei
@@ -511,6 +513,8 @@ bin_2_ascii_bgcolor:
   sta value + 1
   jsr bin_2_ascii
   jsr bin_2_ascii_print_message_NOCRLF  
+  pha
+  tax
   rts 
 
 bin_2_ascii_screen_row:
