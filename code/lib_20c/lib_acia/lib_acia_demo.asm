@@ -36,11 +36,22 @@ loop:
 
 demoScreen:
   jsr send_ansi_reset
+  ;set foregound color
+  jsr send_ansi_red
+  ;clear the screen, set backgourn blue, and position home the cursor
   lda #<screen_blue
   sta ansiStringMemoryConstantLow
   lda #>screen_blue
   sta ansiStringMemoryConstantHigh
   jsr send_ansi_string
+  ;position the cursor col 20, row 10
+  lda #<cur_10_20
+  sta ansiStringMemoryConstantLow
+  lda #>cur_10_20
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string
+  ;print the regular demo message
+  jsr send_rs232_line
   rts
 
 demoAllColorStyles:
