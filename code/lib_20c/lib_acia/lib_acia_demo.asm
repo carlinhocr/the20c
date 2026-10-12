@@ -55,7 +55,7 @@ demoScreen:
   lda #20
   sta screenCol
   jsr positionScreenRowCol
-
+  jsr send_rs232_line  
   rts
 
 demoAllColorStyles:
