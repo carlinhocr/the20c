@@ -126,6 +126,7 @@ demoSpriteMovHorizontal:
   ldx #$00 ;because columns start in 1  
 demoSpriteMovHorizontal_loop:
   inc screenCol
+  lda screenCol
   cmp #40
   beq demoSpriteMovHorizontal_end
   jsr preserveSerialDataVector  
