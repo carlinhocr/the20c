@@ -26,9 +26,11 @@ mainAciaDemo:
 ;   jsr delay_1_sec
 ;   jsr demoAllColors
 ;   jsr delay_1_sec
-  jsr demoAllColorStyles
-;  jsr demoScreen
+;  jsr demoAllColorStyles
+  jsr demoScreen
 ;   jmp mainAciaDemo
+loop:
+  jmp loop
 
   
 
