@@ -167,10 +167,11 @@ demoAllColorStyles:
 
 demo256Colors:
   jsr send_ansi_reset
-  ldx #$00 
+  lda #$00 
+  sta backgroundColor
 demo256Colors_Loop:
-  inx
-  cpx #$ff
+  inc backgroundColor
+  cmp #$ff
   beq demo256Colors_End
   lda #27 ;ESC 
   jsr send_rs232_char
@@ -187,8 +188,6 @@ demo256Colors_Loop:
   jsr send_rs232_char
   lda #59
   jsr send_rs232_char  
-  txa 
-  sta backgroundColor
   jsr bin_2_ascii_bgcolor 
   lda #109 ; m
   jsr send_rs232_char  

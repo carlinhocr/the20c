@@ -147,12 +147,12 @@ send_rs232_line_simple_NO_CRLF_end:
 
 send_rs232_CRLF:
   txa
-  pla
+  pha
   lda #$0d
   jsr send_rs232_char
   lda #$0a
   jsr send_rs232_char 
-  pha
+  pla
   tax
   rts   
 
