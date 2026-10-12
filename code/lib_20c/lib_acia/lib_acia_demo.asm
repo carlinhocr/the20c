@@ -86,6 +86,10 @@ demoCharMovHorizontal_loop:
   sta screenCol
   jsr positionScreenRowCol
   jsr send_rs232_line 
+  inc screenRow
+  jsr positionScreenRowCol
+  jsr send_rs232_line 
+  dec screenRow  
   jsr delay_1_sec
   jmp demoCharMovHorizontal_loop  
 demoCharMovHorizontal_end:
