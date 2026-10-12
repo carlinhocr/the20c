@@ -186,6 +186,8 @@ demo256Colors_Loop:
   jsr send_rs232_char
   lda #"5"
   jsr send_rs232_char
+  lda #59
+  jsr send_rs232_char  
   txa 
   sta backgroundColor
   jsr bin_2_ascii_bgcolor 
