@@ -123,7 +123,8 @@ demoSpriteMovHorizontal:
   sta serialDataVectorHigh
   lda #10
   sta screenRow
-  ldx #$00 ;because columns start in 1  
+  lda #$00 ;because columns start in 1  
+  sta screenCol
 demoSpriteMovHorizontal_loop:
   inc screenCol
   lda screenCol
