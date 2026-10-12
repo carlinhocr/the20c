@@ -355,6 +355,11 @@ DELAY_SEC:
   jmp DELAY_MAIN
 
 DELAY_HALF_SEC:
+  pha
+  tya
+  pha
+  txa
+  pha
   lda #$50
   sta delay_COUNT_A
   lda #$FF
