@@ -44,20 +44,18 @@ demoScreen:
   lda #>screen_blue
   sta ansiStringMemoryConstantHigh
   jsr send_ansi_string
-;   ;position the cursor col 20, row 10
-;   lda #<cur_10_20
-;   sta ansiStringMemoryConstantLow
-;   lda #>cur_10_20
-;   sta ansiStringMemoryConstantHigh
-;   jsr send_ansi_string
-;   ;print the regular demo message
-;   jsr send_rs232_line
   lda #2
   sta screenRow
   lda #4
   sta screenCol
   jsr positionScreenRowCol
   jsr send_rs232_line  
+  lda #10
+  sta screenRow
+  lda #20
+  sta screenCol
+  jsr positionScreenRowCol
+
   rts
 
 demoAllColorStyles:
