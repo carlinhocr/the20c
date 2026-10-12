@@ -53,6 +53,8 @@ uartSerialInit:
 serialUART:
 
 send_rs232_line:
+  txa
+  pha
   tya ;preserve the Y index
   pha ;preserve the Y index
   ldy #$0
@@ -79,6 +81,8 @@ send_rs232_line_end:
   jsr send_rs232_CRLF
   pla ;restore the Y index
   tay ;restore the Y index
+  pla
+  tax
   rts  
 
 send_rs232_line_noCRLF:
