@@ -125,11 +125,9 @@ demoSpriteMovHorizontal:
   sta screenRow
   ldx #$00 ;because columns start in 1  
 demoSpriteMovHorizontal_loop:
-  inx
-  cpx #40
+  inc screenCol
+  cmp #40
   beq demoSpriteMovHorizontal_end
-  txa
-  sta screenCol
   jsr preserveSerialDataVector  
   jsr printAsciiDrawing 
   jsr restoreSerialDataVector
