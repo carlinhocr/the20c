@@ -582,7 +582,6 @@ printAsciiSpriteOneOnOne:
   lda #>demoCharShip_l7
   sta serialDataVectorHigh
   jsr send_rs232_line_noCRLF
-  inc screenRow
   dec screenRow
   dec screenRow
   dec screenRow
