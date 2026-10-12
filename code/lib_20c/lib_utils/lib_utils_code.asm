@@ -131,17 +131,29 @@ memoryTransfer_End:
 ;-----------------------------------------------------------------------------------
 
 
-; bin_2_ascii_print_message
-;   ldx #$0
-; bin_2_ascii_printMessageLoop:
-;   lda message,x  
-;   beq bin_2_ascii_printMessageLoopEnd ;on null character stop printing
-;   jsr send_rs232_char
-;   inx
-;   jmp bin_2_ascii_printMessageLoop
-; bin_2_ascii_printMessageLoopEnd:  
-;   jsr send_rs232_CRLF
-;   rts
+bin_2_ascii_print_message
+  ldx #$0
+bin_2_ascii_printMessageLoop:
+  lda message,x  
+  beq bin_2_ascii_printMessageLoopEnd ;on null character stop printing
+  jsr send_rs232_char
+  inx
+  jmp bin_2_ascii_printMessageLoop
+bin_2_ascii_printMessageLoopEnd:  
+  jsr send_rs232_CRLF
+  rts
+
+bin_2_ascii_print_message_NOCRLF:
+  ldx #$0
+bin_2_ascii_printMessageLoop_NOCRLF:
+  lda message,x  
+  beq bin_2_ascii_printMessageLoopEnd_NOCRLF ;on null character stop printing
+  jsr send_rs232_char
+  inx
+  jmp bin_2_ascii_printMessageLoop_NOCRLF
+bin_2_ascii_printMessageLoopEnd_NOCRLF:  
+  ;jsr send_rs232_CRLF
+  rts
 
 ; bin_2_ascii_segmentBarSizeLow:
 ;   lda #$0
