@@ -546,12 +546,9 @@ printAsciiSprite_lenghts_loop:
   lda serialDataVectorLow ;load marioascii low
   adc serialCharperLines ; add the number of records of the last send_rs232_line
   sta serialDataVectorLow ; store the new value
-  bcc printAsciiSprite_lenghts_no_carry ;branch on carry clear or no carry
-  ;if there is a carry it is in the carry flag
-  ; clear the carry and add one to the high order byte
-  clc
-  inc serialDataVectorHigh
-printAsciiSprite_lenghts_no_carry  
+  lda serialDataVectorHigh
+  adc #$0 ;do not erase the carry bit
+  sta serialDataVectorHigh
   ldy #0
   lda (serialDataVectorLow),y 
   cmp #$65;"e"
