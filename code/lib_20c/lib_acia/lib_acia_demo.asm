@@ -130,9 +130,9 @@ demoSpriteMovHorizontal_loop:
   lda screenCol
   cmp #40
   beq demoSpriteMovHorizontal_end
-  jsr preserveSerialDataVector  
-  jsr printAsciiSprite 
-  jsr restoreSerialDataVector
+  ;jsr preserveSerialDataVector  
+  jsr printAsciiSpriteOneOnOne 
+  ;jsr restoreSerialDataVector
   jsr delay_1_sec
   jmp demoSpriteMovHorizontal_loop  
 demoSpriteMovHorizontal_end:
@@ -262,6 +262,23 @@ demoCharShip:
   .asciiz "  *" 
   .asciiz " ***"   
   .asciiz "e"
+
+demoCharShip_l0:
+  .asciiz "           "   
+demoCharShip_l1:
+  .asciiz " ***" 
+demoCharShip_l2:  
+  .asciiz "  *" 
+demoCharShip_l3:  
+  .asciiz " ********* " 
+demoCharShip_l4:  
+  .asciiz " ********* " 
+demoCharShip_l5:  
+  .asciiz "  *" 
+demoCharShip_l6:  
+  .asciiz " ***"
+demoCharShip_l7:
+  .asciiz "           "
 
 nmi:
 irq:

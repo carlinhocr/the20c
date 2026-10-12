@@ -102,8 +102,8 @@ send_rs232_line_noCRLF_end:
   ;add the number of characters printed + 1 for the null char
   ;store in serialCharperLines
   clc
-  tya
-  adc #1
+  tya ;save register y to accumulator
+  adc #1 ;add the null byte
   sta serialCharperLines
   ;jsr send_rs232_CRLF
   pla ;restore the Y index
@@ -526,7 +526,71 @@ bin_2_ascii_screen_col:
 ;-----------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------
 
-
+printAsciiSpriteOneOnOne:
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l0
+  sta serialDataVectorLow
+  lda #>demoCharShip_l0
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l1
+  sta serialDataVectorLow
+  lda #>demoCharShip_l1
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l2
+  sta serialDataVectorLow
+  lda #>demoCharShip_l2
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l3
+  sta serialDataVectorLow
+  lda #>demoCharShip_l3
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l4
+  sta serialDataVectorLow
+  lda #>demoCharShip_l4
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l5
+  sta serialDataVectorLow
+  lda #>demoCharShip_l5
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l6
+  sta serialDataVectorLow
+  lda #>demoCharShip_l6
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l7
+  sta serialDataVectorLow
+  lda #>demoCharShip_l7
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  dec screenRow
+  dec screenRow
+  dec screenRow
+  dec screenRow
+  dec screenRow
+  dec screenRow
+  dec screenRow
+  rts
 
 printAsciiSprite:
   ;sei ;disable interrupts to run
@@ -551,7 +615,7 @@ printAsciiSprite_lenghts_loop:
   adc serialCharperLines ; add the number of records of the last send_rs232_line
   sta serialDataVectorLow ; store the new value
   lda serialDataVectorHigh
-  adc #$0 ;do not erase the carry bit
+  adc #$0 ;do not erase the carry bit and add it
   sta serialDataVectorHigh
   ldy #0
   lda (serialDataVectorLow),y 
