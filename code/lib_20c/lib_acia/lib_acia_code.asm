@@ -429,6 +429,13 @@ foreground_Red:
   jsr send_rs232_char  
   rts
 
+positionScreenRowColManual:
+  lda #27 ;ESC 
+  jsr send_rs232_char
+  lda #91 ;[ 
+  jsr send_rs232_char 
+  rts
+
 positionScreenRowCol:
   ;print the ESC[ of the command for the row
   lda #<ansi_open_command
