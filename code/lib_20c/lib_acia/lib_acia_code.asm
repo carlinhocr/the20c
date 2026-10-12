@@ -306,7 +306,7 @@ send_ansi_italic:
 send_ansi_italic_off:
   lda #<ansi_italic_off
   sta ansiStringMemoryConstantLow
-  lda #<ansi_italic_off
+  lda #>ansi_italic_off
   sta ansiStringMemoryConstantHigh
   jsr send_ansi_string
   rts  
