@@ -193,3 +193,10 @@ clr_eol:
   .byte 27,"[K",0      ; borra desde el cursor al final de la línea
 clr_line:
   .byte 27,"[2K",0     ; borra la línea entera
+
+;----------256 colors
+
+fg_256:
+  ;.byte 27,"[38;5;208m",0   ; texto naranja (color 208)
+bg_256:
+  ;.byte 27,"[48;5;21m",0    ; fondo azul (color 21)

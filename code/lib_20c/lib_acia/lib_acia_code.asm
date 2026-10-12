@@ -496,6 +496,19 @@ positionScreenRowCol:
   tax
   rts
 
+
+bin_2_ascii_bgcolor:
+  lda #$0
+  sta message ;string with nul character
+  sei
+  lda backgroundColor
+  sta value
+  lda #$0
+  sta value + 1
+  jsr bin_2_ascii
+  jsr bin_2_ascii_print_message_NOCRLF  
+  rts 
+
 bin_2_ascii_screen_row:
   lda #$0
   sta message ;string with nul character

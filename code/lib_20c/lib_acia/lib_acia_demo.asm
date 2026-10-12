@@ -29,7 +29,8 @@ mainAciaDemo:
 ;  jsr demoAllColorStyles
   ;jsr demoScreen
   ;jsr demoCharMovHorizontal
-  jsr demoSpriteMovHorizontal
+  ;jsr demoSpriteMovHorizontal
+  jsr demo256Colors
 ;   jmp mainAciaDemo
 loop:
   jmp loop
@@ -164,6 +165,37 @@ demoAllColorStyles:
   jsr delay_1_sec
 
   rts 
+
+demo256Colors:
+  jsr send_ansi_reset
+  ldx #$00 
+demo256Colors_Loop:
+  inx
+  cpx #$ff
+  beq demo256Colors_End
+  lda #27 ;ESC 
+  jsr send_rs232_char
+  lda #91 ;[ 
+  jsr send_rs232_char  
+  ; Foregorund Text Red
+  lda #'4'     ; 51
+  jsr send_rs232_char
+  lda #'8'     ; 49
+  jsr send_rs232_char
+  lda #59
+  jsr send_rs232_char
+  lda #"5"
+  jsr send_rs232_char
+  txa 
+  sta backgroundColor
+  jsr bin_2_ascii_bgcolor 
+  lda #109 ; m
+  jsr send_rs232_char  
+  jsr send_rs232_CRLF
+  jsr delay_1_sec
+  jmp demo256Colors_Loop
+demo256Colors_End:
+  rts
 
 demoAllColors:
   jsr demoAllForegroundColors
