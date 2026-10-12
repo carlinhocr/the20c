@@ -26,8 +26,8 @@ mainAciaDemo:
 ;   jsr delay_1_sec
 ;   jsr demoAllColors
 ;   jsr delay_1_sec
-;   jsr demoAllColorStyles
-  jsr demoScreen
+  jsr demoAllColorStyles
+;  jsr demoScreen
 ;   jmp mainAciaDemo
 
   
@@ -36,7 +36,7 @@ demoScreen:
   jsr send_ansi_reset
   lda #<screen_blue
   sta ansiStringMemoryConstantLow
-  lda #<screen_blue
+  lda #>screen_blue
   sta ansiStringMemoryConstantHigh
   jsr send_ansi_string
   rts
