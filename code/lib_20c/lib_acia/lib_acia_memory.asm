@@ -41,7 +41,7 @@ screenCol=                        $027f
 screenRow=                        $0280
 
 ansi_string=                      $0290 ;to $0300  
-ansiStringMemoryConstantLow=$80
+ansiStringMemoryConstantLow=$90
 ansiStringMemoryConstantHigh=$02
 
 

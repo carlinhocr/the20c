@@ -437,16 +437,23 @@ positionScreenRowCol:
   ;run bin2ascii and print the row in ascii
   jsr bin_2_ascii_screen_row
   ;print the ESC[ of the command for the column
+  lda #<ansi_open_command
+  sta ansiStringMemoryConstantLow
+  lda #>ansi_open_command
+  sta ansiStringMemoryConstantHigh
   jsr send_ansi_string
   ;run bin2ascii and print the column in ascii
   jsr bin_2_ascii_screen_col
-  lda #<cur_column_close_command
-  sta ansiStringMemoryConstantLow
-  lda #>cur_column_close_command
-  sta ansiStringMemoryConstantHigh
-  jsr send_ansi_string  
+  ;send the column close command
+  lda #"H"
+  jsr send_rs232_char
+  ; lda #<cur_column_close_command
+  ; sta ansiStringMemoryConstantLow
+  ; lda #>cur_column_close_command
+  ; sta ansiStringMemoryConstantHigh
+  ; jsr send_ansi_string  
   rts
-  
+
 bin_2_ascii_screen_row:
   lda #$0
   sta message ;string with nul character
