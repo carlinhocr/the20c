@@ -335,10 +335,10 @@ send_ansi_generic:
   txa
   pha
   jsr preserveSerialDataVector
-  lda #ansiStringMemoryConstantLow
+  lda #<ansi_string
   ;lda #$80
   sta serialDataVectorLow
-  lda #ansiStringMemoryConstantHigh
+  lda #>ansi_string
   ;lda #$02
   sta serialDataVectorHigh  
   lda #27
@@ -365,10 +365,10 @@ send_ansi_generic2forColorStyle:
   jsr preserveSerialDataVector
   ;lda #<ansi_string
   ;lda #$80
-  lda #ansiStringMemoryConstantLow
+  lda #<ansi_string
   sta serialDataVectorLow
   ;lda #>ansi_string
-  lda #ansiStringMemoryConstantHigh  
+  lda #>ansi_string 
   ;lda #$02
   sta serialDataVectorHigh  
   lda #27
@@ -439,11 +439,8 @@ positionScreenRowCol:
   ;run bin2ascii and print the row in ascii
   jsr bin_2_ascii_screen_row
   ;print the ESC[ of the command for the column
-  lda #<ansi_open_command
-  sta ansiStringMemoryConstantLow
-  lda #>ansi_open_command
-  sta ansiStringMemoryConstantHigh
-  jsr send_ansi_string
+  lda #59 ; the code for semi colon ;
+  jsr send_rs232_char
   ;run bin2ascii and print the column in ascii
   jsr bin_2_ascii_screen_col
   ;send the column close command
