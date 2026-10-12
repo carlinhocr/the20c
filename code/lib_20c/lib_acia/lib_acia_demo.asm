@@ -17,18 +17,30 @@ mainAciaDemo:
   sta serialDataVectorLow
   lda #>demoConstantString
   sta serialDataVectorHigh
-  jsr send_ansi_reset
-  jsr send_rs232_line
-  jsr send_ansi_red
-  jsr send_rs232_line
-  jsr send_ansi_blue   
-  jsr send_rs232_line
+;   jsr send_ansi_reset
+;   jsr send_rs232_line
+;   jsr send_ansi_red
+;   jsr send_rs232_line
+;   jsr send_ansi_blue   
+;   jsr send_rs232_line
 ;   jsr delay_1_sec
 ;   jsr demoAllColors
-  jsr delay_1_sec
-  jsr demoAllColorStyles
-  jmp mainAciaDemo
- 
+;   jsr delay_1_sec
+;   jsr demoAllColorStyles
+  jsr demoScreen
+;   jmp mainAciaDemo
+
+  
+
+demoScreen:
+  jsr send_ansi_reset
+  lda #<screen_blue
+  sta ansiStringMemoryConstantLow
+  lda #<screen_blue
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string
+  rts
+
 demoAllColorStyles:
   ;normal
   jsr send_ansi_reset

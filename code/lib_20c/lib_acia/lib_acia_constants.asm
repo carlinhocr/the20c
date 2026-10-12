@@ -143,4 +143,48 @@ ansi_strike_off:
 ansi_reset: 
   .byte 27,"[0m",0  
 
+screen_blue: 
+  .byte 27,"[44m",27,"[2J",27,"[H",0  
 
+; ---------- Mover el cursor ----------
+cur_up:
+  .byte 27,"[A",0      ; arriba 1   (ESC[nA = arriba n)
+cur_down:
+  .byte 27,"[B",0      ; abajo 1    (ESC[nB)
+cur_right:
+  .byte 27,"[C",0      ; derecha 1  (ESC[nC)
+cur_left:
+  .byte 27,"[D",0      ; izquierda 1 (ESC[nD)
+cur_up5:
+  .byte 27,"[5A",0     ; ejemplo: arriba 5
+
+cur_next_line:
+  .byte 27,"[E",0      ; abajo 1 y a columna 1 (ESC[nE)
+cur_prev_line:
+  .byte 27,"[F",0      ; arriba 1 y a columna 1 (ESC[nF)
+
+; ---------- Posición absoluta ----------
+cur_home:
+  .byte 27,"[H",0      ; fila 1, columna 1
+cur_10_20:
+  .byte 27,"[10;20H",0 ; fila 10, columna 20 (ESC[fila;colH)
+
+; ---------- Guardar / restaurar ----------
+cur_save:
+  .byte 27,"7",0
+cur_restore:
+  .byte 27,"8",0
+
+; ---------- Mostrar / ocultar ----------
+cur_hide:
+  .byte 27,"[?25l",0
+cur_show:
+  .byte 27,"[?25h",0
+
+; ---------- Borrar ----------
+cls:
+  .byte 27,"[2J",27,"[H",0  ; borra pantalla y va al inicio
+clr_eol:
+  .byte 27,"[K",0      ; borra desde el cursor al final de la línea
+clr_line:
+  .byte 27,"[2K",0     ; borra la línea entera
