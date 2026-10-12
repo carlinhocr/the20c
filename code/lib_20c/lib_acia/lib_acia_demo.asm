@@ -36,6 +36,7 @@ loop:
 
 demoScreen:
   jsr send_ansi_reset
+  jsr send_ansi_cur_hide
   ;set foregound color
   jsr send_ansi_red
   ;clear the screen, set backgourn blue, and position home the cursor

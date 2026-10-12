@@ -311,6 +311,23 @@ send_ansi_italic_off:
   jsr send_ansi_string
   rts  
 
+send_ansi_cur_show:
+  lda #<cur_show
+  sta ansiStringMemoryConstantLow
+  lda #>cur_show
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string
+  rts
+
+send_ansi_cur_hide:
+  lda #<cur_hide
+  sta ansiStringMemoryConstantLow
+  lda #>cur_hide
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string
+  rts  
+
+
 send_ansi_red:
   ;.byte 27,"[34m",0
   ;31 = 4*7 = 28 bytes from zero
@@ -427,13 +444,6 @@ foreground_Red:
   jsr send_rs232_char  
   lda #109 ; m
   jsr send_rs232_char  
-  rts
-
-positionScreenRowColManual:
-  lda #27 ;ESC 
-  jsr send_rs232_char
-  lda #91 ;[ 
-  jsr send_rs232_char 
   rts
 
 positionScreenRowCol:
