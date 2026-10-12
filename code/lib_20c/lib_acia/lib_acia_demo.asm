@@ -128,12 +128,12 @@ demoSpriteMovHorizontal:
 demoSpriteMovHorizontal_loop:
   inc screenCol
   lda screenCol
-  cmp #40
+  cmp #80
   beq demoSpriteMovHorizontal_end
   ;jsr preserveSerialDataVector  
   jsr printAsciiSpriteOneOnOne 
   ;jsr restoreSerialDataVector
-  jsr delay_1_sec
+  jsr DELAY_HALF_SEC
   jmp demoSpriteMovHorizontal_loop  
 demoSpriteMovHorizontal_end:
   rts  
@@ -242,6 +242,74 @@ demoAllColors_send:
   jmp demoAllColors_loop
 demoAllColors_end:  
   rts
+
+
+
+printAsciiSpriteOneOnOne:
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l0
+  sta serialDataVectorLow
+  lda #>demoCharShip_l0
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l1
+  sta serialDataVectorLow
+  lda #>demoCharShip_l1
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l2
+  sta serialDataVectorLow
+  lda #>demoCharShip_l2
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l3
+  sta serialDataVectorLow
+  lda #>demoCharShip_l3
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l4
+  sta serialDataVectorLow
+  lda #>demoCharShip_l4
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l5
+  sta serialDataVectorLow
+  lda #>demoCharShip_l5
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l6
+  sta serialDataVectorLow
+  lda #>demoCharShip_l6
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  inc screenRow
+  jsr positionScreenRowCol 
+  lda #<demoCharShip_l7
+  sta serialDataVectorLow
+  lda #>demoCharShip_l7
+  sta serialDataVectorHigh
+  jsr send_rs232_line_noCRLF
+  dec screenRow
+  dec screenRow
+  dec screenRow
+  dec screenRow
+  dec screenRow
+  dec screenRow
+  dec screenRow
+  rts
+
 
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  
   .include "../lib_utils/lib_utils_code.asm" ;define code for ACIA t  
