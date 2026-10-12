@@ -27,7 +27,8 @@ mainAciaDemo:
 ;   jsr demoAllColors
 ;   jsr delay_1_sec
 ;  jsr demoAllColorStyles
-  jsr demoScreen
+  ;jsr demoScreen
+  jsr demoCharMovHorizontal
 ;   jmp mainAciaDemo
 loop:
   jmp loop
@@ -57,6 +58,29 @@ demoScreen:
   sta screenCol
   jsr positionScreenRowCol
   jsr send_rs232_line  
+  rts
+
+demoCharMovHorizontal:
+  jsr send_ansi_reset
+  jsr send_ansi_br_white 
+  lda #<demoCharTrain
+  sta serialDataVectorLow
+  lda #>demoCharTrain
+  sta serialDataVectorHigh
+  lda #10
+  sta screenRow
+  ldx #$00 ;because columns start in 1  
+demoCharMovHorizontal_loop:
+  inx
+  cpx #40
+  beq demoCharMovHorizontal_end
+  txa
+  sta screenCol
+  jsr positionScreenRowCol
+  jsr send_rs232_line 
+  jsr delay_1_sec
+  jmp demoCharMovHorizontal_loop  
+demoCharMovHorizontal_end:
   rts
 
 demoAllColorStyles:
@@ -172,6 +196,9 @@ demoAllColors_end:
 
 demoConstantString:
   .asciiz "Hola a todos"
+
+demoCharTrain:
+  .asciiz "**" 
 
 nmi:
 irq:

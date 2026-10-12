@@ -338,6 +338,16 @@ send_ansi_red:
   jsr send_ansi_generic
   rts
 
+send_ansi_br_white:
+  ;.byte 27,"[34m",0
+  ;31 = 4*7 = 28 bytes from zero
+  lda #"9"
+  sta colorStyleType  
+  lda #"7"
+  sta colorStyleOffset
+  jsr send_ansi_generic
+  rts
+
 send_ansi_blue:
   ;.byte 27,"[34m",0
   ;34 = 4*7 = 28 bytes from zero
@@ -447,6 +457,10 @@ foreground_Red:
   rts
 
 positionScreenRowCol:
+  txa
+  pha
+  tya
+  pha
   ;print the ESC[ of the command for the row
   lda #<ansi_open_command
   sta ansiStringMemoryConstantLow
@@ -468,6 +482,10 @@ positionScreenRowCol:
   ; lda #>cur_column_close_command
   ; sta ansiStringMemoryConstantHigh
   ; jsr send_ansi_string  
+  pla
+  tay
+  pla
+  tax
   rts
 
 bin_2_ascii_screen_row:
