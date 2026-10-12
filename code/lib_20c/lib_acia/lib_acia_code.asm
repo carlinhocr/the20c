@@ -537,7 +537,7 @@ printAsciiSprite:
   lda #$0
   sta serialCharperLines
   jsr positionScreenRowCol  
-  jsr send_rs232_line
+  jsr send_rs232_line_noCRLF
   ldx #$0 ;the first line 0 we aleready printed
 printAsciiSprite_lenghts_loop:
   inx ;now going to line 1
@@ -562,7 +562,7 @@ printAsciiSprite_checkNull:
 printAsciiSprite_keepgoing:  
   inc screenRow
   jsr positionScreenRowCol  
-  jsr send_rs232_line
+  jsr send_rs232_line_noCRLF
   jmp printAsciiSprite_lenghts_loop
 printAsciiSprite_decreaseRow:
   ;decrease the rows increase to print the whole sprite
