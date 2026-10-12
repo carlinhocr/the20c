@@ -62,7 +62,15 @@ demoScreen:
 
 demoCharMovHorizontal:
   jsr send_ansi_reset
+  jsr send_ansi_cur_hide
+  ;set foregound color  
   jsr send_ansi_br_white 
+  ;clear the screen background blue
+  lda #<screen_blue
+  sta ansiStringMemoryConstantLow
+  lda #>screen_blue
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string  
   lda #<demoCharTrain
   sta serialDataVectorLow
   lda #>demoCharTrain
@@ -198,7 +206,7 @@ demoConstantString:
   .asciiz "Hola a todos"
 
 demoCharTrain:
-  .asciiz "**" 
+  .asciiz " **" 
 
 nmi:
 irq:
