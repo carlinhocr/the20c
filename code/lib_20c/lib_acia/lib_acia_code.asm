@@ -335,11 +335,11 @@ send_ansi_generic:
   txa
   pha
   jsr preserveSerialDataVector
-  ;lda #<ansi_string
-  lda #$80
+  lda #ansiStringMemoryConstantLow
+  ;lda #$80
   sta serialDataVectorLow
-  ;lda #>ansi_string
-  lda #$02
+  lda #ansiStringMemoryConstantHigh
+  ;lda #$02
   sta serialDataVectorHigh  
   lda #27
   sta ansi_string
