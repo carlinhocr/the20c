@@ -8,3 +8,9 @@ graph002:
 
 graph003:
   .byte "0:GRAPH003,P,R", $00  ; Open GRAPH001 as PRG for reading    
+
+fileBandera:
+    .byte "0:BANDERA.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading   
+
+fileF1:
+    .byte "0:F1.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading      

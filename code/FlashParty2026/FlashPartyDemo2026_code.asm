@@ -22,6 +22,19 @@
 
 mainFlashPartyFunction:
 ;STRUCTURE to show ASCII messages
+  lda #<fileBandera
+  sta ZP_PTR_LO
+  lda #>fileBandera
+  sta ZP_PTR_HI
+  jsr readFilenameToBuffer
+  lda #<BUFFER_START
+  sta serialDataVectorLow
+  lda #>BUFFER_START
+  sta serialDataVectorHigh
+  jsr printAsciiBinary
+
+loopFlashParty2026:
+  jmp loopFlashParty2026
 
 ;01 load buffer from GRAPH001
 
@@ -56,10 +69,10 @@ populate_GRAPH_Table:
   sta (graphTable_LB),y ;stores in $0300 + 1
   iny
   ;go to populate the table with file2
-  lda #<graph001
+  lda #<graph002
   sta (graphTable_LB),y ;stores in $0300 + 2
   iny
-  lda #>graph001
+  lda #>graph002
   sta (graphTable_LB),y ;stores in $0300 + 3
   iny
 
