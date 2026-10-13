@@ -365,10 +365,10 @@ demoPrintAsciiBinary:
   .include "../lib_utils/lib_utils_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
 
 demoAciaBandera:
-  .incbin "../lib_acia/bandera_ar_eol.bin"
+  .incbin "../lib_acia/lib_acia_demo_bandera_ar_eol.bin"
 
 demoAciaColapinto:
-  .incbin "../lib_acia/f1_colapinto_eol.bin"
+  .incbin "../lib_acia/lib_acia_demo_f1_colapinto_eol.bin"
 
 demoConstantString:
   .asciiz "Hola a todos"
