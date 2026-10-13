@@ -71,6 +71,7 @@ send_rs232_line_16bit_loop:
   cpy #$00
   bne send_rs232_line_16bit_loop ;if i did not went through  twice more than 256 bytes
   inc serialCharperLinesHigh
+  inc serialDataVectorHigh
   jmp send_rs232_line_16bit_loop 
 send_rs232_line_16bit_end:
   ;add the number of characters printed + 1 for the null char
@@ -723,7 +724,7 @@ printAsciiBinaryLoop:
   adc serialCharperLinesLow
   sta serialDataVectorLow
   lda serialDataVectorHigh
-  adc serialCharperLinesHigh
+  adc #$0 ; to add the carry
   sta serialDataVectorHigh
   dec asciiBinaryRows
   jmp printAsciiBinaryLoop
