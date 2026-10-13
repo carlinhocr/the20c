@@ -35,7 +35,8 @@ mainFlashPartyFunction:
   sta ZP_PTR_HI
   jsr readFilenameToBuffer
   jsr printDiskBuffer
-
+loopFlashParty2026:
+  jmp loopFlashParty2026
 
 
 printDiskBuffer:  
@@ -46,8 +47,7 @@ printDiskBuffer:
   jsr printAsciiBinary
   rts
 
-loopFlashParty2026:
-  jmp loopFlashParty2026
+
 
 ;01 load buffer from GRAPH001
 
