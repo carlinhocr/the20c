@@ -350,6 +350,12 @@ demoPrintAsciiBinary:
   lda #>demoAciaBandera
   sta serialDataVectorHigh
   jsr printAsciiBinary
+  jsr delay_3_sec
+  lda #<demoAciaColapinto
+  sta serialDataVectorLow
+  lda #>demoAciaColapinto
+  sta serialDataVectorHigh
+  jsr printAsciiBinary  
   rts
 
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  
@@ -361,6 +367,8 @@ demoPrintAsciiBinary:
 demoAciaBandera:
   .incbin "../lib_acia/bandera_ar_eol.bin"
 
+demoAciaColapinto:
+  .incbin "../lib_acia/f1_colapinto_eol.bin"
 
 demoConstantString:
   .asciiz "Hola a todos"

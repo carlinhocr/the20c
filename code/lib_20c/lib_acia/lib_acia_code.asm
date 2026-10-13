@@ -71,7 +71,7 @@ send_rs232_line_16bit_loop:
   cpy #$00
   bne send_rs232_line_16bit_loop ;if i did not went through  twice more than 256 bytes
   inc serialCharperLinesHigh
-  inc serialDataVectorHigh
+  inc serialDataVectorHigh ;just to know how bigger afeter 256 it was
   jmp send_rs232_line_16bit_loop 
 send_rs232_line_16bit_end:
   ;add the number of characters printed + 1 for the null char
