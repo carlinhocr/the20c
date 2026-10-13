@@ -52,6 +52,42 @@ uartSerialInit:
 ;-----------------------------------------------------------------------------------
 serialUART:
 
+send_rs232_line_16bit:
+  txa
+  pha
+  tya ;preserve the Y index
+  pha ;preserve the Y index
+  lda #$0
+  sta serialCharperLinesLow
+  sta serialCharperLinesHigh
+  ldy #$0
+send_rs232_line_16bit_loop:
+;send_rs232_line_loop_same_page:  
+  lda (serialDataVectorLow),y 
+  ;test for the NULL char that ends all ASCII strings
+  beq send_rs232_line_16bit_end
+  jsr send_rs232_char
+  iny
+  cpy #$00
+  bne send_rs232_line_16bit_loop ;if i did not went through  twice more than 256 bytes
+  inc serialCharperLinesHigh
+  jmp send_rs232_line_16bit_loop 
+send_rs232_line_16bit_end:
+  ;add the number of characters printed + 1 for the null char
+  ;store in serialCharperLines
+  clc
+  tya
+  adc #1 ;to account for the Null byte because I did not added the null byte
+  sta serialCharperLinesLow
+  jsr send_rs232_CRLF
+  pla ;restore the Y index
+  tay ;restore the Y index
+  pla
+  tax
+  rts  
+
+
+
 send_rs232_line:
   txa
   pha
@@ -665,6 +701,40 @@ setSimulationTimerBars:
   jsr setBarSegmentSize
   ;jsr bin_2_ascii_segmentBarSizeLow
   rts  
+
+
+printAsciiBinary:
+  sei ;disable interrupts to run
+  ;save accumulator x and y registers
+  pha
+  txa
+  pha
+  tya
+  pha
+  lda #25
+  sta asciiBinaryRows
+printAsciiBinaryLoop:
+  lda asciiBinaryRows
+  cmp #$00
+  beq printAsciiBinary_end
+  jsr send_rs232_line_16bit 
+  clc
+  lda serialDataVectorLow
+  adc serialCharperLinesLow
+  sta serialDataVectorLow
+  lda serialDataVectorHigh
+  adc serialCharperLinesHigh
+  sta serialDataVectorHigh
+  dec asciiBinaryRows
+  jmp printAsciiBinaryLoop
+printAsciiBinary_end:
+  pla
+  tay
+  pla
+  tax
+  pla
+  cli ;let them be on when it is ok for them to be on
+  rts
 
 printAsciiDrawing:
   sei ;disable interrupts to run

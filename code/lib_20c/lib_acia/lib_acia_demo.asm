@@ -30,7 +30,8 @@ mainAciaDemo:
   ;jsr demoScreen
   ;jsr demoCharMovHorizontal
   ;jsr demoSpriteMovHorizontal
-  jsr demo256Colors
+  ;jsr demo256Colors
+  jsr demoPrintAsciiBinary
 ;   jmp mainAciaDemo
 loop:
   jmp loop
@@ -177,7 +178,7 @@ demo256Colors_Loop:
   jsr send_rs232_char
   lda #91 ;[ 
   jsr send_rs232_char  
-  ; Foregorund Text Red
+  ; Background Text Red
   lda #'4'     ; 51
   jsr send_rs232_char
   lda #'8'     ; 49
@@ -343,12 +344,23 @@ printAsciiSpriteOneOnOne:
   dec screenRow
   rts
 
+demoPrintAsciiBinary:
+  lda #<demoAciaBandera
+  sta serialDataVectorLow
+  lda #>demoAciaBandera
+  sta serialDataVectorHigh
+  jsr printAsciiBinary
+  rts
 
   .include "../lib_acia/lib_acia_code.asm" ;define code for ACIA t  
   .include "../lib_utils/lib_utils_code.asm" ;define code for ACIA t  
 
   .include "../lib_acia/lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
   .include "../lib_utils/lib_utils_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
+
+demoAciaBandera:
+  .incbin "../lib_acia/bandera_ar_eol.bin"
+
 
 demoConstantString:
   .asciiz "Hola a todos"
