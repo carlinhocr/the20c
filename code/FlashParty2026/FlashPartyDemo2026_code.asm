@@ -22,13 +22,13 @@
 
 mainFlashPartyFunction:
 ;STRUCTURE to show ASCII messages
-  ; lda #<fileBandera
-  ; sta ZP_PTR_LO
-  ; lda #>fileBandera
-  ; sta ZP_PTR_HI
-  ; jsr readFilenameToBuffer
-  ; jsr printDiskBuffer
-  ; jsr delay_3_sec
+  lda #<fileBandera
+  sta ZP_PTR_LO
+  lda #>fileBandera
+  sta ZP_PTR_HI
+  jsr readFilenameToBuffer
+  jsr printDiskBuffer
+  jsr delay_3_sec
   lda #<fileF1
   sta ZP_PTR_LO
   lda #>fileF1
