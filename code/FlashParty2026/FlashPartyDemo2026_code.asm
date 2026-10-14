@@ -37,20 +37,20 @@ mainFlashPartyFunction:
   sta ZP_BufferStartHigh
   jsr readFilenameToBuffer
   jsr printDiskBuffer
-  lda #<fileSoundHimno
-  sta ZP_PTR_LO
-  lda #>fileSoundHimno
-  sta ZP_PTR_HI
-  ;Load a Song
-  lda #<1000              ; frames hasta cortar (0 = no corta)
-  sta SID_LIMIT
-  lda #>1000
-  sta SID_LIMIT+1
-  lda #<BUFFER_MUSIC_START
-  sta ZP_BufferStartLow
-  lda #>BUFFER_MUSIC_START
-  sta ZP_BufferStartHigh
-  jsr readFilenameToBuffer
+  ; lda #<fileSoundHimno
+  ; sta ZP_PTR_LO
+  ; lda #>fileSoundHimno
+  ; sta ZP_PTR_HI
+  ; ;Load a Song
+  ; lda #<1000              ; frames hasta cortar (0 = no corta)
+  ; sta SID_LIMIT
+  ; lda #>1000
+  ; sta SID_LIMIT+1
+  ; lda #<BUFFER_MUSIC_START
+  ; sta ZP_BufferStartLow
+  ; lda #>BUFFER_MUSIC_START
+  ; sta ZP_BufferStartHigh
+  ; jsr readFilenameToBuffer
   ;lda FILE_SIZE_LO        ; tamaño que te dejó el IEC
   ;ldx FILE_SIZE_HI
   ; jsr SID_PLAY  
