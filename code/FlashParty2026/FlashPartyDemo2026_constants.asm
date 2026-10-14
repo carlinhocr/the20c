@@ -16,4 +16,5 @@ fileF1:
     .byte "0:F1.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading      
 
 fileSoundHimno:
-    .byte "0:HIMNO.SID,P,R", $00  ; Open GRAPH001 as PRG for reading      
+    ;.byte "0:HIMNO.SID,P,R", $00  ; Open GRAPH001 as PRG for reading     
+    .byte "0:EJEMPLO.SID,P,R", $00  ; Open GRAPH001 as PRG for reading  
