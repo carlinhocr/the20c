@@ -45,9 +45,9 @@ loopFlashParty2026:
 
 
 printDiskBuffer:  
-  lda ZP_BufferStartLow
+  lda #$00
   sta serialDataVectorLow
-  lda ZP_BufferStartHigh
+  lda #$10
   sta serialDataVectorHigh
   jsr printAsciiBinary
   rts
