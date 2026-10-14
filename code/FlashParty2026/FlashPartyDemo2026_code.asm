@@ -20,6 +20,7 @@
   jsr iecInit
 
 
+
 mainFlashPartyFunction:
 ;STRUCTURE to show ASCII messages
   lda #<fileBandera
@@ -30,16 +31,32 @@ mainFlashPartyFunction:
   sta ZP_BufferStartLow
   lda #>BUFFER_GRAPHICS_START
   sta ZP_BufferStartHigh
-  ;jsr readFilenameToBuffer
   jsr readFilenameToBuffer
   jsr printDiskBuffer
-  jsr delay_3_sec
-  lda #<fileF1
+  lda #<fileSoundHimno
   sta ZP_PTR_LO
-  lda #>fileF1
+  lda #>fileSoundHimno
   sta ZP_PTR_HI
+  ;Load a Song
+  lda #<1000              ; frames hasta cortar (0 = no corta)
+  sta SID_LIMIT
+  lda #>1000
+  sta SID_LIMIT+1
+  lda #<BUFFER_MUSIC_START
+  sta ZP_BufferStartLow
+  lda #>BUFFER_MUSIC_START
+  sta ZP_BufferStartHigh
   jsr readFilenameToBuffer
-  jsr printDiskBuffer
+  lda FILE_SIZE_LO        ; tamaño que te dejó el IEC
+  ldx FILE_SIZE_HI
+  jsr SID_PLAY  
+  ; jsr delay_3_sec
+  ; lda #<fileF1
+  ; sta ZP_PTR_LO
+  ; lda #>fileF1
+  ; sta ZP_PTR_HI
+  ; jsr readFilenameToBuffer
+  ; jsr printDiskBuffer
 loopFlashParty2026:
   jmp loopFlashParty2026
 
@@ -132,7 +149,7 @@ read_GRAPH_Table_End:
 
 
 
-
+  .include "../lib_20c/lib_sid/lib_sid_player.asm"
   .include "../lib_20c/lib_iec/lib_iec_code.asm"
   .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_code.asm"
   .include "../lib_20c/lib_acia/lib_acia_code.asm" ;define code for ACIA t  
@@ -145,6 +162,7 @@ read_GRAPH_Table_End:
 
 nmi:
 irq:
+  ;goes to the sid IRQ routine
   rti
 
 ;complete the file
@@ -153,4 +171,5 @@ irq:
   .org $fffc ;go to memory address $fffc of the reset vector
   .word RESET ;store in $FFFC & $FFFD the memory address of the RESET: label  00 80 ($8000 in little endian)
   .org $fffe
-  .word irq ;a word is 16 bits or two bytes in this case $fffe and $ffff  
+  .word SID_IRQ
+  ;a word is 16 bits or two bytes in this case $fffe and $ffff  
