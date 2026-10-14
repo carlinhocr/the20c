@@ -218,7 +218,7 @@
 ; The program resides in ROM at $8000-$FFFF. The 6502 reads its reset
 ; vector from $FFFC-$FFFD, which points to our RESET entry point.
 
-            .org $8000
+ ;           .org $8000
 
 
 ;===============================================================================
@@ -1541,9 +1541,11 @@ IEC_READ_FILE:
 
             ; --- Step 4: Set up RAM destination pointer ---
             ; We'll store received bytes starting at BUFFER_START
-            LDA #<BUFFER_START  ; Low byte of buffer address
+            ;LDA #<BUFFER_START  ; Low byte of buffer address
+            lda ZP_BufferStartLow
             STA ZP_PTR_LO
-            LDA #>BUFFER_START  ; High byte of buffer address
+            ;LDA #>BUFFER_START  ; High byte of buffer address
+            lda ZP_BufferStartHigh
             STA ZP_PTR_HI
 
             ; --- Step 5: Receive data loop ---
@@ -1698,9 +1700,11 @@ IEC_WRITE_FILE:
             ; (The caller already set FILE_SIZE_LO/HI to the byte count)
 
             ; Set source pointer to BUFFER_START
-            LDA #<BUFFER_START
+            ;LDA #<BUFFER_START
+            lda ZP_BufferStartLow
             STA ZP_PTR_LO
-            LDA #>BUFFER_START
+            ;LDA #>BUFFER_START
+            lda ZP_BufferStartHigh
             STA ZP_PTR_HI
 
             ; --- Step 4: Send data loop ---
@@ -1823,9 +1827,11 @@ IEC_READ_STATUS:
             JSR IEC_TURNAROUND
 
             ; Set up destination
-            LDA #<BUFFER_START
+            ;LDA #<BUFFER_START
+            lda ZP_BufferStartLow
             STA ZP_PTR_LO
-            LDA #>BUFFER_START
+            ;LDA #>BUFFER_START
+            lda ZP_BufferStartHigh
             STA ZP_PTR_HI
 
             ; Receive bytes until EOI
@@ -2183,7 +2189,8 @@ writeFile256bytes:
             LDX #$00
 .fill_loop:
             TXA                 ; A = X (0-255)
-            STA BUFFER_START,X  ; Store at BUFFER_START + X
+            ;STA BUFFER_START,X  ; Store at BUFFER_START + X
+
             INX
             BNE .fill_loop      ; Loop 256 times (X wraps to 0)
 
@@ -2268,6 +2275,22 @@ readFilenameToBuffer:
 .halt_loop:
             jmp .halt_loop ; loop on error and stop
 
+
+readFilenameToBufferTroubleshoot:
+            JSR IEC_READ_FILE
+            LDA IEC_STATUS
+            BNE .rf_err
+            ; ZP_PTR quedo apuntando al byte siguiente al ultimo leido:
+            ; null-terminar para que el print sepa donde cortar
+            LDY #$00
+            TYA
+            STA (ZP_PTR_LO),Y
+            CLC
+            RTS
+.rf_err:
+            JSR IEC_READ_STATUS     ; deja "nn,MENSAJE,tt,ss",0 en el buffer
+            SEC                     ; carry set = fallo, IEC_STATUS tiene el bit
+            RTS
 
 ; ;===============================================================================
 ; ;===============================================================================

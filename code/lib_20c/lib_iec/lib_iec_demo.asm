@@ -52,7 +52,12 @@
 ;   jsr send_rs232_line   
  
 ;   jsr writeAsciiFromROM
-   
+ 
+  lda #00
+  sta ZP_BufferStartLow
+  lda #10
+  sta ZP_BufferStartHigh
+
   lda #<messageReadingAsciiDemo
   sta serialDataVectorLow
   lda #>messageReadingAsciiDemo
@@ -80,9 +85,13 @@ read20cAsciiFile:
   rts
 
 printFromFileBuffer:
-  lda #<BUFFER_START
+  lda #00
+  sta ZP_BufferStartLow
+  lda #10
+  sta ZP_BufferStartHigh
+  lda ZP_BufferStartLow
   sta serialDataVectorLow
-  lda #>BUFFER_START
+  lda ZP_BufferStartHigh
   sta serialDataVectorHigh
   jsr printAsciiDrawing    
   rts
@@ -103,6 +112,10 @@ writeAsciiFromROM:
   ;transfer any amount of bytes from one memory area to another
   ;load how many bytes to transfer
   ;example for 256 bytes
+  lda #00
+  sta ZP_BufferStartLow
+  lda #10
+  sta ZP_BufferStartHigh
   lda #254
   sta utilMemoryTransfer_LowByte
   lda #8
@@ -114,9 +127,9 @@ writeAsciiFromROM:
   lda #>la20cAscii
   sta utilPivot_01_ZP_high
   ;now load the memory TO, for example to copy to RAM $1000
-  lda #<BUFFER_START
+  lda ZP_BufferStartLow
   sta utilPivot_02_ZP_low
-  lda #>BUFFER_START
+  lda ZP_BufferStartHigh
   sta utilPivot_02_ZP_high
   ;now run the transfer function
   ;jsr memoryTransferFullPagesOnly  

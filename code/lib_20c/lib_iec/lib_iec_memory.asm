@@ -54,7 +54,7 @@ ZP_WWANT    = $0C               ; IEC_WAIT: masked value that ends the wait
                                 ; Both are owned by IEC_WAIT and its wrappers.
                                 ; Callee-clobbered, like ZP_RFDCNT.
 ZP_RFDCNT   = $0A               ; RFD outer timeout counter (callee-local,
-                                    ; NOT part of the volatile-scratch trio)
+                                    ; NOT part of the volatile-scratch trio)                               
 ;-------------------------------------------------------------------------------
 ; VOLATILE-SCRATCH CONTRACT  (read before adding new code)
 ;-------------------------------------------------------------------------------
@@ -82,9 +82,10 @@ ZP_RFDCNT   = $0A               ; RFD outer timeout counter (callee-local,
 ; We designate a general-purpose buffer in RAM for file data.
 ; This sits above the zero page and stack ($0100-$01FF).
 
-BUFFER_START = $3000            ; Start of file data buffer
+;BUFFER_START = $3000            ; Start of file data buffer
 BUFFER_END   = $6FFF            ; End of available RAM
-BUFFER_SIZE  = BUFFER_END - BUFFER_START + 1  ; = 15,872 bytes max
-
-fileName_LB = $0280
-fileName_HB = $0281
+;BUFFER_SIZE  = BUFFER_END - BUFFER_START + 1  ; = 15,872 bytes max
+fileName_LB = $0380
+fileName_HB = $0381
+ZP_BufferStartLow=$0382    
+ZP_BufferStartHigh=$0383
