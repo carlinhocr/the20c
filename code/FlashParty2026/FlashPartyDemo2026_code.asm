@@ -20,7 +20,7 @@
   jsr iecInit
 
   ;Initialize SID & SID VIA1
-  jsr SID_SETUP
+  ;jsr SID_SETUP
 
 
 
@@ -52,7 +52,7 @@ mainFlashPartyFunction:
   jsr readFilenameToBuffer
   lda FILE_SIZE_LO        ; tamaño que te dejó el IEC
   ldx FILE_SIZE_HI
-  jsr SID_PLAY  
+  ;jsr SID_PLAY  
   ; jsr delay_3_sec
   ; lda #<fileF1
   ; sta ZP_PTR_LO
@@ -152,7 +152,7 @@ read_GRAPH_Table_End:
 
 
 
-  .include "../lib_20c/lib_sid/lib_sid_player_noIRQ.asm"
+  .include "../lib_20c/lib_sid/lib_sid_player_again.asm"
 
   .org $90A2                                   ; IEC fijo: mismo offset de página que cuando andaba ($82A2)
   .include "../lib_20c/lib_iec/lib_iec_code.asm"
