@@ -28,7 +28,7 @@ mainFlashPartyFunction:
   sta ZP_PTR_HI
   lda #$00
   sta ZP_BufferStartLow
-  lda #$40
+  lda #$10
   sta ZP_BufferStartHigh
   jsr readFilenameToBuffer
   jsr printDiskBuffer
