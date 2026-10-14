@@ -51,17 +51,17 @@ mainFlashPartyFunction:
   lda #>BUFFER_MUSIC_START
   sta ZP_BufferStartHigh
   jsr readFilenameToBuffer
-  lda FILE_SIZE_LO        ; tamaño que te dejó el IEC
-  ldx FILE_SIZE_HI
+  ;lda FILE_SIZE_LO        ; tamaño que te dejó el IEC
+  ;ldx FILE_SIZE_HI
   ; jsr SID_PLAY  
   ; jsr iecInit
-  ; jsr delay_3_sec
-  ; lda #<fileF1
-  ; sta ZP_PTR_LO
-  ; lda #>fileF1
-  ; sta ZP_PTR_HI
-  ; jsr readFilenameToBuffer
-  ; jsr printDiskBuffer
+  jsr delay_3_sec
+  lda #<fileF1
+  sta ZP_PTR_LO
+  lda #>fileF1
+  sta ZP_PTR_HI
+  jsr readFilenameToBuffer
+  jsr printDiskBuffer
 loopFlashParty2026:
   jmp loopFlashParty2026
 
