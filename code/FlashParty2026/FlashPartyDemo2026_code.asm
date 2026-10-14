@@ -16,7 +16,7 @@
   lda #$0 ;if zero got to screen and not printer
   sta rs232Printer ;so we will go to screen and not printer
 
-  jsr SID_SETUP
+  ;jsr SID_SETUP
   ;Initilize IEC disk drive VIA2
   jsr iecInit
 
@@ -53,8 +53,8 @@ mainFlashPartyFunction:
   jsr readFilenameToBuffer
   lda FILE_SIZE_LO        ; tamaño que te dejó el IEC
   ldx FILE_SIZE_HI
-  jsr SID_PLAY  
-  jsr iecInit
+  ; jsr SID_PLAY  
+  ; jsr iecInit
   ; jsr delay_3_sec
   ; lda #<fileF1
   ; sta ZP_PTR_LO
