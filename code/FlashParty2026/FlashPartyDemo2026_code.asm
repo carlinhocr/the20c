@@ -26,6 +26,10 @@ mainFlashPartyFunction:
   sta ZP_PTR_LO
   lda #>fileBandera
   sta ZP_PTR_HI
+  lda $00
+  sta ZP_BufferStartLow
+  lda $40
+  sta ZP_BufferStartHigh
   jsr readFilenameToBuffer
   jsr printDiskBuffer
   jsr delay_3_sec
@@ -40,9 +44,9 @@ loopFlashParty2026:
 
 
 printDiskBuffer:  
-  lda #<BUFFER_START
+  lda ZP_BufferStartLow
   sta serialDataVectorLow
-  lda #>BUFFER_START
+  lda ZP_BufferStartHigh
   sta serialDataVectorHigh
   jsr printAsciiBinary
   rts
