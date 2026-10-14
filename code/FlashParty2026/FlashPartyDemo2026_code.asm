@@ -30,15 +30,16 @@ mainFlashPartyFunction:
   sta ZP_BufferStartLow
   lda #$10
   sta ZP_BufferStartHigh
-  jsr readFilenameToBuffer
+  ;jsr readFilenameToBuffer
+  jsr readFilenameToBufferTroubleshoot
   jsr printDiskBuffer
   jsr delay_3_sec
-  lda #<fileF1
-  sta ZP_PTR_LO
-  lda #>fileF1
-  sta ZP_PTR_HI
-  jsr readFilenameToBuffer
-  jsr printDiskBuffer
+  ; lda #<fileF1
+  ; sta ZP_PTR_LO
+  ; lda #>fileF1
+  ; sta ZP_PTR_HI
+  ; jsr readFilenameToBuffer
+  ; jsr printDiskBuffer
 loopFlashParty2026:
   jmp loopFlashParty2026
 
