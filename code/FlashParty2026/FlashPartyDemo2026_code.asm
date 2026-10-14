@@ -152,7 +152,9 @@ read_GRAPH_Table_End:
 
 
 
-  .include "../lib_20c/lib_sid/lib_sid_player.asm"
+  .include "../lib_20c/lib_sid/lib_sid_player_noIRQ.asm"
+
+  .org $90A2                                   ; IEC fijo: mismo offset de página que cuando andaba ($82A2)
   .include "../lib_20c/lib_iec/lib_iec_code.asm"
   .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_code.asm"
   .include "../lib_20c/lib_acia/lib_acia_code.asm" ;define code for ACIA t  
