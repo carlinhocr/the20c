@@ -17,9 +17,9 @@
 
 ; ---------------------------------------------------------------- CONFIG ----
 SIDFILE     = $8500                 ; MUST match the .incbin .org below
-;SIDFILE_END = $8500 + $0d8f         ; start + file size (3471 = $0d8f bytes)
+SIDFILE_END = $8500 + $0d8f         ; start + file size (3471 = $0d8f bytes)
 ;SIDFILE_END = $8500 + $1279         ; himno start + file size (4729 = $0d8f bytes)
-SIDFILE_END = $8500 + $23e6         ; voz20c.sid = 9190 bytes
+;SIDFILE_END = $8500 + $23e6         ; voz20c.sid = 9190 bytes
 
 
 SID         = $7300                 ; real 6581 base on the 20c
@@ -337,9 +337,9 @@ nmi:
 
 ; ---- the song, assembled into the image; SIDFILE above must equal this org -
   .org $8500
-  ;.incbin "lib_sid_song_example.sid"
+  .incbin "lib_sid_song_example.sid"
   ;.incbin "lib_sid_himno.sid"
-  .incbin "voz20c.sid"
+  ;.incbin "voz20c.sid"
 
 ; ---- CPU vectors ----
   .org $fffa
