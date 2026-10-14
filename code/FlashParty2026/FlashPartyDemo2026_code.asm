@@ -20,7 +20,7 @@
   jsr iecInit
 
   ;Initialize SID & SID VIA1
-  jsr SID_SETUP
+  ;jsr SID_SETUP
 
 
 
