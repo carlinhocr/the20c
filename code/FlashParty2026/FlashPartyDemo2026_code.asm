@@ -16,8 +16,11 @@
   lda #$0 ;if zero got to screen and not printer
   sta rs232Printer ;so we will go to screen and not printer
 
-  ;Initilize IEC disk drive
+  ;Initilize IEC disk drive VIA2
   jsr iecInit
+
+  ;Initialize SID & SID VIA1
+  jsr SID_SETUP
 
 
 
