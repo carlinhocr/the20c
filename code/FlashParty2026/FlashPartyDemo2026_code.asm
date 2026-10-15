@@ -30,14 +30,13 @@
 
 
 mainFlashPartyFunction:
+  ; cargar el .sid en $4000 por IEC
+  ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
   jsr loadAndPlayVoice
   jsr loadAndPlayHimno 
-
-
-; cargar el .sid en $4000 por IEC
-
-; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
-
+  jsr loadAndPrintBandera
+  jsr delay_3_sec
+  jsr loadAndPrintF1
   jsr delay_3_sec
 
 loopFlashParty2026:
@@ -94,29 +93,33 @@ loadAndPlayHimno:
   rts
 
 loadAndPlayOnce:
+  jsr loadMusic
   lda #<1                 ; SID_LIMIT = 1: vuelve apenas termina la frase
   sta SID_LIMIT
   lda #>1
   sta SID_LIMIT+1
-  jsr loadAndPlay
+  lda FILE_SIZE_LO
+  ldx FILE_SIZE_HI
+  jsr SID_PLAY            ; por polling: nada de IEC mientras habla
   rts
 
 loadAndPlayContinuos:
+  jsr loadMusic
   lda #0               ; sin corte (o el límite de frames que quieras)
   sta SID_LIMIT
   sta SID_LIMIT+1
-  jsr loadAndPlay
+  lda FILE_SIZE_LO
+  ldx FILE_SIZE_HI
+  jsr SID_START           ; suena de fondo
   rts
 
-loadAndPlay:  
+loadMusic:                  ; para lo que esté sonando y carga ZP_PTR en $4000
+  jsr SID_STOP            ; nunca cargar encima de un tema que está sonando
   lda #<BUFFER_MUSIC_START
   sta ZP_BufferStartLow
   lda #>BUFFER_MUSIC_START
   sta ZP_BufferStartHigh
   jsr readFilenameToBuffer
-  lda FILE_SIZE_LO
-  ldx FILE_SIZE_HI
-  jsr SID_START        ; suena de fondo
   rts
 
 
