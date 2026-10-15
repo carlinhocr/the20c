@@ -705,7 +705,7 @@ setSimulationTimerBars:
 
 
 printAsciiBinary:
-  sei ;disable interrupts to run
+  ;sei ;disable interrupts to run
   ;save accumulator x and y registers
   pha
   txa
@@ -734,7 +734,7 @@ printAsciiBinary_end:
   pla
   tax
   pla
-  cli ;let them be on when it is ok for them to be on
+  ;cli ;let them be on when it is ok for them to be on
   rts
 
 printAsciiDrawing:
