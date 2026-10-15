@@ -33,7 +33,8 @@ mainFlashPartyFunction:
   ; cargar el .sid en $4000 por IEC
   ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
   jsr loadAndPrintOsoMatrix
-  jsr loadAndPlayVoice
+  jsr delay_1_sec
+  ;jsr loadAndPlayVoice
   jsr delay_1_sec
   jsr loadAndPlayHimno 
   jsr loadAndPrintBandera
