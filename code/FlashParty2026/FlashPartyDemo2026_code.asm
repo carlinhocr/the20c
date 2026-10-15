@@ -32,7 +32,7 @@
 mainFlashPartyFunction:
   ; cargar el .sid en $4000 por IEC
   ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
-  jsr loadAndPlayVoice
+  ;sr loadAndPlayVoice
   jsr loadAndPlayHimno 
   jsr loadAndPrintBandera
   jsr delay_3_sec
