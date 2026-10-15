@@ -30,10 +30,73 @@
 
 
 mainFlashPartyFunction:
-;STRUCTURE to show ASCII messages
+  jsr loadAndPlayVoice
+  jsr loadAndPlayHimno 
 
-  jsr SID_SETUP
+
 ; cargar el .sid en $4000 por IEC
+
+; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
+
+  jsr delay_3_sec
+
+loopFlashParty2026:
+  jmp loopFlashParty2026
+
+
+loadAndPrintBandera:
+  lda #<fileBandera
+  sta ZP_PTR_LO
+  lda #>fileBandera
+  sta ZP_PTR_HI
+  jsr loadAndPrint
+  rts
+loadAndPrintF1:
+  lda #<fileF1
+  sta ZP_PTR_LO
+  lda #>fileF1
+  sta ZP_PTR_HI
+  jsr loadAndPrint
+  rts
+
+loadAndPrint:  
+  lda #<BUFFER_GRAPHICS_START
+  sta ZP_BufferStartLow
+  lda #>BUFFER_GRAPHICS_START
+  sta ZP_BufferStartHigh  
+  jsr readFilenameToBuffer
+  jsr printDiskBuffer
+  rts
+
+printDiskBuffer:  
+  lda ZP_BufferStartLow
+  sta serialDataVectorLow
+  lda ZP_BufferStartHigh
+  sta serialDataVectorHigh
+  jsr printAsciiBinary
+  rts  
+
+loadAndPlayVoice:
+  ; ---- "Hola, soy la 20c" ----
+  lda #<BUFFER_MUSIC_START
+  sta ZP_BufferStartLow
+  lda #>BUFFER_MUSIC_START
+  sta ZP_BufferStartHigh
+  lda #<fileVoz
+  sta ZP_PTR_LO
+  lda #>fileVoz
+  sta ZP_PTR_HI
+  jsr readFilenameToBuffer
+  lda #<1                 ; SID_LIMIT = 1: vuelve apenas termina la frase
+  sta SID_LIMIT
+  lda #>1
+  sta SID_LIMIT+1
+  lda FILE_SIZE_LO
+  ldx FILE_SIZE_HI
+  jsr SID_PLAY            ; habla (~2 s) y vuelve
+  rts
+
+loadAndPlayHimno:
   lda #<BUFFER_MUSIC_START
   sta ZP_BufferStartLow
   lda #>BUFFER_MUSIC_START
@@ -49,35 +112,8 @@ mainFlashPartyFunction:
   lda FILE_SIZE_LO
   ldx FILE_SIZE_HI
   jsr SID_START        ; suena de fondo
-; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
-  lda #<fileBandera
-  sta ZP_PTR_LO
-  lda #>fileBandera
-  sta ZP_PTR_HI
-  lda #<BUFFER_GRAPHICS_START
-  sta ZP_BufferStartLow
-  lda #>BUFFER_GRAPHICS_START
-  sta ZP_BufferStartHigh
-  jsr readFilenameToBuffer
-  jsr printDiskBuffer
-  jsr delay_3_sec
-  lda #<fileF1
-  sta ZP_PTR_LO
-  lda #>fileF1
-  sta ZP_PTR_HI
-  jsr readFilenameToBuffer
-  jsr printDiskBuffer
-loopFlashParty2026:
-  jmp loopFlashParty2026
-
-
-printDiskBuffer:  
-  lda ZP_BufferStartLow
-  sta serialDataVectorLow
-  lda ZP_BufferStartHigh
-  sta serialDataVectorHigh
-  jsr printAsciiBinary
   rts
+
 
 playSong10Seconds:  
   lda #<1000              ; frames hasta cortar (0 = no corta)

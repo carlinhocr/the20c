@@ -18,3 +18,5 @@ fileF1:
 fileSoundHimno:
     .byte "0:HIMNO.SID,P,R", $00  ; Open GRAPH001 as PRG for reading     
     ;.byte "0:HIMNO.SID,P,R", $00  ; Open GRAPH001 as PRG for reading  
+fileVoz:
+    .byte "0:HOLA.SID,P,R", $00  ; Open GRAPH001 as PRG for reading     
