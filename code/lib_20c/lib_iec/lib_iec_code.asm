@@ -73,6 +73,17 @@
 ;   VERSION HISTORY
 ;===============================================================================
 ;
+;   v29  - Musica de fondo por IRQ (VIA1 $7100) mientras se usa el bus.
+;          IEC_SEND_BYTE_ATN, IEC_SEND_BYTE, IEC_TURNAROUND e IEC_RECEIVE_BYTE
+;          ahora son envoltorios (al final del archivo) que hacen
+;          PHP/SEI ... PLP alrededor de las partes con tiempos del bus. Las
+;          rutinas originales quedan BYTE POR BYTE IGUALES (renombradas *_RAW),
+;          asi que no cambia ningun cruce de pagina dentro del driver.
+;          En la recepcion, la espera larga del RTS (el drive entre bytes o
+;          entre sectores) queda FUERA del SEI: ahi suena la musica. El SEI
+;          arranca al soltar DATA (RFD) y termina con el ACK del byte.
+;          Sin musica (I=1 todo el tiempo) se comporta exactamente igual.
+;
 ;   v28  - Removed the blind 250 us delay in the EOI-send handshake. It
 ;          straddled the listener's acknowledge pulse, so the pulse was
 ;          missed roughly as often as not, the 250 ms ACK watchdog then
@@ -775,7 +786,7 @@ IEC_BUS_IDLE:
 ; The protocol is the same as normal byte send, except ATN is held
 ; low throughout the entire transfer.
 ;-----------------------------------------------------------------------
-IEC_SEND_BYTE_ATN:
+IEC_SEND_BYTE_ATN_RAW:
             STA ZP_BYTE         ; Save the byte to send
 
             ; --- Assert ATN and CLK, release DATA ---
@@ -940,7 +951,7 @@ IEC_SEND_BYTE_ATN:
 ;   - ATN is not asserted
 ;   - EOI signaling is used for the last byte
 ;-----------------------------------------------------------------------
-IEC_SEND_BYTE:
+IEC_SEND_BYTE_RAW:
             STA ZP_BYTE         ; Save byte to send
             TYA                 ; Preserve caller's Y - callers (e.g. the
             PHA                 ; filename loop in IEC_OPEN_FILE) hold a string
@@ -1134,7 +1145,7 @@ IEC_SEND_BYTE:
 ; The order in steps 1-2 matters: RFD after RTS, never before. See the
 ; v26 notes in the version history.
 ;-----------------------------------------------------------------------
-IEC_RECEIVE_BYTE:
+IEC_RECEIVE_BYTE_RAW:            ; (v29: la entrada real es IEC_RECEIVE_BYTE, al final)
             LDA #$00
             STA IEC_EOI_FLAG    ; Clear EOI flag
             STA ZP_BYTE         ; Clear receive buffer
@@ -1148,9 +1159,11 @@ IEC_RECEIVE_BYTE:
             ; DATA was already high when it looked. (v25 released DATA on
             ; entry, which is how the SD2IEC ended up stalled for 29.6 s.)
             JSR IEC_WAIT_CLK_RTS
-            BCS .recv_timeout
+            BCS IEC_RECV_TIMEOUT
 
             ; --- Step 2: RFD - release DATA to say "ready for data" ---
+            ; v29: IEC_RECEIVE_BYTE (al final del archivo) entra ACA con SEI.
+IEC_RECV_RFD:
             JSR DATA_RELEASE
 
             ; --- Step 3: is this the last byte? ---
@@ -1172,7 +1185,7 @@ IEC_RECEIVE_BYTE:
 
             ; The talker now pulls CLK low and sends the final byte normally.
             JSR IEC_WAIT_CLK_LOW
-            BCS .recv_timeout
+            BCS IEC_RECV_TIMEOUT
 
 .recv_clk_is_low:
             ; --- Step 4: eight bits, LSB first ---
@@ -1202,7 +1215,7 @@ IEC_RECEIVE_BYTE:
             BNE .recv_wait_rise
             DEC ZP_TEMP
             BNE .recv_wait_rise
-            JMP .recv_timeout       ; watchdog: talker stopped clocking
+            JMP IEC_RECV_TIMEOUT       ; watchdog: talker stopped clocking
 
 .recv_sample:
             TXA                     ; the sample taken AT the edge
@@ -1228,7 +1241,7 @@ IEC_RECEIVE_BYTE:
             BNE .recv_wait_fall
             DEC ZP_TEMP
             BNE .recv_wait_fall
-            JMP .recv_timeout
+            JMP IEC_RECV_TIMEOUT
 
 .recv_bit_done:
             DEC ZP_COUNT
@@ -1241,7 +1254,7 @@ IEC_RECEIVE_BYTE:
             LDA ZP_BYTE
             RTS
 
-.recv_timeout:
+IEC_RECV_TIMEOUT:
             ; Set the timeout bit the read loops test for, and assert DATA.
             ; A released DATA reads as "ready for data" to the talker, which
             ; would keep it clocking into a listener that has given up;
@@ -1338,7 +1351,7 @@ IEC_UNTALK:
 ;   3. Assert DATA (signal "listener not ready yet")
 ;   4. Wait for device to assert CLK (device is now talker)
 ;-----------------------------------------------------------------------
-IEC_TURNAROUND:
+IEC_TURNAROUND_RAW:
             JSR ATN_RELEASE     ; End command phase
             JSR CLK_RELEASE     ; We stop driving CLK (device takes over)
             JSR DATA_ASSERT     ; We hold DATA LOW ("not ready yet")
@@ -2384,3 +2397,64 @@ readFilenameToBufferTroubleshoot:
 ;   $8000-$FFFF  This program (ROM)
 ;
 ;===============================================================================
+
+
+;===============================================================================
+;   v29 - ENVOLTORIOS PARA TOCAR MUSICA POR IRQ MIENTRAS SE USA EL BUS
+;===============================================================================
+;   Cada uno guarda el flag I (PHP), hace SEI, llama a la rutina original y lo
+;   restaura (PLP). La IRQ de la musica que llegue mientras tanto queda
+;   pendiente en el VIA1 y se atiende apenas se hace el PLP (un frame tarde,
+;   nunca perdido, salvo que la espera dure mas de 20 ms).
+;   Conservan A y el carry de la rutina original.
+;-------------------------------------------------------------------------------
+
+IEC_SEND_BYTE_ATN:                  ; bytes de comando bajo ATN
+            PHP
+            SEI
+            JSR IEC_SEND_BYTE_ATN_RAW
+            JMP IEC_PLP_KEEP_C
+
+IEC_SEND_BYTE:                      ; bytes de datos (nombre de archivo, escritura)
+            PHP                     ; incluye la espera del RFD: el listener mide
+            SEI                     ; 200 us desde que suelta DATA hasta que bajamos CLK
+            JSR IEC_SEND_BYTE_RAW
+            JMP IEC_PLP_KEEP_C
+
+IEC_TURNAROUND:
+            PHP
+            SEI
+            JSR IEC_TURNAROUND_RAW
+            JMP IEC_PLP_KEEP_C
+
+; ---- receptor: la espera del RTS va CON interrupciones; desde el RFD, sin -----
+IEC_RECEIVE_BYTE:
+            LDA #$00
+            STA IEC_EOI_FLAG
+            STA ZP_BYTE
+            ; Paso 1: el talker suelta CLK cuando tiene el byte listo. Mientras
+            ; tanto tenemos DATA abajo ("no listo"): el drive espera lo que haga
+            ; falta, asi que aca la IRQ de la musica puede entrar tranquila.
+            JSR IEC_WAIT_CLK_RTS
+            BCC .rx_rts
+            JMP IEC_RECV_TIMEOUT    ; misma salida que antes (no hay PHP pendiente)
+.rx_rts:
+            ; Desde que soltamos DATA el reloj corre: ventana de EOI de 200 us,
+            ; los 8 bits a ~60 us y el ACK en menos de 1 ms. Todo con SEI.
+            PHP
+            SEI
+            JSR IEC_RECV_RFD        ; pasos 2 a 5 de la rutina original
+            PLP
+            ORA #$00                ; N/Z segun el byte, como devolvia antes
+            RTS
+
+; ---- PLP conservando el carry de la rutina (y A) ------------------------------
+IEC_PLP_KEEP_C:
+            BCS .k_sec
+            PLP
+            CLC
+            RTS
+.k_sec:
+            PLP
+            SEC
+            RTS
