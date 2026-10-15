@@ -16,7 +16,7 @@
   lda #$0 ;if zero got to screen and not printer
   sta rs232Printer ;so we will go to screen and not printer
 
-  jsr SID_SETUP
+  ;jsr SID_SETUP
   ;Initilize IEC disk drive VIA2
   jsr iecInit
 
@@ -27,6 +27,25 @@
 
 mainFlashPartyFunction:
 ;STRUCTURE to show ASCII messages
+
+  jsr SID_SETUP
+; cargar el .sid en $4000 por IEC
+  lda #<BUFFER_MUSIC_START
+  sta ZP_BufferStartLow
+  lda #>BUFFER_MUSIC_START
+  sta ZP_BufferStartHigh
+  jsr readFilenameToBuffer
+  lda #<fileSoundHimno
+  sta ZP_PTR_LO
+  lda #>fileSoundHimno
+  sta ZP_PTR_HI
+  lda #0               ; sin corte (o el límite de frames que quieras)
+  sta SID_LIMIT
+  sta SID_LIMIT+1
+  lda FILE_SIZE_LO
+  ldx FILE_SIZE_HI
+  jsr SID_START        ; suena de fondo
+; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
   lda #<fileBandera
   sta ZP_PTR_LO
   lda #>fileBandera
@@ -37,12 +56,6 @@ mainFlashPartyFunction:
   sta ZP_BufferStartHigh
   jsr readFilenameToBuffer
   jsr printDiskBuffer
-  ;Load a Song
-  lda #<fileSoundHimno
-  sta ZP_PTR_LO
-  lda #>fileSoundHimno
-  sta ZP_PTR_HI
-  jsr playSong10Seconds
   jsr delay_3_sec
   lda #<fileF1
   sta ZP_PTR_LO
@@ -155,7 +168,7 @@ read_GRAPH_Table_End:
 
 
 
-  .include "../lib_20c/lib_sid/lib_sid_player_withIRQ.asm"
+  .include "../lib_20c/lib_sid/lib_sid_player.asm"
 
   .org $90A2                                   ; IEC fijo: mismo offset de página que cuando andaba ($82A2)
   .include "../lib_20c/lib_iec/lib_iec_code.asm"
