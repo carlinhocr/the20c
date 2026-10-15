@@ -34,11 +34,11 @@ mainFlashPartyFunction:
   sta ZP_BufferStartLow
   lda #>BUFFER_MUSIC_START
   sta ZP_BufferStartHigh
-  jsr readFilenameToBuffer
   lda #<fileSoundHimno
   sta ZP_PTR_LO
   lda #>fileSoundHimno
   sta ZP_PTR_HI
+  jsr readFilenameToBuffer
   lda #0               ; sin corte (o el límite de frames que quieras)
   sta SID_LIMIT
   sta SID_LIMIT+1
