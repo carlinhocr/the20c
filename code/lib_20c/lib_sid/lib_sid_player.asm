@@ -1,5 +1,7 @@
 ; ============================================================================
-;  LIB_SID_PLAYER.ASM  -  PSID player para la "20c" (6502 + SID 6581 @ $7300)
+;  LIB_SID_PLAYER.ASM  v3  -  PSID player para la "20c" (6502 + SID 6581 @ $7300)
+;  v3: VIA1 $7100 dedicado a la música (IRQ del T1). SID_PLAY por polling,
+;      SID_START por IRQ, SID_SETUP con puertos como entradas.
 ;  Librería: tu programa carga el .sid con el driver IEC en SIDFILE ($4000)
 ;  y llama a SID_PLAY (bloqueante) o SID_START (en segundo plano).
 ; ----------------------------------------------------------------------------
@@ -19,17 +21,21 @@
 ;      jsr SID_PLAY            ; vuelve con carry=0 al terminar, carry=1 si no es PSID
 ;      ; ... seguís con tu programa: cargar otra canción, etc.
 ;
-;  USO (en segundo plano):
+;  SID_PLAY NO usa interrupciones (hace polling del T1): anda aunque la IRQ
+;  del VIA no llegue a la CPU.
+;
+;  USO (en segundo plano, ESTE SÍ necesita la IRQ del VIA $7100 en la CPU):
 ;      jsr SID_START           ; mismos parámetros; vuelve enseguida, suena por IRQ
 ;      ...                     ; SID_BUSY <> 0 mientras suena
 ;      ...                     ; SID_FRAMES / SID_FRAMES+1 = frames tocados
 ;      jsr SID_STOP            ; corta cuando quieras
 ;
 ;  Requisitos:
-;   - El vector de IRQ ($FFFE) tiene que apuntar a SID_IRQ (o tu despachador
-;     tiene que saltar a SID_IRQ cuando la IRQ sea del T1 del VIA de música).
-;   - La carga IEC hacela con la música parada (SID_BUSY = 0): una IRQ en el
-;     medio de un byte IEC puede romper la temporización del bus.
+;   - Solo para SID_START: el vector de IRQ ($FFFE) tiene que apuntar a SID_IRQ
+;     y la salida IRQ del VIA $7100 tiene que llegar a la pata IRQ de la CPU.
+;   - Para cargar por IEC con la música sonando usá lib_iec_code.asm v29
+;     (tiene los PHP/SEI ... PLP en las partes con tiempos del bus).
+;     Con la v28 o anterior, cargá con la música parada (SID_STOP).
 ;   - Temas "en el lugar": si la dirección de carga del PSID es SIDFILE+$7E
 ;     el tema corre donde lo cargaste y la copia no mueve nada. Si la dirección
 ;     de carga es otra, se copia ahí (ascendente: el destino tiene que estar
@@ -42,7 +48,7 @@ SID         = $7300                 ; 6581 real en la 20c
 SIDPAGE     = $D4                   ; página que escribe el tema (se parchea)
 SIDREG_MAX  = $1C                   ; último registro válido del SID
 
-VIA         = $7100                 ; VIA de la música (el IEC usa el de $6000)
+VIA         = $7100                 ; VIA1: solo música (el IEC usa el VIA2 de $7200)
 VIA_DDRB    = VIA+$02
 VIA_DDRA    = VIA+$03
 VIA_T1CL    = VIA+$04
@@ -56,6 +62,9 @@ VIA_PCR     = VIA+$0C
 VIA_IFR     = VIA+$0D
 VIA_IER     = VIA+$0E
 
+VIA_PORT_DDR = $00                  ; puertos A/B del VIA de música: $00 = entradas (no maneja
+                                    ; ninguna pata). Ponelo en $FF solo si PA/PB no van a nada
+                                    ; o van a cosas que esperan salidas.
 CPUCLK_KHZ  = 1000                  ; <-- clock de la CPU en kHz (1000 = 1 MHz)
 T1_LATCH    = (CPUCLK_KHZ * 20) - 2 ; T1 libre: ~50 Hz
 
@@ -80,17 +89,36 @@ H_STARTSONG = SIDFILE+$10
 
 ; ============================================================================
 ;  SID_PLAY  -  A/X = tamaño del archivo. Toca hasta SID_LIMIT frames y vuelve.
-;  Con SID_LIMIT = 0 no vuelve nunca (salvo que algo llame a SID_STOP).
+;  Funciona POR POLLING del flag del T1 (IFR bit 6) con las IRQ deshabilitadas:
+;  no necesita que la línea IRQ del VIA llegue a la CPU, y las IRQ de otros
+;  chips (ACIA, VIA del IEC) no lo molestan mientras suena.
+;  Con SID_LIMIT = 0 no vuelve nunca.
 ;  Sale con carry=1 si el archivo no es PSID/RSID.
 ; ============================================================================
 SID_PLAY:
-    jsr SID_START
+    php
+    sei
+    jsr SID_LOAD                    ; parsea, copia, parchea, init
     bcs .bad
-.wait:
-    lda SID_BUSY
-    bne .wait
+    jsr TIMER_ON                    ; T1 libre a 50 Hz...
+    lda #%01000000
+    sta VIA_IER                     ; ...pero SIN IRQ: lo miramos a mano
+    lda #1
+    sta SID_BUSY
+.poll:
+    lda VIA_IFR
+    and #%01000000                  ; ¿venció el T1?
+    beq .poll
+    lda VIA_T1CL                    ; baja el flag
+    jsr SID_TICK                    ; play + cuenta; carry=1 al llegar al límite
+    bcc .poll
+    jsr SID_HALT
+    plp
     clc
+    rts
 .bad:
+    plp
+    sec
     rts
 
 ; ============================================================================
@@ -101,6 +129,24 @@ SID_PLAY:
 SID_START:
     php
     sei
+    jsr SID_LOAD
+    bcs .bad
+    jsr TIMER_ON
+    lda #%11000000                  ; IER: habilita la IRQ del T1
+    sta VIA_IER
+    lda #1
+    sta SID_BUSY
+    plp                             ; recupera el estado de I de quien llamó...
+    cli                             ; ...pero la música necesita las IRQ
+    clc
+    rts
+.bad:
+    plp
+    sec
+    rts
+
+; ---- SID_LOAD: A/X = tamaño. Header, copia, parcheo, init. carry=1 si no es PSID
+SID_LOAD:
     sta zp_len+0                    ; guardo el tamaño mientras tanto
     stx zp_len+1
     lda #0
@@ -124,7 +170,6 @@ SID_START:
     cmp #'D'
     beq .hdr_ok
 .badmagic:
-    plp
     sec
     rts
 .hdr_ok:
@@ -231,12 +276,6 @@ SID_START:
     ldx #0
     ldy #0
     jsr call_init
-
-    jsr INSTALL_TIMER
-    lda #1
-    sta SID_BUSY
-    plp                             ; recupera el estado de I de quien llamó...
-    cli                             ; ...pero la música necesita las IRQ
     clc
     rts
 
@@ -244,8 +283,8 @@ SID_START:
 ;  SID_SETUP  -  llamalo una vez al arrancar, antes del CLI.
 ;  Deja el VIA de música en un estado conocido aunque su /RES no venga del
 ;  reset del sistema (o después de un reset en caliente con un tema sonando):
-;  sin IRQs, timers sin efecto, puertos como salidas en 0 (sin entradas
-;  flotando) y el SID con todos sus registros en 0 (mudo, sin zumbido).
+;  sin IRQs, timers sin efecto, puertos según VIA_PORT_DDR y el SID con
+;  todos sus registros en 0 (mudo, sin zumbido).
 ; ============================================================================
 SID_SETUP:
     php
@@ -256,10 +295,10 @@ SID_SETUP:
     lda #0
     sta VIA_ACR                     ; T1/T2 one-shot, sin shift register, sin latch
     sta VIA_PCR                     ; CA/CB en modo entrada, flanco negativo
-    sta VIA_ORA                     ; salidas en 0...
+    sta VIA_ORA                     ; si son salidas, quedan en 0
     sta VIA_ORB
-    lda #%11111111
-    sta VIA_DDRA                    ; ...y todo el puerto como salida
+    lda #VIA_PORT_DDR
+    sta VIA_DDRA                    ; dirección de los puertos (ver VIA_PORT_DDR)
     sta VIA_DDRB
     lda VIA_T1CL                    ; lee T1CL por si quedó un flag del T1
     ldx #$18                        ; SID: los 25 registros a 0
@@ -371,21 +410,44 @@ call_play:
     jmp (play_vec)
 
 ; ============================================================================
-;  INSTALL_TIMER  -  T1 del VIA en modo libre a ~50 Hz con IRQ
+;  TIMER_ON  -  T1 del VIA en modo libre a ~50 Hz (la IRQ la decide quien llama)
 ; ============================================================================
-INSTALL_TIMER:
-    lda #%11111111                  ; (tu configuración de puertos)
-    sta VIA_DDRB
-    lda #%11111111
-    sta VIA_DDRA
+TIMER_ON:
     lda #%01000000                  ; ACR: T1 libre, PB7 off
     sta VIA_ACR
     lda #<(T1_LATCH)
     sta VIA_T1CL
     lda #>(T1_LATCH)                ; carga + arranca + limpia el flag
     sta VIA_T1CH
-    lda #%11000000                  ; IER: habilita la IRQ del T1
-    sta VIA_IER
+    rts
+
+; ============================================================================
+;  SID_TICK  -  llama a play y cuenta frames. carry=1 si llegó a SID_LIMIT.
+;  Solo cuenta cuando el T1 está a 50 Hz: los temas de voz digital suben el
+;  T1 a ~6800 Hz y esas llamadas no son frames.
+; ============================================================================
+SID_TICK:
+    jsr call_play
+    lda VIA_T1LH                    ; ¿T1 a 50 Hz? (la voz lo cambia)
+    cmp #>(T1_LATCH)
+    bne .no
+    inc SID_FRAMES+0
+    bne .chk
+    inc SID_FRAMES+1
+.chk:
+    lda SID_LIMIT+0
+    ora SID_LIMIT+1
+    beq .no                         ; 0 = sin corte
+    lda SID_FRAMES+0
+    cmp SID_LIMIT+0
+    bne .no
+    lda SID_FRAMES+1
+    cmp SID_LIMIT+1
+    bne .no
+    sec
+    rts
+.no:
+    clc
     rts
 
 ; ============================================================================
@@ -403,23 +465,8 @@ SID_IRQ:
     lda VIA_T1CL                    ; ack del T1
     lda SID_BUSY
     beq .out                        ; IRQ sin tema sonando: no hacer nada
-    jsr call_play
-    lda VIA_T1LH                    ; ¿T1 a 50 Hz? (la voz lo cambia)
-    cmp #>(T1_LATCH)
-    bne .out
-    inc SID_FRAMES+0
-    bne .chk
-    inc SID_FRAMES+1
-.chk:
-    lda SID_LIMIT+0
-    ora SID_LIMIT+1
-    beq .out                        ; 0 = sin corte
-    lda SID_FRAMES+0
-    cmp SID_LIMIT+0
-    bne .out
-    lda SID_FRAMES+1
-    cmp SID_LIMIT+1
-    bne .out
+    jsr SID_TICK
+    bcc .out
     jsr SID_HALT                    ; llegó al límite: fin del tema
 .out:
     pla
