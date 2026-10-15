@@ -16,7 +16,7 @@
   lda #$0 ;if zero got to screen and not printer
   sta rs232Printer ;so we will go to screen and not printer
 
-  ;jsr SID_SETUP
+  jsr SID_SETUP
   ;Initilize IEC disk drive VIA2
   jsr iecInit
 
@@ -37,24 +37,12 @@ mainFlashPartyFunction:
   sta ZP_BufferStartHigh
   jsr readFilenameToBuffer
   jsr printDiskBuffer
-  ; lda #<fileSoundHimno
-  ; sta ZP_PTR_LO
-  ; lda #>fileSoundHimno
-  ; sta ZP_PTR_HI
-  ; ;Load a Song
-  ; lda #<1000              ; frames hasta cortar (0 = no corta)
-  ; sta SID_LIMIT
-  ; lda #>1000
-  ; sta SID_LIMIT+1
-  ; lda #<BUFFER_MUSIC_START
-  ; sta ZP_BufferStartLow
-  ; lda #>BUFFER_MUSIC_START
-  ; sta ZP_BufferStartHigh
-  ; jsr readFilenameToBuffer
-  ;lda FILE_SIZE_LO        ; tamaño que te dejó el IEC
-  ;ldx FILE_SIZE_HI
-  ; jsr SID_PLAY  
-  ; jsr iecInit
+  ;Load a Song
+  lda #<fileSoundHimno
+  sta ZP_PTR_LO
+  lda #>fileSoundHimno
+  sta ZP_PTR_HI
+  jsr playSong10Seconds
   jsr delay_3_sec
   lda #<fileF1
   sta ZP_PTR_LO
@@ -74,7 +62,20 @@ printDiskBuffer:
   jsr printAsciiBinary
   rts
 
-
+playSong10Seconds:  
+  lda #<1000              ; frames hasta cortar (0 = no corta)
+  sta SID_LIMIT
+  lda #>1000
+  sta SID_LIMIT+1
+  lda #<BUFFER_MUSIC_START
+  sta ZP_BufferStartLow
+  lda #>BUFFER_MUSIC_START
+  sta ZP_BufferStartHigh
+  jsr readFilenameToBuffer
+  lda FILE_SIZE_LO        ; tamaño que te dejó el IEC
+  ldx FILE_SIZE_HI
+  jsr SID_PLAY  
+  rts
 
 ;01 load buffer from GRAPH001
 
@@ -154,7 +155,7 @@ read_GRAPH_Table_End:
 
 
 
-  .include "../lib_20c/lib_sid/lib_sid_player_again.asm"
+  .include "../lib_20c/lib_sid/lib_sid_player_withIRQ.asm"
 
   .org $90A2                                   ; IEC fijo: mismo offset de página que cuando andaba ($82A2)
   .include "../lib_20c/lib_iec/lib_iec_code.asm"
