@@ -78,41 +78,47 @@ printDiskBuffer:
 
 loadAndPlayVoice:
   ; ---- "Hola, soy la 20c" ----
-  lda #<BUFFER_MUSIC_START
-  sta ZP_BufferStartLow
-  lda #>BUFFER_MUSIC_START
-  sta ZP_BufferStartHigh
   lda #<fileVoz
   sta ZP_PTR_LO
   lda #>fileVoz
   sta ZP_PTR_HI
-  jsr readFilenameToBuffer
-  lda #<1                 ; SID_LIMIT = 1: vuelve apenas termina la frase
-  sta SID_LIMIT
-  lda #>1
-  sta SID_LIMIT+1
-  lda FILE_SIZE_LO
-  ldx FILE_SIZE_HI
-  jsr SID_PLAY            ; habla (~2 s) y vuelve
+  jsr loadAndPlayOnce
   rts
 
 loadAndPlayHimno:
-  lda #<BUFFER_MUSIC_START
-  sta ZP_BufferStartLow
-  lda #>BUFFER_MUSIC_START
-  sta ZP_BufferStartHigh
   lda #<fileSoundHimno
   sta ZP_PTR_LO
   lda #>fileSoundHimno
   sta ZP_PTR_HI
-  jsr readFilenameToBuffer
+  jsr loadAndPlayContinuos
+  rts
+
+loadAndPlayOnce:
+  lda #<1                 ; SID_LIMIT = 1: vuelve apenas termina la frase
+  sta SID_LIMIT
+  lda #>1
+  sta SID_LIMIT+1
+  jsr loadAndPlay
+  rts
+
+loadAndPlayContinuos:
   lda #0               ; sin corte (o el límite de frames que quieras)
   sta SID_LIMIT
   sta SID_LIMIT+1
+  jsr loadAndPlay
+  rts
+
+loadAndPlay:  
+  lda #<BUFFER_MUSIC_START
+  sta ZP_BufferStartLow
+  lda #>BUFFER_MUSIC_START
+  sta ZP_BufferStartHigh
+  jsr readFilenameToBuffer
   lda FILE_SIZE_LO
   ldx FILE_SIZE_HI
   jsr SID_START        ; suena de fondo
   rts
+
 
 
 playSong10Seconds:  
