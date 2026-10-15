@@ -38,7 +38,7 @@ mainFlashPartyFunction:
   jsr delay_3_sec
   jsr loadAndPrintF1
   jsr delay_3_sec
-
+  jsr delay_3_sec
 loopFlashParty2026:
   jmp loopFlashParty2026
 
@@ -54,6 +54,14 @@ loadAndPrintF1:
   lda #<fileF1
   sta ZP_PTR_LO
   lda #>fileF1
+  sta ZP_PTR_HI
+  jsr loadAndPrint
+  rts
+
+loadAndPrintOsoMatrix:
+  lda #<fileOsoMatrix
+  sta ZP_PTR_LO
+  lda #>fileOsoMatrix
   sta ZP_PTR_HI
   jsr loadAndPrint
   rts
