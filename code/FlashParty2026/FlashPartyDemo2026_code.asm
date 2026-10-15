@@ -11,16 +11,20 @@
   ;initialize RESET, Stack and processor Flags
   .include "../lib_20c/lib_init/lib_init.asm" ;reset vector and stack initialization
 
+  ;Initialize SID & SID VIA1
+  sei
+  jsr SID_SETUP
+
   ;Initialize UART for RS-232 Screen
   jsr uartSerialInit
   lda #$0 ;if zero got to screen and not printer
   sta rs232Printer ;so we will go to screen and not printer
+  
 
-  ;jsr SID_SETUP
   ;Initilize IEC disk drive VIA2
   jsr iecInit
 
-  ;Initialize SID & SID VIA1
+
  
 
 
