@@ -64,7 +64,8 @@ loadAndPrintBandera:
   sta ZP_PTR_LO
   lda #>fileBandera
   sta ZP_PTR_HI
-  jsr loadAndPrintRS232
+  ;jsr loadAndPrintRS232
+  jsr loadRetryRS232
   rts
 
 loadAndPrintF1:
@@ -72,7 +73,8 @@ loadAndPrintF1:
   sta ZP_PTR_LO
   lda #>fileF1
   sta ZP_PTR_HI
-  jsr loadAndPrint
+  ;jsr loadAndPrint
+  jsr loadRetryRS232
   rts
 
 loadAndPrintOsoMatrix:
@@ -80,7 +82,8 @@ loadAndPrintOsoMatrix:
   sta ZP_PTR_LO
   lda #>fileOsoMatrix
   sta ZP_PTR_HI
-  jsr loadAndPrintRS232
+  jsr loadRetryRS232
+  ;jsr loadAndPrintRS232
   ;jsr loadAndPrint
   rts
 
@@ -89,7 +92,8 @@ loadAndPrintTutankamon:
   sta ZP_PTR_LO
   lda #>fileTutankamon
   sta ZP_PTR_HI
-  jsr loadAndPrintRS232
+  jsr loadRetryRS232
+  ;jsr loadAndPrintRS232
   ;jsr loadAndPrint
   rts  
 
@@ -220,7 +224,8 @@ loadSid:
   sty ZP_BufferStartHigh
   lda #0
   sta ZP_BufferStartLow
-  jsr readFilenameToBuffer
+  jsr loadRetry
+  ;jsr readFilenameToBuffer
   lda FILE_SIZE_LO        ; guardo el tamaño: la carga de un gráfico lo pisa
   sta sidSize
   lda FILE_SIZE_HI
@@ -237,10 +242,83 @@ playSid:
   jsr SID_START_AT
   rts
 
-sidSize = $0390           ; 2 bytes de RAM libres ($0382/83 ya los usa tu IEC)
 
 
-
+;   LOAD_RETRIES = 3
+;   retryCount   = $0392      ; 1 byte de RAM libre
+;   namePtr      = $0393      ; 2 bytes de RAM libres
+ 
+;------------------------------------------------------------------------------
+; loadRetry - carga un archivo por IEC y reintenta si falla
+;   Entrada: ZP_PTR_LO/HI = nombre ("0:ARCHIVO,P,R",0)
+;            ZP_BufferStartLow/High = destino
+;   Salida:  carry = 0 cargó bien (FILE_SIZE_LO/HI = bytes)
+;            carry = 1 falló LOAD_RETRIES veces seguidas
+;
+;   Cómo sabe si anduvo: IEC_STATUS = 0 Y IEC_EOI_FLAG <> 0.
+;   IEC_STATUS solo NO alcanza: IEC_READ_FILE termina con IEC_CLOSE_FILE, que
+;   pone IEC_STATUS = 0, así que un timeout en el medio de la lectura se borra.
+;   IEC_EOI_FLAG queda en $FF solo si llegó el último byte (el que trae EOI).
+;   IEC_READ_FILE pisa ZP_PTR (lo usa como puntero al buffer): por eso el
+;   nombre se guarda en namePtr y se repone en cada intento.
+;------------------------------------------------------------------------------
+loadRetry:
+  lda ZP_PTR_LO
+  sta namePtr
+  lda ZP_PTR_HI
+  sta namePtr+1
+  lda #LOAD_RETRIES
+  sta retryCount
+.try:
+  lda namePtr
+  sta ZP_PTR_LO
+  lda namePtr+1
+  sta ZP_PTR_HI
+  jsr IEC_READ_FILE
+  lda IEC_STATUS
+  bne .fail              ; error al abrir (sin disquetera, etc.)
+  lda IEC_EOI_FLAG
+  bne .ok                ; $FF = llegó entero
+.fail:
+  jsr IEC_BUS_IDLE
+  lda #200
+  jsr DELAY_LONG         ; 200 ms para que la disquetera se reponga
+  dec retryCount
+  bne .try
+  sec                    ; no hubo caso
+  rts
+.ok:
+  clc
+  rts
+ 
+loadRetryRS232:
+  lda ZP_PTR_LO
+  sta namePtr
+  lda ZP_PTR_HI
+  sta namePtr+1
+  lda #LOAD_RETRIES
+  sta retryCount
+.try:
+  lda namePtr
+  sta ZP_PTR_LO
+  lda namePtr+1
+  sta ZP_PTR_HI
+  jsr IEC_READ_FILE_TO_RS232
+  lda IEC_STATUS
+  bne .fail              ; error al abrir (sin disquetera, etc.)
+  lda IEC_EOI_FLAG
+  bne .ok                ; $FF = llegó entero
+.fail:
+  jsr IEC_BUS_IDLE
+  lda #200
+  jsr DELAY_LONG         ; 200 ms para que la disquetera se reponga
+  dec retryCount
+  bne .try
+  sec                    ; no hubo caso
+  rts
+.ok:
+  clc
+  rts
 
   .include "../lib_20c/lib_sid/lib_sid_player.asm"
 
