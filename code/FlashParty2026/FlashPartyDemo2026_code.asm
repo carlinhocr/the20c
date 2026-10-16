@@ -34,6 +34,7 @@ mainFlashPartyFunction:
   ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
   jsr loadAndPrintOsoMatrix
   jsr delay_1_sec
+  jsr loadAndPlayDesierto
   jsr loadAndPrintTutankamon
   ;jsr loadAndPlayVoice
   ; jsr delay_1_sec
@@ -119,6 +120,15 @@ loadAndPlayHimno:
   sta ZP_PTR_HI
   jsr loadAndPlayContinuos
   rts
+
+loadAndPlayDesierto:
+  lda #<fileSoundDesierto
+  sta ZP_PTR_LO
+  lda #>fileSoundDesierto
+  sta ZP_PTR_HI
+  jsr loadAndPlayContinuos
+  rts
+
 
 loadAndPlayOnce:
   jsr loadMusic
