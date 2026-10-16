@@ -1,8 +1,13 @@
 ; ============================================================================
-;  LIB_SID_PLAYER.ASM  v3  -  PSID player para la "20c" (6502 + SID 6581 @ $7300)
+;  LIB_SID_PLAYER.ASM  v4  -  PSID player para la "20c" (6502 + SID 6581 @ $7300)
+;  v4: el .sid puede estar en cualquier página (dos "slots": $1000 y $4000) para
+;      cargar el próximo tema por IEC mientras suena el anterior.
+;        SID_START_AT / SID_PLAY_AT:  A/X = tamaño, Y = página del .sid ($10, $40...)
+;        SID_START / SID_PLAY:        igual que antes, usan SIDFILE.
+;      Al arrancar un tema nuevo se apagan las voces del anterior (cambio limpio).
 ;  v3: VIA1 $7100 dedicado a la música (IRQ del T1). SID_PLAY por polling,
 ;      SID_START por IRQ, SID_SETUP con puertos como entradas.
-;  Librería: tu programa carga el .sid con el driver IEC en SIDFILE ($4000)
+;  Librería: tu programa carga el .sid con el driver IEC en un slot ($1000 o $4000)
 ;  y llama a SID_PLAY (bloqueante) o SID_START (en segundo plano).
 ; ----------------------------------------------------------------------------
 ;  Sintaxis: vasm6502_oldstyle
@@ -43,7 +48,8 @@
 ; ============================================================================
 
 ; ---------------------------------------------------------------- CONFIG ----
-SIDFILE     = $4000                 ; donde tu IEC deja el .sid ($4000-$6FFF)
+SIDFILE     = $1000                 ; slot por defecto de SID_START / SID_PLAY
+SID_BASE    = $20                   ; 16 bits en página cero: dónde está el .sid actual
 SID         = $7300                 ; 6581 real en la 20c
 SIDPAGE     = $D4                   ; página que escribe el tema (se parchea)
 SIDREG_MAX  = $1C                   ; último registro válido del SID
@@ -79,13 +85,13 @@ SID_LIMIT   = $1C                   ; 16 bits: corta al llegar acá. 0 = sin cor
 SID_BUSY    = $1E                   ; <> 0 mientras suena
 song_no     = $1F                   ; canción del PSID (0 = la primera)
 
-; ---- campos del header PSID (los de 16 bits son BIG-ENDIAN) ----------------
-H_MAGIC     = SIDFILE+$00
-H_DATAOFF   = SIDFILE+$06
-H_LOADADDR  = SIDFILE+$08
-H_INITADDR  = SIDFILE+$0A
-H_PLAYADDR  = SIDFILE+$0C
-H_STARTSONG = SIDFILE+$10
+; ---- campos del header PSID (offsets; los de 16 bits son BIG-ENDIAN) --------
+H_MAGIC     = $00
+H_DATAOFF   = $06
+H_LOADADDR  = $08
+H_INITADDR  = $0A
+H_PLAYADDR  = $0C
+H_STARTSONG = $10
 
 ; ============================================================================
 ;  SID_PLAY  -  A/X = tamaño del archivo. Toca hasta SID_LIMIT frames y vuelve.
@@ -96,6 +102,8 @@ H_STARTSONG = SIDFILE+$10
 ;  Sale con carry=1 si el archivo no es PSID/RSID.
 ; ============================================================================
 SID_PLAY:
+    ldy #>(SIDFILE)
+SID_PLAY_AT:                        ; Y = página donde está el .sid
     php
     sei
     jsr SID_LOAD                    ; parsea, copia, parchea, init
@@ -127,6 +135,8 @@ SID_PLAY:
 ;  carry=0 OK (ya está sonando) / carry=1 no es PSID/RSID.
 ; ============================================================================
 SID_START:
+    ldy #>(SIDFILE)
+SID_START_AT:                       ; Y = página donde está el .sid
     php
     sei
     jsr SID_LOAD
@@ -149,57 +159,73 @@ SID_START:
 SID_LOAD:
     sta zp_len+0                    ; guardo el tamaño mientras tanto
     stx zp_len+1
+    sty SID_BASE+1                  ; el .sid empieza al principio de la página Y
     lda #0
-    sta SID_BUSY
+    sta SID_BASE+0
+    jsr SID_HALT                    ; apaga el tema anterior (si había) antes del init
+    lda #0
     sta SID_FRAMES+0
     sta SID_FRAMES+1
 
-    lda H_MAGIC+0
+    ldy #H_MAGIC
+    lda (SID_BASE),y
     cmp #'P'
     beq .magic_ok
     cmp #'R'                        ; RSID también
     bne .badmagic
 .magic_ok:
-    lda H_MAGIC+1
+    iny
+    lda (SID_BASE),y
     cmp #'S'
     bne .badmagic
-    lda H_MAGIC+2
+    iny
+    lda (SID_BASE),y
     cmp #'I'
     bne .badmagic
-    lda H_MAGIC+3
+    iny
+    lda (SID_BASE),y
     cmp #'D'
     beq .hdr_ok
 .badmagic:
     sec
     rts
 .hdr_ok:
-    lda H_STARTSONG+1               ; canción 0-based
+    ldy #H_STARTSONG+1              ; canción 0-based
+    lda (SID_BASE),y
     sec
     sbc #1
     sta song_no
 
-    ; src = SIDFILE + dataOffset
+    ; src = base + dataOffset
+    ldy #H_DATAOFF+1
+    lda (SID_BASE),y
     clc
-    lda #<(SIDFILE)
-    adc H_DATAOFF+1
+    adc SID_BASE+0
     sta zp_src
-    lda #>(SIDFILE)
-    adc H_DATAOFF+0
+    ldy #H_DATAOFF
+    lda (SID_BASE),y
+    adc SID_BASE+1
     sta zp_src+1
 
     ; vectores init / play (big-endian en el header)
-    lda H_INITADDR+1
+    ldy #H_INITADDR+1
+    lda (SID_BASE),y
     sta init_vec+0
-    lda H_INITADDR+0
+    dey
+    lda (SID_BASE),y
     sta init_vec+1
-    lda H_PLAYADDR+1
+    ldy #H_PLAYADDR+1
+    lda (SID_BASE),y
     sta play_vec+0
-    lda H_PLAYADDR+0
+    dey
+    lda (SID_BASE),y
     sta play_vec+1
 
     ; dirección de carga
-    lda H_LOADADDR+0
-    ora H_LOADADDR+1
+    ldy #H_LOADADDR
+    lda (SID_BASE),y
+    iny
+    ora (SID_BASE),y
     bne .hdr_load
     ldy #0                          ; viene en los 2 primeros bytes de los datos
     lda (zp_src),y
@@ -216,18 +242,20 @@ SID_LOAD:
     sta zp_src+1
     jmp .have_dst
 .hdr_load:
-    lda H_LOADADDR+1
+    ldy #H_LOADADDR+1
+    lda (SID_BASE),y
     sta zp_dst+0
-    lda H_LOADADDR+0
+    dey
+    lda (SID_BASE),y
     sta zp_dst+1
 .have_dst:
-    ; len = (SIDFILE + tamaño) - src
+    ; len = (base + tamaño) - src
     clc
     lda zp_len+0
-    adc #<(SIDFILE)
+    adc SID_BASE+0
     sta zp_len+0
     lda zp_len+1
-    adc #>(SIDFILE)
+    adc SID_BASE+1
     sta zp_len+1
     sec
     lda zp_len+0
