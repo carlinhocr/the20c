@@ -69,7 +69,8 @@ loadAndPrintOsoMatrix:
   sta ZP_PTR_LO
   lda #>fileOsoMatrix
   sta ZP_PTR_HI
-  jsr loadAndPrint
+  jsr loadAndPrintRS232
+  ;jsr loadAndPrint
   rts
 
 loadAndPrintTutankamon:
@@ -77,7 +78,8 @@ loadAndPrintTutankamon:
   sta ZP_PTR_LO
   lda #>fileTutankamon
   sta ZP_PTR_HI
-  jsr loadAndPrint
+  jsr loadAndPrintRS232
+  ;jsr loadAndPrint
   rts  
 
 loadAndPrint:  
@@ -88,6 +90,10 @@ loadAndPrint:
   jsr readFilenameToBuffer
   jsr printDiskBuffer
   rts
+
+loadAndPrintRS232:  
+  jsr readFilenameToRS232
+  rts  
 
 printDiskBuffer:  
   lda ZP_BufferStartLow
