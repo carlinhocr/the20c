@@ -316,7 +316,12 @@ loadRetry:
   lda IEC_STATUS
   bne .fail              ; error al abrir (sin disquetera, etc.)
   lda IEC_EOI_FLAG
-  bne .ok                ; $FF = llegó entero
+  beq .fail
+  lda checkTrailer       ; 1 = gráfico, 0 = .sid
+  beq .ok
+  lda TR_MATCH
+  cmp #TRAILER_LEN
+  beq .ok
 .fail:
   jsr printFailInfo
   jsr IEC_BUS_IDLE       ; suelto todo
@@ -378,9 +383,12 @@ loadRetryRS232:
   sta ZP_PTR_HI
   jsr IEC_READ_FILE_TO_RS232
   lda IEC_STATUS
-  bne .fail              ; error al abrir (sin disquetera, etc.)
+  bne .fail
   lda IEC_EOI_FLAG
-  bne .ok                ; $FF = llegó entero
+  beq .fail
+  lda TR_MATCH
+  cmp #TRAILER_LEN       ; ¿llegó el final ESC[0m,00?
+  beq .ok
 .fail:
   jsr printFailInfo
   jsr IEC_BUS_IDLE       ; suelto todo

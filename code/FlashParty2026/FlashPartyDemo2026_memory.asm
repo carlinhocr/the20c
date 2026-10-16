@@ -15,7 +15,7 @@ LOAD_RETRIES = 3
 retryCount   = $0392      ; 1 byte de RAM libre
 namePtr      = $0393      ; 2 bytes de RAM libres
 driveStatus  = $03A0      ; 48 bytes: mensaje del canal 15
-
+checkTrailer = $039A
 
 BUFFER_GRAPHICS_START=$1000
 BUFFER_GRAPHICS_END=$3FFF
