@@ -38,17 +38,17 @@ mainFlashPartyFunction:
   jsr delay_1_sec
   jsr loadAndPrintBandera
   jsr delay_3_sec
-  jsr SID_STOP
-  jsr loadAndPlayDesierto
-  jsr delay_1_sec
+  ;jsr SID_STOP
+  ;jsr loadAndPlayDesierto
+  ;jsr delay_1_sec
   jsr loadAndPrintTutankamon
   ;jsr loadAndPlayVoice
   ; jsr delay_1_sec
   ; jsr loadAndPlayHimno 
   ; jsr delay_1_sec
   ; jsr loadAndPrintBandera
-  ; jsr delay_3_sec
-  ; jsr loadAndPrintF1
+  jsr delay_3_sec
+  jsr loadAndPrintF1
   ; jsr delay_3_sec
   ; jsr delay_3_sec
 loopFlashParty2026:
