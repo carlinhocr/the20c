@@ -33,15 +33,19 @@ mainFlashPartyFunction:
   ; cargar el .sid en $4000 por IEC
   ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
   jsr loadAndPrintOsoMatrix
-  jsr delay_1_sec
-  jsr loadAndPlayHimno10
-  jsr delay_1_sec
-  jsr loadAndPrintBandera
   jsr delay_3_sec
-  ;jsr SID_STOP
-  jsr loadAndPlayDesierto40
-  ;jsr delay_1_sec
+  jsr loadAndPrintBandera
+  jsr loadAndPlayHimno10
+  jsr delay_3_sec
+  jsr delay_3_sec
+  jsr delay_3_sec
+  jsr SID_STOP
   jsr loadAndPrintTutankamon
+  jsr loadAndPlayDesierto40
+  jsr delay_3_sec
+  jsr delay_3_sec
+  jsr delay_3_sec
+  jsr SID_STOP
   ;jsr loadAndPlayVoice
   ; jsr delay_1_sec
   ; jsr loadAndPlayHimno 
