@@ -59,7 +59,7 @@ loadAndPrintBandera:
   sta ZP_PTR_LO
   lda #>fileBandera
   sta ZP_PTR_HI
-  jsr loadAndPrint
+  jsr loadAndPrintRS232
   rts
 
 loadAndPrintF1:
