@@ -67,9 +67,9 @@ loadAndPrintBandera:
   sta ZP_PTR_LO
   lda #>fileBandera
   sta ZP_PTR_HI
-  ;jsr loadRetryAndPrint
+  jsr loadRetryAndPrint
   ;jsr loadAndPrintRS232
-  jsr loadRetryRS232
+  ;jsr loadRetryRS232
   rts
 
 loadAndPrintF1:
@@ -86,8 +86,8 @@ loadAndPrintOsoMatrix:
   sta ZP_PTR_LO
   lda #>fileOsoMatrix
   sta ZP_PTR_HI
-  ;jsr loadRetryAndPrint
-  jsr loadRetryRS232
+  jsr loadRetryAndPrint
+  ;jsr loadRetryRS232
   ;jsr loadAndPrintRS232
   ;jsr loadAndPrint
   rts
@@ -295,6 +295,8 @@ loadRetry:
   lda #LOAD_RETRIES
   sta retryCount
 .try:
+  lda #100
+  jsr DELAY_LONG          ; 100 ms: que el SD2IEC 
   lda namePtr
   sta ZP_PTR_LO
   lda namePtr+1
@@ -357,6 +359,8 @@ loadRetryRS232:
   lda #LOAD_RETRIES
   sta retryCount
 .try:
+  lda #100
+  jsr DELAY_LONG          ; 100 ms: que el SD2IEC 
   lda namePtr
   sta ZP_PTR_LO
   lda namePtr+1
