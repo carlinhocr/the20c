@@ -34,7 +34,12 @@ mainFlashPartyFunction:
   ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
   jsr loadAndPrintOsoMatrix
   jsr delay_1_sec
+  jsr loadAndPlayHimno
+  jsr delay_1_sec
+  jsr loadAndPrintBandera
+  jsr SID_STOP
   jsr loadAndPlayDesierto
+  jsr delay_1_sec
   jsr loadAndPrintTutankamon
   ;jsr loadAndPlayVoice
   ; jsr delay_1_sec
