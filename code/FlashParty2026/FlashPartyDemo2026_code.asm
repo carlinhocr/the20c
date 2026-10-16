@@ -340,6 +340,7 @@ loadRetryRS232:
   lda IEC_EOI_FLAG
   bne .ok                ; $FF = llegó entero
 .fail:
+  jsr printFailInfo
   jsr readDriveStatus    ; canal 15: apaga la luz que parpadea y deja el error
   lda #<driveStatus
   sta serialDataVectorLow
@@ -358,6 +359,100 @@ loadRetryRS232:
   clc
   rts
 
+;------------------------------------------------------------------------------
+; printFailInfo - imprime por RS232 qué vio el driver al fallar una carga:
+;     ST=$xx EOI=$xx BYTES=$xxxx
+;   ST    = IEC_STATUS   ($02 timeout al recibir, $03 sin ACK/RFD al mandar,
+;                         $04 buffer lleno, $80 no hay disquetera)
+;   EOI   = IEC_EOI_FLAG ($FF = llegó el último byte)
+;   BYTES = FILE_SIZE    (cuántos bytes llegaron antes del corte)
+; Llamala en .fail ANTES de readDriveStatus (que pisa IEC_STATUS y FILE_SIZE).
+; Usa send_rs232_char (A = carácter).
+;------------------------------------------------------------------------------
+printFailInfo:
+  lda IEC_STATUS          ; copio todo antes de imprimir
+  sta failSt
+  lda IEC_EOI_FLAG
+  sta failEoi
+  lda FILE_SIZE_LO
+  sta failSize
+  lda FILE_SIZE_HI
+  sta failSize+1
+  jsr send_rs232_CRLF
+  ldx #0
+.t1:
+  lda txtSt,x
+  beq .v1
+  jsr pfiChar
+  inx
+  bne .t1
+.v1:
+  lda failSt
+  jsr pfiHex
+  ldx #0
+.t2:
+  lda txtEoi,x
+  beq .v2
+  jsr pfiChar
+  inx
+  bne .t2
+.v2:
+  lda failEoi
+  jsr pfiHex
+  ldx #0
+.t3:
+  lda txtBytes,x
+  beq .v3
+  jsr pfiChar
+  inx
+  bne .t3
+.v3:
+  lda failSize+1
+  jsr pfiHex
+  lda failSize
+  jsr pfiHex
+  jsr send_rs232_CRLF
+  rts
+ 
+pfiHex:                   ; A en hexa (2 caracteres)
+  pha
+  lsr
+  lsr
+  lsr
+  lsr
+  jsr .nib
+  pla
+  and #$0f
+.nib:
+  cmp #10
+  bcc .dig
+  adc #6
+.dig:
+  adc #'0'
+pfiChar:                  ; send_rs232_char guardando X e Y
+  pha
+  txa
+  pha
+  tya
+  pha
+  tsx
+  lda $0103,x             ; el carácter que guardé primero
+  jsr send_rs232_char
+  pla
+  tay
+  pla
+  tax
+  pla
+  rts
+ 
+txtSt:    .byte "ST=$",0
+txtEoi:   .byte " EOI=$",0
+txtBytes: .byte " BYTES=$",0
+failSt    = $0395
+failEoi   = $0396
+failSize  = $0397         ; 2 bytes
+ 
+  
   .include "../lib_20c/lib_sid/lib_sid_player.asm"
 
   .org $90A2                                   ; IEC fijo: mismo offset de página que cuando andaba ($82A2)
