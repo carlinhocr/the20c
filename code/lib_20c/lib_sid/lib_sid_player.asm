@@ -1,5 +1,6 @@
 ; ============================================================================
 ;  LIB_SID_PLAYER.ASM  v4  -  PSID player para la "20c" (6502 + SID 6581 @ $7300)
+;  v4.1: CLD al entrar a SID_IRQ (con D=1 las sumas del tema dan cualquier cosa).
 ;  v4: el .sid puede estar en cualquier página (dos "slots": $1000 y $4000) para
 ;      cargar el próximo tema por IEC mientras suena el anterior.
 ;        SID_START_AT / SID_PLAY_AT:  A/X = tamaño, Y = página del .sid ($10, $40...)
@@ -485,6 +486,7 @@ SID_TICK:
 ;  Al llegar a SID_LIMIT (si no es 0) corta todo y SID_BUSY queda en 0.
 ; ============================================================================
 SID_IRQ:
+    cld                             ; el 6502 NMOS no borra D al entrar a la IRQ
     pha
     txa
     pha
