@@ -34,12 +34,12 @@ mainFlashPartyFunction:
   ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
   jsr loadAndPrintOsoMatrix
   jsr delay_1_sec
-  jsr loadAndPlayHimno
+  jsr loadAndPlayHimno10
   jsr delay_1_sec
   jsr loadAndPrintBandera
   jsr delay_3_sec
   ;jsr SID_STOP
-  ;jsr loadAndPlayDesierto
+  jsr loadAndPlayDesierto40
   ;jsr delay_1_sec
   jsr loadAndPrintTutankamon
   ;jsr loadAndPlayVoice
@@ -182,81 +182,57 @@ playSong10Seconds:
   ldx FILE_SIZE_HI
   jsr SID_PLAY  
   rts
+; ---- Ejemplo: alternar dos slots de música ($1000 y $4000) ------------------
+; Constantes de nombres (en FlashPartyDemo2026_constants.asm):
+;   fileDes10:   .byte "0:DES60_10.SID,P,R", $00
+;   fileHimno40: .byte "0:HIMNO_40.SID,P,R", $00
 
-;01 load buffer from GRAPH001
+  ; 1) primer tema en el slot $1000 y a sonar
+loadAndPlayDesierto40:
+  lda #<fileDesierto40
+  ldx #>fileDesierto40
+  ldy #$40
+  jsr loadSid
+  ldy #$40
+  jsr playSid
 
-;02 show buffer
-
-;03 load music from MUSIC001
-
-;04 play music
-
-;05 load buffer from GRAPH002 (still we do not show it)
-
-;06 wait for music ends
-
-;REPEAT from STEP 02
-
-
-populate_GRAPH_Table:
-  ;to populate the table you have to write to each byte
-  ;to read the table you have to skip bytes
-  ;set the contens of the zero page variables $d2 and $d3 to 00 03 or the address $0300
-  lda #<graphTable
-  sta graphTable_LB
-  lda #>graphTable
-  sta graphTable_HB
-  ;now pivot on the graphTable_LB using the Y index register to store
-  ;starting on address $3000
-  ldy #$00
-  lda #<graph001
-  sta (graphTable_LB),y ;stores in $0300 + 0
-  iny
-  lda #>graph001
-  sta (graphTable_LB),y ;stores in $0300 + 1
-  iny
-  ;go to populate the table with file2
-  lda #<graph002
-  sta (graphTable_LB),y ;stores in $0300 + 2
-  iny
-  lda #>graph002
-  sta (graphTable_LB),y ;stores in $0300 + 3
-  iny
-
-read_GRAPH_Table:
-  ;to populate the table you have to write to each byte
-  ;to read the table you have to skip bytes
-  ;set the contens of the zero page variables $d2 and $d3 to 00 03 or the address $0300
-  lda #<graphTable
-  sta graphTable_LB
-  lda #>graphTable
-  sta graphTable_HB
-  ;read the table
-  ldy #$00
-  ;lets imagine we will read three files
-read_GRAPH_Table_Loop:  
-  cpy #$03
-  beq read_GRAPH_Table_End
-  ;load the file name
-  lda (graphTable_LB),y ;reads from $0300 + 0
-  sta ZP_PTR_LO
-  iny 
-  lda (graphTable_LB),y ;reads from $0300 + 0
-  sta ZP_PTR_HI
-
-  jsr readFilenameToBuffer
-
-  ;now we have the file contents in the buffer
-  ;we can print, whatever we want
-   
-  ;we go to the next File 
-  jmp read_GRAPH_Table_Loop
-
-read_GRAPH_Table_End:
-  ;it continues for each file
+loadAndPlayHimno10:  
+  lda #<fileHimno10
+  ldx #>fileHimno10
+  ldy #$10
+  jsr loadSid
+  ldy #$10
+  jsr playSid          ; corta el de $1000 y arranca el de $4000
   rts
 
+  ; 4) el siguiente vuelve a $1000 (ya no suena nada ahí), y así...
 
+;------------------------------------------------------------------------------
+; loadSid: A/X = nombre del archivo, Y = página del slot ($10 o $40)
+loadSid:
+  sta ZP_PTR_LO
+  stx ZP_PTR_HI
+  sty ZP_BufferStartHigh
+  lda #0
+  sta ZP_BufferStartLow
+  jsr readFilenameToBuffer
+  lda FILE_SIZE_LO        ; guardo el tamaño: la carga de un gráfico lo pisa
+  sta sidSize
+  lda FILE_SIZE_HI
+  sta sidSize+1
+  rts
+
+; playSid: Y = página del slot donde se cargó
+playSid:
+  lda #0                  ; sin corte (o los frames que quieras)
+  sta SID_LIMIT
+  sta SID_LIMIT+1
+  lda sidSize
+  ldx sidSize+1
+  jsr SID_START_AT
+  rts
+
+sidSize = $0390           ; 2 bytes de RAM libres ($0382/83 ya los usa tu IEC)
 
 
 
