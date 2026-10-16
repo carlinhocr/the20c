@@ -43,7 +43,9 @@ mainFlashPartyFunction:
   jsr delay_3_sec
   jsr delay_3_sec
   jsr SID_STOP
+  jsr delay_3_sec
   jsr loadAndPlayDesierto40
+  jsr delay_3_sec  
   jsr loadAndPrintTutankamon
   jsr delay_3_sec
   jsr delay_3_sec
