@@ -195,6 +195,7 @@ loadAndPlayDesierto40:
   jsr loadSid
   ldy #$40
   jsr playSid
+  rts
 
 loadAndPlayHimno10:  
   lda #<fileHimno10
