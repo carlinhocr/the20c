@@ -1649,6 +1649,141 @@ IEC_READ_FILE:
             RTS                 ; Return with error status already set
 
 
+IEC_READ_FILE_TO_RS232:
+            ; --- Clear counters ---
+            LDA #$00
+            STA FILE_SIZE_LO
+            STA FILE_SIZE_HI
+            STA IEC_STATUS
+
+            ; --- Step 1: OPEN the file for reading ---
+            ; Channel 0 is traditionally used for LOADing (reading).
+            ; The filename should include ",P,R" or ",S,R" for read mode
+            ; if needed, e.g. "0:MYFILE,P,R"
+            LDX #CHAN_LOAD      ; Channel 0
+            JSR IEC_OPEN_FILE
+
+            ; Check for errors from OPEN
+            LDA IEC_STATUS
+            BEQ .read_opened_ok
+            JMP .read_error     ; OPEN failed
+
+.read_opened_ok:
+            ; --- Step 2: TALK the device on the data channel ---
+            ; We tell the device: "Talk to me on channel 0"
+            JSR IEC_TALK        ; Send TALK command
+
+            ; Send the data-transfer secondary address for channel 0
+            LDA #SA_DATA        ; $60
+            ORA #CHAN_LOAD      ; + channel 0 = $60
+            JSR IEC_SEND_SECONDARY
+
+            ; --- Step 3: Turn the bus around ---
+            ; The device is now the talker, we are the listener.
+            JSR IEC_TURNAROUND
+
+            ; --- Step 4: Set up RAM destination pointer ---
+            ; We'll store received bytes starting at BUFFER_START
+            ;LDA #<BUFFER_START  ; Low byte of buffer address
+            lda ZP_BufferStartLow
+            STA ZP_PTR_LO
+            ;LDA #>BUFFER_START  ; High byte of buffer address
+            lda ZP_BufferStartHigh
+            STA ZP_PTR_HI
+
+            ; --- Step 5: Receive data loop ---
+            ; Keep receiving bytes until the talker signals EOI (last byte)
+            ; or until we run out of buffer space.
+
+.read_loop:
+            ; Check if we've filled the buffer
+            ;LDA ZP_PTR_HI
+            ;CMP #>BUFFER_END    ; Are we past the end of RAM?
+            ;BCS .read_overflow  ; Yes - buffer overflow!
+
+            ; Receive one byte from the talker
+            JSR IEC_RECEIVE_BYTE
+
+            ; Check for errors
+            PHA                 ; Save received byte
+            LDA IEC_STATUS
+            AND #$02            ; Check for timeout error
+            BNE .read_rx_error
+
+            ; --- Store the byte in RAM ---
+            PLA                 ; Restore received byte
+            bne .same_line
+            jsr send_rs232_CRLF
+.same_line            
+            jsr send_rs232_char  
+            ;LDY #$00
+            ;STA (ZP_PTR_LO),Y  ; Store at address pointed to by ZP_PTR
+
+            ; --- Increment the destination pointer ---
+            ;INC ZP_PTR_LO      ; Increment low byte
+            ;BNE .no_ptr_inc     ; No overflow? Skip high byte
+            ;INC ZP_PTR_HI      ; Overflow: increment high byte
+.no_ptr_inc:
+
+            ; --- Increment the byte count ---
+            INC FILE_SIZE_LO
+            BNE .no_size_inc
+            INC FILE_SIZE_HI
+.no_size_inc:
+
+            ; --- Check for EOI (last byte) ---
+            LDA IEC_EOI_FLAG
+            BNE .read_eoi       ; EOI was signaled -> this was the last byte
+
+            ; Not done yet - receive the next byte
+            JMP .read_loop
+
+.read_eoi:
+            ; --- End of file reached (EOI received) ---
+            ; Fall through to cleanup
+
+.read_done:
+            ; --- Step 6: UNTALK the device ---
+            ; Tell the device to stop talking. We must re-assert ATN and
+            ; take control of CLK again.
+            ;
+            ; WHO OWNS DATA HERE: we arrive from the receive loop still
+            ; holding DATA LOW - that was our ACK of the last byte, and it
+            ; is also the correct "listener not ready" state to sit in while
+            ; we reclaim the bus. We do NOT re-assert it. IEC_UNTALK ->
+            ; IEC_SEND_BYTE_ATN releases DATA itself as its third step,
+            ; because from that point on it must read the DEVICE's state on
+            ; DATA, not its own. v24 had a redundant DATA_ASSERT here; it
+            ; was harmless but it made DATA look like it was ours to hold
+            ; across the turnaround, which is exactly the confusion to
+            ; avoid when the next stuck-DATA bug turns up.
+            JSR ATN_ASSERT      ; Assert ATN
+            JSR CLK_ASSERT      ; Take CLK
+            JSR IEC_UNTALK      ; Send UNTALK command (releases DATA inside)
+
+            ; --- Step 7: CLOSE the file ---
+            LDX #CHAN_LOAD
+            JSR IEC_CLOSE_FILE
+
+            ; Return with status in IEC_STATUS and byte count in FILE_SIZE
+            RTS
+
+.read_overflow:
+            ; Buffer is full - stop reading
+            LDA #$04            ; Custom error: buffer overflow
+            ORA IEC_STATUS
+            STA IEC_STATUS
+            JMP .read_done
+
+.read_rx_error:
+            PLA                 ; Clean stack (discard byte)
+            JMP .read_done
+
+.read_error:
+            RTS                 ; Return with error status already set
+
+
+
 ;===============================================================================
 ;===============================================================================
 ;
@@ -2265,6 +2400,52 @@ readFilenameToBuffer:
 
             ; Read the file!
             JSR IEC_READ_FILE
+
+            ; Check result
+            LDA IEC_STATUS
+            BNE .read_failed    ; Nonzero = error occurred
+
+            ; Success! Data is now in RAM at BUFFER_START.
+            ; FILE_SIZE_LO/HI contains the number of bytes read.
+            ; Your application can now process the data.
+            ;if it worked return
+            rts
+            ;JMP .demo_write     ; Continue to demo 2
+
+.read_failed:
+            ; Handle error - read the drive status to find out what happened
+            JSR IEC_READ_STATUS
+            ; The error string is now at BUFFER_START
+            ; In a real system, you'd display this to the user.
+            JMP .halt           ; Stop on error
+.halt: ;local label
+            JSR IEC_BUS_IDLE    ; release the bus before stopping - see above
+.halt_loop:
+            jmp .halt_loop ; loop on error and stop
+
+
+
+readFilenameToRS232:
+            ;===================================================================
+            ; DEMO 1: READ A FILE FROM DISK INTO RAM
+            ;===================================================================
+            ;
+            ; To read a file, we:
+            ;   1. Point ZP_PTR to the filename string
+            ;   2. Call IEC_READ_FILE
+            ;   3. Check IEC_STATUS for errors
+            ;   4. The data is now at BUFFER_START, size in FILE_SIZE
+            ;
+            ;----------------- IMPORTANT!!!!!
+            ; Set up filename pointer
+            ;we assume we already have the filename LOADED
+            ;LDA #<FNAME_READ    ; Low byte of filename string address
+            ;STA ZP_PTR_LO
+            ;LDA #>FNAME_READ    ; High byte of filename string address
+            ;STA ZP_PTR_HI
+
+            ; Read the file!
+            JSR IEC_READ_FILE_TO_RS232
 
             ; Check result
             LDA IEC_STATUS
