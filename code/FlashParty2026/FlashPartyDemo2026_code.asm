@@ -306,19 +306,22 @@ loadRetry:
   bne .ok                ; $FF = llegó entero
 .fail:
   jsr printFailInfo
-  jsr readDriveStatus    ; canal 15: apaga la luz que parpadea y deja el error
+  jsr IEC_BUS_IDLE       ; suelto todo
+  lda #250
+  jsr DELAY_LONG
+  jsr IEC_UNTALK         ; si quedó hablando, que se calle
+  jsr IEC_UNLISTEN       ; y que nadie quede escuchando
+  lda #250
+  jsr DELAY_LONG         ; medio segundo en total para que se reponga
+  jsr readDriveStatus    ; recién ahí el canal 15
   lda #<driveStatus
   sta serialDataVectorLow
   lda #>driveStatus
-  sta serialDataVectorHigh  
+  sta serialDataVectorHigh
   jsr send_rs232_line
-  jsr delay_3_sec
-  jsr IEC_BUS_IDLE
-  lda #200
-  jsr DELAY_LONG         ; 200 ms para que la disquetera se reponga
   dec retryCount
   bne .try
-  sec                    ; no hubo caso
+  sec
   rts
 .ok:
   clc
@@ -365,23 +368,26 @@ loadRetryRS232:
   bne .ok                ; $FF = llegó entero
 .fail:
   jsr printFailInfo
-  jsr readDriveStatus    ; canal 15: apaga la luz que parpadea y deja el error
+  jsr IEC_BUS_IDLE       ; suelto todo
+  lda #250
+  jsr DELAY_LONG
+  jsr IEC_UNTALK         ; si quedó hablando, que se calle
+  jsr IEC_UNLISTEN       ; y que nadie quede escuchando
+  lda #250
+  jsr DELAY_LONG         ; medio segundo en total para que se reponga
+  jsr readDriveStatus    ; recién ahí el canal 15
   lda #<driveStatus
   sta serialDataVectorLow
   lda #>driveStatus
-  sta serialDataVectorHigh  
+  sta serialDataVectorHigh
   jsr send_rs232_line
-  jsr delay_3_sec
-  jsr IEC_BUS_IDLE
-  lda #200
-  jsr DELAY_LONG         ; 200 ms para que la disquetera se reponga
   dec retryCount
   bne .try
-  sec                    ; no hubo caso
+  sec
   rts
 .ok:
   clc
-  rts
+  rts  
 
 ;------------------------------------------------------------------------------
 ; printFailInfo - imprime por RS232 qué vio el driver al fallar una carga:
