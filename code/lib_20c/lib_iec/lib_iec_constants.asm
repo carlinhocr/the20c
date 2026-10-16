@@ -86,7 +86,12 @@ TURN_TIMEOUT_MS = 3000          ; watchdog on the device taking CLK after the
                                 ; before it can offer the first byte
 TURN_OUTER     = TURN_TIMEOUT_MS / RFD_CHUNK_MS
 
-EOI_WINDOW     = 256            ; T2 count = ~256 us at 1 MHz. THE protocol
+EOI_WINDOW     = 2000           ; v30: era 256. Con 256 un byte lento del SD2IEC
+                                ; (>256 us en bajar CLK) se tomaba como EOI y el
+                                ; archivo se cortaba SIN error. El talker espera
+                                ; nuestro ack de EOI lo que haga falta, asi que
+                                ; una ventana larga no rompe el EOI verdadero.
+                                ; T2 count = ~2000 us at 1 MHz. THE protocol
                                 ; constant for EOI: if the talker has not
                                 ; pulled CLK low within this window after our
                                 ; RFD, the byte coming is the last one.

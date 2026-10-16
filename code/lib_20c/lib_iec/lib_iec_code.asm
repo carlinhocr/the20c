@@ -73,6 +73,10 @@
 ;   VERSION HISTORY
 ;===============================================================================
 ;
+;   v30  - IEC_READ_FILE e IEC_READ_FILE_TO_RS232 ya no pierden el error: antes
+;          IEC_CLOSE_FILE ponia IEC_STATUS = 0 al final y un timeout en el medio
+;          de la lectura volvia como si nada. Ahora IEC_STATUS <> 0 si fallo.
+;
 ;   v29  - Musica de fondo por IRQ (VIA1 $7100) mientras se usa el bus.
 ;          IEC_SEND_BYTE_ATN, IEC_SEND_BYTE, IEC_TURNAROUND e IEC_RECEIVE_BYTE
 ;          ahora son envoltorios (al final del archivo) que hacen
@@ -1609,6 +1613,10 @@ IEC_READ_FILE:
             ; Fall through to cleanup
 
 .read_done:
+            ; v30: IEC_CLOSE_FILE pone IEC_STATUS = 0. Guardo el error de la
+            ; lectura y lo vuelvo a sumar despues, para que el que llama lo vea.
+            LDA IEC_STATUS
+            PHA
             ; --- Step 6: UNTALK the device ---
             ; Tell the device to stop talking. We must re-assert ATN and
             ; take control of CLK again.
@@ -1630,6 +1638,9 @@ IEC_READ_FILE:
             ; --- Step 7: CLOSE the file ---
             LDX #CHAN_LOAD
             JSR IEC_CLOSE_FILE
+            PLA
+            ORA IEC_STATUS      ; error de la lectura + error del cierre
+            STA IEC_STATUS
 
             ; Return with status in IEC_STATUS and byte count in FILE_SIZE
             RTS
@@ -1743,6 +1754,10 @@ IEC_READ_FILE_TO_RS232:
             ; Fall through to cleanup
 
 .read_done:
+            ; v30: IEC_CLOSE_FILE pone IEC_STATUS = 0. Guardo el error de la
+            ; lectura y lo vuelvo a sumar despues, para que el que llama lo vea.
+            LDA IEC_STATUS
+            PHA
             ; --- Step 6: UNTALK the device ---
             ; Tell the device to stop talking. We must re-assert ATN and
             ; take control of CLK again.
@@ -1764,6 +1779,9 @@ IEC_READ_FILE_TO_RS232:
             ; --- Step 7: CLOSE the file ---
             LDX #CHAN_LOAD
             JSR IEC_CLOSE_FILE
+            PLA
+            ORA IEC_STATUS      ; error de la lectura + error del cierre
+            STA IEC_STATUS
 
             ; Return with status in IEC_STATUS and byte count in FILE_SIZE
             RTS
