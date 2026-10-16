@@ -44,7 +44,7 @@ mainFlashPartyFunction:
   jsr delay_3_sec
   ;jsr SID_STOP
   jsr loadAndPlayDesierto40
-  ;jsr loadAndPrintTutankamon
+  jsr loadAndPrintTutankamon
   jsr delay_3_sec
   jsr delay_3_sec
   jsr delay_3_sec
@@ -67,9 +67,9 @@ loadAndPrintBandera:
   sta ZP_PTR_LO
   lda #>fileBandera
   sta ZP_PTR_HI
-  jsr loadRetryAndPrint
+  ;jsr loadRetryAndPrint
   ;jsr loadAndPrintRS232
-  ;jsr loadRetryRS232
+  jsr loadRetryRS232
   rts
 
 loadAndPrintF1:
@@ -86,8 +86,8 @@ loadAndPrintOsoMatrix:
   sta ZP_PTR_LO
   lda #>fileOsoMatrix
   sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  ;jsr loadRetryRS232
+  ;jsr loadRetryAndPrint
+  jsr loadRetryRS232
   ;jsr loadAndPrintRS232
   ;jsr loadAndPrint
   rts
