@@ -34,7 +34,7 @@ mainFlashPartyFunction:
   ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
   jsr loadAndPrintOsoMatrix
   jsr delay_3_sec
-  jsr loadAndPlayHimno40
+  jsr loadAndPlayHimno10
   jsr loadAndPrintBandera
   jsr delay_3_sec
   jsr delay_3_sec
@@ -42,9 +42,9 @@ mainFlashPartyFunction:
   jsr delay_3_sec
   jsr delay_3_sec
   jsr delay_3_sec
-  jsr SID_STOP
+  ;jsr SID_STOP
   jsr loadAndPlayDesierto40
-  ;jsr loadAndPrintTutankamon
+  jsr loadAndPrintTutankamon
   jsr delay_3_sec
   jsr delay_3_sec
   jsr delay_3_sec
@@ -67,9 +67,9 @@ loadAndPrintBandera:
   sta ZP_PTR_LO
   lda #>fileBandera
   sta ZP_PTR_HI
-  jsr loadRetryAndPrint
+  ;jsr loadRetryAndPrint
   ;jsr loadAndPrintRS232
-  ;jsr loadRetryRS232
+  jsr loadRetryRS232
   rts
 
 loadAndPrintF1:
@@ -86,8 +86,8 @@ loadAndPrintOsoMatrix:
   sta ZP_PTR_LO
   lda #>fileOsoMatrix
   sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  ;jsr loadRetryRS232
+  ;jsr loadRetryAndPrint
+  jsr loadRetryRS232
   ;jsr loadAndPrintRS232
   ;jsr loadAndPrint
   rts
@@ -217,6 +217,15 @@ loadAndPlayDesierto40:
   jsr loadSid
   ldy #$40
   jsr playSid
+  rts
+
+loadAndPlayHimno10:  
+  lda #<fileHimno10
+  ldx #>fileHimno10
+  ldy #$10
+  jsr loadSid
+  ldy #$10
+  jsr playSid          ; corta el de $1000 y arranca el de $4000
   rts
 
 loadAndPlayHimno40:  
