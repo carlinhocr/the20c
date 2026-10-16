@@ -34,12 +34,15 @@ mainFlashPartyFunction:
   ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
   jsr loadAndPrintOsoMatrix
   jsr delay_3_sec
-  jsr loadAndPlayHimno10
+  jsr loadAndPlayHimno40
   jsr loadAndPrintBandera
   jsr delay_3_sec
   jsr delay_3_sec
   jsr delay_3_sec
-  ;jsr SID_STOP
+  jsr delay_3_sec
+  jsr delay_3_sec
+  jsr delay_3_sec
+  jsr SID_STOP
   jsr loadAndPlayDesierto40
   jsr loadAndPrintTutankamon
   jsr delay_3_sec
@@ -51,8 +54,8 @@ mainFlashPartyFunction:
   ; jsr loadAndPlayHimno 
   ; jsr delay_1_sec
   ; jsr loadAndPrintBandera
-  jsr delay_3_sec
-  jsr loadAndPrintF1
+  ;jsr delay_3_sec
+  ;jsr loadAndPrintF1
   ; jsr delay_3_sec
   ; jsr delay_3_sec
 loopFlashParty2026:
@@ -64,8 +67,9 @@ loadAndPrintBandera:
   sta ZP_PTR_LO
   lda #>fileBandera
   sta ZP_PTR_HI
+  jsr loadRetryAndPrint
   ;jsr loadAndPrintRS232
-  jsr loadRetryRS232
+  ;jsr loadRetryRS232
   rts
 
 loadAndPrintF1:
@@ -82,7 +86,8 @@ loadAndPrintOsoMatrix:
   sta ZP_PTR_LO
   lda #>fileOsoMatrix
   sta ZP_PTR_HI
-  jsr loadRetryRS232
+  jsr loadRetryAndPrint
+  ;jsr loadRetryRS232
   ;jsr loadAndPrintRS232
   ;jsr loadAndPrint
   rts
@@ -96,6 +101,15 @@ loadAndPrintTutankamon:
   ;jsr loadAndPrintRS232
   ;jsr loadAndPrint
   rts  
+
+loadRetryAndPrint:  
+  lda #<BUFFER_GRAPHICS_START
+  sta ZP_BufferStartLow
+  lda #>BUFFER_GRAPHICS_START
+  sta ZP_BufferStartHigh  
+  jsr loadRetry
+  jsr printDiskBuffer
+  rts
 
 loadAndPrint:  
   lda #<BUFFER_GRAPHICS_START
@@ -205,12 +219,12 @@ loadAndPlayDesierto40:
   jsr playSid
   rts
 
-loadAndPlayHimno10:  
-  lda #<fileHimno10
-  ldx #>fileHimno10
-  ldy #$10
+loadAndPlayHimno40:  
+  lda #<fileHimno40
+  ldx #>fileHimno40
+  ldy #$40
   jsr loadSid
-  ldy #$10
+  ldy #$40
   jsr playSid          ; corta el de $1000 y arranca el de $4000
   rts
 
@@ -282,6 +296,7 @@ loadRetry:
   lda IEC_EOI_FLAG
   bne .ok                ; $FF = llegó entero
 .fail:
+  jsr printFailInfo
   jsr readDriveStatus    ; canal 15: apaga la luz que parpadea y deja el error
   lda #<driveStatus
   sta serialDataVectorLow
