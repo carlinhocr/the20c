@@ -86,7 +86,7 @@ TURN_TIMEOUT_MS = 3000          ; watchdog on the device taking CLK after the
                                 ; before it can offer the first byte
 TURN_OUTER     = TURN_TIMEOUT_MS / RFD_CHUNK_MS
 
-EOI_WINDOW     = 2000           ; v30: era 256. Con 256 un byte lento del SD2IEC
+EOI_WINDOW     = 300           ; v30: era 256. Con 256 un byte lento del SD2IEC
                                 ; (>256 us en bajar CLK) se tomaba como EOI y el
                                 ; archivo se cortaba SIN error. El talker espera
                                 ; nuestro ack de EOI lo que haga falta, asi que

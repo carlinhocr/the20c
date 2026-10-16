@@ -73,6 +73,13 @@
 ;   VERSION HISTORY
 ;===============================================================================
 ;
+;   v31  - TRAILER_TRACK: las dos rutinas de lectura siguen si el archivo
+;          termina en ESC[0m,00 (el final de todas las pantallas ANSI).
+;          TR_MATCH = 5 al terminar => llego el final de verdad. Sirve para
+;          detectar un EOI falso (archivo cortado sin error).
+;          IEC_READ_FILE_TO_RS232: el byte 00 ya no manda un caracter basura
+;          despues del CRLF.
+;
 ;   v30  - IEC_READ_FILE e IEC_READ_FILE_TO_RS232 ya no pierden el error: antes
 ;          IEC_CLOSE_FILE ponia IEC_STATUS = 0 al final y un timeout en el medio
 ;          de la lectura volvia como si nada. Ahora IEC_STATUS <> 0 si fallo.
@@ -1529,6 +1536,7 @@ IEC_READ_FILE:
             STA FILE_SIZE_LO
             STA FILE_SIZE_HI
             STA IEC_STATUS
+            STA TR_MATCH        ; v31: nada del final visto todavia
 
             ; --- Step 1: OPEN the file for reading ---
             ; Channel 0 is traditionally used for LOADing (reading).
@@ -1586,6 +1594,7 @@ IEC_READ_FILE:
 
             ; --- Store the byte in RAM ---
             PLA                 ; Restore received byte
+            JSR TRAILER_TRACK   ; v31
             LDY #$00
             STA (ZP_PTR_LO),Y  ; Store at address pointed to by ZP_PTR
 
@@ -1666,6 +1675,7 @@ IEC_READ_FILE_TO_RS232:
             STA FILE_SIZE_LO
             STA FILE_SIZE_HI
             STA IEC_STATUS
+            STA TR_MATCH        ; v31: nada del final visto todavia
 
             ; --- Step 1: OPEN the file for reading ---
             ; Channel 0 is traditionally used for LOADing (reading).
@@ -1723,8 +1733,11 @@ IEC_READ_FILE_TO_RS232:
 
             ; --- Store the byte in RAM ---
             PLA                 ; Restore received byte
+            JSR TRAILER_TRACK   ; v31: sigue el final esperado ESC[0m,00
             bne .same_line
             jsr send_rs232_CRLF
+            jmp .no_ptr_inc     ; v31: el 00 es solo fin de linea (antes mandaba
+                                ; ademas un caracter basura despues del CRLF)
 .same_line            
             jsr send_rs232_char  
             ;LDY #$00
@@ -2657,3 +2670,34 @@ IEC_PLP_KEEP_C:
             PLP
             SEC
             RTS
+
+
+;-----------------------------------------------------------------------
+; TRAILER_TRACK (v31) - sigue si los ultimos bytes recibidos son el final
+; de las pantallas ANSI: ESC [ 0 m 00. Al terminar la lectura, TR_MATCH = 5
+; si el archivo termino justo en ese final.
+; Entrada: A = byte recibido (se conserva, igual que N/Z). Usa X.
+;-----------------------------------------------------------------------
+TR_MATCH    = $0399             ; 1 byte de RAM libre
+TRAILER_LEN = 5
+
+TRAILER_TRACK:
+            PHA
+            LDX TR_MATCH
+            CPX #TRAILER_LEN
+            BCS .tr_miss        ; ya estaba completo: un byte mas lo rompe
+            CMP TRAILER,X
+            BNE .tr_miss
+            INX
+            BNE .tr_store       ; siempre
+.tr_miss:
+            LDX #0
+            CMP TRAILER         ; puede empezar otra vez el patron
+            BNE .tr_store
+            INX
+.tr_store:
+            STX TR_MATCH
+            PLA                 ; A y N/Z como entraron
+            RTS
+
+TRAILER:    .byte $1B,$5B,$30,$6D,$00
