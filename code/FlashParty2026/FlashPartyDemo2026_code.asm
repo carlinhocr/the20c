@@ -43,7 +43,7 @@ mainFlashPartyFunction:
   jsr delay_3_sec
   jsr delay_3_sec
   ;jsr SID_STOP
-  jsr loadAndPlayDesierto40
+  jsr loadAndPlayDesierto10
   jsr loadAndPrintTutankamon
   jsr delay_3_sec
   jsr delay_3_sec
@@ -213,6 +213,15 @@ playSong10Seconds:
 loadAndPlayDesierto40:
   lda #<fileDesierto40
   ldx #>fileDesierto40
+  ldy #$40
+  jsr loadSid
+  ldy #$40
+  jsr playSid
+  rts
+
+loadAndPlayDesierto10:
+  lda #<fileDesierto10
+  ldx #>fileDesierto10
   ldy #$40
   jsr loadSid
   ldy #$40
