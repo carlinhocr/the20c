@@ -34,9 +34,11 @@ mainFlashPartyFunction:
   ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
   jsr loadAndPrintOsoMatrix
   jsr delay_1_sec
+  jsr loadAndPrintTutankamon
   ;jsr loadAndPlayVoice
   jsr delay_1_sec
   jsr loadAndPlayHimno 
+  jsr delay_1_sec
   jsr loadAndPrintBandera
   jsr delay_3_sec
   jsr loadAndPrintF1
@@ -53,6 +55,7 @@ loadAndPrintBandera:
   sta ZP_PTR_HI
   jsr loadAndPrint
   rts
+
 loadAndPrintF1:
   lda #<fileF1
   sta ZP_PTR_LO
@@ -68,6 +71,14 @@ loadAndPrintOsoMatrix:
   sta ZP_PTR_HI
   jsr loadAndPrint
   rts
+
+loadAndPrintTutankamon:
+  lda #<fileTutankamon
+  sta ZP_PTR_LO
+  lda #>fileTutankamon
+  sta ZP_PTR_HI
+  jsr loadAndPrint
+  rts  
 
 loadAndPrint:  
   lda #<BUFFER_GRAPHICS_START
