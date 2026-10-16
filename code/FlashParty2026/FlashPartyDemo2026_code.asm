@@ -231,7 +231,6 @@ loadSid:
   lda FILE_SIZE_HI
   sta sidSize+1
   rts
-
 ; playSid: Y = página del slot donde se cargó
 playSid:
   lda #0                  ; sin corte (o los frames que quieras)
@@ -289,6 +288,7 @@ loadRetry:
   lda #>driveStatus
   sta serialDataVectorHigh  
   jsr send_rs232_line
+  jsr delay_3_sec
   jsr IEC_BUS_IDLE
   lda #200
   jsr DELAY_LONG         ; 200 ms para que la disquetera se reponga
@@ -346,6 +346,7 @@ loadRetryRS232:
   lda #>driveStatus
   sta serialDataVectorHigh  
   jsr send_rs232_line
+  jsr delay_3_sec
   jsr IEC_BUS_IDLE
   lda #200
   jsr DELAY_LONG         ; 200 ms para que la disquetera se reponga
