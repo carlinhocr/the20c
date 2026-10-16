@@ -28,5 +28,5 @@ fileVoz:
     .byte "0:HOLA.SID,P,R", $00  ; Open GRAPH001 as PRG for reading     
 
 fileSoundDesierto:
-    .byte "0:DESIERTO.SID,P,R", $00  ; Open GRAPH001 as PRG for reading     
+    .byte "0:DESIERTO60.SID,P,R", $00  ; Open GRAPH001 as PRG for reading     
     ;.byte "0:HIMNO.SID,P,R", $00  ; Open GRAPH001 as PRG for reading     
