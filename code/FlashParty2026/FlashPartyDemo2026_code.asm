@@ -109,6 +109,8 @@ loadRetryAndPrint:
   sta ZP_BufferStartLow
   lda #>BUFFER_GRAPHICS_START
   sta ZP_BufferStartHigh  
+  lda #1
+  sta checkTrailer      
   jsr loadRetry
   jsr printDiskBuffer
   rts
@@ -258,6 +260,7 @@ loadSid:
   sty ZP_BufferStartHigh
   lda #0
   sta ZP_BufferStartLow
+  sta checkTrailer
   jsr loadRetry
   ;jsr readFilenameToBuffer
   lda FILE_SIZE_LO        ; guardo el tamaño: la carga de un gráfico lo pisa
