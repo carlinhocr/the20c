@@ -244,9 +244,12 @@ playSid:
 
 
 
+
+; Agregá a FlashPartyDemo2026_memory.asm:
 ;   LOAD_RETRIES = 3
 ;   retryCount   = $0392      ; 1 byte de RAM libre
 ;   namePtr      = $0393      ; 2 bytes de RAM libres
+;   driveStatus  = $03A0      ; 48 bytes: mensaje del canal 15
  
 ;------------------------------------------------------------------------------
 ; loadRetry - carga un archivo por IEC y reintenta si falla
@@ -280,6 +283,12 @@ loadRetry:
   lda IEC_EOI_FLAG
   bne .ok                ; $FF = llegó entero
 .fail:
+  jsr readDriveStatus    ; canal 15: apaga la luz que parpadea y deja el error
+  lda #<driveStatus
+  sta serialDataVectorLow
+  lda #>driveStatus
+  sta serialDataVectorHigh  
+  jsr send_rs232_line
   jsr IEC_BUS_IDLE
   lda #200
   jsr DELAY_LONG         ; 200 ms para que la disquetera se reponga
@@ -290,6 +299,28 @@ loadRetry:
 .ok:
   clc
   rts
+ 
+;------------------------------------------------------------------------------
+; readDriveStatus - lee el canal de errores (15) de la disquetera / SD2IEC.
+;   Deja "nn,MENSAJE,tt,ss",0 en driveStatus (ej. "62,FILE NOT FOUND,00,00").
+;   Leerlo es lo que apaga la luz que parpadea. No toca ZP_BufferStart.
+;------------------------------------------------------------------------------
+readDriveStatus:
+  lda ZP_BufferStartLow
+  pha
+  lda ZP_BufferStartHigh
+  pha
+  lda #<driveStatus
+  sta ZP_BufferStartLow
+  lda #>driveStatus
+  sta ZP_BufferStartHigh
+  jsr IEC_READ_STATUS
+  pla
+  sta ZP_BufferStartHigh
+  pla
+  sta ZP_BufferStartLow
+  rts
+ 
  
 loadRetryRS232:
   lda ZP_PTR_LO
@@ -309,6 +340,12 @@ loadRetryRS232:
   lda IEC_EOI_FLAG
   bne .ok                ; $FF = llegó entero
 .fail:
+  jsr readDriveStatus    ; canal 15: apaga la luz que parpadea y deja el error
+  lda #<driveStatus
+  sta serialDataVectorLow
+  lda #>driveStatus
+  sta serialDataVectorHigh  
+  jsr send_rs232_line
   jsr IEC_BUS_IDLE
   lda #200
   jsr DELAY_LONG         ; 200 ms para que la disquetera se reponga
