@@ -1,16 +1,43 @@
-;File Name Constants with IEC strings to load Files
-
-graph001:
-  .byte "0:GRAPH001,P,R", $00  ; Open GRAPH001 as PRG for reading
-
-graph002:
-  .byte "0:GRAPH002,P,R", $00  ; Open GRAPH001 as PRG for reading
-
-graph003:
-  .byte "0:GRAPH003,P,R", $00  ; Open GRAPH001 as PRG for reading    
+;File Name Constants with IEC strings to load Files  
 
 fileBandera:
-    .byte "0:BANDERA.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading   
+    .byte "0:BANDERA.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading  
+
+
+fileBerdyx:
+    .byte "0:BERDYX.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading 
+
+
+fileESPTEC:
+    .byte "0:ESPTEC.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading     
+
+
+fileICUY:
+    .byte "0:ICUY.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading     
+
+fileKRAKATOA:
+    .byte "0:KRAKATOA.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading     
+
+fileLA20C:
+    .byte "0:LA20C.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading     
+
+fileMODO:
+    .byte "0:MODO.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading     
+fileOSO:
+    .byte "0:OSO.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading     
+filePVM:
+    .byte "0:PVM.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading     
+
+fileVENTILA:
+    .byte "0:VENTILA.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading     
+
+fileOSOLABS:
+    .byte "0:OSOLABS.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading     
+
+
+
+
+
 
 fileF1:
     .byte "0:F1.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading      

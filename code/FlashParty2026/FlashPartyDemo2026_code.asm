@@ -28,28 +28,48 @@
  
 
 
+mainFlashParty:
+  ;cargar primera imagen de ROM
+  ;cargar sid de rom y empezar a tocarlo
+  ldy #$C0
+  jsr SID_START_ROM
+  ;cargar el resto de los gráficos
+  jsr loadAndPrintLA20c
+  jsr delay_3_sec
+  ;quienes somos
+  jsr loadAndPrintBerdyx
+  jsr delay_3_sec
+  jsr loadAndPrintKRAKATOA
+  jsr delay_3_sec
+  jsr loadAndPrintOSO
+  jsr delay_3_sec
+  ;amigos
+  jsr loadAndPrintVENTILA
+  jsr delay_3_sec
+  ;imagen del final 
+  ;y que diga hola soy la 20c
 
-mainFlashPartyFunction:
-  ; cargar el .sid en $4000 por IEC
-  ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
-  jsr loadAndPrintOsoMatrix
-  jsr delay_3_sec
-  jsr loadAndPlayHimno40
-  jsr loadAndPrintBandera
-  jsr delay_3_sec
-  jsr delay_3_sec
-  jsr delay_3_sec
-  jsr delay_3_sec
-  jsr delay_3_sec
-  jsr delay_3_sec
-  jsr SID_STOP
-  jsr delay_3_sec
-  jsr loadAndPlayDesierto40
-  jsr delay_3_sec  
-  jsr loadAndPrintTutankamon
-  jsr delay_3_sec
-  jsr delay_3_sec
-  jsr delay_3_sec
+; mainFlashPartyFunction:
+;   ; cargar el .sid en $4000 por IEC
+;   ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
+;   jsr loadAndPrintOsoMatrix
+;   jsr delay_3_sec
+;   jsr loadAndPlayHimno40
+;   jsr loadAndPrintBandera
+;   jsr delay_3_sec
+;   jsr delay_3_sec
+;   jsr delay_3_sec
+;   jsr delay_3_sec
+;   jsr delay_3_sec
+;   jsr delay_3_sec
+;   jsr SID_STOP
+;   jsr delay_3_sec
+;   jsr loadAndPlayDesierto40
+;   jsr delay_3_sec  
+;   jsr loadAndPrintTutankamon
+;   jsr delay_3_sec
+;   jsr delay_3_sec
+;   jsr delay_3_sec
   ;jsr SID_STOP
   ;jsr loadAndPlayVoice
   ; jsr delay_1_sec
@@ -70,9 +90,93 @@ loadAndPrintBandera:
   lda #>fileBandera
   sta ZP_PTR_HI
   jsr loadRetryAndPrint
-  ;jsr loadAndPrintRS232
-  ;jsr loadRetryRS232
   rts
+
+loadAndPrintICUY:
+  lda #<fileICUY
+  sta ZP_PTR_LO
+  lda #>fileICUY
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrint
+  rts
+
+loadAndPrintBerdyx:
+  lda #<fileBerdyx
+  sta ZP_PTR_LO
+  lda #>fileBerdyx
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrint
+  rts
+
+loadAndPrintESPTEC:
+  lda #<fileESPTEC
+  sta ZP_PTR_LO
+  lda #>fileESPTEC
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrint
+  rts
+
+loadAndPrintKRAKATOA:
+  lda #<fileKRAKATOA
+  sta ZP_PTR_LO
+  lda #>fileKRAKATOA
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrint
+  rts    
+
+
+
+
+loadAndPrintLA20c:
+  lda #<fileLA20C
+  sta ZP_PTR_LO
+  lda #>fileLA20C
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrint
+  rts
+
+loadAndPrintMODO:
+  lda #<fileMODO
+  sta ZP_PTR_LO
+  lda #>fileMODO
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrint
+  rts
+
+loadAndPrintOSO:
+  lda #<fileOSO
+  sta ZP_PTR_LO
+  lda #>fileOSO
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrint
+  rts
+
+loadAndPrintPVM:
+  lda #<filePVM
+  sta ZP_PTR_LO
+  lda #>filePVM
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrint
+  rts
+
+loadAndPrintVENTILA:
+  lda #<fileVENTILA
+  sta ZP_PTR_LO
+  lda #>fileVENTILA
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrint
+  rts      
+
+loadAndPrintOSOLABS:
+  lda #<fileOSOLABS
+  sta ZP_PTR_LO
+  lda #>fileOSOLABS
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrint
+  rts     
+
+
+
 
 loadAndPrintF1:
   lda #<fileF1
@@ -509,6 +613,61 @@ failEoi   = $0396
 failSize  = $0397         ; 2 bytes
  
   
+; =============================================================================
+;  sid_rom.asm - tocar un tema que está en ROM (sin copiar ni parchear)
+;  Va después de lib_sid_player.asm (usa SID_HALT, TIMER_ON, call_init, etc.)
+;
+;  El tema tiene que estar armado para ROM (SID_ROM=1): escribe directo al SID
+;  de la 20c ($7300) y sus variables están en RAM. Ejemplo: NAVES_C0.SID en $C000.
+;
+;      ldy #$C0            ; página donde está el .sid en la ROM
+;      jsr SID_START_ROM   ; suena por IRQ (igual que SID_START)
+;
+;  No escribe NADA en la zona del tema: con una EEPROM con /WE conectado, un
+;  SID_START_AT común intentaría "copiar" y "parchear" sobre la ROM.
+; =============================================================================
+SID_START_ROM:
+    php
+    sei
+    sty SID_BASE+1
+    lda #0
+    sta SID_BASE+0
+    jsr SID_HALT                    ; apaga el tema anterior
+    lda #0
+    sta SID_FRAMES+0
+    sta SID_FRAMES+1
+    ldy #H_STARTSONG+1
+    lda (SID_BASE),y
+    sec
+    sbc #1
+    sta song_no
+    ldy #H_INITADDR+1               ; vectores (big-endian en el header)
+    lda (SID_BASE),y
+    sta init_vec+0
+    dey
+    lda (SID_BASE),y
+    sta init_vec+1
+    ldy #H_PLAYADDR+1
+    lda (SID_BASE),y
+    sta play_vec+0
+    dey
+    lda (SID_BASE),y
+    sta play_vec+1
+    lda song_no
+    ldx #0
+    ldy #0
+    jsr call_init
+    jsr TIMER_ON
+    lda #%11000000                  ; IRQ del T1
+    sta VIA_IER
+    lda #1
+    sta SID_BUSY
+    plp
+    cli
+    rts
+
+
+
   .include "../lib_20c/lib_sid/lib_sid_player.asm"
 
   .org $90A2                                   ; IEC fijo: mismo offset de página que cuando andaba ($82A2)
@@ -521,6 +680,9 @@ failSize  = $0397         ; 2 bytes
   .include "../lib_20c/lib_acia/lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
   .include "../lib_20c/lib_utils/lib_utils_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
   .include "./FlashPartyDemo2026_constants.asm"
+
+  .org $C000
+    .incbin "../FlashParty2026/media/NAVES_C0.SID"
 
 nmi:
 irq:
