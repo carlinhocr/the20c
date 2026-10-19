@@ -106,6 +106,8 @@ bannerHola:
   lda #>asciiBannerAlphabet_c64  
   sta asciiBannerAlphabet_high
   ;load the asciiString that will be processed
+  jsr send_ansi_reset
+  jsr send_ansi_br_green
   lda #<asciiSHola
   sta asciiStringZp_low
   lda #>asciiSHola
@@ -118,6 +120,10 @@ bannerHola:
   sta asciiStringZp_high
   jsr fillLineRAM
   jsr printLineRAM
+  jsr delay_1_sec
+
+  jsr send_ansi_cls
+
   lda #<asciiOtraVez
   sta asciiStringZp_low
   lda #>asciiOtraVez
