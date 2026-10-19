@@ -159,8 +159,8 @@ bin_2_ascii_printMessageLoop_NOCRLF:
   jmp bin_2_ascii_printMessageLoop_NOCRLF
 bin_2_ascii_printMessageLoopEnd_NOCRLF:  
   ;jsr send_rs232_CRLF
-  pha
-  pla 
+  pla ;recupero X (antes decia pha/pla y quedaba un byte de mas en la pila)
+  tax
   rts
 
 ; bin_2_ascii_segmentBarSizeLow:

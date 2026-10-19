@@ -323,7 +323,8 @@ drawLetterRAM_defineRAMPosition:
   ;in asciiRAMPointer_low, this variable is already in the position and line to start filling
   lda (asciiPointer_low),Y ;load the byte of the correct line for the letter
   sta asciiBannerLineByte
-  jsr writeLetterBannerLineinRAM
+  ;jsr writeLetterBannerLineinRAM
+  jsr writeLetterBannerLineinRAM_5_Symbols
   jmp drawLetterRAM_Loop
 drawLetterRAM_End:
   pla ;restore the Y index
@@ -354,3 +355,41 @@ writeLetterBannerLineinRAM_End:
   pla
   tay
   rts
+
+writeLetterBannerLineinRAM_5_Symbols:
+  tya 
+  pha 
+  txa
+  pha
+  ;the glyphs are 8 bits wide but the C64 font only uses the 5 right bits ($10..$01)
+  ;skip the (8 - numberOfSymbolsPerLinePerChar) left bits so each letter uses
+  ;exactly numberOfSymbolsPerLinePerChar columns on the line
+  ldx #asciiSkipBits
+  beq writeLetterBannerLineinRAM_5_Symbols_NoSkip
+writeLetterBannerLineinRAM_5_Symbols_Skip:
+  asl asciiBannerLineByte
+  dex
+  bne writeLetterBannerLineinRAM_5_Symbols_Skip
+writeLetterBannerLineinRAM_5_Symbols_NoSkip:
+  pla
+  tax
+  ldy #$FF 
+writeLetterBannerLineinRAM_5_Symbols_Loop:  
+  iny
+  cpy #numberOfSymbolsPerLinePerChar ;#8
+  beq writeLetterBannerLineinRAM_5_Symbols_End
+  asl asciiBannerLineByte ;now i have on the carry if it is a 1 then print a block 
+                          ;or a 0 print space
+  bcc writeLetterBannerLineinRAM_5_Symbols_Space
+  ;here i have to print a block the carry is set
+  lda #asciiCharBlock
+  sta (asciiRAMPointer_low),Y
+  jmp writeLetterBannerLineinRAM_5_Symbols_Loop
+writeLetterBannerLineinRAM_5_Symbols_Space:
+  lda #asciiCharBlank
+  sta (asciiRAMPointer_low),Y
+  jmp writeLetterBannerLineinRAM_5_Symbols_Loop
+writeLetterBannerLineinRAM_5_Symbols_End: 
+  pla
+  tay
+  rts  

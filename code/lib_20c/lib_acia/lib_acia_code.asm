@@ -20,8 +20,10 @@ uartSerialInit:
   ;bit 3 =1 bit 2=1 bit 1=1 bit 0=0 -> 9600 baudios as a baud rate
   ;bit 3 =1 bit 2=1 bit 1=1 bit 0=1 -> 19200 baudios as a baud rate
   ;lda #%00011110 ;N-8-1 = No parity, 8 bits, 1 Stop Bit, 9600 baudios
-  lda #%00011111 ;N-8-1 = No parity, 8 bits, 1 Stop Bit, 19200 baudios
+  ;lda #%00011111 ;N-8-1 = No parity, 8 bits, 1 Stop Bit, 19200 baudios
+  lda #ACIA_CTRL_SCREEN  ;velocidad de la pantalla (ver lib_acia_memory.asm)
   sta ACIA_CTRL
+  lda #ACIA_CTRL_PRINTER ;la impresora sigue a 19200
   sta ACIA_PRINTER_CTRL
 
   ;configure the command register
@@ -211,80 +213,119 @@ loopReceiveData:
   jmp loopReceiveData ;go to wait for next character
   rts
 
+;------------------------------------------------------------------------------
+; send_rs232_char - manda A por el ACIA. Conserva A, X e Y.
+;   Version rapida:
+;   - sin leer el STATUS: en el W65C51 el bit 4 (TDRE) siempre da 1, el
+;     lazo tx_wait nunca esperaba nada (8 ciclos perdidos por caracter)
+;   - el retardo usa X y va en linea (sin jsr/rts, sin guardar Y)
+;   - el retardo es TX_DELAY (lib_acia_memory.asm), calculado para que entre
+;     dos escrituras haya 10 bits contando el camino mas corto posible del
+;     que llama (lda #n / jsr): 47 + 5*TX_DELAY ciclos
+;   Una IRQ (el SID) en el medio solo alarga la espera: no rompe nada.
+;------------------------------------------------------------------------------
 send_rs232_char:
-  pha ;store the character to print
-  lda rs232Printer
-  bne send_rs232_char_printer
+  pha                  ;3 guardo el caracter
+  lda rs232Printer     ;4
+  bne send_rs232_char_printer ;2
 send_rs232_char_screen:
-  pla ;restore the character to print
-  sta ACIA_DATA ;wrie whatever is on the accumulator to the transmit register
-  ; preserve accumulator
-  pha 
-  ; preserve Y register
-  tya  
-  pha
-  ; preserve X register
-  txa  
-  pha  
-  ;check to see if the transmit data register is empty bit 4 of the status register
-tx_wait:  
-  lda ACIA_STATUS
-  and #%00010000 ;leave vae only bit 4 on the accumulator
-  beq tx_wait ;if zero the transmit buffer is full so we wait
-  jsr tx_delay ; solve bit 4 hardware issue on the wdc issue
-  ;recover X register
-  pla
-  tax
-  ;recover y register
-  pla
-  tay
-  ; recover accumulator
-  pla 
-  rts
-tx_delay:
-  ;at 19200 bauds it is 1 bit every 52 clock cycles
-  ;so 8 bits + start and stop bit it is 10 bits or 520 cycles
-  ldy #102
-tx_delay_loop:  
-  dey ;2 cycles
-  bne tx_delay_loop ; 3 cycles
-  rts
+  pla                  ;4
+  sta ACIA_DATA        ;4 sale el byte: desde aca corre la espera
+  pha                  ;3
+  txa                  ;2
+  pha                  ;3
+  ldx #TX_DELAY        ;2
+tx_delay_loop:
+  dex                  ;2
+  bne tx_delay_loop    ;3 (2 el ultimo)
+  pla                  ;4
+  tax                  ;2
+  pla                  ;4
+  rts                  ;6
 
 send_rs232_char_printer:
-  pla ;restore the character to print
-  sta ACIA_PRINTER_DATA ;wrie whatever is on the accumulator to the transmit register
-  ; preserve accumulator
-  pha 
-  ; preserve Y register
-  tya  
+  pla
+  sta ACIA_PRINTER_DATA
   pha
-  ; preserve X register
-  txa  
-  pha  
-
-  ;check to see if the transmit data register is empty bit 4 of the status register
-tx_wait_printer:  
-  lda ACIA_PRINTER_STATUS
-  and #%00010000 ;leave vae only bit 4 on the accumulator
-  beq tx_wait_printer ;if zero the transmit buffer is full so we wait
-  jsr tx_delay_printer ; solve bit 4 hardware issue on the wdc issue
-  ;recover X register
+  txa
+  pha
+  ldx #TX_DELAY_PRINTER
+tx_delay_printer_loop:
+  dex
+  bne tx_delay_printer_loop
   pla
   tax
-  ;recover y register
   pla
-  tay
-  ; recover accumulator
-  pla 
   rts
 
-tx_delay_printer:
-  ;at 19200 bauds it is 1 bit every 52 clock cycles
-  ;so 8 bits + start and stop bit it is 10 bits or 520 cycles
-  ldy #102
-tx_delay_printer_loop:  
-  dey ;2 cycles
-  bne tx_delay_printer_loop ; 3 cycles
+;------------------------------------------------------------------------------
+; printAsciiBinaryFast - igual que printAsciiBinary (25 lineas, cada 00 -> CRLF)
+;   pero manda todo en un solo lazo, sin un jsr por caracter.
+;   Entrada: serialDataVectorLow/High = inicio de la pantalla en RAM
+;   Salida:  serialDataVector queda despues del ultimo 00 (como antes)
+;   Conserva A, X e Y. Usa asciiBinaryRows. Si rs232Printer<>0 usa la vieja.
+;   Entre bytes: 17 + 5*TX_DELAY_STREAM ciclos.
+;------------------------------------------------------------------------------
+printAsciiBinaryFast:
+  pha
+  txa
+  pha
+  tya
+  pha
+  lda rs232Printer
+  beq .screen
+  jsr printAsciiBinary        ; impresora: el camino de siempre
+  jmp .end
+.screen:
+  lda #25
+  sta asciiBinaryRows
+  ldy #0
+.next:
+  lda (serialDataVectorLow),y ;5 (6 si cruza pagina)
+  beq .eol                    ;2
+  sta ACIA_DATA               ;4
+  ldx #TX_DELAY_STREAM        ;2
+.wait:
+  dex                         ;2
+  bne .wait                   ;3
+.adv:
+  iny                         ;2
+  bne .next                   ;3
+  inc serialDataVectorHigh    ;   cada 256 bytes
+  jmp .next
+.eol:                         ; 00 = fin de linea -> CR LF
+  lda #$0d
+  sta ACIA_DATA
+  jsr txWaitStream
+  lda #$0a
+  sta ACIA_DATA
+  jsr txWaitStream
+  dec asciiBinaryRows
+  bne .adv
+  iny                         ; puntero despues del ultimo 00
+  bne .fix
+  inc serialDataVectorHigh
+.fix:
+  tya
+  clc
+  adc serialDataVectorLow
+  sta serialDataVectorLow
+  bcc .end
+  inc serialDataVectorHigh
+.end:
+  pla
+  tay
+  pla
+  tax
+  pla
+  rts
+
+txWaitStream:                 ; 6 (jsr) + 2 + 5*N-1 + 2 + 6 (rts)
+  ldx #TX_DELAY_STREAM
+.w:
+  dex
+  bne .w
+  nop                         ; para que CR->LF no quede mas corto que un byte normal
   rts
 
 ;END--------------------------------------------------------------------------------
@@ -376,6 +417,14 @@ send_ansi_cur_hide:
   jsr send_ansi_string
   rts  
 
+send_ansi_cls:
+  lda #<ansi_cls
+  sta ansiStringMemoryConstantLow
+  lda #>ansi_cls
+  sta ansiStringMemoryConstantHigh
+  jsr send_ansi_string
+  rts  
+
 
 send_ansi_red:
   ;.byte 27,"[34m",0
@@ -393,6 +442,16 @@ send_ansi_br_white:
   lda #"9"
   sta colorStyleType  
   lda #"7"
+  sta colorStyleOffset
+  jsr send_ansi_generic
+  rts
+
+send_ansi_br_green:
+  ;.byte 27,"[34m",0
+  ;31 = 4*7 = 28 bytes from zero
+  lda #"9"
+  sta colorStyleType  
+  lda #"2"
   sta colorStyleOffset
   jsr send_ansi_generic
   rts
@@ -738,7 +797,7 @@ printAsciiBinary_end:
   rts
 
 printAsciiDrawing:
-  sei ;disable interrupts to run
+  ;sei ;disable interrupts to run
   ;save accumulator x and y registers
   pha
   txa

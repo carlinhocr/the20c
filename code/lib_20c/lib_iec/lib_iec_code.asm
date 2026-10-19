@@ -73,6 +73,12 @@
 ;   VERSION HISTORY
 ;===============================================================================
 ;
+;   v32  - Un error del bus ya no congela la musica. Las esperas largas dentro
+;          de los envoltorios con SEI (RFD, DEVICE, ACK, TURN) abren ventanas
+;          para la IRQ despues de 50 ms (IEC_WAIT_IRQ), y las esperas dentro de
+;          un byte se acortaron (CLK tras EOI 50 ms, flancos de bit ~4-8 ms).
+;          Detalle al final del archivo. Usa RAM $039B-$039C.
+;
 ;   v31  - TRAILER_TRACK: las dos rutinas de lectura siguen si el archivo
 ;          termina en ESC[0m,00 (el final de todas las pantallas ANSI).
 ;          TR_MATCH = 5 al terminar => llego el final de verdad. Sirve para
@@ -632,7 +638,7 @@ IEC_WAIT_RFD:
             STA ZP_WWANT
             LDA #RFD_OUTER
             STA ZP_RFDCNT
-            JMP IEC_WAIT
+            JMP IEC_WAIT_IRQ    ; v32: con ventanas para la IRQ de la musica
 
 ; RTS - talker releases CLK, "byte ready". WATCHDOG deadline.
 IEC_WAIT_CLK_RTS:
@@ -650,7 +656,7 @@ IEC_WAIT_CLK_LOW:
             STA ZP_WMASK
             LDA #CLK_IN         ; PB4 = 1 -> CLK asserted
             STA ZP_WWANT
-            LDA #CLKLOW_OUTER
+            LDA #CLKLOW_SEI     ; v32: 1 x 50 ms (antes 10 = 0,5 s con SEI)
             STA ZP_RFDCNT
             JMP IEC_WAIT
 
@@ -663,7 +669,7 @@ IEC_WAIT_DEVICE:
             STA ZP_WWANT
             LDA #DEVICE_OUTER
             STA ZP_RFDCNT
-            JMP IEC_WAIT
+            JMP IEC_WAIT_IRQ    ; v32: con ventanas para la IRQ de la musica
 
 ; Listener pulls DATA low to acknowledge a byte. WATCHDOG deadline.
 IEC_WAIT_ACK:
@@ -673,7 +679,7 @@ IEC_WAIT_ACK:
             STA ZP_WWANT
             LDA #ACK_OUTER
             STA ZP_RFDCNT
-            JMP IEC_WAIT
+            JMP IEC_WAIT_IRQ    ; v32: con ventanas para la IRQ de la musica
 
 ; Device takes CLK after the bus turnaround. WATCHDOG deadline.
 IEC_WAIT_TURN:
@@ -683,7 +689,7 @@ IEC_WAIT_TURN:
             STA ZP_WWANT
             LDA #TURN_OUTER
             STA ZP_RFDCNT
-            JMP IEC_WAIT
+            JMP IEC_WAIT_IRQ    ; v32: con ventanas para la IRQ de la musica
 
 
 ;-----------------------------------------------------------------------
@@ -1215,8 +1221,8 @@ IEC_RECV_RFD:
             ; there is no skew between "edge seen" and "data read". The
             ; polarity convention is the one READ_DATA/READ_CLK document:
             ; PB4 = 1 means CLK is LOW, PB3 = 1 means DATA is LOW.
-            LDY #$00
-            STY ZP_TEMP             ; 16-bit watchdog, ~1 s at 1 MHz
+            LDX #RXBIT_WD       ; v32: watchdog corto (Y arranca en lo que haya)
+            STX ZP_TEMP             ; ~4-8 ms (antes ~1 s con SEI). X se pisa abajo con TAX
 .recv_wait_rise:
             LDA IEC_VIA_PORTB           ; atomic sample of both lines
             TAX                     ; keep the sample
@@ -1242,8 +1248,8 @@ IEC_RECV_RFD:
                                     ; back in the right order
 
             ; ---- wait for the CLK falling edge (end of this bit) ----
-            LDY #$00
-            STY ZP_TEMP
+            LDX #RXBIT_WD       ; v32: idem
+            STX ZP_TEMP
 .recv_wait_fall:
             LDA IEC_VIA_PORTB
             AND #CLK_IN
@@ -2623,18 +2629,21 @@ readFilenameToBufferTroubleshoot:
 
 IEC_SEND_BYTE_ATN:                  ; bytes de comando bajo ATN
             PHP
+            JSR IEC_NOTE_I          ; v32: anota si la musica estaba prendida
             SEI
             JSR IEC_SEND_BYTE_ATN_RAW
             JMP IEC_PLP_KEEP_C
 
 IEC_SEND_BYTE:                      ; bytes de datos (nombre de archivo, escritura)
             PHP                     ; incluye la espera del RFD: el listener mide
-            SEI                     ; 200 us desde que suelta DATA hasta que bajamos CLK
+            JSR IEC_NOTE_I          ; 200 us desde que suelta DATA hasta que bajamos CLK
+            SEI
             JSR IEC_SEND_BYTE_RAW
             JMP IEC_PLP_KEEP_C
 
 IEC_TURNAROUND:
             PHP
+            JSR IEC_NOTE_I
             SEI
             JSR IEC_TURNAROUND_RAW
             JMP IEC_PLP_KEEP_C
@@ -2669,6 +2678,92 @@ IEC_PLP_KEEP_C:
 .k_sec:
             PLP
             SEC
+            RTS
+
+
+;===============================================================================
+;   v32 - QUE UN ERROR DEL BUS NO CONGELE LA MUSICA
+;===============================================================================
+;   Problema (v29-v31): los envoltorios hacen SEI y adentro quedaban esperas con
+;   watchdogs largos: RFD y TURN 60 x 50 ms = 3 s, DEVICE y ACK 250 ms, el CLK
+;   despues del EOI 0,5 s y cada flanco de bit ~0,85 s. Con el bus sano duran
+;   microsegundos; cuando el drive se traba, la IRQ del VIA1 quedaba bloqueada
+;   segundos y la musica se cortaba (UNTALK + CLOSE + UNLISTEN del camino de
+;   error encadenan varias de esas esperas).
+;
+;   Arreglo:
+;   1. IEC_WAIT_IRQ (RFD, DEVICE, ACK, TURN): igual que IEC_WAIT durante el
+;      primer bloque de 50 ms, con SEI y sin tocar nada. Si en 50 ms no paso
+;      el evento (el bus ya esta lento o trabado), entre muestra y muestra abre
+;      una ventana CLI/NOP/SEI para que entre la IRQ de la musica. Solo si el
+;      que llamo tenia las interrupciones prendidas (IEC_IRQ_OFF = 0).
+;      Riesgo aceptado: si el drive suelta DATA (RFD) justo mientras corre la
+;      IRQ, bajamos CLK tarde y el drive puede tomarlo como EOI. Solo puede
+;      pasar despues de 50 ms de espera; el loadRetry lo cubre.
+;   2. Esperas DENTRO de un byte (el talker marca el tiempo): no se abren
+;      ventanas, se acortan. CLK despues del EOI: 1 x 50 ms. Flancos de bit:
+;      RXBIT_WD x 256 vueltas de ~15 ciclos = ~4-8 ms (un bit sano dura ~70 us).
+;   Los cambios dentro del driver son del mismo tamano en bytes: no se mueve
+;   ninguna direccion antes de los envoltorios.
+;-------------------------------------------------------------------------------
+CLKLOW_SEI  = 1                 ; bloques de 50 ms esperando CLK tras el EOI
+RXBIT_WD    = 2                 ; vueltas externas del watchdog de cada flanco
+IEC_IRQ_OFF = $039B             ; 0 = la musica estaba prendida al entrar al envoltorio
+IEC_WIN     = $039C             ; <>0 = ya se abren ventanas en esta espera
+
+; IEC_NOTE_I - mira el P que el envoltorio guardo con PHP (antes del SEI)
+; y anota en IEC_IRQ_OFF el bit I. Conserva A, X, Y y los flags.
+IEC_NOTE_I:
+            PHP
+            PHA
+            TXA
+            PHA
+            TSX
+            LDA $0106,X             ; X+1 = X, +2 = A, +3 = P de aca, +4/+5 = retorno,
+            AND #%00000100          ; +6 = P del envoltorio
+            STA IEC_IRQ_OFF
+            PLA
+            TAX
+            PLA
+            PLP
+            RTS
+
+; IEC_WAIT_IRQ - igual que IEC_WAIT (misma entrada y salida), con ventanas
+; para la IRQ despues del primer bloque de 50 ms. Conserva X e Y.
+IEC_WAIT_IRQ:
+            LDA #$00
+            STA IEC_WIN             ; el primer bloque, sin ventanas
+.wi_arm:
+            LDA #<RFD_CHUNK
+            STA IEC_VIA_T2CL
+            LDA #>RFD_CHUNK
+            STA IEC_VIA_T2CH        ; borra el flag de T2 y arranca el bloque
+.wi_poll:
+            LDA IEC_VIA_PORTB
+            AND ZP_WMASK
+            CMP ZP_WWANT
+            BEQ .wi_met
+            LDA IEC_WIN
+            BEQ .wi_nowin
+            CLI                     ; ventana: la IRQ pendiente entra aca
+            NOP
+            SEI
+.wi_nowin:
+            LDA IEC_VIA_IFR
+            AND #%00100000          ; T2 vencio?
+            BEQ .wi_poll
+            DEC ZP_RFDCNT
+            BEQ .wi_timeout
+            LDA IEC_IRQ_OFF         ; sin musica al entrar: nunca abrir ventanas
+            BNE .wi_arm
+            LDA #$FF
+            STA IEC_WIN
+            JMP .wi_arm
+.wi_timeout:
+            SEC
+            RTS
+.wi_met:
+            CLC
             RTS
 
 

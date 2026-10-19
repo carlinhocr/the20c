@@ -51,7 +51,7 @@
 ; ---------------------------------------------------------------- CONFIG ----
 SIDFILE     = $1000                 ; slot por defecto de SID_START / SID_PLAY
 SID_BASE    = $20                   ; 16 bits en página cero: dónde está el .sid actual
-SID         = $7300                 ; 6581 real en la 20c
+SID         = $7300; 7500 es test $7300                 ; 6581 real en la 20c
 SIDPAGE     = $D4                   ; página que escribe el tema (se parchea)
 SIDREG_MAX  = $1C                   ; último registro válido del SID
 

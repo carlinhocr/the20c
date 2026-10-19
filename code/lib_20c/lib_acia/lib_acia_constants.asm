@@ -187,7 +187,7 @@ cur_show:
   .byte 27,"[?25h",0
 
 ; ---------- Borrar ----------
-cls:
+ansi_cls:
   .byte 27,"[2J",27,"[H",0  ; borra pantalla y va al inicio
 clr_eol:
   .byte 27,"[K",0      ; borra desde el cursor al final de la línea

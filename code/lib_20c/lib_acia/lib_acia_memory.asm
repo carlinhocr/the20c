@@ -64,3 +64,26 @@ ACIA_DATA   = ACIA_BASE + $00
 ACIA_STATUS = ACIA_BASE + $01
 ACIA_CMD    = ACIA_BASE + $02
 ACIA_CTRL   = ACIA_BASE + $03
+
+;---------------------------------------------------------------------------
+; VELOCIDAD DEL RS232 (CPU a 1 MHz, 1 ciclo = 1 us)
+;   El W65C51 tiene el bit 4 (TDRE) trabado en 1: no avisa cuando termino de
+;   mandar. La unica forma segura es esperar 10 bits por caracter con un lazo.
+;     19200  -> 10 bits = 521 ciclos
+;     115200 -> 10 bits =  87 ciclos
+;   TX_DELAY        lo usa send_rs232_char      (47 + 5*N ciclos entre bytes)
+;   TX_DELAY_STREAM lo usa printAsciiBinaryFast (17 + 5*N ciclos entre bytes)
+;   Los valores dejan ~5% de margen. Elegir UN bloque y comentar el otro.
+;---------------------------------------------------------------------------
+; --- 19200 baudios (como estaba) ---
+; ACIA_CTRL_SCREEN = %00011111   ; 1 stop, 8 bits, RCS=1, SBR=1111 -> 19200
+; TX_DELAY         = 100         ; 47+500 = 547 ciclos
+; TX_DELAY_STREAM  = 106         ; 17+530 = 547 ciclos
+; --- 115200 baudios (cristal 1.8432 MHz / 16, SBR=0000) ---
+ACIA_CTRL_SCREEN = %00010000  ; 1 stop, 8 bits, RCS=1, SBR=0000 -> 115200
+TX_DELAY         = 9          ; 47+45 = 92 ciclos
+TX_DELAY_STREAM  = 15         ; 17+75 = 92 ciclos
+
+; la impresora queda siempre a 19200 con el retardo de antes
+ACIA_CTRL_PRINTER = %00011111
+TX_DELAY_PRINTER  = 102
