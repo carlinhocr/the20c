@@ -34,24 +34,24 @@ mainFlashParty:
   ldy #$C0
   jsr SID_START_ROM
   ;cargar el resto de los gráficos
-  jsr delay_3_sec
+  ;jsr delay_3_sec
   jsr loadAndPrintLA20c
   ;quienes somos
-  jsr delay_3_sec
-  jsr delay_3_sec
+  ;jsr delay_3_sec
+  ;jsr delay_3_sec
   jsr loadAndPrintBerdyx
-  jsr delay_3_sec
-  jsr delay_3_sec
+  ;jsr delay_3_sec
+  ;jsr delay_3_sec
   jsr loadAndPrintKRAKATOA
-  jsr delay_3_sec
-  jsr delay_3_sec
+  ;jsr delay_3_sec
+  ;jsr delay_3_sec
   jsr loadAndPrintOSO
-  jsr delay_3_sec
-  jsr delay_3_sec
+  ;jsr delay_3_sec
+  ;jsr delay_3_sec
   ;amigos
   jsr loadAndPrintVENTILA
-  jsr delay_3_sec
-  jsr delay_3_sec
+  ;jsr delay_3_sec
+  ;jsr delay_3_sec
   ;imagen del final 
   ;y que diga hola soy la 20c
 
