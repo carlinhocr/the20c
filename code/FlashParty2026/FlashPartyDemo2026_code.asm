@@ -31,25 +31,34 @@
 mainFlashParty:
   ;cargar primera imagen de ROM
   ;cargar sid de rom y empezar a tocarlo
+  jsr bannerHola
+  lda #0
+  sta SID_LIMIT
+  sta SID_LIMIT+1
   ldy #$C0
   jsr SID_START_ROM
   ;cargar el resto de los gráficos
   ;jsr delay_3_sec
+  jsr delay_1_sec
   jsr loadAndPrintLA20c
+  jsr delay_1_sec
   ;quienes somos
   ;jsr delay_3_sec
   ;jsr delay_3_sec
   jsr loadAndPrintBerdyx
-  ;jsr delay_3_sec
+  jsr delay_1_sec
   ;jsr delay_3_sec
   jsr loadAndPrintKRAKATOA
+  jsr delay_1_sec
   ;jsr delay_3_sec
   ;jsr delay_3_sec
   jsr loadAndPrintOSO
+  jsr delay_1_sec
   ;jsr delay_3_sec
   ;jsr delay_3_sec
   ;amigos
   jsr loadAndPrintVENTILA
+  jsr delay_1_sec
   ;jsr delay_3_sec
   ;jsr delay_3_sec
   ;imagen del final 
@@ -90,6 +99,28 @@ loopFlashParty2026:
   jmp loopFlashParty2026
 
 
+bannerHola:  
+  ;load the alphabet
+  lda #<asciiBannerAlphabet_c64
+  sta asciiBannerAlphabet_low
+  lda #>asciiBannerAlphabet_c64  
+  sta asciiBannerAlphabet_high
+  ;load the asciiString that will be processed
+  lda #<asciiSHola
+  sta asciiStringZp_low
+  lda #>asciiSHola
+  sta asciiStringZp_high
+  jsr fillLineRAM
+  jsr printLineRAM
+  lda #<asciiSoyla20c
+  sta asciiStringZp_low
+  lda #>asciiSoyla20c
+  sta asciiStringZp_high
+  jsr fillLineRAM
+  jsr printLineRAM
+  jsr delay_1_sec
+  rts
+  
 loadAndPrintBandera:
   lda #<fileBandera
   sta ZP_PTR_LO
