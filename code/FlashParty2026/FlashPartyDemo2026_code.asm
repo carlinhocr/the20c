@@ -32,33 +32,31 @@ mainFlashParty:
   ;cargar primera imagen de ROM
   ;cargar sid de rom y empezar a tocarlo
   jsr bannerHola
+
+  ;cargar el resto de los gráficos
+  ;jsr delay_3_sec
+  jsr delay_3_sec
+  jsr loadAndPrintLA20c
+  ;start SID from ROM
   lda #0
   sta SID_LIMIT
   sta SID_LIMIT+1
   ldy #$C0
   jsr SID_START_ROM
-  ;cargar el resto de los gráficos
-  ;jsr delay_3_sec
-  jsr delay_3_sec
-  jsr loadAndPrintLA20c
   jsr delay_1_sec
   ;quienes somos
-  ;jsr delay_3_sec
-  ;jsr delay_3_sec
+  jsr bannerNosotros
+  jsr delay_3_sec
   jsr loadAndPrintBerdyx
   jsr delay_1_sec
-  ;jsr delay_3_sec
   jsr loadAndPrintKRAKATOA
   jsr delay_1_sec
-  ;jsr delay_3_sec
-  ;jsr delay_3_sec
-  jsr loadAndPrintOSO
-  jsr delay_1_sec
-  ;jsr delay_3_sec
-  ;jsr delay_3_sec
-  ;amigos
   jsr loadAndPrintVENTILA
   jsr delay_1_sec
+  jsr loadAndPrintOSO
+  jsr delay_1_sec
+  ;amigos
+
   ;jsr delay_3_sec
   ;jsr delay_3_sec
   ;imagen del final 
@@ -107,38 +105,58 @@ bannerHola:
   sta asciiBannerAlphabet_high
   ;load the asciiString that will be processed
   jsr send_ansi_reset
+  jsr send_ansi_cls
   jsr send_ansi_br_green
-  lda #<asciiSHola
+  lda #<asciiSHola1
   sta asciiStringZp_low
-  lda #>asciiSHola
+  lda #>asciiSHola1
   sta asciiStringZp_high
   jsr fillLineRAM
   jsr printLineRAM
-  lda #<asciiSoyla20c
+  lda #<asciiSHola2
   sta asciiStringZp_low
-  lda #>asciiSoyla20c
+  lda #>asciiSHola2
   sta asciiStringZp_high
   jsr fillLineRAM
   jsr printLineRAM
-  jsr delay_1_sec
+  jsr delay_3_sec
 
   jsr send_ansi_cls
 
-  lda #<asciiOtraVez
+  lda #<asciiSHola3
   sta asciiStringZp_low
-  lda #>asciiOtraVez
+  lda #>asciiSHola3
   sta asciiStringZp_high
   jsr fillLineRAM
   jsr printLineRAM
-  lda #<asciiDeNuevo
+  lda #<asciiSHola4
   sta asciiStringZp_low
-  lda #>asciiDeNuevo
+  lda #>asciiSHola4
   sta asciiStringZp_high
   jsr fillLineRAM
   jsr printLineRAM
   jsr delay_1_sec
   rts
-  
+
+bannerNosotros:
+  jsr send_ansi_reset
+  jsr send_ansi_cls
+  jsr send_ansi_br_green
+  lda #<asciiSHola1
+  sta asciiStringZp_low
+  lda #>asciiSHola1
+  sta asciiStringZp_high
+  jsr fillLineRAM
+  jsr printLineRAM
+  lda #<asciiSHola2
+  sta asciiStringZp_low
+  lda #>asciiSHola2
+  sta asciiStringZp_high
+  jsr fillLineRAM
+  jsr printLineRAM
+  jsr delay_3_sec
+  rts
+
 loadAndPrintBandera:
   lda #<fileBandera
   sta ZP_PTR_LO
