@@ -31,8 +31,8 @@
 mainFlashParty:
   ;cargar primera imagen de ROM
   ;cargar sid de rom y empezar a tocarlo
-  ;ldy #$C0
-  ;jsr SID_START_ROM
+  ldy #$C0
+  jsr SID_START_ROM
   ;cargar el resto de los gráficos
   jsr delay_3_sec
   jsr loadAndPrintLA20c
