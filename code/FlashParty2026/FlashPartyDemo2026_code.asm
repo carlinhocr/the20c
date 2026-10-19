@@ -237,7 +237,8 @@ printDiskBuffer:
   sta serialDataVectorLow
   lda ZP_BufferStartHigh
   sta serialDataVectorHigh
-  jsr printAsciiBinary
+  ;jsr printAsciiBinary
+  jsr printAsciiBinaryFast
   rts  
 
 loadAndPlayVoice:
