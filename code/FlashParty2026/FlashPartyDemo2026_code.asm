@@ -37,6 +37,8 @@ mainFlashParty:
   ;jsr loadAndPrintLA20c
   ;jsr delay_3_sec
   ;quienes somos
+  jsr delay_3_sec
+  jsr delay_3_sec
   jsr loadAndPrintBerdyx
   jsr delay_3_sec
   jsr delay_3_sec
