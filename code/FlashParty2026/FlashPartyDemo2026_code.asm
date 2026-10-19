@@ -32,11 +32,11 @@ mainFlashParty:
   ;cargar primera imagen de ROM
   ;cargar sid de rom y empezar a tocarlo
   jsr bannerHola
-
   ;cargar el resto de los gráficos
   ;jsr delay_3_sec
   jsr delay_3_sec
   jsr loadAndPrintLA20c
+  jsr delay_1_sec
   ;start SID from ROM
   lda #0
   sta SID_LIMIT
@@ -119,23 +119,13 @@ bannerHola:
   sta asciiStringZp_high
   jsr fillLineRAM
   jsr printLineRAM
-  jsr delay_3_sec
-
-  jsr send_ansi_cls
-
   lda #<asciiSHola3
   sta asciiStringZp_low
   lda #>asciiSHola3
   sta asciiStringZp_high
   jsr fillLineRAM
   jsr printLineRAM
-  lda #<asciiSHola4
-  sta asciiStringZp_low
-  lda #>asciiSHola4
-  sta asciiStringZp_high
-  jsr fillLineRAM
-  jsr printLineRAM
-  jsr delay_1_sec
+  jsr delay_3_sec
   rts
 
 bannerNosotros:
@@ -679,12 +669,12 @@ pfiChar:                  ; send_rs232_char guardando X e Y
   pla
   rts
  
-txtSt:    .byte "ST=$",0
-txtEoi:   .byte " EOI=$",0
-txtBytes: .byte " BYTES=$",0
-failSt    = $0395
-failEoi   = $0396
-failSize  = $0397         ; 2 bytes
+; txtSt:    .byte "ST=$",0
+; txtEoi:   .byte " EOI=$",0
+; txtBytes: .byte " BYTES=$",0
+; failSt       = $0395
+; failEoi      = $0396
+; failSize     = $0397         ; 2 bytes
  
   
 ; =============================================================================
@@ -756,7 +746,7 @@ SID_START_ROM:
   .include "./FlashPartyDemo2026_constants.asm"
 
   .org $C000
-    .incbin "../FlashParty2026/media/NAVES_C0.SID"
+    .incbin "../FlashParty2026/media/CARNAV_C0.SID"
 
 nmi:
 irq:
