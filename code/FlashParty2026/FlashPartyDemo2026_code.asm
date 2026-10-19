@@ -39,7 +39,7 @@ mainFlashParty:
   jsr SID_START_ROM
   ;cargar el resto de los gráficos
   ;jsr delay_3_sec
-  jsr delay_1_sec
+  jsr delay_3_sec
   jsr loadAndPrintLA20c
   jsr delay_1_sec
   ;quienes somos
@@ -115,6 +115,18 @@ bannerHola:
   lda #<asciiSoyla20c
   sta asciiStringZp_low
   lda #>asciiSoyla20c
+  sta asciiStringZp_high
+  jsr fillLineRAM
+  jsr printLineRAM
+  lda #<asciiOtraVez
+  sta asciiStringZp_low
+  lda #>asciiOtraVez
+  sta asciiStringZp_high
+  jsr fillLineRAM
+  jsr printLineRAM
+  lda #<asciiDeNuevo
+  sta asciiStringZp_low
+  lda #>asciiDeNuevo
   sta asciiStringZp_high
   jsr fillLineRAM
   jsr printLineRAM
