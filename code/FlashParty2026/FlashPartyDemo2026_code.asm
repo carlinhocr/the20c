@@ -34,8 +34,8 @@ mainFlashParty:
   ;ldy #$C0
   ;jsr SID_START_ROM
   ;cargar el resto de los gráficos
-  ;jsr loadAndPrintLA20c
-  ;jsr delay_3_sec
+  jsr delay_3_sec
+  jsr loadAndPrintLA20c
   ;quienes somos
   jsr delay_3_sec
   jsr delay_3_sec
