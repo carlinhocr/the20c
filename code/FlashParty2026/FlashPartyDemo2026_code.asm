@@ -132,15 +132,15 @@ bannerNosotros:
   jsr send_ansi_reset
   jsr send_ansi_cls
   jsr send_ansi_br_green
-  lda #<asciiSHola1
+  lda #<asciiSNosotros1
   sta asciiStringZp_low
-  lda #>asciiSHola1
+  lda #>asciiSNosotros1
   sta asciiStringZp_high
   jsr fillLineRAM
   jsr printLineRAM
-  lda #<asciiSHola2
+  lda #<asciiSNosotros2
   sta asciiStringZp_low
-  lda #>asciiSHola2
+  lda #>asciiSNosotros2
   sta asciiStringZp_high
   jsr fillLineRAM
   jsr printLineRAM
