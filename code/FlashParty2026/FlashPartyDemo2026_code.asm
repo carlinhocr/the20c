@@ -31,6 +31,7 @@
 mainFlashParty:
   ;cargar primera imagen de ROM
   ;cargar sid de rom y empezar a tocarlo
+  jsr animationDNAASCII
   jsr bannerHola
   ;cargar el resto de los gráficos
   ;jsr delay_3_sec
@@ -295,6 +296,7 @@ loadAndPrintRS232:
   jsr readFilenameToRS232
   rts  
 
+
 printDiskBuffer:  
   lda ZP_BufferStartLow
   sta serialDataVectorLow
@@ -447,7 +449,21 @@ playSid:
   rts
 
 
-
+animationDNAASCII:
+  lda #<dnaAscii
+  sta serialDataVectorLow
+  lda #>dnaAscii
+  sta serialDataVectorHigh
+  txa
+  pha
+  ldx #$0
+.loop  
+  cpx $ff
+  beq .end
+  jsr printAsciiDrawing
+  jmp .loop
+.end
+  rts
 
 ; Agregá a FlashPartyDemo2026_memory.asm:
 ;   LOAD_RETRIES = 3
@@ -747,6 +763,7 @@ SID_START_ROM:
 
   .org $C000
     .incbin "../FlashParty2026/media/CARNAV_C0.SID"
+    .include "../FlashParty2026/media/DNASCII.asm"
 
 nmi:
 irq:
