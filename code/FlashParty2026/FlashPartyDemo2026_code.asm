@@ -31,10 +31,10 @@
 mainFlashParty:
   ;cargar primera imagen de ROM
   ;cargar sid de rom y empezar a tocarlo 
-  ;jsr bannerHola
+  jsr bannerHola
   ;cargar el resto de los gráficos
   ;jsr delay_3_sec
-  jsr loadAndPrintLA20c_lz
+  jsr loadAndPrintLA20C_lz
   jsr delay_1_sec
   ;start SID from ROM
   lda #0
@@ -44,21 +44,48 @@ mainFlashParty:
   jsr SID_START_ROM
   jsr delay_1_sec
   ;quienes somos
-  ;jsr bannerNosotros
-  ;jsr delay_3_sec
-  jsr loadAndPrintBerdyx_lz
+  jsr loadAndPrintNOSOTROS_lz
   jsr delay_1_sec
-  ;jsr loadAndPrintKRAKATOA
-  ;jsr delay_1_sec
-  ;jsr loadAndPrintVENTILA
-  ;jsr delay_1_sec
+  jsr loadAndPrintBERDYX_lz
+  jsr delay_1_sec
+  jsr loadAndPrintKRAKATOA_lz
+  jsr delay_1_sec
+  jsr loadAndPrintVENTILA_lz
+  jsr delay_1_sec
   jsr loadAndPrintOSO_lz
   jsr delay_1_sec
+  ;hablar de la maquina
+  jsr loadAndPrintASISI_SID_lz ;quetenemos musica
+  jsr delay_1_sec
+  jsr loadAndPrintSID6581_lz  ;pantalla SID
+  jsr delay_1_sec
+  ;y que toda la demo es ASCII puro por RS232
+  jsr loadAndPrintPANACIA_lz
+  jsr delay_1_sec
+  jsr loadAndPrintACIA6551_lz
+  jsr delay_1_sec
   ;amigos
-
-  ;jsr delay_3_sec
+  jsr loadAndPrintAMIGOS_lz
+  jsr delay_1_sec
+  jsr loadAndPrintPVM_lz
+  jsr delay_1_sec
+  jsr loadAndPrintCIRUGRP_lz
+  jsr delay_1_sec
+  jsr loadAndPrintESPTEC_lz
+  jsr delay_1_sec
+  jsr loadAndPrintAPIX_lz
+  jsr delay_1_sec
+  jsr loadAndPrintCAFEC64_lz
+  jsr delay_1_sec
+  jsr loadAndPrintDIEGO_lz
+  jsr delay_1_sec
+  jsr loadAndPrintGALAEPI_lz
+  jsr delay_1_sec
+  jsr loadAndPrintBRINDIS_lz
+  jsr loadAndPlayVoice
   ;jsr delay_3_sec
   ;imagen del final 
+  ;Voten por mi
   ;y que diga hola soy la 20c
 
 ; mainFlashPartyFunction:
@@ -148,18 +175,147 @@ bannerNosotros:
 
 
 
-loadAndPrintBerdyx_lz:
-  lda #<fileBerdyx_lz
+; ---- cargadores de las pantallas .LZ4 (generado por lz4asm.py) ----
+loadAndPrintACIA6551_lz:
+  lda #<fileACIA6551_lz
   sta ZP_PTR_LO
-  lda #>fileBerdyx_lz
+  lda #>fileACIA6551_lz
   sta ZP_PTR_HI
   jsr loadRetryAndPrintLZ
   rts
 
-loadAndPrintLA20c_lz:
+loadAndPrintAMIGOS_lz:
+  lda #<fileAMIGOS_lz
+  sta ZP_PTR_LO
+  lda #>fileAMIGOS_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintAPIX_lz:
+  lda #<fileAPIX_lz
+  sta ZP_PTR_LO
+  lda #>fileAPIX_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+  
+loadAndPrintASISI_SID_lz:
+  lda #<fileASISI_SID_lz
+  sta ZP_PTR_LO
+  lda #>fileASISI_SID_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintBERDYX_lz:
+  lda #<fileBERDYX_lz
+  sta ZP_PTR_LO
+  lda #>fileBERDYX_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintBRINDIS_lz:
+  lda #<fileBRINDIS_lz
+  sta ZP_PTR_LO
+  lda #>fileBRINDIS_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintCAFEC64_lz:
+  lda #<fileCAFEC64_lz
+  sta ZP_PTR_LO
+  lda #>fileCAFEC64_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintCIRUGRP_lz:
+  lda #<fileCIRUGRP_lz
+  sta ZP_PTR_LO
+  lda #>fileCIRUGRP_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintCPU6502_lz:
+  lda #<fileCPU6502_lz
+  sta ZP_PTR_LO
+  lda #>fileCPU6502_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintDIEGO_lz:
+  lda #<fileDIEGO_lz
+  sta ZP_PTR_LO
+  lda #>fileDIEGO_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintESPTEC_lz:
+  lda #<fileESPTEC_lz
+  sta ZP_PTR_LO
+  lda #>fileESPTEC_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintGALAEPI_lz:
+  lda #<fileGALAEPI_lz
+  sta ZP_PTR_LO
+  lda #>fileGALAEPI_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintICUY_lz:
+  lda #<fileICUY_lz
+  sta ZP_PTR_LO
+  lda #>fileICUY_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintJORGE_lz:
+  lda #<fileJORGE_lz
+  sta ZP_PTR_LO
+  lda #>fileJORGE_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintKRAKATOA_lz:
+  lda #<fileKRAKATOA_lz
+  sta ZP_PTR_LO
+  lda #>fileKRAKATOA_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintLA20C_lz:
   lda #<fileLA20C_lz
   sta ZP_PTR_LO
   lda #>fileLA20C_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintMODO_lz:
+  lda #<fileMODO_lz
+  sta ZP_PTR_LO
+  lda #>fileMODO_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintNOSOTROS_lz:
+  lda #<fileNOSOTROS_lz
+  sta ZP_PTR_LO
+  lda #>fileNOSOTROS_lz
   sta ZP_PTR_HI
   jsr loadRetryAndPrintLZ
   rts
@@ -172,120 +328,185 @@ loadAndPrintOSO_lz:
   jsr loadRetryAndPrintLZ
   rts
 
+loadAndPrintOSOLABS_lz:
+  lda #<fileOSOLABS_lz
+  sta ZP_PTR_LO
+  lda #>fileOSOLABS_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintPANACIA_lz:
+  lda #<filePANACIA_lz
+  sta ZP_PTR_LO
+  lda #>filePANACIA_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintPVM_lz:
+  lda #<filePVM_lz
+  sta ZP_PTR_LO
+  lda #>filePVM_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintSID6581_lz:
+  lda #<fileSID6581_lz
+  sta ZP_PTR_LO
+  lda #>fileSID6581_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintTECSORO_lz:
+  lda #<fileTECSORO_lz
+  sta ZP_PTR_LO
+  lda #>fileTECSORO_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintTENO_lz:
+  lda #<fileTENO_lz
+  sta ZP_PTR_LO
+  lda #>fileTENO_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintVENTILA_lz:
+  lda #<fileVENTILA_lz
+  sta ZP_PTR_LO
+  lda #>fileVENTILA_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintVOTEN_lz:
+  lda #<fileVOTEN_lz
+  sta ZP_PTR_LO
+  lda #>fileVOTEN_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+
   
-loadAndPrintBandera:
-  lda #<fileBandera
-  sta ZP_PTR_LO
-  lda #>fileBandera
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  rts
+; loadAndPrintBandera:
+;   lda #<fileBandera
+;   sta ZP_PTR_LO
+;   lda #>fileBandera
+;   sta ZP_PTR_HI
+;   jsr loadRetryAndPrint
+;   rts
 
-loadAndPrintICUY:
-  lda #<fileICUY
-  sta ZP_PTR_LO
-  lda #>fileICUY
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  rts
+; loadAndPrintICUY:
+;   lda #<fileICUY
+;   sta ZP_PTR_LO
+;   lda #>fileICUY
+;   sta ZP_PTR_HI
+;   jsr loadRetryAndPrint
+;   rts
 
-loadAndPrintBerdyx:
-  lda #<fileBerdyx
-  sta ZP_PTR_LO
-  lda #>fileBerdyx
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  rts
+; loadAndPrintBerdyx:
+;   lda #<fileBerdyx
+;   sta ZP_PTR_LO
+;   lda #>fileBerdyx
+;   sta ZP_PTR_HI
+;   jsr loadRetryAndPrint
+;   rts
 
-loadAndPrintESPTEC:
-  lda #<fileESPTEC
-  sta ZP_PTR_LO
-  lda #>fileESPTEC
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  rts
+; loadAndPrintESPTEC:
+;   lda #<fileESPTEC
+;   sta ZP_PTR_LO
+;   lda #>fileESPTEC
+;   sta ZP_PTR_HI
+;   jsr loadRetryAndPrint
+;   rts
 
-loadAndPrintKRAKATOA:
-  lda #<fileKRAKATOA
-  sta ZP_PTR_LO
-  lda #>fileKRAKATOA
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  rts    
-
-
-
-
-loadAndPrintLA20c:
-  lda #<fileLA20C
-  sta ZP_PTR_LO
-  lda #>fileLA20C
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  rts
-
-loadAndPrintMODO:
-  lda #<fileMODO
-  sta ZP_PTR_LO
-  lda #>fileMODO
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  rts
-
-loadAndPrintOSO:
-  lda #<fileOSO
-  sta ZP_PTR_LO
-  lda #>fileOSO
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  rts
-
-loadAndPrintPVM:
-  lda #<filePVM
-  sta ZP_PTR_LO
-  lda #>filePVM
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  rts
-
-loadAndPrintVENTILA:
-  lda #<fileVENTILA
-  sta ZP_PTR_LO
-  lda #>fileVENTILA
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  rts      
-
-loadAndPrintOSOLABS:
-  lda #<fileOSOLABS
-  sta ZP_PTR_LO
-  lda #>fileOSOLABS
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  rts     
+; loadAndPrintKRAKATOA:
+;   lda #<fileKRAKATOA
+;   sta ZP_PTR_LO
+;   lda #>fileKRAKATOA
+;   sta ZP_PTR_HI
+;   jsr loadRetryAndPrint
+;   rts    
 
 
 
 
-loadAndPrintF1:
-  lda #<fileF1
-  sta ZP_PTR_LO
-  lda #>fileF1
-  sta ZP_PTR_HI
-  ;jsr loadAndPrint
-  jsr loadRetryRS232
-  rts
+; loadAndPrintLA20c:
+;   lda #<fileLA20C
+;   sta ZP_PTR_LO
+;   lda #>fileLA20C
+;   sta ZP_PTR_HI
+;   jsr loadRetryAndPrint
+;   rts
 
-loadAndPrintOsoMatrix:
-  lda #<fileOsoMatrix
-  sta ZP_PTR_LO
-  lda #>fileOsoMatrix
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrint
-  ;jsr loadRetryRS232
-  ;jsr loadAndPrintRS232
-  ;jsr loadAndPrint
-  rts
+; loadAndPrintMODO:
+;   lda #<fileMODO
+;   sta ZP_PTR_LO
+;   lda #>fileMODO
+;   sta ZP_PTR_HI
+;   jsr loadRetryAndPrint
+;   rts
+
+; loadAndPrintOSO:
+;   lda #<fileOSO
+;   sta ZP_PTR_LO
+;   lda #>fileOSO
+;   sta ZP_PTR_HI
+;   jsr loadRetryAndPrint
+;   rts
+
+; loadAndPrintPVM:
+;   lda #<filePVM
+;   sta ZP_PTR_LO
+;   lda #>filePVM
+;   sta ZP_PTR_HI
+;   jsr loadRetryAndPrint
+;   rts
+
+; loadAndPrintVENTILA:
+;   lda #<fileVENTILA
+;   sta ZP_PTR_LO
+;   lda #>fileVENTILA
+;   sta ZP_PTR_HI
+;   jsr loadRetryAndPrint
+;   rts      
+
+; loadAndPrintOSOLABS:
+;   lda #<fileOSOLABS
+;   sta ZP_PTR_LO
+;   lda #>fileOSOLABS
+;   sta ZP_PTR_HI
+;   jsr loadRetryAndPrint
+;   rts     
+
+
+
+
+; loadAndPrintF1:
+;   lda #<fileF1
+;   sta ZP_PTR_LO
+;   lda #>fileF1
+;   sta ZP_PTR_HI
+;   ;jsr loadAndPrint
+;   jsr loadRetryRS232
+;   rts
+
+; loadAndPrintOsoMatrix:
+;   lda #<fileOsoMatrix
+;   sta ZP_PTR_LO
+;   lda #>fileOsoMatrix
+;   sta ZP_PTR_HI
+;   jsr loadRetryAndPrint
+;   ;jsr loadRetryRS232
+;   ;jsr loadAndPrintRS232
+;   ;jsr loadAndPrint
+;   rts
 
 loadAndPrintTutankamon:
   lda #<fileTutankamon
