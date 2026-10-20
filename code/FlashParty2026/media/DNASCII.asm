@@ -38,9 +38,10 @@ dnaAscii:
   .asciiz "          o===================================O    "     
   .asciiz "           o                                 O     "      
   .asciiz "             o                             O       "      
-  .asciiz "               o=========================O         "      
+  .ascii "               o=========================O         "      
   .ascii "                 o                     O       "          
   .ascii "                   o                 O  "                 
   .ascii "                      o===========O   "                   
   .ascii "                         o     O   "                    
   .ascii "e"
+  .byte $00
