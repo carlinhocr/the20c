@@ -20,7 +20,6 @@ fileKRAKATOA:
 
 fileLA20C:
     .byte "0:LA20C.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading     
-
 fileMODO:
     .byte "0:MODO.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading     
 fileOSO:
@@ -35,6 +34,16 @@ fileOSOLABS:
     .byte "0:OSOLABS.BIN,P,R", $00  ; Open GRAPH001 as PRG for reading     
 
 
+;-------------------------------------------------------------------------
+
+fileBerdyx_lz:
+    .byte "0:BERDYX.LZ4,P,R", $00  ; Open GRAPH001 as PRG for reading 
+
+fileLA20C_lz:
+    .byte "0:LA20C.LZ4,P,R", $00  ; Open GRAPH001 as PRG for reading    
+
+fileOSO_lz:
+    .byte "0:OSO.LZ4,P,R", $00  ; Open GRAPH001 as PRG for reading  
 
 
 

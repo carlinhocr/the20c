@@ -30,15 +30,11 @@
 
 mainFlashParty:
   ;cargar primera imagen de ROM
-  ;cargar sid de rom y empezar a tocarlo
-  jsr animationDNAASCII
-.loopMain 
-  jmp .loopMain  
-  jsr bannerHola
+  ;cargar sid de rom y empezar a tocarlo 
+  ;jsr bannerHola
   ;cargar el resto de los gráficos
   ;jsr delay_3_sec
-  jsr delay_3_sec
-  jsr loadAndPrintLA20c
+  jsr loadAndPrintLA20c_lz
   jsr delay_1_sec
   ;start SID from ROM
   lda #0
@@ -48,15 +44,15 @@ mainFlashParty:
   jsr SID_START_ROM
   jsr delay_1_sec
   ;quienes somos
-  jsr bannerNosotros
-  jsr delay_3_sec
-  jsr loadAndPrintBerdyx
+  ;jsr bannerNosotros
+  ;jsr delay_3_sec
+  jsr loadAndPrintBerdyx_lz
   jsr delay_1_sec
-  jsr loadAndPrintKRAKATOA
-  jsr delay_1_sec
-  jsr loadAndPrintVENTILA
-  jsr delay_1_sec
-  jsr loadAndPrintOSO
+  ;jsr loadAndPrintKRAKATOA
+  ;jsr delay_1_sec
+  ;jsr loadAndPrintVENTILA
+  ;jsr delay_1_sec
+  jsr loadAndPrintOSO_lz
   jsr delay_1_sec
   ;amigos
 
@@ -150,6 +146,33 @@ bannerNosotros:
   jsr delay_3_sec
   rts
 
+
+
+loadAndPrintBerdyx_lz:
+  lda #<fileBerdyx_lz
+  sta ZP_PTR_LO
+  lda #>fileBerdyx_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintLA20c_lz:
+  lda #<fileLA20C_lz
+  sta ZP_PTR_LO
+  lda #>fileLA20C_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+loadAndPrintOSO_lz:
+  lda #<fileOSO_lz
+  sta ZP_PTR_LO
+  lda #>fileOSO_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts
+
+  
 loadAndPrintBandera:
   lda #<fileBandera
   sta ZP_PTR_LO
@@ -451,24 +474,24 @@ playSid:
   rts
 
 
-animationDNAASCII:
-  txa
-  pha
-  ldx #$00
-.loop  
-  inx ;cuando llega a cero el beq sale del loop
-  beq .end
-  lda #<dnaAscii
-  sta serialDataVectorLow
-  lda #>dnaAscii
-  sta serialDataVectorHigh
-  jsr printAsciiDrawing
-  inx
-  jmp .loop
-.end
-  pla
-  tax
-  rts
+; animationDNAASCII:
+;   txa
+;   pha
+;   ldx #$00
+; .loop  
+;   inx ;cuando llega a cero el beq sale del loop
+;   beq .end
+;   lda #<dnaAscii
+;   sta serialDataVectorLow
+;   lda #>dnaAscii
+;   sta serialDataVectorHigh
+;   jsr printAsciiDrawing
+;   inx
+;   jmp .loop
+; .end
+;   pla
+;   tax
+;   rts
 
 ; Agregá a FlashPartyDemo2026_memory.asm:
 ;   LOAD_RETRIES = 3
@@ -509,8 +532,14 @@ loadRetry:
   bne .fail              ; error al abrir (sin disquetera, etc.)
   lda IEC_EOI_FLAG
   beq .fail
-  lda checkTrailer       ; 1 = gráfico, 0 = .sid
+  lda checkTrailer       ; 0 = .sid, 1 = gráfico .BIN, 2 = gráfico .LZ4
   beq .ok
+  cmp #2
+  bne .trailer
+  jsr lzCheckSize        ; .LZ4: llegaron todos los bytes que dice el header?
+  bcc .ok
+  bcs .fail
+.trailer:
   lda TR_MATCH
   cmp #TRAILER_LEN
   beq .ok
@@ -760,6 +789,8 @@ SID_START_ROM:
   .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_code.asm"
   .include "../lib_20c/lib_acia/lib_acia_code.asm" ;define code for ACIA t  
   .include "../lib_20c/lib_utils/lib_utils_code.asm" ;define code for ACIA t  
+  .include "../lib_20c/lib_lz4/lib_lz4.asm"
+
   .include "../lib_20c/lib_iec/lib_iec_constants.asm"
   .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_constants.asm"
   .include "../lib_20c/lib_acia/lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
@@ -768,7 +799,7 @@ SID_START_ROM:
 
   .org $C000
     .incbin "../FlashParty2026/media/CARNAV_C0.SID"
-    .include "../FlashParty2026/media/DNASCII.asm"
+    ;.include "../FlashParty2026/media/DNASCII.asm"
 
 nmi:
 irq:
