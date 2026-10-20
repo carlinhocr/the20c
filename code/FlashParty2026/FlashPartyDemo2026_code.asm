@@ -452,21 +452,22 @@ playSid:
 
 
 animationDNAASCII:
+  txa
+  pha
+  ldx #$ff
+.loop  
+  inx ;cuando llega a cero el beq sale del loop
+  beq .end
   lda #<dnaAscii
   sta serialDataVectorLow
   lda #>dnaAscii
   sta serialDataVectorHigh
-  txa
-  pha
-  ldx #$0
-.loop  
-  cpx $ff
-  beq .end
-  jsr printAsciiDrawing
   jsr printAsciiDrawing
   inx
   jmp .loop
 .end
+  pla
+  tax
   rts
 
 ; Agregá a FlashPartyDemo2026_memory.asm:
