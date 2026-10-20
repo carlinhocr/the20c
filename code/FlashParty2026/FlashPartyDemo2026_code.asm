@@ -32,6 +32,8 @@ mainFlashParty:
   ;cargar primera imagen de ROM
   ;cargar sid de rom y empezar a tocarlo
   jsr animationDNAASCII
+.loopMain 
+  jmp .loopMain  
   jsr bannerHola
   ;cargar el resto de los gráficos
   ;jsr delay_3_sec
@@ -461,6 +463,8 @@ animationDNAASCII:
   cpx $ff
   beq .end
   jsr printAsciiDrawing
+  jsr printAsciiDrawing
+  inx
   jmp .loop
 .end
   rts
