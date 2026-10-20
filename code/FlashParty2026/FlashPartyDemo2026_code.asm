@@ -454,7 +454,7 @@ playSid:
 animationDNAASCII:
   txa
   pha
-  ldx #$ff
+  ldx #$00
 .loop  
   inx ;cuando llega a cero el beq sale del loop
   beq .end
