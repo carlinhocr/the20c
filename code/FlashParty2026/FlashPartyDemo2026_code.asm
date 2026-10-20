@@ -82,7 +82,7 @@ mainFlashParty:
   jsr loadAndPrintGALAEPI_lz
   jsr delay_1_sec
   jsr loadAndPrintBRINDIS_lz
-  jsr loadAndPlayVoice
+  jsr loadAndPlayHola40
   ;jsr delay_3_sec
   ;imagen del final 
   ;Voten por mi
@@ -630,6 +630,16 @@ playSong10Seconds:
 ;   fileHimno40: .byte "0:HIMNO_40.SID,P,R", $00
 
   ; 1) primer tema en el slot $1000 y a sonar
+
+loadAndPlayHola40:  
+  lda #<fileHola40
+  ldx #>fileHola40
+  ldy #$40
+  jsr loadSid
+  ldy #$40
+  jsr playSid          ; corta el de $1000 y arranca el de $4000
+  rts  
+
 loadAndPlayDesierto40:
   lda #<fileDesierto40
   ldx #>fileDesierto40

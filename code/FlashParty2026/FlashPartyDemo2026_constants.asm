@@ -147,6 +147,10 @@ fileDesierto10:
 fileDesierto40:
     .byte "0:DES60_40.SID,P,R", $00  ; Open GRAPH001 as PRG for reading 
 
+
+fileHola40:
+    .byte "0:HOLA_40.SID,P,R", $00  ; Open GRAPH001 as PRG for reading 
+
 fileVoz:
     .byte "0:HOLA.SID,P,R", $00  ; Open GRAPH001 as PRG for reading     
 
