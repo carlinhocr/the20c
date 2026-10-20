@@ -78,8 +78,14 @@ fileESPTEC_lz:
 fileGALAEPI_lz:
     .byte "0:GALAEPI.LZ4,P,R", $00
 
-fileHABLO_lz:
-    .byte "0:HABLO.LZ4,P,R", $00
+fileHABLO1_lz:
+    .byte "0:HABLO1.LZ4,P,R", $00
+
+fileHABLO2_lz:
+    .byte "0:HABLO2.LZ4,P,R", $00
+
+fileHABLO3_lz:
+    .byte "0:HABLO3.LZ4,P,R", $00
 
 fileICUY_lz:
     .byte "0:ICUY.LZ4,P,R", $00

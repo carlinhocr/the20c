@@ -49,13 +49,13 @@ mainFlashParty:
   jsr loadAndPrintVENTILA_lz
   jsr delay_1_sec
   jsr loadAndPrintOSO_lz
-  jsr delay_1_sec
   ;hablar de la maquina
+  jsr delay_3_sec
   jsr loadAndPrintASISI_SID_lz ;quetenemos musica
   jsr delay_1_sec
   jsr loadAndPrintSID6581_lz  ;pantalla SID
-  jsr delay_1_sec
   ;y que toda la demo es ASCII puro por RS232
+  jsr delay_3_sec
   jsr loadAndPrintPANACIA_lz
   jsr delay_1_sec
   jsr loadAndPrintACIA6551_lz
@@ -79,48 +79,24 @@ mainFlashParty:
   jsr delay_1_sec
   jsr loadAndPrintBRINDIS_lz
   jsr delay_1_sec
-  ;con esto vamos cerrando
-  jsr loadAndPrintHABLO_lz  
-  jsr loadAndPlayHola40
+  jsr loadAndPrintICUY_lz
+  jsr delay_1_sec
+  jsr loadAndPrintJORGE_lz
+  jsr delay_1_sec
+  jsr loadAndPrintMODO_lz
+  jsr delay_1_sec
+  jsr loadAndPrintTECSORO_lz
+  jsr delay_1_sec
+  jsr loadAndPrintTENO_lz
   ;imagen del final 
   jsr loadAndPrintVOTEN_lz
-  jsr musicaDesdeROM
-  ;jsr delay_3_sec
-
-  ;Voten por mi
-  ;y que diga hola soy la 20c
-
-; mainFlashPartyFunction:
-;   ; cargar el .sid en $4000 por IEC
-;   ; readFilenameToBuffer de cada gráfico -> $1000, e imprimirlo
-;   jsr loadAndPrintOsoMatrix
-;   jsr delay_3_sec
-;   jsr loadAndPlayHimno40
-;   jsr loadAndPrintBandera
-;   jsr delay_3_sec
-;   jsr delay_3_sec
-;   jsr delay_3_sec
-;   jsr delay_3_sec
-;   jsr delay_3_sec
-;   jsr delay_3_sec
-;   jsr SID_STOP
-;   jsr delay_3_sec
-;   jsr loadAndPlayDesierto40
-;   jsr delay_3_sec  
-;   jsr loadAndPrintTutankamon
-;   jsr delay_3_sec
-;   jsr delay_3_sec
-;   jsr delay_3_sec
-  ;jsr SID_STOP
-  ;jsr loadAndPlayVoice
-  ; jsr delay_1_sec
-  ; jsr loadAndPlayHimno 
-  ; jsr delay_1_sec
-  ; jsr loadAndPrintBandera
-  ;jsr delay_3_sec
-  ;jsr loadAndPrintF1
-  ; jsr delay_3_sec
-  ; jsr delay_3_sec
+  ;con esto vamos cerrando
+  jsr delay_3_sec
+  jsr loadAndPrintHABLO1_lz  
+  jsr delay_3_sec
+  jsr loadAndPrintHABLO2_lz
+  jsr delay_1_sec
+  jsr loadAndPlayHola40 ;aca adentro imprimi HABLO3
 loopFlashParty2026:
   jmp loopFlashParty2026
 
@@ -282,10 +258,26 @@ loadAndPrintGALAEPI_lz:
   jsr loadRetryAndPrintLZ
   rts
 
-loadAndPrintHABLO_lz:
-  lda #<fileHABLO_lz
+loadAndPrintHABLO1_lz:
+  lda #<fileHABLO1_lz
   sta ZP_PTR_LO
-  lda #>fileHABLO_lz
+  lda #>fileHABLO1_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts  
+
+loadAndPrintHABLO2_lz:
+  lda #<fileHABLO2_lz
+  sta ZP_PTR_LO
+  lda #>fileHABLO2_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts  
+
+loadAndPrintHABLO3_lz:
+  lda #<fileHABLO3_lz
+  sta ZP_PTR_LO
+  lda #>fileHABLO3_lz
   sta ZP_PTR_HI
   jsr loadRetryAndPrintLZ
   rts  
@@ -654,6 +646,7 @@ loadAndPlayHola40:
   ldx #>fileHola40
   ldy #$40
   jsr loadSid
+  jsr loadAndPrintHABLO3_lz
   ldy #$40
   jsr playSid          ; corta el de $1000 y arranca el de $4000
   rts  
