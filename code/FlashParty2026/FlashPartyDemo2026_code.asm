@@ -37,13 +37,9 @@ mainFlashParty:
   jsr loadAndPrintLA20C_lz
   jsr delay_1_sec
   ;start SID from ROM
-  lda #0
-  sta SID_LIMIT
-  sta SID_LIMIT+1
-  ldy #$C0
-  jsr SID_START_ROM
-  jsr delay_1_sec
+  jsr musicaDesdeROM
   ;quienes somos
+  jsr delay_3_sec
   jsr loadAndPrintNOSOTROS_lz
   jsr delay_1_sec
   jsr loadAndPrintBERDYX_lz
@@ -63,8 +59,8 @@ mainFlashParty:
   jsr loadAndPrintPANACIA_lz
   jsr delay_1_sec
   jsr loadAndPrintACIA6551_lz
-  jsr delay_1_sec
   ;amigos
+  jsr delay_3_sec
   jsr loadAndPrintAMIGOS_lz
   jsr delay_1_sec
   jsr loadAndPrintPVM_lz
@@ -82,9 +78,15 @@ mainFlashParty:
   jsr loadAndPrintGALAEPI_lz
   jsr delay_1_sec
   jsr loadAndPrintBRINDIS_lz
+  jsr delay_1_sec
+  ;con esto vamos cerrando
+  jsr loadAndPrintHABLO_lz  
   jsr loadAndPlayHola40
-  ;jsr delay_3_sec
   ;imagen del final 
+  jsr loadAndPrintVOTEN_lz
+  jsr musicaDesdeROM
+  ;jsr delay_3_sec
+
   ;Voten por mi
   ;y que diga hola soy la 20c
 
@@ -122,6 +124,14 @@ mainFlashParty:
 loopFlashParty2026:
   jmp loopFlashParty2026
 
+musicaDesdeROM:
+  ;start SID from ROM
+  lda #0
+  sta SID_LIMIT
+  sta SID_LIMIT+1
+  ldy #$C0
+  jsr SID_START_ROM
+  rts
 
 bannerHola:  
   ;load the alphabet
@@ -271,6 +281,14 @@ loadAndPrintGALAEPI_lz:
   sta ZP_PTR_HI
   jsr loadRetryAndPrintLZ
   rts
+
+loadAndPrintHABLO_lz:
+  lda #<fileHABLO_lz
+  sta ZP_PTR_LO
+  lda #>fileHABLO_lz
+  sta ZP_PTR_HI
+  jsr loadRetryAndPrintLZ
+  rts  
 
 loadAndPrintICUY_lz:
   lda #<fileICUY_lz
