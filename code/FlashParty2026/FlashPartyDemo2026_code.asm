@@ -89,6 +89,7 @@ mainFlashParty:
   jsr delay_1_sec
   jsr loadAndPrintTENO_lz
   ;imagen del final 
+  jsr delay_1_sec
   jsr loadAndPrintVOTEN_lz
   ;con esto vamos cerrando
   jsr delay_3_sec
