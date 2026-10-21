@@ -100,6 +100,7 @@ mainFlashParty:
   jsr delay_3_sec
   jsr loadAndPrintHABLO2_lz
   jsr delay_1_sec
+  jsr loadAndPrintHABLO3_lz 
   jsr loadAndPlayHola40 ;aca adentro imprimi HABLO3
 loopFlashParty2026:
   jmp loopFlashParty2026
@@ -645,12 +646,12 @@ playSong10Seconds:
 
   ; 1) primer tema en el slot $1000 y a sonar
 
-loadAndPlayHola40:  
+loadAndPlayHola40: 
   lda #<fileHola40
   ldx #>fileHola40
   ldy #$40
   jsr loadSid
-  jsr loadAndPrintHABLO3_lz
+
   ldy #$40
   jsr playSid          ; corta el de $1000 y arranca el de $4000
   rts  
@@ -660,8 +661,10 @@ loadAndPlayDesierto40:
   ldx #>fileDesierto40
   ldy #$40
   jsr loadSid
+  bcs .noSid                  ; si no cargó, no tocar SID_START_AT
   ldy #$40
   jsr playSid
+.noSid  
   rts
 
 loadAndPlayDesierto10:
@@ -703,12 +706,22 @@ loadSid:
   sta ZP_BufferStartLow
   sta checkTrailer
   jsr loadRetry
-  ;jsr readFilenameToBuffer
-  lda FILE_SIZE_LO        ; guardo el tamaño: la carga de un gráfico lo pisa
+  bcs .err                    ; carry = 1: falló
+  lda FILE_SIZE_LO
   sta sidSize
   lda FILE_SIZE_HI
   sta sidSize+1
+  clc
   rts
+.err:
+  lda #0
+  sta sidSize
+  sta sidSize+1
+  sta BUFFER_MUSIC_START      ; $4000: borra la "P" de PSID
+  sta BUFFER_MUSIC2_START     ; $1000
+  sec
+  rts
+
 ; playSid: Y = página del slot donde se cargó
 playSid:
   lda #0                  ; sin corte (o los frames que quieras)
