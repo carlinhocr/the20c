@@ -803,7 +803,7 @@ loadRetry:
   cmp #TRAILER_LEN
   beq .ok
 .fail:
-  jsr printFailInfo
+  ;jsr printFailInfo
   jsr IEC_BUS_IDLE       ; suelto todo
   lda #250
   jsr DELAY_LONG
@@ -870,7 +870,7 @@ loadRetryRS232:
   cmp #TRAILER_LEN       ; ¿llegó el final ESC[0m,00?
   beq .ok
 .fail:
-  jsr printFailInfo
+  ;jsr printFailInfo
   jsr IEC_BUS_IDLE       ; suelto todo
   lda #250
   jsr DELAY_LONG

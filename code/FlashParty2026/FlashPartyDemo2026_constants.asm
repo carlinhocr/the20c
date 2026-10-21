@@ -168,11 +168,11 @@ fileSoundDesierto:
     ;.byte "0:HIMNO.SID,P,R", $00  ; Open GRAPH001 as PRG for reading     
 
 asciiSHola1:
-  .asciiz "Hola, soy "
+  .asciiz "   Hola, soy "
 asciiSHola2:
-  .asciiz "la 20c    "
+  .asciiz "     la 20c  "
 asciiSHola3:
-  .asciiz "De Nuevo! " 
+  .asciiz "   De Nuevo! " 
 
 asciiSNosotros1:
   .asciiz "Estos somo"
