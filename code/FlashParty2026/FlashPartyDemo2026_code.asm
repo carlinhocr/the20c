@@ -51,15 +51,18 @@ mainFlashParty:
   jsr loadAndPrintOSO_lz
   ;hablar de la maquina
   jsr delay_3_sec
+  jsr delay_3_sec
   jsr loadAndPrintASISI_SID_lz ;quetenemos musica
   jsr delay_1_sec
   jsr loadAndPrintSID6581_lz  ;pantalla SID
   ;y que toda la demo es ASCII puro por RS232
   jsr delay_3_sec
+  jsr delay_3_sec
   jsr loadAndPrintPANACIA_lz
   jsr delay_1_sec
   jsr loadAndPrintACIA6551_lz
   ;amigos
+  jsr delay_3_sec
   jsr delay_3_sec
   jsr loadAndPrintAMIGOS_lz
   jsr delay_1_sec
@@ -89,7 +92,7 @@ mainFlashParty:
   jsr delay_1_sec
   jsr loadAndPrintTENO_lz
   ;imagen del final 
-  jsr delay_1_sec
+  jsr delay_3_sec
   jsr loadAndPrintVOTEN_lz
   ;con esto vamos cerrando
   jsr delay_3_sec
