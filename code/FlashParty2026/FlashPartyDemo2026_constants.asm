@@ -52,7 +52,7 @@ fileAPIX_lz:
     .byte "0:APIX.LZ4,P,R", $00
 
 fileASISI_SID_lz:
-    .byte "0:ASISI_SID.LZ4,P,R", $00    
+    .byte "0:ASISISID.LZ4,P,R", $00    
 
 fileBERDYX_lz:
     .byte "0:BERDYX.LZ4,P,R", $00
