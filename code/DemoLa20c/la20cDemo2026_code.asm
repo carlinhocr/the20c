@@ -31,9 +31,11 @@ mainLa20cDemo:
   ;cargar primera imagen de ROM
   ;cargar sid de rom y empezar a tocarlo 
   ;jsr loadAndPrintLA20C_lz
-
+  ldy #$F9
+  jsr SID_START_ROM
+mainLa20cShowBoards:  
   jsr printRomPlacas
-  jmp mainLa20cDemo
+  jmp mainLa20cShowBoards
 
 
   ; jsr delay_1_sec
@@ -966,6 +968,9 @@ placasRomTabla:
   .word $0000
 
     ;.include "../FlashParty2026/media/DNASCII.asm"
+
+  .org $F900
+  .incbin "./media/PEGA_F9.SID"
 
 nmi:
 irq:
