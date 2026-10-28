@@ -22,7 +22,8 @@ failSize     = $0397         ; 2 bytes
 driveStatus  = $03A0      ; 48 bytes: mensaje del canal 15
 checkTrailer = $039A
 
-
+romLzPtr = $03D1               ; 2 bytes de RAM libres: dirección del .LZ4 en la ROM
+placaRomIndex = $03D3          ; 1 byte de RAM libre
 
 BUFFER_GRAPHICS_START=$1000
 BUFFER_GRAPHICS_END=$3FFF

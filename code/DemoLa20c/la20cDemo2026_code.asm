@@ -1,5 +1,5 @@
 ;
-  .include "../lib_20c/lib_iec/lib_iec_memory.asm"
+  ;.include "../lib_20c/lib_iec/lib_iec_memory.asm"
   .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_memory.asm"
   .include "../lib_20c/lib_acia/lib_acia_memory.asm" ;define memory address for ACIA
   .include "../lib_20c/lib_utils/lib_utils_memory.asm" ;define memory address for ACIA
@@ -30,77 +30,79 @@
 mainLa20cDemo:
   ;cargar primera imagen de ROM
   ;cargar sid de rom y empezar a tocarlo 
-  jsr bannerHola
-  ;cargar el resto de los gráficos
-  ;jsr delay_3_sec
-  jsr loadAndPrintLA20C_lz
-  jsr delay_1_sec
-  ;start SID from ROM
-  jsr musicaDesdeROM
-  ;quienes somos
-  jsr delay_3_sec
-  jsr loadAndPrintNOSOTROS_lz
-  jsr delay_1_sec
-  jsr loadAndPrintBERDYX_lz
-  jsr delay_1_sec
-  jsr loadAndPrintKRAKATOA_lz
-  jsr delay_1_sec
-  jsr loadAndPrintVENTILA_lz
-  jsr delay_1_sec
-  jsr loadAndPrintOSO_lz
-  ;hablar de la maquina
-  jsr delay_3_sec
-  jsr delay_3_sec
-  jsr loadAndPrintASISI_SID_lz ;quetenemos musica
-  jsr delay_1_sec
-  jsr loadAndPrintSID6581_lz  ;pantalla SID
-  ;y que toda la demo es ASCII puro por RS232
-  jsr delay_3_sec
-  jsr delay_3_sec
-  jsr loadAndPrintPANACIA_lz
-  jsr delay_1_sec
-  jsr loadAndPrintACIA6551_lz
-  ;amigos
-  jsr delay_3_sec
-  jsr delay_3_sec
-  jsr loadAndPrintAMIGOS_lz
-  jsr delay_1_sec
-  jsr loadAndPrintPVM_lz
-  jsr delay_1_sec
-  jsr loadAndPrintCIRUGRP_lz
-  jsr delay_1_sec
-  jsr loadAndPrintESPTEC_lz
-  jsr delay_1_sec
-  jsr loadAndPrintAPIX_lz
-  jsr delay_1_sec
-  jsr loadAndPrintCAFEC64_lz
-  jsr delay_1_sec
-  jsr loadAndPrintDIEGO_lz
-  jsr delay_1_sec
-  jsr loadAndPrintGALAEPI_lz
-  jsr delay_1_sec
-  jsr loadAndPrintBRINDIS_lz
-  jsr delay_1_sec
-  jsr loadAndPrintICUY_lz
-  jsr delay_1_sec
-  jsr loadAndPrintJORGE_lz
-  jsr delay_1_sec
-  jsr loadAndPrintMODO_lz
-  jsr delay_1_sec
-  jsr loadAndPrintTECSORO_lz
-  jsr delay_1_sec
-  jsr loadAndPrintTENO_lz
-  ;imagen del final 
-  jsr delay_3_sec
-  jsr loadAndPrintVOTEN_lz
-  ;con esto vamos cerrando
-  jsr delay_3_sec
-  jsr loadAndPrintHABLO1_lz  
-  jsr delay_3_sec
-  jsr loadAndPrintHABLO2_lz
-  jsr delay_1_sec
-  jsr loadAndPrintHABLO3_lz 
-  jsr loadAndPlayHola40 ;aca adentro imprimi HABLO3
+  ;jsr loadAndPrintLA20C_lz
+
+  jsr printRomPlacas
+  jmp mainLa20cDemo
+
+
+  ; jsr delay_1_sec
+  ; ;start SID from ROM
+  ; jsr musicaDesdeROM
+  ; ;quienes somos
+  ; jsr delay_3_sec
+  ; jsr loadAndPrintNOSOTROS_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintBERDYX_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintKRAKATOA_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintVENTILA_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintOSO_lz
+  ; ;hablar de la maquina
+  ; jsr delay_3_sec
+  ; jsr delay_3_sec
+  ; jsr loadAndPrintASISI_SID_lz ;quetenemos musica
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintSID6581_lz  ;pantalla SID
+  ; ;y que toda la demo es ASCII puro por RS232
+  ; jsr delay_3_sec
+  ; jsr delay_3_sec
+  ; jsr loadAndPrintPANACIA_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintACIA6551_lz
+  ; ;amigos
+  ; jsr delay_3_sec
+  ; jsr delay_3_sec
+  ; jsr loadAndPrintAMIGOS_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintPVM_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintCIRUGRP_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintESPTEC_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintAPIX_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintCAFEC64_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintDIEGO_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintGALAEPI_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintBRINDIS_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintICUY_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintJORGE_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintMODO_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintTECSORO_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintTENO_lz
+  ; ;imagen del final 
+  ; jsr delay_3_sec
+  ; jsr loadAndPrintVOTEN_lz
+  ; ;con esto vamos cerrando
+  ; jsr delay_3_sec
+  ; jsr loadAndPrintHABLO1_lz  
+  ; jsr delay_3_sec
+  ; jsr loadAndPrintHABLO2_lz
+  ; jsr delay_1_sec
+  ; jsr loadAndPrintHABLO3_lz 
+  ; jsr loadAndPlayHola40 ;aca adentro imprimi HABLO3
 loopLa20cDemo:
   jmp loopLa20cDemo
 
@@ -1122,41 +1124,169 @@ romCopy:
 .done:
   rts
 
-holaChunks:
-  .word holaPart1, HOLA_P1_LEN
-  .word holaPart2, HOLA_P2_LEN
-  .word holaPart3, HOLA_P3_LEN
 
-holaPart1:                 ; pedazo 1 de HOLA_40.SID (hueco antes del IEC fijo)
-  .incbin "../FlashParty2026/media/HOLA_40.SID",0,HOLA_P1_LEN
+
+;------------------------------------------------------------------------------
+; printRomLZ - A = byte bajo, X = byte alto de un .LZ4 que está en la ROM.
+;   Descomprime a $1000, verifica largo y final ESC[0m,00 e imprime.
+;   Sale con carry = 0 si imprimió, 1 si el archivo estaba mal (no imprime).
+;   No escribe nada en la ROM: solo lee el .LZ4 desde ahí.
+;------------------------------------------------------------------------------
+printRomLZ:
+  sta romLzPtr
+  stx romLzPtr+1
+  sta LZ_SRC
+  stx LZ_SRC+1
+  ldy #1
+  lda (LZ_SRC),y                ; largo original, byte alto
+  cmp #>LZ_MAX_RAW
+  bcc .fits
+  jmp .bad                      ; no entra en $1000-$3FFF
+.fits:
+  ldy #2                        ; LZ_END = dirección + 4 + largo del bloque
+  lda (LZ_SRC),y
+  clc
+  adc #4
+  sta LZ_LEN
+  iny
+  lda (LZ_SRC),y
+  adc #0
+  sta LZ_LEN+1                  ; LZ_LEN = 4 + bloque (los dos bytes antes de sumar)
+  lda LZ_LEN
+  clc
+  adc romLzPtr
+  sta LZ_END
+  lda LZ_LEN+1
+  adc romLzPtr+1
+  sta LZ_END+1
+  lda romLzPtr                  ; LZ_SRC = dirección + 4 (el bloque)
+  clc
+  adc #4
+  sta LZ_SRC
+  lda romLzPtr+1
+  adc #0
+  sta LZ_SRC+1
+  lda #<LZ_UNPACKED
+  sta LZ_DST
+  lda #>LZ_UNPACKED
+  sta LZ_DST+1
+  jsr lz4Decode
+  ; ---- verificación: LZ_DST tiene que ser $1000 + largo original ----
+  lda romLzPtr
+  sta LZ_MATCH
+  lda romLzPtr+1
+  sta LZ_MATCH+1
+  ldy #0
+  lda (LZ_MATCH),y
+  clc
+  adc #<LZ_UNPACKED
+  sta LZ_LEN
+  iny
+  lda (LZ_MATCH),y
+  adc #>LZ_UNPACKED
+  sta LZ_LEN+1                  ; primero calcular, después comparar (CMP pisa el carry)
+  lda LZ_LEN
+  cmp LZ_DST
+  bne .bad
+  lda LZ_LEN+1
+  cmp LZ_DST+1
+  bne .bad
+  ; ---- y que termine en ESC[0m,00 ----
+  lda LZ_DST
+  sec
+  sbc #5
+  sta LZ_MATCH
+  lda LZ_DST+1
+  sbc #0
+  sta LZ_MATCH+1
+  ldy #4
+.tr:
+  lda (LZ_MATCH),y
+  cmp TRAILER,y
+  bne .bad
+  dey
+  bpl .tr
+  lda #<LZ_UNPACKED
+  sta serialDataVectorLow
+  lda #>LZ_UNPACKED
+  sta serialDataVectorHigh
+  jsr printAsciiBinaryFast
+  clc
+  rts
+.bad:
+  sec
+  rts
+
+;------------------------------------------------------------------------------
+; printRomPlacas - todas seguidas, 3 s entre cada una (orden: placasRomTabla)
+;------------------------------------------------------------------------------
+
+printRomPlacas:
+  lda #0
+  sta placaRomIndex
+.next:
+  lda placaRomIndex
+  asl
+  tay
+  lda placasRomTabla,y
+  ldx placasRomTabla+1,y
+  bne .go                       ; alto = 0 -> fin de la tabla (en ROM nunca es $00xx)
+  rts
+.go:
+  jsr printRomLZ
+  bcs .skip
+  jsr delay_3_sec
+.skip:
+  inc placaRomIndex
+  jmp .next
+
+; la tabla placasRomTabla está en placas_rom_tabla.asm (lista solo las que metiste en la ROM)
+
+printRomCPU:
+  lda #<romCPU
+  ldx #>romCPU
+  jmp printRomLZ
+romCPU: .incbin "./media/CPU6502.LZ4"   ; 1557 bytes
+printRomBUS:
+  lda #<romBUS
+  ldx #>romBUS
+  jmp printRomLZ
+romBUS: .incbin "./media/BUS.LZ4"   ; 1278 bytes
+printRomVIA:
+  lda #<romVIA
+  ldx #>romVIA
+  jmp printRomLZ
+romVIA: .incbin "./media/VIA6522.LZ4"   ; 1460 bytes
+printRomROMRAM:
+  lda #<romROMRAM
+  ldx #>romROMRAM
+  jmp printRomLZ
+romROMRAM: .incbin "./media/ROMRAM.LZ4"   ; 1487 bytes
+
+placasRomTabla:
+  .word romCPU, romROMRAM, romBUS, romVIA
+  .word $0000
+
 
   .org $90A2                                   ; IEC fijo: mismo offset de página que cuando andaba ($82A2)
-  .include "../lib_20c/lib_iec/lib_iec_code.asm"
-  .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_code.asm"
+  ;.include "../lib_20c/lib_iec/lib_iec_code.asm"
+  ;.include "../lib_20c/lib_ascii_banner/lib_ascii_banner_code.asm"
   .include "../lib_20c/lib_acia/lib_acia_code.asm" ;define code for ACIA t  
   .include "../lib_20c/lib_utils/lib_utils_code.asm" ;define code for ACIA t  
   .include "../lib_20c/lib_lz4/lib_lz4.asm"
 
-  .include "../lib_20c/lib_iec/lib_iec_constants.asm"
+  ;.include "../lib_20c/lib_iec/lib_iec_constants.asm"
   .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_constants.asm"
   .include "../lib_20c/lib_acia/lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
   .include "../lib_20c/lib_utils/lib_utils_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
   .include "./FlashPartyDemo2026_constants.asm"
 
-holaPart2:                 ; pedazo 2 (hueco antes de $C000)
-  .incbin "../FlashParty2026/media/HOLA_40.SID",HOLA_P1_LEN,HOLA_P2_LEN
-
-  .org $C000
-    .incbin "../FlashParty2026/media/CARNAV_C0.SID"
     ;.include "../FlashParty2026/media/DNASCII.asm"
 
 nmi:
 irq:
   ;goes to the sid IRQ routine
   rti
-
-holaPart3:                 ; pedazo 3 (después de CARNAV_C0, hasta los vectores)
-  .incbin "../FlashParty2026/media/HOLA_40.SID",HOLA_P1_LEN+HOLA_P2_LEN,HOLA_P3_LEN
 
 ;complete the file
   .org $fffa
