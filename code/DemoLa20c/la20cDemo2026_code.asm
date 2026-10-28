@@ -246,16 +246,18 @@ musicaDesdeROM:
 ;   rts
 
 
-loadRetryAndPrint:  
-  lda #<BUFFER_GRAPHICS_START
-  sta ZP_BufferStartLow
-  lda #>BUFFER_GRAPHICS_START
-  sta ZP_BufferStartHigh  
-  lda #1
-  sta checkTrailer      
-  jsr loadRetry
-  jsr printDiskBuffer
-  rts
+; loadRetryAndPrint:  
+;   lda #<BUFFER_GRAPHICS_START
+;   sta ZP_BufferStartLow
+;   lda #>BUFFER_GRAPHICS_START
+;   sta ZP_BufferStartHigh  
+;   lda #1
+;   sta checkTrailer      
+;   jsr loadRetry
+;   jsr printDiskBuffer
+;   rts
+
+loadRetry:
 
 loadAndPrint:  
   lda #<BUFFER_GRAPHICS_START
@@ -417,40 +419,40 @@ playSong10Seconds:
   ; 4) el siguiente vuelve a $1000 (ya no suena nada ahí), y así...
 
 ;------------------------------------------------------------------------------
-; loadSid: A/X = nombre del archivo, Y = página del slot ($10 o $40)
-loadSid:
-  sta ZP_PTR_LO
-  stx ZP_PTR_HI
-  sty ZP_BufferStartHigh
-  lda #0
-  sta ZP_BufferStartLow
-  sta checkTrailer
-  jsr loadRetry
-  bcs .err                    ; carry = 1: falló
-  lda FILE_SIZE_LO
-  sta sidSize
-  lda FILE_SIZE_HI
-  sta sidSize+1
-  clc
-  rts
-.err:
-  lda #0
-  sta sidSize
-  sta sidSize+1
-  sta BUFFER_MUSIC_START      ; $4000: borra la "P" de PSID
-  sta BUFFER_MUSIC2_START     ; $1000
-  sec
-  rts
+; ; loadSid: A/X = nombre del archivo, Y = página del slot ($10 o $40)
+; loadSid:
+;   sta ZP_PTR_LO
+;   stx ZP_PTR_HI
+;   sty ZP_BufferStartHigh
+;   lda #0
+;   sta ZP_BufferStartLow
+;   sta checkTrailer
+;   jsr loadRetry
+;   bcs .err                    ; carry = 1: falló
+;   lda FILE_SIZE_LO
+;   sta sidSize
+;   lda FILE_SIZE_HI
+;   sta sidSize+1
+;   clc
+;   rts
+; .err:
+;   lda #0
+;   sta sidSize
+;   sta sidSize+1
+;   sta BUFFER_MUSIC_START      ; $4000: borra la "P" de PSID
+;   sta BUFFER_MUSIC2_START     ; $1000
+;   sec
+;   rts
 
-; playSid: Y = página del slot donde se cargó
-playSid:
-  lda #0                  ; sin corte (o los frames que quieras)
-  sta SID_LIMIT
-  sta SID_LIMIT+1
-  lda sidSize
-  ldx sidSize+1
-  jsr SID_START_AT
-  rts
+; ; playSid: Y = página del slot donde se cargó
+; playSid:
+;   lda #0                  ; sin corte (o los frames que quieras)
+;   sta SID_LIMIT
+;   sta SID_LIMIT+1
+;   lda sidSize
+;   ldx sidSize+1
+;   jsr SID_START_AT
+;   rts
 
 
 ; animationDNAASCII:
@@ -492,211 +494,211 @@ playSid:
 ;   IEC_READ_FILE pisa ZP_PTR (lo usa como puntero al buffer): por eso el
 ;   nombre se guarda en namePtr y se repone en cada intento.
 ;------------------------------------------------------------------------------
-loadRetry:
-  lda ZP_PTR_LO
-  sta namePtr
-  lda ZP_PTR_HI
-  sta namePtr+1
-  lda #LOAD_RETRIES
-  sta retryCount
-.try:
-  lda #100
-  jsr DELAY_LONG          ; 100 ms: que el SD2IEC 
-  lda namePtr
-  sta ZP_PTR_LO
-  lda namePtr+1
-  sta ZP_PTR_HI
-  jsr IEC_READ_FILE
-  lda IEC_STATUS
-  bne .fail              ; error al abrir (sin disquetera, etc.)
-  lda IEC_EOI_FLAG
-  beq .fail
-  lda checkTrailer       ; 0 = .sid, 1 = gráfico .BIN, 2 = gráfico .LZ4
-  beq .ok
-  cmp #2
-  bne .trailer
-  jsr lzCheckSize        ; .LZ4: llegaron todos los bytes que dice el header?
-  bcc .ok
-  bcs .fail
-.trailer:
-  lda TR_MATCH
-  cmp #TRAILER_LEN
-  beq .ok
-.fail:
-  ;jsr printFailInfo
-  jsr IEC_BUS_IDLE       ; suelto todo
-  lda #250
-  jsr DELAY_LONG
-  jsr IEC_UNTALK         ; si quedó hablando, que se calle
-  jsr IEC_UNLISTEN       ; y que nadie quede escuchando
-  lda #250
-  jsr DELAY_LONG         ; medio segundo en total para que se reponga
-  jsr readDriveStatus    ; recién ahí el canal 15
-  lda #<driveStatus
-  sta serialDataVectorLow
-  lda #>driveStatus
-  sta serialDataVectorHigh
-  jsr send_rs232_line
-  dec retryCount
-  bne .try
-  sec
-  rts
-.ok:
-  clc
-  rts
+; loadRetry:
+;   lda ZP_PTR_LO
+;   sta namePtr
+;   lda ZP_PTR_HI
+;   sta namePtr+1
+;   lda #LOAD_RETRIES
+;   sta retryCount
+; .try:
+;   lda #100
+;   jsr DELAY_LONG          ; 100 ms: que el SD2IEC 
+;   lda namePtr
+;   sta ZP_PTR_LO
+;   lda namePtr+1
+;   sta ZP_PTR_HI
+;   jsr IEC_READ_FILE
+;   lda IEC_STATUS
+;   bne .fail              ; error al abrir (sin disquetera, etc.)
+;   lda IEC_EOI_FLAG
+;   beq .fail
+;   lda checkTrailer       ; 0 = .sid, 1 = gráfico .BIN, 2 = gráfico .LZ4
+;   beq .ok
+;   cmp #2
+;   bne .trailer
+;   jsr lzCheckSize        ; .LZ4: llegaron todos los bytes que dice el header?
+;   bcc .ok
+;   bcs .fail
+; .trailer:
+;   lda TR_MATCH
+;   cmp #TRAILER_LEN
+;   beq .ok
+; .fail:
+;   ;jsr printFailInfo
+;   jsr IEC_BUS_IDLE       ; suelto todo
+;   lda #250
+;   jsr DELAY_LONG
+;   jsr IEC_UNTALK         ; si quedó hablando, que se calle
+;   jsr IEC_UNLISTEN       ; y que nadie quede escuchando
+;   lda #250
+;   jsr DELAY_LONG         ; medio segundo en total para que se reponga
+;   jsr readDriveStatus    ; recién ahí el canal 15
+;   lda #<driveStatus
+;   sta serialDataVectorLow
+;   lda #>driveStatus
+;   sta serialDataVectorHigh
+;   jsr send_rs232_line
+;   dec retryCount
+;   bne .try
+;   sec
+;   rts
+; .ok:
+;   clc
+;   rts
  
-;------------------------------------------------------------------------------
-; readDriveStatus - lee el canal de errores (15) de la disquetera / SD2IEC.
-;   Deja "nn,MENSAJE,tt,ss",0 en driveStatus (ej. "62,FILE NOT FOUND,00,00").
-;   Leerlo es lo que apaga la luz que parpadea. No toca ZP_BufferStart.
-;------------------------------------------------------------------------------
-readDriveStatus:
-  lda ZP_BufferStartLow
-  pha
-  lda ZP_BufferStartHigh
-  pha
-  lda #<driveStatus
-  sta ZP_BufferStartLow
-  lda #>driveStatus
-  sta ZP_BufferStartHigh
-  jsr IEC_READ_STATUS
-  pla
-  sta ZP_BufferStartHigh
-  pla
-  sta ZP_BufferStartLow
-  rts
+; ;------------------------------------------------------------------------------
+; ; readDriveStatus - lee el canal de errores (15) de la disquetera / SD2IEC.
+; ;   Deja "nn,MENSAJE,tt,ss",0 en driveStatus (ej. "62,FILE NOT FOUND,00,00").
+; ;   Leerlo es lo que apaga la luz que parpadea. No toca ZP_BufferStart.
+; ;------------------------------------------------------------------------------
+; readDriveStatus:
+;   lda ZP_BufferStartLow
+;   pha
+;   lda ZP_BufferStartHigh
+;   pha
+;   lda #<driveStatus
+;   sta ZP_BufferStartLow
+;   lda #>driveStatus
+;   sta ZP_BufferStartHigh
+;   jsr IEC_READ_STATUS
+;   pla
+;   sta ZP_BufferStartHigh
+;   pla
+;   sta ZP_BufferStartLow
+;   rts
  
  
-loadRetryRS232:
-  lda ZP_PTR_LO
-  sta namePtr
-  lda ZP_PTR_HI
-  sta namePtr+1
-  lda #LOAD_RETRIES
-  sta retryCount
-.try:
-  lda #100
-  jsr DELAY_LONG          ; 100 ms: que el SD2IEC 
-  lda namePtr
-  sta ZP_PTR_LO
-  lda namePtr+1
-  sta ZP_PTR_HI
-  jsr IEC_READ_FILE_TO_RS232
-  lda IEC_STATUS
-  bne .fail
-  lda IEC_EOI_FLAG
-  beq .fail
-  lda TR_MATCH
-  cmp #TRAILER_LEN       ; ¿llegó el final ESC[0m,00?
-  beq .ok
-.fail:
-  ;jsr printFailInfo
-  jsr IEC_BUS_IDLE       ; suelto todo
-  lda #250
-  jsr DELAY_LONG
-  jsr IEC_UNTALK         ; si quedó hablando, que se calle
-  jsr IEC_UNLISTEN       ; y que nadie quede escuchando
-  lda #250
-  jsr DELAY_LONG         ; medio segundo en total para que se reponga
-  jsr readDriveStatus    ; recién ahí el canal 15
-  lda #<driveStatus
-  sta serialDataVectorLow
-  lda #>driveStatus
-  sta serialDataVectorHigh
-  jsr send_rs232_line
-  dec retryCount
-  bne .try
-  sec
-  rts
-.ok:
-  clc
-  rts  
+; loadRetryRS232:
+;   lda ZP_PTR_LO
+;   sta namePtr
+;   lda ZP_PTR_HI
+;   sta namePtr+1
+;   lda #LOAD_RETRIES
+;   sta retryCount
+; .try:
+;   lda #100
+;   jsr DELAY_LONG          ; 100 ms: que el SD2IEC 
+;   lda namePtr
+;   sta ZP_PTR_LO
+;   lda namePtr+1
+;   sta ZP_PTR_HI
+;   jsr IEC_READ_FILE_TO_RS232
+;   lda IEC_STATUS
+;   bne .fail
+;   lda IEC_EOI_FLAG
+;   beq .fail
+;   lda TR_MATCH
+;   cmp #TRAILER_LEN       ; ¿llegó el final ESC[0m,00?
+;   beq .ok
+; .fail:
+;   ;jsr printFailInfo
+;   jsr IEC_BUS_IDLE       ; suelto todo
+;   lda #250
+;   jsr DELAY_LONG
+;   jsr IEC_UNTALK         ; si quedó hablando, que se calle
+;   jsr IEC_UNLISTEN       ; y que nadie quede escuchando
+;   lda #250
+;   jsr DELAY_LONG         ; medio segundo en total para que se reponga
+;   jsr readDriveStatus    ; recién ahí el canal 15
+;   lda #<driveStatus
+;   sta serialDataVectorLow
+;   lda #>driveStatus
+;   sta serialDataVectorHigh
+;   jsr send_rs232_line
+;   dec retryCount
+;   bne .try
+;   sec
+;   rts
+; .ok:
+;   clc
+;   rts  
 
-;------------------------------------------------------------------------------
-; printFailInfo - imprime por RS232 qué vio el driver al fallar una carga:
-;     ST=$xx EOI=$xx BYTES=$xxxx
-;   ST    = IEC_STATUS   ($02 timeout al recibir, $03 sin ACK/RFD al mandar,
-;                         $04 buffer lleno, $80 no hay disquetera)
-;   EOI   = IEC_EOI_FLAG ($FF = llegó el último byte)
-;   BYTES = FILE_SIZE    (cuántos bytes llegaron antes del corte)
-; Llamala en .fail ANTES de readDriveStatus (que pisa IEC_STATUS y FILE_SIZE).
-; Usa send_rs232_char (A = carácter).
-;------------------------------------------------------------------------------
-printFailInfo:
-  lda IEC_STATUS          ; copio todo antes de imprimir
-  sta failSt
-  lda IEC_EOI_FLAG
-  sta failEoi
-  lda FILE_SIZE_LO
-  sta failSize
-  lda FILE_SIZE_HI
-  sta failSize+1
-  jsr send_rs232_CRLF
-  ldx #0
-.t1:
-  lda txtSt,x
-  beq .v1
-  jsr pfiChar
-  inx
-  bne .t1
-.v1:
-  lda failSt
-  jsr pfiHex
-  ldx #0
-.t2:
-  lda txtEoi,x
-  beq .v2
-  jsr pfiChar
-  inx
-  bne .t2
-.v2:
-  lda failEoi
-  jsr pfiHex
-  ldx #0
-.t3:
-  lda txtBytes,x
-  beq .v3
-  jsr pfiChar
-  inx
-  bne .t3
-.v3:
-  lda failSize+1
-  jsr pfiHex
-  lda failSize
-  jsr pfiHex
-  jsr send_rs232_CRLF
-  rts
+; ;------------------------------------------------------------------------------
+; ; printFailInfo - imprime por RS232 qué vio el driver al fallar una carga:
+; ;     ST=$xx EOI=$xx BYTES=$xxxx
+; ;   ST    = IEC_STATUS   ($02 timeout al recibir, $03 sin ACK/RFD al mandar,
+; ;                         $04 buffer lleno, $80 no hay disquetera)
+; ;   EOI   = IEC_EOI_FLAG ($FF = llegó el último byte)
+; ;   BYTES = FILE_SIZE    (cuántos bytes llegaron antes del corte)
+; ; Llamala en .fail ANTES de readDriveStatus (que pisa IEC_STATUS y FILE_SIZE).
+; ; Usa send_rs232_char (A = carácter).
+; ;------------------------------------------------------------------------------
+; printFailInfo:
+;   lda IEC_STATUS          ; copio todo antes de imprimir
+;   sta failSt
+;   lda IEC_EOI_FLAG
+;   sta failEoi
+;   lda FILE_SIZE_LO
+;   sta failSize
+;   lda FILE_SIZE_HI
+;   sta failSize+1
+;   jsr send_rs232_CRLF
+;   ldx #0
+; .t1:
+;   lda txtSt,x
+;   beq .v1
+;   jsr pfiChar
+;   inx
+;   bne .t1
+; .v1:
+;   lda failSt
+;   jsr pfiHex
+;   ldx #0
+; .t2:
+;   lda txtEoi,x
+;   beq .v2
+;   jsr pfiChar
+;   inx
+;   bne .t2
+; .v2:
+;   lda failEoi
+;   jsr pfiHex
+;   ldx #0
+; .t3:
+;   lda txtBytes,x
+;   beq .v3
+;   jsr pfiChar
+;   inx
+;   bne .t3
+; .v3:
+;   lda failSize+1
+;   jsr pfiHex
+;   lda failSize
+;   jsr pfiHex
+;   jsr send_rs232_CRLF
+;   rts
  
-pfiHex:                   ; A en hexa (2 caracteres)
-  pha
-  lsr
-  lsr
-  lsr
-  lsr
-  jsr .nib
-  pla
-  and #$0f
-.nib:
-  cmp #10
-  bcc .dig
-  adc #6
-.dig:
-  adc #'0'
-pfiChar:                  ; send_rs232_char guardando X e Y
-  pha
-  txa
-  pha
-  tya
-  pha
-  tsx
-  lda $0103,x             ; el carácter que guardé primero
-  jsr send_rs232_char
-  pla
-  tay
-  pla
-  tax
-  pla
-  rts
+; pfiHex:                   ; A en hexa (2 caracteres)
+;   pha
+;   lsr
+;   lsr
+;   lsr
+;   lsr
+;   jsr .nib
+;   pla
+;   and #$0f
+; .nib:
+;   cmp #10
+;   bcc .dig
+;   adc #6
+; .dig:
+;   adc #'0'
+; pfiChar:                  ; send_rs232_char guardando X e Y
+;   pha
+;   txa
+;   pha
+;   tya
+;   pha
+;   tsx
+;   lda $0103,x             ; el carácter que guardé primero
+;   jsr send_rs232_char
+;   pla
+;   tay
+;   pla
+;   tax
+;   pla
+;   rts
  
 ; txtSt:    .byte "ST=$",0
 ; txtEoi:   .byte " EOI=$",0
@@ -705,127 +707,7 @@ pfiChar:                  ; send_rs232_char guardando X e Y
 ; failEoi      = $0396
 ; failSize     = $0397         ; 2 bytes
  
-  
-; =============================================================================
-;  sid_rom.asm - tocar un tema que está en ROM (sin copiar ni parchear)
-;  Va después de lib_sid_player.asm (usa SID_HALT, TIMER_ON, call_init, etc.)
-;
-;  El tema tiene que estar armado para ROM (SID_ROM=1): escribe directo al SID
-;  de la 20c ($7300) y sus variables están en RAM. Ejemplo: NAVES_C0.SID en $C000.
-;
-;      ldy #$C0            ; página donde está el .sid en la ROM
-;      jsr SID_START_ROM   ; suena por IRQ (igual que SID_START)
-;
-;  No escribe NADA en la zona del tema: con una EEPROM con /WE conectado, un
-;  SID_START_AT común intentaría "copiar" y "parchear" sobre la ROM.
-; =============================================================================
-SID_START_ROM:
-    php
-    sei
-    sty SID_BASE+1
-    lda #0
-    sta SID_BASE+0
-    jsr SID_HALT                    ; apaga el tema anterior
-    lda #0
-    sta SID_FRAMES+0
-    sta SID_FRAMES+1
-    ldy #H_STARTSONG+1
-    lda (SID_BASE),y
-    sec
-    sbc #1
-    sta song_no
-    ldy #H_INITADDR+1               ; vectores (big-endian en el header)
-    lda (SID_BASE),y
-    sta init_vec+0
-    dey
-    lda (SID_BASE),y
-    sta init_vec+1
-    ldy #H_PLAYADDR+1
-    lda (SID_BASE),y
-    sta play_vec+0
-    dey
-    lda (SID_BASE),y
-    sta play_vec+1
-    lda song_no
-    ldx #0
-    ldy #0
-    jsr call_init
-    jsr TIMER_ON
-    lda #%11000000                  ; IRQ del T1
-    sta VIA_IER
-    lda #1
-    sta SID_BUSY
-    plp
-    cli
-    rts
 
-
-
-  .include "../lib_20c/lib_sid/lib_sid_player.asm"
-
-;------------------------------------------------------------------------------
-; HOLA_40.SID en ROM (partido en 3 pedazos, no hay 9 KB seguidos libres)
-; copyHola40ToRAM: copia los pedazos uno atrás del otro a $4000 (~0,15 s)
-;   y deja sidSize = HOLA40_SIZE. Después se toca igual que si viniera del
-;   disco (SID_START_AT parchea $D4xx->$73xx en RAM, nunca toca la ROM).
-;   Pisa A, X, Y. Usa romCopySrc/Dst/Len (ZP $D4-$D9).
-;   $4000 lo usa lib_lz4: llamarla después de la última pantalla .LZ4.
-;------------------------------------------------------------------------------
-
-; romCopy: copia romCopyLen bytes de (romCopySrc) a (romCopyDst).
-;   Deja romCopyDst apuntando al byte siguiente al último copiado. Pisa A, X, Y.
-romCopy:
-  ldy #0
-  ldx romCopyLen+1            ; páginas enteras
-  beq .tail
-.page:
-  lda (romCopySrc),y
-  sta (romCopyDst),y
-  iny
-  bne .page
-  inc romCopySrc+1
-  inc romCopyDst+1
-  dex
-  bne .page
-.tail:
-  ldx romCopyLen              ; bytes sueltos (Y = 0 acá)
-  beq .done
-.rest:
-  lda (romCopySrc),y
-  sta (romCopyDst),y
-  iny
-  dex
-  bne .rest
-  tya                         ; romCopyDst += Y
-  clc
-  adc romCopyDst
-  sta romCopyDst
-  bcc .done
-  inc romCopyDst+1
-.done:
-  rts
-
-
-
-  .org $90A2                                   ; IEC fijo: mismo offset de página que cuando andaba ($82A2)
-  .include "../lib_20c/lib_iec/lib_iec_code.asm"
-  ;.include "../lib_20c/lib_ascii_banner/lib_ascii_banner_code.asm"
-  .include "../lib_20c/lib_acia/lib_acia_code.asm" ;define code for ACIA t  
-  .include "../lib_20c/lib_utils/lib_utils_code.asm" ;define code for ACIA t  
-  .include "../lib_20c/lib_lz4/lib_lz4.asm"
-
-  .include "../lib_20c/lib_iec/lib_iec_constants.asm"
-  .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_constants.asm"
-  .include "../lib_20c/lib_acia/lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
-  .include "../lib_20c/lib_utils/lib_utils_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
-  .include "./la20cDemo2026_constants.asm"
-
-  ;------------------------------------------------------------------------------
-; printRomLZ - A = byte bajo, X = byte alto de un .LZ4 que está en la ROM.
-;   Descomprime a $1000, verifica largo y final ESC[0m,00 e imprime.
-;   Sale con carry = 0 si imprimió, 1 si el archivo estaba mal (no imprime).
-;   No escribe nada en la ROM: solo lee el .LZ4 desde ahí.
-;------------------------------------------------------------------------------
 printRomLZ:
   sta romLzPtr
   stx romLzPtr+1
@@ -930,9 +812,134 @@ printRomPlacas:
   jsr printRomLZ
   bcs .skip
   jsr delay_3_sec
+  jsr delay_3_sec
+  jsr delay_3_sec
+  jsr delay_3_sec
 .skip:
   inc placaRomIndex
   jmp .next
+
+  
+; =============================================================================
+;  sid_rom.asm - tocar un tema que está en ROM (sin copiar ni parchear)
+;  Va después de lib_sid_player.asm (usa SID_HALT, TIMER_ON, call_init, etc.)
+;
+;  El tema tiene que estar armado para ROM (SID_ROM=1): escribe directo al SID
+;  de la 20c ($7300) y sus variables están en RAM. Ejemplo: NAVES_C0.SID en $C000.
+;
+;      ldy #$C0            ; página donde está el .sid en la ROM
+;      jsr SID_START_ROM   ; suena por IRQ (igual que SID_START)
+;
+;  No escribe NADA en la zona del tema: con una EEPROM con /WE conectado, un
+;  SID_START_AT común intentaría "copiar" y "parchear" sobre la ROM.
+; =============================================================================
+SID_START_ROM:
+    php
+    sei
+    sty SID_BASE+1
+    lda #0
+    sta SID_BASE+0
+    jsr SID_HALT                    ; apaga el tema anterior
+    lda #0
+    sta SID_FRAMES+0
+    sta SID_FRAMES+1
+    ldy #H_STARTSONG+1
+    lda (SID_BASE),y
+    sec
+    sbc #1
+    sta song_no
+    ldy #H_INITADDR+1               ; vectores (big-endian en el header)
+    lda (SID_BASE),y
+    sta init_vec+0
+    dey
+    lda (SID_BASE),y
+    sta init_vec+1
+    ldy #H_PLAYADDR+1
+    lda (SID_BASE),y
+    sta play_vec+0
+    dey
+    lda (SID_BASE),y
+    sta play_vec+1
+    lda song_no
+    ldx #0
+    ldy #0
+    jsr call_init
+    jsr TIMER_ON
+    lda #%11000000                  ; IRQ del T1
+    sta VIA_IER
+    lda #1
+    sta SID_BUSY
+    plp
+    cli
+    rts
+
+
+
+  .include "../lib_20c/lib_sid/lib_sid_player.asm"
+
+;------------------------------------------------------------------------------
+; HOLA_40.SID en ROM (partido en 3 pedazos, no hay 9 KB seguidos libres)
+; copyHola40ToRAM: copia los pedazos uno atrás del otro a $4000 (~0,15 s)
+;   y deja sidSize = HOLA40_SIZE. Después se toca igual que si viniera del
+;   disco (SID_START_AT parchea $D4xx->$73xx en RAM, nunca toca la ROM).
+;   Pisa A, X, Y. Usa romCopySrc/Dst/Len (ZP $D4-$D9).
+;   $4000 lo usa lib_lz4: llamarla después de la última pantalla .LZ4.
+;------------------------------------------------------------------------------
+
+; romCopy: copia romCopyLen bytes de (romCopySrc) a (romCopyDst).
+;   Deja romCopyDst apuntando al byte siguiente al último copiado. Pisa A, X, Y.
+; romCopy:
+;   ldy #0
+;   ldx romCopyLen+1            ; páginas enteras
+;   beq .tail
+; .page:
+;   lda (romCopySrc),y
+;   sta (romCopyDst),y
+;   iny
+;   bne .page
+;   inc romCopySrc+1
+;   inc romCopyDst+1
+;   dex
+;   bne .page
+; .tail:
+;   ldx romCopyLen              ; bytes sueltos (Y = 0 acá)
+;   beq .done
+; .rest:
+;   lda (romCopySrc),y
+;   sta (romCopyDst),y
+;   iny
+;   dex
+;   bne .rest
+;   tya                         ; romCopyDst += Y
+;   clc
+;   adc romCopyDst
+;   sta romCopyDst
+;   bcc .done
+;   inc romCopyDst+1
+; .done:
+;   rts
+
+
+
+  .org $90A2                                   ; IEC fijo: mismo offset de página que cuando andaba ($82A2)
+  .include "../lib_20c/lib_iec/lib_iec_code.asm"
+  ;.include "../lib_20c/lib_ascii_banner/lib_ascii_banner_code.asm"
+  .include "../lib_20c/lib_acia/lib_acia_code.asm" ;define code for ACIA t  
+  .include "../lib_20c/lib_utils/lib_utils_code.asm" ;define code for ACIA t  
+  .include "../lib_20c/lib_lz4/lib_lz4.asm"
+
+  .include "../lib_20c/lib_iec/lib_iec_constants.asm"
+  ;.include "../lib_20c/lib_ascii_banner/lib_ascii_banner_constants.asm"
+  .include "../lib_20c/lib_acia/lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
+  .include "../lib_20c/lib_utils/lib_utils_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
+  .include "./la20cDemo2026_constants.asm"
+
+  ;------------------------------------------------------------------------------
+; printRomLZ - A = byte bajo, X = byte alto de un .LZ4 que está en la ROM.
+;   Descomprime a $1000, verifica largo y final ESC[0m,00 e imprime.
+;   Sale con carry = 0 si imprimió, 1 si el archivo estaba mal (no imprime).
+;   No escribe nada en la ROM: solo lee el .LZ4 desde ahí.
+;------------------------------------------------------------------------------
 
 ; la tabla placasRomTabla está en placas_rom_tabla.asm (lista solo las que metiste en la ROM)
 
@@ -942,29 +949,79 @@ printRomACIA6551:
   jmp printRomLZ
 romACIA6551: .incbin "./media/ACIA6551.LZ4"   ; 1487 bytes
 
+printRomBUS:
+  lda #<romBUS
+  ldx #>romBUS
+  jmp printRomLZ
+romBUS: .incbin "./media/BUS.LZ4"   ; 1487 bytes
+
 printRomCPU:
   lda #<romCPU
   ldx #>romCPU
   jmp printRomLZ
 romCPU: .incbin "./media/CPU6502.LZ4"   ; 1557 bytes
-printRomBUS:
-  lda #<romBUS
-  ldx #>romBUS
+
+printRomDISPLAY:
+  lda #<romDISPLAY
+  ldx #>romDISPLAY
   jmp printRomLZ
-romBUS: .incbin "./media/BUS.LZ4"   ; 1278 bytes
-printRomVIA:
-  lda #<romVIA
-  ldx #>romVIA
+romDISPLAY: .incbin "./media/DISPLAY.LZ4"   ; 1487 bytes
+
+
+printRomGLUE:
+  lda #<romGLUE
+  ldx #>romGLUE
   jmp printRomLZ
-romVIA: .incbin "./media/VIA6522.LZ4"   ; 1460 bytes
+romGLUE: .incbin "./media/GLUE.LZ4"   ; 1487 bytes
+
+printRomIECBUS:
+  lda #<romIECBUS
+  ldx #>romIECBUS
+  jmp printRomLZ
+romIECBUS: .incbin "./media/IECBUS.LZ4"   ; 1487 bytes
+
+printRomLA20C:
+  lda #<romLA20C
+  ldx #>romLA20C
+  jmp printRomLZ
+romLA20C: .incbin "./media/LA20C.LZ4"   ; 1487 bytes
+
+printRomPOWER:
+  lda #<romPOWER
+  ldx #>romPOWER
+  jmp printRomLZ
+romPOWER: .incbin "./media/POWER.LZ4"   ; 1487 bytes
+
+
 printRomROMRAM:
   lda #<romROMRAM
   ldx #>romROMRAM
   jmp printRomLZ
 romROMRAM: .incbin "./media/ROMRAM.LZ4"   ; 1487 bytes
 
+printRomSID6581:
+  lda #<romSID6581
+  ldx #>romSID6581
+  jmp printRomLZ
+romSID6581: .incbin "./media/SID6581.LZ4"   ; 1487 bytes
+
+printRomVIA:
+  lda #<romVIA
+  ldx #>romVIA
+  jmp printRomLZ
+romVIA: .incbin "./media/VIA6522.LZ4"   ; 1460 bytes
+
+printRomOSO:
+  lda #<romOSO
+  ldx #>romOSO
+  jmp printRomLZ
+romOSO: .incbin "./media/OSO.LZ4"   ; 1460 bytes
+
 placasRomTabla:
-  .word romCPU, romROMRAM, romBUS, romVIA, romACIA6551
+  .word romLA20C
+  .word romCPU, romROMRAM, romBUS, romVIA, romACIA6551 
+  .word romDISPLAY, romGLUE, romIECBUS, romPOWER
+  .word romSID6581, romOSO
   .word $0000
 
     ;.include "../FlashParty2026/media/DNASCII.asm"
