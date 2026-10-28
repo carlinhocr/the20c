@@ -1,9 +1,9 @@
 ;
-  ;.include "../lib_20c/lib_iec/lib_iec_memory.asm"
+  .include "../lib_20c/lib_iec/lib_iec_memory.asm"
   .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_memory.asm"
   .include "../lib_20c/lib_acia/lib_acia_memory.asm" ;define memory address for ACIA
   .include "../lib_20c/lib_utils/lib_utils_memory.asm" ;define memory address for ACIA
-  .include "./FlashPartyDemo2026_memory.asm"
+  .include "./la20cDemo2026_memory.asm"
 
   .org $8000
   
@@ -115,298 +115,17 @@ musicaDesdeROM:
   jsr SID_START_ROM
   rts
 
-bannerHola:  
-  ;load the alphabet
-  lda #<asciiBannerAlphabet_c64
-  sta asciiBannerAlphabet_low
-  lda #>asciiBannerAlphabet_c64  
-  sta asciiBannerAlphabet_high
-  ;load the asciiString that will be processed
-  jsr send_ansi_reset
-  jsr send_ansi_cls
-  jsr send_ansi_br_green
-  lda #<asciiSHola1
-  sta asciiStringZp_low
-  lda #>asciiSHola1
-  sta asciiStringZp_high
-  jsr fillLineRAM
-  jsr printLineRAM
-  lda #<asciiSHola2
-  sta asciiStringZp_low
-  lda #>asciiSHola2
-  sta asciiStringZp_high
-  jsr fillLineRAM
-  jsr printLineRAM
-  lda #<asciiSHola3
-  sta asciiStringZp_low
-  lda #>asciiSHola3
-  sta asciiStringZp_high
-  jsr fillLineRAM
-  jsr printLineRAM
-  jsr delay_3_sec
-  rts
-
-bannerNosotros:
-  jsr send_ansi_reset
-  jsr send_ansi_cls
-  jsr send_ansi_br_green
-  lda #<asciiSNosotros1
-  sta asciiStringZp_low
-  lda #>asciiSNosotros1
-  sta asciiStringZp_high
-  jsr fillLineRAM
-  jsr printLineRAM
-  lda #<asciiSNosotros2
-  sta asciiStringZp_low
-  lda #>asciiSNosotros2
-  sta asciiStringZp_high
-  jsr fillLineRAM
-  jsr printLineRAM
-  jsr delay_3_sec
-  rts
 
 
 
-; ---- cargadores de las pantallas .LZ4 (generado por lz4asm.py) ----
-loadAndPrintACIA6551_lz:
-  lda #<fileACIA6551_lz
-  sta ZP_PTR_LO
-  lda #>fileACIA6551_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
 
-loadAndPrintAMIGOS_lz:
-  lda #<fileAMIGOS_lz
-  sta ZP_PTR_LO
-  lda #>fileAMIGOS_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
 
-loadAndPrintAPIX_lz:
-  lda #<fileAPIX_lz
-  sta ZP_PTR_LO
-  lda #>fileAPIX_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-  
-loadAndPrintASISI_SID_lz:
-  lda #<fileASISI_SID_lz
-  sta ZP_PTR_LO
-  lda #>fileASISI_SID_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
 
-loadAndPrintBERDYX_lz:
-  lda #<fileBERDYX_lz
-  sta ZP_PTR_LO
-  lda #>fileBERDYX_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
 
-loadAndPrintBRINDIS_lz:
-  lda #<fileBRINDIS_lz
-  sta ZP_PTR_LO
-  lda #>fileBRINDIS_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
 
-loadAndPrintCAFEC64_lz:
-  lda #<fileCAFEC64_lz
-  sta ZP_PTR_LO
-  lda #>fileCAFEC64_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
 
-loadAndPrintCIRUGRP_lz:
-  lda #<fileCIRUGRP_lz
-  sta ZP_PTR_LO
-  lda #>fileCIRUGRP_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
 
-loadAndPrintCPU6502_lz:
-  lda #<fileCPU6502_lz
-  sta ZP_PTR_LO
-  lda #>fileCPU6502_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
 
-loadAndPrintDIEGO_lz:
-  lda #<fileDIEGO_lz
-  sta ZP_PTR_LO
-  lda #>fileDIEGO_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintESPTEC_lz:
-  lda #<fileESPTEC_lz
-  sta ZP_PTR_LO
-  lda #>fileESPTEC_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintGALAEPI_lz:
-  lda #<fileGALAEPI_lz
-  sta ZP_PTR_LO
-  lda #>fileGALAEPI_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintHABLO1_lz:
-  lda #<fileHABLO1_lz
-  sta ZP_PTR_LO
-  lda #>fileHABLO1_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts  
-
-loadAndPrintHABLO2_lz:
-  lda #<fileHABLO2_lz
-  sta ZP_PTR_LO
-  lda #>fileHABLO2_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts  
-
-loadAndPrintHABLO3_lz:
-  lda #<fileHABLO3_lz
-  sta ZP_PTR_LO
-  lda #>fileHABLO3_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts  
-
-loadAndPrintICUY_lz:
-  lda #<fileICUY_lz
-  sta ZP_PTR_LO
-  lda #>fileICUY_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintJORGE_lz:
-  lda #<fileJORGE_lz
-  sta ZP_PTR_LO
-  lda #>fileJORGE_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintKRAKATOA_lz:
-  lda #<fileKRAKATOA_lz
-  sta ZP_PTR_LO
-  lda #>fileKRAKATOA_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintLA20C_lz:
-  lda #<fileLA20C_lz
-  sta ZP_PTR_LO
-  lda #>fileLA20C_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintMODO_lz:
-  lda #<fileMODO_lz
-  sta ZP_PTR_LO
-  lda #>fileMODO_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintNOSOTROS_lz:
-  lda #<fileNOSOTROS_lz
-  sta ZP_PTR_LO
-  lda #>fileNOSOTROS_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintOSO_lz:
-  lda #<fileOSO_lz
-  sta ZP_PTR_LO
-  lda #>fileOSO_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintOSOLABS_lz:
-  lda #<fileOSOLABS_lz
-  sta ZP_PTR_LO
-  lda #>fileOSOLABS_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintPANACIA_lz:
-  lda #<filePANACIA_lz
-  sta ZP_PTR_LO
-  lda #>filePANACIA_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintPVM_lz:
-  lda #<filePVM_lz
-  sta ZP_PTR_LO
-  lda #>filePVM_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintSID6581_lz:
-  lda #<fileSID6581_lz
-  sta ZP_PTR_LO
-  lda #>fileSID6581_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintTECSORO_lz:
-  lda #<fileTECSORO_lz
-  sta ZP_PTR_LO
-  lda #>fileTECSORO_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintTENO_lz:
-  lda #<fileTENO_lz
-  sta ZP_PTR_LO
-  lda #>fileTENO_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintVENTILA_lz:
-  lda #<fileVENTILA_lz
-  sta ZP_PTR_LO
-  lda #>fileVENTILA_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
-
-loadAndPrintVOTEN_lz:
-  lda #<fileVOTEN_lz
-  sta ZP_PTR_LO
-  lda #>fileVOTEN_lz
-  sta ZP_PTR_HI
-  jsr loadRetryAndPrintLZ
-  rts
 
 
   
@@ -524,15 +243,6 @@ loadAndPrintVOTEN_lz:
 ;   ;jsr loadAndPrint
 ;   rts
 
-loadAndPrintTutankamon:
-  lda #<fileTutankamon
-  sta ZP_PTR_LO
-  lda #>fileTutankamon
-  sta ZP_PTR_HI
-  jsr loadRetryRS232
-  ;jsr loadAndPrintRS232
-  ;jsr loadAndPrint
-  rts  
 
 loadRetryAndPrint:  
   lda #<BUFFER_GRAPHICS_START
@@ -568,30 +278,30 @@ printDiskBuffer:
   jsr printAsciiBinaryFast
   rts  
 
-loadAndPlayVoice:
-  ; ---- "Hola, soy la 20c" ----
-  lda #<fileVoz
-  sta ZP_PTR_LO
-  lda #>fileVoz
-  sta ZP_PTR_HI
-  jsr loadAndPlayOnce
-  rts
+; loadAndPlayVoice:
+;   ; ---- "Hola, soy la 20c" ----
+;   lda #<fileVoz
+;   sta ZP_PTR_LO
+;   lda #>fileVoz
+;   sta ZP_PTR_HI
+;   jsr loadAndPlayOnce
+;   rts
 
-loadAndPlayHimno:
-  lda #<fileSoundHimno
-  sta ZP_PTR_LO
-  lda #>fileSoundHimno
-  sta ZP_PTR_HI
-  jsr loadAndPlayContinuos
-  rts
+; loadAndPlayHimno:
+;   lda #<fileSoundHimno
+;   sta ZP_PTR_LO
+;   lda #>fileSoundHimno
+;   sta ZP_PTR_HI
+;   jsr loadAndPlayContinuos
+;   rts
 
-loadAndPlayDesierto:
-  lda #<fileSoundDesierto
-  sta ZP_PTR_LO
-  lda #>fileSoundDesierto
-  sta ZP_PTR_HI
-  jsr loadAndPlayContinuos
-  rts
+; loadAndPlayDesierto:
+;   lda #<fileSoundDesierto
+;   sta ZP_PTR_LO
+;   lda #>fileSoundDesierto
+;   sta ZP_PTR_HI
+;   jsr loadAndPlayContinuos
+;   rts
 
 
 loadAndPlayOnce:
@@ -647,60 +357,60 @@ playSong10Seconds:
 
   ; 1) primer tema en el slot $1000 y a sonar
 
-loadAndPlayHola40:         ; ahora desde ROM (ver copyHola40ToRAM)
-  jsr copyHola40ToRAM      ; ROM -> $4000 en ~0,15 s, deja sidSize
-  ldy #$40
-  jsr playSid              ; corta el tema de ROM y arranca la voz en $4000
-  rts
+; loadAndPlayHola40:         ; ahora desde ROM (ver copyHola40ToRAM)
+;   jsr copyHola40ToRAM      ; ROM -> $4000 en ~0,15 s, deja sidSize
+;   ldy #$40
+;   jsr playSid              ; corta el tema de ROM y arranca la voz en $4000
+;   rts
 
-loadAndPlayHola40Disco:    ; la versión vieja, por IEC
-  lda #<fileHola40
-  ldx #>fileHola40
-  ldy #$40
-  jsr loadSid
-  bcs .noHola
-  ldy #$40
-  jsr playSid
-.noHola
-  rts
+; loadAndPlayHola40Disco:    ; la versión vieja, por IEC
+;   lda #<fileHola40
+;   ldx #>fileHola40
+;   ldy #$40
+;   jsr loadSid
+;   bcs .noHola
+;   ldy #$40
+;   jsr playSid
+; .noHola
+;   rts
 
-loadAndPlayDesierto40:
-  lda #<fileDesierto40
-  ldx #>fileDesierto40
-  ldy #$40
-  jsr loadSid
-  bcs .noSid                  ; si no cargó, no tocar SID_START_AT
-  ldy #$40
-  jsr playSid
-.noSid  
-  rts
+; loadAndPlayDesierto40:
+;   lda #<fileDesierto40
+;   ldx #>fileDesierto40
+;   ldy #$40
+;   jsr loadSid
+;   bcs .noSid                  ; si no cargó, no tocar SID_START_AT
+;   ldy #$40
+;   jsr playSid
+; .noSid  
+;   rts
 
-loadAndPlayDesierto10:
-  lda #<fileDesierto10
-  ldx #>fileDesierto10
-  ldy #$40
-  jsr loadSid
-  ldy #$40
-  jsr playSid
-  rts
+; loadAndPlayDesierto10:
+;   lda #<fileDesierto10
+;   ldx #>fileDesierto10
+;   ldy #$40
+;   jsr loadSid
+;   ldy #$40
+;   jsr playSid
+;   rts
 
-loadAndPlayHimno10:  
-  lda #<fileHimno10
-  ldx #>fileHimno10
-  ldy #$10
-  jsr loadSid
-  ldy #$10
-  jsr playSid          ; corta el de $1000 y arranca el de $4000
-  rts
+; loadAndPlayHimno10:  
+;   lda #<fileHimno10
+;   ldx #>fileHimno10
+;   ldy #$10
+;   jsr loadSid
+;   ldy #$10
+;   jsr playSid          ; corta el de $1000 y arranca el de $4000
+;   rts
 
-loadAndPlayHimno40:  
-  lda #<fileHimno40
-  ldx #>fileHimno40
-  ldy #$40
-  jsr loadSid
-  ldy #$40
-  jsr playSid          ; corta el de $1000 y arranca el de $4000
-  rts
+; loadAndPlayHimno40:  
+;   lda #<fileHimno40
+;   ldx #>fileHimno40
+;   ldy #$40
+;   jsr loadSid
+;   ldy #$40
+;   jsr playSid          ; corta el de $1000 y arranca el de $4000
+;   rts
 
   ; 4) el siguiente vuelve a $1000 (ya no suena nada ahí), y así...
 
@@ -1059,37 +769,6 @@ SID_START_ROM:
 ;   Pisa A, X, Y. Usa romCopySrc/Dst/Len (ZP $D4-$D9).
 ;   $4000 lo usa lib_lz4: llamarla después de la última pantalla .LZ4.
 ;------------------------------------------------------------------------------
-copyHola40ToRAM:
-  lda #<BUFFER_MUSIC_START
-  sta romCopyDst
-  lda #>BUFFER_MUSIC_START
-  sta romCopyDst+1
-  ldx #0                      ; índice en holaChunks (4 bytes por pedazo)
-.chunk:
-  lda holaChunks,x
-  sta romCopySrc
-  lda holaChunks+1,x
-  sta romCopySrc+1
-  lda holaChunks+2,x
-  sta romCopyLen
-  lda holaChunks+3,x
-  sta romCopyLen+1
-  txa
-  pha
-  jsr romCopy                 ; romCopyDst queda al final de lo copiado
-  pla
-  tax
-  inx
-  inx
-  inx
-  inx
-  cpx #12
-  bne .chunk
-  lda #<HOLA40_SIZE
-  sta sidSize
-  lda #>HOLA40_SIZE
-  sta sidSize+1
-  rts
 
 ; romCopy: copia romCopyLen bytes de (romCopySrc) a (romCopyDst).
 ;   Deja romCopyDst apuntando al byte siguiente al último copiado. Pisa A, X, Y.
@@ -1126,7 +805,20 @@ romCopy:
 
 
 
-;------------------------------------------------------------------------------
+  .org $90A2                                   ; IEC fijo: mismo offset de página que cuando andaba ($82A2)
+  .include "../lib_20c/lib_iec/lib_iec_code.asm"
+  ;.include "../lib_20c/lib_ascii_banner/lib_ascii_banner_code.asm"
+  .include "../lib_20c/lib_acia/lib_acia_code.asm" ;define code for ACIA t  
+  .include "../lib_20c/lib_utils/lib_utils_code.asm" ;define code for ACIA t  
+  .include "../lib_20c/lib_lz4/lib_lz4.asm"
+
+  .include "../lib_20c/lib_iec/lib_iec_constants.asm"
+  .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_constants.asm"
+  .include "../lib_20c/lib_acia/lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
+  .include "../lib_20c/lib_utils/lib_utils_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
+  .include "./la20cDemo2026_constants.asm"
+
+  ;------------------------------------------------------------------------------
 ; printRomLZ - A = byte bajo, X = byte alto de un .LZ4 que está en la ROM.
 ;   Descomprime a $1000, verifica largo y final ESC[0m,00 e imprime.
 ;   Sale con carry = 0 si imprimió, 1 si el archivo estaba mal (no imprime).
@@ -1242,6 +934,12 @@ printRomPlacas:
 
 ; la tabla placasRomTabla está en placas_rom_tabla.asm (lista solo las que metiste en la ROM)
 
+printRomACIA6551:
+  lda #<romACIA6551
+  ldx #>romACIA6551
+  jmp printRomLZ
+romACIA6551: .incbin "./media/ACIA6551.LZ4"   ; 1487 bytes
+
 printRomCPU:
   lda #<romCPU
   ldx #>romCPU
@@ -1264,22 +962,8 @@ printRomROMRAM:
 romROMRAM: .incbin "./media/ROMRAM.LZ4"   ; 1487 bytes
 
 placasRomTabla:
-  .word romCPU, romROMRAM, romBUS, romVIA
+  .word romCPU, romROMRAM, romBUS, romVIA, romACIA6551
   .word $0000
-
-
-  .org $90A2                                   ; IEC fijo: mismo offset de página que cuando andaba ($82A2)
-  ;.include "../lib_20c/lib_iec/lib_iec_code.asm"
-  ;.include "../lib_20c/lib_ascii_banner/lib_ascii_banner_code.asm"
-  .include "../lib_20c/lib_acia/lib_acia_code.asm" ;define code for ACIA t  
-  .include "../lib_20c/lib_utils/lib_utils_code.asm" ;define code for ACIA t  
-  .include "../lib_20c/lib_lz4/lib_lz4.asm"
-
-  ;.include "../lib_20c/lib_iec/lib_iec_constants.asm"
-  .include "../lib_20c/lib_ascii_banner/lib_ascii_banner_constants.asm"
-  .include "../lib_20c/lib_acia/lib_acia_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
-  .include "../lib_20c/lib_utils/lib_utils_constants.asm" ;define constansts that are not memory addresses but literals for ACIA  
-  .include "./FlashPartyDemo2026_constants.asm"
 
     ;.include "../FlashParty2026/media/DNASCII.asm"
 
